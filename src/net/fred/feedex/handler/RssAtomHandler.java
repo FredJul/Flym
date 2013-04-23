@@ -1,0 +1,623 @@
+/**
+ * FeedEx
+ * 
+ * Copyright (c) 2012-2013 Frederic Julian
+ * Copyright (c) 2010-2012 Stefan Handschuh
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package net.fred.feedex.handler;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import net.fred.feedex.Constants;
+import net.fred.feedex.MainApplication;
+import net.fred.feedex.PrefsManager;
+import net.fred.feedex.provider.FeedData;
+import net.fred.feedex.provider.FeedData.EntryColumns;
+import net.fred.feedex.provider.FeedData.FeedColumns;
+import net.fred.feedex.provider.FeedData.FilterColumns;
+import net.fred.feedex.provider.FeedDataContentProvider;
+import net.fred.feedex.service.FetcherService;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
+import android.text.Html;
+import android.util.Pair;
+
+public class RssAtomHandler extends DefaultHandler {
+
+	private static final String URL_SPACE = "%20";
+	private static final String ANDRHOMBUS = "&#";
+
+	private static final String TAG_RSS = "rss";
+	private static final String TAG_RDF = "rdf";
+	private static final String TAG_FEED = "feed";
+	private static final String TAG_ENTRY = "entry";
+	private static final String TAG_ITEM = "item";
+	private static final String TAG_UPDATED = "updated";
+	private static final String TAG_TITLE = "title";
+	private static final String TAG_LINK = "link";
+	private static final String TAG_DESCRIPTION = "description";
+	private static final String TAG_MEDIA_DESCRIPTION = "media:description";
+	private static final String TAG_CONTENT = "content";
+	private static final String TAG_MEDIA_CONTENT = "media:content";
+	private static final String TAG_ENCODEDCONTENT = "encoded";
+	private static final String TAG_SUMMARY = "summary";
+	private static final String TAG_PUBDATE = "pubDate";
+	private static final String TAG_DATE = "date";
+	private static final String TAG_LASTBUILDDATE = "lastBuildDate";
+	private static final String TAG_ENCLOSURE = "enclosure";
+	private static final String TAG_GUID = "guid";
+	private static final String TAG_AUTHOR = "author";
+	private static final String TAG_CREATOR = "creator";
+	private static final String TAG_NAME = "name";
+
+	private static final String ATTRIBUTE_URL = "url";
+	private static final String ATTRIBUTE_HREF = "href";
+	private static final String ATTRIBUTE_TYPE = "type";
+	private static final String ATTRIBUTE_LENGTH = "length";
+	private static final String ATTRIBUTE_REL = "rel";
+
+	private static final String[] TIMEZONES = { "MEST", "EST", "PST" };
+	private static final String[] TIMEZONES_REPLACE = { "+0200", "-0500", "-0800" };
+	private static final int TIMEZONES_COUNT = 3;
+
+	private static long KEEP_TIME = 345600000l; // 4 days
+
+	private static final DateFormat[] PUBDATE_DATEFORMATS = { new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US),
+			new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US), new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.US),
+
+	};
+	private static final int PUBDATEFORMAT_COUNT = 3;
+	private static final DateFormat[] UPDATE_DATEFORMATS = { new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz", Locale.US),
+
+	};
+	private static final int DATEFORMAT_COUNT = 2;
+	private static final String Z = "Z";
+	private static final String GMT = "GMT";
+
+	// middle() is group 1; s* is important for non-whitespaces; ' also usable
+	private static final Pattern IMG_PATTERN = Pattern.compile("<img src=\\s*['\"]([^'\"]+)['\"][^>]*>");
+
+	private Date lastUpdateDate;
+
+	private String id;
+
+	private boolean titleTagEntered;
+	private boolean updatedTagEntered;
+	private boolean linkTagEntered;
+	private boolean descriptionTagEntered;
+	private boolean pubDateTagEntered;
+	private boolean dateTagEntered;
+	private boolean lastUpdateDateTagEntered;
+	private boolean guidTagEntered;
+	private boolean authorTagEntered;
+
+	private StringBuilder title;
+	private StringBuilder dateStringBuilder;
+	private Date entryDate;
+	private StringBuilder entryLink;
+	private StringBuilder description;
+	private StringBuilder enclosure;
+	private Uri feedEntiresUri;
+	private int newCount;
+	private String originalFeedTitle;
+	private String feedTitle;
+	private String feedBaseUrl;
+	private boolean done;
+	private Date keepDateBorder;
+	private InputStream inputStream;
+	private Reader reader;
+	private boolean fetchImages;
+	private boolean cancelled;
+	private long now;
+	private StringBuilder guid;
+	private StringBuilder author, tmpAuthor;
+
+	public RssAtomHandler() {
+		KEEP_TIME = Long.parseLong(PrefsManager.getString(PrefsManager.KEEP_TIME, "4")) * 86400000l;
+	}
+
+	public void init(Date lastUpdateDate, final String id, String title, String url) {
+		final long keepDateBorderTime = KEEP_TIME > 0 ? System.currentTimeMillis() - KEEP_TIME : 0;
+
+		keepDateBorder = new Date(keepDateBorderTime);
+		this.lastUpdateDate = lastUpdateDate;
+		this.id = id;
+		feedEntiresUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(id);
+
+		final String query = new StringBuilder(EntryColumns.DATE).append('<').append(keepDateBorderTime).append(Constants.DB_AND).append(EntryColumns.WHERE_NOT_FAVORITE).toString();
+
+		FeedData.deletePicturesOfFeed(MainApplication.getAppContext(), feedEntiresUri, query);
+
+		MainApplication.getAppContext().getContentResolver().delete(feedEntiresUri, query, null);
+		newCount = 0;
+		originalFeedTitle = title;
+
+		int index = url.indexOf('/', 8); // this also covers https://
+
+		if (index > -1) {
+			feedBaseUrl = url.substring(0, index);
+		} else {
+			feedBaseUrl = null;
+		}
+		this.title = null;
+		this.dateStringBuilder = null;
+		this.entryLink = null;
+		this.description = null;
+		this.enclosure = null;
+		inputStream = null;
+		reader = null;
+		entryDate = null;
+
+		done = false;
+		cancelled = false;
+
+		titleTagEntered = false;
+		updatedTagEntered = false;
+		linkTagEntered = false;
+		descriptionTagEntered = false;
+		pubDateTagEntered = false;
+		dateTagEntered = false;
+		lastUpdateDateTagEntered = false;
+		now = System.currentTimeMillis();
+		guid = null;
+		guidTagEntered = false;
+		authorTagEntered = false;
+		author = null;
+		tmpAuthor = null;
+	}
+
+	@Override
+	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+		if (TAG_UPDATED.equals(localName)) {
+			updatedTagEntered = true;
+			dateStringBuilder = new StringBuilder();
+		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
+			description = null;
+			entryLink = null;
+
+			// This is the retrieved feed title
+			if (feedTitle == null && title != null && title.length() > 0) {
+				feedTitle = title.toString();
+			}
+			title = null;
+		} else if (TAG_TITLE.equals(localName)) {
+			if (title == null) {
+				titleTagEntered = true;
+				title = new StringBuilder();
+			}
+		} else if (TAG_LINK.equals(localName)) {
+			if (authorTagEntered) {
+				return;
+			}
+			if (TAG_ENCLOSURE.equals(attributes.getValue("", ATTRIBUTE_REL))) {
+				startEnclosure(attributes, attributes.getValue("", ATTRIBUTE_HREF));
+			} else {
+				entryLink = new StringBuilder();
+
+				boolean foundLink = false;
+
+				for (int n = 0, i = attributes.getLength(); n < i; n++) {
+					if (ATTRIBUTE_HREF.equals(attributes.getLocalName(n))) {
+						if (attributes.getValue(n) != null) {
+							entryLink.append(attributes.getValue(n));
+							foundLink = true;
+							linkTagEntered = false;
+						} else {
+							linkTagEntered = true;
+						}
+						break;
+					}
+				}
+				if (!foundLink) {
+					linkTagEntered = true;
+				}
+			}
+		} else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName)) || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName))) {
+			descriptionTagEntered = true;
+			description = new StringBuilder();
+		} else if (TAG_SUMMARY.equals(localName)) {
+			if (description == null) {
+				descriptionTagEntered = true;
+				description = new StringBuilder();
+			}
+		} else if (TAG_PUBDATE.equals(localName)) {
+			pubDateTagEntered = true;
+			dateStringBuilder = new StringBuilder();
+		} else if (TAG_DATE.equals(localName)) {
+			dateTagEntered = true;
+			dateStringBuilder = new StringBuilder();
+		} else if (TAG_LASTBUILDDATE.equals(localName)) {
+			lastUpdateDateTagEntered = true;
+			dateStringBuilder = new StringBuilder();
+		} else if (TAG_ENCODEDCONTENT.equals(localName)) {
+			descriptionTagEntered = true;
+			description = new StringBuilder();
+		} else if (TAG_ENCLOSURE.equals(localName)) {
+			startEnclosure(attributes, attributes.getValue("", ATTRIBUTE_URL));
+		} else if (TAG_GUID.equals(localName)) {
+			guidTagEntered = true;
+			guid = new StringBuilder();
+		} else if (TAG_NAME.equals(localName) || TAG_AUTHOR.equals(localName) || TAG_CREATOR.equals(localName)) {
+			authorTagEntered = true;
+			if (tmpAuthor == null) {
+				tmpAuthor = new StringBuilder();
+			}
+		}
+	}
+
+	private void startEnclosure(Attributes attributes, String url) {
+		if (enclosure == null) { // fetch the first enclosure only
+			enclosure = new StringBuilder(url);
+			enclosure.append(Constants.ENCLOSURE_SEPARATOR);
+
+			String value = attributes.getValue("", ATTRIBUTE_TYPE);
+
+			if (value != null) {
+				enclosure.append(value);
+			}
+			enclosure.append(Constants.ENCLOSURE_SEPARATOR);
+			value = attributes.getValue("", ATTRIBUTE_LENGTH);
+			if (value != null) {
+				enclosure.append(value);
+			}
+		}
+	}
+
+	@Override
+	public void characters(char[] ch, int start, int length) throws SAXException {
+		if (titleTagEntered) {
+			title.append(ch, start, length);
+		} else if (updatedTagEntered) {
+			dateStringBuilder.append(ch, start, length);
+		} else if (linkTagEntered) {
+			entryLink.append(ch, start, length);
+		} else if (descriptionTagEntered) {
+			description.append(ch, start, length);
+		} else if (pubDateTagEntered) {
+			dateStringBuilder.append(ch, start, length);
+		} else if (dateTagEntered) {
+			dateStringBuilder.append(ch, start, length);
+		} else if (lastUpdateDateTagEntered) {
+			dateStringBuilder.append(ch, start, length);
+		} else if (guidTagEntered) {
+			guid.append(ch, start, length);
+		} else if (authorTagEntered) {
+			tmpAuthor.append(ch, start, length);
+		}
+	}
+
+	@Override
+	public void endElement(String uri, String localName, String qName) throws SAXException {
+		if (TAG_TITLE.equals(localName)) {
+			titleTagEntered = false;
+		} else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName)) || TAG_SUMMARY.equals(localName) || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName))
+				|| TAG_ENCODEDCONTENT.equals(localName)) {
+			descriptionTagEntered = false;
+		} else if (TAG_LINK.equals(localName)) {
+			linkTagEntered = false;
+		} else if (TAG_UPDATED.equals(localName)) {
+			entryDate = parseUpdateDate(dateStringBuilder.toString());
+			updatedTagEntered = false;
+		} else if (TAG_PUBDATE.equals(localName)) {
+			entryDate = parsePubdateDate(dateStringBuilder.toString().replace("  ", " "));
+			pubDateTagEntered = false;
+		} else if (TAG_LASTBUILDDATE.equals(localName)) {
+			entryDate = parsePubdateDate(dateStringBuilder.toString().replace("  ", " "));
+			lastUpdateDateTagEntered = false;
+		} else if (TAG_DATE.equals(localName)) {
+			entryDate = parseUpdateDate(dateStringBuilder.toString());
+			dateTagEntered = false;
+		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
+			if (title != null && (entryDate == null || ((entryDate.after(lastUpdateDate)) && entryDate.after(keepDateBorder)))) {
+				ContentValues values = new ContentValues();
+
+				String improvedTitle = unescapeTitle(title.toString().trim());
+				values.put(EntryColumns.TITLE, improvedTitle);
+
+				// Improve the description
+				Pair<String, Vector<String>> improvedDesc = improveFeedDescription(description.toString(), fetchImages);
+				Vector<String> images = improvedDesc.second;
+				if (improvedDesc.first != null) {
+					values.put(EntryColumns.ABSTRACT, improvedDesc.first);
+				}
+
+				// Try to find if the entry is filtered
+				boolean isFiltered = false;
+				ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+				Cursor c = cr.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(id), new String[] { FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX, FilterColumns.IS_APPLIED_TO_TITLE }, null, null,
+						null);
+				while (c.moveToNext()) {
+					String filterText = c.getString(0);
+					boolean isRegex = c.getInt(1) == 1;
+					boolean isAppliedToTitle = c.getInt(2) == 1;
+
+					if (isRegex) {
+						Pattern p = Pattern.compile(filterText);
+						if (isAppliedToTitle) {
+							Matcher m = p.matcher(improvedTitle);
+							isFiltered = m.find();
+						} else {
+							Matcher m = p.matcher(improvedDesc.first);
+							isFiltered = m.find();
+						}
+					} else if ((isAppliedToTitle && improvedTitle.contains(filterText)) || (!isAppliedToTitle && improvedDesc.first.contains(filterText))) {
+						isFiltered = true;
+					}
+				}
+				c.close();
+
+				if (!isFiltered) {
+					if (author != null) {
+						values.put(EntryColumns.AUTHOR, author.toString());
+					}
+
+					String enclosureString = null;
+					StringBuilder existanceStringBuilder = new StringBuilder(EntryColumns.LINK).append(Constants.DB_ARG);
+
+					if (enclosure != null && enclosure.length() > 0) {
+						enclosureString = enclosure.toString();
+						values.put(EntryColumns.ENCLOSURE, enclosureString);
+						existanceStringBuilder.append(Constants.DB_AND).append(EntryColumns.ENCLOSURE).append(Constants.DB_ARG);
+					}
+
+					String guidString = null;
+
+					if (guid != null && guid.length() > 0) {
+						guidString = guid.toString();
+						values.put(EntryColumns.GUID, guidString);
+						existanceStringBuilder.append(Constants.DB_AND).append(EntryColumns.GUID).append(Constants.DB_ARG);
+					}
+
+					String entryLinkString = ""; // don't set this to null as we need *some* value
+
+					if (entryLink != null && entryLink.length() > 0) {
+						entryLinkString = entryLink.toString().trim();
+						if (feedBaseUrl != null && !entryLinkString.startsWith(Constants.HTTP) && !entryLinkString.startsWith(Constants.HTTPS)) {
+							entryLinkString = feedBaseUrl + (entryLinkString.startsWith(Constants.SLASH) ? entryLinkString : Constants.SLASH + entryLinkString);
+						}
+					}
+
+					String[] existanceValues = enclosureString != null ? (guidString != null ? new String[] { entryLinkString, enclosureString, guidString } : new String[] { entryLinkString,
+							enclosureString }) : (guidString != null ? new String[] { entryLinkString, guidString } : new String[] { entryLinkString });
+
+					// First, try to update the feed
+					if ((entryLinkString.length() == 0 && guidString == null) || cr.update(feedEntiresUri, values, existanceStringBuilder.toString(), existanceValues) == 0) {
+
+						// We put the date only for new entry (no need to change the past, you may already read it)
+						if (entryDate != null) {
+							values.put(EntryColumns.DATE, entryDate.getTime());
+						} else {
+							values.put(EntryColumns.DATE, now--);
+						}
+
+						values.put(EntryColumns.LINK, entryLinkString);
+
+						// We cannot update, we need to insert it
+						String entryId = cr.insert(feedEntiresUri, values).getLastPathSegment();
+						cr.notifyChange(EntryColumns.CONTENT_URI, null);
+						FeedDataContentProvider.notifyGroupFromFeedId(id);
+
+						if (fetchImages && images != null) {
+							downloadImages(entryId, images);
+						}
+
+						newCount++;
+					} else if (entryDate == null) {
+						cancel();
+					}
+				}
+			} else {
+				cancel();
+			}
+			description = null;
+			title = null;
+			enclosure = null;
+			guid = null;
+			author = null;
+		} else if (TAG_RSS.equals(localName) || TAG_RDF.equals(localName) || TAG_FEED.equals(localName)) {
+			done = true;
+		} else if (TAG_GUID.equals(localName)) {
+			guidTagEntered = false;
+		} else if (TAG_NAME.equals(localName) || TAG_AUTHOR.equals(localName) || TAG_CREATOR.equals(localName)) {
+			authorTagEntered = false;
+
+			if (tmpAuthor != null && tmpAuthor.indexOf("@") == -1) { // no email
+				if (author == null) {
+					author = new StringBuilder(tmpAuthor);
+				} else { // this indicates multiple authors
+					boolean found = false;
+					for (String previousAuthor : author.toString().split(",")) {
+						if (previousAuthor.equals(tmpAuthor.toString())) {
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						author.append(Constants.COMMA_SPACE);
+						author.append(tmpAuthor);
+					}
+				}
+			}
+
+			tmpAuthor = null;
+		}
+	}
+
+	public int getNewCount() {
+		return newCount;
+	}
+
+	public boolean isDone() {
+		return done;
+	}
+
+	public boolean isCancelled() {
+		return cancelled;
+	}
+
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
+		reader = null;
+	}
+
+	public void setReader(Reader reader) {
+		this.reader = reader;
+		inputStream = null;
+	}
+
+	private void cancel() {
+		if (!cancelled) {
+			cancelled = true;
+			done = true;
+			if (inputStream != null) {
+				try {
+					inputStream.close(); // stops all parsing
+				} catch (IOException e) {
+
+				}
+			} else if (reader != null) {
+				try {
+					reader.close(); // stops all parsing
+				} catch (IOException e) {
+
+				}
+			}
+		}
+	}
+
+	public void setFetchImages(boolean fetchImages) {
+		this.fetchImages = fetchImages;
+	}
+
+	private static Date parseUpdateDate(String string) {
+		string = string.replace(Z, GMT);
+		for (int n = 0; n < DATEFORMAT_COUNT; n++) {
+			try {
+				return UPDATE_DATEFORMATS[n].parse(string);
+			} catch (ParseException e) {
+			} // just do nothing
+		}
+		return null;
+	}
+
+	private static Date parsePubdateDate(String string) {
+		for (int n = 0; n < TIMEZONES_COUNT; n++) {
+			string = string.replace(TIMEZONES[n], TIMEZONES_REPLACE[n]);
+		}
+		for (int n = 0; n < PUBDATEFORMAT_COUNT; n++) {
+			try {
+				return PUBDATE_DATEFORMATS[n].parse(string);
+			} catch (ParseException e) {
+			} // just do nothing
+		}
+		return null;
+	}
+
+	private static String unescapeTitle(String title) {
+		String result = title.replace(Constants.AMP_SG, Constants.AMP).replaceAll(Constants.HTML_TAG_REGEX, "").replace(Constants.HTML_LT, Constants.LT).replace(Constants.HTML_GT, Constants.GT)
+				.replace(Constants.HTML_QUOT, Constants.QUOT).replace(Constants.HTML_APOSTROPHE, Constants.APOSTROPHE);
+
+		if (result.indexOf(ANDRHOMBUS) > -1) {
+			return Html.fromHtml(result, null, null).toString();
+		} else {
+			return result;
+		}
+	}
+
+	private static Pair<String, Vector<String>> improveFeedDescription(String content, boolean fetchImages) {
+		if (content != null) {
+			String newContent = content.trim().replaceAll(Constants.HTML_SPAN_REGEX, "");
+
+			if (newContent.length() > 0) {
+				Vector<String> images = null;
+				if (fetchImages) {
+					images = new Vector<String>(4);
+
+					Matcher matcher = IMG_PATTERN.matcher(content);
+
+					while (matcher.find()) {
+						String match = matcher.group(1).replace(" ", URL_SPACE);
+
+						images.add(match);
+						newContent = newContent.replace(
+								match,
+								new StringBuilder(Constants.FILE_URL).append(FeedDataContentProvider.IMAGE_FOLDER).append(Constants.IMAGEID_REPLACEMENT)
+										.append(match.substring(match.lastIndexOf('/') + 1)).toString());
+					}
+				}
+
+				return new Pair<String, Vector<String>>(newContent, images);
+			}
+		}
+
+		return new Pair<String, Vector<String>>(null, null);
+	}
+
+	private static void downloadImages(String entryId, Vector<String> images) {
+		if (images != null) {
+			FeedDataContentProvider.IMAGE_FOLDER_FILE.mkdir(); // create images dir
+			for (String img : images) {
+				try {
+					byte[] data = FetcherService.getBytes(new URL(img).openStream());
+
+					FileOutputStream fos = new FileOutputStream(new StringBuilder(FeedDataContentProvider.IMAGE_FOLDER).append(entryId).append(Constants.IMAGEFILE_IDSEPARATOR)
+							.append(img.substring(img.lastIndexOf('/') + 1)).toString());
+
+					fos.write(data);
+					fos.close();
+				} catch (Exception e) {
+				}
+			}
+		}
+	}
+
+	@Override
+	public void endDocument() throws SAXException {
+		ContentValues values = new ContentValues();
+
+		if (originalFeedTitle == null && feedTitle != null) {
+			values.put(FeedColumns.NAME, title.toString().trim());
+		}
+		values.putNull(FeedColumns.ERROR);
+		values.put(FeedColumns.LAST_UPDATE, now);
+		ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+		if (cr.update(FeedColumns.CONTENT_URI(id), values, null, null) > 0) {
+			FeedDataContentProvider.notifyGroupFromFeedId(id);
+		}
+
+		super.endDocument();
+	}
+}

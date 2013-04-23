@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">FeedEx</string>
+    <string name="never">never</string>
+    <string name="update">Update</string>
+    <string name="colon">:\u00A0</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_all_read">Mark all as read</string>
+    <string name="feedex_feeds">FeedEx feeds</string>
+    <string name="new_entries">new entries</string>
+    <string name="error">Error</string>
+    <string name="network_error">The network is not set up</string>
+    
+    <!-- FEEDS -->
+    <string name="menu_add_feed">Add feed</string>
+    <string name="no_feeds">No feeds</string>
+    <string name="no_filters">No filters</string>
+    <string name="context_menu_delete">Delete</string>
+    <string name="edit_feed_title">Edit feed</string>
+    <string name="new_feed_title">New feed</string>
+    <string name="context_menu_edit">Edit</string>
+    <string name="menu_add_group">Add group</string>
+    <string name="menu_import">Import from OPML</string>
+    <string name="menu_export">Export to OPML</string>
+    <string name="menu_enable_feed_sort">Enable feed sort</string>
+    <string name="menu_disable_feed_sort">Disable feed sort</string>
+    <string name="error_feed_error">The feed URL could not accessed.</string>
+    <string name="error_feed_process">The feed can not be processed.</string>
+    <string name="error_feed_url_exists">The URL already exists.</string>
+    <string name="error_feed_import">The selected file could not be imported.</string>
+    <string name="error_feed_export">The export has failed. Make sure you have a writable SD-card mounted.</string>
+    <string name="error_external_storage_not_available">The external storage (e.g. SD-card)  is not available.</string>
+    <string name="feed_url">URL</string>
+    <string name="optional">(optional)</string>
+    <string name="website_or_feed">(website or feed)</string>
+    <string name="feed_title">TITLE</string>
+    <string name="feed_filters">FILTERS</string>
+    <string name="filter_add_title">Add filter</string>
+    <string name="filter_delete_title">Delete filter</string>
+    <string name="filter_edit_title">Edit filter</string>
+    <string name="filter_is_regex">is a regular expression</string>
+    <string name="filter_apply_to_title">Apply to title</string>
+    <string name="filter_apply_to_content">Apply to content</string>
+    <string name="select_file">Select file (SD-root)</string>
+    <string name="question_delete_feed">Do you really want to delete this feed?</string>
+    <string name="question_delete_group">Do you really want to delete this group and all of its feeds?</string>
+    <string name="question_delete_filter">Do you really want to delete this filter?</string>
+    <string name="add_group_title">Select group name</string>
+    <string name="edit_group_title">Edit group name</string>
+    <string name="message_exported_to">Exported into %s.</string>
+    <string name="to_group_title">Group action</string>
+    <string name="to_group_message">You can either put this feed into or above this group. What do you want to do?</string>
+    <string name="to_group_above">Above the group</string>
+    <string name="to_group_into">Into the group</string>
+    
+    <!-- ENTRIES -->
+    <string name="all">All</string>
+    <string name="overview">Overview</string>
+    <string name="no_entries">No entries</string>
+    <string name="favorites">Starred</string>
+    <string name="context_menu_mark_as_read">Mark as read</string>
+    <string name="context_menu_hide_read">Hide read entries</string>
+    <string name="context_menu_show_read">Show read entries</string>
+    <string name="menu_star">Star</string>
+    <string name="menu_unstar">Unstar</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_copy_clipboard">Copy link into clipboard</string>
+    <string name="copied_clipboard">Copied to clipboard</string>
+    <string name="get_full_text">Retrieve the full text</string>
+    <string name="original_text">Show original text</string>
+    <string name="see_enclosure">See enclosure</string>
+    <string name="see_link">See in browser</string>
+    
+    <!-- WIDGET -->
+    <string name="red">Red</string>
+    <string name="green">Green</string>
+    <string name="blue">Blue</string>
+    <string name="transparency">Transparency</string>
+    
+    <!-- SETTINGS -->
+    <string name="settings_screen_proxy">Proxy</string>
+    <string name="settings_category_refresh">Automated refresh</string>
+    <string name="settings_enabled">Enabled</string>
+    <string name="settings_refresh_enabled_description">This setting controls the automatic refresh of all feeds</string>
+    <string name="settings_refresh_interval">Refresh interval</string>
+    <string name="settings_refresh_interval_description">Interval between two automated refreshes</string>
+    <string name="settings_category_notofications">Notifications</string>
+    <string name="settings_notifications_enabled_description">Controls the appearance of notifications in case of new feed content</string>
+    <string name="settings_notifications_ringtone">Ringtone</string>
+    <string name="settings_notifications_ringtone_description">Select a ringtone that will be played on new feed content</string>
+    <string name="settings_notifications_vibrate">Vibrate</string>
+    <string name="settings_notifications_vibrate_description">Controls if there will be vibration on new feed content</string>
+    <string name="settings_category_content_presentation">Content presentation</string>
+    <string name="settings_keep_time">Time that the entries will be kept</string>
+    <string name="settings_keep_time_description">The entries that are older than the given date will be deleted</string>
+    <string name="settings_disable_pictures">Disable pictures</string>
+    <string name="settings_disable_pictures_description">Do not show and load any pictures</string>
+    <string name="settings_fetch_pictures">Download pictures</string>
+    <string name="settings_fetch_pictures_description">Download all pictures and store them locally</string>
+    <string name="settings_font_size">Font size</string>
+    <string name="settings_font_size_description">Font size for single entries</string>
+    <string name="settings_refresh_on_open">Refresh feeds on open</string>
+    <string name="settings_refresh_on_open_description">Refreshes all feeds after opening the application</string>
+    <string name="settings_visible_feeds">Visible feeds</string>
+    <string name="settings_widget_background">Background</string>
+    <string name="settings_widget_background_description">Color and transparency of the widget background</string>
+    <string name="settings_category_network">Network</string>
+    <string name="settings_proxy_wifi_only">Wifi only</string>
+    <string name="settings_proxy_wifi_only_description">Use Proxy only for wifi</string>
+    <string name="settings_proxy_host">Host</string>
+    <string name="settings_proxy_port">Port</string>
+    <string name="settings_proxy_type">Type</string>
+    <string name="all_feeds">All feeds (incl. future)</string>
+
+    <string-array name="settings_intervals">
+        <item>1 minute</item>
+        <item>5 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>1 day</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 day</item>
+        <item>2 days</item>
+        <item>4 days</item>
+        <item>1 week</item>
+        <item>2 weeks</item>
+        <item>1 month</item>
+        <item>2 months</item>
+        <item>3 months</item>
+        <item>Forever</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>Standard</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_proxy_types_names">
+        <item>HTTP</item>
+        <item>SOCKS</item>
+    </string-array>
+
+</resources>

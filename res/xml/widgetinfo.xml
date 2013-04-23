@@ -1,0 +1,7 @@
+<appwidget-provider
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="294dp"
+    android:minHeight="147dp"
+    android:updatePeriodMillis="0"
+    android:initialLayout="@layout/widget"
+    android:configure="net.fred.feedex.widget.WidgetConfigActivity"/>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="net.fred.feedex"
+    android:installLocation="auto"
+    android:versionCode="4"
+    android:versionName="1.0.3" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name="net.fred.feedex.MainApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Holo" >
+        <service android:name="net.fred.feedex.service.RefreshService" />
+        <service android:name="net.fred.feedex.service.FetcherService" />
+
+        <provider
+            android:name="net.fred.feedex.provider.FeedDataContentProvider"
+            android:authorities="net.fred.feedex.provider.FeedData"
+            android:exported="true" />
+
+        <activity
+            android:name="net.fred.feedex.activity.MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="net.fred.feedex.activity.EntriesListActivity"
+            android:launchMode="singleTask"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.dir/vnd.feeddata.entry" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="net.fred.feedex.activity.EntryActivity"
+            android:launchMode="singleTask"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.feeddata.entry" />
+            </intent-filter>
+        </activity>
+        <activity android:name="net.fred.feedex.activity.GeneralPrefsActivity" />
+        <activity android:name="net.fred.feedex.widget.WidgetConfigActivity" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        <activity android:name="net.fred.feedex.activity.EditFeedActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.feeddata.feed" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.INSERT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.dir/vnd.feeddata.feed" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name="net.fred.feedex.widget.WidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widgetinfo" />
+        </receiver>
+
+        <service
+            android:name="net.fred.feedex.widget.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <receiver
+            android:name="net.fred.feedex.receiver.RefreshBroadcastReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="net.fred.feedex.REFRESH" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="net.fred.feedex.receiver.MobilizeFeedBroadcastReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="net.fred.feedex.MOBILIZE_FEED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="net.fred.feedex.receiver.BootCompletedBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="net.fred.feedex.receiver.ConnectionChangeReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

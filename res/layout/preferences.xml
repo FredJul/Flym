@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/settings_category_refresh" >
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="refresh.enabled"
+            android:summary="@string/settings_refresh_enabled_description"
+            android:title="@string/settings_enabled" />
+
+        <ListPreference
+            android:name="@string/settings_refresh_interval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="1800000"
+            android:dependency="refresh.enabled"
+            android:entries="@array/settings_intervals"
+            android:entryValues="@array/settings_interval_values"
+            android:inputType="number"
+            android:key="refresh.interval"
+            android:summary="@string/settings_refresh_interval_description"
+            android:title="@string/settings_refresh_interval" />
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="refreshonopen.enabled"
+            android:summary="@string/settings_refresh_on_open_description"
+            android:title="@string/settings_refresh_on_open" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/settings_category_notofications" >
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="notifications.enabled"
+            android:summary="@string/settings_notifications_enabled_description"
+            android:title="@string/settings_enabled" />
+
+        <RingtonePreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:dependency="notifications.enabled"
+            android:key="notifications.ringtone"
+            android:ringtoneType="notification"
+            android:summary="@string/settings_notifications_ringtone_description"
+            android:title="@string/settings_notifications_ringtone" />
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:dependency="notifications.enabled"
+            android:key="notifications.vibrate"
+            android:summary="@string/settings_notifications_vibrate_description"
+            android:title="@string/settings_notifications_vibrate" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/settings_category_content_presentation" >
+
+        <ListPreference
+            android:name="@string/settings_keep_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="4"
+            android:entries="@array/settings_keep_times"
+            android:entryValues="@array/settings_keep_time_values"
+            android:inputType="number"
+            android:key="keeptime"
+            android:summary="@string/settings_keep_time_description"
+            android:title="@string/settings_keep_time" />
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:disableDependentsState="true"
+            android:key="pictures.disable"
+            android:summary="@string/settings_disable_pictures_description"
+            android:title="@string/settings_disable_pictures" />
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:dependency="pictures.disable"
+            android:key="pictures.fetch"
+            android:summary="@string/settings_fetch_pictures_description"
+            android:title="@string/settings_fetch_pictures" />
+
+        <ListPreference
+            android:name="@string/settings_font_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="0"
+            android:entries="@array/settings_font_sizes"
+            android:entryValues="@array/settings_font_size_values"
+            android:inputType="number"
+            android:key="fontsize"
+            android:summary="@string/settings_font_size_description"
+            android:title="@string/settings_font_size" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/settings_category_network" >
+
+        <PreferenceScreen
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:title="@string/settings_screen_proxy" >
+
+            <CheckBoxPreference
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:key="proxy.enabled"
+                android:title="@string/settings_enabled" />
+
+            <CheckBoxPreference
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:dependency="proxy.enabled"
+                android:key="proxy.wifionly"
+                android:summary="@string/settings_proxy_wifi_only_description"
+                android:title="@string/settings_proxy_wifi_only" />
+
+            <EditTextPreference
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:dependency="proxy.enabled"
+                android:key="proxy.host"
+                android:title="@string/settings_proxy_host" />
+
+            <EditTextPreference
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:dependency="proxy.enabled"
+                android:inputType="number"
+                android:key="proxy.port"
+                android:title="@string/settings_proxy_port" />
+
+            <ListPreference
+                android:name="@string/settings_proxy_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:defaultValue="0"
+                android:dependency="proxy.enabled"
+                android:entries="@array/settings_proxy_types_names"
+                android:entryValues="@array/settings_proxy_types"
+                android:inputType="number"
+                android:key="proxy.type"
+                android:title="@string/settings_proxy_type" />
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+</PreferenceScreen>
