@@ -61,7 +61,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 	private int linkColumn;
 
 	private final Uri uri;
-
 	private final boolean showFeedInfo;
 
 	private final Vector<Long> markedAsRead = new Vector<Long>();
@@ -113,7 +112,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 				values.put(EntryColumns.IS_FAVORITE, newFavorite ? 1 : 0);
 
 				ContentResolver cr = MainApplication.getAppContext().getContentResolver();
-				if (cr.update(uri, values, new StringBuilder(EntryColumns._ID).append(Constants.DB_ARG).toString(), new String[] { Long.toString(id) }) > 0) {
+				if (cr.update(uri, values, new StringBuilder(EntryColumns._ID).append(Constants.DB_ARG).toString(),
+						new String[] { Long.toString(id) }) > 0) {
 					if (!EntryColumns.FAVORITES_CONTENT_URI.equals(uri)) {
 						cr.notifyChange(ContentUris.withAppendedId(EntryColumns.FAVORITES_CONTENT_URI, id), null);
 					}
@@ -129,27 +129,22 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
 		if (showFeedInfo && feedIconColumn > -1 && feedNameColumn > -1) {
 			byte[] iconBytes = cursor.getBlob(feedIconColumn);
+			dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date))
+					.append(Constants.COMMA_SPACE).append(cursor.getString(feedNameColumn)));
 
 			if (iconBytes != null && iconBytes.length > 0) {
 				Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
 
 				if (bitmap != null) {
-					int bitmapSizeInDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18f, context.getResources().getDisplayMetrics());
+					int bitmapSizeInDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18f, context.getResources()
+							.getDisplayMetrics());
 					if (bitmap.getHeight() != bitmapSizeInDip) {
 						bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
 					}
-					dateTextView.setText(new StringBuilder().append(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)).append(Constants.COMMA_SPACE)
-							.append(cursor.getString(feedNameColumn))); // bad
-																		// style
-				} else {
-					dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)).append(Constants.COMMA_SPACE)
-							.append(cursor.getString(feedNameColumn)));
 				}
 				dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(context.getResources(), bitmap), null, null, null);
 			} else {
 				dateTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-				dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)).append(Constants.COMMA_SPACE)
-						.append(cursor.getString(feedNameColumn)));
 			}
 
 		} else {
