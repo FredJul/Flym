@@ -21,9 +21,6 @@
 package net.fred.feedex.handler;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -137,8 +134,6 @@ public class RssAtomHandler extends DefaultHandler {
 	private String feedBaseUrl;
 	private boolean done;
 	private Date keepDateBorder;
-	private InputStream inputStream;
-	private Reader reader;
 	private boolean fetchImages;
 	private boolean cancelled;
 	private long now;
@@ -177,8 +172,6 @@ public class RssAtomHandler extends DefaultHandler {
 		this.entryLink = null;
 		this.description = null;
 		this.enclosure = null;
-		inputStream = null;
-		reader = null;
 		entryDate = null;
 
 		done = false;
@@ -466,33 +459,13 @@ public class RssAtomHandler extends DefaultHandler {
 		return cancelled;
 	}
 
-	public void setInputStream(InputStream inputStream) {
-		this.inputStream = inputStream;
-		reader = null;
-	}
-
-	public void setReader(Reader reader) {
-		this.reader = reader;
-		inputStream = null;
-	}
-
-	private void cancel() {
+	private void cancel() throws SAXException {
 		if (!cancelled) {
 			cancelled = true;
 			done = true;
-			if (inputStream != null) {
-				try {
-					inputStream.close(); // stops all parsing
-				} catch (IOException e) {
+			endDocument();
 
-				}
-			} else if (reader != null) {
-				try {
-					reader.close(); // stops all parsing
-				} catch (IOException e) {
-
-				}
-			}
+			throw new SAXException("Finished");
 		}
 	}
 

@@ -48,9 +48,6 @@ import net.fred.feedex.handler.RssAtomHandler;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
-
-import org.xml.sax.SAXException;
-
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.IntentService;
@@ -375,13 +372,9 @@ public class FetcherService extends IntentService {
 						int index2 = contentType.indexOf(';', index);
 
 						InputStream inputStream = getConnectionInputStream(connection);
-
-						handler.setInputStream(inputStream);
 						Xml.parse(inputStream, Xml.findEncodingByName(index2 > -1 ? contentType.substring(index + 8, index2) : contentType.substring(index + 8)), handler);
 					} else {
 						InputStreamReader reader = new InputStreamReader(getConnectionInputStream(connection));
-
-						handler.setReader(reader);
 						Xml.parse(reader, handler);
 					}
 					break;
@@ -414,15 +407,11 @@ public class FetcherService extends IntentService {
 								try {
 									StringReader reader = new StringReader(new String(ouputStream.toByteArray(), index2 > -1 ? contentType.substring(index + 8, index2)
 											: contentType.substring(index + 8)));
-
-									handler.setReader(reader);
 									Xml.parse(reader, handler);
 								} catch (Exception e) {
 								}
 							} else {
 								StringReader reader = new StringReader(new String(ouputStream.toByteArray()));
-
-								handler.setReader(reader);
 								Xml.parse(reader, handler);
 							}
 						}
@@ -442,11 +431,6 @@ public class FetcherService extends IntentService {
 					if (cr.update(FeedColumns.CONTENT_URI(id), values, null, null) > 0) {
 						FeedDataContentProvider.notifyGroupFromFeedId(id);
 					}
-				} else {
-					try {
-						handler.endDocument(); // HACK to correctly finished the process
-					} catch (SAXException e1) {
-					}
 				}
 			} catch (Throwable e) {
 				if (!handler.isDone() && !handler.isCancelled()) {
@@ -458,11 +442,6 @@ public class FetcherService extends IntentService {
 					values.put(FeedColumns.ERROR, e.getMessage() != null ? e.getMessage() : getString(R.string.error_feed_process));
 					if (cr.update(FeedColumns.CONTENT_URI(id), values, null, null) > 0) {
 						FeedDataContentProvider.notifyGroupFromFeedId(id);
-					}
-				} else {
-					try {
-						handler.endDocument(); // HACK to correctly finished the process
-					} catch (SAXException e1) {
 					}
 				}
 			} finally {
