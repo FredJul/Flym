@@ -67,8 +67,6 @@ public class FeedDataContentProvider extends ContentProvider {
 	private static final String TABLE_FILTERS = "filters";
 	private static final String TABLE_ENTRIES = "entries";
 
-	private static final String EQUALS_ONE = "=1";
-
 	public static final String IMAGE_FOLDER = FOLDER + "images/";
 	public static final File IMAGE_FOLDER_FILE = new File(IMAGE_FOLDER);
 
@@ -204,7 +202,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		switch (option) {
 		case URI_GROUPS: {
 			queryBuilder.setTables(TABLE_FEEDS);
-			queryBuilder.appendWhere(new StringBuilder(FeedColumns.IS_GROUP).append(EQUALS_ONE).append(Constants.DB_OR).append(FeedColumns.GROUP_ID).append(Constants.DB_IS_NULL));
+			queryBuilder.appendWhere(new StringBuilder(FeedColumns.IS_GROUP).append(Constants.DB_IS_TRUE).append(Constants.DB_OR).append(FeedColumns.GROUP_ID).append(Constants.DB_IS_NULL));
 			break;
 		}
 		case URI_FEEDS_FOR_GROUPS: {
@@ -254,7 +252,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		}
 		case URI_FAVORITES: {
 			queryBuilder.setTables("entries join (select name, icon, _id as feed_id from feeds) as F on (entries.feedid = F.feed_id)");
-			queryBuilder.appendWhere(new StringBuilder(EntryColumns.IS_FAVORITE).append(EQUALS_ONE));
+			queryBuilder.appendWhere(new StringBuilder(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_TRUE));
 			break;
 		}
 		}
@@ -359,7 +357,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
 					priorityCursor.close();
 
-					String oldGroupWhere = '(' + (oldGroupId != null ? FeedColumns.GROUP_ID + '=' + oldGroupId : FeedColumns.IS_GROUP + EQUALS_ONE + Constants.DB_OR + FeedColumns.GROUP_ID
+					String oldGroupWhere = '(' + (oldGroupId != null ? FeedColumns.GROUP_ID + '=' + oldGroupId : FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR + FeedColumns.GROUP_ID
 							+ Constants.DB_IS_NULL) + ')';
 
 					// If the group has changed, it is not only a +1 or -1 for priority...
@@ -371,8 +369,8 @@ public class FeedDataContentProvider extends ContentProvider {
 
 						priorityValue = FeedColumns.PRIORITY + "+1";
 						priorityWhere = FeedColumns.PRIORITY + '>' + (newPriority - 1);
-						String newGroupWhere = '(' + (newGroupId != null ? FeedColumns.GROUP_ID + '=' + newGroupId : FeedColumns.IS_GROUP + EQUALS_ONE + Constants.DB_OR + FeedColumns.GROUP_ID
-								+ Constants.DB_IS_NULL) + ')';
+						String newGroupWhere = '(' + (newGroupId != null ? FeedColumns.GROUP_ID + '=' + newGroupId : FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR
+								+ FeedColumns.GROUP_ID + Constants.DB_IS_NULL) + ')';
 						database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE " + newGroupWhere + Constants.DB_AND + priorityWhere);
 
 					} else { // We move the item into the same group
@@ -430,7 +428,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		}
 		case URI_FAVORITES: {
 			table = TABLE_ENTRIES;
-			where.append(EntryColumns.IS_FAVORITE).append(EQUALS_ONE);
+			where.append(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_TRUE);
 			break;
 		}
 		}
@@ -490,7 +488,7 @@ public class FeedDataContentProvider extends ContentProvider {
 			if (priorityCursor.moveToNext()) {
 				int priority = priorityCursor.getInt(0);
 				String priorityWhere = FeedColumns.PRIORITY + " > " + priority;
-				String groupWhere = '(' + FeedColumns.IS_GROUP + EQUALS_ONE + Constants.DB_OR + FeedColumns.GROUP_ID + Constants.DB_IS_NULL + ')';
+				String groupWhere = '(' + FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR + FeedColumns.GROUP_ID + Constants.DB_IS_NULL + ')';
 				database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + " = " + FeedColumns.PRIORITY + "-1 WHERE " + groupWhere + Constants.DB_AND + priorityWhere);
 			}
 			priorityCursor.close();
@@ -518,7 +516,8 @@ public class FeedDataContentProvider extends ContentProvider {
 				int priority = priorityCursor.getInt(0);
 				String groupId = priorityCursor.getString(1);
 
-				String groupWhere = '(' + (groupId != null ? FeedColumns.GROUP_ID + '=' + groupId : FeedColumns.IS_GROUP + EQUALS_ONE + Constants.DB_OR + FeedColumns.GROUP_ID + Constants.DB_IS_NULL) + ')';
+				String groupWhere = '(' + (groupId != null ? FeedColumns.GROUP_ID + '=' + groupId : FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR + FeedColumns.GROUP_ID
+						+ Constants.DB_IS_NULL) + ')';
 				String priorityWhere = FeedColumns.PRIORITY + " > " + priority;
 
 				database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + " = " + FeedColumns.PRIORITY + "-1 WHERE " + groupWhere + Constants.DB_AND + priorityWhere);
@@ -567,7 +566,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		}
 		case URI_FAVORITES: {
 			table = TABLE_ENTRIES;
-			where.append(EntryColumns.IS_FAVORITE).append(EQUALS_ONE);
+			where.append(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_TRUE);
 			break;
 		}
 		}

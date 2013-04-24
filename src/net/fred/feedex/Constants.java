@@ -34,6 +34,8 @@ public final class Constants {
 
 	public static final String ENTRY_URI = "entry_uri";
 
+	public static final String DB_IS_TRUE = "=1";
+	public static final String DB_IS_FALSE = "=0";
 	public static final String DB_IS_NULL = " IS NULL";
 	public static final String DB_DESC = " DESC";
 	public static final String DB_ARG = "=?";
