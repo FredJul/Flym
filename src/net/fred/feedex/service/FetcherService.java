@@ -204,22 +204,23 @@ public class FetcherService extends IntentService {
 					sb.append(line);
 				}
 
+				String mobilizedHtml = null;
 				Pattern p = Pattern.compile("<description>[^<]*</description>.*<description>(.*)&lt;p&gt;&lt;em&gt;This entry passed through the");
 				Matcher m = p.matcher(sb.toString());
 				if (m.find()) {
-					String html = m.toMatchResult().group(1);
-					ContentValues values = new ContentValues();
-					values.put(EntryColumns.MOBILIZED_HTML, Html.fromHtml(html, null, null).toString());
-					cr.update(uri, values, null, null);
+					mobilizedHtml = m.toMatchResult().group(1);
 				} else {
 					p = Pattern.compile("<description>[^<]*</description>.*<description>(.*)</description>");
 					m = p.matcher(sb.toString());
 					if (m.find()) {
-						String html = m.toMatchResult().group(1);
-						ContentValues values = new ContentValues();
-						values.put(EntryColumns.MOBILIZED_HTML, Html.fromHtml(html, null, null).toString());
-						cr.update(uri, values, null, null);
+						mobilizedHtml = m.toMatchResult().group(1);
 					}
+				}
+
+				if (mobilizedHtml != null) {
+					ContentValues values = new ContentValues();
+					values.put(EntryColumns.MOBILIZED_HTML, Html.fromHtml(mobilizedHtml, null, null).toString());
+					cr.update(uri, values, null, null);
 				}
 			} catch (Throwable e) {
 				e.printStackTrace();
