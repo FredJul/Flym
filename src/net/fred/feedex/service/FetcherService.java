@@ -543,23 +543,18 @@ public class FetcherService extends IntentService {
 		try {
 			iconURLConnection = setupConnection(new URL(new StringBuilder(url.getProtocol()).append(Constants.PROTOCOL_SEPARATOR).append(url.getHost()).append(Constants.FILE_FAVICON).toString()));
 
+			ContentValues values = new ContentValues();
 			try {
 				byte[] iconBytes = getBytes(getConnectionInputStream(iconURLConnection));
-				ContentValues values = new ContentValues();
-
 				values.put(FeedColumns.ICON, iconBytes);
-				context.getContentResolver().update(FeedColumns.CONTENT_URI(id), values, null, null);
-				FeedDataContentProvider.notifyGroupFromFeedId(id);
 			} catch (Exception e) {
-				ContentValues values = new ContentValues();
-
 				// no icon found or error
 				values.put(FeedColumns.ICON, new byte[0]);
+			} finally {
+				iconURLConnection.disconnect();
 
 				context.getContentResolver().update(FeedColumns.CONTENT_URI(id), values, null, null);
 				FeedDataContentProvider.notifyGroupFromFeedId(id);
-			} finally {
-				iconURLConnection.disconnect();
 			}
 		} catch (Throwable t) {
 		}
