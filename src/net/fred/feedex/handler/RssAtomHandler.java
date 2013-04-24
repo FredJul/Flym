@@ -354,32 +354,9 @@ public class RssAtomHandler extends DefaultHandler {
 					values.put(EntryColumns.ABSTRACT, improvedDesc.first);
 				}
 
-				// Try to find if the entry is filtered
-				boolean isFiltered = false;
-				ContentResolver cr = MainApplication.getAppContext().getContentResolver();
-				Cursor c = cr.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(id), new String[] { FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX, FilterColumns.IS_APPLIED_TO_TITLE }, null, null,
-						null);
-				while (c.moveToNext()) {
-					String filterText = c.getString(0);
-					boolean isRegex = c.getInt(1) == 1;
-					boolean isAppliedToTitle = c.getInt(2) == 1;
+				// Try to find if the entry is not filtered and need to be processed
+				if (!isEntryFiltered(id, improvedTitle, improvedDesc.first)) {
 
-					if (isRegex) {
-						Pattern p = Pattern.compile(filterText);
-						if (isAppliedToTitle) {
-							Matcher m = p.matcher(improvedTitle);
-							isFiltered = m.find();
-						} else {
-							Matcher m = p.matcher(improvedDesc.first);
-							isFiltered = m.find();
-						}
-					} else if ((isAppliedToTitle && improvedTitle.contains(filterText)) || (!isAppliedToTitle && improvedDesc.first.contains(filterText))) {
-						isFiltered = true;
-					}
-				}
-				c.close();
-
-				if (!isFiltered) {
 					if (author != null) {
 						values.put(EntryColumns.AUTHOR, author.toString());
 					}
@@ -414,6 +391,7 @@ public class RssAtomHandler extends DefaultHandler {
 							enclosureString }) : (guidString != null ? new String[] { entryLinkString, guidString } : new String[] { entryLinkString });
 
 					// First, try to update the feed
+					ContentResolver cr = MainApplication.getAppContext().getContentResolver();
 					if ((entryLinkString.length() == 0 && guidString == null) || cr.update(feedEntiresUri, values, existanceStringBuilder.toString(), existanceValues) == 0) {
 
 						// We put the date only for new entry (no need to change the past, you may already read it)
@@ -544,6 +522,34 @@ public class RssAtomHandler extends DefaultHandler {
 			} // just do nothing
 		}
 		return null;
+	}
+
+	private static boolean isEntryFiltered(String feedId, String title, String content) {
+		boolean isFiltered = false;
+		ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+		Cursor c = cr
+				.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), new String[] { FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX, FilterColumns.IS_APPLIED_TO_TITLE }, null, null, null);
+		while (c.moveToNext()) {
+			String filterText = c.getString(0);
+			boolean isRegex = c.getInt(1) == 1;
+			boolean isAppliedToTitle = c.getInt(2) == 1;
+
+			if (isRegex) {
+				Pattern p = Pattern.compile(filterText);
+				if (isAppliedToTitle) {
+					Matcher m = p.matcher(title);
+					isFiltered = m.find();
+				} else {
+					Matcher m = p.matcher(content);
+					isFiltered = m.find();
+				}
+			} else if ((isAppliedToTitle && title.contains(filterText)) || (!isAppliedToTitle && content.contains(filterText))) {
+				isFiltered = true;
+			}
+		}
+		c.close();
+
+		return isFiltered;
 	}
 
 	private static String unescapeTitle(String title) {
