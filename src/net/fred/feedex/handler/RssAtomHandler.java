@@ -111,6 +111,7 @@ public class RssAtomHandler extends DefaultHandler {
 
 	private String id;
 
+	private boolean entryTagEntered;
 	private boolean titleTagEntered;
 	private boolean updatedTagEntered;
 	private boolean linkTagEntered;
@@ -123,13 +124,14 @@ public class RssAtomHandler extends DefaultHandler {
 
 	private StringBuilder title;
 	private StringBuilder dateStringBuilder;
+	private String feedLink;
 	private Date entryDate;
 	private StringBuilder entryLink;
 	private StringBuilder description;
 	private StringBuilder enclosure;
 	private Uri feedEntiresUri;
 	private int newCount;
-	private String originalFeedTitle;
+	private String feedName;
 	private String feedTitle;
 	private String feedBaseUrl;
 	private boolean done;
@@ -144,12 +146,13 @@ public class RssAtomHandler extends DefaultHandler {
 		KEEP_TIME = Long.parseLong(PrefsManager.getString(PrefsManager.KEEP_TIME, "4")) * 86400000l;
 	}
 
-	public void init(Date lastUpdateDate, final String id, String title, String url) {
+	public void init(Date lastUpdateDate, final String id, String feedName, String url) {
 		final long keepDateBorderTime = KEEP_TIME > 0 ? System.currentTimeMillis() - KEEP_TIME : 0;
 
 		keepDateBorder = new Date(keepDateBorderTime);
 		this.lastUpdateDate = lastUpdateDate;
 		this.id = id;
+		this.feedName = feedName;
 		feedEntiresUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(id);
 
 		final String query = new StringBuilder(EntryColumns.DATE).append('<').append(keepDateBorderTime).append(Constants.DB_AND).append(EntryColumns.WHERE_NOT_FAVORITE).toString();
@@ -158,7 +161,6 @@ public class RssAtomHandler extends DefaultHandler {
 
 		MainApplication.getAppContext().getContentResolver().delete(feedEntiresUri, query, null);
 		newCount = 0;
-		originalFeedTitle = title;
 
 		int index = url.indexOf('/', 8); // this also covers https://
 
@@ -167,16 +169,19 @@ public class RssAtomHandler extends DefaultHandler {
 		} else {
 			feedBaseUrl = null;
 		}
-		this.title = null;
-		this.dateStringBuilder = null;
-		this.entryLink = null;
-		this.description = null;
-		this.enclosure = null;
+
+		title = null;
+		feedLink = null;
+		dateStringBuilder = null;
+		entryLink = null;
+		description = null;
+		enclosure = null;
 		entryDate = null;
 
 		done = false;
 		cancelled = false;
 
+		entryTagEntered = false;
 		titleTagEntered = false;
 		updatedTagEntered = false;
 		linkTagEntered = false;
@@ -198,6 +203,7 @@ public class RssAtomHandler extends DefaultHandler {
 			updatedTagEntered = true;
 			dateStringBuilder = new StringBuilder();
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
+			entryTagEntered = true;
 			description = null;
 			entryLink = null;
 
@@ -321,6 +327,10 @@ public class RssAtomHandler extends DefaultHandler {
 			descriptionTagEntered = false;
 		} else if (TAG_LINK.equals(localName)) {
 			linkTagEntered = false;
+
+			if (feedLink == null && !entryTagEntered && TAG_LINK.equals(qName)) { // Skip <atom10:link> tags
+				feedLink = entryLink.toString();
+			}
 		} else if (TAG_UPDATED.equals(localName)) {
 			entryDate = parseUpdateDate(dateStringBuilder.toString());
 			updatedTagEntered = false;
@@ -334,6 +344,7 @@ public class RssAtomHandler extends DefaultHandler {
 			entryDate = parseUpdateDate(dateStringBuilder.toString());
 			dateTagEntered = false;
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
+			entryTagEntered = false;
 			if (title != null && (entryDate == null || ((entryDate.after(lastUpdateDate)) && entryDate.after(keepDateBorder)))) {
 				ContentValues values = new ContentValues();
 
@@ -445,6 +456,10 @@ public class RssAtomHandler extends DefaultHandler {
 
 			tmpAuthor = null;
 		}
+	}
+
+	public String getFeedLink() {
+		return feedLink;
 	}
 
 	public int getNewCount() {
@@ -587,7 +602,7 @@ public class RssAtomHandler extends DefaultHandler {
 	public void endDocument() throws SAXException {
 		ContentValues values = new ContentValues();
 
-		if (originalFeedTitle == null && feedTitle != null) {
+		if (feedName == null && feedTitle != null) {
 			values.put(FeedColumns.NAME, title.toString().trim());
 		}
 		values.putNull(FeedColumns.ERROR);

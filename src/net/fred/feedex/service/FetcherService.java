@@ -358,11 +358,6 @@ public class FetcherService extends IntentService {
 					cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
 				}
 
-				/* check and optionally find favicon */
-				if (cursor.getBlob(iconPosition) == null) {
-					getFavicon(this, connection.getURL(), id);
-				}
-
 				switch (fetchMode) {
 				default:
 				case FETCHMODE_DIRECT: {
@@ -419,6 +414,7 @@ public class FetcherService extends IntentService {
 					break;
 				}
 				}
+
 				connection.disconnect();
 			} catch (FileNotFoundException e) {
 				if (!handler.isDone() && !handler.isCancelled()) {
@@ -445,6 +441,20 @@ public class FetcherService extends IntentService {
 					}
 				}
 			} finally {
+
+				/* check and optionally find favicon */
+				try {
+					if (cursor.getBlob(iconPosition) == null) {
+						String feedLink = handler.getFeedLink();
+						if (feedLink != null) {
+							retrieveFavicon(this, new URL(feedLink), id);
+						} else {
+							retrieveFavicon(this, connection.getURL(), id);
+						}
+					}
+				} catch (Throwable e) {
+				}
+
 				if (connection != null) {
 					connection.disconnect();
 				}
@@ -517,7 +527,7 @@ public class FetcherService extends IntentService {
 		return result;
 	}
 
-	private static void getFavicon(Context context, URL url, String id) {
+	private static void retrieveFavicon(Context context, URL url, String id) {
 		HttpURLConnection iconURLConnection;
 		try {
 			iconURLConnection = setupConnection(new URL(new StringBuilder(url.getProtocol()).append(Constants.PROTOCOL_SEPARATOR).append(url.getHost()).append(Constants.FILE_FAVICON).toString()));
