@@ -1,0 +1,7 @@
+-keepattributes JavascriptInterface
+
+-keep public class net.fred.feedex.activity.EntryActivity$JavaScriptObject
+-keepclassmembers class net.fred.feedex.activity.EntryActivity$JavaScriptObject {
+    <fields>;
+    <methods>;
+}

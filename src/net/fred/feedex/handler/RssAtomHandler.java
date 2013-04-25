@@ -603,7 +603,7 @@ public class RssAtomHandler extends DefaultHandler {
 		ContentValues values = new ContentValues();
 
 		if (feedName == null && feedTitle != null) {
-			values.put(FeedColumns.NAME, title.toString().trim());
+			values.put(FeedColumns.NAME, feedTitle.toString().trim());
 		}
 		values.putNull(FeedColumns.ERROR);
 		values.put(FeedColumns.LAST_UPDATE, now);

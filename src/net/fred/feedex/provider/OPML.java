@@ -200,6 +200,11 @@ public class OPML {
 					feedId = null;
 					if (!cursor.moveToFirst()) {
 						feedId = cr.insert(FeedColumns.CONTENT_URI, values).getLastPathSegment();
+						if (groupId == null) {
+							cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+						} else {
+							cr.notifyChange(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupId), null);
+						}
 					}
 					cursor.close();
 				}

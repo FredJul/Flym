@@ -705,7 +705,7 @@ public class EntryActivity extends Activity {
 		nextEntry();
 	}
 
-	private final Object injectedJSObject = new Object() {
+	private class JavaScriptObject {
 		@Override
 		@JavascriptInterface
 		public String toString() {
@@ -770,5 +770,7 @@ public class EntryActivity extends Activity {
 				}
 			});
 		}
-	};
+	}
+
+	private final JavaScriptObject injectedJSObject = new JavaScriptObject();
 }

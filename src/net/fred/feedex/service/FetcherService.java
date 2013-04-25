@@ -130,35 +130,37 @@ public class FetcherService extends IntentService {
 						Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[] { COUNT }, EntryColumns.WHERE_UNREAD, null, null);
 
 						cursor.moveToFirst();
-						newCount = cursor.getInt(0);
+						newCount = cursor.getInt(0); // The number has possibly changed
 						cursor.close();
 
-						String text = new StringBuilder().append(newCount).append(' ').append(getString(R.string.new_entries)).toString();
+						if (newCount > 0) {
+							String text = new StringBuilder().append(newCount).append(' ').append(getString(R.string.new_entries)).toString();
 
-						Intent notificationIntent = new Intent(FetcherService.this, MainActivity.class);
-						PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+							Intent notificationIntent = new Intent(FetcherService.this, MainActivity.class);
+							PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-						Notification.Builder notifBuilder = new Notification.Builder(MainApplication.getAppContext()) //
-								.setContentIntent(contentIntent) //
-								.setSmallIcon(R.drawable.ic_statusbar_rss) //
-								.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon)) //
-								.setTicker(text) //
-								.setWhen(System.currentTimeMillis()) //
-								.setAutoCancel(true) //
-								.setContentTitle(getString(R.string.feedex_feeds)) //
-								.setContentText(text) //
-								.setLights(0xffffffff, 300, 1000);
+							Notification.Builder notifBuilder = new Notification.Builder(MainApplication.getAppContext()) //
+									.setContentIntent(contentIntent) //
+									.setSmallIcon(R.drawable.ic_statusbar_rss) //
+									.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon)) //
+									.setTicker(text) //
+									.setWhen(System.currentTimeMillis()) //
+									.setAutoCancel(true) //
+									.setContentTitle(getString(R.string.feedex_feeds)) //
+									.setContentText(text) //
+									.setLights(0xffffffff, 300, 1000);
 
-						if (PrefsManager.getBoolean(PrefsManager.NOTIFICATIONS_VIBRATE, false)) {
-							notifBuilder.setVibrate(new long[] { 0, 1000 });
+							if (PrefsManager.getBoolean(PrefsManager.NOTIFICATIONS_VIBRATE, false)) {
+								notifBuilder.setVibrate(new long[] { 0, 1000 });
+							}
+
+							String ringtone = PrefsManager.getString(PrefsManager.NOTIFICATIONS_RINGTONE, null);
+							if (ringtone != null && ringtone.length() > 0) {
+								notifBuilder.setSound(Uri.parse(ringtone));
+							}
+
+							notificationManager.notify(0, notifBuilder.getNotification());
 						}
-
-						String ringtone = PrefsManager.getString(PrefsManager.NOTIFICATIONS_RINGTONE, null);
-						if (ringtone != null && ringtone.length() > 0) {
-							notifBuilder.setSound(Uri.parse(ringtone));
-						}
-
-						notificationManager.notify(0, notifBuilder.getNotification());
 					} else {
 						notificationManager.cancel(0);
 					}
