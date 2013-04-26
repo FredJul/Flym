@@ -28,6 +28,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Pair;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +54,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	/**
 	 * The map of a group position to the group's children cursor
 	 */
-	SparseArray<Cursor> mChildrenCursors = new SparseArray<Cursor>();
+	SparseArray<Pair<Cursor, Boolean>> mChildrenCursors = new SparseArray<Pair<Cursor, Boolean>>();
 
 	LoaderManager.LoaderCallbacks<Cursor> mGroupLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
 		@Override
@@ -66,7 +67,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 		@Override
 		public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 			mGroupCursor = data;
-			mChildrenCursors.clear();
+			setAllChildrenCursorsAsObsolete();
 			notifyDataSetChanged();
 			notifyDataSetChanged(data);
 		}
@@ -74,10 +75,18 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 		@Override
 		public void onLoaderReset(Loader<Cursor> loader) {
 			mGroupCursor = null;
-			mChildrenCursors.clear();
+			setAllChildrenCursorsAsObsolete();
 			notifyDataSetInvalidated();
 		}
 	};
+	
+	private void setAllChildrenCursorsAsObsolete() {
+		int key = 0;
+		for (int i = 0; i < mChildrenCursors.size(); i++) {
+			key = mChildrenCursors.keyAt(i);
+			mChildrenCursors.put(key, new Pair<Cursor, Boolean>(mChildrenCursors.get(key).first, true));
+		}
+	}
 
 	LoaderManager.LoaderCallbacks<Cursor> mChildrenLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
 		@Override
@@ -89,7 +98,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 
 		@Override
 		public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-			mChildrenCursors.put(loader.getId() - 1, data);
+			mChildrenCursors.put(loader.getId() - 1, new Pair<Cursor, Boolean>(data, false));
 			notifyDataSetChanged();
 		}
 
@@ -198,10 +207,10 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	@Override
 	public Cursor getChild(int groupPosition, int childPosition) {
 		// Return this group's children Cursor pointing to the particular child
-		Cursor childCursor = mChildrenCursors.get(groupPosition);
+		Pair<Cursor, Boolean> childCursor = mChildrenCursors.get(groupPosition);
 		if (childCursor != null) {
-			childCursor.moveToPosition(childPosition);
-			return childCursor;
+			childCursor.first.moveToPosition(childPosition);
+			return childCursor.first;
 		}
 
 		return null;
@@ -209,10 +218,10 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 
 	@Override
 	public long getChildId(int groupPosition, int childPosition) {
-		Cursor childrenCursor = mChildrenCursors.get(groupPosition);
+		Pair<Cursor, Boolean> childrenCursor = mChildrenCursors.get(groupPosition);
 		if (childrenCursor != null) {
-			if (childrenCursor.moveToPosition(childPosition)) {
-				return childrenCursor.getLong(childrenCursor.getColumnIndex("_id"));
+			if (childrenCursor.first.moveToPosition(childPosition)) {
+				return childrenCursor.first.getLong(childrenCursor.first.getColumnIndex("_id"));
 			} else {
 				return 0;
 			}
@@ -223,35 +232,37 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-		Cursor cursor = mChildrenCursors.get(groupPosition);
-		if (cursor == null || !cursor.moveToPosition(childPosition)) {
+		Pair<Cursor, Boolean> cursor = mChildrenCursors.get(groupPosition);
+		if (cursor == null || !cursor.first.moveToPosition(childPosition)) {
 			throw new IllegalStateException("this should only be called when the cursor is valid");
 		}
 
 		View v;
 		if (convertView == null) {
-			v = newChildView(mActivity, cursor, parent);
+			v = newChildView(mActivity, cursor.first, parent);
 		} else {
 			v = convertView;
 		}
-		bindChildView(v, mActivity, cursor);
+		bindChildView(v, mActivity, cursor.first);
 		return v;
 	}
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		Cursor childCursor = mChildrenCursors.get(groupPosition);
-		if (childCursor != null) {
-			return childCursor.getCount();
-		} else {
-			if (mGroupCursor != null && mGroupCursor.moveToPosition(groupPosition)) {
-				Bundle args = new Bundle();
-				args.putParcelable(URI_ARG, getChildrenUri(mGroupCursor));
-				mLoaderMgr.restartLoader(groupPosition + 1, args, mChildrenLoaderCallback);
-			}
-
-			return 0;
+		Pair<Cursor, Boolean> childCursor = mChildrenCursors.get(groupPosition);
+		
+		// We need to restart the loader
+		if ((childCursor == null || childCursor.second == true) && mGroupCursor != null && mGroupCursor.moveToPosition(groupPosition)) {
+			Bundle args = new Bundle();
+			args.putParcelable(URI_ARG, getChildrenUri(mGroupCursor));
+			mLoaderMgr.restartLoader(groupPosition + 1, args, mChildrenLoaderCallback);
 		}
+
+		if (childCursor != null) {
+			return childCursor.first.getCount();
+		}
+
+		return 0;
 	}
 
 	@Override
