@@ -492,15 +492,15 @@ public class FetcherService extends IntentService {
 		return result;
 	}
 
-	private static final HttpURLConnection setupConnection(String url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+	public static final HttpURLConnection setupConnection(String url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
 		return setupConnection(new URL(url));
 	}
 
-	private static final HttpURLConnection setupConnection(URL url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+	public static final HttpURLConnection setupConnection(URL url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
 		return setupConnection(url, 0);
 	}
 
-	private static final HttpURLConnection setupConnection(URL url, int cycle) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+	public static final HttpURLConnection setupConnection(URL url, int cycle) throws IOException, NoSuchAlgorithmException, KeyManagementException {
 		HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
 
 		connection.setDoInput(true);
@@ -578,7 +578,7 @@ public class FetcherService extends IntentService {
 	/**
 	 * This is a small wrapper for getting the properly encoded inputstream if is is gzip compressed and not properly recognized.
 	 */
-	private static InputStream getConnectionInputStream(HttpURLConnection connection) throws IOException {
+	public static InputStream getConnectionInputStream(HttpURLConnection connection) throws IOException {
 		InputStream inputStream = connection.getInputStream();
 
 		if (GZIP.equals(connection.getContentEncoding()) && !(inputStream instanceof GZIPInputStream)) {

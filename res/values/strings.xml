@@ -65,6 +65,11 @@
     <string name="filter_is_regex">is a regular expression</string>
     <string name="filter_apply_to_title">Apply to title</string>
     <string name="filter_apply_to_content">Apply to content</string>
+    <string name="feed_search">Feed search</string>
+    <string name="feed_search_by_site_name">Find by site name (via Faroo)</string>
+    <string name="feed_search_by_topic">Find by topic (via Faroo)</string>
+    <string name="feed_search_by_twitter">Find by Twitter screen name</string>
+    <string name="feed_search_by_youtube">Find by Youtube channel name</string>
     <string name="select_file">Select file (SD-root)</string>
     <string name="question_delete_feed">Do you really want to delete this feed?</string>
     <string name="question_delete_group">Do you really want to delete this group and all of its feeds?</string>

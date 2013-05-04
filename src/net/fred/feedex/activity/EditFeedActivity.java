@@ -44,11 +44,20 @@
 
 package net.fred.feedex.activity;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URLEncoder;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.FiltersCursorAdapter;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
+import net.fred.feedex.service.FetcherService;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -72,6 +81,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class EditFeedActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -155,8 +165,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 			String url = mUrlEditText.getText().toString();
 			ContentResolver cr = getContentResolver();
 
-			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID,
-					new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(), new String[] { url }, null);
+			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(),
+					new String[] { url }, null);
 
 			if (cursor.moveToFirst() && !getIntent().getData().getLastPathSegment().equals(cursor.getString(0))) {
 				cursor.close();
@@ -244,8 +254,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		CursorLoader cursorLoader = new CursorLoader(this, FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
-				null, null, null, null);
+		CursorLoader cursorLoader = new CursorLoader(this, FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()), null, null, null, null);
 		cursorLoader.setUpdateThrottle(500);
 		return cursorLoader;
 	}
@@ -270,8 +279,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 			url = Constants.HTTP + url;
 		}
 
-		Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(),
-				new String[] { url }, null);
+		Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(), new String[] { url }, null);
 
 		if (cursor.moveToFirst()) {
 			cursor.close();
@@ -358,9 +366,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 												values.put(FilterColumns.IS_REGEX, regexCheckBox.isChecked());
 												values.put(FilterColumns.IS_APPLIED_TO_TITLE, applyTitleRadio.isChecked());
 												if (cr.update(FilterColumns.CONTENT_URI, values, FilterColumns._ID + '=' + filterId, null) > 0) {
-													cr.notifyChange(
-															FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
-															null);
+													cr.notifyChange(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()), null);
 												}
 											}
 										}
@@ -385,8 +391,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 									public void run() {
 										ContentResolver cr = getContentResolver();
 										if (cr.delete(FilterColumns.CONTENT_URI, FilterColumns._ID + '=' + filterId, null) > 0) {
-											cr.notifyChange(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
-													null);
+											cr.notifyChange(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()), null);
 										}
 									}
 								}.start();
@@ -407,4 +412,82 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 			mFiltersListView.invalidateViews();
 		}
 	};
+
+	public void onClickSearch(View view) {
+		final View dialogView = getLayoutInflater().inflate(R.layout.search_feed, null);
+		final EditText searchText = (EditText) dialogView.findViewById(R.id.searchText);
+		final RadioGroup radioGroup = (RadioGroup) dialogView.findViewById(R.id.radioGroup);
+
+		new AlertDialog.Builder(EditFeedActivity.this) //
+				.setIcon(R.drawable.action_search) //
+				.setTitle(R.string.feed_search) //
+				.setView(dialogView) //
+				.setPositiveButton(android.R.string.search_go, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						if (searchText.getText().length() > 0) {
+							String tmp = searchText.getText().toString();
+							try {
+								tmp = URLEncoder.encode(searchText.getText().toString(), "utf-8");
+							} catch (UnsupportedEncodingException e1) {
+							}
+							final String text = tmp;
+
+							switch (radioGroup.getCheckedRadioButtonId()) {
+							case R.id.bySiteName:
+								new Thread() {
+									@Override
+									public void run() {
+										try {
+											HttpURLConnection conn = FetcherService.setupConnection("http://www.faroo.com/api?q=" + text + "&start=1&length=1&l=en&src=web&f=json");
+											BufferedReader reader = new BufferedReader(new InputStreamReader(FetcherService.getConnectionInputStream(conn)));
+
+											StringBuilder sb = new StringBuilder();
+											String line = null;
+											while ((line = reader.readLine()) != null) {
+												sb.append(line);
+											}
+											conn.disconnect();
+
+											Pattern p = Pattern.compile("\"url\": \"([^\"]+)\"");
+											final Matcher m = p.matcher(sb.toString());
+											if (m.find()) {
+												EditFeedActivity.this.runOnUiThread(new Runnable() {
+													@Override
+													public void run() {
+														mUrlEditText.setText(m.toMatchResult().group(1));
+													}
+												});
+											} else {
+												throw new Exception();
+											}
+										} catch (Exception e) {
+											EditFeedActivity.this.runOnUiThread(new Runnable() {
+												@Override
+												public void run() {
+													Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+												}
+											});
+										}
+									}
+								}.start();
+								break;
+
+							case R.id.byTopic:
+								mUrlEditText.setText("http://www.faroo.com/api?q=" + text + "&start=1&length=10&l=en&src=news&f=rss");
+								break;
+
+							case R.id.byTwitter:
+								mUrlEditText.setText("https://api.twitter.com/1/statuses/user_timeline.rss?screen_name=" + text.replaceAll("+", ""));
+								break;
+
+							case R.id.byYoutube:
+								mUrlEditText.setText("http://www.youtube.com/rss/user/" + text.replaceAll("+", "") + "/videos.rss");
+								break;
+							}
+						}
+					}
+				}).setNegativeButton(android.R.string.cancel, null).show();
+	}
 }
