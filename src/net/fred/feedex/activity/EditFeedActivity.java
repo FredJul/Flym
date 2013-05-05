@@ -435,7 +435,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 							final String text = tmp;
 
 							switch (radioGroup.getCheckedRadioButtonId()) {
-							case R.id.bySiteName:
+							case R.id.byWebSearch:
 								new Thread() {
 									@Override
 									public void run() {

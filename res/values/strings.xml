@@ -66,7 +66,7 @@
     <string name="filter_apply_to_title">Apply to title</string>
     <string name="filter_apply_to_content">Apply to content</string>
     <string name="feed_search">Feed search</string>
-    <string name="feed_search_by_site_name">Find by site name (via Faroo)</string>
+    <string name="feed_search_by_web_search">Find by web search (via Faroo)</string>
     <string name="feed_search_by_topic">Find by topic (via Faroo)</string>
     <string name="feed_search_by_twitter">Find by Twitter screen name</string>
     <string name="feed_search_by_youtube">Find by Youtube channel name</string>

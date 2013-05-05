@@ -7,7 +7,8 @@
     <EditText
         android:id="@+id/searchText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:singleLine="true" >
 
         <requestFocus />
     </EditText>
@@ -19,11 +20,11 @@
         android:layout_marginTop="10dp" >
 
         <RadioButton
-            android:id="@+id/bySiteName"
+            android:id="@+id/byWebSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/feed_search_by_site_name" />
+            android:text="@string/feed_search_by_web_search" />
 
         <RadioButton
             android:id="@+id/byTopic"
