@@ -31,7 +31,9 @@ public class PrefsManager {
 	public static final String NOTIFICATIONS_ENABLED = "notifications.enabled";
 	public static final String NOTIFICATIONS_RINGTONE = "notifications.ringtone";
 	public static final String NOTIFICATIONS_VIBRATE = "notifications.vibrate";
+
 	
+	public static final String LIGHT_THEME = "lighttheme";
 	public static final String FETCH_PICTURES = "pictures.fetch";
 	public static final String DISABLE_PICTURES = "pictures.disable";
 	

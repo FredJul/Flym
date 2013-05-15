@@ -49,6 +49,7 @@ import java.util.Date;
 import net.fred.feedex.Constants;
 import net.fred.feedex.PrefsManager;
 import net.fred.feedex.R;
+import net.fred.feedex.Utils;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import android.annotation.SuppressLint;
@@ -119,8 +120,11 @@ public class EntryActivity extends Activity {
 	private static final String ASC = "date asc, _id desc limit 1";
 	private static final String DESC = "date desc, _id asc limit 1";
 
+	private static final String TEXT_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";
+	private static final String BUTTON_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#D0D0D0" : "#505050";
+	
 	private static final String CSS = "<head><style type=\"text/css\">body {max-width: 100%; font-family: sans-serif-light; background: transparent}\nimg {max-width: 100%; height: auto;}\ndiv[style] {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
-	private static final String BODY_START = CSS + "<body link=\"#97ACE5\" text=\"#C0C0C0\">";
+	private static final String BODY_START = CSS + "<body link=\"#97ACE5\" text=\"" + TEXT_COLOR + "\">";
 	private static final String FONTSIZE_START = CSS + BODY_START + "<font size=\"+";
 	private static final String FONTSIZE_MIDDLE = "\">";
 	private static final String BODY_END = "<br/><br/><br/><br/></body>";
@@ -135,16 +139,19 @@ public class EntryActivity extends Activity {
 
 	private static final String BUTTON_START = "<div style=\"text-align: center\"><input type=\"button\" value=\"";
 	private static final String BUTTON_MIDDLE = "\" onclick=\"";
-	private static final String BUTTON_END = "\" style=\"background-color:#505050; color:#C0C0C0; border: none; border-radius:10px; padding: 10px;\"/></div>";
+	private static final String BUTTON_END = "\" style=\"background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
+			+ "; border: none; border-radius:10px; padding: 10px;\"/></div>";
 
 	private static final String LINK_BUTTON_START = "<div style=\"text-align: center; margin-top:12px\"><a href=\"";
-	private static final String LINK_BUTTON_MIDDLE = "\" style=\"background-color:#505050; color:#C0C0C0; text-decoration: none; border: none; border-radius:10px; padding: 10px;\">";
+	private static final String LINK_BUTTON_MIDDLE = "\" style=\"background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
+			+ "; text-decoration: none; border: none; border-radius:10px; padding: 10px;\">";
 	private static final String LINK_BUTTON_END = "</a></div>";
 
 	private static final String IMAGE_ENCLOSURE = "[@]image/";
 	private static final String TEXT_PLAIN = "text/plain";
 
-	private int titlePosition, datePosition, mobilizedHtmlPosition, abstractPosition, linkPosition, feedIdPosition, isFavoritePosition, isReadPosition, enclosurePosition, authorPosition;
+	private int titlePosition, datePosition, mobilizedHtmlPosition, abstractPosition, linkPosition, feedIdPosition, isFavoritePosition,
+			isReadPosition, enclosurePosition, authorPosition;
 
 	private String _id;
 	private String _nextId;
@@ -184,6 +191,7 @@ public class EntryActivity extends Activity {
 	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Utils.setPreferenceTheme(this);
 		super.onCreate(savedInstanceState);
 
 		// We need to display progress information
@@ -407,7 +415,8 @@ public class EntryActivity extends Activity {
 				feedId = _feedId;
 			}
 
-			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI(feedId), new String[] { FeedColumns.NAME, FeedColumns.URL }, null, null, null);
+			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI(feedId), new String[] { FeedColumns.NAME, FeedColumns.URL }, null,
+					null, null);
 			if (cursor.moveToFirst()) {
 				setTitle(cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0));
 			} else { // fallback, should not be possible
@@ -417,7 +426,8 @@ public class EntryActivity extends Activity {
 
 			if (canShowIcon) {
 				if (iconBytes == null || iconBytes.length == 0) {
-					Cursor iconCursor = getContentResolver().query(FeedColumns.CONTENT_URI(Integer.toString(feedId)), new String[] { FeedColumns._ID, FeedColumns.ICON }, null, null, null);
+					Cursor iconCursor = getContentResolver().query(FeedColumns.CONTENT_URI(Integer.toString(feedId)),
+							new String[] { FeedColumns._ID, FeedColumns.ICON }, null, null, null);
 
 					if (iconCursor.moveToFirst()) {
 						iconBytes = iconCursor.getBlob(1);
@@ -497,7 +507,8 @@ public class EntryActivity extends Activity {
 			link = "";
 		content.append(TITLE_START).append(link).append(TITLE_MIDDLE).append(title).append(TITLE_END).append(SUBTITLE_START);
 		Date date = new Date(timestamp);
-		StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(DateFormat.getTimeFormat(this).format(date));
+		StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(
+				DateFormat.getTimeFormat(this).format(date));
 
 		if (author != null && !author.isEmpty()) {
 			dateStringBuilder.append(" &mdash; ").append(author);
@@ -512,7 +523,8 @@ public class EntryActivity extends Activity {
 		content.append(BUTTON_END);
 
 		if (enclosure != null && enclosure.length() > 6 && enclosure.indexOf(IMAGE_ENCLOSURE) == -1) {
-			content.append(BUTTON_START).append(getString(R.string.see_enclosure)).append(BUTTON_MIDDLE).append("injectedJSObject.onClickEnclosure();").append(BUTTON_END);
+			content.append(BUTTON_START).append(getString(R.string.see_enclosure)).append(BUTTON_MIDDLE)
+					.append("injectedJSObject.onClickEnclosure();").append(BUTTON_END);
 		}
 
 		if (link != null && link.length() > 0) {
@@ -561,8 +573,8 @@ public class EntryActivity extends Activity {
 	}
 
 	private void setupNavigationButton(final boolean isNextEntry, long date) {
-		StringBuilder queryString = new StringBuilder(DATE).append(date).append(AND_ID).append(isNextEntry ? '>' : '<').append(_id).append(')').append(OR_DATE).append(isNextEntry ? '<' : '>')
-				.append(date);
+		StringBuilder queryString = new StringBuilder(DATE).append(date).append(AND_ID).append(isNextEntry ? '>' : '<').append(_id).append(')')
+				.append(OR_DATE).append(isNextEntry ? '<' : '>').append(date);
 
 		if (!PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)) {
 			queryString.append(Constants.DB_AND).append(EntryColumns.WHERE_UNREAD);
@@ -666,7 +678,8 @@ public class EntryActivity extends Activity {
 		}
 		case R.id.menu_share: {
 			if (link != null) {
-				startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, link).setType(TEXT_PLAIN), getString(R.string.menu_share)));
+				startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, link).setType(TEXT_PLAIN),
+						getString(R.string.menu_share)));
 			}
 			break;
 		}

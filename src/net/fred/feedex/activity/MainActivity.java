@@ -27,6 +27,7 @@ import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.PrefsManager;
 import net.fred.feedex.R;
+import net.fred.feedex.Utils;
 import net.fred.feedex.fragment.EntriesListFragment;
 import net.fred.feedex.fragment.FeedsListFragment;
 import net.fred.feedex.provider.FeedData.EntryColumns;
@@ -91,6 +92,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Utils.setPreferenceTheme(this);
 		super.onCreate(savedInstanceState);
 
 		// We need to display progress information

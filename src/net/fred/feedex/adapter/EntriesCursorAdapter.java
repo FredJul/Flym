@@ -112,7 +112,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 		final boolean favorite = !unfavorited.contains(id) && (cursor.getInt(favoriteColumn) == 1 || favorited.contains(id));
 		final CheckBox viewCheckBox = (CheckBox) view.findViewById(android.R.id.checkbox);
 
-		imageView.setImageResource(favorite ? R.drawable.rating_important : R.drawable.rating_not_important);
+		imageView.setImageResource(favorite ? R.drawable.dimmed_rating_important : R.drawable.dimmed_rating_not_important);
 		imageView.setTag(favorite ? Constants.TRUE : Constants.FALSE);
 		imageView.setOnClickListener(new OnClickListener() {
 			@Override
@@ -121,12 +121,12 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
 				if (newFavorite) {
 					view.setTag(Constants.TRUE);
-					imageView.setImageResource(R.drawable.rating_important);
+					imageView.setImageResource(R.drawable.dimmed_rating_important);
 					favorited.add(id);
 					unfavorited.remove(id);
 				} else {
 					view.setTag(Constants.FALSE);
-					imageView.setImageResource(R.drawable.rating_not_important);
+					imageView.setImageResource(R.drawable.dimmed_rating_not_important);
 					unfavorited.add(id);
 					favorited.remove(id);
 				}

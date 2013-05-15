@@ -35,6 +35,7 @@
             android:id="@android:id/text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:alpha="0.7"
             android:drawablePadding="3dp"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceSmall"

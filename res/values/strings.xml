@@ -113,13 +113,15 @@
     <string name="settings_refresh_enabled_description">This setting controls the automatic refresh of all feeds</string>
     <string name="settings_refresh_interval">Refresh interval</string>
     <string name="settings_refresh_interval_description">Interval between two automated refreshes</string>
-    <string name="settings_category_notofications">Notifications</string>
+    <string name="settings_category_notifications">Notifications</string>
     <string name="settings_notifications_enabled_description">Controls the appearance of notifications in case of new feed content</string>
     <string name="settings_notifications_ringtone">Ringtone</string>
     <string name="settings_notifications_ringtone_description">Select a ringtone that will be played on new feed content</string>
     <string name="settings_notifications_vibrate">Vibrate</string>
     <string name="settings_notifications_vibrate_description">Controls if there will be vibration on new feed content</string>
     <string name="settings_category_content_presentation">Content presentation</string>
+    <string name="settings_lighttheme">Light theme</string>
+    <string name="settings_lighttheme_description">Use the light theme</string>
     <string name="settings_keep_time">Time that the entries will be kept</string>
     <string name="settings_keep_time_description">The entries that are older than the given date will be deleted</string>
     <string name="settings_disable_pictures">Disable pictures</string>

@@ -46,6 +46,7 @@ package net.fred.feedex.activity;
 
 import net.fred.feedex.PrefsManager;
 import net.fred.feedex.R;
+import net.fred.feedex.Utils;
 import net.fred.feedex.service.RefreshService;
 import android.app.ActionBar;
 import android.content.Intent;
@@ -58,6 +59,7 @@ import android.view.MenuItem;
 public class GeneralPrefsActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Utils.setPreferenceTheme(this);
 		super.onCreate(savedInstanceState);
 
 		ActionBar actionBar = getActionBar();
@@ -66,7 +68,6 @@ public class GeneralPrefsActivity extends PreferenceActivity {
 		addPreferencesFromResource(R.layout.preferences);
 
 		Preference preference = findPreference(PrefsManager.REFRESH_ENABLED);
-
 		preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -81,6 +82,18 @@ public class GeneralPrefsActivity extends PreferenceActivity {
 					PrefsManager.putLong(PrefsManager.LAST_SCHEDULED_REFRESH, 0);
 					stopService(new Intent(GeneralPrefsActivity.this, RefreshService.class));
 				}
+				return true;
+			}
+		});
+		
+		preference = findPreference(PrefsManager.LIGHT_THEME);
+		preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				PrefsManager.putBoolean(PrefsManager.LIGHT_THEME, Boolean.TRUE.equals(newValue));
+				android.os.Process.killProcess(android.os.Process.myPid());
+				
+				// this return statement will never be reached
 				return true;
 			}
 		});

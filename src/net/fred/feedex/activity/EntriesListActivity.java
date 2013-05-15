@@ -45,6 +45,7 @@
 package net.fred.feedex.activity;
 
 import net.fred.feedex.R;
+import net.fred.feedex.Utils;
 import net.fred.feedex.fragment.EntriesListFragment;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import android.app.ActionBar;
@@ -68,6 +69,7 @@ public class EntriesListActivity extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Utils.setPreferenceTheme(this);
 		super.onCreate(savedInstanceState);
 
 		ActionBar actionBar = getActionBar();

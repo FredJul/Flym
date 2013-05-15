@@ -54,6 +54,7 @@ import java.util.regex.Pattern;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
+import net.fred.feedex.Utils;
 import net.fred.feedex.adapter.FiltersCursorAdapter;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
@@ -97,6 +98,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Utils.setPreferenceTheme(this);
 		super.onCreate(savedInstanceState);
 
 		ActionBar actionBar = getActionBar();

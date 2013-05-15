@@ -103,7 +103,7 @@
             android:layout_alignTop="@+id/filter_textview"
             android:layout_marginRight="5dp"
             android:onClick="onClickAddFilter"
-            android:src="@drawable/content_new" />
+            android:src="@drawable/dimmed_content_new" />
     </RelativeLayout>
 
     <LinearLayout
