@@ -188,7 +188,6 @@ public class EntryActivity extends Activity {
 		}
 	};
 
-	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Utils.setPreferenceTheme(this);
@@ -233,9 +232,7 @@ public class EntryActivity extends Activity {
 		layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
 		webView = new WebView(this);
-		webView.getSettings().setJavaScriptEnabled(true);
-		webView.addJavascriptInterface(injectedJSObject, "injectedJSObject");
-		setWebviewTransparent(webView);
+		setupWebview(webView);
 
 		viewFlipper.addView(webView, layoutParams);
 
@@ -259,9 +256,7 @@ public class EntryActivity extends Activity {
 		content = findViewById(R.id.entry_content);
 
 		webView0 = new WebView(this);
-		webView0.getSettings().setJavaScriptEnabled(true);
-		webView0.addJavascriptInterface(injectedJSObject, "injectedJSObject");
-		setWebviewTransparent(webView0);
+		setupWebview(webView0);
 		webView0.setOnKeyListener(onKeyEventListener);
 
 		final GestureDetector gestureDetector = new GestureDetector(this, new OnGestureListener() {
@@ -540,7 +535,16 @@ public class EntryActivity extends Activity {
 		return content.toString();
 	}
 
-	private void setWebviewTransparent(final WebView wv) {
+	@SuppressLint("SetJavaScriptEnabled")
+	private void setupWebview(final WebView wv) {
+		// For javascript
+		wv.getSettings().setJavaScriptEnabled(true);
+		wv.addJavascriptInterface(injectedJSObject, "injectedJSObject");
+		
+		// For HTML5 video
+		//wv.setWebChromeClient(new WebChromeClient());
+		
+		// Transparent
 		wv.setBackgroundColor(Color.TRANSPARENT);
 		wv.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
 		wv.setWebViewClient(new WebViewClient() {
