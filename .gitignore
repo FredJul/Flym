@@ -1,3 +1,7 @@
+#OS junk files
+[Tt]humbs.db
+*.DS_Store
+
 # built application files
 *.apk
 *.ap_
