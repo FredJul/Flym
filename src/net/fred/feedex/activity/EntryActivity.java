@@ -113,6 +113,7 @@ public class EntryActivity extends Activity {
 
 	private static final String TEXT_HTML = "text/html";
 	private static final String UTF8 = "utf-8";
+	private static final String HTML_IMG_REGEX = "<[/]?[ ]?img(.|\n)*?>";
 
 	private static final String OR_DATE = " or date ";
 	private static final String DATE = "(date=";
@@ -455,7 +456,7 @@ public class EntryActivity extends Activity {
 			}
 
 			if (PrefsManager.getBoolean(PrefsManager.DISABLE_PICTURES, false)) {
-				contentText = contentText.replaceAll(Constants.HTML_IMG_REGEX, "");
+				contentText = contentText.replaceAll(HTML_IMG_REGEX, "");
 				webView.getSettings().setBlockNetworkImage(true);
 			} else {
 				if (webView.getSettings().getBlockNetworkImage()) {
@@ -491,7 +492,7 @@ public class EntryActivity extends Activity {
 	private String generateHtmlContent(String title, String link, String abstractText, String enclosure, String author, long timestamp) {
 		StringBuilder content = new StringBuilder();
 
-		int fontsize = Integer.parseInt(PrefsManager.getString(PrefsManager.FONT_SIZE, Constants.ONE));
+		int fontsize = Integer.parseInt(PrefsManager.getString(PrefsManager.FONT_SIZE, "1"));
 		if (fontsize > 0) {
 			content.append(FONTSIZE_START).append(fontsize).append(FONTSIZE_MIDDLE);
 		} else {

@@ -113,6 +113,11 @@ public class FetcherService extends IntentService {
 	private static final String SERVICENAME = "RssFetcherService";
 	private static final String ZERO = "0";
 	private static final String GZIP = "gzip";
+	private static final String FILE_FAVICON = "/favicon.ico";
+	private static final String DEFAULT_PROXY_PORT = "8080";
+	private static final String PROTOCOL_SEPARATOR = "://";
+	private static final String _HTTP = "http";
+	private static final String _HTTPS = "https";
 
 	private NotificationManager notificationManager;
 	private static Proxy proxy;
@@ -136,7 +141,7 @@ public class FetcherService extends IntentService {
 			if (PrefsManager.getBoolean(PrefsManager.PROXY_ENABLED, false) && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !PrefsManager.getBoolean(PrefsManager.PROXY_WIFI_ONLY, false))) {
 				try {
 					proxy = new Proxy(ZERO.equals(PrefsManager.getString(PrefsManager.PROXY_TYPE, ZERO)) ? Proxy.Type.HTTP : Proxy.Type.SOCKS, new InetSocketAddress(PrefsManager.getString(
-							PrefsManager.PROXY_HOST, ""), Integer.parseInt(PrefsManager.getString(PrefsManager.PROXY_PORT, Constants.DEFAULT_PROXY_PORT))));
+							PrefsManager.PROXY_HOST, ""), Integer.parseInt(PrefsManager.getString(PrefsManager.PROXY_PORT, DEFAULT_PROXY_PORT))));
 				} catch (Exception e) {
 					proxy = null;
 				}
@@ -520,7 +525,7 @@ public class FetcherService extends IntentService {
 		String location = connection.getHeaderField("Location");
 
 		if (location != null
-				&& (url.getProtocol().equals(Constants._HTTP) && location.startsWith(Constants.HTTPS) || url.getProtocol().equals(Constants._HTTPS) && location.startsWith(Constants.HTTP))) {
+				&& (url.getProtocol().equals(_HTTP) && location.startsWith(Constants.HTTPS) || url.getProtocol().equals(_HTTPS) && location.startsWith(Constants.HTTP))) {
 			// if location != null, the system-automatic redirect has failed
 			// which indicates a protocol change
 
@@ -556,7 +561,7 @@ public class FetcherService extends IntentService {
 	private static void retrieveFavicon(Context context, URL url, String id) {
 		HttpURLConnection iconURLConnection;
 		try {
-			iconURLConnection = setupConnection(new URL(new StringBuilder(url.getProtocol()).append(Constants.PROTOCOL_SEPARATOR).append(url.getHost()).append(Constants.FILE_FAVICON).toString()));
+			iconURLConnection = setupConnection(new URL(new StringBuilder(url.getProtocol()).append(PROTOCOL_SEPARATOR).append(url.getHost()).append(FILE_FAVICON).toString()));
 
 			ContentValues values = new ContentValues();
 			try {

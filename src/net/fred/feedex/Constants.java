@@ -44,26 +44,11 @@ public final class Constants {
 
 	public static final String HTTP = "http://";
 	public static final String HTTPS = "https://";
-	public static final String _HTTP = "http";
-	public static final String _HTTPS = "https";
-	public static final String PROTOCOL_SEPARATOR = "://";
-
-	public static final String FILE_FAVICON = "/favicon.ico";
-
-	public static final String HTML_TAG_REGEX = "<(.|\n)*?>";
 
 	public static final String FILE_URL = "file://";
 
 	public static final String IMAGEFILE_IDSEPARATOR = "__";
-
 	public static final String IMAGEID_REPLACEMENT = "##ID##";
-
-	public static final String DEFAULT_PROXY_PORT = "8080";
-
-	public static final String HTML_SPAN_REGEX = "<[/]?[ ]?span(.|\n)*?>";
-	public static final String HTML_IMG_REGEX = "<[/]?[ ]?img(.|\n)*?>";
-
-	public static final String ONE = "1";
 
 	public static final String HTML_LT = "&lt;";
 	public static final String HTML_GT = "&gt;";

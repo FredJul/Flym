@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">FeedEx</string>
+    <string name="never">jamais</string>
+    <string name="update">Mise à jour</string>
+    <string name="colon">\u00A0:\u00A0</string>
+    <string name="menu_settings">Réglages</string>
+    <string name="menu_refresh">Actualiser</string>
+    <string name="menu_all_read">Marquer tout comme lu</string>
+    <string name="feedex_feeds">Flux FeedEx</string>
+    <string name="new_entries">nouveaux articles</string>
+    <string name="error">Erreur</string>
+    <string name="network_error">Pas de connexion disponible</string>
+    
+    <!-- FEEDS -->
+    <string name="menu_add_feed">Ajouter un flux</string>
+    <string name="no_feeds">Pas de flux</string>
+    <string name="no_filters">Pas de filtres</string>
+    <string name="context_menu_delete">Supprimer</string>
+    <string name="edit_feed_title">Éditer le flux</string>
+    <string name="new_feed_title">Nouveau flux</string>
+    <string name="context_menu_edit">Éditer</string>
+    <string name="menu_add_group">Ajouter un groupe</string>
+    <string name="menu_import">Importer depuis OPML</string>
+    <string name="menu_export">Exporter vers OPML</string>
+    <string name="menu_enable_feed_sort">Activer le tri des flux</string>
+    <string name="menu_disable_feed_sort">Désactiver le tri des flux</string>
+    <string name="error_feed_error">L\'addresse du flux n\'est pas accessible.</string>
+    <string name="error_feed_process">Le flux ne peux être traité.</string>
+    <string name="error_feed_url_exists">L\'addresse existe déjà.</string>
+    <string name="error_feed_import">Le fichier sélectionné n\'a pu être importé.</string>
+    <string name="error_feed_export">L\'export a échoué. Assurez-vous d\'avoir une carte SD montée et autorisée en écriture.</string>
+    <string name="error_external_storage_not_available">The external storage (e.g. SD-card)  is not available.</string>
+    <string name="feed_url">Addresse URL</string>
+    <string name="optional">(optionel)</string>
+    <string name="website_or_feed">(site web ou flux)</string>
+    <string name="feed_title">TITRE</string>
+    <string name="feed_filters">FILTRE</string>
+    <string name="filter_add_title">Ajouter un filtre</string>
+    <string name="filter_delete_title">Supprimer un filtre</string>
+    <string name="filter_edit_title">Éditer le filtre</string>
+    <string name="filter_is_regex">est une expression régulière</string>
+    <string name="filter_apply_to_title">Appliquer au titre</string>
+    <string name="filter_apply_to_content">Appliquer au contenu</string>
+    <string name="feed_search">Recherche de flux</string>
+    <string name="feed_search_by_web_search">Recherche d\'un site par mot-clé (via Faroo)</string>
+    <string name="feed_search_by_topic">Recherche d\'articles par mot-clé (via Faroo)</string>
+    <string name="feed_search_by_twitter">Recherche de flux par nom d\'utilisateur Twitter</string>
+    <string name="feed_search_by_youtube">Recherche de flux par nom de chaîne Youtube</string>
+    <string name="select_file">Sélectionner le fichier (racine SD)</string>
+    <string name="question_delete_feed">Voulez-vous vraiment supprimer ce flux\u00A0?</string>
+    <string name="question_delete_group">Voulez-vous vraiment supprimer ce groupe et tout ses flux\u00A0?</string>
+    <string name="question_delete_filter">Voulez-vous vraiment supprimer ce filtre\u00A0?</string>
+    <string name="add_group_title">Entrez le nom du groupe</string>
+    <string name="edit_group_title">Éditer le nom du groupe</string>
+    <string name="message_exported_to">Exporté vers %s.</string>
+    <string name="to_group_title">Déplacement de flux</string>
+    <string name="to_group_message">Vous pouvez placer ce flux dans ou au-dessus de ce groupe. Que voulez-vous faire\u00A0?</string>
+    <string name="to_group_above">Au-dessus du groupe</string>
+    <string name="to_group_into">Dans le groupe</string>
+    
+    <!-- ENTRIES -->
+    <string name="all">Articles</string>
+    <string name="overview">Flux</string>
+    <string name="no_entries">Pas d\'article</string>
+    <string name="favorites">Favoris</string>
+    <string name="context_menu_mark_as_read">Marquer comme lu</string>
+    <string name="context_menu_hide_read">Cacher les articles lus</string>
+    <string name="context_menu_show_read">Afficher les articles lus</string>
+    <string name="menu_star">Mettre en favoris</string>
+    <string name="menu_unstar">Enlever des favoris</string>
+    <string name="menu_share">Partager</string>
+    <string name="menu_copy_clipboard">Copier le lien</string>
+    <string name="copied_clipboard">Lien copié</string>
+    <string name="get_full_text">Retrouve le texte entier</string>
+    <string name="original_text">Affiche le texte original</string>
+    <string name="see_enclosure">Voir le fichier joint</string>
+    <string name="see_link">Ouvrir dans le navigateur</string>
+    
+    <!-- WIDGET -->
+    <string name="red">Rouge</string>
+    <string name="green">Vert</string>
+    <string name="blue">Bleu</string>
+    <string name="transparency">Transparence</string>
+    
+    <!-- SETTINGS -->
+    <string name="settings_screen_proxy">Proxy</string>
+    <string name="settings_category_refresh">Mise à jour automatique</string>
+    <string name="settings_refresh_enabled">Active la mise à jour auto</string>
+    <string name="settings_refresh_enabled_description">Active la mise à jour automatique des flux</string>
+    <string name="settings_refresh_interval">Interval de mise à jour</string>
+    <string name="settings_refresh_interval_description">Interval entre 2 mise à jour automatique</string>
+    <string name="settings_category_notifications">Notifications</string>
+    <string name="settings_notifications_enabled">Active les notifications</string>
+    <string name="settings_notifications_enabled_description">Active les notifications en cas de nouveaux articles</string>
+    <string name="settings_notifications_ringtone">Sonnerie</string>
+    <string name="settings_notifications_ringtone_description">Choisir une sonnerie annonçant les nouveaux articles</string>
+    <string name="settings_notifications_vibrate">Vibrer</string>
+    <string name="settings_notifications_vibrate_description">Active la vibration pour les nouveaux articles</string>
+    <string name="settings_category_content_presentation">Présentation des flux</string>
+    <string name="settings_lighttheme">Theme clair</string>
+    <string name="settings_lighttheme_description">Utilise le theme clair</string>
+    <string name="settings_keep_time">Délai de conservation des flux</string>
+    <string name="settings_keep_time_description">Les articles plus anciens que le délai indiqué sera effacé</string>
+    <string name="settings_disable_pictures">Désactive les images</string>
+    <string name="settings_disable_pictures_description">Ne jamais afficher et télécharger les images</string>
+    <string name="settings_fetch_pictures">Télécharger les images</string>
+    <string name="settings_fetch_pictures_description">Télécharge toutes les images et les stock localement</string>
+    <string name="settings_font_size">Taille du texte</string>
+    <string name="settings_font_size_description">Taille du texte du contenu des articles</string>
+    <string name="settings_refresh_on_open">Mise à jour des flux à l\'ouverture</string>
+    <string name="settings_refresh_on_open_description">Met à jour tous les flux à l\'ouverture de l\'application</string>
+    <string name="settings_visible_feeds">Flux visibles</string>
+    <string name="settings_widget_background">Arrière-plan</string>
+    <string name="settings_widget_background_description">Couleur et transparence de l\'arrière-plan du widget</string>
+    <string name="settings_category_network">Réseau</string>
+    <string name="settings_proxy_enabled">Activé</string>
+    <string name="settings_proxy_wifi_only">Wifi seulement</string>
+    <string name="settings_proxy_wifi_only_description">Utilise le proxy pour le wifi seulement</string>
+    <string name="settings_proxy_host">Hôte</string>
+    <string name="settings_proxy_port">Port</string>
+    <string name="settings_proxy_type">Type</string>
+    <string name="all_feeds">Tous les flux (y compris ceux à venir)</string>
+
+    <string-array name="settings_intervals">
+        <item>1 minute</item>
+        <item>5 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 heure</item>
+        <item>2 heures</item>
+        <item>6 heures</item>
+        <item>12 heures</item>
+        <item>1 jour</item>
+    </string-array>
+    <string-array name="settings_keeptimes">
+        <item>1 jour</item>
+        <item>2 jours</item>
+        <item>4 jours</item>
+        <item>1 semaine</item>
+        <item>2 semaines</item>
+        <item>1 mois</item>
+        <item>2 mois</item>
+        <item>3 mois</item>
+        <item>Jamais</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>Standard</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_proxy_types_names">
+        <item>HTTP</item>
+        <item>SOCKS</item>
+    </string-array>
+
+</resources>

@@ -14,7 +14,7 @@
             android:defaultValue="true"
             android:key="refresh.enabled"
             android:summary="@string/settings_refresh_enabled_description"
-            android:title="@string/settings_enabled" />
+            android:title="@string/settings_refresh_enabled" />
 
         <ListPreference
             android:name="@string/settings_refresh_interval"
@@ -104,7 +104,7 @@
             android:defaultValue="true"
             android:key="notifications.enabled"
             android:summary="@string/settings_notifications_enabled_description"
-            android:title="@string/settings_enabled" />
+            android:title="@string/settings_notifications_enabled" />
 
         <RingtonePreference
             android:layout_width="wrap_content"
@@ -138,7 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:key="proxy.enabled"
-                android:title="@string/settings_enabled" />
+                android:title="@string/settings_proxy_enabled" />
 
             <CheckBoxPreference
                 android:layout_width="wrap_content"

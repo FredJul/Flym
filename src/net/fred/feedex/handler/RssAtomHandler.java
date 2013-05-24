@@ -80,6 +80,8 @@ public class RssAtomHandler extends DefaultHandler {
 
 	private static final String URL_SPACE = "%20";
 	private static final String ANDRHOMBUS = "&#";
+	private static final String HTML_TAG_REGEX = "<(.|\n)*?>";
+	private static final String HTML_SPAN_REGEX = "<[/]?[ ]?span(.|\n)*?>";
 
 	private static final String TAG_RSS = "rss";
 	private static final String TAG_RDF = "rdf";
@@ -565,7 +567,7 @@ public class RssAtomHandler extends DefaultHandler {
 	}
 
 	private static String unescapeTitle(String title) {
-		String result = title.replace(Constants.AMP_SG, Constants.AMP).replaceAll(Constants.HTML_TAG_REGEX, "").replace(Constants.HTML_LT, Constants.LT).replace(Constants.HTML_GT, Constants.GT)
+		String result = title.replace(Constants.AMP_SG, Constants.AMP).replaceAll(HTML_TAG_REGEX, "").replace(Constants.HTML_LT, Constants.LT).replace(Constants.HTML_GT, Constants.GT)
 				.replace(Constants.HTML_QUOT, Constants.QUOT).replace(Constants.HTML_APOSTROPHE, Constants.APOSTROPHE);
 
 		if (result.indexOf(ANDRHOMBUS) > -1) {
@@ -577,7 +579,7 @@ public class RssAtomHandler extends DefaultHandler {
 
 	private static Pair<String, Vector<String>> improveFeedDescription(String content, boolean fetchImages) {
 		if (content != null) {
-			String newContent = content.trim().replaceAll(Constants.HTML_SPAN_REGEX, "");
+			String newContent = content.trim().replaceAll(HTML_SPAN_REGEX, "");
 
 			if (newContent.length() > 0) {
 				Vector<String> images = null;
