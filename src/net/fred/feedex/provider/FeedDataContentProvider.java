@@ -180,21 +180,21 @@ public class FeedDataContentProvider extends ContentProvider {
 		case URI_GROUPS:
 		case URI_FEEDS_FOR_GROUPS:
 		case URI_FEEDS:
-			return "vnd.android.cursor.dir/vnd.feeddata.feed";
+			return "vnd.android.cursor.dir/vnd.feedex.feed";
 		case URI_GROUP:
 		case URI_FEED:
-			return "vnd.android.cursor.item/vnd.feeddata.feed";
+			return "vnd.android.cursor.item/vnd.feedex.feed";
 		case URI_FILTERS:
 		case URI_FILTERS_FOR_FEED:
-			return "vnd.android.cursor.dir/vnd.feeddata.filter";
+			return "vnd.android.cursor.dir/vnd.feedex.filter";
 		case URI_FAVORITES:
 		case URI_ENTRIES:
 		case URI_ENTRIES_FOR_FEED:
-			return "vnd.android.cursor.dir/vnd.feeddata.entry";
+			return "vnd.android.cursor.dir/vnd.feedex.entry";
 		case URI_FAVORITES_ENTRY:
 		case URI_ENTRY:
 		case URI_ENTRY_FOR_FEED:
-			return "vnd.android.cursor.item/vnd.feeddata.entry";
+			return "vnd.android.cursor.item/vnd.feedex.entry";
 		default:
 			throw new IllegalArgumentException("Unknown URI: " + uri);
 		}

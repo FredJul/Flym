@@ -49,7 +49,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.dir/vnd.feeddata.entry" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.feedex.entry" />
             </intent-filter>
         </activity>
         <activity
@@ -61,7 +61,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.item/vnd.feeddata.entry" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.feedex.entry" />
             </intent-filter>
         </activity>
         <activity android:name="net.fred.feedex.activity.GeneralPrefsActivity" />
@@ -76,14 +76,14 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.item/vnd.feeddata.feed" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.feedex.feed" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.INSERT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.dir/vnd.feeddata.feed" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.feedex.feed" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
