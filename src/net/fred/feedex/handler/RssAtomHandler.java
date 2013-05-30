@@ -215,7 +215,7 @@ public class RssAtomHandler extends DefaultHandler {
 		pubDateTagEntered = false;
 		dateTagEntered = false;
 		lastUpdateDateTagEntered = false;
-		now = System.currentTimeMillis();
+		now = System.currentTimeMillis() - 1000;	// by precaution
 		guid = null;
 		guidTagEntered = false;
 		authorTagEntered = false;
@@ -428,7 +428,7 @@ public class RssAtomHandler extends DefaultHandler {
 						if (entryDate != null) {
 							values.put(EntryColumns.DATE, entryDate.getTime());
 						} else {
-							values.put(EntryColumns.DATE, now--);
+							values.put(EntryColumns.DATE, now);
 						}
 
 						values.put(EntryColumns.LINK, entryLinkString);
