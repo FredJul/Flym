@@ -577,7 +577,7 @@ public class EntryActivity extends Activity {
 				.append(date);
 
 		if (!PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)) {
-			queryString.append(Constants.DB_AND).append(EntryColumns.WHERE_UNREAD);
+			queryString.append(Constants.DB_AND).append(EntryColumns.WHERE_UNREAD_WITH_FAVORITES);
 		}
 
 		Cursor cursor = getContentResolver().query(parentUri, EntryColumns.PROJECTION_ID, queryString.toString(), null, isNextEntry ? DESC : ASC);
@@ -705,10 +705,10 @@ public class EntryActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
-			if (keyCode == 92 || keyCode == 94) {
+			if (keyCode == KeyEvent.KEYCODE_PAGE_UP) {
 				scrollUp();
 				return true;
-			} else if (keyCode == 93 || keyCode == 95) {
+			} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
 				scrollDown();
 				return true;
 			}

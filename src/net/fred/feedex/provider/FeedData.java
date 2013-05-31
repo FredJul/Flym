@@ -82,9 +82,10 @@ public class FeedData {
 		public static final String PRIORITY = "priority";
 		public static final String FETCH_MODE = "fetchmode";
 
-		public static final String[] COLUMNS = new String[] { _ID, URL, NAME, IS_GROUP, IS_GROUP_COLLAPSED, GROUP_ID, LAST_UPDATE, ICON, ERROR, PRIORITY, FETCH_MODE };
-		public static final String[] TYPES = new String[] { TYPE_PRIMARY_KEY, TYPE_TEXT_UNIQUE, TYPE_TEXT, TYPE_BOOLEAN, TYPE_BOOLEAN, TYPE_EXTERNAL_ID, TYPE_DATE_TIME, "BLOB", TYPE_TEXT, TYPE_INT,
-				TYPE_INT };
+		public static final String[] COLUMNS = new String[] { _ID, URL, NAME, IS_GROUP, IS_GROUP_COLLAPSED, GROUP_ID, LAST_UPDATE, ICON, ERROR,
+				PRIORITY, FETCH_MODE };
+		public static final String[] TYPES = new String[] { TYPE_PRIMARY_KEY, TYPE_TEXT_UNIQUE, TYPE_TEXT, TYPE_BOOLEAN, TYPE_BOOLEAN,
+				TYPE_EXTERNAL_ID, TYPE_DATE_TIME, "BLOB", TYPE_TEXT, TYPE_INT, TYPE_INT };
 
 		public static final Uri CONTENT_URI(String feedId) {
 			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).toString());
@@ -150,9 +151,10 @@ public class FeedData {
 		public static final String GUID = "guid";
 		public static final String AUTHOR = "author";
 
-		public static final String[] COLUMNS = new String[] { _ID, FEED_ID, TITLE, ABSTRACT, MOBILIZED_HTML, DATE, IS_READ, LINK, IS_FAVORITE, ENCLOSURE, GUID, AUTHOR };
-		public static final String[] TYPES = new String[] { TYPE_PRIMARY_KEY, TYPE_EXTERNAL_ID, TYPE_TEXT, TYPE_TEXT, TYPE_TEXT, TYPE_DATE_TIME, TYPE_BOOLEAN, TYPE_TEXT, TYPE_BOOLEAN, TYPE_TEXT,
-				TYPE_TEXT, TYPE_TEXT };
+		public static final String[] COLUMNS = new String[] { _ID, FEED_ID, TITLE, ABSTRACT, MOBILIZED_HTML, DATE, IS_READ, LINK, IS_FAVORITE,
+				ENCLOSURE, GUID, AUTHOR };
+		public static final String[] TYPES = new String[] { TYPE_PRIMARY_KEY, TYPE_EXTERNAL_ID, TYPE_TEXT, TYPE_TEXT, TYPE_TEXT, TYPE_DATE_TIME,
+				TYPE_BOOLEAN, TYPE_TEXT, TYPE_BOOLEAN, TYPE_TEXT, TYPE_TEXT, TYPE_TEXT };
 
 		public static final Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/entries").toString());
 		public static final Uri FAVORITES_CONTENT_URI = Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/favorites").toString());
@@ -179,11 +181,15 @@ public class FeedData {
 
 		public static final String[] PROJECTION_ID = new String[] { EntryColumns._ID };
 
-		public static final String WHERE_UNREAD = new StringBuilder("(").append(EntryColumns.IS_READ).append(Constants.DB_IS_NULL).append(Constants.DB_OR).append(EntryColumns.IS_READ)
-				.append(Constants.DB_IS_FALSE).append(')').toString();
+		public static final String WHERE_UNREAD = new StringBuilder("(").append(EntryColumns.IS_READ).append(Constants.DB_IS_NULL)
+				.append(Constants.DB_OR).append(EntryColumns.IS_READ).append(Constants.DB_IS_FALSE).append(')').toString();
 
-		public static final String WHERE_NOT_FAVORITE = new StringBuilder("(").append(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_NULL).append(Constants.DB_OR).append(EntryColumns.IS_FAVORITE)
-				.append(Constants.DB_IS_FALSE).append(')').toString();
+		public static final String WHERE_UNREAD_WITH_FAVORITES = new StringBuilder("(").append(EntryColumns.IS_READ).append(Constants.DB_IS_NULL)
+				.append(Constants.DB_OR).append(EntryColumns.IS_READ).append(Constants.DB_IS_FALSE).append(Constants.DB_OR)
+				.append(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_TRUE).append(')').toString();
+
+		public static final String WHERE_NOT_FAVORITE = new StringBuilder("(").append(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_NULL)
+				.append(Constants.DB_OR).append(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_FALSE).append(')').toString();
 	}
 
 	public static synchronized void deletePicturesOfFeed(Context context, Uri entriesUri, String selection) {

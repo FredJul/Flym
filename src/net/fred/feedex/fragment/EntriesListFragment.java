@@ -100,7 +100,10 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 		menu.clear();
 		getActivity().getMenuInflater().inflate(R.menu.entry_list, menu);
 		
-		if (!PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)) {
+		if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
+			menu.findItem(R.id.menu_hide_read).setVisible(false);
+		}
+		else if (!PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)) {
 			menu.findItem(R.id.menu_hide_read).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
 		}
 		super.onPrepareOptionsMenu(menu);
@@ -144,7 +147,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) ? null
-				: EntryColumns.WHERE_UNREAD, null, new StringBuilder(EntryColumns.DATE).append(Constants.DB_DESC).toString());
+				: EntryColumns.WHERE_UNREAD_WITH_FAVORITES, null, new StringBuilder(EntryColumns.DATE).append(Constants.DB_DESC).toString());
 		cursorLoader.setUpdateThrottle(500);
 		return cursorLoader;
 	}
