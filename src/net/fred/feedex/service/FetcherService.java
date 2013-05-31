@@ -126,7 +126,7 @@ public class FetcherService extends IntentService {
 	private static final String _HTTP = "http";
 	private static final String _HTTPS = "https";
 	/* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
-	private static Pattern feedLinkPattern = Pattern.compile("[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>");
+	private static final Pattern feedLinkPattern = Pattern.compile("[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>");
 
 	private NotificationManager notificationManager;
 	private static Proxy proxy;
