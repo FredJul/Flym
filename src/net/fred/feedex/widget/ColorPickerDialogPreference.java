@@ -53,12 +53,10 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class ColorPickerDialogPreference extends DialogPreference {
+	
 	private SeekBar redSeekBar;
-
 	private SeekBar greenSeekBar;
-
 	private SeekBar blueSeekBar;
-
 	private SeekBar transparencySeekBar;
 
 	int color;

@@ -47,6 +47,8 @@ package net.fred.feedex.widget;
 import net.fred.feedex.PrefsManager;
 import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedData.FeedColumns;
+import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.database.Cursor;
@@ -60,7 +62,8 @@ import android.view.View.OnClickListener;
 public class WidgetConfigActivity extends PreferenceActivity {
 	private int widgetId;
 
-	private static final String NAMECOLUMN = new StringBuilder("ifnull(").append(FeedColumns.NAME).append(',').append(FeedColumns.URL).append(") as title").toString();
+	private static final String NAMECOLUMN = new StringBuilder("ifnull(").append(FeedColumns.NAME).append(',').append(FeedColumns.URL)
+			.append(") as title").toString();
 
 	public static final String ZERO = "0";
 
@@ -132,7 +135,17 @@ public class WidgetConfigActivity extends PreferenceActivity {
 
 					PrefsManager.putInteger(widgetId + ".background", color);
 
-					AppWidgetManager.getInstance(WidgetConfigActivity.this).notifyAppWidgetViewDataChanged(widgetId, R.id.feedsListView);
+					// Now we need to update the widget
+					//AppWidgetManager.getInstance(WidgetConfigActivity.this).notifyAppWidgetViewDataChanged(widgetId, R.id.feedsListView);
+					Intent intent = new Intent(WidgetConfigActivity.this, WidgetProvider.class);
+					intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+					intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[] { widgetId });
+					PendingIntent pendingIntent = PendingIntent.getBroadcast(WidgetConfigActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+					try {
+						pendingIntent.send();
+					} catch (CanceledException e) {
+					}
+
 					// WidgetProvider.updateAppWidget(WidgetConfigActivity.this, widgetId, hideRead, feedIds, color);
 					setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
 					finish();

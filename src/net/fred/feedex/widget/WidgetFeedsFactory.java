@@ -104,7 +104,7 @@ public class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory
 
 		if (cursor.moveToPosition(position)) {
 			row.setTextViewText(android.R.id.text1, cursor.getString(0));
-			row.setOnClickFillInIntent(android.R.id.text1, new Intent(Intent.ACTION_VIEW, EntryColumns.CONTENT_URI(cursor.getString(1))));
+			row.setOnClickFillInIntent(android.R.id.content, new Intent(Intent.ACTION_VIEW, EntryColumns.CONTENT_URI(cursor.getString(1))));
 
 			if (!cursor.isNull(2)) {
 				try {
