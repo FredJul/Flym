@@ -75,6 +75,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.TaskStackBuilder;
 import android.text.format.DateFormat;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -141,7 +142,8 @@ public class EntryActivity extends Activity {
 
 	private static final String BUTTON_START = "<div style=\"text-align: center\"><input type=\"button\" value=\"";
 	private static final String BUTTON_MIDDLE = "\" onclick=\"";
-	private static final String BUTTON_END = "\" style=\"background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR + "; border: none; border-radius:10px; padding: 10px;\"/></div>";
+	private static final String BUTTON_END = "\" style=\"background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
+			+ "; border: none; border-radius:10px; padding: 10px;\"/></div>";
 
 	private static final String LINK_BUTTON_START = "<div style=\"text-align: center; margin-top:12px\"><a href=\"";
 	private static final String LINK_BUTTON_MIDDLE = "\" style=\"background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
@@ -151,7 +153,8 @@ public class EntryActivity extends Activity {
 	private static final String IMAGE_ENCLOSURE = "[@]image/";
 	private static final String TEXT_PLAIN = "text/plain";
 
-	private int titlePosition, datePosition, mobilizedHtmlPosition, abstractPosition, linkPosition, feedIdPosition, isFavoritePosition, isReadPosition, enclosurePosition, authorPosition;
+	private int titlePosition, datePosition, mobilizedHtmlPosition, abstractPosition, linkPosition, feedIdPosition, isFavoritePosition,
+			isReadPosition, enclosurePosition, authorPosition;
 
 	private String _id;
 	private String _nextId;
@@ -177,6 +180,7 @@ public class EntryActivity extends Activity {
 	private boolean localPictures;
 
 	private boolean mIsProgressVisible = false;
+	private boolean mFromWidget = false;
 
 	private final ContentObserver mEntryObserver = new ContentObserver(new Handler()) {
 		@Override
@@ -205,6 +209,11 @@ public class EntryActivity extends Activity {
 		uri = getIntent().getData();
 		parentUri = EntryColumns.PARENT_URI(uri.getPath());
 		feedId = 0;
+
+		Bundle b = getIntent().getExtras();
+		if (b != null) {
+			mFromWidget = b.getBoolean(Constants.INTENT_FROM_WIDGET, false);
+		}
 
 		Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
 
@@ -410,7 +419,8 @@ public class EntryActivity extends Activity {
 				feedId = _feedId;
 			}
 
-			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI(feedId), new String[] { FeedColumns.NAME, FeedColumns.URL }, null, null, null);
+			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI(feedId), new String[] { FeedColumns.NAME, FeedColumns.URL }, null,
+					null, null);
 			if (cursor.moveToFirst()) {
 				setTitle(cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0));
 			} else { // fallback, should not be possible
@@ -420,7 +430,8 @@ public class EntryActivity extends Activity {
 
 			if (canShowIcon) {
 				if (iconBytes == null || iconBytes.length == 0) {
-					Cursor iconCursor = getContentResolver().query(FeedColumns.CONTENT_URI(Integer.toString(feedId)), new String[] { FeedColumns._ID, FeedColumns.ICON }, null, null, null);
+					Cursor iconCursor = getContentResolver().query(FeedColumns.CONTENT_URI(Integer.toString(feedId)),
+							new String[] { FeedColumns._ID, FeedColumns.ICON }, null, null, null);
 
 					if (iconCursor.moveToFirst()) {
 						iconBytes = iconCursor.getBlob(1);
@@ -500,7 +511,8 @@ public class EntryActivity extends Activity {
 			link = "";
 		content.append(TITLE_START).append(link).append(TITLE_MIDDLE).append(title).append(TITLE_END).append(SUBTITLE_START);
 		Date date = new Date(timestamp);
-		StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(DateFormat.getTimeFormat(this).format(date));
+		StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(
+				DateFormat.getTimeFormat(this).format(date));
 
 		if (author != null && !author.isEmpty()) {
 			dateStringBuilder.append(" &mdash; ").append(author);
@@ -515,7 +527,8 @@ public class EntryActivity extends Activity {
 		content.append(BUTTON_END);
 
 		if (enclosure != null && enclosure.length() > 6 && enclosure.indexOf(IMAGE_ENCLOSURE) == -1) {
-			content.append(BUTTON_START).append(getString(R.string.see_enclosure)).append(BUTTON_MIDDLE).append("injectedJSObject.onClickEnclosure();").append(BUTTON_END);
+			content.append(BUTTON_START).append(getString(R.string.see_enclosure)).append(BUTTON_MIDDLE)
+					.append("injectedJSObject.onClickEnclosure();").append(BUTTON_END);
 		}
 
 		if (link != null && link.length() > 0) {
@@ -573,8 +586,8 @@ public class EntryActivity extends Activity {
 	}
 
 	private void setupNavigationButton(final boolean isNextEntry, long date) {
-		StringBuilder queryString = new StringBuilder(DATE).append(date).append(AND_ID).append(isNextEntry ? '>' : '<').append(_id).append(')').append(OR_DATE).append(isNextEntry ? '<' : '>')
-				.append(date);
+		StringBuilder queryString = new StringBuilder(DATE).append(date).append(AND_ID).append(isNextEntry ? '>' : '<').append(_id).append(')')
+				.append(OR_DATE).append(isNextEntry ? '<' : '>').append(date);
 
 		if (!PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)) {
 			queryString.append(Constants.DB_AND).append(EntryColumns.WHERE_UNREAD_WITH_FAVORITES);
@@ -658,7 +671,14 @@ public class EntryActivity extends Activity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
+			if (mFromWidget) {
+				Intent intent = new Intent(this, MainActivity.class);
+				TaskStackBuilder.create(this) //
+						.addNextIntentWithParentStack(intent) // Add all of this activity's parents to the back stack
+						.startActivities(); // Navigate up to the closest parent
+			}
 			finish();
+
 			return true;
 		case R.id.menu_star: {
 			favorite = !favorite;
@@ -685,7 +705,8 @@ public class EntryActivity extends Activity {
 		}
 		case R.id.menu_share: {
 			if (link != null) {
-				startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, link).setType(TEXT_PLAIN), getString(R.string.menu_share)));
+				startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, link).setType(TEXT_PLAIN),
+						getString(R.string.menu_share)));
 			}
 			break;
 		}

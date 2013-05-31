@@ -122,14 +122,12 @@
                 <action android:name="net.fred.feedex.MOBILIZE_FEED" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name="net.fred.feedex.receiver.BootCompletedBroadcastReceiver" >
+        <receiver android:name="net.fred.feedex.receiver.BootCompletedBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name="net.fred.feedex.receiver.ConnectionChangeReceiver" >
+        <receiver android:name="net.fred.feedex.receiver.ConnectionChangeReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>

@@ -26,6 +26,8 @@ public final class Constants {
 	public static final DateFormat DATE_FORMAT = android.text.format.DateFormat.getDateFormat(MainApplication.getAppContext());
 	public static final DateFormat TIME_FORMAT = android.text.format.DateFormat.getTimeFormat(MainApplication.getAppContext());
 
+	public static final String INTENT_FROM_WIDGET = "fromWidget";
+	
 	public static final String ACTION_REFRESH_FEEDS = "net.fred.feedex.REFRESH";
 	public static final String ACTION_REFRESH_FINISHED = "net.fred.feedex.REFRESH_FINISHED";
 	public static final String ACTION_MOBILIZE_FEED = "net.fred.feedex.MOBILIZE_FEED";
