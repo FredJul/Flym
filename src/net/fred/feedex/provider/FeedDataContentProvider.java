@@ -116,6 +116,11 @@ public class FeedDataContentProvider extends ContentProvider {
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
+
+		private static final String DEFAULT_FEED_URL = "http://news.google.com/?output=rss";
+		private static final String DEFAULT_FEED_NAME = "Google News";
+		private static final String DEFAULT_GROUP_NAME = "News";
+
 		private final Handler mHandler;
 
 		public DatabaseHelper(Handler handler, Context context, String name, int version) {
@@ -139,7 +144,34 @@ public class FeedDataContentProvider extends ContentProvider {
 						try {
 							OPML.importFromFile(BACKUP_OPML);
 						} catch (Exception e) {
-							e.getMessage();
+						}
+					}
+				});
+			} else { // No database and no backup
+				mHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						// Automatically add an example feed
+						try {
+							ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+
+							ContentValues values = new ContentValues();
+							values.put(FeedColumns.IS_GROUP, true);
+							values.put(FeedColumns.NAME, DEFAULT_GROUP_NAME);
+							cr.insert(FeedColumns.GROUPS_CONTENT_URI, values);
+
+							Cursor groupCursor = cr.query(FeedColumns.GROUPS_CONTENT_URI, new String[] { FeedColumns._ID }, null, null, null);
+							if (groupCursor.moveToFirst()) {
+								values = new ContentValues();
+								values.put(FeedColumns.URL, DEFAULT_FEED_URL);
+								values.put(FeedColumns.NAME, DEFAULT_FEED_NAME);
+								values.put(FeedColumns.GROUP_ID, groupCursor.getString(0));
+
+								cr.insert(FeedColumns.CONTENT_URI, values);
+								cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+							}
+							groupCursor.close();
+						} catch (Exception e) {
 						}
 					}
 				});
