@@ -90,6 +90,7 @@
     <string name="context_menu_mark_as_read">Mark as read</string>
     <string name="context_menu_hide_read">Hide read entries</string>
     <string name="context_menu_show_read">Show read entries</string>
+    <string name="context_menu_share_starred">Share starred entries</string>
     <string name="menu_star">Star</string>
     <string name="menu_unstar">Unstar</string>
     <string name="menu_share">Share</string>

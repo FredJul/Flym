@@ -7,6 +7,11 @@
         android:showAsAction="ifRoom|withText"
         android:title="@string/context_menu_hide_read"/>
     <item
+        android:id="@+id/menu_share_starred"
+        android:icon="@drawable/social_share"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/context_menu_share_starred"/>
+    <item
         android:id="@+id/menu_refresh"
         android:icon="@drawable/refresh"
         android:showAsAction="ifRoom|withText"

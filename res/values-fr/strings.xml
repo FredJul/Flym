@@ -90,6 +90,7 @@
     <string name="context_menu_mark_as_read">Marquer comme lu</string>
     <string name="context_menu_hide_read">Cacher les articles lus</string>
     <string name="context_menu_show_read">Afficher les articles lus</string>
+    <string name="context_menu_share_starred">Partager les favoris</string>
     <string name="menu_star">Mettre en favoris</string>
     <string name="menu_unstar">Enlever des favoris</string>
     <string name="menu_share">Partager</string>

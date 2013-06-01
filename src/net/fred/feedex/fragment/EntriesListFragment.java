@@ -99,12 +99,15 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 	public void onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
 		getActivity().getMenuInflater().inflate(R.menu.entry_list, menu);
-		
+
 		if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
 			menu.findItem(R.id.menu_hide_read).setVisible(false);
-		}
-		else if (!PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)) {
-			menu.findItem(R.id.menu_hide_read).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
+		} else {
+			menu.findItem(R.id.menu_share_starred).setVisible(false);
+
+			if (!PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)) {
+				menu.findItem(R.id.menu_hide_read).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
+			}
 		}
 		super.onPrepareOptionsMenu(menu);
 	}
@@ -112,6 +115,21 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menu_share_starred: {
+			String starredList = "";
+			Cursor cursor = mEntriesCursorAdapter.getCursor();
+			if (cursor != null && !cursor.isClosed()) {
+				int titlePos = cursor.getColumnIndex(EntryColumns.TITLE);
+				int linkPos = cursor.getColumnIndex(EntryColumns.LINK);
+				if (cursor.moveToFirst()) {
+					do {
+						starredList += cursor.getString(titlePos) + "\n" + cursor.getString(linkPos) + "\n\n";
+					} while (cursor.moveToNext());
+				}
+				startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, starredList).setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)));
+			}
+			return true;
+		}
 		case R.id.menu_refresh: {
 			new Thread() {
 				@Override
@@ -146,8 +164,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) ? null
-				: EntryColumns.WHERE_UNREAD_WITH_FAVORITES, null, new StringBuilder(EntryColumns.DATE).append(Constants.DB_DESC).toString());
+		CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) ? null : EntryColumns.WHERE_UNREAD_WITH_FAVORITES, null,
+				new StringBuilder(EntryColumns.DATE).append(Constants.DB_DESC).toString());
 		cursorLoader.setUpdateThrottle(500);
 		return cursorLoader;
 	}
