@@ -150,9 +150,10 @@ public class FetcherService extends IntentService {
 			}
 
 			if (intent.hasExtra(Constants.ENTRY_URI)) {
-				mobilizeFeed((Uri) intent.getParcelableExtra(Constants.ENTRY_URI), networkInfo);
+				mobilizeFeed((Uri) intent.getParcelableExtra(Constants.ENTRY_URI));
 			} else {
-				int newCount = refreshFeeds(intent.getStringExtra(Constants.FEED_ID), networkInfo);
+				String feedId = intent.getStringExtra(Constants.FEED_ID);
+				int newCount = (feedId == null ? refreshFeeds() : refreshFeed(feedId));
 
 				if (newCount > 0) {
 					if (PrefsManager.getBoolean(PrefsManager.NOTIFICATIONS_ENABLED, true)) {
@@ -213,7 +214,7 @@ public class FetcherService extends IntentService {
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 
-	private void mobilizeFeed(Uri uri, NetworkInfo networkInfo) {
+	private void mobilizeFeed(Uri uri) {
 		ContentResolver cr = getContentResolver();
 		Cursor entryCursor = cr.query(uri, null, null, null, null);
 
@@ -261,22 +262,35 @@ public class FetcherService extends IntentService {
 		entryCursor.close();
 	}
 
-	private int refreshFeeds(String feedId, NetworkInfo networkInfo) {
+	private int refreshFeeds() {
 		ContentResolver cr = getContentResolver();
-		Cursor cursor = cr.query(feedId == null ? FeedColumns.CONTENT_URI : FeedColumns.CONTENT_URI(feedId), null, null, null, null);
+		Cursor cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
 
-		int urlPosition = cursor.getColumnIndex(FeedColumns.URL);
-		int idPosition = cursor.getColumnIndex(FeedColumns._ID);
-		int titlePosition = cursor.getColumnIndex(FeedColumns.NAME);
-		int fetchmodePosition = cursor.getColumnIndex(FeedColumns.FETCH_MODE);
-		int lastUpdatePosition = cursor.getColumnIndex(FeedColumns.LAST_UPDATE);
-		int iconPosition = cursor.getColumnIndex(FeedColumns.ICON);
 		int result = 0;
 
+		while (cursor.moveToNext()) {
+			result += refreshFeed(cursor.getString(0));
+		}
+		cursor.close();
+
+		return result;
+	}
+
+	private int refreshFeed(String feedId) {
 		RssAtomHandler handler = new RssAtomHandler();
 		handler.setFetchImages(PrefsManager.getBoolean(PrefsManager.FETCH_PICTURES, false));
 
-		while (cursor.moveToNext()) {
+		ContentResolver cr = getContentResolver();
+		Cursor cursor = cr.query(FeedColumns.CONTENT_URI(feedId), null, null, null, null);
+
+		if (cursor.moveToFirst()) {
+			int urlPosition = cursor.getColumnIndex(FeedColumns.URL);
+			int idPosition = cursor.getColumnIndex(FeedColumns._ID);
+			int titlePosition = cursor.getColumnIndex(FeedColumns.NAME);
+			int fetchmodePosition = cursor.getColumnIndex(FeedColumns.FETCH_MODE);
+			int lastUpdatePosition = cursor.getColumnIndex(FeedColumns.LAST_UPDATE);
+			int iconPosition = cursor.getColumnIndex(FeedColumns.ICON);
+
 			String id = cursor.getString(idPosition);
 			HttpURLConnection connection = null;
 
@@ -490,11 +504,11 @@ public class FetcherService extends IntentService {
 					connection.disconnect();
 				}
 			}
-			result += handler.getNewCount();
 		}
+
 		cursor.close();
 
-		return result;
+		return handler.getNewCount();
 	}
 
 	public static final HttpURLConnection setupConnection(String url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
@@ -524,8 +538,7 @@ public class FetcherService extends IntentService {
 
 		String location = connection.getHeaderField("Location");
 
-		if (location != null
-				&& (url.getProtocol().equals(_HTTP) && location.startsWith(Constants.HTTPS) || url.getProtocol().equals(_HTTPS) && location.startsWith(Constants.HTTP))) {
+		if (location != null && (url.getProtocol().equals(_HTTP) && location.startsWith(Constants.HTTPS) || url.getProtocol().equals(_HTTPS) && location.startsWith(Constants.HTTP))) {
 			// if location != null, the system-automatic redirect has failed
 			// which indicates a protocol change
 

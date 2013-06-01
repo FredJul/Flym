@@ -160,7 +160,7 @@ public class FeedDataContentProvider extends ContentProvider {
 							values.put(FeedColumns.NAME, DEFAULT_GROUP_NAME);
 							cr.insert(FeedColumns.GROUPS_CONTENT_URI, values);
 
-							Cursor groupCursor = cr.query(FeedColumns.GROUPS_CONTENT_URI, new String[] { FeedColumns._ID }, null, null, null);
+							Cursor groupCursor = cr.query(FeedColumns.GROUPS_CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
 							if (groupCursor.moveToFirst()) {
 								values = new ContentValues();
 								values.put(FeedColumns.URL, DEFAULT_FEED_URL);
