@@ -59,6 +59,13 @@ import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -264,21 +271,49 @@ public class FetcherService extends IntentService {
 
 	private int refreshFeeds() {
 		ContentResolver cr = getContentResolver();
-		Cursor cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
+		final Cursor cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
+		int nbFeed = cursor.getCount();
 
-		int result = 0;
+		ExecutorService executor = Executors.newFixedThreadPool(2, new ThreadFactory() {
+			@Override
+			public Thread newThread(Runnable r) {
+				Thread t = new Thread(r);
+				t.setPriority(Thread.MIN_PRIORITY);
+				return t;
+			}
+		});
 
+		CompletionService<Integer> completionService = new ExecutorCompletionService<Integer>(executor);
 		while (cursor.moveToNext()) {
-			result += refreshFeed(cursor.getString(0));
+			final String feedId = cursor.getString(0);
+			completionService.submit(new Callable<Integer>() {
+				@Override
+				public Integer call() {
+					int result = 0;
+					try {
+						result = refreshFeed(feedId);
+					} catch (Exception ex) {
+					}
+					return result;
+				}
+			});
 		}
 		cursor.close();
 
-		return result;
+		int globalResult = 0;
+		for (int i = 0; i < nbFeed; i++) {
+			try {
+				Future<Integer> f = completionService.take();
+				globalResult += f.get();
+			} catch (Exception e) {
+			}
+		}
+
+		return globalResult;
 	}
 
 	private int refreshFeed(String feedId) {
-		RssAtomHandler handler = new RssAtomHandler();
-		handler.setFetchImages(PrefsManager.getBoolean(PrefsManager.FETCH_PICTURES, false));
+		RssAtomHandler handler = null;
 
 		ContentResolver cr = getContentResolver();
 		Cursor cursor = cr.query(FeedColumns.CONTENT_URI(feedId), null, null, null, null);
@@ -300,7 +335,9 @@ public class FetcherService extends IntentService {
 				String contentType = connection.getContentType();
 				int fetchMode = cursor.getInt(fetchmodePosition);
 
-				handler.init(new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl);
+				handler = new RssAtomHandler(new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl);
+				handler.setFetchImages(PrefsManager.getBoolean(PrefsManager.FETCH_PICTURES, false));
+
 				if (fetchMode == 0) {
 					if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
 						BufferedReader reader = new BufferedReader(new InputStreamReader(getConnectionInputStream(connection)));
@@ -462,7 +499,7 @@ public class FetcherService extends IntentService {
 
 				connection.disconnect();
 			} catch (FileNotFoundException e) {
-				if (!handler.isDone() && !handler.isCancelled()) {
+				if (handler != null && !handler.isDone() && !handler.isCancelled()) {
 					ContentValues values = new ContentValues();
 
 					// resets the fetchmode to determine it again later
@@ -474,7 +511,7 @@ public class FetcherService extends IntentService {
 					}
 				}
 			} catch (Throwable e) {
-				if (!handler.isDone() && !handler.isCancelled()) {
+				if (handler != null && !handler.isDone() && !handler.isCancelled()) {
 					ContentValues values = new ContentValues();
 
 					// resets the fetchmode to determine it again later
@@ -489,7 +526,7 @@ public class FetcherService extends IntentService {
 
 				/* check and optionally find favicon */
 				try {
-					if (cursor.getBlob(iconPosition) == null) {
+					if (handler != null && cursor.getBlob(iconPosition) == null) {
 						String feedLink = handler.getFeedLink();
 						if (feedLink != null) {
 							retrieveFavicon(this, new URL(feedLink), id);
@@ -508,7 +545,7 @@ public class FetcherService extends IntentService {
 
 		cursor.close();
 
-		return handler.getNewCount();
+		return handler != null ? handler.getNewCount() : 0;
 	}
 
 	public static final HttpURLConnection setupConnection(String url) throws IOException, NoSuchAlgorithmException, KeyManagementException {

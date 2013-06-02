@@ -49,6 +49,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Vector;
@@ -118,8 +119,7 @@ public class RssAtomHandler extends DefaultHandler {
 
 	private static long KEEP_TIME = 345600000l; // 4 days
 
-	private static final DateFormat[] PUBDATE_DATEFORMATS = { new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US),
-			new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US), new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.US),
+	private static final DateFormat[] PUBDATE_DATEFORMATS = { new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US), new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.US),
 
 	};
 	private static final int PUBDATEFORMAT_COUNT = 3;
@@ -133,20 +133,20 @@ public class RssAtomHandler extends DefaultHandler {
 	// middle() is group 1; s* is important for non-whitespaces; ' also usable
 	private static final Pattern IMG_PATTERN = Pattern.compile("<img src=\\s*['\"]([^'\"]+)['\"][^>]*>");
 
-	private Date lastUpdateDate;
+	private final Date lastUpdateDate;
 
-	private String id;
+	private final String id;
 
-	private boolean entryTagEntered;
-	private boolean titleTagEntered;
-	private boolean updatedTagEntered;
-	private boolean linkTagEntered;
-	private boolean descriptionTagEntered;
-	private boolean pubDateTagEntered;
-	private boolean dateTagEntered;
-	private boolean lastUpdateDateTagEntered;
-	private boolean guidTagEntered;
-	private boolean authorTagEntered;
+	private boolean entryTagEntered = false;
+	private boolean titleTagEntered = false;
+	private boolean updatedTagEntered = false;
+	private boolean linkTagEntered = false;
+	private boolean descriptionTagEntered = false;
+	private boolean pubDateTagEntered = false;
+	private boolean dateTagEntered = false;
+	private boolean lastUpdateDateTagEntered = false;
+	private boolean guidTagEntered = false;
+	private boolean authorTagEntered = false;
 
 	private StringBuilder title;
 	private StringBuilder dateStringBuilder;
@@ -155,31 +155,32 @@ public class RssAtomHandler extends DefaultHandler {
 	private StringBuilder entryLink;
 	private StringBuilder description;
 	private StringBuilder enclosure;
-	private Uri feedEntiresUri;
+	private final Uri feedEntiresUri;
 	private int newCount;
-	private String feedName;
+	private final String feedName;
 	private String feedTitle;
 	private String feedBaseUrl;
-	private boolean done;
-	private Date keepDateBorder;
-	private boolean fetchImages;
-	private boolean cancelled;
-	private long now;
+	private boolean done = false;
+	private final Date keepDateBorder;
+	private boolean fetchImages = false;
+	private boolean cancelled = false;
+	private final long now;
 	private StringBuilder guid;
 	private StringBuilder author, tmpAuthor;
 
-	public RssAtomHandler() {
-		KEEP_TIME = Long.parseLong(PrefsManager.getString(PrefsManager.KEEP_TIME, "4")) * 86400000l;
-	}
+	private final FeedFilters filters;
 
-	public void init(Date lastUpdateDate, final String id, String feedName, String url) {
-		final long keepDateBorderTime = KEEP_TIME > 0 ? System.currentTimeMillis() - KEEP_TIME : 0;
+	public RssAtomHandler(Date lastUpdateDate, final String id, String feedName, String url) {
+		KEEP_TIME = Long.parseLong(PrefsManager.getString(PrefsManager.KEEP_TIME, "4")) * 86400000l;
+		long keepDateBorderTime = KEEP_TIME > 0 ? System.currentTimeMillis() - KEEP_TIME : 0;
 
 		keepDateBorder = new Date(keepDateBorderTime);
 		this.lastUpdateDate = lastUpdateDate;
 		this.id = id;
 		this.feedName = feedName;
 		feedEntiresUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(id);
+
+		filters = new FeedFilters(id);
 
 		final String query = new StringBuilder(EntryColumns.DATE).append('<').append(keepDateBorderTime).append(Constants.DB_AND).append(EntryColumns.WHERE_NOT_FAVORITE).toString();
 
@@ -192,35 +193,9 @@ public class RssAtomHandler extends DefaultHandler {
 
 		if (index > -1) {
 			feedBaseUrl = url.substring(0, index);
-		} else {
-			feedBaseUrl = null;
 		}
 
-		title = null;
-		feedLink = null;
-		dateStringBuilder = null;
-		entryLink = null;
-		description = null;
-		enclosure = null;
-		entryDate = null;
-
-		done = false;
-		cancelled = false;
-
-		entryTagEntered = false;
-		titleTagEntered = false;
-		updatedTagEntered = false;
-		linkTagEntered = false;
-		descriptionTagEntered = false;
-		pubDateTagEntered = false;
-		dateTagEntered = false;
-		lastUpdateDateTagEntered = false;
-		now = System.currentTimeMillis() - 1000;	// by precaution
-		guid = null;
-		guidTagEntered = false;
-		authorTagEntered = false;
-		author = null;
-		tmpAuthor = null;
+		now = System.currentTimeMillis() - 1000; // by precaution
 	}
 
 	@Override
@@ -385,7 +360,7 @@ public class RssAtomHandler extends DefaultHandler {
 				}
 
 				// Try to find if the entry is not filtered and need to be processed
-				if (!isEntryFiltered(id, improvedTitle, improvedDesc.first)) {
+				if (!filters.isEntryFiltered(improvedTitle, improvedDesc.first)) {
 
 					if (author != null) {
 						values.put(EntryColumns.AUTHOR, author.toString());
@@ -526,6 +501,12 @@ public class RssAtomHandler extends DefaultHandler {
 	}
 
 	private static Date parsePubdateDate(String string) {
+		// We remove the first part if necessary (the day display)
+		int coma = string.indexOf(", ");
+		if (coma != -1) {
+			string = string.substring(coma + 2);
+		}
+
 		for (int n = 0; n < TIMEZONES_COUNT; n++) {
 			string = string.replace(TIMEZONES[n], TIMEZONES_REPLACE[n]);
 		}
@@ -536,34 +517,6 @@ public class RssAtomHandler extends DefaultHandler {
 			} // just do nothing
 		}
 		return null;
-	}
-
-	private static boolean isEntryFiltered(String feedId, String title, String content) {
-		boolean isFiltered = false;
-		ContentResolver cr = MainApplication.getAppContext().getContentResolver();
-		Cursor c = cr
-				.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), new String[] { FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX, FilterColumns.IS_APPLIED_TO_TITLE }, null, null, null);
-		while (c.moveToNext()) {
-			String filterText = c.getString(0);
-			boolean isRegex = c.getInt(1) == 1;
-			boolean isAppliedToTitle = c.getInt(2) == 1;
-
-			if (isRegex) {
-				Pattern p = Pattern.compile(filterText);
-				if (isAppliedToTitle) {
-					Matcher m = p.matcher(title);
-					isFiltered = m.find();
-				} else {
-					Matcher m = p.matcher(content);
-					isFiltered = m.find();
-				}
-			} else if ((isAppliedToTitle && title.contains(filterText)) || (!isAppliedToTitle && content.contains(filterText))) {
-				isFiltered = true;
-			}
-		}
-		c.close();
-
-		return isFiltered;
 	}
 
 	private static String unescapeTitle(String title) {
@@ -639,5 +592,48 @@ public class RssAtomHandler extends DefaultHandler {
 		}
 
 		super.endDocument();
+	}
+
+	private class FeedFilters {
+		ArrayList<Pair<String, Pair<Boolean, Boolean>>> mFilters = new ArrayList<Pair<String, Pair<Boolean, Boolean>>>();
+
+		public FeedFilters(String feedId) {
+			ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+			Cursor c = cr.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), new String[] { FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX, FilterColumns.IS_APPLIED_TO_TITLE }, null, null,
+					null);
+			while (c.moveToNext()) {
+				String filterText = c.getString(0);
+				boolean isRegex = c.getInt(1) == 1;
+				boolean isAppliedToTitle = c.getInt(2) == 1;
+
+				mFilters.add(new Pair<String, Pair<Boolean, Boolean>>(filterText, new Pair<Boolean, Boolean>(isRegex, isAppliedToTitle)));
+			}
+			c.close();
+		}
+
+		public boolean isEntryFiltered(String title, String content) {
+			boolean isFiltered = false;
+
+			for (Pair<String, Pair<Boolean, Boolean>> filter : mFilters) {
+				String filterText = filter.first;
+				boolean isRegex = filter.second.first;
+				boolean isAppliedToTitle = filter.second.second;
+
+				if (isRegex) {
+					Pattern p = Pattern.compile(filterText);
+					if (isAppliedToTitle) {
+						Matcher m = p.matcher(title);
+						isFiltered = m.find();
+					} else {
+						Matcher m = p.matcher(content);
+						isFiltered = m.find();
+					}
+				} else if ((isAppliedToTitle && title.contains(filterText)) || (!isAppliedToTitle && content.contains(filterText))) {
+					isFiltered = true;
+				}
+			}
+
+			return isFiltered;
+		}
 	}
 }
