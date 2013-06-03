@@ -19,6 +19,7 @@
 
 package net.fred.feedex.adapter;
 
+import net.fred.feedex.Constants;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
@@ -60,7 +61,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 		@Override
 		public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 			CursorLoader cursorLoader = new CursorLoader(mActivity, mGroupUri, null, null, null, null);
-			cursorLoader.setUpdateThrottle(500);
+			cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
 			return cursorLoader;
 		}
 
@@ -92,7 +93,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 		@Override
 		public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 			CursorLoader cursorLoader = new CursorLoader(mActivity, (Uri) args.getParcelable(URI_ARG), null, null, null, null);
-			cursorLoader.setUpdateThrottle(500);
+			cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
 			return cursorLoader;
 		}
 

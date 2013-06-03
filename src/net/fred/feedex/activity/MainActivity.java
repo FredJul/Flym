@@ -289,7 +289,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		CursorLoader cursorLoader = new CursorLoader(this, EntryColumns.CONTENT_URI, new String[] { "COUNT(*)" }, EntryColumns.WHERE_UNREAD, null,
 				null);
-		cursorLoader.setUpdateThrottle(500);
+		cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
 		return cursorLoader;
 	}
 
