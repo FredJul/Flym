@@ -160,15 +160,13 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	 * 
 	 * @param context
 	 *            Interface to application's global information
-	 * @param cursor
-	 *            The cursor from which to get the data. The cursor is already moved to the correct position.
 	 * @param isLastChild
 	 *            Whether the child is the last child within its group.
 	 * @param parent
 	 *            The parent to which the new view is attached to
 	 * @return the newly created view.
 	 */
-	public View newChildView(Context context, Cursor cursor, ViewGroup parent) {
+	public View newChildView(Context context, ViewGroup parent) {
 		return mInflater.inflate(mChildLayout, parent, false);
 	}
 
@@ -177,15 +175,13 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	 * 
 	 * @param context
 	 *            Interface to application's global information
-	 * @param cursor
-	 *            The group cursor from which to get the data. The cursor is already moved to the correct position.
 	 * @param isExpanded
 	 *            Whether the group is expanded.
 	 * @param parent
 	 *            The parent to which the new view is attached to
 	 * @return The newly created view.
 	 */
-	public View newGroupView(Context context, Cursor cursor, boolean isExpanded, ViewGroup parent) {
+	public View newGroupView(Context context, boolean isExpanded, ViewGroup parent) {
 		return mInflater.inflate((isExpanded) ? mExpandedGroupLayout : mCollapsedGroupLayout, parent, false);
 	}
 
@@ -240,7 +236,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 
 		View v;
 		if (convertView == null) {
-			v = newChildView(mActivity, cursor.first, parent);
+			v = newChildView(mActivity, parent);
 		} else {
 			v = convertView;
 		}
@@ -304,7 +300,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 
 		View v;
 		if (convertView == null) {
-			v = newGroupView(mActivity, mGroupCursor, isExpanded, parent);
+			v = newGroupView(mActivity, isExpanded, parent);
 		} else {
 			v = convertView;
 		}
