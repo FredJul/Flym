@@ -102,6 +102,8 @@ import android.util.Xml;
 
 public class FetcherService extends IntentService {
 
+	private static final int THREAD_NUMBER = 2;
+
 	private static final String MOBILIZER_URL = "http://ftr.fivefilters.org/makefulltextfeed.php?url=";
 
 	private static final int FETCHMODE_DIRECT = 1;
@@ -274,7 +276,7 @@ public class FetcherService extends IntentService {
 		final Cursor cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
 		int nbFeed = cursor.getCount();
 
-		ExecutorService executor = Executors.newFixedThreadPool(2, new ThreadFactory() {
+		ExecutorService executor = Executors.newFixedThreadPool(THREAD_NUMBER, new ThreadFactory() {
 			@Override
 			public Thread newThread(Runnable r) {
 				Thread t = new Thread(r);
