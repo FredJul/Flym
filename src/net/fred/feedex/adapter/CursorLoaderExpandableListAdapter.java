@@ -205,7 +205,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	public Cursor getChild(int groupPosition, int childPosition) {
 		// Return this group's children Cursor pointing to the particular child
 		Pair<Cursor, Boolean> childCursor = mChildrenCursors.get(groupPosition);
-		if (childCursor != null) {
+		if (childCursor != null && !childCursor.first.isClosed()) {
 			childCursor.first.moveToPosition(childPosition);
 			return childCursor.first;
 		}
@@ -216,21 +216,17 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	@Override
 	public long getChildId(int groupPosition, int childPosition) {
 		Pair<Cursor, Boolean> childrenCursor = mChildrenCursors.get(groupPosition);
-		if (childrenCursor != null) {
-			if (childrenCursor.first.moveToPosition(childPosition)) {
-				return childrenCursor.first.getLong(childrenCursor.first.getColumnIndex("_id"));
-			} else {
-				return 0;
-			}
-		} else {
-			return 0;
+		if (childrenCursor != null && !childrenCursor.first.isClosed() && childrenCursor.first.moveToPosition(childPosition)) {
+			return childrenCursor.first.getLong(childrenCursor.first.getColumnIndex("_id"));
 		}
+
+		return 0;
 	}
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		Pair<Cursor, Boolean> cursor = mChildrenCursors.get(groupPosition);
-		if (cursor == null || !cursor.first.moveToPosition(childPosition)) {
+		if (cursor == null || cursor.first.isClosed() || !cursor.first.moveToPosition(childPosition)) {
 			throw new IllegalStateException("this should only be called when the cursor is valid");
 		}
 
@@ -249,13 +245,14 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 		Pair<Cursor, Boolean> childCursor = mChildrenCursors.get(groupPosition);
 
 		// We need to restart the loader
-		if ((childCursor == null || childCursor.second == true) && mGroupCursor != null && mGroupCursor.moveToPosition(groupPosition)) {
+		if ((childCursor == null || childCursor.second == true) && mGroupCursor != null && !mGroupCursor.isClosed()
+				&& mGroupCursor.moveToPosition(groupPosition)) {
 			Bundle args = new Bundle();
 			args.putParcelable(URI_ARG, getChildrenUri(mGroupCursor));
 			mLoaderMgr.restartLoader(groupPosition + 1, args, mChildrenLoaderCallback);
 		}
 
-		if (childCursor != null) {
+		if (childCursor != null && !childCursor.first.isClosed()) {
 			return childCursor.first.getCount();
 		}
 
@@ -265,7 +262,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	@Override
 	public Cursor getGroup(int groupPosition) {
 		// Return the group Cursor pointing to the given group
-		if (mGroupCursor != null) {
+		if (mGroupCursor != null && !mGroupCursor.isClosed()) {
 			mGroupCursor.moveToPosition(groupPosition);
 		}
 		return mGroupCursor;
@@ -273,28 +270,25 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 
 	@Override
 	public int getGroupCount() {
-		if (mGroupCursor != null)
+		if (mGroupCursor != null && !mGroupCursor.isClosed()) {
 			return mGroupCursor.getCount();
-		else
-			return 0;
+		}
+
+		return 0;
 	}
 
 	@Override
 	public long getGroupId(int groupPosition) {
-		if (mGroupCursor != null) {
-			try { // by precaution, cursor can be closed
-				if (mGroupCursor.moveToPosition(groupPosition)) {
-					return mGroupCursor.getLong(mGroupCursor.getColumnIndex("_id"));
-				}
-			} catch (Exception e) {
-			}
+		if (mGroupCursor != null && !mGroupCursor.isClosed() && mGroupCursor.moveToPosition(groupPosition)) {
+			return mGroupCursor.getLong(mGroupCursor.getColumnIndex("_id"));
 		}
+
 		return 0;
 	}
 
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-		if (mGroupCursor == null || !mGroupCursor.moveToPosition(groupPosition)) {
+		if (mGroupCursor == null || mGroupCursor.isClosed() || !mGroupCursor.moveToPosition(groupPosition)) {
 			throw new IllegalStateException("this should only be called when the cursor is valid");
 		}
 
