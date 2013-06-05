@@ -80,7 +80,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 			notifyDataSetInvalidated();
 		}
 	};
-	
+
 	private void setAllChildrenCursorsAsObsolete() {
 		int key = 0;
 		for (int i = 0; i < mChildrenCursors.size(); i++) {
@@ -247,7 +247,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	@Override
 	public int getChildrenCount(int groupPosition) {
 		Pair<Cursor, Boolean> childCursor = mChildrenCursors.get(groupPosition);
-		
+
 		// We need to restart the loader
 		if ((childCursor == null || childCursor.second == true) && mGroupCursor != null && mGroupCursor.moveToPosition(groupPosition)) {
 			Bundle args = new Bundle();
@@ -282,14 +282,14 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	@Override
 	public long getGroupId(int groupPosition) {
 		if (mGroupCursor != null) {
-			if (mGroupCursor.moveToPosition(groupPosition)) {
-				return mGroupCursor.getLong(mGroupCursor.getColumnIndex("_id"));
-			} else {
-				return 0;
+			try { // by precaution, cursor can be closed
+				if (mGroupCursor.moveToPosition(groupPosition)) {
+					return mGroupCursor.getLong(mGroupCursor.getColumnIndex("_id"));
+				}
+			} catch (Exception e) {
 			}
-		} else {
-			return 0;
 		}
+		return 0;
 	}
 
 	@Override
