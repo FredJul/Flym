@@ -74,10 +74,8 @@ import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.RemoteException;
 import android.text.Html;
 import android.util.Pair;
 
@@ -176,8 +174,8 @@ public class RssAtomHandler extends DefaultHandler {
 
 	private final FeedFilters filters;
 
-	private ArrayList<ContentProviderOperation> inserts = new ArrayList<ContentProviderOperation>();
-	private ArrayList<Vector<String>> entriesImages = new ArrayList<Vector<String>>();
+	private final ArrayList<ContentProviderOperation> inserts = new ArrayList<ContentProviderOperation>();
+	private final ArrayList<Vector<String>> entriesImages = new ArrayList<Vector<String>>();
 
 	public RssAtomHandler(Date lastUpdateDate, final String id, String feedName, String url) {
 		KEEP_TIME = Long.parseLong(PrefsManager.getString(PrefsManager.KEEP_TIME, "4")) * 86400000l;
@@ -340,9 +338,7 @@ public class RssAtomHandler extends DefaultHandler {
 		} else if (TAG_LINK.equals(localName)) {
 			linkTagEntered = false;
 
-			if (feedLink == null && !entryTagEntered && TAG_LINK.equals(qName)) { // Skip
-																					// <atom10:link>
-																					// tags
+			if (feedLink == null && !entryTagEntered && TAG_LINK.equals(qName)) { // Skip <atom10:link> tags
 				feedLink = entryLink.toString();
 			}
 		} else if (TAG_UPDATED.equals(localName)) {
@@ -372,8 +368,7 @@ public class RssAtomHandler extends DefaultHandler {
 					values.put(EntryColumns.ABSTRACT, improvedDesc.first);
 				}
 
-				// Try to find if the entry is not filtered and need to be
-				// processed
+				// Try to find if the entry is not filtered and need to be processed
 				if (!filters.isEntryFiltered(improvedTitle, improvedDesc.first)) {
 
 					if (author != null) {
@@ -397,8 +392,7 @@ public class RssAtomHandler extends DefaultHandler {
 						existanceStringBuilder.append(Constants.DB_AND).append(EntryColumns.GUID).append(Constants.DB_ARG);
 					}
 
-					String entryLinkString = ""; // don't set this to null as we
-													// need *some* value
+					String entryLinkString = ""; // don't set this to null as we need *some* value
 
 					if (entryLink != null && entryLink.length() > 0) {
 						entryLinkString = entryLink.toString().trim();
@@ -417,8 +411,7 @@ public class RssAtomHandler extends DefaultHandler {
 					if ((entryLinkString.length() == 0 && guidString == null)
 							|| cr.update(feedEntiresUri, values, existanceStringBuilder.toString(), existanceValues) == 0) {
 
-						// We put the date only for new entry (no need to change
-						// the past, you may already read it)
+						// We put the date only for new entry (no need to change the past, you may already read it)
 						if (entryDate != null) {
 							values.put(EntryColumns.DATE, entryDate.getTime());
 						} else {
@@ -573,8 +566,7 @@ public class RssAtomHandler extends DefaultHandler {
 
 	private static void downloadImages(String entryId, Vector<String> images) {
 		if (images != null) {
-			FeedDataContentProvider.IMAGE_FOLDER_FILE.mkdir(); // create images
-																// dir
+			FeedDataContentProvider.IMAGE_FOLDER_FILE.mkdir(); // create images dir
 			for (String img : images) {
 				try {
 					byte[] data = FetcherService.getBytes(new URL(img).openStream());
@@ -613,9 +605,8 @@ public class RssAtomHandler extends DefaultHandler {
 
 		} catch (Exception e) {
 		}
-		
-		ContentValues values = new ContentValues();
 
+		ContentValues values = new ContentValues();
 		if (feedName == null && feedTitle != null) {
 			values.put(FeedColumns.NAME, feedTitle.toString().trim());
 		}
