@@ -481,11 +481,11 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 								break;
 
 							case R.id.byTwitter:
-								mUrlEditText.setText("https://api.twitter.com/1/statuses/user_timeline.rss?screen_name=" + text.replaceAll("+", ""));
+								mUrlEditText.setText("https://api.twitter.com/1/statuses/user_timeline.rss?screen_name=" + text.replaceAll("\\+", ""));
 								break;
 
 							case R.id.byYoutube:
-								mUrlEditText.setText("http://www.youtube.com/rss/user/" + text.replaceAll("+", "") + "/videos.rss");
+								mUrlEditText.setText("http://www.youtube.com/rss/user/" + text.replaceAll("\\+", "") + "/videos.rss");
 								break;
 							}
 						}
