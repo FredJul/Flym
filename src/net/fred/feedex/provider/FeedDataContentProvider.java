@@ -71,7 +71,7 @@ public class FeedDataContentProvider extends ContentProvider {
 	private static final String FOLDER = Environment.getExternalStorageDirectory() + "/FeedEx/";
 	private static final String DATABASE_NAME = "FeedEx.db";
 
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 
 	private static final int URI_GROUPS = 1;
 	private static final int URI_GROUP = 2;
@@ -96,6 +96,9 @@ public class FeedDataContentProvider extends ContentProvider {
 
 	private static final String BACKUP_OPML = FOLDER + "backup.opml";
 
+	private static final String ALTER_TABLE = "ALTER TABLE ";
+	private static final String ADD = " ADD ";
+	
 	private static UriMatcher URI_MATCHER;
 
 	static {
@@ -198,7 +201,16 @@ public class FeedDataContentProvider extends ContentProvider {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-			// Nothing to do
+			if (oldVersion < 2) {
+				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.REAL_LAST_UPDATE).append(' ').append(FeedData.TYPE_DATE_TIME).toString());
+			}
+		}
+		
+		private void executeCatchedSQL(SQLiteDatabase database, String query) {
+			try {
+				database.execSQL(query);
+			} catch (Exception e) {
+			}
 		}
 	}
 

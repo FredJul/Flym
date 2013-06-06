@@ -130,7 +130,8 @@ public class RssAtomHandler extends DefaultHandler {
 	// middle() is group 1; s* is important for non-whitespaces; ' also usable
 	private static final Pattern IMG_PATTERN = Pattern.compile("<img src=\\s*['\"]([^'\"]+)['\"][^>]*>");
 
-	private final Date lastUpdateDate;
+	private final Date realLastUpdateDate;
+	private long newRealLastUpdate;
 
 	private final String id;
 
@@ -141,7 +142,7 @@ public class RssAtomHandler extends DefaultHandler {
 	private boolean descriptionTagEntered = false;
 	private boolean pubDateTagEntered = false;
 	private boolean dateTagEntered = false;
-	private boolean lastUpdateDateTagEntered = false;
+	private boolean lastBuildDateTagEntered = false;
 	private boolean guidTagEntered = false;
 	private boolean authorTagEntered = false;
 
@@ -170,12 +171,13 @@ public class RssAtomHandler extends DefaultHandler {
 	private final ArrayList<ContentProviderOperation> inserts = new ArrayList<ContentProviderOperation>();
 	private final ArrayList<Vector<String>> entriesImages = new ArrayList<Vector<String>>();
 
-	public RssAtomHandler(Date lastUpdateDate, final String id, String feedName, String url) {
+	public RssAtomHandler(Date realLastUpdateDate, final String id, String feedName, String url) {
 		KEEP_TIME = Long.parseLong(PrefsManager.getString(PrefsManager.KEEP_TIME, "4")) * 86400000l;
 		long keepDateBorderTime = KEEP_TIME > 0 ? System.currentTimeMillis() - KEEP_TIME : 0;
 
 		keepDateBorder = new Date(keepDateBorderTime);
-		this.lastUpdateDate = lastUpdateDate;
+		this.realLastUpdateDate = realLastUpdateDate;
+		newRealLastUpdate = realLastUpdateDate.getTime();
 		this.id = id;
 		this.feedName = feedName;
 		feedEntiresUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(id);
@@ -214,6 +216,10 @@ public class RssAtomHandler extends DefaultHandler {
 				feedTitle = title.toString();
 			}
 			title = null;
+			
+			if (entryDate != null && entryDate.getTime() > newRealLastUpdate) {
+				newRealLastUpdate = entryDate.getTime();
+			}
 		} else if (TAG_TITLE.equals(localName)) {
 			if (title == null) {
 				titleTagEntered = true;
@@ -262,7 +268,7 @@ public class RssAtomHandler extends DefaultHandler {
 			dateTagEntered = true;
 			dateStringBuilder = new StringBuilder();
 		} else if (TAG_LASTBUILDDATE.equals(localName)) {
-			lastUpdateDateTagEntered = true;
+			lastBuildDateTagEntered = true;
 			dateStringBuilder = new StringBuilder();
 		} else if (TAG_ENCODEDCONTENT.equals(localName)) {
 			descriptionTagEntered = true;
@@ -312,7 +318,7 @@ public class RssAtomHandler extends DefaultHandler {
 			dateStringBuilder.append(ch, start, length);
 		} else if (dateTagEntered) {
 			dateStringBuilder.append(ch, start, length);
-		} else if (lastUpdateDateTagEntered) {
+		} else if (lastBuildDateTagEntered) {
 			dateStringBuilder.append(ch, start, length);
 		} else if (guidTagEntered) {
 			guid.append(ch, start, length);
@@ -342,15 +348,19 @@ public class RssAtomHandler extends DefaultHandler {
 			pubDateTagEntered = false;
 		} else if (TAG_LASTBUILDDATE.equals(localName)) {
 			entryDate = parsePubdateDate(dateStringBuilder.toString().replace("  ", " "));
-			lastUpdateDateTagEntered = false;
+			lastBuildDateTagEntered = false;
 		} else if (TAG_DATE.equals(localName)) {
 			entryDate = parseUpdateDate(dateStringBuilder.toString());
 			dateTagEntered = false;
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
 			entryTagEntered = false;
-			if (title != null && (entryDate == null || ((entryDate.after(lastUpdateDate)) && entryDate.after(keepDateBorder)))) {
+			if (title != null && (entryDate == null || ((entryDate.after(realLastUpdateDate)) && entryDate.after(keepDateBorder)))) {
 				ContentValues values = new ContentValues();
 
+				if (entryDate != null && entryDate.getTime() > newRealLastUpdate) {
+					newRealLastUpdate = entryDate.getTime();
+				}
+				
 				String improvedTitle = unescapeTitle(title.toString().trim());
 				values.put(EntryColumns.TITLE, improvedTitle);
 
@@ -606,6 +616,7 @@ public class RssAtomHandler extends DefaultHandler {
 		}
 		values.putNull(FeedColumns.ERROR);
 		values.put(FeedColumns.LAST_UPDATE, now);
+		values.put(FeedData.FeedColumns.REAL_LAST_UPDATE, newRealLastUpdate);
 		if (cr.update(FeedColumns.CONTENT_URI(id), values, null, null) > 0) {
 			FeedDataContentProvider.notifyGroupFromFeedId(id);
 		}

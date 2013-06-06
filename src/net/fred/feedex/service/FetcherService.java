@@ -325,7 +325,7 @@ public class FetcherService extends IntentService {
 			int idPosition = cursor.getColumnIndex(FeedColumns._ID);
 			int titlePosition = cursor.getColumnIndex(FeedColumns.NAME);
 			int fetchmodePosition = cursor.getColumnIndex(FeedColumns.FETCH_MODE);
-			int lastUpdatePosition = cursor.getColumnIndex(FeedColumns.LAST_UPDATE);
+			int realLastUpdatePosition = cursor.getColumnIndex(FeedColumns.REAL_LAST_UPDATE);
 			int iconPosition = cursor.getColumnIndex(FeedColumns.ICON);
 
 			String id = cursor.getString(idPosition);
@@ -337,7 +337,7 @@ public class FetcherService extends IntentService {
 				String contentType = connection.getContentType();
 				int fetchMode = cursor.getInt(fetchmodePosition);
 
-				handler = new RssAtomHandler(new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl);
+				handler = new RssAtomHandler(new Date(cursor.getLong(realLastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl);
 				handler.setFetchImages(PrefsManager.getBoolean(PrefsManager.FETCH_PICTURES, false));
 
 				if (fetchMode == 0) {

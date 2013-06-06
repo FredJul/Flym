@@ -59,14 +59,14 @@ public class FeedData {
 	public static final String AUTHORITY = "net.fred.feedex.provider.FeedData";
 	public static final String CONTENT_AUTHORITY = CONTENT + AUTHORITY;
 
-	private static final String TYPE_PRIMARY_KEY = "INTEGER PRIMARY KEY AUTOINCREMENT";
+	static final String TYPE_PRIMARY_KEY = "INTEGER PRIMARY KEY AUTOINCREMENT";
 
-	private static final String TYPE_EXTERNAL_ID = "INTEGER(7)";
-	private static final String TYPE_TEXT = "TEXT";
-	private static final String TYPE_TEXT_UNIQUE = "TEXT UNIQUE";
-	private static final String TYPE_DATE_TIME = "DATETIME";
-	private static final String TYPE_INT = "INT";
-	private static final String TYPE_BOOLEAN = "INTEGER(1)";
+	static final String TYPE_EXTERNAL_ID = "INTEGER(7)";
+	static final String TYPE_TEXT = "TEXT";
+	static final String TYPE_TEXT_UNIQUE = "TEXT UNIQUE";
+	static final String TYPE_DATE_TIME = "DATETIME";
+	static final String TYPE_INT = "INT";
+	static final String TYPE_BOOLEAN = "INTEGER(1)";
 
 	public static class FeedColumns implements BaseColumns {
 		public static final Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds").toString());
@@ -77,15 +77,16 @@ public class FeedData {
 		public static final String IS_GROUP_COLLAPSED = "isgroupcollapsed";
 		public static final String GROUP_ID = "groupid";
 		public static final String LAST_UPDATE = "lastupdate";
+		public static final String REAL_LAST_UPDATE = "reallastupdate";
 		public static final String ICON = "icon";
 		public static final String ERROR = "error";
 		public static final String PRIORITY = "priority";
 		public static final String FETCH_MODE = "fetchmode";
 
-		public static final String[] COLUMNS = new String[] { _ID, URL, NAME, IS_GROUP, IS_GROUP_COLLAPSED, GROUP_ID, LAST_UPDATE, ICON, ERROR,
+		public static final String[] COLUMNS = new String[] { _ID, URL, NAME, IS_GROUP, IS_GROUP_COLLAPSED, GROUP_ID, LAST_UPDATE, REAL_LAST_UPDATE, ICON, ERROR,
 				PRIORITY, FETCH_MODE };
 		public static final String[] TYPES = new String[] { TYPE_PRIMARY_KEY, TYPE_TEXT_UNIQUE, TYPE_TEXT, TYPE_BOOLEAN, TYPE_BOOLEAN,
-				TYPE_EXTERNAL_ID, TYPE_DATE_TIME, "BLOB", TYPE_TEXT, TYPE_INT, TYPE_INT };
+				TYPE_EXTERNAL_ID, TYPE_DATE_TIME, TYPE_DATE_TIME, "BLOB", TYPE_TEXT, TYPE_INT, TYPE_INT };
 
 		public static final Uri CONTENT_URI(String feedId) {
 			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).toString());
