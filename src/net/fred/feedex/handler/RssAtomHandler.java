@@ -117,20 +117,17 @@ public class RssAtomHandler extends DefaultHandler {
 
 	private static final String[] TIMEZONES = { "MEST", "EST", "PST" };
 	private static final String[] TIMEZONES_REPLACE = { "+0200", "-0500", "-0800" };
-	private static final int TIMEZONES_COUNT = 3;
 
 	private static long KEEP_TIME = 345600000l; // 4 days
 
-	private static final DateFormat[] PUBDATE_DATEFORMATS = { new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US),
+	private static final DateFormat[] PUBDATE_DATE_FORMATS = { new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US),
 			new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.US),
 
 	};
-	private static final int PUBDATEFORMAT_COUNT = 3;
-	private static final DateFormat[] UPDATE_DATEFORMATS = { new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US),
+	private static final DateFormat[] UPDATE_DATE_FORMATS = { new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US),
 			new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz", Locale.US),
 
 	};
-	private static final int DATEFORMAT_COUNT = 2;
 	private static final String Z = "Z";
 	private static final String GMT = "GMT";
 
@@ -497,9 +494,9 @@ public class RssAtomHandler extends DefaultHandler {
 
 	private static Date parseUpdateDate(String string) {
 		string = string.replace(Z, GMT);
-		for (int n = 0; n < DATEFORMAT_COUNT; n++) {
+		for (DateFormat format : UPDATE_DATE_FORMATS) {
 			try {
-				return UPDATE_DATEFORMATS[n].parse(string);
+				return format.parse(string);
 			} catch (ParseException e) {
 			} // just do nothing
 		}
@@ -513,12 +510,12 @@ public class RssAtomHandler extends DefaultHandler {
 			string = string.substring(coma + 2);
 		}
 
-		for (int n = 0; n < TIMEZONES_COUNT; n++) {
+		for (int n = 0; n < TIMEZONES.length; n++) {
 			string = string.replace(TIMEZONES[n], TIMEZONES_REPLACE[n]);
 		}
-		for (int n = 0; n < PUBDATEFORMAT_COUNT; n++) {
+		for (DateFormat format : PUBDATE_DATE_FORMATS) {
 			try {
-				return PUBDATE_DATEFORMATS[n].parse(string);
+				return format.parse(string);
 			} catch (ParseException e) {
 			} // just do nothing
 		}
