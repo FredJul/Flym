@@ -120,13 +120,10 @@ public class RssAtomHandler extends DefaultHandler {
 	private static long KEEP_TIME = 345600000l; // 4 days
 
 	private static final DateFormat[] PUBDATE_DATE_FORMATS = { new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US),
-			new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.US),
-
-	};
+			new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.US) };
+	
 	private static final DateFormat[] UPDATE_DATE_FORMATS = { new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US),
-			new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz", Locale.US),
-
-	};
+			new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz", Locale.US) };
 	private static final String Z = "Z";
 	private static final String GMT = "GMT";
 
