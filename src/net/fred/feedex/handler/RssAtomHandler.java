@@ -115,8 +115,7 @@ public class RssAtomHandler extends DefaultHandler {
 	private static final String ATTRIBUTE_LENGTH = "length";
 	private static final String ATTRIBUTE_REL = "rel";
 
-	private static final String[] TIMEZONES = { "MEST", "EST", "PST" };
-	private static final String[] TIMEZONES_REPLACE = { "+0200", "-0500", "-0800" };
+	private static final String[][] TIMEZONES_REPLACE = { {"MEST", "+0200"}, {"EST", "-0500"}, {"PST", "-0800"} };
 
 	private static long KEEP_TIME = 345600000l; // 4 days
 
@@ -510,9 +509,10 @@ public class RssAtomHandler extends DefaultHandler {
 			string = string.substring(coma + 2);
 		}
 
-		for (int n = 0; n < TIMEZONES.length; n++) {
-			string = string.replace(TIMEZONES[n], TIMEZONES_REPLACE[n]);
+		for (String[] timezoneReplace : TIMEZONES_REPLACE) {
+			string = string.replace(timezoneReplace[0], timezoneReplace[1]);
 		}
+		
 		for (DateFormat format : PUBDATE_DATE_FORMATS) {
 			try {
 				return format.parse(string);
