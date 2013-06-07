@@ -114,8 +114,6 @@ public class FetcherService extends IntentService {
 	private static final String CHARSET = "charset=";
 	private static final String COUNT = "COUNT(*)";
 	private static final String CONTENT_TYPE_TEXT_HTML = "text/html";
-	private static final String LINK_RSS = "<link rel=\"alternate\" ";
-	private static final String LINK_RSS_SLOPPY = "<link rel=alternate ";
 	private static final String HREF = "href=\"";
 	private static final String HTML_BODY = "<body";
 	private static final String ENCODING = "encoding=\"";
@@ -127,6 +125,8 @@ public class FetcherService extends IntentService {
 	private static final String PROTOCOL_SEPARATOR = "://";
 	private static final String _HTTP = "http";
 	private static final String _HTTPS = "https";
+	/* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
+	private static final Pattern feedLinkPattern = Pattern.compile("[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>");
 
 	private NotificationManager notificationManager;
 	private static Proxy proxy;
@@ -345,19 +345,17 @@ public class FetcherService extends IntentService {
 						BufferedReader reader = new BufferedReader(new InputStreamReader(getConnectionInputStream(connection)));
 
 						String line = null;
-						int pos = -1, posStart = -1;
+						int posStart = -1;
 
 						while ((line = reader.readLine()) != null) {
 							if (line.indexOf(HTML_BODY) > -1) {
 								break;
 							} else {
-								pos = line.indexOf(LINK_RSS);
+								Matcher matcher = feedLinkPattern.matcher(line);
 
-								if (pos == -1) {
-									pos = line.indexOf(LINK_RSS_SLOPPY);
-								}
-								if (pos > -1) {
-									posStart = line.indexOf(HREF, pos);
+								if (matcher.find()) { // not "while" as only one link is needed
+									line = matcher.group();
+									posStart = line.indexOf(HREF);
 
 									if (posStart > -1) {
 										String url = line.substring(posStart + 6, line.indexOf('"', posStart + 10)).replace(Constants.AMP_SG, Constants.AMP);
