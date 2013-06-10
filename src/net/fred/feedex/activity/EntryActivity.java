@@ -582,8 +582,8 @@ public class EntryActivity extends Activity {
 		StringBuilder queryString = new StringBuilder(DATE).append(date).append(AND_ID).append(isNextEntry ? '>' : '<').append(_id).append(')').append(OR_DATE).append(isNextEntry ? '<' : '>')
 				.append(date);
 
-		if (!PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)) {
-			queryString.append(Constants.DB_AND).append(EntryColumns.WHERE_UNREAD_WITH_FAVORITES);
+		if (!EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) && !PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)) {
+			queryString.append(Constants.DB_AND).append(EntryColumns.WHERE_UNREAD);
 		}
 
 		Cursor cursor = getContentResolver().query(parentUri, EntryColumns.PROJECTION_ID, queryString.toString(), null, isNextEntry ? DESC : ASC);

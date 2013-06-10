@@ -164,8 +164,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) ? null : EntryColumns.WHERE_UNREAD_WITH_FAVORITES, null,
-				new StringBuilder(EntryColumns.DATE).append(Constants.DB_DESC).toString());
+		CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(mUri) ? null
+				: EntryColumns.WHERE_UNREAD, null, new StringBuilder(EntryColumns.DATE).append(Constants.DB_DESC).toString());
 		cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
 		return cursorLoader;
 	}
