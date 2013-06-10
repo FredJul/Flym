@@ -275,7 +275,7 @@ public class EntryActivity extends Activity {
 			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 				if (Math.abs(velocityY) < Math.abs(velocityX)) {
 					if (velocityX > 800) {
-						if (_previousId != null) {
+						if (_previousId != null && webView.getScrollX() == 0) {
 							previousEntry();
 						}
 					} else if (velocityX < -800) {
