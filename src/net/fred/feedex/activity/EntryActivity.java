@@ -189,6 +189,71 @@ public class EntryActivity extends Activity {
 		}
 	};
 
+	final OnKeyListener onKeyEventListener = new OnKeyListener() {
+		@Override
+		public boolean onKey(View v, int keyCode, KeyEvent event) {
+			if (event.getAction() == KeyEvent.ACTION_DOWN) {
+				if (keyCode == KeyEvent.KEYCODE_PAGE_UP) {
+					scrollUp();
+					return true;
+				} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
+					scrollDown();
+					return true;
+				}
+			}
+			return false;
+		}
+	};
+
+	final GestureDetector gestureDetector = new GestureDetector(this, new OnGestureListener() {
+		@Override
+		public boolean onDown(MotionEvent e) {
+			return false;
+		}
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			if (Math.abs(velocityY) < Math.abs(velocityX)) {
+				if (velocityX > 800) {
+					if (_previousId != null && webView.getScrollX() == 0) {
+						previousEntry();
+					}
+				} else if (velocityX < -800) {
+					if (_nextId != null) {
+						nextEntry();
+					}
+				}
+			}
+
+			return false;
+		}
+
+		@Override
+		public void onLongPress(MotionEvent e) {
+		}
+
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+			return false;
+		}
+
+		@Override
+		public void onShowPress(MotionEvent e) {
+		}
+
+		@Override
+		public boolean onSingleTapUp(MotionEvent e) {
+			return false;
+		}
+	});
+
+	final OnTouchListener onTouchListener = new OnTouchListener() {
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			return gestureDetector.onTouchEvent(event);
+		}
+	};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Utils.setPreferenceTheme(this);
@@ -239,83 +304,12 @@ public class EntryActivity extends Activity {
 
 		webView = new WebView(this);
 		setupWebview(webView);
-
 		viewFlipper.addView(webView, layoutParams);
-
-		OnKeyListener onKeyEventListener = new OnKeyListener() {
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if (event.getAction() == KeyEvent.ACTION_DOWN) {
-					if (keyCode == KeyEvent.KEYCODE_PAGE_UP) {
-						scrollUp();
-						return true;
-					} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
-						scrollDown();
-						return true;
-					}
-				}
-				return false;
-			}
-		};
-		webView.setOnKeyListener(onKeyEventListener);
-
-		content = findViewById(R.id.entry_content);
 
 		webView0 = new WebView(this);
 		setupWebview(webView0);
-		webView0.setOnKeyListener(onKeyEventListener);
 
-		final GestureDetector gestureDetector = new GestureDetector(this, new OnGestureListener() {
-			@Override
-			public boolean onDown(MotionEvent e) {
-				return false;
-			}
-
-			@Override
-			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-				if (Math.abs(velocityY) < Math.abs(velocityX)) {
-					if (velocityX > 800) {
-						if (_previousId != null && webView.getScrollX() == 0) {
-							previousEntry();
-						}
-					} else if (velocityX < -800) {
-						if (_nextId != null) {
-							nextEntry();
-						}
-					}
-				}
-
-				return false;
-			}
-
-			@Override
-			public void onLongPress(MotionEvent e) {
-			}
-
-			@Override
-			public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-				return false;
-			}
-
-			@Override
-			public void onShowPress(MotionEvent e) {
-			}
-
-			@Override
-			public boolean onSingleTapUp(MotionEvent e) {
-				return false;
-			}
-		});
-
-		OnTouchListener onTouchListener = new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				return gestureDetector.onTouchEvent(event);
-			}
-		};
-
-		webView.setOnTouchListener(onTouchListener);
-
+		content = findViewById(R.id.entry_content);
 		content.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -323,8 +317,6 @@ public class EntryActivity extends Activity {
 				return true; // different to the above one!
 			}
 		});
-
-		webView0.setOnTouchListener(onTouchListener);
 
 		scrollX = 0;
 		scrollY = 0;
@@ -539,6 +531,10 @@ public class EntryActivity extends Activity {
 
 	@SuppressLint("SetJavaScriptEnabled")
 	private void setupWebview(final WebView wv) {
+		// For scrolling & gesture
+		webView.setOnKeyListener(onKeyEventListener);
+		webView.setOnTouchListener(onTouchListener);
+		
 		// For javascript
 		wv.getSettings().setJavaScriptEnabled(true);
 		wv.addJavascriptInterface(injectedJSObject, "injectedJSObject");
