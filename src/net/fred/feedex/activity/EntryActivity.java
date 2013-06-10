@@ -246,10 +246,10 @@ public class EntryActivity extends Activity {
 			@Override
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN) {
-					if (keyCode == 92 || keyCode == 94) {
+					if (keyCode == KeyEvent.KEYCODE_PAGE_UP) {
 						scrollUp();
 						return true;
-					} else if (keyCode == 93 || keyCode == 95) {
+					} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
 						scrollDown();
 						return true;
 					}
