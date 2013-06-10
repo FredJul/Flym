@@ -58,7 +58,7 @@
     <string name="optional">(optionel)</string>
     <string name="website_or_feed">(site web ou flux)</string>
     <string name="feed_title">TITRE</string>
-    <string name="feed_filters">FILTRE</string>
+    <string name="feed_filters">FILTRE D\'EXCLUSION</string>
     <string name="filter_add_title">Ajouter un filtre</string>
     <string name="filter_delete_title">Supprimer un filtre</string>
     <string name="filter_edit_title">Éditer le filtre</string>
