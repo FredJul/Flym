@@ -98,7 +98,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
 	private static final String ALTER_TABLE = "ALTER TABLE ";
 	private static final String ADD = " ADD ";
-	
+
 	private static UriMatcher URI_MATCHER;
 
 	static {
@@ -139,46 +139,44 @@ public class FeedDataContentProvider extends ContentProvider {
 
 			// Check if we need to import the backup
 			File backupFile = new File(BACKUP_OPML);
-			if (backupFile.exists()) {
-				mHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						// Perform an automated import of the backup
-						try {
-							OPML.importFromFile(BACKUP_OPML);
-						} catch (Exception e) {
-						}
-					}
-				});
-			} else { // No database and no backup
-				mHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						// Automatically add an example feed
-						try {
-							ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+			final boolean hasBackup = backupFile.exists();
+			mHandler.post(new Runnable() { // In order to it after the database is created
+				@Override
+				public void run() {
+					new Thread(new Runnable() { // To not block the UI
+								@Override
+								public void run() {
+									try {
+										if (hasBackup) {
+											// Perform an automated import of the backup
+											OPML.importFromFile(BACKUP_OPML);
+										} else {
+											// No database and no backup, automatically add an example feed
+											ContentResolver cr = MainApplication.getAppContext().getContentResolver();
 
-							ContentValues values = new ContentValues();
-							values.put(FeedColumns.IS_GROUP, true);
-							values.put(FeedColumns.NAME, DEFAULT_GROUP_NAME);
-							cr.insert(FeedColumns.GROUPS_CONTENT_URI, values);
+											ContentValues values = new ContentValues();
+											values.put(FeedColumns.IS_GROUP, true);
+											values.put(FeedColumns.NAME, DEFAULT_GROUP_NAME);
+											cr.insert(FeedColumns.GROUPS_CONTENT_URI, values);
 
-							Cursor groupCursor = cr.query(FeedColumns.GROUPS_CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
-							if (groupCursor.moveToFirst()) {
-								values = new ContentValues();
-								values.put(FeedColumns.URL, DEFAULT_FEED_URL);
-								values.put(FeedColumns.NAME, DEFAULT_FEED_NAME);
-								values.put(FeedColumns.GROUP_ID, groupCursor.getString(0));
+											Cursor groupCursor = cr.query(FeedColumns.GROUPS_CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
+											if (groupCursor.moveToFirst()) {
+												values = new ContentValues();
+												values.put(FeedColumns.URL, DEFAULT_FEED_URL);
+												values.put(FeedColumns.NAME, DEFAULT_FEED_NAME);
+												values.put(FeedColumns.GROUP_ID, groupCursor.getString(0));
 
-								cr.insert(FeedColumns.CONTENT_URI, values);
-								cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-							}
-							groupCursor.close();
-						} catch (Exception e) {
-						}
-					}
-				});
-			}
+												cr.insert(FeedColumns.CONTENT_URI, values);
+												cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+											}
+											groupCursor.close();
+										}
+									} catch (Exception e) {
+									}
+								}
+							}).start();
+				}
+			});
 		}
 
 		private String createTable(String tableName, String[] columns, String[] types) {
@@ -202,10 +200,11 @@ public class FeedDataContentProvider extends ContentProvider {
 		@Override
 		public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
 			if (oldVersion < 2) {
-				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.REAL_LAST_UPDATE).append(' ').append(FeedData.TYPE_DATE_TIME).toString());
+				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.REAL_LAST_UPDATE).append(' ').append(FeedData.TYPE_DATE_TIME)
+						.toString());
 			}
 		}
-		
+
 		private void executeCatchedSQL(SQLiteDatabase database, String query) {
 			try {
 				database.execSQL(query);

@@ -327,12 +327,22 @@ public class FeedsListFragment extends ListFragment {
 					});
 					builder.setItems(fileNames, new DialogInterface.OnClickListener() {
 						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							try {
-								OPML.importFromFile(new StringBuilder(Environment.getExternalStorageDirectory().toString()).append(File.separator).append(fileNames[which]).toString());
-							} catch (Exception e) {
-								Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
-							}
+						public void onClick(DialogInterface dialog, final int which) {
+							new Thread(new Runnable() { // To not block the UI
+										@Override
+										public void run() {
+											try {
+												OPML.importFromFile(new StringBuilder(Environment.getExternalStorageDirectory().toString()).append(File.separator).append(fileNames[which]).toString());
+											} catch (Exception e) {
+												getActivity().runOnUiThread(new Runnable() {
+													@Override
+													public void run() {
+														Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
+													}
+												});
+											}
+										}
+									}).start();
 						}
 					});
 					builder.show();
@@ -347,14 +357,31 @@ public class FeedsListFragment extends ListFragment {
 		}
 		case R.id.menu_export: {
 			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
-				try {
-					String filename = new StringBuilder(Environment.getExternalStorageDirectory().toString()).append("/FeedEx_").append(System.currentTimeMillis()).append(".opml").toString();
 
-					OPML.exportToFile(filename);
-					Toast.makeText(getActivity(), String.format(getString(R.string.message_exported_to), filename), Toast.LENGTH_LONG).show();
-				} catch (Exception e) {
-					Toast.makeText(getActivity(), R.string.error_feed_export, Toast.LENGTH_LONG).show();
-				}
+				new Thread(new Runnable() { // To not block the UI
+							@Override
+							public void run() {
+								try {
+									final String filename = new StringBuilder(Environment.getExternalStorageDirectory().toString()).append("/FeedEx_").append(System.currentTimeMillis())
+											.append(".opml").toString();
+
+									OPML.exportToFile(filename);
+									getActivity().runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											Toast.makeText(getActivity(), String.format(getString(R.string.message_exported_to), filename), Toast.LENGTH_LONG).show();
+										}
+									});
+								} catch (Exception e) {
+									getActivity().runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											Toast.makeText(getActivity(), R.string.error_feed_export, Toast.LENGTH_LONG).show();
+										}
+									});
+								}
+							}
+						}).start();
 			} else {
 				Toast.makeText(getActivity(), R.string.error_external_storage_not_available, Toast.LENGTH_LONG).show();
 			}
