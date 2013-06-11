@@ -205,47 +205,7 @@ public class EntryActivity extends Activity {
 		}
 	};
 
-	final GestureDetector gestureDetector = new GestureDetector(this, new OnGestureListener() {
-		@Override
-		public boolean onDown(MotionEvent e) {
-			return false;
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			if (Math.abs(velocityY) < Math.abs(velocityX)) {
-				if (velocityX > 800) {
-					if (_previousId != null && webView.getScrollX() == 0) {
-						previousEntry();
-					}
-				} else if (velocityX < -800) {
-					if (_nextId != null) {
-						nextEntry();
-					}
-				}
-			}
-
-			return false;
-		}
-
-		@Override
-		public void onLongPress(MotionEvent e) {
-		}
-
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-			return false;
-		}
-
-		@Override
-		public void onShowPress(MotionEvent e) {
-		}
-
-		@Override
-		public boolean onSingleTapUp(MotionEvent e) {
-			return false;
-		}
-	});
+	GestureDetector gestureDetector;
 
 	final OnTouchListener onTouchListener = new OnTouchListener() {
 		@Override
@@ -267,6 +227,55 @@ public class EntryActivity extends Activity {
 
 		canShowIcon = true;
 		setContentView(R.layout.entry);
+
+		gestureDetector = new GestureDetector(this, new OnGestureListener() {
+			@Override
+			public boolean onDown(MotionEvent e) {
+				return false;
+			}
+
+			@Override
+			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+				if (Math.abs(velocityY) < Math.abs(velocityX)) {
+					if (velocityX > 1000) {
+						if (_previousId != null && webView.getScrollX() == 0) {
+							previousEntry();
+						}
+					} else if (velocityX < -1000) {
+						if (_nextId != null) {
+							nextEntry();
+						}
+					}
+				}
+
+				return false;
+			}
+
+			@Override
+			public void onLongPress(MotionEvent e) {
+			}
+
+			@Override
+			public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+				return false;
+			}
+
+			@Override
+			public void onShowPress(MotionEvent e) {
+			}
+
+			@Override
+			public boolean onSingleTapUp(MotionEvent e) {
+				return false;
+			}
+		});
+
+		onTouchListener = new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return gestureDetector.onTouchEvent(event);
+			}
+		};
 
 		uri = getIntent().getData();
 		parentUri = EntryColumns.PARENT_URI(uri.getPath());
@@ -534,7 +543,7 @@ public class EntryActivity extends Activity {
 		// For scrolling & gesture
 		webView.setOnKeyListener(onKeyEventListener);
 		webView.setOnTouchListener(onTouchListener);
-		
+
 		// For javascript
 		wv.getSettings().setJavaScriptEnabled(true);
 		wv.addJavascriptInterface(injectedJSObject, "injectedJSObject");
