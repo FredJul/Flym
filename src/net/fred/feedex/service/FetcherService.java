@@ -310,6 +310,8 @@ public class FetcherService extends IntentService {
 			} catch (Exception e) {
 			}
 		}
+		
+		executor.shutdownNow(); // To purge all threads
 
 		return globalResult;
 	}
