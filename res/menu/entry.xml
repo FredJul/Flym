@@ -18,4 +18,8 @@
         android:icon="@drawable/content_copy"
         android:showAsAction="ifRoom|withText"
         android:title="@string/menu_copy_clipboard"/>
+    
+    <item
+        android:id="@+id/menu_mark_as_unread"
+        android:title="@string/menu_mark_as_unread"/>
 </menu>

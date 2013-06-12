@@ -50,8 +50,10 @@ import net.fred.feedex.Constants;
 import net.fred.feedex.PrefsManager;
 import net.fred.feedex.R;
 import net.fred.feedex.Utils;
+import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
+import net.fred.feedex.provider.FeedDataContentProvider;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -189,7 +191,7 @@ public class EntryActivity extends Activity {
 		}
 	};
 
-	final OnKeyListener onKeyEventListener = new OnKeyListener() {
+	final private OnKeyListener onKeyEventListener = new OnKeyListener() {
 		@Override
 		public boolean onKey(View v, int keyCode, KeyEvent event) {
 			if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -205,9 +207,9 @@ public class EntryActivity extends Activity {
 		}
 	};
 
-	GestureDetector gestureDetector;
+	private GestureDetector gestureDetector;
 
-	final OnTouchListener onTouchListener = new OnTouchListener() {
+	final private OnTouchListener onTouchListener = new OnTouchListener() {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			return gestureDetector.onTouchEvent(event);
@@ -697,6 +699,26 @@ public class EntryActivity extends Activity {
 			clipboard.setPrimaryClip(clip);
 
 			Toast.makeText(this, R.string.copied_clipboard, Toast.LENGTH_SHORT).show();
+			break;
+		}
+		case R.id.menu_mark_as_unread: {
+			new Thread() {
+				@Override
+				public void run() {
+					ContentResolver cr = getContentResolver();
+					if (cr.update(uri, FeedData.getUnreadContentValues(), null, null) > 0) {
+						long id = Long.valueOf(_id);
+						String feedId = FeedDataContentProvider.getFeedIdFromEntryId(id);
+						if (feedId != null) {
+							cr.notifyChange(FeedColumns.CONTENT_URI, null);
+							FeedDataContentProvider.notifyGroupFromFeedId(feedId);
+						}
+						cr.notifyChange(ContentUris.withAppendedId(EntryColumns.FAVORITES_CONTENT_URI, id), null);
+						cr.notifyChange(ContentUris.withAppendedId(EntryColumns.CONTENT_URI, id), null);
+					}
+				}
+			}.start();
+			Toast.makeText(this, R.string.marked_as_unread, Toast.LENGTH_SHORT).show();
 			break;
 		}
 		}
