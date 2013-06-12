@@ -173,7 +173,7 @@ public class EntryActivity extends Activity {
 
 	private String link, enclosure;
 	private LayoutParams layoutParams;
-	private View content, backBtn, forwardBtn;
+	private View backBtn, forwardBtn;
 	private boolean localPictures;
 
 	private boolean mIsProgressVisible = false;
@@ -270,13 +270,6 @@ public class EntryActivity extends Activity {
 			}
 		});
 
-		onTouchListener = new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				return gestureDetector.onTouchEvent(event);
-			}
-		};
-
 		uri = getIntent().getData();
 		parentUri = EntryColumns.PARENT_URI(uri.getPath());
 		feedId = 0;
@@ -317,15 +310,6 @@ public class EntryActivity extends Activity {
 
 		webView0 = new WebView(this);
 		setupWebview(webView0);
-
-		content = findViewById(R.id.entry_content);
-		content.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				gestureDetector.onTouchEvent(event);
-				return true; // different to the above one!
-			}
-		});
 
 		scrollX = 0;
 		scrollY = 0;
@@ -541,8 +525,8 @@ public class EntryActivity extends Activity {
 	@SuppressLint("SetJavaScriptEnabled")
 	private void setupWebview(final WebView wv) {
 		// For scrolling & gesture
-		webView.setOnKeyListener(onKeyEventListener);
-		webView.setOnTouchListener(onTouchListener);
+		wv.setOnKeyListener(onKeyEventListener);
+		wv.setOnTouchListener(onTouchListener);
 
 		// For javascript
 		wv.getSettings().setJavaScriptEnabled(true);
