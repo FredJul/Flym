@@ -37,8 +37,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 
 /**
- * A fairly simple ExpandableListAdapter that creates views defined in an XML file. You can specify the XML file that defines the appearance of the
- * views.
+ * A fairly simple ExpandableListAdapter that creates views defined in an XML file. You can specify the XML file that defines the appearance of the views.
  */
 public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableListAdapter {
 	private static final String URI_ARG = "uri";
@@ -60,7 +59,16 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	LoaderManager.LoaderCallbacks<Cursor> mGroupLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
 		@Override
 		public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-			CursorLoader cursorLoader = new CursorLoader(mActivity, mGroupUri, null, null, null, null);
+			CursorLoader cursorLoader = new CursorLoader(mActivity, mGroupUri, null, null, null, null) {
+
+				@Override
+				public Cursor loadInBackground() {
+					Cursor c = super.loadInBackground();
+					onCursorLoaded(mActivity, c);
+					return c;
+				}
+
+			};
 			cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
 			return cursorLoader;
 		}
@@ -92,7 +100,16 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	LoaderManager.LoaderCallbacks<Cursor> mChildrenLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
 		@Override
 		public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-			CursorLoader cursorLoader = new CursorLoader(mActivity, (Uri) args.getParcelable(URI_ARG), null, null, null, null);
+			CursorLoader cursorLoader = new CursorLoader(mActivity, (Uri) args.getParcelable(URI_ARG), null, null, null, null) {
+
+				@Override
+				public Cursor loadInBackground() {
+					Cursor c = super.loadInBackground();
+					onCursorLoaded(mActivity, c);
+					return c;
+				}
+
+			};
 			cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
 			return cursorLoader;
 		}
@@ -124,8 +141,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	 * @param childLayout
 	 *            resource identifier of a layout file that defines the views for all children but the last..
 	 */
-	public CursorLoaderExpandableListAdapter(FragmentActivity activity, Uri groupUri, int collapsedGroupLayout, int expandedGroupLayout,
-			int childLayout) {
+	public CursorLoaderExpandableListAdapter(FragmentActivity activity, Uri groupUri, int collapsedGroupLayout, int expandedGroupLayout, int childLayout) {
 		mActivity = activity;
 		mLoaderMgr = activity.getSupportLoaderManager();
 		mGroupUri = groupUri;
@@ -188,12 +204,10 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	/**
 	 * Gets the Cursor for the children at the given group. Subclasses must implement this method to return the children data for a particular group.
 	 * <p>
-	 * If you want to asynchronously query a provider to prevent blocking the UI, it is possible to return null and at a later time call
-	 * {@link #setChildrenCursor(int, Cursor)}.
+	 * If you want to asynchronously query a provider to prevent blocking the UI, it is possible to return null and at a later time call {@link #setChildrenCursor(int, Cursor)}.
 	 * <p>
-	 * It is your responsibility to manage this Cursor through the Activity lifecycle. It is a good idea to use {@link Activity#managedQuery} which
-	 * will handle this for you. In some situations, the adapter will deactivate the Cursor on its own, but this will not always be the case, so
-	 * please ensure the Cursor is properly managed.
+	 * It is your responsibility to manage this Cursor through the Activity lifecycle. It is a good idea to use {@link Activity#managedQuery} which will handle this for you. In some situations, the
+	 * adapter will deactivate the Cursor on its own, but this will not always be the case, so please ensure the Cursor is properly managed.
 	 * 
 	 * @param groupCursor
 	 *            The cursor pointing to the group whose children cursor should be returned
@@ -245,8 +259,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 		Pair<Cursor, Boolean> childCursor = mChildrenCursors.get(groupPosition);
 
 		// We need to restart the loader
-		if ((childCursor == null || childCursor.second == true) && mGroupCursor != null && !mGroupCursor.isClosed()
-				&& mGroupCursor.moveToPosition(groupPosition)) {
+		if ((childCursor == null || childCursor.second == true) && mGroupCursor != null && !mGroupCursor.isClosed() && mGroupCursor.moveToPosition(groupPosition)) {
 			Bundle args = new Bundle();
 			args.putParcelable(URI_ARG, getChildrenUri(mGroupCursor));
 			mLoaderMgr.restartLoader(groupPosition + 1, args, mChildrenLoaderCallback);
@@ -327,6 +340,16 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	 *            The cursor from which to get the data. The cursor is already moved to the correct position.
 	 */
 	protected abstract void bindChildView(View view, Context context, Cursor cursor);
+
+	/**
+	 * Called on the background thread just after loaded the cursor
+	 * 
+	 * @param context
+	 *            Interface to application's global information
+	 * @param cursor
+	 *            The cursor from which to get the data.
+	 */
+	protected abstract void onCursorLoaded(Context context, Cursor cursor);
 
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {

@@ -20,6 +20,9 @@
 package net.fred.feedex.adapter;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import net.fred.feedex.Constants;
@@ -47,18 +50,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
-	private static final String COUNT_UNREAD = "COUNT(*) - COUNT(" + EntryColumns.IS_READ + ")";
+	private static final String COUNT_UNREAD = "COUNT(*)";
+	private static final String WHERE_UNREAD = EntryColumns.IS_READ + " is null";
+
 	private static final String COLON = MainApplication.getAppContext().getString(R.string.colon);
 
 	private final FragmentActivity mActivity;
-	private int isGroupPosition;
-	private int isGroupCollapsedPosition;
-	private int namePosition;
-	private int lastUpdateColumn;
-	private int idPosition;
-	private int linkPosition;
-	private int errorPosition;
-	private int iconPosition;
+	private int isGroupPosition = -1;
+	private int isGroupCollapsedPosition = -1;
+	private int namePosition = -1;
+	private int lastUpdateColumn = -1;
+	private int idPosition = -1;
+	private int linkPosition = -1;
+	private int errorPosition = -1;
+	private int iconPosition = -1;
 
 	private boolean feedSort;
 
@@ -66,8 +71,20 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 	private final SparseBooleanArray mGroupInitDone = new SparseBooleanArray();
 
 	private final Vector<View> sortViews = new Vector<View>();
-	
-    private long mSelectedFeedId = -1; 
+
+	private long mSelectedFeedId = -1;
+
+	private final Map<Long, Integer> mUnreadItemsByFeed = new HashMap<Long, Integer>();
+
+	private static final int CACHE_MAX_ENTRIES = 100;
+	private final Map<Long, String> mFormattedDateCache = new LinkedHashMap<Long, String>(CACHE_MAX_ENTRIES + 1, .75F, true) {
+		private static final long serialVersionUID = -3678524849080041298L;
+
+		@Override
+		public boolean removeEldestEntry(Map.Entry<Long, String> eldest) {
+			return size() > CACHE_MAX_ENTRIES;
+		}
+	};
 
 	public FeedsCursorAdapter(FragmentActivity activity, Uri groupUri) {
 		super(activity, groupUri, R.layout.feed_list_item, R.layout.feed_list_item);
@@ -102,6 +119,24 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 	}
 
 	@Override
+	protected void onCursorLoaded(Context context, Cursor cursor) {
+		getCursorPositions(cursor);
+
+		while (cursor.moveToNext()) {
+
+			if (cursor.getInt(isGroupPosition) != 1) {
+				long feedId = cursor.getLong(idPosition);
+				Cursor countCursor = context.getContentResolver().query(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedId), new String[] { COUNT_UNREAD }, WHERE_UNREAD, null, null);
+				countCursor.moveToFirst();
+				synchronized (mUnreadItemsByFeed) {
+					mUnreadItemsByFeed.put(feedId, countCursor.getInt(0));
+				}
+				countCursor.close();
+			}
+		}
+	}
+
+	@Override
 	protected void bindChildView(View view, Context context, Cursor cursor) {
 		view.findViewById(R.id.indicator).setVisibility(View.INVISIBLE);
 
@@ -109,27 +144,33 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 		long feedId = cursor.getLong(idPosition);
 		if (feedId == mSelectedFeedId) {
 			view.setBackgroundResource(android.R.color.holo_blue_dark);
-		}
-		else {
+		} else {
 			view.setBackgroundResource(android.R.color.transparent);
 		}
 
-		Cursor countCursor = context.getContentResolver().query(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedId),
-				new String[] { COUNT_UNREAD }, null, null, null);
-		countCursor.moveToFirst();
-		int unreadCount = countCursor.getInt(0);
-		countCursor.close();
+		int unreadCount;
+		synchronized (mUnreadItemsByFeed) {
+			unreadCount = mUnreadItemsByFeed.get(feedId);
+		}
 
-		long timestamp = cursor.getLong(lastUpdateColumn);
 		TextView updateTextView = ((TextView) view.findViewById(android.R.id.text2));
 		updateTextView.setVisibility(View.VISIBLE);
 
 		if (cursor.isNull(errorPosition)) {
-			Date date = new Date(timestamp);
+			long timestamp = cursor.getLong(lastUpdateColumn);
 
-			updateTextView.setText(new StringBuilder(context.getString(R.string.update)).append(COLON).append(
-					timestamp == 0 ? context.getString(R.string.never) : new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(
-							Constants.TIME_FORMAT.format(date))));
+			// Date formatting is expensive, look at the cache
+			String formattedDate = mFormattedDateCache.get(timestamp);
+			if (formattedDate == null) {
+				Date date = new Date(timestamp);
+
+				formattedDate = new StringBuilder(context.getString(R.string.update)).append(COLON)
+						.append(timestamp == 0 ? context.getString(R.string.never) : new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)))
+						.toString();
+				mFormattedDateCache.put(timestamp, formattedDate);
+			}
+
+			updateTextView.setText(formattedDate);
 		} else {
 			updateTextView.setText(new StringBuilder(context.getString(R.string.error)).append(COLON).append(cursor.getString(errorPosition)));
 		}
@@ -160,8 +201,7 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 			view.setTag(null);
 			textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 		}
-		textView.setText((cursor.isNull(namePosition) ? cursor.getString(linkPosition) : cursor.getString(namePosition))
-				+ (unreadCount > 0 ? " (" + unreadCount + ")" : ""));
+		textView.setText((cursor.isNull(namePosition) ? cursor.getString(linkPosition) : cursor.getString(namePosition)) + (unreadCount > 0 ? " (" + unreadCount + ")" : ""));
 
 		View sortView = view.findViewById(R.id.sortitem);
 		if (!sortViews.contains(sortView)) { // as we are reusing views, this is fine
@@ -178,11 +218,10 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 			long feedId = cursor.getLong(idPosition);
 			if (feedId == mSelectedFeedId) {
 				view.setBackgroundResource(android.R.color.holo_blue_dark);
-			}
-			else {
+			} else {
 				view.setBackgroundResource(android.R.color.transparent);
 			}
-			
+
 			indicatorImage.setVisibility(View.VISIBLE);
 
 			TextView textView = ((TextView) view.findViewById(android.R.id.text1));
@@ -260,25 +299,26 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 
 	@Override
 	public void notifyDataSetChanged() {
-		reinit(null);
+		sortViews.clear();
+		getCursorPositions(null);
 		super.notifyDataSetChanged();
 	}
 
 	@Override
 	public void notifyDataSetChanged(Cursor data) {
-		reinit(data);
+		sortViews.clear();
+		getCursorPositions(data);
 	}
 
 	@Override
 	public void notifyDataSetInvalidated() {
-		reinit(null);
+		sortViews.clear();
+		getCursorPositions(null);
 		super.notifyDataSetInvalidated();
 	}
 
-	private void reinit(Cursor cursor) {
-		sortViews.clear();
-
-		if (cursor != null) {
+	private synchronized void getCursorPositions(Cursor cursor) {
+		if (cursor != null && isGroupPosition == -1) {
 			isGroupPosition = cursor.getColumnIndex(FeedColumns.IS_GROUP);
 			isGroupCollapsedPosition = cursor.getColumnIndex(FeedColumns.IS_GROUP_COLLAPSED);
 			namePosition = cursor.getColumnIndex(FeedColumns.NAME);
@@ -289,13 +329,13 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 			iconPosition = cursor.getColumnIndex(FeedColumns.ICON);
 		}
 	}
-	
-    public void setSelectedFeed(long feedId) {
-        mSelectedFeedId = feedId;
-        mListView.invalidateViews();
-    }
 
-    public long getSelectedFeed() {
-        return mSelectedFeedId;
-    }
+	public void setSelectedFeed(long feedId) {
+		mSelectedFeedId = feedId;
+		mListView.invalidateViews();
+	}
+
+	public long getSelectedFeed() {
+		return mSelectedFeedId;
+	}
 }
