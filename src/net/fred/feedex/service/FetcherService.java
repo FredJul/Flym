@@ -102,7 +102,7 @@ import android.util.Xml;
 
 public class FetcherService extends IntentService {
 
-	private static final int THREAD_NUMBER = 2;
+	private static final int THREAD_NUMBER = 3;
 
 	private static final String MOBILIZER_URL = "http://ftr.fivefilters.org/makefulltextfeed.php?url=";
 
@@ -126,7 +126,8 @@ public class FetcherService extends IntentService {
 	private static final String _HTTP = "http";
 	private static final String _HTTPS = "https";
 	/* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
-	private static final Pattern feedLinkPattern = Pattern.compile("[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>");
+	private static final Pattern feedLinkPattern = Pattern
+			.compile("[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>");
 
 	private NotificationManager notificationManager;
 	private static Proxy proxy;
@@ -310,7 +311,7 @@ public class FetcherService extends IntentService {
 			} catch (Exception e) {
 			}
 		}
-		
+
 		executor.shutdownNow(); // To purge all threads
 
 		return globalResult;
