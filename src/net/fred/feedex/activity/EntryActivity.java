@@ -94,6 +94,7 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -103,7 +104,7 @@ public class EntryActivity extends Activity {
 
 	private static final String SAVE_INSTANCE_PROGRESS__VISIBLE = "isProgressVisible";
 
-	private static final long ANIM_DURATION = 300;
+	private static final long ANIM_DURATION = 250;
 	private static final TranslateAnimation SLIDE_IN_RIGHT = generateAnimation(1, 0);
 	private static final TranslateAnimation SLIDE_IN_LEFT = generateAnimation(-1, 0);
 	private static final TranslateAnimation SLIDE_OUT_RIGHT = generateAnimation(0, 1);
@@ -125,10 +126,11 @@ public class EntryActivity extends Activity {
 	private static final String ASC = "date asc, _id desc limit 1";
 	private static final String DESC = "date desc, _id asc limit 1";
 
+	private static final String BACKGROUND_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#f6f6f6" : "#181b1f";
 	private static final String TEXT_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";
 	private static final String BUTTON_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#D0D0D0" : "#505050";
 
-	private static final String CSS = "<head><style type=\"text/css\">body {max-width: 100%; font-family: sans-serif-light; background: transparent}\nimg {max-width: 100%; height: auto;}\ndiv[style] {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
+	private static final String CSS = "<head><style type=\"text/css\">body {max-width: 100%; font-family: sans-serif-light}\nimg {max-width: 100%; height: auto;}\ndiv[style] {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
 	private static final String BODY_START = CSS + "<body link=\"#97ACE5\" text=\"" + TEXT_COLOR + "\">";
 	private static final String FONTSIZE_START = CSS + BODY_START + "<font size=\"+";
 	private static final String FONTSIZE_MIDDLE = "\">";
@@ -526,6 +528,9 @@ public class EntryActivity extends Activity {
 
 	@SuppressLint("SetJavaScriptEnabled")
 	private void setupWebview(final WebView wv) {
+		// For color
+		wv.setBackgroundColor(Color.parseColor(BACKGROUND_COLOR));
+
 		// For scrolling & gesture
 		wv.setOnKeyListener(onKeyEventListener);
 		wv.setOnTouchListener(onTouchListener);
@@ -535,18 +540,9 @@ public class EntryActivity extends Activity {
 		wv.addJavascriptInterface(injectedJSObject, "injectedJSObject");
 
 		// For HTML5 video
-		// wv.setWebChromeClient(new WebChromeClient());
+		wv.setWebChromeClient(new WebChromeClient());
 
-		// Transparent
-		wv.setBackgroundColor(Color.TRANSPARENT);
-		wv.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
 		wv.setWebViewClient(new WebViewClient() {
-			@Override
-			public void onPageFinished(WebView view, String url) {
-				wv.setBackgroundColor(Color.TRANSPARENT);
-				wv.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
-			}
-
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				// Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
