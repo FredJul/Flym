@@ -71,9 +71,11 @@ public final class Constants {
 	public static final String SLASH = "/";
 	public static final String COMMA_SPACE = ", ";
 
+	public static final String UTF8 = "UTF-8";
+
 	public static final String SCHEDULED = "scheduled";
 
 	public static final String MIMETYPE_TEXT_PLAIN = "text/plain";
-	
+
 	public static final int UPDATE_THROTTLE_DELAY = 1000;
 }

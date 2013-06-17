@@ -431,7 +431,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 						if (searchText.getText().length() > 0) {
 							String tmp = searchText.getText().toString();
 							try {
-								tmp = URLEncoder.encode(searchText.getText().toString(), "utf-8");
+								tmp = URLEncoder.encode(searchText.getText().toString(), Constants.UTF8);
 							} catch (UnsupportedEncodingException e1) {
 							}
 							final String text = tmp;

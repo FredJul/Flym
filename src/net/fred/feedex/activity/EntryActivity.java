@@ -117,7 +117,6 @@ public class EntryActivity extends Activity {
 	}
 
 	private static final String TEXT_HTML = "text/html";
-	private static final String UTF8 = "utf-8";
 	private static final String HTML_IMG_REGEX = "<[/]?[ ]?img(.|\n)*?>";
 
 	private static final String OR_DATE = " or date ";
@@ -455,7 +454,7 @@ public class EntryActivity extends Activity {
 					/*
 					 * setBlockNetwortImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
 					 */
-					webView.loadData("", TEXT_HTML, UTF8);
+					webView.loadData("", TEXT_HTML, Constants.UTF8);
 					webView.getSettings().setBlockNetworkImage(false);
 				}
 			}
@@ -468,7 +467,7 @@ public class EntryActivity extends Activity {
 			String author = entryCursor.getString(authorPosition);
 			link = entryCursor.getString(linkPosition);
 			enclosure = entryCursor.getString(enclosurePosition);
-			webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, UTF8, null);
+			webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8, null);
 
 			entryCursor.close();
 			webView.scrollTo(scrollX, scrollY); // resets the scrolling

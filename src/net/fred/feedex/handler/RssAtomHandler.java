@@ -45,7 +45,9 @@
 package net.fred.feedex.handler;
 
 import java.io.FileOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -114,6 +116,10 @@ public class RssAtomHandler extends DefaultHandler {
 	private static final String ATTRIBUTE_TYPE = "type";
 	private static final String ATTRIBUTE_LENGTH = "length";
 	private static final String ATTRIBUTE_REL = "rel";
+
+	private static final String PERCENT = "%";
+	/** This can be any valid filename character sequence which does not contain '%' */
+	private static final String PERCENT_REPLACE = "____";
 
 	private static final String[][] TIMEZONES_REPLACE = { { "MEST", "+0200" }, { "EST", "-0500" }, { "PST", "-0800" } };
 
@@ -549,10 +555,15 @@ public class RssAtomHandler extends DefaultHandler {
 						String match = matcher.group(1).replace(" ", URL_SPACE);
 
 						images.add(match);
-						newContent = newContent.replace(
-								match,
-								new StringBuilder(Constants.FILE_URL).append(FeedDataContentProvider.IMAGE_FOLDER).append(Constants.IMAGEID_REPLACEMENT)
-										.append(match.substring(match.lastIndexOf('/') + 1)).toString());
+						try {
+							// replace the '%' that may occur while urlencode such that the img-src url (in the abstract text) does reinterpret the parameters
+							newContent = newContent.replace(
+									match,
+									new StringBuilder(Constants.FILE_URL).append(FeedDataContentProvider.IMAGE_FOLDER).append(Constants.IMAGEID_REPLACEMENT)
+											.append(URLEncoder.encode(match.substring(match.lastIndexOf('/') + 1), Constants.UTF8)).toString().replace(PERCENT, PERCENT_REPLACE));
+						} catch (UnsupportedEncodingException e) {
+							// UTF-8 should be supported
+						}
 					}
 				}
 
@@ -570,8 +581,9 @@ public class RssAtomHandler extends DefaultHandler {
 				try {
 					byte[] data = FetcherService.getBytes(new URL(img).openStream());
 
+					// see the comment where the img regex is executed for details about this replacement
 					FileOutputStream fos = new FileOutputStream(new StringBuilder(FeedDataContentProvider.IMAGE_FOLDER).append(entryId).append(Constants.IMAGEFILE_IDSEPARATOR)
-							.append(img.substring(img.lastIndexOf('/') + 1)).toString());
+							.append(URLEncoder.encode(img.substring(img.lastIndexOf('/') + 1), Constants.UTF8)).toString().replace(PERCENT, PERCENT_REPLACE));
 
 					fos.write(data);
 					fos.close();
