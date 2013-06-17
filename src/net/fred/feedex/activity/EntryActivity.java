@@ -102,7 +102,8 @@ import android.widget.ViewFlipper;
 
 public class EntryActivity extends Activity {
 
-	private static final String SAVE_INSTANCE_PROGRESS__VISIBLE = "isProgressVisible";
+	private static final String SAVE_INSTANCE_PROGRESS_VISIBLE = "isProgressVisible";
+	private static final String SAVE_INSTANCE_SCROLL_PERCENTAGE = "scrollPercentage";
 
 	private static final long ANIM_DURATION = 250;
 	private static final TranslateAnimation SLIDE_IN_RIGHT = generateAnimation(1, 0);
@@ -171,8 +172,7 @@ public class EntryActivity extends Activity {
 
 	private ViewFlipper viewFlipper;
 
-	private int scrollX;
-	private int scrollY;
+	private float mScrollPercentage = 0;
 
 	private String link, enclosure;
 	private LayoutParams layoutParams;
@@ -313,17 +313,15 @@ public class EntryActivity extends Activity {
 
 		webView0 = new WebView(this);
 		setupWebview(webView0);
-
-		scrollX = 0;
-		scrollY = 0;
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-		webView.restoreState(savedInstanceState);
-		mIsProgressVisible = savedInstanceState.getBoolean(SAVE_INSTANCE_PROGRESS__VISIBLE);
+		mIsProgressVisible = savedInstanceState.getBoolean(SAVE_INSTANCE_PROGRESS_VISIBLE);
+		mScrollPercentage = savedInstanceState.getFloat(SAVE_INSTANCE_SCROLL_PERCENTAGE);
 		setProgressBarIndeterminateVisibility(mIsProgressVisible);
+		webView.restoreState(savedInstanceState);
 	}
 
 	@Override
@@ -350,14 +348,18 @@ public class EntryActivity extends Activity {
 		getContentResolver().unregisterContentObserver(mEntryObserver);
 
 		webView.onPause();
-		scrollX = webView.getScrollX();
-		scrollY = webView.getScrollY();
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		webView.saveState(outState);
-		outState.putBoolean(SAVE_INSTANCE_PROGRESS__VISIBLE, mIsProgressVisible);
+		outState.putBoolean(SAVE_INSTANCE_PROGRESS_VISIBLE, mIsProgressVisible);
+
+		float positionTopView = webView.getTop();
+		float contentHeight = webView.getContentHeight();
+		float currentScrollPosition = webView.getScrollY();
+
+		outState.putFloat(SAVE_INSTANCE_SCROLL_PERCENTAGE, (currentScrollPosition - positionTopView) / contentHeight);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -468,12 +470,9 @@ public class EntryActivity extends Activity {
 			link = entryCursor.getString(linkPosition);
 			enclosure = entryCursor.getString(enclosurePosition);
 			webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8, null);
-
-			entryCursor.close();
-			webView.scrollTo(scrollX, scrollY); // resets the scrolling
-		} else {
-			entryCursor.close();
 		}
+
+		entryCursor.close();
 
 		/*
 		 * new Thread() { public void run() { sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET)); // this is slow } }.start();
@@ -543,6 +542,24 @@ public class EntryActivity extends Activity {
 
 		wv.setWebViewClient(new WebViewClient() {
 			@Override
+			public void onPageFinished(WebView view, String url) {
+				super.onPageFinished(view, url);
+
+				if (mScrollPercentage != 0) {
+					view.postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							float webviewsize = wv.getContentHeight() - wv.getTop();
+							float positionInWV = webviewsize * mScrollPercentage;
+							int positionY = Math.round(wv.getTop() + positionInWV);
+							wv.scrollTo(0, positionY);
+						}
+						// Delay the scrollTo to make it work
+					}, 150);
+				}
+			}
+
+			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				// Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
 				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -601,8 +618,7 @@ public class EntryActivity extends Activity {
 
 		uri = parentUri.buildUpon().appendPath(id).build();
 		getIntent().setData(uri);
-		scrollX = 0;
-		scrollY = 0;
+		mScrollPercentage = 0;
 
 		WebView tmp = webView; // switch reference
 
