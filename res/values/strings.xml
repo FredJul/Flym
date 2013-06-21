@@ -102,6 +102,7 @@
     <string name="original_text">Show original text</string>
     <string name="see_enclosure">See enclosure</string>
     <string name="see_link">See in browser</string>
+    <string name="cant_open_link">No application found for this link</string>
     
     <!-- WIDGET -->
     <string name="red">Red</string>

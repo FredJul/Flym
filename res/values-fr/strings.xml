@@ -102,6 +102,7 @@
     <string name="original_text">Affiche le texte original</string>
     <string name="see_enclosure">Voir le fichier joint</string>
     <string name="see_link">Ouvrir dans le navigateur</string>
+    <string name="cant_open_link">Aucune application trouvée pour ce lien</string>
     
     <!-- WIDGET -->
     <string name="red">Rouge</string>
