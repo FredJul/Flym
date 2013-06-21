@@ -68,7 +68,6 @@
     <string name="feed_search">Feed search</string>
     <string name="feed_search_by_web_search">Find a site by key word (via Faroo)</string>
     <string name="feed_search_by_topic">Find news by key word (via Faroo)</string>
-    <string name="feed_search_by_twitter">Find feed by Twitter screen name</string>
     <string name="feed_search_by_youtube">Find feed by Youtube channel name</string>
     <string name="select_file">Select file (SD-root)</string>
     <string name="question_delete_feed">Do you really want to delete this feed?</string>

@@ -480,10 +480,6 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 								mUrlEditText.setText("http://www.faroo.com/api?q=" + text + "&start=1&length=10&l=en&src=news&f=rss");
 								break;
 
-							case R.id.byTwitter:
-								mUrlEditText.setText("https://api.twitter.com/1/statuses/user_timeline.rss?screen_name=" + text.replaceAll("\\+", ""));
-								break;
-
 							case R.id.byYoutube:
 								mUrlEditText.setText("http://www.youtube.com/rss/user/" + text.replaceAll("\\+", "") + "/videos.rss");
 								break;
