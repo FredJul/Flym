@@ -159,7 +159,8 @@ public class FeedDataContentProvider extends ContentProvider {
 											values.put(FeedColumns.NAME, DEFAULT_GROUP_NAME);
 											cr.insert(FeedColumns.GROUPS_CONTENT_URI, values);
 
-											Cursor groupCursor = cr.query(FeedColumns.GROUPS_CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
+											Cursor groupCursor = cr
+													.query(FeedColumns.GROUPS_CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
 											if (groupCursor.moveToFirst()) {
 												values = new ContentValues();
 												values.put(FeedColumns.URL, DEFAULT_FEED_URL);
@@ -200,8 +201,9 @@ public class FeedDataContentProvider extends ContentProvider {
 		@Override
 		public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
 			if (oldVersion < 2) {
-				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.REAL_LAST_UPDATE).append(' ').append(FeedData.TYPE_DATE_TIME)
-						.toString());
+				executeCatchedSQL(database,
+						new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.REAL_LAST_UPDATE).append(' ')
+								.append(FeedData.TYPE_DATE_TIME).toString());
 			}
 		}
 
@@ -269,7 +271,8 @@ public class FeedDataContentProvider extends ContentProvider {
 		switch (option) {
 		case URI_GROUPS: {
 			queryBuilder.setTables(TABLE_FEEDS);
-			queryBuilder.appendWhere(new StringBuilder(FeedColumns.IS_GROUP).append(Constants.DB_IS_TRUE).append(Constants.DB_OR).append(FeedColumns.GROUP_ID).append(Constants.DB_IS_NULL));
+			queryBuilder.appendWhere(new StringBuilder(FeedColumns.IS_GROUP).append(Constants.DB_IS_TRUE).append(Constants.DB_OR)
+					.append(FeedColumns.GROUP_ID).append(Constants.DB_IS_NULL));
 			break;
 		}
 		case URI_FEEDS_FOR_GROUPS: {
@@ -415,7 +418,8 @@ public class FeedDataContentProvider extends ContentProvider {
 			where.append(FeedColumns._ID).append('=').append(feedId);
 
 			if (values != null && values.containsKey(FeedColumns.PRIORITY)) {
-				Cursor priorityCursor = database.query(TABLE_FEEDS, new String[] { FeedColumns.PRIORITY, FeedColumns.GROUP_ID }, FeedColumns._ID + "=" + feedId, null, null, null, null);
+				Cursor priorityCursor = database.query(TABLE_FEEDS, new String[] { FeedColumns.PRIORITY, FeedColumns.GROUP_ID }, FeedColumns._ID
+						+ "=" + feedId, null, null, null, null);
 				if (priorityCursor.moveToNext()) {
 					int oldPriority = priorityCursor.getInt(0);
 					String oldGroupId = priorityCursor.getString(1);
@@ -424,32 +428,37 @@ public class FeedDataContentProvider extends ContentProvider {
 
 					priorityCursor.close();
 
-					String oldGroupWhere = '(' + (oldGroupId != null ? FeedColumns.GROUP_ID + '=' + oldGroupId : FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR + FeedColumns.GROUP_ID
-							+ Constants.DB_IS_NULL) + ')';
+					String oldGroupWhere = '(' + (oldGroupId != null ? FeedColumns.GROUP_ID + '=' + oldGroupId : FeedColumns.IS_GROUP
+							+ Constants.DB_IS_TRUE + Constants.DB_OR + FeedColumns.GROUP_ID + Constants.DB_IS_NULL) + ')';
 
 					// If the group has changed, it is not only a +1 or -1 for priority...
-					if ((oldGroupId == null && newGroupId != null) || (oldGroupId != null && newGroupId == null) || (oldGroupId != null && newGroupId != null && !oldGroupId.equals(newGroupId))) {
+					if ((oldGroupId == null && newGroupId != null) || (oldGroupId != null && newGroupId == null)
+							|| (oldGroupId != null && newGroupId != null && !oldGroupId.equals(newGroupId))) {
 
 						String priorityValue = FeedColumns.PRIORITY + "-1";
 						String priorityWhere = FeedColumns.PRIORITY + '>' + oldPriority;
-						database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE " + oldGroupWhere + Constants.DB_AND + priorityWhere);
+						database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE " + oldGroupWhere
+								+ Constants.DB_AND + priorityWhere);
 
 						priorityValue = FeedColumns.PRIORITY + "+1";
 						priorityWhere = FeedColumns.PRIORITY + '>' + (newPriority - 1);
-						String newGroupWhere = '(' + (newGroupId != null ? FeedColumns.GROUP_ID + '=' + newGroupId : FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR
-								+ FeedColumns.GROUP_ID + Constants.DB_IS_NULL) + ')';
-						database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE " + newGroupWhere + Constants.DB_AND + priorityWhere);
+						String newGroupWhere = '(' + (newGroupId != null ? FeedColumns.GROUP_ID + '=' + newGroupId : FeedColumns.IS_GROUP
+								+ Constants.DB_IS_TRUE + Constants.DB_OR + FeedColumns.GROUP_ID + Constants.DB_IS_NULL) + ')';
+						database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE " + newGroupWhere
+								+ Constants.DB_AND + priorityWhere);
 
 					} else { // We move the item into the same group
 						if (newPriority > oldPriority) {
 							String priorityValue = FeedColumns.PRIORITY + "-1";
 							String priorityWhere = '(' + FeedColumns.PRIORITY + " BETWEEN " + (oldPriority + 1) + " AND " + newPriority + ')';
-							database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE " + oldGroupWhere + Constants.DB_AND + priorityWhere);
+							database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE "
+									+ oldGroupWhere + Constants.DB_AND + priorityWhere);
 
 						} else if (newPriority < oldPriority) {
 							String priorityValue = FeedColumns.PRIORITY + "+1";
 							String priorityWhere = '(' + FeedColumns.PRIORITY + " BETWEEN " + newPriority + " AND " + (oldPriority - 1) + ')';
-							database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE " + oldGroupWhere + Constants.DB_AND + priorityWhere);
+							database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE "
+									+ oldGroupWhere + Constants.DB_AND + priorityWhere);
 						}
 					}
 				} else {
@@ -511,7 +520,8 @@ public class FeedDataContentProvider extends ContentProvider {
 		int count = database.update(table, values, where.toString(), selectionArgs);
 
 		// == is ok here
-		if (table == TABLE_FEEDS && (values.containsKey(FeedColumns.NAME) || values.containsKey(FeedColumns.URL) || values.containsKey(FeedColumns.PRIORITY))) {
+		if (table == TABLE_FEEDS
+				&& (values.containsKey(FeedColumns.NAME) || values.containsKey(FeedColumns.URL) || values.containsKey(FeedColumns.PRIORITY))) {
 			try {
 				OPML.exportToFile(BACKUP_OPML);
 			} catch (Exception e) {
@@ -542,7 +552,8 @@ public class FeedDataContentProvider extends ContentProvider {
 			where.append(FeedColumns._ID).append('=').append(groupId);
 
 			// Delete the sub feeds & their entries
-			Cursor subFeedsCursor = database.query(TABLE_FEEDS, FeedColumns.PROJECTION_ID, FeedColumns.GROUP_ID + "=" + groupId, null, null, null, null);
+			Cursor subFeedsCursor = database.query(TABLE_FEEDS, FeedColumns.PROJECTION_ID, FeedColumns.GROUP_ID + "=" + groupId, null, null, null,
+					null);
 			while (subFeedsCursor.moveToNext()) {
 				String feedId = subFeedsCursor.getString(0);
 				delete(FeedColumns.CONTENT_URI(feedId), null, null);
@@ -550,13 +561,16 @@ public class FeedDataContentProvider extends ContentProvider {
 			subFeedsCursor.close();
 
 			// Update the priorities
-			Cursor priorityCursor = database.query(TABLE_FEEDS, FeedColumns.PROJECTION_PRIORITY, FeedColumns._ID + "=" + groupId, null, null, null, null);
+			Cursor priorityCursor = database.query(TABLE_FEEDS, FeedColumns.PROJECTION_PRIORITY, FeedColumns._ID + "=" + groupId, null, null, null,
+					null);
 
 			if (priorityCursor.moveToNext()) {
 				int priority = priorityCursor.getInt(0);
 				String priorityWhere = FeedColumns.PRIORITY + " > " + priority;
-				String groupWhere = '(' + FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR + FeedColumns.GROUP_ID + Constants.DB_IS_NULL + ')';
-				database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + " = " + FeedColumns.PRIORITY + "-1 WHERE " + groupWhere + Constants.DB_AND + priorityWhere);
+				String groupWhere = '(' + FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR + FeedColumns.GROUP_ID + Constants.DB_IS_NULL
+						+ ')';
+				database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + " = " + FeedColumns.PRIORITY + "-1 WHERE " + groupWhere
+						+ Constants.DB_AND + priorityWhere);
 			}
 			priorityCursor.close();
 			break;
@@ -577,17 +591,19 @@ public class FeedDataContentProvider extends ContentProvider {
 			where.append(FeedColumns._ID).append('=').append(feedId);
 
 			// Update the priorities
-			Cursor priorityCursor = database.query(TABLE_FEEDS, new String[] { FeedColumns.PRIORITY, FeedColumns.GROUP_ID }, FeedColumns._ID + "=" + feedId, null, null, null, null);
+			Cursor priorityCursor = database.query(TABLE_FEEDS, new String[] { FeedColumns.PRIORITY, FeedColumns.GROUP_ID }, FeedColumns._ID + "="
+					+ feedId, null, null, null, null);
 
 			if (priorityCursor.moveToNext()) {
 				int priority = priorityCursor.getInt(0);
 				String groupId = priorityCursor.getString(1);
 
-				String groupWhere = '(' + (groupId != null ? FeedColumns.GROUP_ID + '=' + groupId : FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR + FeedColumns.GROUP_ID
-						+ Constants.DB_IS_NULL) + ')';
+				String groupWhere = '(' + (groupId != null ? FeedColumns.GROUP_ID + '=' + groupId : FeedColumns.IS_GROUP + Constants.DB_IS_TRUE
+						+ Constants.DB_OR + FeedColumns.GROUP_ID + Constants.DB_IS_NULL) + ')';
 				String priorityWhere = FeedColumns.PRIORITY + " > " + priority;
 
-				database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + " = " + FeedColumns.PRIORITY + "-1 WHERE " + groupWhere + Constants.DB_AND + priorityWhere);
+				database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + " = " + FeedColumns.PRIORITY + "-1 WHERE " + groupWhere
+						+ Constants.DB_AND + priorityWhere);
 			}
 			priorityCursor.close();
 			break;
@@ -686,5 +702,32 @@ public class FeedDataContentProvider extends ContentProvider {
 			}
 		}
 		c.close();
+	}
+
+	public static void notifyAllFromEntryUri(Uri entryUri, boolean onlyStarredOrUnstarred) {
+		ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+
+		try {
+			long entryId = Long.parseLong(entryUri.getLastPathSegment());
+
+			String uriStr = entryUri.toString();
+			if (!onlyStarredOrUnstarred) {
+				String feedId = FeedDataContentProvider.getFeedIdFromEntryId(entryId);
+				if (feedId != null) {
+					FeedDataContentProvider.notifyGroupFromFeedId(feedId);
+				}
+				if (!uriStr.startsWith(FeedColumns.CONTENT_URI.toString())) {
+					cr.notifyChange(ContentUris.withAppendedId(FeedColumns.CONTENT_URI, entryId), null);
+				}
+			}
+
+			if (!uriStr.startsWith(EntryColumns.FAVORITES_CONTENT_URI.toString())) {
+				cr.notifyChange(ContentUris.withAppendedId(EntryColumns.FAVORITES_CONTENT_URI, entryId), null);
+			}
+			if (!uriStr.startsWith(EntryColumns.CONTENT_URI.toString())) {
+				cr.notifyChange(ContentUris.withAppendedId(EntryColumns.CONTENT_URI, entryId), null);
+			}
+		} catch (Exception e) {
+		}
 	}
 }

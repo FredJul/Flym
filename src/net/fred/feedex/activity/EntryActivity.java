@@ -63,7 +63,6 @@ import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -160,7 +159,7 @@ public class EntryActivity extends Activity {
 	private int titlePosition, datePosition, mobilizedHtmlPosition, abstractPosition, linkPosition, feedIdPosition, isFavoritePosition,
 			isReadPosition, enclosurePosition, authorPosition;
 
-	private String _id;
+	private long _id = -1;
 	private String _nextId;
 	private String _previousId;
 	private Uri uri;
@@ -375,11 +374,11 @@ public class EntryActivity extends Activity {
 	private void reload(boolean forceUpdate) {
 		getContentResolver().unregisterContentObserver(mEntryObserver);
 
-		if (!forceUpdate && _id != null && _id.equals(uri.getLastPathSegment())) {
+		if (!forceUpdate && _id == Long.parseLong(uri.getLastPathSegment())) {
 			return;
 		}
 
-		_id = uri.getLastPathSegment();
+		_id = Long.parseLong(uri.getLastPathSegment());
 
 		Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
 
@@ -396,9 +395,10 @@ public class EntryActivity extends Activity {
 			}
 
 			if (entryCursor.getInt(isReadPosition) != 1) {
-				ContentValues values = new ContentValues();
-				values.put(EntryColumns.IS_READ, true);
-				getContentResolver().update(uri, values, null, null);
+				ContentResolver cr = getContentResolver();
+				if (cr.update(uri, FeedData.getReadContentValues(), null, null) > 0) {
+					FeedDataContentProvider.notifyAllFromEntryUri(uri, false);
+				}
 			}
 
 			int _feedId = entryCursor.getInt(feedIdPosition);
@@ -694,14 +694,8 @@ public class EntryActivity extends Activity {
 			ContentValues values = new ContentValues();
 			values.put(EntryColumns.IS_FAVORITE, favorite ? 1 : 0);
 			ContentResolver cr = getContentResolver();
-			cr.update(uri, values, null, null);
-			try {
-				long id = Long.parseLong(_id);
-				cr.notifyChange(ContentUris.withAppendedId(EntryColumns.CONTENT_URI, id), null);
-				cr.notifyChange(ContentUris.withAppendedId(EntryColumns.FAVORITES_CONTENT_URI, id), null);
-			} catch (NumberFormatException e) {
-				cr.notifyChange(EntryColumns.CONTENT_URI, null);
-				cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
+			if (cr.update(uri, values, null, null) > 0) {
+				FeedDataContentProvider.notifyAllFromEntryUri(uri, true);
 			}
 
 			if (favorite) {
@@ -733,14 +727,7 @@ public class EntryActivity extends Activity {
 				public void run() {
 					ContentResolver cr = getContentResolver();
 					if (cr.update(uri, FeedData.getUnreadContentValues(), null, null) > 0) {
-						long id = Long.valueOf(_id);
-						String feedId = FeedDataContentProvider.getFeedIdFromEntryId(id);
-						if (feedId != null) {
-							cr.notifyChange(FeedColumns.CONTENT_URI, null);
-							FeedDataContentProvider.notifyGroupFromFeedId(feedId);
-						}
-						cr.notifyChange(ContentUris.withAppendedId(EntryColumns.FAVORITES_CONTENT_URI, id), null);
-						cr.notifyChange(ContentUris.withAppendedId(EntryColumns.CONTENT_URI, id), null);
+						FeedDataContentProvider.notifyAllFromEntryUri(uri, false);
 					}
 				}
 			}.start();

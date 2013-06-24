@@ -106,44 +106,38 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 		textView.setText(cursor.getString(titleColumnPosition));
 
 		final TextView dateTextView = (TextView) view.findViewById(android.R.id.text2);
-		final ImageView imageView = (ImageView) view.findViewById(android.R.id.icon);
+		final ImageView starImgView = (ImageView) view.findViewById(android.R.id.icon);
 		final long id = cursor.getLong(idColumn);
 		view.setTag(cursor.getString(linkColumn));
 		final boolean favorite = !unfavorited.contains(id) && (cursor.getInt(favoriteColumn) == 1 || favorited.contains(id));
 		final CheckBox viewCheckBox = (CheckBox) view.findViewById(android.R.id.checkbox);
 
-		imageView.setImageResource(favorite ? R.drawable.dimmed_rating_important : R.drawable.dimmed_rating_not_important);
-		imageView.setTag(favorite ? Constants.TRUE : Constants.FALSE);
-		imageView.setOnClickListener(new OnClickListener() {
+		starImgView.setImageResource(favorite ? R.drawable.dimmed_rating_important : R.drawable.dimmed_rating_not_important);
+		starImgView.setTag(favorite ? Constants.TRUE : Constants.FALSE);
+		starImgView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				boolean newFavorite = !Constants.TRUE.equals(view.getTag());
 
 				if (newFavorite) {
 					view.setTag(Constants.TRUE);
-					imageView.setImageResource(R.drawable.dimmed_rating_important);
+					starImgView.setImageResource(R.drawable.dimmed_rating_important);
 					favorited.add(id);
 					unfavorited.remove(id);
 				} else {
 					view.setTag(Constants.FALSE);
-					imageView.setImageResource(R.drawable.dimmed_rating_not_important);
+					starImgView.setImageResource(R.drawable.dimmed_rating_not_important);
 					unfavorited.add(id);
 					favorited.remove(id);
 				}
 
 				ContentValues values = new ContentValues();
-
 				values.put(EntryColumns.IS_FAVORITE, newFavorite ? 1 : 0);
 
 				ContentResolver cr = MainApplication.getAppContext().getContentResolver();
-				if (cr.update(uri, values, new StringBuilder(EntryColumns._ID).append(Constants.DB_ARG).toString(), new String[] { Long.toString(id) }) > 0) {
-					if (!EntryColumns.FAVORITES_CONTENT_URI.equals(uri)) {
-						cr.notifyChange(ContentUris.withAppendedId(EntryColumns.FAVORITES_CONTENT_URI, id), null);
-					}
-
-					if (!EntryColumns.CONTENT_URI.equals(uri)) {
-						cr.notifyChange(ContentUris.withAppendedId(EntryColumns.CONTENT_URI, id), null);
-					}
+				Uri entryUri = ContentUris.withAppendedId(uri, id);
+				if (cr.update(entryUri, values, null, null) > 0) {
+					FeedDataContentProvider.notifyAllFromEntryUri(entryUri, true);
 				}
 			}
 		});
@@ -232,20 +226,9 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 			@Override
 			public void run() {
 				ContentResolver cr = MainApplication.getAppContext().getContentResolver();
-				if (cr.update(ContentUris.withAppendedId(uri, id), FeedData.getReadContentValues(), null, null) > 0) {
-					String feedId = FeedDataContentProvider.getFeedIdFromEntryId(id);
-					if (feedId != null) {
-						cr.notifyChange(FeedColumns.CONTENT_URI, null);
-						FeedDataContentProvider.notifyGroupFromFeedId(feedId);
-					}
-
-					if (!EntryColumns.FAVORITES_CONTENT_URI.equals(uri)) {
-						cr.notifyChange(ContentUris.withAppendedId(EntryColumns.FAVORITES_CONTENT_URI, id), null);
-					}
-
-					if (!EntryColumns.CONTENT_URI.equals(uri)) {
-						cr.notifyChange(ContentUris.withAppendedId(EntryColumns.CONTENT_URI, id), null);
-					}
+				Uri entryUri = ContentUris.withAppendedId(uri, id);
+				if (cr.update(entryUri, FeedData.getReadContentValues(), null, null) > 0) {
+					FeedDataContentProvider.notifyAllFromEntryUri(entryUri, false);
 				}
 			}
 		}.start();
@@ -259,20 +242,9 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 			@Override
 			public void run() {
 				ContentResolver cr = MainApplication.getAppContext().getContentResolver();
-				if (cr.update(ContentUris.withAppendedId(uri, id), FeedData.getUnreadContentValues(), null, null) > 0) {
-					String feedId = FeedDataContentProvider.getFeedIdFromEntryId(id);
-					if (feedId != null) {
-						cr.notifyChange(FeedColumns.CONTENT_URI, null);
-						FeedDataContentProvider.notifyGroupFromFeedId(feedId);
-					}
-
-					if (!EntryColumns.FAVORITES_CONTENT_URI.equals(uri)) {
-						cr.notifyChange(ContentUris.withAppendedId(EntryColumns.FAVORITES_CONTENT_URI, id), null);
-					}
-
-					if (!EntryColumns.CONTENT_URI.equals(uri)) {
-						cr.notifyChange(ContentUris.withAppendedId(EntryColumns.CONTENT_URI, id), null);
-					}
+				Uri entryUri = ContentUris.withAppendedId(uri, id);
+				if (cr.update(entryUri, FeedData.getUnreadContentValues(), null, null) > 0) {
+					FeedDataContentProvider.notifyAllFromEntryUri(entryUri, false);
 				}
 			}
 		}.start();
