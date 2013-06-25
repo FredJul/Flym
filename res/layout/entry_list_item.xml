@@ -37,7 +37,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="3dp"
+            android:ellipsize="end"
             android:gravity="top"
+            android:maxLines="3"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textIsSelectable="false" />
 
