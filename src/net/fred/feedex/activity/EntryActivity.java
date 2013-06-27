@@ -731,7 +731,7 @@ public class EntryActivity extends Activity {
 					}
 				}
 			}.start();
-			Toast.makeText(this, R.string.marked_as_unread, Toast.LENGTH_SHORT).show();
+			finish();
 			break;
 		}
 		}
