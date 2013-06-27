@@ -66,8 +66,8 @@
     <string name="filter_apply_to_title">Apply to title</string>
     <string name="filter_apply_to_content">Apply to content</string>
     <string name="feed_search">Feed search</string>
-    <string name="feed_search_by_web_search">Find a site by key word (via Faroo)</string>
-    <string name="feed_search_by_topic">Find news by key word (via Faroo)</string>
+    <string name="feed_search_by_web_search">Find feed by key words</string>
+    <string name="feed_search_by_topic">Generate feed by topic (via Faroo)</string>
     <string name="feed_search_by_youtube">Find feed by Youtube channel name</string>
     <string name="select_file">Select file (SD-root)</string>
     <string name="question_delete_feed">Do you really want to delete this feed?</string>

@@ -49,8 +49,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
@@ -59,6 +57,10 @@ import net.fred.feedex.adapter.FiltersCursorAdapter;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
 import net.fred.feedex.service.FetcherService;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -71,6 +73,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -442,7 +445,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 									@Override
 									public void run() {
 										try {
-											HttpURLConnection conn = FetcherService.setupConnection("http://www.faroo.com/api?q=" + text + "&start=1&length=1&l=en&src=web&f=json");
+											HttpURLConnection conn = FetcherService.setupConnection("https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=" + text);
 											BufferedReader reader = new BufferedReader(new InputStreamReader(FetcherService.getConnectionInputStream(conn)));
 
 											StringBuilder sb = new StringBuilder();
@@ -451,18 +454,25 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 												sb.append(line);
 											}
 											conn.disconnect();
-
-											Pattern p = Pattern.compile("\"url\": \"([^\"]+)\"");
-											final Matcher m = p.matcher(sb.toString());
-											if (m.find()) {
-												EditFeedActivity.this.runOnUiThread(new Runnable() {
-													@Override
-													public void run() {
-														mUrlEditText.setText(m.toMatchResult().group(1));
-													}
-												});
-											} else {
-												throw new Exception();
+											
+											JSONObject result = new JSONObject(sb.toString()).getJSONObject("responseData");
+											JSONArray entries = result.getJSONArray("entries");
+											for (int i = 0; i < entries.length(); i++) {
+												try {
+													JSONObject entry = (JSONObject) entries.get(i);
+													final String title = Html.fromHtml(entry.get("title").toString()).toString();
+													final String url = entry.get("url").toString();
+													
+													EditFeedActivity.this.runOnUiThread(new Runnable() {
+														@Override
+														public void run() {
+															mNameEditText.setText(title);
+															mUrlEditText.setText(url);
+														}
+													});
+												} catch (Exception e) {
+												}
+												break;
 											}
 										} catch (Exception e) {
 											EditFeedActivity.this.runOnUiThread(new Runnable() {
