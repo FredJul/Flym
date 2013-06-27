@@ -96,6 +96,7 @@
     <string name="menu_copy_clipboard">Copier le lien</string>
     <string name="menu_mark_as_unread">Marquer comme non lu</string>
     <string name="marked_as_unread">Marqué comme non lu</string>
+    <string name="share_favorites_title">FeedEx : articles favoris</string>
     <string name="copied_clipboard">Lien copié</string>
     <string name="get_full_text">Retrouve le texte entier</string>
     <string name="original_text">Affiche le texte original</string>

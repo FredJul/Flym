@@ -126,7 +126,9 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 						starredList += cursor.getString(titlePos) + "\n" + cursor.getString(linkPos) + "\n\n";
 					} while (cursor.moveToNext());
 				}
-				startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, starredList).setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)));
+				startActivity(Intent.createChooser(
+						new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_favorites_title))
+								.putExtra(Intent.EXTRA_TEXT, starredList).setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)));
 			}
 			return true;
 		}
@@ -164,8 +166,9 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(mUri) ? null
-				: EntryColumns.WHERE_UNREAD, null, new StringBuilder(EntryColumns.DATE).append(Constants.DB_DESC).toString());
+		CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)
+				|| EntryColumns.FAVORITES_CONTENT_URI.equals(mUri) ? null : EntryColumns.WHERE_UNREAD, null, new StringBuilder(EntryColumns.DATE)
+				.append(Constants.DB_DESC).toString());
 		cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
 		return cursorLoader;
 	}

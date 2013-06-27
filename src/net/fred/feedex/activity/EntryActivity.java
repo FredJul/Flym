@@ -176,7 +176,7 @@ public class EntryActivity extends Activity {
 
 	private float mScrollPercentage = 0;
 
-	private String link, enclosure;
+	private String link, title, enclosure;
 	private LayoutParams layoutParams;
 	private View backBtn, forwardBtn;
 	private boolean localPictures;
@@ -409,12 +409,13 @@ public class EntryActivity extends Activity {
 				feedId = _feedId;
 			}
 
+			title = entryCursor.getString(titlePosition);
 			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI(feedId), new String[] { FeedColumns.NAME, FeedColumns.URL }, null,
 					null, null);
 			if (cursor.moveToFirst()) {
 				setTitle(cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0));
 			} else { // fallback, should not be possible
-				setTitle(entryCursor.getString(titlePosition));
+				setTitle(title);
 			}
 			cursor.close();
 
@@ -470,7 +471,6 @@ public class EntryActivity extends Activity {
 			setupNavigationButton(false, timestamp);
 			setupNavigationButton(true, timestamp);
 
-			String title = entryCursor.getString(titlePosition);
 			String author = entryCursor.getString(authorPosition);
 			link = entryCursor.getString(linkPosition);
 			enclosure = entryCursor.getString(enclosurePosition);
@@ -708,8 +708,8 @@ public class EntryActivity extends Activity {
 		case R.id.menu_share: {
 			if (link != null) {
 				startActivity(Intent.createChooser(
-						new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, link).setType(Constants.MIMETYPE_TEXT_PLAIN),
-						getString(R.string.menu_share)));
+						new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, link)
+								.setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)));
 			}
 			break;
 		}
