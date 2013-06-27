@@ -159,7 +159,7 @@ public class RssAtomHandler extends DefaultHandler {
 	private StringBuilder description;
 	private StringBuilder enclosure;
 	private final Uri feedEntiresUri;
-	private int newCount;
+	private int newCount = 0;
 	private final String feedName;
 	private String feedTitle;
 	private String feedBaseUrl;
@@ -167,7 +167,7 @@ public class RssAtomHandler extends DefaultHandler {
 	private final Date keepDateBorder;
 	private boolean fetchImages = false;
 	private boolean cancelled = false;
-	private final long now;
+	private final long now = System.currentTimeMillis() - 1000; // by precaution
 	private StringBuilder guid;
 	private StringBuilder author, tmpAuthor;
 
@@ -189,20 +189,15 @@ public class RssAtomHandler extends DefaultHandler {
 
 		filters = new FeedFilters(id);
 
+		// Remove old stuffs
 		final String query = new StringBuilder(EntryColumns.DATE).append('<').append(keepDateBorderTime).append(Constants.DB_AND).append(EntryColumns.WHERE_NOT_FAVORITE).toString();
-
 		FeedData.deletePicturesOfFeed(MainApplication.getAppContext(), feedEntiresUri, query);
-
 		MainApplication.getAppContext().getContentResolver().delete(feedEntiresUri, query, null);
-		newCount = 0;
 
 		int index = url.indexOf('/', 8); // this also covers https://
-
 		if (index > -1) {
 			feedBaseUrl = url.substring(0, index);
 		}
-
-		now = System.currentTimeMillis() - 1000; // by precaution
 	}
 
 	@Override
