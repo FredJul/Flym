@@ -48,6 +48,7 @@ import java.io.File;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
+import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
@@ -120,10 +121,6 @@ public class FeedDataContentProvider extends ContentProvider {
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
-		private static final String DEFAULT_FEED_URL = "http://news.google.com/?output=rss";
-		private static final String DEFAULT_FEED_NAME = "Google News";
-		private static final String DEFAULT_GROUP_NAME = "News";
-
 		private final Handler mHandler;
 
 		public DatabaseHelper(Handler handler, Context context, String name, int version) {
@@ -151,26 +148,8 @@ public class FeedDataContentProvider extends ContentProvider {
 											// Perform an automated import of the backup
 											OPML.importFromFile(BACKUP_OPML);
 										} else {
-											// No database and no backup, automatically add an example feed
-											ContentResolver cr = MainApplication.getAppContext().getContentResolver();
-
-											ContentValues values = new ContentValues();
-											values.put(FeedColumns.IS_GROUP, true);
-											values.put(FeedColumns.NAME, DEFAULT_GROUP_NAME);
-											cr.insert(FeedColumns.GROUPS_CONTENT_URI, values);
-
-											Cursor groupCursor = cr
-													.query(FeedColumns.GROUPS_CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
-											if (groupCursor.moveToFirst()) {
-												values = new ContentValues();
-												values.put(FeedColumns.URL, DEFAULT_FEED_URL);
-												values.put(FeedColumns.NAME, DEFAULT_FEED_NAME);
-												values.put(FeedColumns.GROUP_ID, groupCursor.getString(0));
-
-												cr.insert(FeedColumns.CONTENT_URI, values);
-												cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-											}
-											groupCursor.close();
+											// No database and no backup, automatically add the default feeds
+											OPML.importFromFile(MainApplication.getAppContext().getResources().openRawResource(R.raw.default_feeds));
 										}
 									} catch (Exception e) {
 									}

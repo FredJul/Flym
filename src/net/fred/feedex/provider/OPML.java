@@ -49,6 +49,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import net.fred.feedex.Constants;
@@ -87,6 +88,10 @@ public class OPML {
 
 	public static void importFromFile(String filename) throws FileNotFoundException, IOException, SAXException {
 		Xml.parse(new InputStreamReader(new FileInputStream(filename)), parser);
+	}
+	
+	public static void importFromFile(InputStream input) throws IOException, SAXException {
+		Xml.parse(new InputStreamReader(input), parser);
 	}
 
 	public static void exportToFile(String filename) throws IOException {
