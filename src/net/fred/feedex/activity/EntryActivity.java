@@ -805,12 +805,15 @@ public class EntryActivity extends Activity {
 
 		@JavascriptInterface
 		public void onClickFullText() {
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					if (!mIsProgressVisible) {
-						Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
-						if (entryCursor.moveToFirst() && !entryCursor.isNull(mobilizedHtmlPosition)) {
+			if (!mIsProgressVisible) {
+				Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
+				final boolean alreadyMobilized = entryCursor.moveToFirst() && !entryCursor.isNull(mobilizedHtmlPosition);
+				entryCursor.close();
+
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if (alreadyMobilized) {
 							preferFullText = true;
 							reload(true);
 						} else {
@@ -833,8 +836,8 @@ public class EntryActivity extends Activity {
 							}
 						}
 					}
-				}
-			});
+				});
+			}
 		}
 
 		@JavascriptInterface
