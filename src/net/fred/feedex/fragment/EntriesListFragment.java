@@ -41,7 +41,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ListView;
 
 public class EntriesListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -89,9 +88,6 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
-		CheckBox viewCheckBox = (CheckBox) view.findViewById(android.R.id.checkbox);
-		viewCheckBox.setChecked(true); // Will do all the read state stuff into the adapter
-
 		startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, id)));
 	}
 

@@ -120,12 +120,6 @@ public class EntryActivity extends Activity {
 	private static final String TEXT_HTML = "text/html";
 	private static final String HTML_IMG_REGEX = "<[/]?[ ]?img(.|\n)*?>";
 
-	private static final String OR_DATE = " or date ";
-	private static final String DATE = "(date=";
-	private static final String AND_ID = " and _id";
-	private static final String ASC = "date asc, _id desc limit 1";
-	private static final String DESC = "date desc, _id asc limit 1";
-
 	private static final String BACKGROUND_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#f6f6f6" : "#181b1f";
 	private static final String TEXT_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";
 	private static final String BUTTON_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#D0D0D0" : "#505050";
@@ -160,8 +154,8 @@ public class EntryActivity extends Activity {
 			isReadPosition, enclosurePosition, authorPosition;
 
 	private long _id = -1;
-	private String _nextId;
-	private String _previousId;
+	private long _nextId = -1;
+	private long _previousId = -1;
 	private Uri uri;
 	private Uri parentUri;
 	private int feedId;
@@ -243,11 +237,11 @@ public class EntryActivity extends Activity {
 			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 				if (Math.abs(velocityY) * 2 < Math.abs(velocityX)) {
 					if (velocityX > 800) {
-						if (_previousId != null && webView.getScrollX() == 0) {
+						if (_previousId != -1 && webView.getScrollX() == 0) {
 							previousEntry();
 						}
 					} else if (velocityX < -800) {
-						if (_nextId != null) {
+						if (_nextId != -1) {
 							nextEntry();
 						}
 					}
@@ -374,11 +368,12 @@ public class EntryActivity extends Activity {
 	private void reload(boolean forceUpdate) {
 		getContentResolver().unregisterContentObserver(mEntryObserver);
 
-		if (!forceUpdate && _id == Long.parseLong(uri.getLastPathSegment())) {
+		long newId = Long.parseLong(uri.getLastPathSegment());
+		if (!forceUpdate && _id == newId) {
 			return;
 		}
 
-		_id = Long.parseLong(uri.getLastPathSegment());
+		_id = newId;
 
 		Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
 
@@ -393,7 +388,11 @@ public class EntryActivity extends Activity {
 			if (contentText == null) {
 				contentText = "";
 			}
+			
+			// Need to be done before the "mark as read" action
+			setupNavigationButton();
 
+			// Mark the article as read
 			if (entryCursor.getInt(isReadPosition) != 1) {
 				ContentResolver cr = getContentResolver();
 				if (cr.update(uri, FeedData.getReadContentValues(), null, null) > 0) {
@@ -446,8 +445,7 @@ public class EntryActivity extends Activity {
 			favorite = entryCursor.getInt(isFavoritePosition) == 1;
 			invalidateOptionsMenu();
 
-			// loadData does not recognize the encoding without correct
-			// html-header
+			// loadData does not recognize the encoding without correct html-header
 			localPictures = contentText.indexOf(Constants.IMAGEID_REPLACEMENT) > -1;
 
 			if (localPictures) {
@@ -467,11 +465,8 @@ public class EntryActivity extends Activity {
 				}
 			}
 
-			long timestamp = entryCursor.getLong(datePosition);
-			setupNavigationButton(false, timestamp);
-			setupNavigationButton(true, timestamp);
-
 			String author = entryCursor.getString(authorPosition);
+			long timestamp = entryCursor.getLong(datePosition);
 			link = entryCursor.getString(linkPosition);
 			enclosure = entryCursor.getString(enclosurePosition);
 			webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8,
@@ -479,10 +474,6 @@ public class EntryActivity extends Activity {
 		}
 
 		entryCursor.close();
-
-		/*
-		 * new Thread() { public void run() { sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET)); // this is slow } }.start();
-		 */
 	}
 
 	private String generateHtmlContent(String title, String link, String abstractText, String enclosure, String author, long timestamp) {
@@ -594,42 +585,45 @@ public class EntryActivity extends Activity {
 		}
 	}
 
-	private void setupNavigationButton(final boolean isNextEntry, long date) {
-		StringBuilder queryString = new StringBuilder(DATE).append(date).append(AND_ID).append(isNextEntry ? '>' : '<').append(_id).append(')')
-				.append(OR_DATE).append(isNextEntry ? '<' : '>').append(date);
+	private void setupNavigationButton() {
+		_previousId = -1;
+		backBtn.setVisibility(View.GONE);
+		_nextId = -1;
+		forwardBtn.setVisibility(View.GONE);
 
-		if (!EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) && !PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)) {
-			queryString.append(Constants.DB_AND).append(EntryColumns.WHERE_UNREAD);
+		Cursor cursor = getContentResolver().query(
+				parentUri,
+				EntryColumns.PROJECTION_ID,
+				PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null
+						: EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
+
+		while (cursor.moveToNext()) {
+			if (_id == cursor.getLong(0)) {
+
+				if (cursor.moveToPrevious()) {
+					_previousId = cursor.getLong(0);
+					backBtn.setVisibility(View.VISIBLE);
+				}
+				
+				cursor.moveToNext();
+
+				if (cursor.moveToNext()) {
+					_nextId = cursor.getLong(0);
+					forwardBtn.setVisibility(View.VISIBLE);
+				}
+
+				break;
+			}
 		}
 
-		Cursor cursor = getContentResolver().query(parentUri, EntryColumns.PROJECTION_ID, queryString.toString(), null, isNextEntry ? DESC : ASC);
-
-		if (cursor.moveToFirst()) {
-			String id = cursor.getString(0);
-			if (isNextEntry) {
-				_nextId = id;
-				forwardBtn.setVisibility(View.VISIBLE);
-			} else {
-				_previousId = id;
-				backBtn.setVisibility(View.VISIBLE);
-			}
-		} else {
-			if (isNextEntry) {
-				_nextId = null;
-				forwardBtn.setVisibility(View.GONE);
-			} else {
-				_previousId = null;
-				backBtn.setVisibility(View.GONE);
-			}
-		}
 		cursor.close();
 	}
 
-	private void switchEntry(String id, Animation inAnimation, Animation outAnimation) {
+	private void switchEntry(long id, Animation inAnimation, Animation outAnimation) {
 		setProgressBarIndeterminateVisibility(false);
 		mIsProgressVisible = false;
 
-		uri = parentUri.buildUpon().appendPath(id).build();
+		uri = parentUri.buildUpon().appendPath(String.valueOf(id)).build();
 		getIntent().setData(uri);
 		mScrollPercentage = 0;
 
