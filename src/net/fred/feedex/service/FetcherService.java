@@ -148,10 +148,12 @@ public class FetcherService extends IntentService {
 				PrefsManager.putLong(PrefsManager.LAST_SCHEDULED_REFRESH, SystemClock.elapsedRealtime());
 			}
 
-			if (PrefsManager.getBoolean(PrefsManager.PROXY_ENABLED, false) && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !PrefsManager.getBoolean(PrefsManager.PROXY_WIFI_ONLY, false))) {
+			if (PrefsManager.getBoolean(PrefsManager.PROXY_ENABLED, false)
+					&& (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !PrefsManager.getBoolean(PrefsManager.PROXY_WIFI_ONLY, false))) {
 				try {
-					proxy = new Proxy(ZERO.equals(PrefsManager.getString(PrefsManager.PROXY_TYPE, ZERO)) ? Proxy.Type.HTTP : Proxy.Type.SOCKS, new InetSocketAddress(PrefsManager.getString(
-							PrefsManager.PROXY_HOST, ""), Integer.parseInt(PrefsManager.getString(PrefsManager.PROXY_PORT, DEFAULT_PROXY_PORT))));
+					proxy = new Proxy(ZERO.equals(PrefsManager.getString(PrefsManager.PROXY_TYPE, ZERO)) ? Proxy.Type.HTTP : Proxy.Type.SOCKS,
+							new InetSocketAddress(PrefsManager.getString(PrefsManager.PROXY_HOST, ""), Integer.parseInt(PrefsManager.getString(
+									PrefsManager.PROXY_PORT, DEFAULT_PROXY_PORT))));
 				} catch (Exception e) {
 					proxy = null;
 				}
@@ -167,7 +169,8 @@ public class FetcherService extends IntentService {
 
 				if (newCount > 0) {
 					if (PrefsManager.getBoolean(PrefsManager.NOTIFICATIONS_ENABLED, true)) {
-						Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[] { COUNT }, EntryColumns.WHERE_UNREAD, null, null);
+						Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[] { COUNT }, EntryColumns.WHERE_UNREAD, null,
+								null);
 
 						cursor.moveToFirst();
 						newCount = cursor.getInt(0); // The number has possibly changed
@@ -177,7 +180,8 @@ public class FetcherService extends IntentService {
 							String text = new StringBuilder().append(newCount).append(' ').append(getString(R.string.new_entries)).toString();
 
 							Intent notificationIntent = new Intent(FetcherService.this, MainActivity.class);
-							PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+							PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent,
+									PendingIntent.FLAG_UPDATE_CURRENT);
 
 							Notification.Builder notifBuilder = new Notification.Builder(MainApplication.getAppContext()) //
 									.setContentIntent(contentIntent) //
@@ -361,7 +365,8 @@ public class FetcherService extends IntentService {
 									posStart = line.indexOf(HREF);
 
 									if (posStart > -1) {
-										String url = line.substring(posStart + 6, line.indexOf('"', posStart + 10)).replace(Constants.AMP_SG, Constants.AMP);
+										String url = line.substring(posStart + 6, line.indexOf('"', posStart + 10)).replace(Constants.AMP_SG,
+												Constants.AMP);
 
 										ContentValues values = new ContentValues();
 
@@ -452,7 +457,9 @@ public class FetcherService extends IntentService {
 						int index2 = contentType.indexOf(';', index);
 
 						InputStream inputStream = getConnectionInputStream(connection);
-						Xml.parse(inputStream, Xml.findEncodingByName(index2 > -1 ? contentType.substring(index + 8, index2) : contentType.substring(index + 8)), handler);
+						Xml.parse(inputStream,
+								Xml.findEncodingByName(index2 > -1 ? contentType.substring(index + 8, index2) : contentType.substring(index + 8)),
+								handler);
 					} else {
 						InputStreamReader reader = new InputStreamReader(getConnectionInputStream(connection));
 						Xml.parse(reader, handler);
@@ -475,7 +482,9 @@ public class FetcherService extends IntentService {
 					int start = xmlText != null ? xmlText.indexOf(ENCODING) : -1;
 
 					if (start > -1) {
-						Xml.parse(new StringReader(new String(ouputStream.toByteArray(), xmlText.substring(start + 10, xmlText.indexOf('"', start + 11)))), handler);
+						Xml.parse(
+								new StringReader(new String(ouputStream.toByteArray(),
+										xmlText.substring(start + 10, xmlText.indexOf('"', start + 11)))), handler);
 					} else {
 						// use content type
 						if (contentType != null) {
@@ -485,8 +494,8 @@ public class FetcherService extends IntentService {
 								int index2 = contentType.indexOf(';', index);
 
 								try {
-									StringReader reader = new StringReader(new String(ouputStream.toByteArray(), index2 > -1 ? contentType.substring(index + 8, index2)
-											: contentType.substring(index + 8)));
+									StringReader reader = new StringReader(new String(ouputStream.toByteArray(), index2 > -1 ? contentType.substring(
+											index + 8, index2) : contentType.substring(index + 8)));
 									Xml.parse(reader, handler);
 								} catch (Exception e) {
 								}
@@ -502,7 +511,7 @@ public class FetcherService extends IntentService {
 
 				connection.disconnect();
 			} catch (FileNotFoundException e) {
-				if (handler != null && !handler.isDone() && !handler.isCancelled()) {
+				if (handler == null || (handler != null && !handler.isDone() && !handler.isCancelled())) {
 					ContentValues values = new ContentValues();
 
 					// resets the fetchmode to determine it again later
@@ -514,7 +523,7 @@ public class FetcherService extends IntentService {
 					}
 				}
 			} catch (Throwable e) {
-				if (handler != null && !handler.isDone() && !handler.isCancelled()) {
+				if (handler == null || (handler != null && !handler.isDone() && !handler.isCancelled())) {
 					ContentValues values = new ContentValues();
 
 					// resets the fetchmode to determine it again later
@@ -578,7 +587,9 @@ public class FetcherService extends IntentService {
 
 		String location = connection.getHeaderField("Location");
 
-		if (location != null && (url.getProtocol().equals(_HTTP) && location.startsWith(Constants.HTTPS) || url.getProtocol().equals(_HTTPS) && location.startsWith(Constants.HTTP))) {
+		if (location != null
+				&& (url.getProtocol().equals(_HTTP) && location.startsWith(Constants.HTTPS) || url.getProtocol().equals(_HTTPS)
+						&& location.startsWith(Constants.HTTP))) {
 			// if location != null, the system-automatic redirect has failed
 			// which indicates a protocol change
 
@@ -614,7 +625,8 @@ public class FetcherService extends IntentService {
 	private static void retrieveFavicon(Context context, URL url, String id) {
 		HttpURLConnection iconURLConnection;
 		try {
-			iconURLConnection = setupConnection(new URL(new StringBuilder(url.getProtocol()).append(PROTOCOL_SEPARATOR).append(url.getHost()).append(FILE_FAVICON).toString()));
+			iconURLConnection = setupConnection(new URL(new StringBuilder(url.getProtocol()).append(PROTOCOL_SEPARATOR).append(url.getHost())
+					.append(FILE_FAVICON).toString()));
 
 			ContentValues values = new ContentValues();
 			try {
