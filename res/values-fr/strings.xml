@@ -34,6 +34,8 @@
     <string name="new_entries">nouveaux articles</string>
     <string name="error">Erreur</string>
     <string name="network_error">Pas de connexion disponible</string>
+    <string name="loading">Chargement en cours…</string>
+    <string name="no_result">Aucun résultat</string>
     
     <!-- FEEDS -->
     <string name="menu_add_feed">Ajouter un flux</string>

@@ -34,6 +34,8 @@
     <string name="new_entries">new entries</string>
     <string name="error">Error</string>
     <string name="network_error">The network is not set up</string>
+    <string name="loading">Loading…</string>
+    <string name="no_result">No result</string>
     
     <!-- FEEDS -->
     <string name="menu_add_feed">Add feed</string>

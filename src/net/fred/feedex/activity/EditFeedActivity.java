@@ -49,6 +49,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
@@ -65,6 +67,7 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.LoaderManager;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.CursorLoader;
@@ -86,9 +89,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 public class EditFeedActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+	private static final String FEED_SEARCH_TITLE = "title";
+	private static final String FEED_SEARCH_URL = "url";
+	private static final String FEED_SEARCH_DESC = "contentSnippet";
 
 	private static final String[] FEED_PROJECTION = new String[] { FeedColumns.NAME, FeedColumns.URL };
 
@@ -170,8 +178,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 			String url = mUrlEditText.getText().toString();
 			ContentResolver cr = getContentResolver();
 
-			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(),
-					new String[] { url }, null);
+			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID,
+					new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(), new String[] { url }, null);
 
 			if (cursor.moveToFirst() && !getIntent().getData().getLastPathSegment().equals(cursor.getString(0))) {
 				cursor.close();
@@ -259,7 +267,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		CursorLoader cursorLoader = new CursorLoader(this, FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()), null, null, null, null);
+		CursorLoader cursorLoader = new CursorLoader(this, FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
+				null, null, null, null);
 		cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
 		return cursorLoader;
 	}
@@ -284,7 +293,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 			url = Constants.HTTP + url;
 		}
 
-		Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(), new String[] { url }, null);
+		Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(),
+				new String[] { url }, null);
 
 		if (cursor.moveToFirst()) {
 			cursor.close();
@@ -371,7 +381,9 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 												values.put(FilterColumns.IS_REGEX, regexCheckBox.isChecked());
 												values.put(FilterColumns.IS_APPLIED_TO_TITLE, applyTitleRadio.isChecked());
 												if (cr.update(FilterColumns.CONTENT_URI, values, FilterColumns._ID + '=' + filterId, null) > 0) {
-													cr.notifyChange(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()), null);
+													cr.notifyChange(
+															FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
+															null);
 												}
 											}
 										}
@@ -396,7 +408,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 									public void run() {
 										ContentResolver cr = getContentResolver();
 										if (cr.delete(FilterColumns.CONTENT_URI, FilterColumns._ID + '=' + filterId, null) > 0) {
-											cr.notifyChange(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()), null);
+											cr.notifyChange(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
+													null);
 										}
 									}
 								}.start();
@@ -441,12 +454,20 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 
 							switch (radioGroup.getCheckedRadioButtonId()) {
 							case R.id.byWebSearch:
+								final ProgressDialog pd = new ProgressDialog(EditFeedActivity.this);
+								pd.setMessage(getString(R.string.loading));
+								pd.setCancelable(true);
+								pd.setIndeterminate(true);
+								pd.show();
+
 								new Thread() {
 									@Override
 									public void run() {
 										try {
-											HttpURLConnection conn = FetcherService.setupConnection("https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=" + text);
-											BufferedReader reader = new BufferedReader(new InputStreamReader(FetcherService.getConnectionInputStream(conn)));
+											HttpURLConnection conn = FetcherService
+													.setupConnection("https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=" + text);
+											BufferedReader reader = new BufferedReader(new InputStreamReader(FetcherService
+													.getConnectionInputStream(conn)));
 
 											StringBuilder sb = new StringBuilder();
 											String line = null;
@@ -454,26 +475,54 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 												sb.append(line);
 											}
 											conn.disconnect();
-											
-											JSONObject result = new JSONObject(sb.toString()).getJSONObject("responseData");
-											JSONArray entries = result.getJSONArray("entries");
+
+											// Parse results
+											final ArrayList<HashMap<String, String>> results = new ArrayList<HashMap<String, String>>();
+											JSONObject response = new JSONObject(sb.toString()).getJSONObject("responseData");
+											JSONArray entries = response.getJSONArray("entries");
 											for (int i = 0; i < entries.length(); i++) {
 												try {
 													JSONObject entry = (JSONObject) entries.get(i);
-													final String title = Html.fromHtml(entry.get("title").toString()).toString();
-													final String url = entry.get("url").toString();
-													
-													EditFeedActivity.this.runOnUiThread(new Runnable() {
-														@Override
-														public void run() {
-															mNameEditText.setText(title);
-															mUrlEditText.setText(url);
-														}
-													});
+													HashMap<String, String> map = new HashMap<String, String>();
+													map.put(FEED_SEARCH_TITLE, Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString());
+													map.put(FEED_SEARCH_URL, entry.get(FEED_SEARCH_URL).toString());
+													map.put(FEED_SEARCH_DESC, Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString());
+
+													results.add(map);
 												} catch (Exception e) {
 												}
-												break;
 											}
+
+											// Show the results
+											EditFeedActivity.this.runOnUiThread(new Runnable() {
+												@Override
+												public void run() {
+													pd.cancel();
+
+													if (!results.isEmpty()) {
+														AlertDialog.Builder builder = new AlertDialog.Builder(EditFeedActivity.this);
+														builder.setTitle(R.string.feed_search);
+
+														// create the grid item mapping
+														String[] from = new String[] { FEED_SEARCH_TITLE, FEED_SEARCH_DESC };
+														int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
+
+														// fill in the grid_item layout
+														SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, results,
+																R.layout.search_result_item, from, to);
+														builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+															@Override
+															public void onClick(DialogInterface dialog, int which) {
+																mNameEditText.setText(results.get(which).get(FEED_SEARCH_TITLE));
+																mUrlEditText.setText(results.get(which).get(FEED_SEARCH_URL));
+															}
+														});
+														builder.show();
+													} else {
+														Toast.makeText(EditFeedActivity.this, R.string.no_result, Toast.LENGTH_SHORT).show();
+													}
+												}
+											});
 										} catch (Exception e) {
 											EditFeedActivity.this.runOnUiThread(new Runnable() {
 												@Override
