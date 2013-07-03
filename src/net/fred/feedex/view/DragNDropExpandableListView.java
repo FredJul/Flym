@@ -54,27 +54,28 @@ public class DragNDropExpandableListView extends ExpandableListView {
 	public void setDragNDropEnabled(boolean enabled) {
 		mDragNDropEnabled = enabled;
 	}
-	
+
 	public boolean isDragNDropEnabled() {
 		return mDragNDropEnabled;
 	}
-	
+
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
-		if (!mDragNDropEnabled) {
+		if (!mDragNDropEnabled || ev.getActionIndex() != 0) {
 			return super.onTouchEvent(ev);
 		}
 
 		final int action = ev.getAction();
-		final int x = (int) ev.getX();
-		final int y = (int) ev.getY();
+		final int x = (int) ev.getX(0);
+		final int y = (int) ev.getY(0);
 
 		if (action == MotionEvent.ACTION_DOWN && x > getWidth() - 80) { // drag on the right part of the item only
 			mDragMode = true;
 		}
 
-		if (!mDragMode)
+		if (!mDragMode) {
 			return super.onTouchEvent(ev);
+		}
 
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
@@ -100,6 +101,11 @@ public class DragNDropExpandableListView extends ExpandableListView {
 				mDragNDropListener.onDrop(mStartPosition, mEndPosition);
 			break;
 		}
+
+		if (ev.getPointerCount() > 1) {
+			return super.onTouchEvent(ev);
+		}
+
 		return true;
 	}
 
@@ -124,7 +130,7 @@ public class DragNDropExpandableListView extends ExpandableListView {
 		View item = getChildAt(itemIndex);
 		if (item == null)
 			return;
-		
+
 		if (mDragNDropListener != null)
 			mDragNDropListener.onStartDrag(item);
 
@@ -135,9 +141,8 @@ public class DragNDropExpandableListView extends ExpandableListView {
 
 		mWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 		mWindowParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-		mWindowParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-				| WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-				| WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+		mWindowParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+				| WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 		mWindowParams.format = PixelFormat.TRANSLUCENT;
 		mWindowParams.windowAnimations = 0;
 
@@ -175,8 +180,7 @@ public class DragNDropExpandableListView extends ExpandableListView {
 		long packedPos = getExpandableListPosition(flatPos);
 		if (ExpandableListView.getPackedPositionType(packedPos) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
 			return getExpandableListAdapter().getGroupId(ExpandableListView.getPackedPositionGroup(packedPos));
-		}
-		else {
+		} else {
 			return getExpandableListAdapter().getChildId(ExpandableListView.getPackedPositionGroup(packedPos), ExpandableListView.getPackedPositionChild(packedPos));
 		}
 	}
