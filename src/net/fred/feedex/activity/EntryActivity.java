@@ -104,6 +104,7 @@ public class EntryActivity extends Activity {
 
 	private static final String SAVE_INSTANCE_PROGRESS_VISIBLE = "isProgressVisible";
 	private static final String SAVE_INSTANCE_SCROLL_PERCENTAGE = "scrollPercentage";
+	private static final String SAVE_INSTANCE_ENTRIES_IDS = "entriesIds";
 
 	private static final long ANIM_DURATION = 250;
 	private static final TranslateAnimation SLIDE_IN_RIGHT = generateAnimation(1, 0);
@@ -140,8 +141,7 @@ public class EntryActivity extends Activity {
 
 	private static final String BUTTON_START = "<div style=\"text-align: center\"><input type=\"button\" value=\"";
 	private static final String BUTTON_MIDDLE = "\" onclick=\"";
-	private static final String BUTTON_END = "\" style=\"background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
-			+ "; border: none; border-radius:10px; padding: 10px;\"/></div>";
+	private static final String BUTTON_END = "\" style=\"background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR + "; border: none; border-radius:10px; padding: 10px;\"/></div>";
 
 	private static final String LINK_BUTTON_START = "<div style=\"text-align: center; margin-top:12px\"><a href=\"";
 	private static final String LINK_BUTTON_MIDDLE = "\" style=\"background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
@@ -150,12 +150,13 @@ public class EntryActivity extends Activity {
 
 	private static final String IMAGE_ENCLOSURE = "[@]image/";
 
-	private int titlePosition, datePosition, mobilizedHtmlPosition, abstractPosition, linkPosition, feedIdPosition, isFavoritePosition,
-			isReadPosition, enclosurePosition, authorPosition;
+	private int titlePosition, datePosition, mobilizedHtmlPosition, abstractPosition, linkPosition, feedIdPosition, isFavoritePosition, isReadPosition, enclosurePosition, authorPosition;
 
 	private long _id = -1;
 	private long _nextId = -1;
 	private long _previousId = -1;
+	private long[] mEntriesIds;
+
 	private Uri uri;
 	private Uri parentUri;
 	private int feedId;
@@ -314,6 +315,7 @@ public class EntryActivity extends Activity {
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
+		mEntriesIds = savedInstanceState.getLongArray(SAVE_INSTANCE_ENTRIES_IDS);
 		mIsProgressVisible = savedInstanceState.getBoolean(SAVE_INSTANCE_PROGRESS_VISIBLE);
 		mScrollPercentage = savedInstanceState.getFloat(SAVE_INSTANCE_SCROLL_PERCENTAGE);
 		setProgressBarIndeterminateVisibility(mIsProgressVisible);
@@ -349,6 +351,8 @@ public class EntryActivity extends Activity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		webView.saveState(outState);
+		outState.putLongArray(SAVE_INSTANCE_ENTRIES_IDS, mEntriesIds);
+
 		outState.putBoolean(SAVE_INSTANCE_PROGRESS_VISIBLE, mIsProgressVisible);
 
 		float positionTopView = webView.getTop();
@@ -388,7 +392,7 @@ public class EntryActivity extends Activity {
 			if (contentText == null) {
 				contentText = "";
 			}
-			
+
 			// Need to be done before the "mark as read" action
 			setupNavigationButton();
 
@@ -409,8 +413,7 @@ public class EntryActivity extends Activity {
 			}
 
 			title = entryCursor.getString(titlePosition);
-			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI(feedId), new String[] { FeedColumns.NAME, FeedColumns.URL }, null,
-					null, null);
+			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI(feedId), new String[] { FeedColumns.NAME, FeedColumns.URL }, null, null, null);
 			if (cursor.moveToFirst()) {
 				setTitle(cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0));
 			} else { // fallback, should not be possible
@@ -420,8 +423,7 @@ public class EntryActivity extends Activity {
 
 			if (canShowIcon) {
 				if (iconBytes == null || iconBytes.length == 0) {
-					Cursor iconCursor = getContentResolver().query(FeedColumns.CONTENT_URI(Integer.toString(feedId)),
-							new String[] { FeedColumns._ID, FeedColumns.ICON }, null, null, null);
+					Cursor iconCursor = getContentResolver().query(FeedColumns.CONTENT_URI(Integer.toString(feedId)), new String[] { FeedColumns._ID, FeedColumns.ICON }, null, null, null);
 
 					if (iconCursor.moveToFirst()) {
 						iconBytes = iconCursor.getBlob(1);
@@ -469,8 +471,7 @@ public class EntryActivity extends Activity {
 			long timestamp = entryCursor.getLong(datePosition);
 			link = entryCursor.getString(linkPosition);
 			enclosure = entryCursor.getString(enclosurePosition);
-			webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8,
-					null);
+			webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8, null);
 		}
 
 		entryCursor.close();
@@ -491,8 +492,7 @@ public class EntryActivity extends Activity {
 		}
 		content.append(TITLE_START).append(link).append(TITLE_MIDDLE).append(title).append(TITLE_END).append(SUBTITLE_START);
 		Date date = new Date(timestamp);
-		StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(
-				DateFormat.getTimeFormat(this).format(date));
+		StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(DateFormat.getTimeFormat(this).format(date));
 
 		if (author != null && !author.isEmpty()) {
 			dateStringBuilder.append(" &mdash; ").append(author);
@@ -507,8 +507,7 @@ public class EntryActivity extends Activity {
 		content.append(BUTTON_END);
 
 		if (enclosure != null && enclosure.length() > 6 && enclosure.indexOf(IMAGE_ENCLOSURE) == -1) {
-			content.append(BUTTON_START).append(getString(R.string.see_enclosure)).append(BUTTON_MIDDLE)
-					.append("injectedJSObject.onClickEnclosure();").append(BUTTON_END);
+			content.append(BUTTON_START).append(getString(R.string.see_enclosure)).append(BUTTON_MIDDLE).append("injectedJSObject.onClickEnclosure();").append(BUTTON_END);
 		}
 
 		if (link != null && link.length() > 0) {
@@ -591,32 +590,35 @@ public class EntryActivity extends Activity {
 		_nextId = -1;
 		forwardBtn.setVisibility(View.GONE);
 
-		Cursor cursor = getContentResolver().query(
-				parentUri,
-				EntryColumns.PROJECTION_ID,
-				PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null
-						: EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
+		if (mEntriesIds == null) {
+			Cursor cursor = getContentResolver().query(parentUri, EntryColumns.PROJECTION_ID,
+					PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null : EntryColumns.WHERE_UNREAD, null,
+					EntryColumns.DATE + Constants.DB_DESC);
 
-		while (cursor.moveToNext()) {
-			if (_id == cursor.getLong(0)) {
+			mEntriesIds = new long[cursor.getCount()];
+			int i = 0;
+			while (cursor.moveToNext()) {
+				mEntriesIds[i++] = cursor.getLong(0);
+			}
 
-				if (cursor.moveToPrevious()) {
-					_previousId = cursor.getLong(0);
+			cursor.close();
+		}
+
+		for (int i = 0; i < mEntriesIds.length; ++i) {
+			if (_id == mEntriesIds[i]) {
+				if (i > 0) {
+					_previousId = mEntriesIds[i - 1];
 					backBtn.setVisibility(View.VISIBLE);
 				}
-				
-				cursor.moveToNext();
 
-				if (cursor.moveToNext()) {
-					_nextId = cursor.getLong(0);
+				if (i < mEntriesIds.length - 1) {
+					_nextId = mEntriesIds[i + 1];
 					forwardBtn.setVisibility(View.VISIBLE);
 				}
 
 				break;
 			}
 		}
-
-		cursor.close();
 	}
 
 	private void switchEntry(long id, Animation inAnimation, Animation outAnimation) {
@@ -701,9 +703,8 @@ public class EntryActivity extends Activity {
 		}
 		case R.id.menu_share: {
 			if (link != null) {
-				startActivity(Intent.createChooser(
-						new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, link)
-								.setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)));
+				startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, link).setType(Constants.MIMETYPE_TEXT_PLAIN),
+						getString(R.string.menu_share)));
 			}
 			break;
 		}
