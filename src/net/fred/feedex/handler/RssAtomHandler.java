@@ -86,7 +86,6 @@ public class RssAtomHandler extends DefaultHandler {
 	private static final String URL_SPACE = "%20";
 	private static final String ANDRHOMBUS = "&#";
 	private static final String HTML_TAG_REGEX = "<(.|\n)*?>";
-	private static final String HTML_SPAN_REGEX = "<[/]?[ ]?span(.|\n)*?>";
 
 	private static final String TAG_RSS = "rss";
 	private static final String TAG_RDF = "rdf";
@@ -366,14 +365,14 @@ public class RssAtomHandler extends DefaultHandler {
 				values.put(EntryColumns.TITLE, improvedTitle);
 
 				// Improve the description
-				Pair<String, Vector<String>> improvedDesc = improveFeedDescription(description.toString(), fetchImages);
-				entriesImages.add(improvedDesc.second);
-				if (improvedDesc.first != null) {
-					values.put(EntryColumns.ABSTRACT, improvedDesc.first);
+				Pair<String, Vector<String>> improvedContent = improveHtmlContent(description.toString(), fetchImages);
+				entriesImages.add(improvedContent.second);
+				if (improvedContent.first != null) {
+					values.put(EntryColumns.ABSTRACT, improvedContent.first);
 				}
 
 				// Try to find if the entry is not filtered and need to be processed
-				if (!filters.isEntryFiltered(improvedTitle, improvedDesc.first)) {
+				if (!filters.isEntryFiltered(improvedTitle, improvedContent.first)) {
 
 					if (author != null) {
 						values.put(EntryColumns.AUTHOR, author.toString());
@@ -542,9 +541,9 @@ public class RssAtomHandler extends DefaultHandler {
 		}
 	}
 
-	private static Pair<String, Vector<String>> improveFeedDescription(String content, boolean fetchImages) {
+	private static Pair<String, Vector<String>> improveHtmlContent(String content, boolean fetchImages) {
 		if (content != null) {
-			String newContent = content.trim().replaceAll(HTML_SPAN_REGEX, "");
+			String newContent = content.trim().replaceAll("<[/]?[ ]?span(.|\n)*?>", "").replaceAll("(href|src)=(\"|')//", "$1=$2http://");
 
 			if (newContent.length() > 0) {
 				Vector<String> images = null;
