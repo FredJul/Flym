@@ -252,14 +252,14 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 				}
 
 				if (savedExpandedState)
-					indicatorImage.setImageResource(R.drawable.navigation_collapse);
+					indicatorImage.setImageResource(R.drawable.group_expanded);
 				else
-					indicatorImage.setImageResource(R.drawable.navigation_expand);
+					indicatorImage.setImageResource(R.drawable.group_collapsed);
 			} else {
 				if (isExpanded)
-					indicatorImage.setImageResource(R.drawable.navigation_collapse);
+					indicatorImage.setImageResource(R.drawable.group_expanded);
 				else
-					indicatorImage.setImageResource(R.drawable.navigation_expand);
+					indicatorImage.setImageResource(R.drawable.group_collapsed);
 			}
 		} else {
 			bindChildView(view, context, cursor);
