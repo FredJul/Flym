@@ -67,9 +67,12 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.LoaderManager;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.app.ProgressDialog;
+import android.content.AsyncTaskLoader;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -94,9 +97,9 @@ import android.widget.Toast;
 
 public class EditFeedActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-	private static final String FEED_SEARCH_TITLE = "title";
-	private static final String FEED_SEARCH_URL = "url";
-	private static final String FEED_SEARCH_DESC = "contentSnippet";
+	static final String FEED_SEARCH_TITLE = "title";
+	static final String FEED_SEARCH_URL = "url";
+	static final String FEED_SEARCH_DESC = "contentSnippet";
 
 	private static final String[] FEED_PROJECTION = new String[] { FeedColumns.NAME, FeedColumns.URL };
 
@@ -460,79 +463,48 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 								pd.setIndeterminate(true);
 								pd.show();
 
-								new Thread() {
+								getLoaderManager().restartLoader(1, null, new LoaderCallbacks<ArrayList<HashMap<String, String>>>() {
+
 									@Override
-									public void run() {
-										try {
-											HttpURLConnection conn = FetcherService
-													.setupConnection("https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=" + text);
-											BufferedReader reader = new BufferedReader(new InputStreamReader(FetcherService
-													.getConnectionInputStream(conn)));
+									public Loader<ArrayList<HashMap<String, String>>> onCreateLoader(int id, Bundle args) {
+										return new GetFeedSearchResultsLoader(EditFeedActivity.this, text);
+									}
 
-											StringBuilder sb = new StringBuilder();
-											String line = null;
-											while ((line = reader.readLine()) != null) {
-												sb.append(line);
-											}
-											conn.disconnect();
+									@Override
+									public void onLoadFinished(Loader<ArrayList<HashMap<String, String>>> loader,
+											final ArrayList<HashMap<String, String>> data) {
+										pd.cancel();
 
-											// Parse results
-											final ArrayList<HashMap<String, String>> results = new ArrayList<HashMap<String, String>>();
-											JSONObject response = new JSONObject(sb.toString()).getJSONObject("responseData");
-											JSONArray entries = response.getJSONArray("entries");
-											for (int i = 0; i < entries.length(); i++) {
-												try {
-													JSONObject entry = (JSONObject) entries.get(i);
-													HashMap<String, String> map = new HashMap<String, String>();
-													map.put(FEED_SEARCH_TITLE, Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString());
-													map.put(FEED_SEARCH_URL, entry.get(FEED_SEARCH_URL).toString());
-													map.put(FEED_SEARCH_DESC, Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString());
+										if (data == null) {
+											Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+										} else if (data.isEmpty()) {
+											Toast.makeText(EditFeedActivity.this, R.string.no_result, Toast.LENGTH_SHORT).show();
+										} else {
+											AlertDialog.Builder builder = new AlertDialog.Builder(EditFeedActivity.this);
+											builder.setTitle(R.string.feed_search);
 
-													results.add(map);
-												} catch (Exception e) {
-												}
-											}
+											// create the grid item mapping
+											String[] from = new String[] { FEED_SEARCH_TITLE, FEED_SEARCH_DESC };
+											int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
 
-											// Show the results
-											EditFeedActivity.this.runOnUiThread(new Runnable() {
+											// fill in the grid_item layout
+											SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.search_result_item, from,
+													to);
+											builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
 												@Override
-												public void run() {
-													pd.cancel();
-
-													if (!results.isEmpty()) {
-														AlertDialog.Builder builder = new AlertDialog.Builder(EditFeedActivity.this);
-														builder.setTitle(R.string.feed_search);
-
-														// create the grid item mapping
-														String[] from = new String[] { FEED_SEARCH_TITLE, FEED_SEARCH_DESC };
-														int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
-
-														// fill in the grid_item layout
-														SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, results,
-																R.layout.search_result_item, from, to);
-														builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-															@Override
-															public void onClick(DialogInterface dialog, int which) {
-																mNameEditText.setText(results.get(which).get(FEED_SEARCH_TITLE));
-																mUrlEditText.setText(results.get(which).get(FEED_SEARCH_URL));
-															}
-														});
-														builder.show();
-													} else {
-														Toast.makeText(EditFeedActivity.this, R.string.no_result, Toast.LENGTH_SHORT).show();
-													}
+												public void onClick(DialogInterface dialog, int which) {
+													mNameEditText.setText(data.get(which).get(FEED_SEARCH_TITLE));
+													mUrlEditText.setText(data.get(which).get(FEED_SEARCH_URL));
 												}
 											});
-										} catch (Exception e) {
-											EditFeedActivity.this.runOnUiThread(new Runnable() {
-												@Override
-												public void run() {
-													Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
-												}
-											});
+											builder.show();
 										}
 									}
-								}.start();
+
+									@Override
+									public void onLoaderReset(Loader<ArrayList<HashMap<String, String>>> loader) {
+									}
+								}).forceLoad();
 								break;
 
 							case R.id.byTopic:
@@ -546,5 +518,58 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 						}
 					}
 				}).setNegativeButton(android.R.string.cancel, null).show();
+	}
+}
+
+/**
+ * A custom Loader that loads feed search results from the google WS.
+ */
+class GetFeedSearchResultsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String>>> {
+
+	private final String mSearchText;
+
+	public GetFeedSearchResultsLoader(Context context, String searchText) {
+		super(context);
+		mSearchText = searchText;
+	}
+
+	/**
+	 * This is where the bulk of our work is done. This function is called in a background thread and should generate a new set of data to be
+	 * published by the loader.
+	 */
+	@Override
+	public ArrayList<HashMap<String, String>> loadInBackground() {
+		try {
+			HttpURLConnection conn = FetcherService.setupConnection("https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=" + mSearchText);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(FetcherService.getConnectionInputStream(conn)));
+
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+			}
+			conn.disconnect();
+
+			// Parse results
+			final ArrayList<HashMap<String, String>> results = new ArrayList<HashMap<String, String>>();
+			JSONObject response = new JSONObject(sb.toString()).getJSONObject("responseData");
+			JSONArray entries = response.getJSONArray("entries");
+			for (int i = 0; i < entries.length(); i++) {
+				try {
+					JSONObject entry = (JSONObject) entries.get(i);
+					HashMap<String, String> map = new HashMap<String, String>();
+					map.put(EditFeedActivity.FEED_SEARCH_TITLE, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_TITLE).toString()).toString());
+					map.put(EditFeedActivity.FEED_SEARCH_URL, entry.get(EditFeedActivity.FEED_SEARCH_URL).toString());
+					map.put(EditFeedActivity.FEED_SEARCH_DESC, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_DESC).toString()).toString());
+
+					results.add(map);
+				} catch (Exception e) {
+				}
+			}
+
+			return results;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }
