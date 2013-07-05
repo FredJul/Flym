@@ -55,7 +55,7 @@
     <string name="error_feed_url_exists">L\'adresse existe déjà.</string>
     <string name="error_feed_import">Le fichier sélectionné n\'a pu être importé.</string>
     <string name="error_feed_export">L\'export a échoué. Assurez-vous d\'avoir une carte SD montée et autorisée en écriture.</string>
-    <string name="error_external_storage_not_available">Le stockage externe (comme la carte SD) n'est pas disponible.</string>
+    <string name="error_external_storage_not_available">Le stockage externe (comme la carte SD) n\'est pas disponible.</string>
     <string name="feed_url">Adresse URL</string>
     <string name="optional">(optionel)</string>
     <string name="website_or_feed">(site web ou flux)</string>
