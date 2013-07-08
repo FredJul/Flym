@@ -2,7 +2,7 @@
 <opml version="1.1">
 <body>
 	<outline title="News" >
-		<outline title="Google News" type="rss" xmlUrl="http://news.google.com/?output=rss" />
+		<outline title="Times - World" type="rss" xmlUrl="http://rss.nytimes.com/services/xml/rss/nyt/World.xml" />
 	</outline>
 </body>
 </opml>
