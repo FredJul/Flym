@@ -124,11 +124,10 @@ public class RssAtomHandler extends DefaultHandler {
 
 	private static long KEEP_TIME = 345600000l; // 4 days
 
-	private static final DateFormat[] PUBDATE_DATE_FORMATS = { new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US),
-			new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.US) };
+	private static final DateFormat[] PUBDATE_DATE_FORMATS = { new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US), new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.US) };
 
-	private static final DateFormat[] UPDATE_DATE_FORMATS = { new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US),
-			new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz", Locale.US), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US) };
+	private static final DateFormat[] UPDATE_DATE_FORMATS = { new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz", Locale.US),
+			new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US) };
 	private static final String Z = "Z";
 	private static final String GMT = "GMT";
 
@@ -190,8 +189,7 @@ public class RssAtomHandler extends DefaultHandler {
 		filters = new FeedFilters(id);
 
 		// Remove old stuffs
-		final String query = new StringBuilder(EntryColumns.DATE).append('<').append(keepDateBorderTime).append(Constants.DB_AND)
-				.append(EntryColumns.WHERE_NOT_FAVORITE).toString();
+		final String query = new StringBuilder(EntryColumns.DATE).append('<').append(keepDateBorderTime).append(Constants.DB_AND).append(EntryColumns.WHERE_NOT_FAVORITE).toString();
 		FeedData.deletePicturesOfFeed(MainApplication.getAppContext(), feedEntiresUri, query);
 		MainApplication.getAppContext().getContentResolver().delete(feedEntiresUri, query, null);
 
@@ -252,8 +250,7 @@ public class RssAtomHandler extends DefaultHandler {
 					linkTagEntered = true;
 				}
 			}
-		} else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName))
-				|| (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName))) {
+		} else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName)) || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName))) {
 			descriptionTagEntered = true;
 			description = new StringBuilder();
 		} else if (TAG_SUMMARY.equals(localName)) {
@@ -331,8 +328,8 @@ public class RssAtomHandler extends DefaultHandler {
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (TAG_TITLE.equals(localName)) {
 			titleTagEntered = false;
-		} else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName)) || TAG_SUMMARY.equals(localName)
-				|| (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName)) || TAG_ENCODEDCONTENT.equals(localName)) {
+		} else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName)) || TAG_SUMMARY.equals(localName) || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName))
+				|| TAG_ENCODEDCONTENT.equals(localName)) {
 			descriptionTagEntered = false;
 		} else if (TAG_LINK.equals(localName)) {
 			linkTagEntered = false;
@@ -400,19 +397,16 @@ public class RssAtomHandler extends DefaultHandler {
 					if (entryLink != null && entryLink.length() > 0) {
 						entryLinkString = entryLink.toString().trim();
 						if (feedBaseUrl != null && !entryLinkString.startsWith(Constants.HTTP) && !entryLinkString.startsWith(Constants.HTTPS)) {
-							entryLinkString = feedBaseUrl
-									+ (entryLinkString.startsWith(Constants.SLASH) ? entryLinkString : Constants.SLASH + entryLinkString);
+							entryLinkString = feedBaseUrl + (entryLinkString.startsWith(Constants.SLASH) ? entryLinkString : Constants.SLASH + entryLinkString);
 						}
 					}
 
-					String[] existanceValues = enclosureString != null ? (guidString != null ? new String[] { entryLinkString, enclosureString,
-							guidString } : new String[] { entryLinkString, enclosureString }) : (guidString != null ? new String[] { entryLinkString,
-							guidString } : new String[] { entryLinkString });
+					String[] existanceValues = enclosureString != null ? (guidString != null ? new String[] { entryLinkString, enclosureString, guidString } : new String[] { entryLinkString,
+							enclosureString }) : (guidString != null ? new String[] { entryLinkString, guidString } : new String[] { entryLinkString });
 
 					// First, try to update the feed
 					ContentResolver cr = MainApplication.getAppContext().getContentResolver();
-					if ((entryLinkString.length() == 0 && guidString == null)
-							|| cr.update(feedEntiresUri, values, existanceStringBuilder.toString(), existanceValues) == 0) {
+					if ((entryLinkString.length() == 0 && guidString == null) || cr.update(feedEntiresUri, values, existanceStringBuilder.toString(), existanceValues) == 0) {
 
 						// We put the date only for new entry (no need to change the past, you may already read it)
 						if (entryDate != null) {
@@ -530,9 +524,8 @@ public class RssAtomHandler extends DefaultHandler {
 	}
 
 	private static String unescapeTitle(String title) {
-		String result = title.replace(Constants.AMP_SG, Constants.AMP).replaceAll(HTML_TAG_REGEX, "").replace(Constants.HTML_LT, Constants.LT)
-				.replace(Constants.HTML_GT, Constants.GT).replace(Constants.HTML_QUOT, Constants.QUOT)
-				.replace(Constants.HTML_APOSTROPHE, Constants.APOSTROPHE);
+		String result = title.replace(Constants.AMP_SG, Constants.AMP).replaceAll(HTML_TAG_REGEX, "").replace(Constants.HTML_LT, Constants.LT).replace(Constants.HTML_GT, Constants.GT)
+				.replace(Constants.HTML_QUOT, Constants.QUOT).replace(Constants.HTML_APOSTROPHE, Constants.APOSTROPHE);
 
 		if (result.indexOf(ANDRHOMBUS) > -1) {
 			return Html.fromHtml(result, null, null).toString();
@@ -543,7 +536,9 @@ public class RssAtomHandler extends DefaultHandler {
 
 	private static Pair<String, Vector<String>> improveHtmlContent(String content, boolean fetchImages) {
 		if (content != null) {
-			String newContent = content.trim().replaceAll("<[/]?[ ]?span(.|\n)*?>", "").replaceAll("(href|src)=(\"|')//", "$1=$2http://");
+			// remove trash and ads
+			String newContent = content.trim().replaceAll("<[/]?[ ]?span(.|\n)*?>", "").replaceAll("(href|src)=(\"|')//", "$1=$2http://")
+					.replaceAll("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
 
 			if (newContent.length() > 0) {
 				Vector<String> images = null;
@@ -561,10 +556,8 @@ public class RssAtomHandler extends DefaultHandler {
 							// parameters
 							newContent = newContent.replace(
 									match,
-									new StringBuilder(Constants.FILE_URL).append(FeedDataContentProvider.IMAGE_FOLDER)
-											.append(Constants.IMAGEID_REPLACEMENT)
-											.append(URLEncoder.encode(match.substring(match.lastIndexOf('/') + 1), Constants.UTF8)).toString()
-											.replace(PERCENT, PERCENT_REPLACE));
+									new StringBuilder(Constants.FILE_URL).append(FeedDataContentProvider.IMAGE_FOLDER).append(Constants.IMAGEID_REPLACEMENT)
+											.append(URLEncoder.encode(match.substring(match.lastIndexOf('/') + 1), Constants.UTF8)).toString().replace(PERCENT, PERCENT_REPLACE));
 						} catch (UnsupportedEncodingException e) {
 							// UTF-8 should be supported
 						}
@@ -586,10 +579,8 @@ public class RssAtomHandler extends DefaultHandler {
 					byte[] data = FetcherService.getBytes(new URL(img).openStream());
 
 					// see the comment where the img regex is executed for details about this replacement
-					FileOutputStream fos = new FileOutputStream(new StringBuilder(FeedDataContentProvider.IMAGE_FOLDER).append(entryId)
-							.append(Constants.IMAGEFILE_IDSEPARATOR)
-							.append(URLEncoder.encode(img.substring(img.lastIndexOf('/') + 1), Constants.UTF8)).toString()
-							.replace(PERCENT, PERCENT_REPLACE));
+					FileOutputStream fos = new FileOutputStream(new StringBuilder(FeedDataContentProvider.IMAGE_FOLDER).append(entryId).append(Constants.IMAGEFILE_IDSEPARATOR)
+							.append(URLEncoder.encode(img.substring(img.lastIndexOf('/') + 1), Constants.UTF8)).toString().replace(PERCENT, PERCENT_REPLACE));
 
 					fos.write(data);
 					fos.close();
@@ -642,8 +633,8 @@ public class RssAtomHandler extends DefaultHandler {
 
 		public FeedFilters(String feedId) {
 			ContentResolver cr = MainApplication.getAppContext().getContentResolver();
-			Cursor c = cr.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), new String[] { FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
-					FilterColumns.IS_APPLIED_TO_TITLE }, null, null, null);
+			Cursor c = cr.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), new String[] { FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX, FilterColumns.IS_APPLIED_TO_TITLE }, null, null,
+					null);
 			while (c.moveToNext()) {
 				String filterText = c.getString(0);
 				boolean isRegex = c.getInt(1) == 1;
