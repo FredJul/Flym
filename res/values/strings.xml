@@ -138,6 +138,8 @@
     <string name="settings_font_size_description">Text size for entries content display</string>
     <string name="settings_refresh_on_open">Refresh feeds on open</string>
     <string name="settings_refresh_on_open_description">Refreshes all feeds after opening the application</string>
+    <string name="settings_refresh_wifi_only">Refresh only with Wifi</string>
+    <string name="settings_refresh_wifi_only_description">Automatic refresh will be done if when the wifi is enabled</string>
     <string name="settings_visible_feeds">Visible feeds</string>
     <string name="settings_widget_background">Background</string>
     <string name="settings_widget_background_description">Color and transparency of the widget background</string>

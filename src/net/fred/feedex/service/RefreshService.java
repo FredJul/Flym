@@ -69,7 +69,7 @@ public class RefreshService extends Service {
 		}
 	};
 
-	private final Intent refreshBroadcastIntent = new Intent(Constants.ACTION_REFRESH_FEEDS).putExtra(Constants.SCHEDULED, true);
+	private final Intent refreshBroadcastIntent = new Intent(Constants.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true);
 	private AlarmManager alarmManager;
 	private PendingIntent timerIntent;
 
