@@ -180,7 +180,7 @@ public class EntryActivity extends Activity {
 	private LayoutParams layoutParams;
 	private View backBtn, forwardBtn;
 	private ImageView fullscreenBtn;
-	private boolean mIsFullscreen;
+	private boolean mIsFullscreen = false;
 	private boolean localPictures;
 
 	private boolean mIsProgressVisible = false;
@@ -327,8 +327,7 @@ public class EntryActivity extends Activity {
 		mIsProgressVisible = savedInstanceState.getBoolean(SAVE_INSTANCE_PROGRESS_VISIBLE);
 		mScrollPercentage = savedInstanceState.getFloat(SAVE_INSTANCE_SCROLL_PERCENTAGE);
 		setProgressBarIndeterminateVisibility(mIsProgressVisible);
-		mIsFullscreen = savedInstanceState.getBoolean(SAVE_INSTANCE_IS_FULLSCREEN);
-		if (mIsFullscreen) {
+		if (savedInstanceState.getBoolean(SAVE_INSTANCE_IS_FULLSCREEN)) {
 			onClickFullscreenBtn(null);
 		}
 		webView.restoreState(savedInstanceState);
@@ -802,9 +801,7 @@ public class EntryActivity extends Activity {
 	}
 
 	public void onClickFullscreenBtn(View view) {
-		if (view != null) {
-			mIsFullscreen = !mIsFullscreen;
-		}
+		mIsFullscreen = !mIsFullscreen;
 
 		if (mIsFullscreen) {
 			getActionBar().hide();
