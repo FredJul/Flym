@@ -49,7 +49,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 
 				long lastRefresh = PrefsManager.getLong(PrefsManager.LAST_SCHEDULED_REFRESH, 0);
 				if (SystemClock.elapsedRealtime() - lastRefresh > time) {
-					MainApplication.getAppContext().sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS));
+					MainApplication.getAppContext().sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
 				}
 			}
 		}

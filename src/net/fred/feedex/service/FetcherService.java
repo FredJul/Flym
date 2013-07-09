@@ -139,77 +139,90 @@ public class FetcherService extends IntentService {
 
 	@Override
 	public void onHandleIntent(Intent intent) {
+		// No intent, we quit
+		if (intent == null) {
+			sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINISHED));
+			return;
+		}
+
+		// Connectivity issue, we quit
 		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-		boolean isFromAutoRefresh = intent.getBooleanExtra(Constants.FROM_AUTO_REFRESH, false);
 		final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+		boolean isFromAutoRefresh = intent.getBooleanExtra(Constants.FROM_AUTO_REFRESH, false);
+		boolean skipFetch = isFromAutoRefresh && PrefsManager.getBoolean(PrefsManager.REFRESH_WIFI_ONLY, false)
+				&& networkInfo.getType() != ConnectivityManager.TYPE_WIFI;
+		if (networkInfo == null || networkInfo.getState() != NetworkInfo.State.CONNECTED || skipFetch) {
+			sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINISHED));
+			return;
+		}
 
-		if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED && intent != null && (!isFromAutoRefresh || networkInfo.getType() == ConnectivityManager.TYPE_WIFI)) {
-			if (isFromAutoRefresh) {
-				PrefsManager.putLong(PrefsManager.LAST_SCHEDULED_REFRESH, SystemClock.elapsedRealtime());
-			}
+		
+		if (isFromAutoRefresh) {
+			PrefsManager.putLong(PrefsManager.LAST_SCHEDULED_REFRESH, SystemClock.elapsedRealtime());
+		}
 
-			if (PrefsManager.getBoolean(PrefsManager.PROXY_ENABLED, false) && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !PrefsManager.getBoolean(PrefsManager.PROXY_WIFI_ONLY, false))) {
-				try {
-					proxy = new Proxy(ZERO.equals(PrefsManager.getString(PrefsManager.PROXY_TYPE, ZERO)) ? Proxy.Type.HTTP : Proxy.Type.SOCKS, new InetSocketAddress(PrefsManager.getString(
-							PrefsManager.PROXY_HOST, ""), Integer.parseInt(PrefsManager.getString(PrefsManager.PROXY_PORT, DEFAULT_PROXY_PORT))));
-				} catch (Exception e) {
-					proxy = null;
-				}
-			} else {
+		if (PrefsManager.getBoolean(PrefsManager.PROXY_ENABLED, false)
+				&& (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !PrefsManager.getBoolean(PrefsManager.PROXY_WIFI_ONLY, false))) {
+			try {
+				proxy = new Proxy(ZERO.equals(PrefsManager.getString(PrefsManager.PROXY_TYPE, ZERO)) ? Proxy.Type.HTTP : Proxy.Type.SOCKS,
+						new InetSocketAddress(PrefsManager.getString(PrefsManager.PROXY_HOST, ""), Integer.parseInt(PrefsManager.getString(
+								PrefsManager.PROXY_PORT, DEFAULT_PROXY_PORT))));
+			} catch (Exception e) {
 				proxy = null;
 			}
-
-			if (intent.hasExtra(Constants.ENTRY_URI)) {
-				mobilizeFeed((Uri) intent.getParcelableExtra(Constants.ENTRY_URI));
-			} else {
-				String feedId = intent.getStringExtra(Constants.FEED_ID);
-				int newCount = (feedId == null ? refreshFeeds() : refreshFeed(feedId));
-
-				if (newCount > 0) {
-					if (PrefsManager.getBoolean(PrefsManager.NOTIFICATIONS_ENABLED, true)) {
-						Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[] { COUNT }, EntryColumns.WHERE_UNREAD, null, null);
-
-						cursor.moveToFirst();
-						newCount = cursor.getInt(0); // The number has possibly changed
-						cursor.close();
-
-						if (newCount > 0) {
-							String text = new StringBuilder().append(newCount).append(' ').append(getString(R.string.new_entries)).toString();
-
-							Intent notificationIntent = new Intent(FetcherService.this, MainActivity.class);
-							PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-							Notification.Builder notifBuilder = new Notification.Builder(MainApplication.getAppContext()) //
-									.setContentIntent(contentIntent) //
-									.setSmallIcon(R.drawable.ic_statusbar_rss) //
-									.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon)) //
-									.setTicker(text) //
-									.setWhen(System.currentTimeMillis()) //
-									.setAutoCancel(true) //
-									.setContentTitle(getString(R.string.feedex_feeds)) //
-									.setContentText(text) //
-									.setLights(0xffffffff, 300, 1000);
-
-							if (PrefsManager.getBoolean(PrefsManager.NOTIFICATIONS_VIBRATE, false)) {
-								notifBuilder.setVibrate(new long[] { 0, 1000 });
-							}
-
-							String ringtone = PrefsManager.getString(PrefsManager.NOTIFICATIONS_RINGTONE, null);
-							if (ringtone != null && ringtone.length() > 0) {
-								notifBuilder.setSound(Uri.parse(ringtone));
-							}
-
-							notificationManager.notify(0, notifBuilder.getNotification());
-						}
-					} else {
-						notificationManager.cancel(0);
-					}
-				}
-
-				sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINISHED));
-			}
 		} else {
+			proxy = null;
+		}
+
+		if (intent.hasExtra(Constants.ENTRY_URI)) {
+			mobilizeFeed((Uri) intent.getParcelableExtra(Constants.ENTRY_URI));
+		} else {
+			String feedId = intent.getStringExtra(Constants.FEED_ID);
+			int newCount = (feedId == null ? refreshFeeds() : refreshFeed(feedId));
+
+			if (newCount > 0) {
+				if (PrefsManager.getBoolean(PrefsManager.NOTIFICATIONS_ENABLED, true)) {
+					Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[] { COUNT }, EntryColumns.WHERE_UNREAD, null,
+							null);
+
+					cursor.moveToFirst();
+					newCount = cursor.getInt(0); // The number has possibly changed
+					cursor.close();
+
+					if (newCount > 0) {
+						String text = new StringBuilder().append(newCount).append(' ').append(getString(R.string.new_entries)).toString();
+
+						Intent notificationIntent = new Intent(FetcherService.this, MainActivity.class);
+						PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent,
+								PendingIntent.FLAG_UPDATE_CURRENT);
+
+						Notification.Builder notifBuilder = new Notification.Builder(MainApplication.getAppContext()) //
+								.setContentIntent(contentIntent) //
+								.setSmallIcon(R.drawable.ic_statusbar_rss) //
+								.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon)) //
+								.setTicker(text) //
+								.setWhen(System.currentTimeMillis()) //
+								.setAutoCancel(true) //
+								.setContentTitle(getString(R.string.feedex_feeds)) //
+								.setContentText(text) //
+								.setLights(0xffffffff, 300, 1000);
+
+						if (PrefsManager.getBoolean(PrefsManager.NOTIFICATIONS_VIBRATE, false)) {
+							notifBuilder.setVibrate(new long[] { 0, 1000 });
+						}
+
+						String ringtone = PrefsManager.getString(PrefsManager.NOTIFICATIONS_RINGTONE, null);
+						if (ringtone != null && ringtone.length() > 0) {
+							notifBuilder.setSound(Uri.parse(ringtone));
+						}
+
+						notificationManager.notify(0, notifBuilder.getNotification());
+					}
+				} else {
+					notificationManager.cancel(0);
+				}
+			}
+
 			sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINISHED));
 		}
 	}
@@ -362,7 +375,8 @@ public class FetcherService extends IntentService {
 									posStart = line.indexOf(HREF);
 
 									if (posStart > -1) {
-										String url = line.substring(posStart + 6, line.indexOf('"', posStart + 10)).replace(Constants.AMP_SG, Constants.AMP);
+										String url = line.substring(posStart + 6, line.indexOf('"', posStart + 10)).replace(Constants.AMP_SG,
+												Constants.AMP);
 
 										ContentValues values = new ContentValues();
 
@@ -453,7 +467,9 @@ public class FetcherService extends IntentService {
 						int index2 = contentType.indexOf(';', index);
 
 						InputStream inputStream = getConnectionInputStream(connection);
-						Xml.parse(inputStream, Xml.findEncodingByName(index2 > -1 ? contentType.substring(index + 8, index2) : contentType.substring(index + 8)), handler);
+						Xml.parse(inputStream,
+								Xml.findEncodingByName(index2 > -1 ? contentType.substring(index + 8, index2) : contentType.substring(index + 8)),
+								handler);
 					} else {
 						InputStreamReader reader = new InputStreamReader(getConnectionInputStream(connection));
 						Xml.parse(reader, handler);
@@ -476,7 +492,9 @@ public class FetcherService extends IntentService {
 					int start = xmlText != null ? xmlText.indexOf(ENCODING) : -1;
 
 					if (start > -1) {
-						Xml.parse(new StringReader(new String(ouputStream.toByteArray(), xmlText.substring(start + 10, xmlText.indexOf('"', start + 11)))), handler);
+						Xml.parse(
+								new StringReader(new String(ouputStream.toByteArray(),
+										xmlText.substring(start + 10, xmlText.indexOf('"', start + 11)))), handler);
 					} else {
 						// use content type
 						if (contentType != null) {
@@ -486,8 +504,8 @@ public class FetcherService extends IntentService {
 								int index2 = contentType.indexOf(';', index);
 
 								try {
-									StringReader reader = new StringReader(new String(ouputStream.toByteArray(), index2 > -1 ? contentType.substring(index + 8, index2)
-											: contentType.substring(index + 8)));
+									StringReader reader = new StringReader(new String(ouputStream.toByteArray(), index2 > -1 ? contentType.substring(
+											index + 8, index2) : contentType.substring(index + 8)));
 									Xml.parse(reader, handler);
 								} catch (Exception e) {
 								}
@@ -579,7 +597,9 @@ public class FetcherService extends IntentService {
 
 		String location = connection.getHeaderField("Location");
 
-		if (location != null && (url.getProtocol().equals(_HTTP) && location.startsWith(Constants.HTTPS) || url.getProtocol().equals(_HTTPS) && location.startsWith(Constants.HTTP))) {
+		if (location != null
+				&& (url.getProtocol().equals(_HTTP) && location.startsWith(Constants.HTTPS) || url.getProtocol().equals(_HTTPS)
+						&& location.startsWith(Constants.HTTP))) {
 			// if location != null, the system-automatic redirect has failed
 			// which indicates a protocol change
 
@@ -615,7 +635,8 @@ public class FetcherService extends IntentService {
 	private static void retrieveFavicon(Context context, URL url, String id) {
 		HttpURLConnection iconURLConnection;
 		try {
-			iconURLConnection = setupConnection(new URL(new StringBuilder(url.getProtocol()).append(PROTOCOL_SEPARATOR).append(url.getHost()).append(FILE_FAVICON).toString()));
+			iconURLConnection = setupConnection(new URL(new StringBuilder(url.getProtocol()).append(PROTOCOL_SEPARATOR).append(url.getHost())
+					.append(FILE_FAVICON).toString()));
 
 			ContentValues values = new ContentValues();
 			try {
