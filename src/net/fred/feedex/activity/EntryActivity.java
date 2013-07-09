@@ -128,28 +128,28 @@ public class EntryActivity extends Activity {
 	private static final String TEXT_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";
 	private static final String BUTTON_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#D0D0D0" : "#505050";
 
-	private static final String CSS = "<head><style type=\"text/css\">body {max-width: 100%; font-family: sans-serif-light}\nimg {max-width: 100%; height: auto;}\ndiv[style] {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
-	private static final String BODY_START = CSS + "<body link=\"#97ACE5\" text=\"" + TEXT_COLOR + "\">";
-	private static final String FONTSIZE_START = CSS + BODY_START + "<font size=\"+";
-	private static final String FONTSIZE_MIDDLE = "\">";
+	private static final String CSS = "<head><style type='text/css'>body {max-width: 100%; font-family: sans-serif-light}\nimg {max-width: 100%; height: auto;}\ndiv[style] {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
+	private static final String BODY_START = CSS + "<body link='#97ACE5' text='" + TEXT_COLOR + "'>";
+	private static final String FONTSIZE_START = CSS + BODY_START + "<font size='+";
+	private static final String FONTSIZE_MIDDLE = "'>";
 	private static final String BODY_END = "<br/><br/><br/><br/></body>";
 	private static final String FONTSIZE_END = "</font>" + BODY_END;
-	private static final String TITLE_START = "<br><font size=\"+2\"><a href=\"";
-	private static final String TITLE_MIDDLE = "\" style=\"text-decoration: none; color:inherit\">";
-	private static final String TITLE_END = "</a></font><br/><br/>";
-	private static final String SUBTITLE_START = "<font size=\"-1\">";
-	private static final String SUBTITLE_END = "</font><div style='width:100%; border:0px; height:1px; margin-top:5px; background:#33b5e5'/><br/><div>";
+	private static final String TITLE_START = "<p style='margin-top:1cm; margin-bottom:0.6cm'><font size='+2'><a href='";
+	private static final String TITLE_MIDDLE = "' style='text-decoration: none; color:inherit'>";
+	private static final String TITLE_END = "</a></font></p>";
+	private static final String SUBTITLE_START = "<font size='-1'>";
+	private static final String SUBTITLE_END = "</font><div style='width:100%; border:0px; height:1px; margin-top:0.1cm; background:#33b5e5'/><br/><div>";
 
 	private static final String BUTTON_SEPARATION = "</div><br/>";
 
-	private static final String BUTTON_START = "<div style=\"text-align: center\"><input type=\"button\" value=\"";
-	private static final String BUTTON_MIDDLE = "\" onclick=\"";
-	private static final String BUTTON_END = "\" style=\"background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
-			+ "; border: none; border-radius:10px; padding: 10px;\"/></div>";
+	private static final String BUTTON_START = "<div style='text-align: center'><input type='button' value='";
+	private static final String BUTTON_MIDDLE = "' onclick='";
+	private static final String BUTTON_END = "' style='background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
+			+ "; border: none; border-radius:0.2cm; padding: 0.3cm;'/></div>";
 
-	private static final String LINK_BUTTON_START = "<div style=\"text-align: center; margin-top:12px\"><a href=\"";
-	private static final String LINK_BUTTON_MIDDLE = "\" style=\"background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
-			+ "; text-decoration: none; border: none; border-radius:10px; padding: 10px;\">";
+	private static final String LINK_BUTTON_START = "<div style='text-align: center; margin-top:0.4cm'><a href='";
+	private static final String LINK_BUTTON_MIDDLE = "' style='background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
+			+ "; text-decoration: none; border: none; border-radius:0.2cm; padding: 0.3cm;'>";
 	private static final String LINK_BUTTON_END = "</a></div>";
 
 	private static final String IMAGE_ENCLOSURE = "[@]image/";
