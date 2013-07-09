@@ -26,6 +26,17 @@
         android:src="@drawable/navigation_back" />
 
     <ImageView
+        android:id="@+id/fullscreenBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/round_background"
+        android:onClick="onClickFullscreenBtn"
+        android:src="@drawable/full_screen" />
+
+    <ImageView
         android:id="@+id/forwardBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
