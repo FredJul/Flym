@@ -198,7 +198,8 @@ public class FeedsListFragment extends ListFragment {
 		return rootView;
 	}
 
-	private void moveItem(boolean fromIsGroup, boolean toIsGroup, boolean fromIsFeedWithoutGroup, long packedPosTo, int packedGroupPosTo, int flatPosFrom) {
+	private void moveItem(boolean fromIsGroup, boolean toIsGroup, boolean fromIsFeedWithoutGroup, long packedPosTo, int packedGroupPosTo,
+			int flatPosFrom) {
 		ContentValues values = new ContentValues();
 		ContentResolver cr = getActivity().getContentResolver();
 
@@ -241,10 +242,11 @@ public class FeedsListFragment extends ListFragment {
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
-		getActivity().getMenuInflater().inflate(R.menu.feed_overview, menu);
-
-		menu.setGroupVisible(R.id.menu_group_0, !mListView.isDragNDropEnabled());
-		menu.setGroupVisible(R.id.menu_group_1, mListView.isDragNDropEnabled());
+		if (mListView.isDragNDropEnabled()) {
+			getActivity().getMenuInflater().inflate(R.menu.feed_overview_sorting, menu);
+		} else {
+			getActivity().getMenuInflater().inflate(R.menu.feed_overview, menu);
+		}
 
 		super.onPrepareOptionsMenu(menu);
 	}
@@ -313,7 +315,8 @@ public class FeedsListFragment extends ListFragment {
 			return true;
 		}
 		case R.id.menu_import: {
-			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
+					|| Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
 				final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 				builder.setTitle(R.string.select_file);
@@ -332,7 +335,8 @@ public class FeedsListFragment extends ListFragment {
 										@Override
 										public void run() {
 											try {
-												OPML.importFromFile(new StringBuilder(Environment.getExternalStorageDirectory().toString()).append(File.separator).append(fileNames[which]).toString());
+												OPML.importFromFile(new StringBuilder(Environment.getExternalStorageDirectory().toString())
+														.append(File.separator).append(fileNames[which]).toString());
 											} catch (Exception e) {
 												getActivity().runOnUiThread(new Runnable() {
 													@Override
@@ -356,20 +360,22 @@ public class FeedsListFragment extends ListFragment {
 			return true;
 		}
 		case R.id.menu_export: {
-			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
+					|| Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
 
 				new Thread(new Runnable() { // To not block the UI
 							@Override
 							public void run() {
 								try {
-									final String filename = new StringBuilder(Environment.getExternalStorageDirectory().toString()).append("/FeedEx_").append(System.currentTimeMillis())
-											.append(".opml").toString();
+									final String filename = new StringBuilder(Environment.getExternalStorageDirectory().toString())
+											.append("/FeedEx_").append(System.currentTimeMillis()).append(".opml").toString();
 
 									OPML.exportToFile(filename);
 									getActivity().runOnUiThread(new Runnable() {
 										@Override
 										public void run() {
-											Toast.makeText(getActivity(), String.format(getString(R.string.message_exported_to), filename), Toast.LENGTH_LONG).show();
+											Toast.makeText(getActivity(), String.format(getString(R.string.message_exported_to), filename),
+													Toast.LENGTH_LONG).show();
 										}
 									});
 								} catch (Exception e) {
@@ -482,7 +488,8 @@ public class FeedsListFragment extends ListFragment {
 										ContentResolver cr = getActivity().getContentResolver();
 
 										// First we got the groupId
-										Cursor feedCursor = cr.query(FeedColumns.CONTENT_URI(feedId), FeedColumns.PROJECTION_GROUP_ID, null, null, null);
+										Cursor feedCursor = cr.query(FeedColumns.CONTENT_URI(feedId), FeedColumns.PROJECTION_GROUP_ID, null, null,
+												null);
 										String groupId = null;
 										if (feedCursor.moveToFirst()) {
 											groupId = feedCursor.getString(0);

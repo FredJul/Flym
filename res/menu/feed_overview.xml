@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <group android:id="@+id/menu_group_0" >
         <item
             android:id="@+id/menu_add_feed"
             android:icon="@drawable/content_new"
@@ -36,11 +35,5 @@
             android:id="@+id/menu_settings"
             android:icon="@drawable/action_settings"
             android:title="@string/menu_settings"/>
-    </group>
-    <group android:id="@+id/menu_group_1" >
-        <item
-            android:id="@+id/menu_disable_feed_sort"
-            android:title="@string/menu_disable_feed_sort"/>
-    </group>
 
 </menu>
