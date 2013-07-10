@@ -129,7 +129,7 @@ public class EntryActivity extends Activity {
 	private static final String BUTTON_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#D0D0D0" : "#505050";
 
 	private static final String CSS = "<head><style type='text/css'>body {max-width: 100%; font-family: sans-serif-light}\nimg {max-width: 100%; height: auto;}\ndiv[style] {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
-	private static final String BODY_START = CSS + "<body link='#97ACE5' text='" + TEXT_COLOR + "'>";
+	private static final String BODY_START = CSS + "<body link='#97ACE5' text='" + TEXT_COLOR + "' align='justify'>";
 	private static final String FONTSIZE_START = CSS + BODY_START + "<font size='+";
 	private static final String FONTSIZE_MIDDLE = "'>";
 	private static final String BODY_END = "<br/><br/><br/><br/></body>";
