@@ -534,11 +534,11 @@ public class RssAtomHandler extends DefaultHandler {
 		}
 	}
 
-	private static Pair<String, Vector<String>> improveHtmlContent(String content, boolean fetchImages) {
+	public static Pair<String, Vector<String>> improveHtmlContent(String content, boolean fetchImages) {
 		if (content != null) {
-			// remove trash and ads
+			// remove trashes, ads, and lazy loading images stuff
 			String newContent = content.trim().replaceAll("<[/]?[ ]?span(.|\n)*?>", "").replaceAll("(href|src)=(\"|')//", "$1=$2http://")
-					.replaceAll("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
+					.replaceAll("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "").replaceAll(" src=[^>]+ original[-]*src=(\"|')", " src=$1");
 
 			if (newContent.length() > 0) {
 				Vector<String> images = null;
@@ -571,7 +571,7 @@ public class RssAtomHandler extends DefaultHandler {
 		return new Pair<String, Vector<String>>(null, null);
 	}
 
-	private static void downloadImages(String entryId, Vector<String> images) {
+	public static void downloadImages(String entryId, Vector<String> images) {
 		if (images != null) {
 			FeedDataContentProvider.IMAGE_FOLDER_FILE.mkdir(); // create images dir
 			for (String img : images) {
