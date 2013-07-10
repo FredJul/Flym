@@ -181,8 +181,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 			String url = mUrlEditText.getText().toString();
 			ContentResolver cr = getContentResolver();
 
-			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID,
-					new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(), new String[] { url }, null);
+			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(),
+					new String[] { url }, null);
 
 			if (cursor.moveToFirst() && !getIntent().getData().getLastPathSegment().equals(cursor.getString(0))) {
 				cursor.close();
@@ -270,8 +270,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		CursorLoader cursorLoader = new CursorLoader(this, FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
-				null, null, null, null);
+		CursorLoader cursorLoader = new CursorLoader(this, FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()), null, null, null, null);
 		cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
 		return cursorLoader;
 	}
@@ -296,8 +295,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 			url = Constants.HTTP + url;
 		}
 
-		Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(),
-				new String[] { url }, null);
+		Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(), new String[] { url }, null);
 
 		if (cursor.moveToFirst()) {
 			cursor.close();
@@ -384,9 +382,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 												values.put(FilterColumns.IS_REGEX, regexCheckBox.isChecked());
 												values.put(FilterColumns.IS_APPLIED_TO_TITLE, applyTitleRadio.isChecked());
 												if (cr.update(FilterColumns.CONTENT_URI, values, FilterColumns._ID + '=' + filterId, null) > 0) {
-													cr.notifyChange(
-															FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
-															null);
+													cr.notifyChange(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()), null);
 												}
 											}
 										}
@@ -411,8 +407,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 									public void run() {
 										ContentResolver cr = getContentResolver();
 										if (cr.delete(FilterColumns.CONTENT_URI, FilterColumns._ID + '=' + filterId, null) > 0) {
-											cr.notifyChange(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
-													null);
+											cr.notifyChange(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()), null);
 										}
 									}
 								}.start();
@@ -471,8 +466,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 									}
 
 									@Override
-									public void onLoadFinished(Loader<ArrayList<HashMap<String, String>>> loader,
-											final ArrayList<HashMap<String, String>> data) {
+									public void onLoadFinished(Loader<ArrayList<HashMap<String, String>>> loader, final ArrayList<HashMap<String, String>> data) {
 										pd.cancel();
 
 										if (data == null) {
@@ -488,8 +482,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 											int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
 
 											// fill in the grid_item layout
-											SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.search_result_item, from,
-													to);
+											SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.search_result_item, from, to);
 											builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
 												@Override
 												public void onClick(DialogInterface dialog, int which) {
@@ -534,8 +527,7 @@ class GetFeedSearchResultsLoader extends AsyncTaskLoader<ArrayList<HashMap<Strin
 	}
 
 	/**
-	 * This is where the bulk of our work is done. This function is called in a background thread and should generate a new set of data to be
-	 * published by the loader.
+	 * This is where the bulk of our work is done. This function is called in a background thread and should generate a new set of data to be published by the loader.
 	 */
 	@Override
 	public ArrayList<HashMap<String, String>> loadInBackground() {
@@ -557,12 +549,15 @@ class GetFeedSearchResultsLoader extends AsyncTaskLoader<ArrayList<HashMap<Strin
 			for (int i = 0; i < entries.length(); i++) {
 				try {
 					JSONObject entry = (JSONObject) entries.get(i);
-					HashMap<String, String> map = new HashMap<String, String>();
-					map.put(EditFeedActivity.FEED_SEARCH_TITLE, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_TITLE).toString()).toString());
-					map.put(EditFeedActivity.FEED_SEARCH_URL, entry.get(EditFeedActivity.FEED_SEARCH_URL).toString());
-					map.put(EditFeedActivity.FEED_SEARCH_DESC, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_DESC).toString()).toString());
+					String url = entry.get(EditFeedActivity.FEED_SEARCH_URL).toString();
+					if (!url.isEmpty()) {
+						HashMap<String, String> map = new HashMap<String, String>();
+						map.put(EditFeedActivity.FEED_SEARCH_TITLE, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_TITLE).toString()).toString());
+						map.put(EditFeedActivity.FEED_SEARCH_URL, url);
+						map.put(EditFeedActivity.FEED_SEARCH_DESC, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_DESC).toString()).toString());
 
-					results.add(map);
+						results.add(map);
+					}
 				} catch (Exception e) {
 				}
 			}
