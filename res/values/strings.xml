@@ -48,8 +48,8 @@
     <string name="menu_add_group">Add group</string>
     <string name="menu_import">Import from OPML</string>
     <string name="menu_export">Export to OPML</string>
-    <string name="menu_enable_feed_sort">Enable feed sort</string>
-    <string name="menu_disable_feed_sort">Disable feed sort</string>
+    <string name="menu_enable_feed_sort">Sort feeds</string>
+    <string name="menu_disable_feed_sort">Stop feed sort</string>
     <string name="error_feed_error">The feed address could not accessed.</string>
     <string name="error_feed_process">The feed can not be processed.</string>
     <string name="error_feed_url_exists">The address already exists.</string>

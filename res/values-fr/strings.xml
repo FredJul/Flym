@@ -48,8 +48,8 @@
     <string name="menu_add_group">Ajouter un groupe</string>
     <string name="menu_import">Importer depuis OPML</string>
     <string name="menu_export">Exporter vers OPML</string>
-    <string name="menu_enable_feed_sort">Activer le tri des flux</string>
-    <string name="menu_disable_feed_sort">Désactiver le tri des flux</string>
+    <string name="menu_enable_feed_sort">Trier des flux</string>
+    <string name="menu_disable_feed_sort">Arrêter le tri des flux</string>
     <string name="error_feed_error">L\'adresse du flux n\'est pas accessible.</string>
     <string name="error_feed_process">Le flux ne peut pas être traité.</string>
     <string name="error_feed_url_exists">L\'adresse existe déjà.</string>
