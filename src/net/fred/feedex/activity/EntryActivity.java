@@ -144,8 +144,7 @@ public class EntryActivity extends Activity {
 
 	private static final String BUTTON_START = "<div style='text-align: center'><input type='button' value='";
 	private static final String BUTTON_MIDDLE = "' onclick='";
-	private static final String BUTTON_END = "' style='background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
-			+ "; border: none; border-radius:0.2cm; padding: 0.3cm;'/></div>";
+	private static final String BUTTON_END = "' style='background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR + "; border: none; border-radius:0.2cm; padding: 0.3cm;'/></div>";
 
 	private static final String LINK_BUTTON_START = "<div style='text-align: center; margin-top:0.4cm'><a href='";
 	private static final String LINK_BUTTON_MIDDLE = "' style='background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
@@ -154,8 +153,7 @@ public class EntryActivity extends Activity {
 
 	private static final String IMAGE_ENCLOSURE = "[@]image/";
 
-	private int titlePosition, datePosition, mobilizedHtmlPosition, abstractPosition, linkPosition, feedIdPosition, isFavoritePosition,
-			isReadPosition, enclosurePosition, authorPosition;
+	private int titlePosition, datePosition, mobilizedHtmlPosition, abstractPosition, linkPosition, feedIdPosition, isFavoritePosition, isReadPosition, enclosurePosition, authorPosition;
 
 	private long _id = -1;
 	private long _nextId = -1;
@@ -243,7 +241,7 @@ public class EntryActivity extends Activity {
 
 			@Override
 			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-				if (Math.abs(velocityY) * 2 < Math.abs(velocityX)) {
+				if (Math.abs(velocityY) * 1.5 < Math.abs(velocityX)) {
 					if (velocityX > 800) {
 						if (_previousId != -1 && webView.getScrollX() == 0) {
 							previousEntry();
@@ -425,8 +423,7 @@ public class EntryActivity extends Activity {
 			}
 
 			title = entryCursor.getString(titlePosition);
-			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI(feedId), new String[] { FeedColumns.NAME, FeedColumns.URL }, null,
-					null, null);
+			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI(feedId), new String[] { FeedColumns.NAME, FeedColumns.URL }, null, null, null);
 			if (cursor.moveToFirst()) {
 				setTitle(cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0));
 			} else { // fallback, should not be possible
@@ -436,8 +433,7 @@ public class EntryActivity extends Activity {
 
 			if (canShowIcon) {
 				if (iconBytes == null || iconBytes.length == 0) {
-					Cursor iconCursor = getContentResolver().query(FeedColumns.CONTENT_URI(Integer.toString(feedId)),
-							new String[] { FeedColumns._ID, FeedColumns.ICON }, null, null, null);
+					Cursor iconCursor = getContentResolver().query(FeedColumns.CONTENT_URI(Integer.toString(feedId)), new String[] { FeedColumns._ID, FeedColumns.ICON }, null, null, null);
 
 					if (iconCursor.moveToFirst()) {
 						iconBytes = iconCursor.getBlob(1);
@@ -485,8 +481,7 @@ public class EntryActivity extends Activity {
 			long timestamp = entryCursor.getLong(datePosition);
 			link = entryCursor.getString(linkPosition);
 			enclosure = entryCursor.getString(enclosurePosition);
-			webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8,
-					null);
+			webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8, null);
 		}
 
 		entryCursor.close();
@@ -507,8 +502,7 @@ public class EntryActivity extends Activity {
 		}
 		content.append(TITLE_START).append(link).append(TITLE_MIDDLE).append(title).append(TITLE_END).append(SUBTITLE_START);
 		Date date = new Date(timestamp);
-		StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(
-				DateFormat.getTimeFormat(this).format(date));
+		StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(DateFormat.getTimeFormat(this).format(date));
 
 		if (author != null && !author.isEmpty()) {
 			dateStringBuilder.append(" &mdash; ").append(author);
@@ -523,8 +517,7 @@ public class EntryActivity extends Activity {
 		content.append(BUTTON_END);
 
 		if (enclosure != null && enclosure.length() > 6 && enclosure.indexOf(IMAGE_ENCLOSURE) == -1) {
-			content.append(BUTTON_START).append(getString(R.string.see_enclosure)).append(BUTTON_MIDDLE)
-					.append("injectedJSObject.onClickEnclosure();").append(BUTTON_END);
+			content.append(BUTTON_START).append(getString(R.string.see_enclosure)).append(BUTTON_MIDDLE).append("injectedJSObject.onClickEnclosure();").append(BUTTON_END);
 		}
 
 		if (link != null && link.length() > 0) {
@@ -608,11 +601,9 @@ public class EntryActivity extends Activity {
 		forwardBtn.setVisibility(View.GONE);
 
 		if (mEntriesIds == null) {
-			Cursor cursor = getContentResolver().query(
-					parentUri,
-					EntryColumns.PROJECTION_ID,
-					PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null
-							: EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
+			Cursor cursor = getContentResolver().query(parentUri, EntryColumns.PROJECTION_ID,
+					PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null : EntryColumns.WHERE_UNREAD, null,
+					EntryColumns.DATE + Constants.DB_DESC);
 
 			mEntriesIds = new long[cursor.getCount()];
 			int i = 0;
@@ -722,9 +713,8 @@ public class EntryActivity extends Activity {
 		}
 		case R.id.menu_share: {
 			if (link != null) {
-				startActivity(Intent.createChooser(
-						new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, link)
-								.setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)));
+				startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, link).setType(Constants.MIMETYPE_TEXT_PLAIN),
+						getString(R.string.menu_share)));
 			}
 			break;
 		}
