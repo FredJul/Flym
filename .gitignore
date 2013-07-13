@@ -20,5 +20,10 @@ proguard/
 # Local configuration file (sdk path, etc)
 local.properties
 
-# Eclipse project files
+# IDE project files
+.idea/
+.gradle/
+gradle/
+build
+FeedEx.iml
 .classpath
