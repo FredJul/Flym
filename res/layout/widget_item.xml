@@ -8,9 +8,8 @@
 
     <ImageView
         android:id="@android:id/icon"
-        android:layout_width="16dip"
-        android:layout_height="16dip"
-        android:scaleType="center" />
+        android:layout_width="18dip"
+        android:layout_height="18dip" />
 
     <TextView
         android:id="@android:id/text1"
