@@ -106,11 +106,11 @@ public class FeedData {
 		}
 
 		public static final Uri FEEDS_FOR_GROUPS_CONTENT_URI(String groupId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds_for_group/").append(groupId).toString());
+			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/groups/").append(groupId).append("/feeds").toString());
 		}
 
 		public static final Uri FEEDS_FOR_GROUPS_CONTENT_URI(long groupId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds_for_group/").append(groupId).toString());
+			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/groups/").append(groupId).append("/feeds").toString());
 		}
 
 		public static final String[] PROJECTION_ID = new String[] { FeedColumns._ID };
@@ -130,11 +130,11 @@ public class FeedData {
 		public static final String[] TYPES = new String[] { TYPE_PRIMARY_KEY, TYPE_EXTERNAL_ID, TYPE_TEXT, TYPE_BOOLEAN, TYPE_BOOLEAN };
 
 		public static final Uri FILTERS_FOR_FEED_CONTENT_URI(String feedId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/filters_for_feed/").append(feedId).toString());
+			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).append("/filters").toString());
 		}
 
 		public static final Uri FILTERS_FOR_FEED_CONTENT_URI(long feedId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/filters_for_feed/").append(feedId).toString());
+			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).append("/filters").toString());
 		}
 	}
 
@@ -164,6 +164,14 @@ public class FeedData {
 
 		public static Uri ENTRIES_FOR_FEED_CONTENT_URI(long feedId) {
 			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).append("/entries").toString());
+		}
+		
+		public static Uri ENTRIES_FOR_GROUP_CONTENT_URI(String groupId) {
+			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/groups/").append(groupId).append("/entries").toString());
+		}
+
+		public static Uri ENTRIES_FOR_GROUP_CONTENT_URI(long groupId) {
+			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/groups/").append(groupId).append("/entries").toString());
 		}
 
 		public static Uri CONTENT_URI(String entryId) {

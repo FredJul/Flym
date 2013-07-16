@@ -83,14 +83,20 @@ public class FeedDataContentProvider extends ContentProvider {
 	private static final int URI_FILTERS_FOR_FEED = 7;
 	private static final int URI_ENTRIES_FOR_FEED = 8;
 	private static final int URI_ENTRY_FOR_FEED = 9;
-	private static final int URI_ENTRIES = 10;
-	private static final int URI_ENTRY = 11;
-	private static final int URI_FAVORITES = 12;
-	private static final int URI_FAVORITES_ENTRY = 13;
+	private static final int URI_ENTRIES_FOR_GROUP = 10;
+	private static final int URI_ENTRY_FOR_GROUP = 11;
+	private static final int URI_ENTRIES = 12;
+	private static final int URI_ENTRY = 13;
+	private static final int URI_FAVORITES = 14;
+	private static final int URI_FAVORITES_ENTRY = 15;
 
 	private static final String TABLE_FEEDS = "feeds";
 	private static final String TABLE_FILTERS = "filters";
 	private static final String TABLE_ENTRIES = "entries";
+	private static final String TABLE_ENTRIES_WITH_FEED_INFO = new StringBuilder(TABLE_ENTRIES).append(" JOIN (SELECT ").append(FeedColumns._ID)
+			.append(" AS joined_feed_id, ").append(FeedColumns.NAME).append(", ").append(FeedColumns.ICON).append(", ").append(FeedColumns.GROUP_ID)
+			.append(" FROM ").append(TABLE_FEEDS).append(") AS f ON (").append(TABLE_ENTRIES).append('.').append(EntryColumns.FEED_ID)
+			.append(" = f.joined_feed_id)").toString();
 
 	public static final String IMAGE_FOLDER = FOLDER + "images/";
 	public static final File IMAGE_FOLDER_FILE = new File(IMAGE_FOLDER);
@@ -106,13 +112,15 @@ public class FeedDataContentProvider extends ContentProvider {
 		URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "groups", URI_GROUPS);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#", URI_GROUP);
-		URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds_for_group/#", URI_FEEDS_FOR_GROUPS);
+		URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#/feeds", URI_FEEDS_FOR_GROUPS);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds", URI_FEEDS);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#", URI_FEED);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/entries", URI_ENTRIES_FOR_FEED);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/entries/#", URI_ENTRY_FOR_FEED);
+		URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#/entries", URI_ENTRIES_FOR_GROUP);
+		URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#/entries/#", URI_ENTRY_FOR_GROUP);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "filters", URI_FILTERS);
-		URI_MATCHER.addURI(FeedData.AUTHORITY, "filters_for_feed/#", URI_FILTERS_FOR_FEED);
+		URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/filters", URI_FILTERS_FOR_FEED);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "entries", URI_ENTRIES);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/#", URI_ENTRY);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites", URI_FAVORITES);
@@ -214,10 +222,12 @@ public class FeedDataContentProvider extends ContentProvider {
 		case URI_FAVORITES:
 		case URI_ENTRIES:
 		case URI_ENTRIES_FOR_FEED:
+		case URI_ENTRIES_FOR_GROUP:
 			return "vnd.android.cursor.dir/vnd.feedex.entry";
 		case URI_FAVORITES_ENTRY:
 		case URI_ENTRY:
 		case URI_ENTRY_FOR_FEED:
+		case URI_ENTRY_FOR_GROUP:
 			return "vnd.android.cursor.item/vnd.feedex.entry";
 		default:
 			throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -279,7 +289,8 @@ public class FeedDataContentProvider extends ContentProvider {
 			queryBuilder.appendWhere(new StringBuilder(FilterColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1)));
 			break;
 		}
-		case URI_ENTRY_FOR_FEED: {
+		case URI_ENTRY_FOR_FEED:
+		case URI_ENTRY_FOR_GROUP: {
 			queryBuilder.setTables(TABLE_ENTRIES);
 			queryBuilder.appendWhere(new StringBuilder(EntryColumns._ID).append('=').append(uri.getPathSegments().get(3)));
 			break;
@@ -289,8 +300,13 @@ public class FeedDataContentProvider extends ContentProvider {
 			queryBuilder.appendWhere(new StringBuilder(EntryColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1)));
 			break;
 		}
+		case URI_ENTRIES_FOR_GROUP: {
+			queryBuilder.setTables(TABLE_ENTRIES_WITH_FEED_INFO);
+			queryBuilder.appendWhere(new StringBuilder(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1)));
+			break;
+		}
 		case URI_ENTRIES: {
-			queryBuilder.setTables("entries join (select name, icon, _id as feed_id from feeds) as F on (entries.feedid = F.feed_id)");
+			queryBuilder.setTables(TABLE_ENTRIES_WITH_FEED_INFO);
 			break;
 		}
 		case URI_FAVORITES_ENTRY:
@@ -300,7 +316,7 @@ public class FeedDataContentProvider extends ContentProvider {
 			break;
 		}
 		case URI_FAVORITES: {
-			queryBuilder.setTables("entries join (select name, icon, _id as feed_id from feeds) as F on (entries.feedid = F.feed_id)");
+			queryBuilder.setTables(TABLE_ENTRIES_WITH_FEED_INFO);
 			queryBuilder.appendWhere(new StringBuilder(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_TRUE));
 			break;
 		}
@@ -461,7 +477,8 @@ public class FeedDataContentProvider extends ContentProvider {
 			where.append(FilterColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1));
 			break;
 		}
-		case URI_ENTRY_FOR_FEED: {
+		case URI_ENTRY_FOR_FEED:
+		case URI_ENTRY_FOR_GROUP: {
 			table = TABLE_ENTRIES;
 			where.append(EntryColumns._ID).append('=').append(uri.getPathSegments().get(3));
 			break;
@@ -469,6 +486,11 @@ public class FeedDataContentProvider extends ContentProvider {
 		case URI_ENTRIES_FOR_FEED: {
 			table = TABLE_ENTRIES;
 			where.append(EntryColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1));
+			break;
+		}
+		case URI_ENTRIES_FOR_GROUP: {
+			table = TABLE_ENTRIES_WITH_FEED_INFO;
+			where.append(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1));
 			break;
 		}
 		case URI_ENTRIES: {
@@ -606,7 +628,8 @@ public class FeedDataContentProvider extends ContentProvider {
 			where.append(FilterColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1));
 			break;
 		}
-		case URI_ENTRY_FOR_FEED: {
+		case URI_ENTRY_FOR_FEED:
+		case URI_ENTRY_FOR_GROUP: {
 			table = TABLE_ENTRIES;
 			where.append(EntryColumns._ID).append('=').append(uri.getPathSegments().get(3));
 			break;
@@ -614,6 +637,11 @@ public class FeedDataContentProvider extends ContentProvider {
 		case URI_ENTRIES_FOR_FEED: {
 			table = TABLE_ENTRIES;
 			where.append(EntryColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1));
+			break;
+		}
+		case URI_ENTRIES_FOR_GROUP: {
+			table = TABLE_ENTRIES_WITH_FEED_INFO;
+			where.append(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1));
 			break;
 		}
 		case URI_ENTRIES: {

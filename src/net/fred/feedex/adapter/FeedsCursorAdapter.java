@@ -124,15 +124,20 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 
 		while (cursor.moveToNext()) {
 
+			long feedId = cursor.getLong(idPosition);
+			Uri uri;
 			if (cursor.getInt(isGroupPosition) != 1) {
-				long feedId = cursor.getLong(idPosition);
-				Cursor countCursor = context.getContentResolver().query(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedId), new String[] { COUNT_UNREAD }, WHERE_UNREAD, null, null);
-				countCursor.moveToFirst();
-				synchronized (mUnreadItemsByFeed) {
-					mUnreadItemsByFeed.put(feedId, countCursor.getInt(0));
-				}
-				countCursor.close();
+				uri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedId);
+			} else {
+				uri = EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedId);
 			}
+
+			Cursor countCursor = context.getContentResolver().query(uri, new String[] { COUNT_UNREAD }, WHERE_UNREAD, null, null);
+			countCursor.moveToFirst();
+			synchronized (mUnreadItemsByFeed) {
+				mUnreadItemsByFeed.put(feedId, countCursor.getInt(0));
+			}
+			countCursor.close();
 		}
 	}
 
@@ -148,11 +153,6 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 			view.setBackgroundResource(android.R.color.transparent);
 		}
 
-		int unreadCount;
-		synchronized (mUnreadItemsByFeed) {
-			unreadCount = mUnreadItemsByFeed.get(feedId);
-		}
-
 		TextView updateTextView = ((TextView) view.findViewById(android.R.id.text2));
 		updateTextView.setVisibility(View.VISIBLE);
 
@@ -164,22 +164,16 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 			if (formattedDate == null) {
 				Date date = new Date(timestamp);
 
-				formattedDate = new StringBuilder(context.getString(R.string.update)).append(COLON)
-						.append(timestamp == 0 ? context.getString(R.string.never) : new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)))
-						.toString();
+				formattedDate = new StringBuilder(context.getString(R.string.update))
+						.append(COLON)
+						.append(timestamp == 0 ? context.getString(R.string.never) : new StringBuilder(Constants.DATE_FORMAT.format(date))
+								.append(' ').append(Constants.TIME_FORMAT.format(date))).toString();
 				mFormattedDateCache.put(timestamp, formattedDate);
 			}
 
 			updateTextView.setText(formattedDate);
 		} else {
 			updateTextView.setText(new StringBuilder(context.getString(R.string.error)).append(COLON).append(cursor.getString(errorPosition)));
-		}
-		if (unreadCount > 0) {
-			textView.setEnabled(true);
-			updateTextView.setEnabled(true);
-		} else {
-			textView.setEnabled(false);
-			updateTextView.setEnabled(false);
 		}
 
 		byte[] iconBytes = cursor.getBlob(iconPosition);
@@ -201,7 +195,21 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 			view.setTag(null);
 			textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 		}
-		textView.setText((cursor.isNull(namePosition) ? cursor.getString(linkPosition) : cursor.getString(namePosition)) + (unreadCount > 0 ? " (" + unreadCount + ")" : ""));
+		
+		int unreadCount;
+		synchronized (mUnreadItemsByFeed) {
+			unreadCount = mUnreadItemsByFeed.get(feedId);
+		}
+		
+		if (unreadCount > 0) {
+			textView.setEnabled(true);
+			updateTextView.setEnabled(true);
+		} else {
+			textView.setEnabled(false);
+			updateTextView.setEnabled(false);
+		}
+		textView.setText((cursor.isNull(namePosition) ? cursor.getString(linkPosition) : cursor.getString(namePosition))
+				+ (unreadCount > 0 ? " (" + unreadCount + ")" : ""));
 
 		View sortView = view.findViewById(R.id.sortitem);
 		if (!sortViews.contains(sortView)) { // as we are reusing views, this is fine
@@ -229,6 +237,14 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 			textView.setText(cursor.getString(namePosition));
 			textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 
+			int unreadCount;
+			synchronized (mUnreadItemsByFeed) {
+				unreadCount = mUnreadItemsByFeed.get(feedId);
+			}
+			
+			textView.setText(cursor.getString(namePosition)
+					+ (unreadCount > 0 ? " (" + unreadCount + ")" : ""));
+			
 			view.findViewById(android.R.id.text2).setVisibility(View.GONE);
 
 			View sortView = view.findViewById(R.id.sortitem);
