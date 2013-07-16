@@ -487,7 +487,7 @@ public class FeedsListFragment extends ListFragment {
 									public void run() {
 										ContentResolver cr = getActivity().getContentResolver();
 
-										// First we got the groupId
+										// First we got the groupId (it will be deleted after)
 										Cursor feedCursor = cr.query(FeedColumns.CONTENT_URI(feedId), FeedColumns.PROJECTION_GROUP_ID, null, null,
 												null);
 										String groupId = null;
@@ -500,7 +500,6 @@ public class FeedsListFragment extends ListFragment {
 										if (cr.delete(FeedColumns.CONTENT_URI(feedId), null, null) > 0) {
 											cr.notifyChange(EntryColumns.CONTENT_URI, null);
 											cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
-											FeedDataContentProvider.notifyGroupFromFeedId(feedId);
 
 											if (groupId == null) {
 												cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
