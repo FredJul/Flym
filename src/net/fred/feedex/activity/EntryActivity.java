@@ -164,7 +164,6 @@ public class EntryActivity extends Activity {
 	private Uri parentUri;
 	private int feedId;
 	private boolean favorite, preferFullText = true;
-	private boolean canShowIcon;
 	private byte[] iconBytes = null;
 
 	private WebView webView;
@@ -230,7 +229,6 @@ public class EntryActivity extends Activity {
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		canShowIcon = true;
 		setContentView(R.layout.entry);
 
 		gestureDetector = new GestureDetector(this, new OnGestureListener() {
@@ -431,27 +429,29 @@ public class EntryActivity extends Activity {
 			}
 			cursor.close();
 
-			if (canShowIcon) {
-				if (iconBytes == null || iconBytes.length == 0) {
-					Cursor iconCursor = getContentResolver().query(FeedColumns.CONTENT_URI(Integer.toString(feedId)), new String[] { FeedColumns._ID, FeedColumns.ICON }, null, null, null);
+			if (iconBytes == null || iconBytes.length == 0) {
+				Cursor iconCursor = getContentResolver().query(FeedColumns.CONTENT_URI(Integer.toString(feedId)), new String[] { FeedColumns._ID, FeedColumns.ICON }, null, null, null);
 
-					if (iconCursor.moveToFirst()) {
-						iconBytes = iconCursor.getBlob(1);
-					}
-					iconCursor.close();
+				if (iconCursor.moveToFirst()) {
+					iconBytes = iconCursor.getBlob(1);
 				}
+				iconCursor.close();
+			}
 
-				if (iconBytes != null && iconBytes.length > 0) {
-					int bitmapSizeInDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, getResources().getDisplayMetrics());
-					Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
-					if (bitmap != null) {
-						if (bitmap.getHeight() != bitmapSizeInDip) {
-							bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
-						}
-
-						getActionBar().setIcon(new BitmapDrawable(getResources(), bitmap));
+			if (iconBytes != null && iconBytes.length > 0) {
+				int bitmapSizeInDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, getResources().getDisplayMetrics());
+				Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
+				if (bitmap != null) {
+					if (bitmap.getHeight() != bitmapSizeInDip) {
+						bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
 					}
+
+					getActionBar().setIcon(new BitmapDrawable(getResources(), bitmap));
+				} else {
+					getActionBar().setIcon(R.drawable.icon);
 				}
+			} else {
+				getActionBar().setIcon(R.drawable.icon);
 			}
 
 			favorite = entryCursor.getInt(isFavoritePosition) == 1;
