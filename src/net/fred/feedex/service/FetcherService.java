@@ -111,8 +111,6 @@ public class FetcherService extends IntentService {
 	private static final int FETCHMODE_DIRECT = 1;
 	private static final int FETCHMODE_REENCODE = 2;
 
-	private static final String KEY_USERAGENT = "User-agent";
-	private static final String VALUE_USERAGENT = "Mozilla/5.0";
 	private static final String CHARSET = "charset=";
 	private static final String COUNT = "COUNT(*)";
 	private static final String CONTENT_TYPE_TEXT_HTML = "text/html";
@@ -580,7 +578,6 @@ public class FetcherService extends IntentService {
 
 		connection.setDoInput(true);
 		connection.setDoOutput(false);
-		connection.setRequestProperty(KEY_USERAGENT, VALUE_USERAGENT); // some feeds need this to work properly
 		connection.setConnectTimeout(30000);
 		connection.setReadTimeout(30000);
 		connection.setUseCaches(false);
