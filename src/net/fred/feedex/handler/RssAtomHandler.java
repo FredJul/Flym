@@ -70,6 +70,7 @@ import net.fred.feedex.service.FetcherService;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import android.content.ContentProviderOperation;
@@ -588,6 +589,16 @@ public class RssAtomHandler extends DefaultHandler {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void warning(SAXParseException e) throws SAXException {
+		// ignore warnings
+	}
+
+	@Override
+	public void error(SAXParseException e) throws SAXException {
+		// ignore small errors
 	}
 
 	@Override
