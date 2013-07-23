@@ -23,7 +23,7 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="app_name">FeedEx</string>
+    <string name="app_name">FeedEx News Reader</string>
     <string name="never">jamais</string>
     <string name="update">Mise à jour</string>
     <string name="colon">\u00A0:\u00A0</string>
