@@ -43,7 +43,6 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.LoaderManager;
@@ -53,9 +52,9 @@ import android.support.v4.view.ViewPager;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
+import android.view.View;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends ProgressFragmentActivity implements ActionBar.TabListener, LoaderManager.LoaderCallbacks<Cursor> {
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a
@@ -77,14 +76,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private final BroadcastReceiver mRefreshReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			setProgressBarIndeterminateVisibility(true);
+			getProgressBar().setVisibility(View.VISIBLE);
 		}
 	};
 
 	private final BroadcastReceiver mRefreshFinishedReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			setProgressBarIndeterminateVisibility(false);
+			getProgressBar().setVisibility(View.GONE);
 		}
 	};
 
@@ -94,9 +93,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	protected void onCreate(Bundle savedInstanceState) {
 		Utils.setPreferenceTheme(this);
 		super.onCreate(savedInstanceState);
-
-		// We need to display progress information
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		setContentView(R.layout.activity_main);
 
@@ -161,7 +157,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	protected void onResume() {
 		super.onResume();
-		setProgressBarIndeterminateVisibility(FetcherService.isCurrentlyFetching());
+		getProgressBar().setVisibility(FetcherService.isCurrentlyFetching() ? View.VISIBLE : View.GONE);
 		registerReceiver(mRefreshReceiver, new IntentFilter(Constants.ACTION_REFRESH_FEEDS));
 		registerReceiver(mRefreshFinishedReceiver, new IntentFilter(Constants.ACTION_REFRESH_FINISHED));
 

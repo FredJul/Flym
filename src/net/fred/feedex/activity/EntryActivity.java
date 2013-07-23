@@ -56,7 +56,6 @@ import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -90,7 +89,6 @@ import android.view.View;
 import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -102,7 +100,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-public class EntryActivity extends Activity {
+public class EntryActivity extends ProgressActivity {
 
 	private static final String SAVE_INSTANCE_PROGRESS_VISIBLE = "isProgressVisible";
 	private static final String SAVE_INSTANCE_SCROLL_PERCENTAGE = "scrollPercentage";
@@ -186,7 +184,7 @@ public class EntryActivity extends Activity {
 	private final ContentObserver mEntryObserver = new ContentObserver(new Handler()) {
 		@Override
 		public void onChange(boolean selfChange) {
-			setProgressBarIndeterminateVisibility(false);
+			getProgressBar().setVisibility(View.GONE);
 			mIsProgressVisible = false;
 			preferFullText = true;
 			reload(true);
@@ -222,9 +220,6 @@ public class EntryActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		Utils.setPreferenceTheme(this);
 		super.onCreate(savedInstanceState);
-
-		// We need to display progress information
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
@@ -322,7 +317,7 @@ public class EntryActivity extends Activity {
 		mEntriesIds = savedInstanceState.getLongArray(SAVE_INSTANCE_ENTRIES_IDS);
 		mIsProgressVisible = savedInstanceState.getBoolean(SAVE_INSTANCE_PROGRESS_VISIBLE);
 		mScrollPercentage = savedInstanceState.getFloat(SAVE_INSTANCE_SCROLL_PERCENTAGE);
-		setProgressBarIndeterminateVisibility(mIsProgressVisible);
+		getProgressBar().setVisibility(mIsProgressVisible ? View.VISIBLE : View.GONE);
 		if (savedInstanceState.getBoolean(SAVE_INSTANCE_IS_FULLSCREEN)) {
 			onClickFullscreenBtn(null);
 		}
@@ -632,7 +627,7 @@ public class EntryActivity extends Activity {
 	}
 
 	private void switchEntry(long id, Animation inAnimation, Animation outAnimation) {
-		setProgressBarIndeterminateVisibility(false);
+		getProgressBar().setVisibility(View.GONE);
 		mIsProgressVisible = false;
 
 		uri = parentUri.buildUpon().appendPath(String.valueOf(id)).build();
@@ -844,7 +839,7 @@ public class EntryActivity extends Activity {
 							// since we have acquired the networkInfo, we use it for basic checks
 							if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
 								getContentResolver().registerContentObserver(uri, false, mEntryObserver);
-								setProgressBarIndeterminateVisibility(true);
+								getProgressBar().setVisibility(View.VISIBLE);
 								mIsProgressVisible = true;
 								new Thread() {
 									@Override
