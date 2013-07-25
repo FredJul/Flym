@@ -54,6 +54,8 @@ import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
+import net.fred.feedex.service.FetcherService;
+import net.fred.feedex.service.FetcherService.FetcherServiceListener;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.NotificationManager;
@@ -61,11 +63,12 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.ContentObserver;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -75,7 +78,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.IBinder;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.format.DateFormat;
 import android.view.GestureDetector;
@@ -101,7 +104,6 @@ import android.widget.ViewFlipper;
 
 public class EntryActivity extends ProgressActivity {
 
-	private static final String SAVE_INSTANCE_PROGRESS_VISIBLE = "isProgressVisible";
 	private static final String SAVE_INSTANCE_SCROLL_PERCENTAGE = "scrollPercentage";
 	private static final String SAVE_INSTANCE_ENTRIES_IDS = "entriesIds";
 	private static final String SAVE_INSTANCE_IS_FULLSCREEN = "isFullscreen";
@@ -141,7 +143,8 @@ public class EntryActivity extends ProgressActivity {
 
 	private static final String BUTTON_START = "<div style='text-align: center'><input type='button' value='";
 	private static final String BUTTON_MIDDLE = "' onclick='";
-	private static final String BUTTON_END = "' style='background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR + "; border: none; border-radius:0.2cm; padding: 0.3cm;'/></div>";
+	private static final String BUTTON_END = "' style='background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
+			+ "; border: none; border-radius:0.2cm; padding: 0.3cm;'/></div>";
 
 	private static final String LINK_BUTTON_START = "<div style='text-align: center; margin-top:0.4cm'><a href='";
 	private static final String LINK_BUTTON_MIDDLE = "' style='background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
@@ -150,7 +153,8 @@ public class EntryActivity extends ProgressActivity {
 
 	private static final String IMAGE_ENCLOSURE = "[@]image/";
 
-	private int titlePosition, datePosition, mobilizedHtmlPosition, abstractPosition, linkPosition, feedIdPosition, isFavoritePosition, isReadPosition, enclosurePosition, authorPosition;
+	private int titlePosition, datePosition, mobilizedHtmlPosition, abstractPosition, linkPosition, feedIdPosition, isFavoritePosition,
+			isReadPosition, enclosurePosition, authorPosition;
 
 	private long _id = -1;
 	private long _nextId = -1;
@@ -177,18 +181,7 @@ public class EntryActivity extends ProgressActivity {
 	private boolean mIsFullscreen = false;
 	private boolean localPictures;
 
-	private boolean mIsProgressVisible = false;
 	private boolean mFromWidget = false;
-
-	private final ContentObserver mEntryObserver = new ContentObserver(new Handler()) {
-		@Override
-		public void onChange(boolean selfChange) {
-			getProgressBar().setVisibility(View.GONE);
-			mIsProgressVisible = false;
-			preferFullText = true;
-			reload(true);
-		}
-	};
 
 	final private OnKeyListener onKeyEventListener = new OnKeyListener() {
 		@Override
@@ -212,6 +205,57 @@ public class EntryActivity extends ProgressActivity {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			return gestureDetector.onTouchEvent(event);
+		}
+	};
+
+	private FetcherService mBoundService = null;
+
+	private final ServiceConnection mServiceConnection = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			// This is called when the connection with the service has been
+			// established, giving us the service object we can use to
+			// interact with the service. Because we have bound to a explicit
+			// service that we know is running in our own process, we can
+			// cast its IBinder to a concrete class and directly access it.
+			mBoundService = ((FetcherService.LocalBinder) service).getService();
+			mBoundService.setListener(new FetcherServiceListener() {
+
+				@Override
+				public void onMobilizationFinished(long entryId) {
+					EntryActivity.this.runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							getProgressBar().setVisibility(View.GONE);
+							preferFullText = true;
+							reload(true);
+						}
+					});
+				}
+
+				@Override
+				public void onMobilizationError(long entryId) {
+					EntryActivity.this.runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							getProgressBar().setVisibility(View.GONE);
+							Toast.makeText(EntryActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+
+			});
+
+			getProgressBar().setVisibility(mBoundService.isMobilizing(_id) ? View.VISIBLE : View.GONE);
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName className) {
+			// This is called when the connection with the service has been
+			// unexpectedly disconnected -- that is, its process crashed.
+			// Because it is running in our same process, we should never
+			// see this happen.
+			mBoundService = null;
 		}
 	};
 
@@ -314,9 +358,7 @@ public class EntryActivity extends ProgressActivity {
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		mEntriesIds = savedInstanceState.getLongArray(SAVE_INSTANCE_ENTRIES_IDS);
-		mIsProgressVisible = savedInstanceState.getBoolean(SAVE_INSTANCE_PROGRESS_VISIBLE);
 		mScrollPercentage = savedInstanceState.getFloat(SAVE_INSTANCE_SCROLL_PERCENTAGE);
-		getProgressBar().setVisibility(mIsProgressVisible ? View.VISIBLE : View.GONE);
 		if (savedInstanceState.getBoolean(SAVE_INSTANCE_IS_FULLSCREEN)) {
 			onClickFullscreenBtn(null);
 		}
@@ -330,31 +372,27 @@ public class EntryActivity extends ProgressActivity {
 			MainActivity.mNotificationManager.cancel(0);
 		}
 
-		if (mIsProgressVisible) {
-			getContentResolver().registerContentObserver(uri, false, mEntryObserver);
-		}
-
 		uri = getIntent().getData();
 		parentUri = EntryColumns.PARENT_URI(uri.getPath());
 		webView.onResume();
 		reload(false);
+		
+		bindService(new Intent(this, FetcherService.class), mServiceConnection, Context.BIND_AUTO_CREATE);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 
-		getContentResolver().unregisterContentObserver(mEntryObserver);
-
 		webView.onPause();
+		
+		unbindService(mServiceConnection);
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		webView.saveState(outState);
 		outState.putLongArray(SAVE_INSTANCE_ENTRIES_IDS, mEntriesIds);
-
-		outState.putBoolean(SAVE_INSTANCE_PROGRESS_VISIBLE, mIsProgressVisible);
 		outState.putBoolean(SAVE_INSTANCE_IS_FULLSCREEN, mIsFullscreen);
 
 		float positionTopView = webView.getTop();
@@ -372,8 +410,6 @@ public class EntryActivity extends ProgressActivity {
 	}
 
 	private void reload(boolean forceUpdate) {
-		getContentResolver().unregisterContentObserver(mEntryObserver);
-
 		long newId = Long.parseLong(uri.getLastPathSegment());
 		if (!forceUpdate && _id == newId) {
 			return;
@@ -415,7 +451,8 @@ public class EntryActivity extends ProgressActivity {
 			}
 
 			title = entryCursor.getString(titlePosition);
-			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI(feedId), new String[] { FeedColumns.NAME, FeedColumns.URL }, null, null, null);
+			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI(feedId), new String[] { FeedColumns.NAME, FeedColumns.URL }, null,
+					null, null);
 			if (cursor.moveToFirst()) {
 				setTitle(cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0));
 			} else { // fallback, should not be possible
@@ -424,7 +461,8 @@ public class EntryActivity extends ProgressActivity {
 			cursor.close();
 
 			if (iconBytes == null || iconBytes.length == 0) {
-				Cursor iconCursor = getContentResolver().query(FeedColumns.CONTENT_URI(Integer.toString(feedId)), new String[] { FeedColumns._ID, FeedColumns.ICON }, null, null, null);
+				Cursor iconCursor = getContentResolver().query(FeedColumns.CONTENT_URI(Integer.toString(feedId)),
+						new String[] { FeedColumns._ID, FeedColumns.ICON }, null, null, null);
 
 				if (iconCursor.moveToFirst()) {
 					iconBytes = iconCursor.getBlob(1);
@@ -475,7 +513,8 @@ public class EntryActivity extends ProgressActivity {
 			long timestamp = entryCursor.getLong(datePosition);
 			link = entryCursor.getString(linkPosition);
 			enclosure = entryCursor.getString(enclosurePosition);
-			webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8, null);
+			webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8,
+					null);
 		}
 
 		entryCursor.close();
@@ -496,7 +535,8 @@ public class EntryActivity extends ProgressActivity {
 		}
 		content.append(TITLE_START).append(link).append(TITLE_MIDDLE).append(title).append(TITLE_END).append(SUBTITLE_START);
 		Date date = new Date(timestamp);
-		StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(DateFormat.getTimeFormat(this).format(date));
+		StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(
+				DateFormat.getTimeFormat(this).format(date));
 
 		if (author != null && !author.isEmpty()) {
 			dateStringBuilder.append(" &mdash; ").append(author);
@@ -511,7 +551,8 @@ public class EntryActivity extends ProgressActivity {
 		content.append(BUTTON_END);
 
 		if (enclosure != null && enclosure.length() > 6 && enclosure.indexOf(IMAGE_ENCLOSURE) == -1) {
-			content.append(BUTTON_START).append(getString(R.string.see_enclosure)).append(BUTTON_MIDDLE).append("injectedJSObject.onClickEnclosure();").append(BUTTON_END);
+			content.append(BUTTON_START).append(getString(R.string.see_enclosure)).append(BUTTON_MIDDLE)
+					.append("injectedJSObject.onClickEnclosure();").append(BUTTON_END);
 		}
 
 		if (link != null && link.length() > 0) {
@@ -595,9 +636,11 @@ public class EntryActivity extends ProgressActivity {
 		forwardBtn.setVisibility(View.GONE);
 
 		if (mEntriesIds == null) {
-			Cursor cursor = getContentResolver().query(parentUri, EntryColumns.PROJECTION_ID,
-					PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null : EntryColumns.WHERE_UNREAD, null,
-					EntryColumns.DATE + Constants.DB_DESC);
+			Cursor cursor = getContentResolver().query(
+					parentUri,
+					EntryColumns.PROJECTION_ID,
+					PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null
+							: EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
 
 			mEntriesIds = new long[cursor.getCount()];
 			int i = 0;
@@ -626,8 +669,7 @@ public class EntryActivity extends ProgressActivity {
 	}
 
 	private void switchEntry(long id, Animation inAnimation, Animation outAnimation) {
-		getProgressBar().setVisibility(View.GONE);
-		mIsProgressVisible = false;
+		getProgressBar().setVisibility(mBoundService != null && mBoundService.isMobilizing(id) ? View.VISIBLE : View.GONE);
 
 		uri = parentUri.buildUpon().appendPath(String.valueOf(id)).build();
 		getIntent().setData(uri);
@@ -707,8 +749,9 @@ public class EntryActivity extends ProgressActivity {
 		}
 		case R.id.menu_share: {
 			if (link != null) {
-				startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, link).setType(Constants.MIMETYPE_TEXT_PLAIN),
-						getString(R.string.menu_share)));
+				startActivity(Intent.createChooser(
+						new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, link)
+								.setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)));
 			}
 			break;
 		}
@@ -820,7 +863,7 @@ public class EntryActivity extends ProgressActivity {
 
 		@JavascriptInterface
 		public void onClickFullText() {
-			if (!mIsProgressVisible) {
+			if (getProgressBar().getVisibility() != View.VISIBLE) {
 				Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
 				final boolean alreadyMobilized = entryCursor.moveToFirst() && !entryCursor.isNull(mobilizedHtmlPosition);
 				entryCursor.close();
@@ -837,9 +880,7 @@ public class EntryActivity extends ProgressActivity {
 
 							// since we have acquired the networkInfo, we use it for basic checks
 							if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-								getContentResolver().registerContentObserver(uri, false, mEntryObserver);
 								getProgressBar().setVisibility(View.VISIBLE);
-								mIsProgressVisible = true;
 								new Thread() {
 									@Override
 									public void run() {
