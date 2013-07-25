@@ -1,5 +1,5 @@
 <resources>
-    <string-array name="settings_interval_values">
+    <string-array name="settings_interval_values" translatable="false">
         <item>60000</item>
         <item>300000</item>
         <item>900000</item>
@@ -10,7 +10,7 @@
         <item>43200000</item>
         <item>86400000</item>
     </string-array>
-    <string-array name="settings_keep_time_values">
+    <string-array name="settings_keep_time_values" translatable="false">
         <item>1</item>
         <item>2</item>
         <item>4</item>
@@ -21,13 +21,13 @@
         <item>91</item>
         <item>0</item>
     </string-array>
-    <string-array name="settings_font_size_values">
+    <string-array name="settings_font_size_values" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
     </string-array>
-    <string-array name="settings_proxy_types">
+    <string-array name="settings_proxy_types" translatable="false">
         <item>0</item>
         <item>1</item>
     </string-array>

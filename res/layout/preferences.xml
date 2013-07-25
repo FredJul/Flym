@@ -52,12 +52,14 @@
         android:title="@string/settings_category_content_presentation" >
 
         <CheckBoxPreference
-            android:title="@string/settings_lighttheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:defaultValue="true"
+            android:disableDependentsState="true"
+            android:key="lighttheme"
             android:summary="@string/settings_lighttheme_description"
-            android:key="lighttheme" 
-            android:disableDependentsState="true"/>
-        
+            android:title="@string/settings_lighttheme" />
+
         <ListPreference
             android:name="@string/settings_keep_time"
             android:layout_width="wrap_content"
@@ -81,7 +83,7 @@
             android:key="fontsize"
             android:summary="@string/settings_font_size_description"
             android:title="@string/settings_font_size" />
-        
+
         <CheckBoxPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
