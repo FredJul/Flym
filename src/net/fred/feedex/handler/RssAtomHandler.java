@@ -343,10 +343,10 @@ public class RssAtomHandler extends DefaultHandler {
 			entryDate = parseUpdateDate(dateStringBuilder.toString());
 			updatedTagEntered = false;
 		} else if (TAG_PUBDATE.equals(localName)) {
-			entryDate = parsePubdateDate(dateStringBuilder.toString().replace("  ", " "));
+			entryDate = parsePubdateDate(dateStringBuilder.toString());
 			pubDateTagEntered = false;
 		} else if (TAG_LASTBUILDDATE.equals(localName)) {
-			entryDate = parsePubdateDate(dateStringBuilder.toString().replace("  ", " "));
+			entryDate = parsePubdateDate(dateStringBuilder.toString());
 			lastBuildDateTagEntered = false;
 		} else if (TAG_DATE.equals(localName)) {
 			entryDate = parseUpdateDate(dateStringBuilder.toString());
@@ -502,7 +502,7 @@ public class RssAtomHandler extends DefaultHandler {
 	}
 
 	private Date parseUpdateDate(String dateStr, boolean tryAllFormat) {
-		dateStr = dateStr.replace("T", " ").replace("Z", "").trim(); // fix useless char
+		dateStr = dateStr.replace("T", " ").replace("Z", "").replaceAll("  ", " ").trim(); // fix useless char
 
 		for (DateFormat format : UPDATE_DATE_FORMATS) {
 			try {
@@ -529,7 +529,7 @@ public class RssAtomHandler extends DefaultHandler {
 			dateStr = dateStr.substring(coma + 2);
 		}
 
-		dateStr = dateStr.replace("T", " ").replace("Z", "").trim(); // fix useless char
+		dateStr = dateStr.replace("T", " ").replace("Z", "").replaceAll("  ", " ").trim(); // fix useless char
 
 		for (String[] timezoneReplace : TIMEZONES_REPLACE) {
 			dateStr = dateStr.replace(timezoneReplace[0], timezoneReplace[1]);
