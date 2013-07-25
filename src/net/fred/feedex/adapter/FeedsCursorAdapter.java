@@ -28,6 +28,7 @@ import java.util.Vector;
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
+import net.fred.feedex.Utils;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.view.DragNDropExpandableListView;
@@ -42,7 +43,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.util.SparseBooleanArray;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
@@ -182,7 +182,7 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 			Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
 
 			if (bitmap != null && bitmap.getHeight() > 0 && bitmap.getWidth() > 0) {
-				int bitmapSizeInDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18f, context.getResources().getDisplayMetrics());
+				int bitmapSizeInDip = Utils.dpToPixel(18);
 
 				if (bitmap.getHeight() != bitmapSizeInDip) {
 					bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);

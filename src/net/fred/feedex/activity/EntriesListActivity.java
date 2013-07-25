@@ -58,7 +58,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -103,7 +102,7 @@ public class EntriesListActivity extends FragmentActivity {
 		}
 
 		if (iconBytes != null && iconBytes.length > 0) {
-			int bitmapSizeInDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, getResources().getDisplayMetrics());
+			int bitmapSizeInDip = Utils.dpToPixel(24);
 			Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
 			if (bitmap != null) {
 				if (bitmap.getHeight() != bitmapSizeInDip) {

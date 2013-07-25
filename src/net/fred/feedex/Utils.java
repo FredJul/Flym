@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.TypedValue;
 
 public class Utils {
 	static public void setPreferenceTheme(Activity a) {
@@ -21,5 +22,9 @@ public class Utils {
 			public void onClick(DialogInterface dialog, int id) {
 			}
 		}).show();
+	}
+	
+	static public int dpToPixel(int dp) {
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, MainApplication.getAppContext().getResources().getDisplayMetrics());
 	}
 }

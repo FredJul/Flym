@@ -78,7 +78,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.format.DateFormat;
-import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
@@ -434,7 +433,7 @@ public class EntryActivity extends ProgressActivity {
 			}
 
 			if (iconBytes != null && iconBytes.length > 0) {
-				int bitmapSizeInDip = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, getResources().getDisplayMetrics());
+				int bitmapSizeInDip = Utils.dpToPixel(24);
 				Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
 				if (bitmap != null) {
 					if (bitmap.getHeight() != bitmapSizeInDip) {
