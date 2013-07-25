@@ -493,18 +493,19 @@ public class RssAtomHandler extends DefaultHandler {
 		this.fetchImages = fetchImages;
 	}
 
-	private static Date parseUpdateDate(String string) {
+	private Date parseUpdateDate(String string) {
 		string = string.replace(Z, GMT);
 		for (DateFormat format : UPDATE_DATE_FORMATS) {
 			try {
-				return format.parse(string);
+				Date result = format.parse(string);
+				return (result.getTime() > now ? new Date(now) : result);
 			} catch (ParseException e) {
 			} // just do nothing
 		}
 		return null;
 	}
 
-	private static Date parsePubdateDate(String string) {
+	private Date parsePubdateDate(String string) {
 		// We remove the first part if necessary (the day display)
 		int coma = string.indexOf(", ");
 		if (coma != -1) {
@@ -517,7 +518,8 @@ public class RssAtomHandler extends DefaultHandler {
 
 		for (DateFormat format : PUBDATE_DATE_FORMATS) {
 			try {
-				return format.parse(string);
+				Date result = format.parse(string);
+				return (result.getTime() > now ? new Date(now) : result);
 			} catch (ParseException e) {
 			} // just do nothing
 		}
