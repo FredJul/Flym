@@ -42,13 +42,11 @@
  *     THE SOFTWARE.
  */
 
-package net.fred.feedex.handler;
+package net.fred.feedex.provider;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.regex.Pattern;
-
-import net.fred.feedex.provider.FeedDataContentProvider;
 
 public class PictureFilenameFilter implements FilenameFilter {
 	private static final String REGEX = "__[^\\.]*\\.[A-Za-z]*";

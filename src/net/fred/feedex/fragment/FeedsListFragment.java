@@ -53,11 +53,11 @@ import net.fred.feedex.Constants;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.GeneralPrefsActivity;
 import net.fred.feedex.adapter.FeedsCursorAdapter;
+import net.fred.feedex.handler.OPMLHandler;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
-import net.fred.feedex.provider.OPML;
 import net.fred.feedex.view.DragNDropExpandableListView;
 import net.fred.feedex.view.DragNDropListener;
 import android.app.AlertDialog;
@@ -335,7 +335,7 @@ public class FeedsListFragment extends ListFragment {
 										@Override
 										public void run() {
 											try {
-												OPML.importFromFile(new StringBuilder(Environment.getExternalStorageDirectory().toString())
+												OPMLHandler.importFromFile(new StringBuilder(Environment.getExternalStorageDirectory().toString())
 														.append(File.separator).append(fileNames[which]).toString());
 											} catch (Exception e) {
 												getActivity().runOnUiThread(new Runnable() {
@@ -370,7 +370,7 @@ public class FeedsListFragment extends ListFragment {
 									final String filename = new StringBuilder(Environment.getExternalStorageDirectory().toString())
 											.append("/FeedEx_").append(System.currentTimeMillis()).append(".opml").toString();
 
-									OPML.exportToFile(filename);
+									OPMLHandler.exportToFile(filename);
 									getActivity().runOnUiThread(new Runnable() {
 										@Override
 										public void run() {

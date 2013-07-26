@@ -49,6 +49,7 @@ import java.io.File;
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
+import net.fred.feedex.handler.OPMLHandler;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
@@ -154,10 +155,11 @@ public class FeedDataContentProvider extends ContentProvider {
 									try {
 										if (hasBackup) {
 											// Perform an automated import of the backup
-											OPML.importFromFile(BACKUP_OPML);
+											OPMLHandler.importFromFile(BACKUP_OPML);
 										} else {
 											// No database and no backup, automatically add the default feeds
-											OPML.importFromFile(MainApplication.getAppContext().getResources().openRawResource(R.raw.default_feeds));
+											OPMLHandler.importFromFile(MainApplication.getAppContext().getResources()
+													.openRawResource(R.raw.default_feeds));
 										}
 									} catch (Exception e) {
 									}
@@ -360,7 +362,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
 			newId = database.insert(TABLE_FEEDS, null, values);
 			try {
-				OPML.exportToFile(BACKUP_OPML);
+				OPMLHandler.exportToFile(BACKUP_OPML);
 			} catch (Exception e) {
 			}
 
@@ -524,7 +526,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		if (table == TABLE_FEEDS
 				&& (values.containsKey(FeedColumns.NAME) || values.containsKey(FeedColumns.URL) || values.containsKey(FeedColumns.PRIORITY))) {
 			try {
-				OPML.exportToFile(BACKUP_OPML);
+				OPMLHandler.exportToFile(BACKUP_OPML);
 			} catch (Exception e) {
 			}
 		}
@@ -672,7 +674,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
 		if (table == TABLE_FEEDS) { // == is ok here
 			try {
-				OPML.exportToFile(BACKUP_OPML);
+				OPMLHandler.exportToFile(BACKUP_OPML);
 			} catch (Exception e) {
 			}
 		}

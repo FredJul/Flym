@@ -42,7 +42,7 @@
  *     THE SOFTWARE.
  */
 
-package net.fred.feedex.provider;
+package net.fred.feedex.handler;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -67,7 +67,7 @@ import android.database.Cursor;
 import android.text.TextUtils;
 import android.util.Xml;
 
-public class OPML {
+public class OPMLHandler {
 	private static final String[] FEEDS_PROJECTION = new String[] { FeedColumns._ID, FeedColumns.IS_GROUP, FeedColumns.NAME, FeedColumns.URL };
 	private static final String[] FILTERS_PROJECTION = new String[] { FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX, FilterColumns.IS_APPLIED_TO_TITLE };
 
