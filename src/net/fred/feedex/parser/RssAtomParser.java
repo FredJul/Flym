@@ -42,7 +42,7 @@
  *     THE SOFTWARE.
  */
 
-package net.fred.feedex.handler;
+package net.fred.feedex.parser;
 
 import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -82,7 +82,7 @@ import android.net.Uri;
 import android.text.Html;
 import android.util.Pair;
 
-public class RssAtomHandler extends DefaultHandler {
+public class RssAtomParser extends DefaultHandler {
 
 	private static final String URL_SPACE = "%20";
 	private static final String ANDRHOMBUS = "&#";
@@ -175,7 +175,7 @@ public class RssAtomHandler extends DefaultHandler {
 	private final ArrayList<ContentProviderOperation> inserts = new ArrayList<ContentProviderOperation>();
 	private final ArrayList<Vector<String>> entriesImages = new ArrayList<Vector<String>>();
 
-	public RssAtomHandler(Date realLastUpdateDate, final String id, String feedName, String url) {
+	public RssAtomParser(Date realLastUpdateDate, final String id, String feedName, String url) {
 		KEEP_TIME = Long.parseLong(PrefsManager.getString(PrefsManager.KEEP_TIME, "4")) * 86400000l;
 		long keepDateBorderTime = KEEP_TIME > 0 ? System.currentTimeMillis() - KEEP_TIME : 0;
 

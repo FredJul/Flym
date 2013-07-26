@@ -77,7 +77,7 @@ import net.fred.feedex.MainApplication;
 import net.fred.feedex.PrefsManager;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.MainActivity;
-import net.fred.feedex.handler.RssAtomHandler;
+import net.fred.feedex.parser.RssAtomParser;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
@@ -327,13 +327,13 @@ public class FetcherService extends IntentService {
 
 				if (mobilizedHtml != null) {
 					String realHtml = Html.fromHtml(mobilizedHtml, null, null).toString();
-					Pair<String, Vector<String>> improvedContent = RssAtomHandler.improveHtmlContent(realHtml,
+					Pair<String, Vector<String>> improvedContent = RssAtomParser.improveHtmlContent(realHtml,
 							PrefsManager.getBoolean(PrefsManager.FETCH_PICTURES, false));
 					if (improvedContent.first != null) {
 						ContentValues values = new ContentValues();
 						values.put(EntryColumns.MOBILIZED_HTML, improvedContent.first);
 						if (cr.update(uri, values, null, null) > 0) {
-							RssAtomHandler.downloadImages(entryIdStr, improvedContent.second);
+							RssAtomParser.downloadImages(entryIdStr, improvedContent.second);
 
 							if (mListener != null) {
 								success = true;
@@ -404,7 +404,7 @@ public class FetcherService extends IntentService {
 	}
 
 	private int refreshFeed(String feedId) {
-		RssAtomHandler handler = null;
+		RssAtomParser handler = null;
 
 		ContentResolver cr = getContentResolver();
 		Cursor cursor = cr.query(FeedColumns.CONTENT_URI(feedId), null, null, null, null);
@@ -426,7 +426,7 @@ public class FetcherService extends IntentService {
 				String contentType = connection.getContentType();
 				int fetchMode = cursor.getInt(fetchmodePosition);
 
-				handler = new RssAtomHandler(new Date(cursor.getLong(realLastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl);
+				handler = new RssAtomParser(new Date(cursor.getLong(realLastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl);
 				handler.setFetchImages(PrefsManager.getBoolean(PrefsManager.FETCH_PICTURES, false));
 
 				if (fetchMode == 0) {
