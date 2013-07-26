@@ -48,7 +48,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.regex.Pattern;
 
-public class PictureFilenameFilter implements FilenameFilter {
+class PictureFilenameFilter implements FilenameFilter {
 	private static final String REGEX = "__[^\\.]*\\.[A-Za-z]*";
 
 	private Pattern pattern;
