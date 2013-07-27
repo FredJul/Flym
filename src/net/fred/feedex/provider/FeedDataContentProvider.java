@@ -73,7 +73,7 @@ public class FeedDataContentProvider extends ContentProvider {
 	private static final String FOLDER = Environment.getExternalStorageDirectory() + "/FeedEx/";
 	private static final String DATABASE_NAME = "FeedEx.db";
 
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 
 	private static final int URI_GROUPS = 1;
 	private static final int URI_GROUP = 2;
@@ -158,8 +158,7 @@ public class FeedDataContentProvider extends ContentProvider {
 											OPML.importFromFile(BACKUP_OPML);
 										} else {
 											// No database and no backup, automatically add the default feeds
-											OPML.importFromFile(MainApplication.getAppContext().getResources()
-													.openRawResource(R.raw.default_feeds));
+											OPML.importFromFile(MainApplication.getAppContext().getResources().openRawResource(R.raw.default_feeds));
 										}
 									} catch (Exception e) {
 									}
@@ -193,6 +192,11 @@ public class FeedDataContentProvider extends ContentProvider {
 				executeCatchedSQL(database,
 						new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.REAL_LAST_UPDATE).append(' ')
 								.append(FeedData.TYPE_DATE_TIME).toString());
+			}
+			if (oldVersion < 3) {
+				executeCatchedSQL(database,
+						new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.RETRIEVE_FULLTEXT).append(' ')
+								.append(FeedData.TYPE_BOOLEAN).toString());
 			}
 		}
 

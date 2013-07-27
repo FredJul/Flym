@@ -101,9 +101,10 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 	static final String FEED_SEARCH_URL = "url";
 	static final String FEED_SEARCH_DESC = "contentSnippet";
 
-	private static final String[] FEED_PROJECTION = new String[] { FeedColumns.NAME, FeedColumns.URL };
+	private static final String[] FEED_PROJECTION = new String[] { FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT };
 
 	private EditText mNameEditText, mUrlEditText;
+	private CheckBox mRetrieveFulltextCb;
 	private ListView mFiltersListView;
 	private String mPreviousName;
 	private View mFiltersLayout, mButtonLayout;
@@ -125,6 +126,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 
 		mNameEditText = (EditText) findViewById(R.id.feed_title);
 		mUrlEditText = (EditText) findViewById(R.id.feed_url);
+		mRetrieveFulltextCb = (CheckBox) findViewById(R.id.retrieve_fulltext);
 		mFiltersListView = (ListView) findViewById(android.R.id.list);
 		mFiltersLayout = findViewById(R.id.filters_layout);
 		mButtonLayout = findViewById(R.id.button_layout);
@@ -165,6 +167,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 					mPreviousName = cursor.getString(0);
 					mNameEditText.setText(mPreviousName);
 					mUrlEditText.setText(cursor.getString(1));
+					mRetrieveFulltextCb.setChecked(cursor.getInt(2) == 1);
 					cursor.close();
 				} else {
 					cursor.close();
@@ -181,8 +184,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 			String url = mUrlEditText.getText().toString();
 			ContentResolver cr = getContentResolver();
 
-			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(),
-					new String[] { url }, null);
+			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID,
+					new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(), new String[] { url }, null);
 
 			if (cursor.moveToFirst() && !getIntent().getData().getLastPathSegment().equals(cursor.getString(0))) {
 				cursor.close();
@@ -199,6 +202,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 				String name = mNameEditText.getText().toString();
 
 				values.put(FeedColumns.NAME, name.trim().length() > 0 ? name : null);
+				values.put(FeedColumns.RETRIEVE_FULLTEXT, mRetrieveFulltextCb.isChecked() ? 1 : null);
 				values.put(FeedColumns.FETCH_MODE, 0);
 				values.putNull(FeedColumns.ERROR);
 
@@ -270,7 +274,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		CursorLoader cursorLoader = new CursorLoader(this, FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()), null, null, null, null);
+		CursorLoader cursorLoader = new CursorLoader(this, FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
+				null, null, null, null);
 		cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
 		return cursorLoader;
 	}
@@ -295,7 +300,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 			url = Constants.HTTP + url;
 		}
 
-		Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(), new String[] { url }, null);
+		Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(),
+				new String[] { url }, null);
 
 		if (cursor.moveToFirst()) {
 			cursor.close();
@@ -312,6 +318,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 			if (name.trim().length() > 0) {
 				values.put(FeedColumns.NAME, name);
 			}
+			values.put(FeedColumns.RETRIEVE_FULLTEXT, mRetrieveFulltextCb.isChecked() ? 1 : null);
 			cr.insert(FeedColumns.CONTENT_URI, values);
 			cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
 		}
@@ -382,7 +389,9 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 												values.put(FilterColumns.IS_REGEX, regexCheckBox.isChecked());
 												values.put(FilterColumns.IS_APPLIED_TO_TITLE, applyTitleRadio.isChecked());
 												if (cr.update(FilterColumns.CONTENT_URI, values, FilterColumns._ID + '=' + filterId, null) > 0) {
-													cr.notifyChange(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()), null);
+													cr.notifyChange(
+															FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
+															null);
 												}
 											}
 										}
@@ -407,7 +416,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 									public void run() {
 										ContentResolver cr = getContentResolver();
 										if (cr.delete(FilterColumns.CONTENT_URI, FilterColumns._ID + '=' + filterId, null) > 0) {
-											cr.notifyChange(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()), null);
+											cr.notifyChange(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
+													null);
 										}
 									}
 								}.start();
@@ -466,7 +476,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 									}
 
 									@Override
-									public void onLoadFinished(Loader<ArrayList<HashMap<String, String>>> loader, final ArrayList<HashMap<String, String>> data) {
+									public void onLoadFinished(Loader<ArrayList<HashMap<String, String>>> loader,
+											final ArrayList<HashMap<String, String>> data) {
 										pd.cancel();
 
 										if (data == null) {
@@ -482,7 +493,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 											int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
 
 											// fill in the grid_item layout
-											SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.search_result_item, from, to);
+											SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.search_result_item, from,
+													to);
 											builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
 												@Override
 												public void onClick(DialogInterface dialog, int which) {
@@ -527,7 +539,8 @@ class GetFeedSearchResultsLoader extends AsyncTaskLoader<ArrayList<HashMap<Strin
 	}
 
 	/**
-	 * This is where the bulk of our work is done. This function is called in a background thread and should generate a new set of data to be published by the loader.
+	 * This is where the bulk of our work is done. This function is called in a background thread and should generate a new set of data to be
+	 * published by the loader.
 	 */
 	@Override
 	public ArrayList<HashMap<String, String>> loadInBackground() {
@@ -552,7 +565,8 @@ class GetFeedSearchResultsLoader extends AsyncTaskLoader<ArrayList<HashMap<Strin
 					String url = entry.get(EditFeedActivity.FEED_SEARCH_URL).toString();
 					if (!url.isEmpty()) {
 						HashMap<String, String> map = new HashMap<String, String>();
-						map.put(EditFeedActivity.FEED_SEARCH_TITLE, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_TITLE).toString()).toString());
+						map.put(EditFeedActivity.FEED_SEARCH_TITLE, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_TITLE).toString())
+								.toString());
 						map.put(EditFeedActivity.FEED_SEARCH_URL, url);
 						map.put(EditFeedActivity.FEED_SEARCH_DESC, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_DESC).toString()).toString());
 

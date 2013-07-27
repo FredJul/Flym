@@ -69,20 +69,23 @@ import android.text.TextUtils;
 import android.util.Xml;
 
 public class OPML {
-	private static final String[] FEEDS_PROJECTION = new String[] { FeedColumns._ID, FeedColumns.IS_GROUP, FeedColumns.NAME, FeedColumns.URL };
-	private static final String[] FILTERS_PROJECTION = new String[] { FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX, FilterColumns.IS_APPLIED_TO_TITLE };
+	private static final String[] FEEDS_PROJECTION = new String[] { FeedColumns._ID, FeedColumns.IS_GROUP, FeedColumns.NAME, FeedColumns.URL,
+			FeedColumns.RETRIEVE_FULLTEXT };
+	private static final String[] FILTERS_PROJECTION = new String[] { FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
+			FilterColumns.IS_APPLIED_TO_TITLE };
 
-	private static final String START = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<opml version=\"1.1\">\n<head>\n<title>FeedEx export</title>\n<dateCreated>";
+	private static final String START = "<?xml version='1.0' encoding='utf-8'?>\n<opml version='1.1'>\n<head>\n<title>FeedEx export</title>\n<dateCreated>";
 	private static final String AFTER_DATE = "</dateCreated>\n</head>\n<body>\n";
-	private static final String OUTLINE_TITLE = "\t<outline title=\"";
-	private static final String OUTLINE_XMLURL = "\" type=\"rss\" xmlUrl=\"";
-	private static final String OUTLINE_INLINE_CLOSING = "\" />\n";
-	private static final String OUTLINE_NORMAL_CLOSING = "\" >\n";
+	private static final String OUTLINE_TITLE = "\t<outline title='";
+	private static final String OUTLINE_XMLURL = "' type='rss' xmlUrl='";
+	private static final String OUTLINE_RETRIEVE_FULLTEXT = "' retrieveFullText='";
+	private static final String OUTLINE_INLINE_CLOSING = "' />\n";
+	private static final String OUTLINE_NORMAL_CLOSING = "' >\n";
 	private static final String OUTLINE_END = "\t</outline>\n";
-	private static final String FILTER_TEXT = "\t\t<filter text=\"";
-	private static final String FILTER_IS_REGEX = "\" isRegex=\"";
-	private static final String FILTER_IS_APPLIED_TO_TITLE = "\" isAppliedToTitle=\"";
-	private static final String FILTER_CLOSING = "\"/>\n";
+	private static final String FILTER_TEXT = "\t\t<filter text='";
+	private static final String FILTER_IS_REGEX = "' isRegex='";
+	private static final String FILTER_IS_APPLIED_TO_TITLE = "' isAppliedToTitle='";
+	private static final String FILTER_CLOSING = "'/>\n";
 	private static final String CLOSING = "</body>\n</opml>\n";
 
 	private static OPMLParser parser = new OPMLParser();
@@ -90,13 +93,14 @@ public class OPML {
 	public static void importFromFile(String filename) throws FileNotFoundException, IOException, SAXException {
 		Xml.parse(new InputStreamReader(new FileInputStream(filename)), parser);
 	}
-	
+
 	public static void importFromFile(InputStream input) throws IOException, SAXException {
 		Xml.parse(new InputStreamReader(input), parser);
 	}
 
 	public static void exportToFile(String filename) throws IOException {
-		Cursor cursor = MainApplication.getAppContext().getContentResolver().query(FeedColumns.GROUPS_CONTENT_URI, FEEDS_PROJECTION, null, null, null);
+		Cursor cursor = MainApplication.getAppContext().getContentResolver()
+				.query(FeedColumns.GROUPS_CONTENT_URI, FEEDS_PROJECTION, null, null, null);
 
 		StringBuilder builder = new StringBuilder(START);
 		builder.append(System.currentTimeMillis());
@@ -108,13 +112,16 @@ public class OPML {
 			if (cursor.getInt(1) == 1) { // If it is a group
 				builder.append(OUTLINE_NORMAL_CLOSING);
 
-				Cursor cursorChildren = MainApplication.getAppContext().getContentResolver().query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(cursor.getString(0)), FEEDS_PROJECTION, null, null, null);
+				Cursor cursorChildren = MainApplication.getAppContext().getContentResolver()
+						.query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(cursor.getString(0)), FEEDS_PROJECTION, null, null, null);
 				while (cursorChildren.moveToNext()) {
 					builder.append("\t");
 					builder.append(OUTLINE_TITLE);
 					builder.append(cursorChildren.isNull(2) ? "" : TextUtils.htmlEncode(cursorChildren.getString(2)));
 					builder.append(OUTLINE_XMLURL);
 					builder.append(TextUtils.htmlEncode(cursorChildren.getString(3)));
+					builder.append(OUTLINE_RETRIEVE_FULLTEXT);
+					builder.append(cursorChildren.getInt(4) == 1 ? Constants.TRUE : "false");
 
 					Cursor cursorFilters = MainApplication.getAppContext().getContentResolver()
 							.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(cursorChildren.getString(0)), FILTERS_PROJECTION, null, null, null);
@@ -125,9 +132,9 @@ public class OPML {
 							builder.append(FILTER_TEXT);
 							builder.append(TextUtils.htmlEncode(cursorFilters.getString(0)));
 							builder.append(FILTER_IS_REGEX);
-							builder.append(cursorFilters.getInt(1) == 1 ? "true" : "false");
+							builder.append(cursorFilters.getInt(1) == 1 ? Constants.TRUE : "false");
 							builder.append(FILTER_IS_APPLIED_TO_TITLE);
-							builder.append(cursorFilters.getInt(2) == 1 ? "true" : "false");
+							builder.append(cursorFilters.getInt(2) == 1 ? Constants.TRUE : "false");
 							builder.append(FILTER_CLOSING);
 						}
 						builder.append("\t");
@@ -143,6 +150,8 @@ public class OPML {
 			} else {
 				builder.append(OUTLINE_XMLURL);
 				builder.append(TextUtils.htmlEncode(cursor.getString(3)));
+				builder.append(OUTLINE_RETRIEVE_FULLTEXT);
+				builder.append(cursor.getInt(4) == 1 ? Constants.TRUE : "false");
 				Cursor cursorFilters = MainApplication.getAppContext().getContentResolver()
 						.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(cursor.getString(0)), FILTERS_PROJECTION, null, null, null);
 				if (cursorFilters.getCount() != 0) {
@@ -151,9 +160,9 @@ public class OPML {
 						builder.append(FILTER_TEXT);
 						builder.append(TextUtils.htmlEncode(cursorFilters.getString(0)));
 						builder.append(FILTER_IS_REGEX);
-						builder.append(cursorFilters.getInt(1) == 1 ? "true" : "false");
+						builder.append(cursorFilters.getInt(1) == 1 ? Constants.TRUE : "false");
 						builder.append(FILTER_IS_APPLIED_TO_TITLE);
-						builder.append(cursorFilters.getInt(2) == 1 ? "true" : "false");
+						builder.append(cursorFilters.getInt(2) == 1 ? Constants.TRUE : "false");
 						builder.append(FILTER_CLOSING);
 					}
 					builder.append(OUTLINE_END);
@@ -178,6 +187,7 @@ public class OPML {
 		private static final String TAG_OUTLINE = "outline";
 		private static final String ATTRIBUTE_TITLE = "title";
 		private static final String ATTRIBUTE_XMLURL = "xmlUrl";
+		private static final String ATTRIBUTE_RETRIEVE_FULLTEXT = "retrieveFullText";
 		private static final String TAG_FILTER = "filter";
 		private static final String ATTRIBUTE_TEXT = "text";
 		private static final String ATTRIBUTE_IS_REGEX = "isRegex";
@@ -208,7 +218,8 @@ public class OPML {
 						values.put(FeedColumns.IS_GROUP, true);
 						values.put(FeedColumns.NAME, title);
 
-						Cursor cursor = cr.query(FeedColumns.GROUPS_CONTENT_URI, null, new StringBuilder(FeedColumns.NAME).append(Constants.DB_ARG).toString(), new String[] { title }, null);
+						Cursor cursor = cr.query(FeedColumns.GROUPS_CONTENT_URI, null, new StringBuilder(FeedColumns.NAME).append(Constants.DB_ARG)
+								.toString(), new String[] { title }, null);
 
 						if (!cursor.moveToFirst()) {
 							groupId = cr.insert(FeedColumns.GROUPS_CONTENT_URI, values).getLastPathSegment();
@@ -225,8 +236,10 @@ public class OPML {
 					if (groupId != null) {
 						values.put(FeedColumns.GROUP_ID, groupId);
 					}
+					values.put(FeedColumns.RETRIEVE_FULLTEXT, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_RETRIEVE_FULLTEXT)));
 
-					Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(), new String[] { url }, null);
+					Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(),
+							new String[] { url }, null);
 					feedId = null;
 					if (!cursor.moveToFirst()) {
 						feedId = cr.insert(FeedColumns.CONTENT_URI, values).getLastPathSegment();
@@ -242,8 +255,8 @@ public class OPML {
 				if (feedEntered && feedId != null) {
 					ContentValues values = new ContentValues();
 					values.put(FilterColumns.FILTER_TEXT, attributes.getValue("", ATTRIBUTE_TEXT));
-					values.put(FilterColumns.IS_REGEX, attributes.getValue("", ATTRIBUTE_IS_REGEX).equals("true"));
-					values.put(FilterColumns.IS_APPLIED_TO_TITLE, attributes.getValue("", ATTRIBUTE_IS_APPLIED_TO_TITLE).equals("true"));
+					values.put(FilterColumns.IS_REGEX, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_REGEX)));
+					values.put(FilterColumns.IS_APPLIED_TO_TITLE, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_APPLIED_TO_TITLE)));
 
 					ContentResolver cr = MainApplication.getAppContext().getContentResolver();
 					cr.insert(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), values);

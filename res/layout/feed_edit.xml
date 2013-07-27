@@ -46,7 +46,7 @@
         android:hint="@string/website_or_feed"
         android:inputType="textUri"
         android:singleLine="true" />
-    
+
     <ImageView
         android:id="@+id/searchButton"
         android:layout_width="wrap_content"
@@ -57,12 +57,21 @@
         android:onClick="onClickSearch"
         android:src="@drawable/action_search" />
 
+    <CheckBox
+        android:id="@+id/retrieve_fulltext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/feed_url"
+        android:layout_marginRight="10dp"
+        android:text="@string/get_full_text" />
+
     <RelativeLayout
         android:id="@+id/filters_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/button_layout"
-        android:layout_below="@+id/feed_url" >
+        android:layout_below="@+id/retrieve_fulltext" >
 
         <TextView
             android:id="@+id/filter_textview"
@@ -97,6 +106,7 @@
         </FrameLayout>
 
         <ImageView
+            android:id="@+id/imageView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

@@ -77,15 +77,16 @@ public class FeedData {
 		public static final String GROUP_ID = "groupid";
 		public static final String LAST_UPDATE = "lastupdate";
 		public static final String REAL_LAST_UPDATE = "reallastupdate";
+		public static final String RETRIEVE_FULLTEXT = "retrievefulltext";
 		public static final String ICON = "icon";
 		public static final String ERROR = "error";
 		public static final String PRIORITY = "priority";
 		public static final String FETCH_MODE = "fetchmode";
 
 		public static final String[] COLUMNS = new String[] { _ID, URL, NAME, IS_GROUP, IS_GROUP_COLLAPSED, GROUP_ID, LAST_UPDATE, REAL_LAST_UPDATE,
-				ICON, ERROR, PRIORITY, FETCH_MODE };
+				RETRIEVE_FULLTEXT, ICON, ERROR, PRIORITY, FETCH_MODE };
 		public static final String[] TYPES = new String[] { TYPE_PRIMARY_KEY, TYPE_TEXT_UNIQUE, TYPE_TEXT, TYPE_BOOLEAN, TYPE_BOOLEAN,
-				TYPE_EXTERNAL_ID, TYPE_DATE_TIME, TYPE_DATE_TIME, "BLOB", TYPE_TEXT, TYPE_INT, TYPE_INT };
+				TYPE_EXTERNAL_ID, TYPE_DATE_TIME, TYPE_DATE_TIME, TYPE_BOOLEAN, "BLOB", TYPE_TEXT, TYPE_INT, TYPE_INT };
 
 		public static final Uri CONTENT_URI(String feedId) {
 			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).toString());

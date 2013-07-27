@@ -77,6 +77,7 @@ import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.Html;
@@ -165,6 +166,7 @@ public class RssAtomParser extends DefaultHandler {
 	private boolean done = false;
 	private final Date keepDateBorder;
 	private boolean fetchImages = false;
+	private boolean retrieveFullText = false;
 	private boolean cancelled = false;
 	private long now = System.currentTimeMillis();
 	private StringBuilder guid;
@@ -175,7 +177,7 @@ public class RssAtomParser extends DefaultHandler {
 	private final ArrayList<ContentProviderOperation> inserts = new ArrayList<ContentProviderOperation>();
 	private final ArrayList<Vector<String>> entriesImages = new ArrayList<Vector<String>>();
 
-	public RssAtomParser(Date realLastUpdateDate, final String id, String feedName, String url) {
+	public RssAtomParser(Date realLastUpdateDate, final String id, String feedName, String url, boolean retrieveFullText) {
 		KEEP_TIME = Long.parseLong(PrefsManager.getString(PrefsManager.KEEP_TIME, "4")) * 86400000l;
 		long keepDateBorderTime = KEEP_TIME > 0 ? System.currentTimeMillis() - KEEP_TIME : 0;
 
@@ -185,6 +187,7 @@ public class RssAtomParser extends DefaultHandler {
 		this.id = id;
 		this.feedName = feedName;
 		feedEntiresUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(id);
+		this.retrieveFullText = retrieveFullText;
 
 		filters = new FeedFilters(id);
 
@@ -521,7 +524,7 @@ public class RssAtomParser extends DefaultHandler {
 	private Date parsePubdateDate(String dateStr) {
 		return parsePubdateDate(dateStr, true);
 	}
-	
+
 	private Date parsePubdateDate(String dateStr, boolean tryAllFormat) {
 		// We remove the first part if necessary (the day display)
 		int coma = dateStr.indexOf(", ");
@@ -649,6 +652,13 @@ public class RssAtomParser extends DefaultHandler {
 						if (images != null) {
 							downloadImages(results[i].uri.getLastPathSegment(), images);
 						}
+					}
+				}
+
+				if (retrieveFullText) {
+					for (ContentProviderResult result : results) {
+						MainApplication.getAppContext().sendBroadcast(
+								new Intent(Constants.ACTION_MOBILIZE_FEED).putExtra(Constants.ENTRY_URI, result.uri));
 					}
 				}
 			}

@@ -117,6 +117,7 @@ public class FetcherService extends IntentService {
 	private static final String COUNT = "COUNT(*)";
 	private static final String CONTENT_TYPE_TEXT_HTML = "text/html";
 	private static final String HREF = "href=\"";
+
 	private static final String HTML_BODY = "<body";
 	private static final String ENCODING = "encoding=\"";
 	private static final String SERVICENAME = "RssFetcherService";
@@ -416,6 +417,7 @@ public class FetcherService extends IntentService {
 			int fetchmodePosition = cursor.getColumnIndex(FeedColumns.FETCH_MODE);
 			int realLastUpdatePosition = cursor.getColumnIndex(FeedColumns.REAL_LAST_UPDATE);
 			int iconPosition = cursor.getColumnIndex(FeedColumns.ICON);
+			int retrieveFullscreenPosition = cursor.getColumnIndex(FeedColumns.RETRIEVE_FULLTEXT);
 
 			String id = cursor.getString(idPosition);
 			HttpURLConnection connection = null;
@@ -426,7 +428,8 @@ public class FetcherService extends IntentService {
 				String contentType = connection.getContentType();
 				int fetchMode = cursor.getInt(fetchmodePosition);
 
-				handler = new RssAtomParser(new Date(cursor.getLong(realLastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl);
+				handler = new RssAtomParser(new Date(cursor.getLong(realLastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl,
+						cursor.getInt(retrieveFullscreenPosition) == 1);
 				handler.setFetchImages(PrefsManager.getBoolean(PrefsManager.FETCH_PICTURES, false));
 
 				if (fetchMode == 0) {
