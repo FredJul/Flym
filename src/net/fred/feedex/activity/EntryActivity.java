@@ -225,25 +225,29 @@ public class EntryActivity extends ProgressActivity {
 
 				@Override
 				public void onMobilizationFinished(long entryId) {
-					EntryActivity.this.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							getProgressBar().setVisibility(View.GONE);
-							preferFullText = true;
-							reload(true);
-						}
-					});
+					if (entryId == _id) {
+						EntryActivity.this.runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								getProgressBar().setVisibility(View.GONE);
+								preferFullText = true;
+								reload(true);
+							}
+						});
+					}
 				}
 
 				@Override
 				public void onMobilizationError(long entryId) {
-					EntryActivity.this.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							getProgressBar().setVisibility(View.GONE);
-							Toast.makeText(EntryActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
-						}
-					});
+					if (entryId == _id) {
+						EntryActivity.this.runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								getProgressBar().setVisibility(View.GONE);
+								Toast.makeText(EntryActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+							}
+						});
+					}
 				}
 
 			});
@@ -574,7 +578,7 @@ public class EntryActivity extends ProgressActivity {
 	private void setupWebview(final WebView wv) {
 		// For color
 		wv.setBackgroundColor(Color.parseColor(BACKGROUND_COLOR));
-		
+
 		// For scrolling & gesture
 		wv.setOnKeyListener(onKeyEventListener);
 		wv.setOnTouchListener(onTouchListener);
