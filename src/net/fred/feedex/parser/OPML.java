@@ -79,8 +79,8 @@ public class OPML {
 	private static final String OUTLINE_TITLE = "\t<outline title='";
 	private static final String OUTLINE_XMLURL = "' type='rss' xmlUrl='";
 	private static final String OUTLINE_RETRIEVE_FULLTEXT = "' retrieveFullText='";
-	private static final String OUTLINE_INLINE_CLOSING = "' />\n";
-	private static final String OUTLINE_NORMAL_CLOSING = "' >\n";
+	private static final String OUTLINE_INLINE_CLOSING = "'/>\n";
+	private static final String OUTLINE_NORMAL_CLOSING = "'>\n";
 	private static final String OUTLINE_END = "\t</outline>\n";
 	private static final String FILTER_TEXT = "\t\t<filter text='";
 	private static final String FILTER_IS_REGEX = "' isRegex='";
