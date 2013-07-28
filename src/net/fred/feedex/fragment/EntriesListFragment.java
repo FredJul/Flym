@@ -27,6 +27,7 @@ import net.fred.feedex.R;
 import net.fred.feedex.activity.GeneralPrefsActivity;
 import net.fred.feedex.adapter.EntriesCursorAdapter;
 import net.fred.feedex.provider.FeedData.EntryColumns;
+import net.fred.feedex.service.FetcherService;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
@@ -129,12 +130,14 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 			return true;
 		}
 		case R.id.menu_refresh: {
-			new Thread() {
-				@Override
-				public void run() {
-					getActivity().sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS));
-				}
-			}.start();
+			if (!FetcherService.isRefreshingFeeds) {
+				new Thread() {
+					@Override
+					public void run() {
+						getActivity().sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS));
+					}
+				}.start();
+			}
 			return true;
 		}
 		case R.id.menu_all_read: {

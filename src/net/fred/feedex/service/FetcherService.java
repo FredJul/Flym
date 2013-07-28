@@ -81,8 +81,6 @@ import net.fred.feedex.parser.RssAtomParser;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -137,6 +135,8 @@ public class FetcherService extends IntentService {
 	private NotificationManager mNotifMgr;
 	private final HashSet<Long> mMobilizingEntries = new HashSet<Long>();
 
+	public static boolean isRefreshingFeeds = false;
+
 	/**
 	 * Listener for this service
 	 */
@@ -185,9 +185,7 @@ public class FetcherService extends IntentService {
 
 	@Override
 	public void onHandleIntent(Intent intent) {
-		// No intent, we quit
-		if (intent == null) {
-			sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINISHED));
+		if (intent == null) { // No intent, we quit
 			return;
 		}
 
@@ -198,7 +196,9 @@ public class FetcherService extends IntentService {
 		boolean skipFetch = isFromAutoRefresh && PrefsManager.getBoolean(PrefsManager.REFRESH_WIFI_ONLY, false)
 				&& networkInfo.getType() != ConnectivityManager.TYPE_WIFI;
 		if (networkInfo == null || networkInfo.getState() != NetworkInfo.State.CONNECTED || skipFetch) {
-			sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINISHED));
+			if (Constants.ACTION_REFRESH_FEEDS.equals(intent.getAction())) {
+				sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINISHED));
+			}
 			return;
 		}
 
@@ -219,10 +219,15 @@ public class FetcherService extends IntentService {
 			proxy = null;
 		}
 
-		if (intent.hasExtra(Constants.ENTRY_URI)) {
+		if (intent.hasExtra(Constants.ENTRY_URI)) { // == Constants.ACTION_MOBILIZE_FEED
 			mobilizeEntry((Uri) intent.getParcelableExtra(Constants.ENTRY_URI));
-		} else {
+		} else if (!isRefreshingFeeds) { // == Constants.ACTION_REFRESH_FEEDS
 			String feedId = intent.getStringExtra(Constants.FEED_ID);
+
+			if (feedId == null) {
+				isRefreshingFeeds = true;
+			}
+
 			int newCount = (feedId == null ? refreshFeeds() : refreshFeed(feedId));
 
 			if (newCount > 0) {
@@ -267,9 +272,12 @@ public class FetcherService extends IntentService {
 					mNotifMgr.cancel(0);
 				}
 			}
-		}
 
-		sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINISHED));
+			if (feedId == null) {
+				isRefreshingFeeds = false;
+			}
+			sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINISHED));
+		}
 	}
 
 	@Override
@@ -740,19 +748,5 @@ public class FetcherService extends IntentService {
 		} else {
 			return inputStream;
 		}
-	}
-
-	public static boolean isCurrentlyFetching() {
-		try {
-			ActivityManager manager = (ActivityManager) MainApplication.getAppContext().getSystemService(ACTIVITY_SERVICE);
-			for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-				if (FetcherService.class.getName().equals(service.service.getClassName())) {
-					return true;
-				}
-			}
-		} catch (SecurityException e) {
-		}
-
-		return false;
 	}
 }

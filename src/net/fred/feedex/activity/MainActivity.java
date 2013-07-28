@@ -143,12 +143,14 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 			stopService(new Intent(this, RefreshService.class));
 		}
 		if (PrefsManager.getBoolean(PrefsManager.REFRESH_ON_OPEN_ENABLED, false)) {
-			new Thread() {
-				@Override
-				public void run() {
-					sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS));
-				}
-			}.start();
+			if (!FetcherService.isRefreshingFeeds) {
+				new Thread() {
+					@Override
+					public void run() {
+						sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS));
+					}
+				}.start();
+			}
 		}
 
 		getSupportLoaderManager().initLoader(loaderId, null, this);
@@ -157,7 +159,7 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 	@Override
 	protected void onResume() {
 		super.onResume();
-		getProgressBar().setVisibility(FetcherService.isCurrentlyFetching() ? View.VISIBLE : View.GONE);
+		getProgressBar().setVisibility(FetcherService.isRefreshingFeeds ? View.VISIBLE : View.GONE);
 		registerReceiver(mRefreshReceiver, new IntentFilter(Constants.ACTION_REFRESH_FEEDS));
 		registerReceiver(mRefreshFinishedReceiver, new IntentFilter(Constants.ACTION_REFRESH_FINISHED));
 

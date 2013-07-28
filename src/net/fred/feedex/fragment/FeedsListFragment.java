@@ -58,6 +58,7 @@ import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
+import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.view.DragNDropExpandableListView;
 import net.fred.feedex.view.DragNDropListener;
 import android.app.AlertDialog;
@@ -261,12 +262,14 @@ public class FeedsListFragment extends ListFragment {
 			return true;
 		}
 		case R.id.menu_refresh: {
-			new Thread() {
-				@Override
-				public void run() {
-					getActivity().sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS));
-				}
-			}.start();
+			if (!FetcherService.isRefreshingFeeds) {
+				new Thread() {
+					@Override
+					public void run() {
+						getActivity().sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS));
+					}
+				}.start();
+			}
 			return true;
 		}
 		case R.id.menu_settings: {
