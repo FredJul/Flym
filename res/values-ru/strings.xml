@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">FeedEx News Reader</string>
+    <string name="never">никогда</string>
+    <string name="update">Обновление</string>
+    <string name="colon">:\u00A0</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_refresh">Обновить</string>
+    <string name="menu_all_read">Пометить все как прочитанное</string>
+    <string name="feedex_feeds">FeedEx feeds</string>
+    <string name="new_entries">новые записи</string>
+    <string name="error">Ошибка</string>
+    <string name="network_error">Нет подключения к сети</string>
+    <string name="loading">Загрузка…</string>
+    <string name="no_result">Нет результатов</string>
+    
+    <!-- FEEDS -->
+    <string name="menu_add_feed">Добавить ленту</string>
+    <string name="no_feeds">Нет лент</string>
+    <string name="no_filters">Нет фильтров</string>
+    <string name="context_menu_delete">Кдалить</string>
+    <string name="edit_feed_title">Редактировать ленту</string>
+    <string name="new_feed_title">Новая лента</string>
+    <string name="context_menu_edit">Редактировать</string>
+    <string name="menu_add_group">Добавить группу</string>
+    <string name="menu_import">Импорт из OPML-файла</string>
+    <string name="menu_export">Экспорт в OPML-файл</string>
+    <string name="menu_enable_feed_sort">Сортировка лент</string>
+    <string name="menu_disable_feed_sort">Закончить сортировку</string>
+    <string name="error_feed_error">Адрес ленты не доступен.</string>
+    <string name="error_feed_process">Лента не может быть добавлена.</string>
+    <string name="error_feed_url_exists">Такой адрес уже есть.</string>
+    <string name="error_feed_import">выбранный файл не может быть импортирован.</string>
+    <string name="error_feed_export">Экспорт не удался. Удостоверьтесь, что карта памяти имеет возможность записи.</string>
+    <string name="error_external_storage_not_available">Внешнее хранилище (например, карта памяти) недоступно.</string>
+    <string name="feed_url">URL-адрес</string>
+    <string name="optional">(не обязательно)</string>
+    <string name="website_or_feed">(сайта или ленты новостей)</string>
+    <string name="feed_title">НАЗВАНИЕ</string>
+    <string name="feed_filters">ФИЛЬТРЫ ИСКЛЮЧЕНИЙ</string>
+    <string name="filter_add_title">Добавить фильтр</string>
+    <string name="filter_delete_title">Удалить фильтр</string>
+    <string name="filter_edit_title">Редактировать фильтр</string>
+    <string name="filter_is_regex">это регулярное выражение</string>
+    <string name="filter_apply_to_title">Применить к заголовкам</string>
+    <string name="filter_apply_to_content">Применить к содержанию</string>
+    <string name="feed_search">Поиск лент</string>
+    <string name="feed_search_by_web_search">Искать ленты по ключевым словам</string>
+    <string name="feed_search_by_topic">Создать ленту по заголовку (через Faroo)</string>
+    <string name="feed_search_by_youtube">Найти ленту по названию канала Youtube</string>
+    <string name="select_file">Выбрать файл (корень SD-карты)</string>
+    <string name="question_delete_feed">Вы действительно хотите удалить эту ленту?</string>
+    <string name="question_delete_group">Вы действительно хотите удалить эту группу и все ее ленты??</string>
+    <string name="question_delete_filter">Вы действительно хотите удалить этот фильтр?</string>
+    <string name="add_group_title">Выберите название группы</string>
+    <string name="edit_group_title">Редактировать название группы</string>
+    <string name="message_exported_to">Экспортировано в %s.</string>
+    <string name="to_group_title">Перенос ленты</string>
+    <string name="to_group_message">Вы можете поместить ленту внутрь этой группы, либо сверху отнее. Что вы хотите сделать?</string>
+    <string name="to_group_above">Над группой</string>
+    <string name="to_group_into">Внутрь группы</string>
+    
+    <!-- ENTRIES -->
+    <string name="all">Новости</string>
+    <string name="overview">Ленты</string>
+    <string name="no_entries">Нет новостей</string>
+    <string name="favorites">Избранные</string>
+    <string name="context_menu_mark_as_read">Пометить как прочитанное</string>
+    <string name="context_menu_hide_read">Скрыть прочитанные новости</string>
+    <string name="context_menu_show_read">Показать прочитанные новости</string>
+    <string name="context_menu_share_starred">Поделиться избранными новостями</string>
+    <string name="menu_star">Поместить в избранное</string>
+    <string name="menu_unstar">Убрать из избранного</string>
+    <string name="menu_share">Поделиться</string>
+    <string name="menu_copy_clipboard">Скопировать ссылку</string>
+    <string name="menu_mark_as_unread">Пометить как непрочитанное</string>
+    <string name="share_favorites_title">FeedEx: избранные новости</string>
+    <string name="copied_clipboard">Ссылка скопирована</string>
+    <string name="get_full_text">Загрузить весь текст</string>
+    <string name="original_text">Показать оригинальный текст</string>
+    <string name="see_enclosure">Показать вложение</string>
+    <string name="see_link">Показать в браузере</string>
+    <string name="cant_open_link">Не найдено приложений для открытия этой ссылки</string>
+    
+    <!-- WIDGET -->
+    <string name="red">Красный</string>
+    <string name="green">Зеленый</string>
+    <string name="blue">Синий</string>
+    <string name="transparency">Прозрачный</string>
+    
+    <!-- SETTINGS -->
+    <string name="settings_screen_proxy">Прокси-сервер</string>
+    <string name="settings_category_refresh">Автоиатическое обновление</string>
+    <string name="settings_refresh_enabled">Enable automatic refresh</string>
+    <string name="settings_refresh_enabled_description">Включить автоматическое обновление лент</string>
+    <string name="settings_refresh_interval">Интервал обновления</string>
+    <string name="settings_refresh_interval_description">Интервал между автоматическим обновлением</string>
+    <string name="settings_category_notifications">Уведомления</string>
+    <string name="settings_notifications_enabled">Включить уведомления</string>
+    <string name="settings_notifications_enabled_description">Включить уведомления о новых записях</string>
+    <string name="settings_notifications_ringtone">Звук</string>
+    <string name="settings_notifications_ringtone_description">Выбрать звук уведомления</string>
+    <string name="settings_notifications_vibrate">Вибрация</string>
+    <string name="settings_notifications_vibrate_description">Включить вибрацию при новых записях</string>
+    <string name="settings_category_content_presentation">Представление содержания</string>
+    <string name="settings_lighttheme">Светлая тема</string>
+    <string name="settings_lighttheme_description">Использовать светлую тему</string>
+    <string name="settings_keep_time">Время хранения новостей</string>
+    <string name="settings_keep_time_description">Новости старше установленной даты будут удалены</string>
+    <string name="settings_disable_pictures">Выключить изображения</string>
+    <string name="settings_disable_pictures_description">Не показывать и не загружать никаких изображений</string>
+    <string name="settings_fetch_pictures">Загружать изображения</string>
+    <string name="settings_fetch_pictures_description">Загружать все изображения и сохранять их в памяти</string>
+    <string name="settings_font_size">Размер текста</string>
+    <string name="settings_font_size_description">Размер текста содержания новостей</string>
+    <string name="settings_refresh_on_open">Обновлять при запуске</string>
+    <string name="settings_refresh_on_open_description">Обновлять все ленты пии запуске приложения</string>
+    <string name="settings_refresh_wifi_only">Обновлять только по WiFi</string>
+    <string name="settings_refresh_wifi_only_description">Автоматическое обновление  будет выполняться только при включенном WiFi</string>
+    <string name="settings_visible_feeds">Видимые ленты</string>
+    <string name="settings_widget_background">Фон</string>
+    <string name="settings_widget_background_description">Цвета и прозрачность фона виджета</string>
+    <string name="settings_category_network">Сеть</string>
+    <string name="settings_proxy_enabled">Включено</string>
+    <string name="settings_proxy_wifi_only">Только WiFi</string>
+    <string name="settings_proxy_wifi_only_description">Использовать прокси-сервер только для WiFi</string>
+    <string name="settings_proxy_host">Адрес сервера</string>
+    <string name="settings_proxy_port">Порт</string>
+    <string name="settings_proxy_type">Тип соединения</string>
+    <string name="all_feeds">Все ленты (включая будущие)</string>
+
+    <string-array name="settings_intervals">
+        <item>1 минута</item>
+        <item>5 минут</item>
+        <item>15 минут</item>
+        <item>30 минут</item>
+        <item>1 час</item>
+        <item>2 часа</item>
+        <item>6 часов</item>
+        <item>12 часов</item>
+        <item>1 день</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 день</item>
+        <item>2 дня</item>
+        <item>4 дня</item>
+        <item>1 неделя</item>
+        <item>2 недели</item>
+        <item>1 месяц</item>
+        <item>2 месяца</item>
+        <item>3 месяца</item>
+        <item>Всегда</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>Стандартно</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_proxy_types_names">
+        <item>HTTP</item>
+        <item>SOCKS</item>
+    </string-array>
+
+</resources>
