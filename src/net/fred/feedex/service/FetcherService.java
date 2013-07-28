@@ -743,12 +743,16 @@ public class FetcherService extends IntentService {
 	}
 
 	public static boolean isCurrentlyFetching() {
-		ActivityManager manager = (ActivityManager) MainApplication.getAppContext().getSystemService(ACTIVITY_SERVICE);
-		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-			if (FetcherService.class.getName().equals(service.service.getClassName())) {
-				return true;
+		try {
+			ActivityManager manager = (ActivityManager) MainApplication.getAppContext().getSystemService(ACTIVITY_SERVICE);
+			for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+				if (FetcherService.class.getName().equals(service.service.getClassName())) {
+					return true;
+				}
 			}
+		} catch (SecurityException e) {
 		}
+
 		return false;
 	}
 }
