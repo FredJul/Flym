@@ -41,7 +41,7 @@
     <string name="menu_add_feed">Добавить ленту</string>
     <string name="no_feeds">Нет лент</string>
     <string name="no_filters">Нет фильтров</string>
-    <string name="context_menu_delete">Кдалить</string>
+    <string name="context_menu_delete">Удалить</string>
     <string name="edit_feed_title">Редактировать ленту</string>
     <string name="new_feed_title">Новая лента</string>
     <string name="context_menu_edit">Редактировать</string>
@@ -53,7 +53,7 @@
     <string name="error_feed_error">Адрес ленты не доступен.</string>
     <string name="error_feed_process">Лента не может быть добавлена.</string>
     <string name="error_feed_url_exists">Такой адрес уже есть.</string>
-    <string name="error_feed_import">выбранный файл не может быть импортирован.</string>
+    <string name="error_feed_import">Выбранный файл не может быть импортирован.</string>
     <string name="error_feed_export">Экспорт не удался. Удостоверьтесь, что карта памяти имеет возможность записи.</string>
     <string name="error_external_storage_not_available">Внешнее хранилище (например, карта памяти) недоступно.</string>
     <string name="feed_url">URL-адрес</string>
@@ -79,7 +79,7 @@
     <string name="edit_group_title">Редактировать название группы</string>
     <string name="message_exported_to">Экспортировано в %s.</string>
     <string name="to_group_title">Перенос ленты</string>
-    <string name="to_group_message">Вы можете поместить ленту внутрь этой группы, либо сверху отнее. Что вы хотите сделать?</string>
+    <string name="to_group_message">Вы можете поместить ленту внутрь этой группы, либо сверху от нее. Что вы хотите сделать?</string>
     <string name="to_group_above">Над группой</string>
     <string name="to_group_into">Внутрь группы</string>
     
@@ -87,7 +87,7 @@
     <string name="all">Новости</string>
     <string name="overview">Ленты</string>
     <string name="no_entries">Нет новостей</string>
-    <string name="favorites">Избранные</string>
+    <string name="favorites">Избранное</string>
     <string name="context_menu_mark_as_read">Пометить как прочитанное</string>
     <string name="context_menu_hide_read">Скрыть прочитанные новости</string>
     <string name="context_menu_show_read">Показать прочитанные новости</string>
@@ -102,7 +102,7 @@
     <string name="get_full_text">Загрузить весь текст</string>
     <string name="original_text">Показать оригинальный текст</string>
     <string name="see_enclosure">Показать вложение</string>
-    <string name="see_link">Показать в браузере</string>
+    <string name="see_link">Открыть в браузере</string>
     <string name="cant_open_link">Не найдено приложений для открытия этой ссылки</string>
     
     <!-- WIDGET -->
@@ -113,8 +113,8 @@
     
     <!-- SETTINGS -->
     <string name="settings_screen_proxy">Прокси-сервер</string>
-    <string name="settings_category_refresh">Автоиатическое обновление</string>
-    <string name="settings_refresh_enabled">Enable automatic refresh</string>
+    <string name="settings_category_refresh">Автоматическое обновление</string>
+    <string name="settings_refresh_enabled">Включить автоматическое обновление</string>
     <string name="settings_refresh_enabled_description">Включить автоматическое обновление лент</string>
     <string name="settings_refresh_interval">Интервал обновления</string>
     <string name="settings_refresh_interval_description">Интервал между автоматическим обновлением</string>
@@ -135,7 +135,7 @@
     <string name="settings_fetch_pictures">Загружать изображения</string>
     <string name="settings_fetch_pictures_description">Загружать все изображения и сохранять их в памяти</string>
     <string name="settings_font_size">Размер текста</string>
-    <string name="settings_font_size_description">Размер текста содержания новостей</string>
+    <string name="settings_font_size_description">Размер текста новостей</string>
     <string name="settings_refresh_on_open">Обновлять при запуске</string>
     <string name="settings_refresh_on_open_description">Обновлять все ленты пии запуске приложения</string>
     <string name="settings_refresh_wifi_only">Обновлять только по WiFi</string>
@@ -172,7 +172,7 @@
         <item>1 месяц</item>
         <item>2 месяца</item>
         <item>3 месяца</item>
-        <item>Всегда</item>
+        <item>Не удалять</item>
     </string-array>
     <string-array name="settings_font_sizes">
         <item>Стандартно</item>
