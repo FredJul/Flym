@@ -20,6 +20,7 @@
 package net.fred.feedex;
 
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 
 public class PrefsManager {
@@ -97,5 +98,19 @@ public class PrefsManager {
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putString(key, value);
 		editor.commit();
+	}
+
+	public static void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+		try {
+			PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).registerOnSharedPreferenceChangeListener(listener);
+		} catch (Exception e) { // Seems to be possible to have a NPE here... Why??
+		}
+	}
+
+	public static void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+		try {
+			PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).unregisterOnSharedPreferenceChangeListener(listener);
+		} catch (Exception e) {
+		}
 	}
 }

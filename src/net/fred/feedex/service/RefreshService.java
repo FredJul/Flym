@@ -45,7 +45,6 @@
 package net.fred.feedex.service;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.MainApplication;
 import net.fred.feedex.PrefsManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -55,7 +54,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 
 public class RefreshService extends Service {
 	public static final String SIXTYMINUTES = "3600000";
@@ -94,7 +92,7 @@ public class RefreshService extends Service {
 		super.onCreate();
 
 		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).registerOnSharedPreferenceChangeListener(listener);
+		PrefsManager.registerOnSharedPreferenceChangeListener(listener);
 		restartTimer(true);
 	}
 
@@ -130,7 +128,7 @@ public class RefreshService extends Service {
 		if (timerIntent != null) {
 			alarmManager.cancel(timerIntent);
 		}
-		PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).unregisterOnSharedPreferenceChangeListener(listener);
+		PrefsManager.unregisterOnSharedPreferenceChangeListener(listener);
 		super.onDestroy();
 	}
 }
