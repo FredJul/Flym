@@ -23,7 +23,6 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="app_name">FeedEx News Reader</string>
     <string name="never">never</string>
     <string name="update">Update</string>
     <string name="colon">:\u00A0</string>
@@ -179,10 +178,6 @@
         <item>+1</item>
         <item>+2</item>
         <item>+3</item>
-    </string-array>
-    <string-array name="settings_proxy_types_names">
-        <item>HTTP</item>
-        <item>SOCKS</item>
     </string-array>
 
 </resources>

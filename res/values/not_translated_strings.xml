@@ -1,4 +1,6 @@
 <resources>
+    <string name="app_name" translatable="false">FeedEx</string>
+    
     <string-array name="settings_interval_values" translatable="false">
         <item>60000</item>
         <item>300000</item>
@@ -30,5 +32,9 @@
     <string-array name="settings_proxy_types" translatable="false">
         <item>0</item>
         <item>1</item>
+    </string-array>
+    <string-array name="settings_proxy_types_names" translatable="false">
+        <item>HTTP</item>
+        <item>SOCKS</item>
     </string-array>
 </resources>
