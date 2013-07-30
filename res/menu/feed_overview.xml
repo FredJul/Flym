@@ -4,17 +4,17 @@
         <item
             android:id="@+id/menu_add_feed"
             android:icon="@drawable/content_new"
-            android:showAsAction="ifRoom|withText"
+            android:showAsAction="always|withText"
             android:title="@string/menu_add_feed"/>
         <item
             android:id="@+id/menu_refresh"
             android:icon="@drawable/refresh"
-            android:showAsAction="ifRoom|withText"
+            android:showAsAction="always|withText"
             android:title="@string/menu_refresh"/>
         <item
             android:id="@+id/menu_all_read"
             android:icon="@drawable/read_all"
-            android:showAsAction="ifRoom|withText"
+            android:showAsAction="always|withText"
             android:title="@string/menu_all_read"/>
         <item
             android:id="@+id/menu_add_group"

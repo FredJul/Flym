@@ -4,7 +4,7 @@
     <item
         android:id="@+id/menu_star"
         android:icon="@drawable/rating_not_important"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="always|withText"
         android:title="@string/menu_star"/>
 
     <item
