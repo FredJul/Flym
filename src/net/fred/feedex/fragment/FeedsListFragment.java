@@ -143,12 +143,15 @@ public class FeedsListFragment extends ListFragment {
 		});
 
 		mListView.setDragNDropListener(new DragNDropListener() {
+			boolean fromHasGroupIndicator = false;
+
 			@Override
 			public void onStopDrag(View itemView) {
 			}
 
 			@Override
 			public void onStartDrag(View itemView) {
+				fromHasGroupIndicator = itemView.findViewById(R.id.indicator).getVisibility() == View.VISIBLE;
 			}
 
 			@Override
@@ -156,8 +159,7 @@ public class FeedsListFragment extends ListFragment {
 				final boolean fromIsGroup = ExpandableListView.getPackedPositionType(mListView.getExpandableListPosition(flatPosFrom)) == ExpandableListView.PACKED_POSITION_TYPE_GROUP;
 				final boolean toIsGroup = ExpandableListView.getPackedPositionType(mListView.getExpandableListPosition(flatPosTo)) == ExpandableListView.PACKED_POSITION_TYPE_GROUP;
 
-				View fromView = mListView.getChildAt(flatPosFrom - mListView.getFirstVisiblePosition());
-				final boolean fromIsFeedWithoutGroup = fromIsGroup && fromView.findViewById(R.id.indicator).getVisibility() != View.VISIBLE;
+				final boolean fromIsFeedWithoutGroup = fromIsGroup && !fromHasGroupIndicator;
 
 				View toView = mListView.getChildAt(flatPosTo - mListView.getFirstVisiblePosition());
 				boolean toIsFeedWithoutGroup = toIsGroup && toView.findViewById(R.id.indicator).getVisibility() != View.VISIBLE;
