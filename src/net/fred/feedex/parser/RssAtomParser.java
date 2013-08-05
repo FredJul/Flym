@@ -366,15 +366,18 @@ public class RssAtomParser extends DefaultHandler {
 				String improvedTitle = unescapeTitle(title.toString().trim());
 				values.put(EntryColumns.TITLE, improvedTitle);
 
-				// Improve the description
-				Pair<String, Vector<String>> improvedContent = improveHtmlContent(description.toString(), fetchImages);
-				entriesImages.add(improvedContent.second);
-				if (improvedContent.first != null) {
-					values.put(EntryColumns.ABSTRACT, improvedContent.first);
+				Pair<String, Vector<String>> improvedContent = null;
+				if (description != null) {
+					// Improve the description
+					improvedContent = improveHtmlContent(description.toString(), fetchImages);
+					entriesImages.add(improvedContent.second);
+					if (improvedContent.first != null) {
+						values.put(EntryColumns.ABSTRACT, improvedContent.first);
+					}
 				}
 
 				// Try to find if the entry is not filtered and need to be processed
-				if (!filters.isEntryFiltered(improvedTitle, improvedContent.first)) {
+				if (!filters.isEntryFiltered(improvedTitle, improvedContent == null ? null : improvedContent.first)) {
 
 					if (author != null) {
 						values.put(EntryColumns.AUTHOR, author.toString());
@@ -710,11 +713,11 @@ public class RssAtomParser extends DefaultHandler {
 					if (isAppliedToTitle) {
 						Matcher m = p.matcher(title);
 						isFiltered = m.find();
-					} else {
+					} else if (content != null) {
 						Matcher m = p.matcher(content);
 						isFiltered = m.find();
 					}
-				} else if ((isAppliedToTitle && title.contains(filterText)) || (!isAppliedToTitle && content.contains(filterText))) {
+				} else if ((isAppliedToTitle && title.contains(filterText)) || (!isAppliedToTitle && content != null && content.contains(filterText))) {
 					isFiltered = true;
 				}
 			}
