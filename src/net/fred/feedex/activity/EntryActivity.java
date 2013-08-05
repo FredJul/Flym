@@ -79,7 +79,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.TaskStackBuilder;
 import android.text.format.DateFormat;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -729,9 +728,7 @@ public class EntryActivity extends ProgressActivity {
 		case android.R.id.home:
 			if (mFromWidget) {
 				Intent intent = new Intent(this, MainActivity.class);
-				TaskStackBuilder.create(this) //
-						.addNextIntentWithParentStack(intent) // Add all of this activity's parents to the back stack
-						.startActivities(); // Navigate up to the closest parent
+				startActivity(intent);
 			}
 			finish();
 
