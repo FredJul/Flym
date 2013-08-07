@@ -180,13 +180,17 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		mSectionsPagerAdapter.getItem(getActionBar().getSelectedNavigationIndex()).onCreateOptionsMenu(menu, getMenuInflater());
+		// HACK to get the good fragment...
+		getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager + ":" + getActionBar().getSelectedNavigationIndex())
+				.onCreateOptionsMenu(menu, getMenuInflater());
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		mSectionsPagerAdapter.getItem(getActionBar().getSelectedNavigationIndex()).onOptionsItemSelected(item);
+		// HACK to get the good fragment...
+		getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager + ":" + getActionBar().getSelectedNavigationIndex())
+				.onOptionsItemSelected(item);
 		return true;
 	}
 
@@ -226,25 +230,36 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 	 */
 	private static class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-		private final Fragment[] mFragments = new Fragment[] { new FeedsListFragment(), new EntriesListFragment(), new EntriesListFragment() };
-
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
-
-			Bundle args = new Bundle();
-			args.putParcelable(EntriesListFragment.ARG_URI, EntryColumns.CONTENT_URI);
-			args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
-			mFragments[1].setArguments(args);
-
-			args = new Bundle();
-			args.putParcelable(EntriesListFragment.ARG_URI, EntryColumns.FAVORITES_CONTENT_URI);
-			args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
-			mFragments[2].setArguments(args);
 		}
 
 		@Override
 		public Fragment getItem(int position) {
-			return mFragments[position];
+			Fragment fragment = null;
+			Bundle args = new Bundle();
+			switch (position) {
+			case 0:
+				fragment = new FeedsListFragment();
+				break;
+			case 1:
+				fragment = new EntriesListFragment();
+				args.putParcelable(EntriesListFragment.ARG_URI, EntryColumns.CONTENT_URI);
+				args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
+				fragment.setArguments(args);
+				break;
+			case 2:
+				fragment = new EntriesListFragment();
+				args.putParcelable(EntriesListFragment.ARG_URI, EntryColumns.FAVORITES_CONTENT_URI);
+				args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
+				fragment.setArguments(args);
+				break;
+
+			default:
+				break;
+			}
+
+			return fragment;
 		}
 
 		@Override

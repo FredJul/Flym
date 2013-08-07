@@ -142,5 +142,4 @@ public class EntriesListActivity extends FragmentActivity {
 
 		return false;
 	}
-
 }
