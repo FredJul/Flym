@@ -39,6 +39,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,9 +94,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 	}
 
 	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		menu.clear();
-		getActivity().getMenuInflater().inflate(R.menu.entry_list, menu);
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.entry_list, menu);
 
 		if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
 			menu.findItem(R.id.menu_hide_read).setVisible(false);
@@ -106,7 +106,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 				menu.findItem(R.id.menu_hide_read).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
 			}
 		}
-		super.onPrepareOptionsMenu(menu);
+
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override

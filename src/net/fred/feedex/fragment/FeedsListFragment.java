@@ -243,15 +243,14 @@ public class FeedsListFragment extends ListFragment {
 	}
 
 	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		menu.clear();
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		if (mListView.isDragNDropEnabled()) {
-			getActivity().getMenuInflater().inflate(R.menu.feed_overview_sorting, menu);
+			inflater.inflate(R.menu.feed_overview_sorting, menu);
 		} else {
-			getActivity().getMenuInflater().inflate(R.menu.feed_overview, menu);
+			inflater.inflate(R.menu.feed_overview, menu);
 		}
 
-		super.onPrepareOptionsMenu(menu);
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override

@@ -123,7 +123,6 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 			@Override
 			public void onPageSelected(int position) {
 				actionBar.setSelectedNavigationItem(position);
-				invalidateOptionsMenu();
 			}
 		});
 
@@ -180,18 +179,14 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 	}
 
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		// HACK to get the good fragment...
-		getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager + ":" + getActionBar().getSelectedNavigationIndex())
-				.onPrepareOptionsMenu(menu);
-		return true;
+	public boolean onCreateOptionsMenu(Menu menu) {
+		mSectionsPagerAdapter.getItem(getActionBar().getSelectedNavigationIndex()).onCreateOptionsMenu(menu, getMenuInflater());
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		// HACK to get the good fragment...
-		getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager + ":" + getActionBar().getSelectedNavigationIndex())
-				.onOptionsItemSelected(item);
+	public boolean onOptionsItemSelected(MenuItem item) {
+		mSectionsPagerAdapter.getItem(getActionBar().getSelectedNavigationIndex()).onOptionsItemSelected(item);
 		return true;
 	}
 
@@ -211,6 +206,7 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 		// When the given tab is selected, switch to the corresponding page in the ViewPager.
 		mViewPager.setCurrentItem(tab.getPosition());
+		invalidateOptionsMenu();
 
 		if (mActionMode != null) {
 			mActionMode.finish();
@@ -230,36 +226,25 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 	 */
 	private static class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+		private final Fragment[] mFragments = new Fragment[] { new FeedsListFragment(), new EntriesListFragment(), new EntriesListFragment() };
+
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
+
+			Bundle args = new Bundle();
+			args.putParcelable(EntriesListFragment.ARG_URI, EntryColumns.CONTENT_URI);
+			args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
+			mFragments[1].setArguments(args);
+
+			args = new Bundle();
+			args.putParcelable(EntriesListFragment.ARG_URI, EntryColumns.FAVORITES_CONTENT_URI);
+			args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
+			mFragments[2].setArguments(args);
 		}
 
 		@Override
 		public Fragment getItem(int position) {
-			Fragment fragment = null;
-			Bundle args = new Bundle();
-			switch (position) {
-			case 0:
-				fragment = new FeedsListFragment();
-				break;
-			case 1:
-				fragment = new EntriesListFragment();
-				args.putParcelable(EntriesListFragment.ARG_URI, EntryColumns.CONTENT_URI);
-				args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
-				fragment.setArguments(args);
-				break;
-			case 2:
-				fragment = new EntriesListFragment();
-				args.putParcelable(EntriesListFragment.ARG_URI, EntryColumns.FAVORITES_CONTENT_URI);
-				args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
-				fragment.setArguments(args);
-				break;
-
-			default:
-				break;
-			}
-
-			return fragment;
+			return mFragments[position];
 		}
 
 		@Override

@@ -98,6 +98,7 @@ public class EntriesListActivity extends FragmentActivity {
 			Bundle args = new Bundle();
 			args.putParcelable(EntriesListFragment.ARG_URI, intent.getData());
 			fragment.setArguments(args);
+			fragment.setHasOptionsMenu(true);
 			getSupportFragmentManager().beginTransaction().add(android.R.id.content, fragment, "fragment").commit();
 		}
 
@@ -128,20 +129,18 @@ public class EntriesListActivity extends FragmentActivity {
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		getSupportFragmentManager().findFragmentByTag("fragment").onPrepareOptionsMenu(menu);
 		menu.removeItem(R.id.menu_refresh); // We do not want the refresh option here
 		return true;
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
 			finish();
-		default:
-			getSupportFragmentManager().findFragmentByTag("fragment").onOptionsItemSelected(item);
+			return true;
 		}
-		return true;
+
+		return false;
 	}
 
 }
