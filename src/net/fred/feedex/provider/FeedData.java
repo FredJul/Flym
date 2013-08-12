@@ -68,7 +68,7 @@ public class FeedData {
 	static final String TYPE_BOOLEAN = "INTEGER(1)";
 
 	public static class FeedColumns implements BaseColumns {
-		public static final Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds").toString());
+		public static final String TABLE_NAME = "feeds";
 
 		public static final String URL = "url";
 		public static final String NAME = "name";
@@ -87,6 +87,8 @@ public class FeedData {
 				RETRIEVE_FULLTEXT, ICON, ERROR, PRIORITY, FETCH_MODE };
 		public static final String[] TYPES = new String[] { TYPE_PRIMARY_KEY, TYPE_TEXT_UNIQUE, TYPE_TEXT, TYPE_BOOLEAN, TYPE_BOOLEAN,
 				TYPE_EXTERNAL_ID, TYPE_DATE_TIME, TYPE_DATE_TIME, TYPE_BOOLEAN, "BLOB", TYPE_TEXT, TYPE_INT, TYPE_INT };
+
+		public static final Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds").toString());
 
 		public static final Uri CONTENT_URI(String feedId) {
 			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).toString());
@@ -120,7 +122,7 @@ public class FeedData {
 	}
 
 	public static class FilterColumns implements BaseColumns {
-		public static final Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/filters").toString());
+		public static final String TABLE_NAME = "filters";
 
 		public static final String FEED_ID = "feedid";
 		public static final String FILTER_TEXT = "filtertext";
@@ -129,6 +131,8 @@ public class FeedData {
 
 		public static final String[] COLUMNS = new String[] { _ID, FEED_ID, FILTER_TEXT, IS_REGEX, IS_APPLIED_TO_TITLE };
 		public static final String[] TYPES = new String[] { TYPE_PRIMARY_KEY, TYPE_EXTERNAL_ID, TYPE_TEXT, TYPE_BOOLEAN, TYPE_BOOLEAN };
+
+		public static final Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/filters").toString());
 
 		public static final Uri FILTERS_FOR_FEED_CONTENT_URI(String feedId) {
 			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).append("/filters").toString());
@@ -140,6 +144,8 @@ public class FeedData {
 	}
 
 	public static class EntryColumns implements BaseColumns {
+		public static final String TABLE_NAME = "entries";
+
 		public static final String FEED_ID = "feedid";
 		public static final String TITLE = "title";
 		public static final String ABSTRACT = "abstract";

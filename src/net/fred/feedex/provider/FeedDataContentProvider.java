@@ -48,8 +48,6 @@ import java.io.File;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
-import net.fred.feedex.R;
-import net.fred.feedex.parser.OPML;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
@@ -57,23 +55,16 @@ import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.text.TextUtils;
 
 public class FeedDataContentProvider extends ContentProvider {
-	private static final String FOLDER = Environment.getExternalStorageDirectory() + "/FeedEx/";
-	private static final String DATABASE_NAME = "FeedEx.db";
-
-	private static final int DATABASE_VERSION = 3;
 
 	private static final int URI_GROUPS = 1;
 	private static final int URI_GROUP = 2;
@@ -91,21 +82,13 @@ public class FeedDataContentProvider extends ContentProvider {
 	private static final int URI_FAVORITES = 14;
 	private static final int URI_FAVORITES_ENTRY = 15;
 
-	private static final String TABLE_FEEDS = "feeds";
-	private static final String TABLE_FILTERS = "filters";
-	private static final String TABLE_ENTRIES = "entries";
-	private static final String TABLE_ENTRIES_WITH_FEED_INFO = new StringBuilder(TABLE_ENTRIES).append(" JOIN (SELECT ").append(FeedColumns._ID)
-			.append(" AS joined_feed_id, ").append(FeedColumns.NAME).append(", ").append(FeedColumns.ICON).append(", ").append(FeedColumns.GROUP_ID)
-			.append(" FROM ").append(TABLE_FEEDS).append(") AS f ON (").append(TABLE_ENTRIES).append('.').append(EntryColumns.FEED_ID)
-			.append(" = f.joined_feed_id)").toString();
+	private static final String ENTRIES_TABLE_WITH_FEED_INFO = new StringBuilder(EntryColumns.TABLE_NAME).append(" JOIN (SELECT ")
+			.append(FeedColumns._ID).append(" AS joined_feed_id, ").append(FeedColumns.NAME).append(", ").append(FeedColumns.ICON).append(", ")
+			.append(FeedColumns.GROUP_ID).append(" FROM ").append(FeedColumns.TABLE_NAME).append(") AS f ON (").append(EntryColumns.TABLE_NAME)
+			.append('.').append(EntryColumns.FEED_ID).append(" = f.joined_feed_id)").toString();
 
-	public static final String IMAGE_FOLDER = FOLDER + "images/";
+	public static final String IMAGE_FOLDER = DatabaseHelper.EXTERNAL_FOLDER + "images/";
 	public static final File IMAGE_FOLDER_FILE = new File(IMAGE_FOLDER);
-
-	private static final String BACKUP_OPML = FOLDER + "backup.opml";
-
-	private static final String ALTER_TABLE = "ALTER TABLE ";
-	private static final String ADD = " ADD ";
 
 	private static UriMatcher URI_MATCHER;
 
@@ -126,86 +109,6 @@ public class FeedDataContentProvider extends ContentProvider {
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/#", URI_ENTRY);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites", URI_FAVORITES);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites/#", URI_FAVORITES_ENTRY);
-	}
-
-	private static class DatabaseHelper extends SQLiteOpenHelper {
-
-		private final Handler mHandler;
-
-		public DatabaseHelper(Handler handler, Context context, String name, int version) {
-			super(context, name, null, version);
-			mHandler = handler;
-		}
-
-		@Override
-		public void onCreate(SQLiteDatabase database) {
-			database.execSQL(createTable(TABLE_FEEDS, FeedColumns.COLUMNS, FeedColumns.TYPES));
-			database.execSQL(createTable(TABLE_FILTERS, FilterColumns.COLUMNS, FilterColumns.TYPES));
-			database.execSQL(createTable(TABLE_ENTRIES, EntryColumns.COLUMNS, EntryColumns.TYPES));
-
-			// Check if we need to import the backup
-			File backupFile = new File(BACKUP_OPML);
-			final boolean hasBackup = backupFile.exists();
-			mHandler.post(new Runnable() { // In order to it after the database is created
-				@Override
-				public void run() {
-					new Thread(new Runnable() { // To not block the UI
-								@Override
-								public void run() {
-									try {
-										if (hasBackup) {
-											// Perform an automated import of the backup
-											OPML.importFromFile(BACKUP_OPML);
-										} else {
-											// No database and no backup, automatically add the default feeds
-											OPML.importFromFile(MainApplication.getAppContext().getResources().openRawResource(R.raw.default_feeds));
-										}
-									} catch (Exception e) {
-									}
-								}
-							}).start();
-				}
-			});
-		}
-
-		private String createTable(String tableName, String[] columns, String[] types) {
-			if (tableName == null || columns == null || types == null || types.length != columns.length || types.length == 0) {
-				throw new IllegalArgumentException("Invalid parameters for creating table " + tableName);
-			} else {
-				StringBuilder stringBuilder = new StringBuilder("CREATE TABLE ");
-
-				stringBuilder.append(tableName);
-				stringBuilder.append(" (");
-				for (int n = 0, i = columns.length; n < i; n++) {
-					if (n > 0) {
-						stringBuilder.append(", ");
-					}
-					stringBuilder.append(columns[n]).append(' ').append(types[n]);
-				}
-				return stringBuilder.append(");").toString();
-			}
-		}
-
-		@Override
-		public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-			if (oldVersion < 2) {
-				executeCatchedSQL(database,
-						new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.REAL_LAST_UPDATE).append(' ')
-								.append(FeedData.TYPE_DATE_TIME).toString());
-			}
-			if (oldVersion < 3) {
-				executeCatchedSQL(database,
-						new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.RETRIEVE_FULLTEXT).append(' ')
-								.append(FeedData.TYPE_BOOLEAN).toString());
-			}
-		}
-
-		private void executeCatchedSQL(SQLiteDatabase database, String query) {
-			try {
-				database.execSQL(query);
-			} catch (Exception e) {
-			}
-		}
 	}
 
 	private DatabaseHelper mDatabaseHelper;
@@ -242,13 +145,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
-		try {
-			File folder = new File(FOLDER);
-			folder.mkdir(); // maybe we use the boolean return value later
-		} catch (Exception e) {
-		}
-
-		mDatabaseHelper = new DatabaseHelper(new Handler(), getContext(), DATABASE_NAME, DATABASE_VERSION);
+		mDatabaseHelper = new DatabaseHelper(new Handler(), getContext());
 
 		return true;
 	}
@@ -265,64 +162,64 @@ public class FeedDataContentProvider extends ContentProvider {
 
 		switch (option) {
 		case URI_GROUPS: {
-			queryBuilder.setTables(TABLE_FEEDS);
+			queryBuilder.setTables(FeedColumns.TABLE_NAME);
 			queryBuilder.appendWhere(new StringBuilder(FeedColumns.IS_GROUP).append(Constants.DB_IS_TRUE).append(Constants.DB_OR)
 					.append(FeedColumns.GROUP_ID).append(Constants.DB_IS_NULL));
 			break;
 		}
 		case URI_FEEDS_FOR_GROUPS: {
-			queryBuilder.setTables(TABLE_FEEDS);
+			queryBuilder.setTables(FeedColumns.TABLE_NAME);
 			queryBuilder.appendWhere(new StringBuilder(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1)));
 			break;
 		}
 		case URI_GROUP:
 		case URI_FEED: {
-			queryBuilder.setTables(TABLE_FEEDS);
+			queryBuilder.setTables(FeedColumns.TABLE_NAME);
 			queryBuilder.appendWhere(new StringBuilder(FeedColumns._ID).append('=').append(uri.getPathSegments().get(1)));
 			break;
 		}
 		case URI_FEEDS: {
-			queryBuilder.setTables(TABLE_FEEDS);
+			queryBuilder.setTables(FeedColumns.TABLE_NAME);
 			queryBuilder.appendWhere(new StringBuilder(FeedColumns.IS_GROUP).append(Constants.DB_IS_NULL));
 			break;
 		}
 		case URI_FILTERS: {
-			queryBuilder.setTables(TABLE_FILTERS);
+			queryBuilder.setTables(FilterColumns.TABLE_NAME);
 			break;
 		}
 		case URI_FILTERS_FOR_FEED: {
-			queryBuilder.setTables(TABLE_FILTERS);
+			queryBuilder.setTables(FilterColumns.TABLE_NAME);
 			queryBuilder.appendWhere(new StringBuilder(FilterColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1)));
 			break;
 		}
 		case URI_ENTRY_FOR_FEED:
 		case URI_ENTRY_FOR_GROUP: {
-			queryBuilder.setTables(TABLE_ENTRIES);
+			queryBuilder.setTables(EntryColumns.TABLE_NAME);
 			queryBuilder.appendWhere(new StringBuilder(EntryColumns._ID).append('=').append(uri.getPathSegments().get(3)));
 			break;
 		}
 		case URI_ENTRIES_FOR_FEED: {
-			queryBuilder.setTables(TABLE_ENTRIES);
+			queryBuilder.setTables(EntryColumns.TABLE_NAME);
 			queryBuilder.appendWhere(new StringBuilder(EntryColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1)));
 			break;
 		}
 		case URI_ENTRIES_FOR_GROUP: {
-			queryBuilder.setTables(TABLE_ENTRIES_WITH_FEED_INFO);
+			queryBuilder.setTables(ENTRIES_TABLE_WITH_FEED_INFO);
 			queryBuilder.appendWhere(new StringBuilder(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1)));
 			break;
 		}
 		case URI_ENTRIES: {
-			queryBuilder.setTables(TABLE_ENTRIES_WITH_FEED_INFO);
+			queryBuilder.setTables(ENTRIES_TABLE_WITH_FEED_INFO);
 			break;
 		}
 		case URI_FAVORITES_ENTRY:
 		case URI_ENTRY: {
-			queryBuilder.setTables(TABLE_ENTRIES);
+			queryBuilder.setTables(EntryColumns.TABLE_NAME);
 			queryBuilder.appendWhere(new StringBuilder(EntryColumns._ID).append('=').append(uri.getPathSegments().get(1)));
 			break;
 		}
 		case URI_FAVORITES: {
-			queryBuilder.setTables(TABLE_ENTRIES_WITH_FEED_INFO);
+			queryBuilder.setTables(ENTRIES_TABLE_WITH_FEED_INFO);
 			queryBuilder.appendWhere(new StringBuilder(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_TRUE));
 			break;
 		}
@@ -364,30 +261,27 @@ public class FeedDataContentProvider extends ContentProvider {
 			}
 			cursor.close();
 
-			newId = database.insert(TABLE_FEEDS, null, values);
-			try {
-				OPML.exportToFile(BACKUP_OPML);
-			} catch (Exception e) {
-			}
+			newId = database.insert(FeedColumns.TABLE_NAME, null, values);
+			mDatabaseHelper.exportToOPML();
 
 			break;
 		}
 		case URI_FILTERS: {
-			newId = database.insert(TABLE_FILTERS, null, values);
+			newId = database.insert(FilterColumns.TABLE_NAME, null, values);
 			break;
 		}
 		case URI_FILTERS_FOR_FEED: {
 			values.put(FilterColumns.FEED_ID, uri.getPathSegments().get(1));
-			newId = database.insert(TABLE_FILTERS, null, values);
+			newId = database.insert(FilterColumns.TABLE_NAME, null, values);
 			break;
 		}
 		case URI_ENTRIES_FOR_FEED: {
 			values.put(EntryColumns.FEED_ID, uri.getPathSegments().get(1));
-			newId = database.insert(TABLE_ENTRIES, null, values);
+			newId = database.insert(EntryColumns.TABLE_NAME, null, values);
 			break;
 		}
 		case URI_ENTRIES: {
-			newId = database.insert(TABLE_ENTRIES, null, values);
+			newId = database.insert(EntryColumns.TABLE_NAME, null, values);
 			break;
 		}
 		default:
@@ -413,14 +307,14 @@ public class FeedDataContentProvider extends ContentProvider {
 
 		switch (option) {
 		case URI_FEED: {
-			table = TABLE_FEEDS;
+			table = FeedColumns.TABLE_NAME;
 
 			long feedId = Long.parseLong(uri.getPathSegments().get(1));
 			where.append(FeedColumns._ID).append('=').append(feedId);
 
 			if (values != null && values.containsKey(FeedColumns.PRIORITY)) {
-				Cursor priorityCursor = database.query(TABLE_FEEDS, new String[] { FeedColumns.PRIORITY, FeedColumns.GROUP_ID }, FeedColumns._ID
-						+ "=" + feedId, null, null, null, null);
+				Cursor priorityCursor = database.query(FeedColumns.TABLE_NAME, new String[] { FeedColumns.PRIORITY, FeedColumns.GROUP_ID },
+						FeedColumns._ID + "=" + feedId, null, null, null, null);
 				if (priorityCursor.moveToNext()) {
 					int oldPriority = priorityCursor.getInt(0);
 					String oldGroupId = priorityCursor.getString(1);
@@ -438,27 +332,27 @@ public class FeedDataContentProvider extends ContentProvider {
 
 						String priorityValue = FeedColumns.PRIORITY + "-1";
 						String priorityWhere = FeedColumns.PRIORITY + '>' + oldPriority;
-						database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE " + oldGroupWhere
-								+ Constants.DB_AND + priorityWhere);
+						database.execSQL("UPDATE " + FeedColumns.TABLE_NAME + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE "
+								+ oldGroupWhere + Constants.DB_AND + priorityWhere);
 
 						priorityValue = FeedColumns.PRIORITY + "+1";
 						priorityWhere = FeedColumns.PRIORITY + '>' + (newPriority - 1);
 						String newGroupWhere = '(' + (newGroupId != null ? FeedColumns.GROUP_ID + '=' + newGroupId : FeedColumns.IS_GROUP
 								+ Constants.DB_IS_TRUE + Constants.DB_OR + FeedColumns.GROUP_ID + Constants.DB_IS_NULL) + ')';
-						database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE " + newGroupWhere
-								+ Constants.DB_AND + priorityWhere);
+						database.execSQL("UPDATE " + FeedColumns.TABLE_NAME + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE "
+								+ newGroupWhere + Constants.DB_AND + priorityWhere);
 
 					} else { // We move the item into the same group
 						if (newPriority > oldPriority) {
 							String priorityValue = FeedColumns.PRIORITY + "-1";
 							String priorityWhere = '(' + FeedColumns.PRIORITY + " BETWEEN " + (oldPriority + 1) + " AND " + newPriority + ')';
-							database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE "
+							database.execSQL("UPDATE " + FeedColumns.TABLE_NAME + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE "
 									+ oldGroupWhere + Constants.DB_AND + priorityWhere);
 
 						} else if (newPriority < oldPriority) {
 							String priorityValue = FeedColumns.PRIORITY + "+1";
 							String priorityWhere = '(' + FeedColumns.PRIORITY + " BETWEEN " + newPriority + " AND " + (oldPriority - 1) + ')';
-							database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE "
+							database.execSQL("UPDATE " + FeedColumns.TABLE_NAME + " SET " + FeedColumns.PRIORITY + '=' + priorityValue + " WHERE "
 									+ oldGroupWhere + Constants.DB_AND + priorityWhere);
 						}
 					}
@@ -471,46 +365,46 @@ public class FeedDataContentProvider extends ContentProvider {
 		case URI_GROUPS:
 		case URI_FEEDS_FOR_GROUPS:
 		case URI_FEEDS: {
-			table = TABLE_FEEDS;
+			table = FeedColumns.TABLE_NAME;
 			break;
 		}
 		case URI_FILTERS: {
-			table = TABLE_FILTERS;
+			table = FilterColumns.TABLE_NAME;
 			break;
 		}
 		case URI_FILTERS_FOR_FEED: {
-			table = TABLE_FILTERS;
+			table = FilterColumns.TABLE_NAME;
 			where.append(FilterColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1));
 			break;
 		}
 		case URI_ENTRY_FOR_FEED:
 		case URI_ENTRY_FOR_GROUP: {
-			table = TABLE_ENTRIES;
+			table = EntryColumns.TABLE_NAME;
 			where.append(EntryColumns._ID).append('=').append(uri.getPathSegments().get(3));
 			break;
 		}
 		case URI_ENTRIES_FOR_FEED: {
-			table = TABLE_ENTRIES;
+			table = EntryColumns.TABLE_NAME;
 			where.append(EntryColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1));
 			break;
 		}
 		case URI_ENTRIES_FOR_GROUP: {
-			table = TABLE_ENTRIES_WITH_FEED_INFO;
+			table = ENTRIES_TABLE_WITH_FEED_INFO;
 			where.append(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1));
 			break;
 		}
 		case URI_ENTRIES: {
-			table = TABLE_ENTRIES;
+			table = EntryColumns.TABLE_NAME;
 			break;
 		}
 		case URI_FAVORITES_ENTRY:
 		case URI_ENTRY: {
-			table = TABLE_ENTRIES;
+			table = EntryColumns.TABLE_NAME;
 			where.append(EntryColumns._ID).append('=').append(uri.getPathSegments().get(1));
 			break;
 		}
 		case URI_FAVORITES: {
-			table = TABLE_ENTRIES;
+			table = EntryColumns.TABLE_NAME;
 			where.append(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_TRUE);
 			break;
 		}
@@ -527,12 +421,9 @@ public class FeedDataContentProvider extends ContentProvider {
 		int count = database.update(table, values, where.toString(), selectionArgs);
 
 		// == is ok here
-		if (table == TABLE_FEEDS
+		if (table == FeedColumns.TABLE_NAME
 				&& (values.containsKey(FeedColumns.NAME) || values.containsKey(FeedColumns.URL) || values.containsKey(FeedColumns.PRIORITY))) {
-			try {
-				OPML.exportToFile(BACKUP_OPML);
-			} catch (Exception e) {
-			}
+			mDatabaseHelper.exportToOPML();
 		}
 		if (count > 0) {
 			getContext().getContentResolver().notifyChange(uri, null);
@@ -552,15 +443,15 @@ public class FeedDataContentProvider extends ContentProvider {
 
 		switch (option) {
 		case URI_GROUP: {
-			table = TABLE_FEEDS;
+			table = FeedColumns.TABLE_NAME;
 
 			String groupId = uri.getPathSegments().get(1);
 
 			where.append(FeedColumns._ID).append('=').append(groupId);
 
 			// Delete the sub feeds & their entries
-			Cursor subFeedsCursor = database.query(TABLE_FEEDS, FeedColumns.PROJECTION_ID, FeedColumns.GROUP_ID + "=" + groupId, null, null, null,
-					null);
+			Cursor subFeedsCursor = database.query(FeedColumns.TABLE_NAME, FeedColumns.PROJECTION_ID, FeedColumns.GROUP_ID + "=" + groupId, null,
+					null, null, null);
 			while (subFeedsCursor.moveToNext()) {
 				String feedId = subFeedsCursor.getString(0);
 				delete(FeedColumns.CONTENT_URI(feedId), null, null);
@@ -568,25 +459,26 @@ public class FeedDataContentProvider extends ContentProvider {
 			subFeedsCursor.close();
 
 			// Update the priorities
-			Cursor priorityCursor = database.query(TABLE_FEEDS, FeedColumns.PROJECTION_PRIORITY, FeedColumns._ID + "=" + groupId, null, null, null,
-					null);
+			Cursor priorityCursor = database.query(FeedColumns.TABLE_NAME, FeedColumns.PROJECTION_PRIORITY, FeedColumns._ID + "=" + groupId, null,
+					null, null, null);
 
 			if (priorityCursor.moveToNext()) {
 				int priority = priorityCursor.getInt(0);
 				String priorityWhere = FeedColumns.PRIORITY + " > " + priority;
 				String groupWhere = '(' + FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR + FeedColumns.GROUP_ID + Constants.DB_IS_NULL
 						+ ')';
-				database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + " = " + FeedColumns.PRIORITY + "-1 WHERE " + groupWhere
-						+ Constants.DB_AND + priorityWhere);
+				database.execSQL("UPDATE " + FeedColumns.TABLE_NAME + " SET " + FeedColumns.PRIORITY + " = " + FeedColumns.PRIORITY + "-1 WHERE "
+						+ groupWhere + Constants.DB_AND + priorityWhere);
 			}
 			priorityCursor.close();
 			break;
 		}
 		case URI_FEED: {
-			table = TABLE_FEEDS;
+			table = FeedColumns.TABLE_NAME;
 
 			final String feedId = uri.getPathSegments().get(1);
 
+			// Remove also the feed entries
 			new Thread() {
 				@Override
 				public void run() {
@@ -598,8 +490,8 @@ public class FeedDataContentProvider extends ContentProvider {
 			where.append(FeedColumns._ID).append('=').append(feedId);
 
 			// Update the priorities
-			Cursor priorityCursor = database.query(TABLE_FEEDS, new String[] { FeedColumns.PRIORITY, FeedColumns.GROUP_ID }, FeedColumns._ID + "="
-					+ feedId, null, null, null, null);
+			Cursor priorityCursor = database.query(FeedColumns.TABLE_NAME, new String[] { FeedColumns.PRIORITY, FeedColumns.GROUP_ID },
+					FeedColumns._ID + "=" + feedId, null, null, null, null);
 
 			if (priorityCursor.moveToNext()) {
 				int priority = priorityCursor.getInt(0);
@@ -609,59 +501,59 @@ public class FeedDataContentProvider extends ContentProvider {
 						+ Constants.DB_OR + FeedColumns.GROUP_ID + Constants.DB_IS_NULL) + ')';
 				String priorityWhere = FeedColumns.PRIORITY + " > " + priority;
 
-				database.execSQL("UPDATE " + TABLE_FEEDS + " SET " + FeedColumns.PRIORITY + " = " + FeedColumns.PRIORITY + "-1 WHERE " + groupWhere
-						+ Constants.DB_AND + priorityWhere);
+				database.execSQL("UPDATE " + FeedColumns.TABLE_NAME + " SET " + FeedColumns.PRIORITY + " = " + FeedColumns.PRIORITY + "-1 WHERE "
+						+ groupWhere + Constants.DB_AND + priorityWhere);
 			}
 			priorityCursor.close();
 			break;
 		}
 		case URI_GROUPS:
 		case URI_FEEDS: {
-			table = TABLE_FEEDS;
+			table = FeedColumns.TABLE_NAME;
 			break;
 		}
 		case URI_FEEDS_FOR_GROUPS: {
-			table = TABLE_FEEDS;
+			table = FeedColumns.TABLE_NAME;
 			where.append(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1));
 			break;
 		}
 		case URI_FILTERS: {
-			table = TABLE_FILTERS;
+			table = FilterColumns.TABLE_NAME;
 			break;
 		}
 		case URI_FILTERS_FOR_FEED: {
-			table = TABLE_FILTERS;
+			table = FilterColumns.TABLE_NAME;
 			where.append(FilterColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1));
 			break;
 		}
 		case URI_ENTRY_FOR_FEED:
 		case URI_ENTRY_FOR_GROUP: {
-			table = TABLE_ENTRIES;
+			table = EntryColumns.TABLE_NAME;
 			where.append(EntryColumns._ID).append('=').append(uri.getPathSegments().get(3));
 			break;
 		}
 		case URI_ENTRIES_FOR_FEED: {
-			table = TABLE_ENTRIES;
+			table = EntryColumns.TABLE_NAME;
 			where.append(EntryColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1));
 			break;
 		}
 		case URI_ENTRIES_FOR_GROUP: {
-			table = TABLE_ENTRIES_WITH_FEED_INFO;
+			table = ENTRIES_TABLE_WITH_FEED_INFO;
 			where.append(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1));
 			break;
 		}
 		case URI_ENTRIES: {
-			table = TABLE_ENTRIES;
+			table = EntryColumns.TABLE_NAME;
 			break;
 		}
 		case URI_FAVORITES_ENTRY:
 		case URI_ENTRY: {
-			table = TABLE_ENTRIES;
+			table = EntryColumns.TABLE_NAME;
 			where.append(EntryColumns._ID).append('=').append(uri.getPathSegments().get(1));
 			break;
 		}
 		case URI_FAVORITES: {
-			table = TABLE_ENTRIES;
+			table = EntryColumns.TABLE_NAME;
 			where.append(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_TRUE);
 			break;
 		}
@@ -676,11 +568,8 @@ public class FeedDataContentProvider extends ContentProvider {
 
 		int count = database.delete(table, where.toString(), selectionArgs);
 
-		if (table == TABLE_FEEDS) { // == is ok here
-			try {
-				OPML.exportToFile(BACKUP_OPML);
-			} catch (Exception e) {
-			}
+		if (table == FeedColumns.TABLE_NAME) { // == is ok here
+			mDatabaseHelper.exportToOPML();
 		}
 		if (count > 0) {
 			getContext().getContentResolver().notifyChange(uri, null);
