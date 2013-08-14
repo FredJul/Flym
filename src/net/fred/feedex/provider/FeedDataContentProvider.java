@@ -90,10 +90,8 @@ public class FeedDataContentProvider extends ContentProvider {
 	public static final String IMAGE_FOLDER = DatabaseHelper.EXTERNAL_FOLDER + "images/";
 	public static final File IMAGE_FOLDER_FILE = new File(IMAGE_FOLDER);
 
-	private static UriMatcher URI_MATCHER;
-
+	private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 	static {
-		URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "groups", URI_GROUPS);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#", URI_GROUP);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#/feeds", URI_FEEDS_FOR_GROUPS);
