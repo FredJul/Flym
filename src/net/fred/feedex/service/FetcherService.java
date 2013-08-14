@@ -666,6 +666,7 @@ public class FetcherService extends IntentService {
 
 		connection.setDoInput(true);
 		connection.setDoOutput(false);
+		connection.setRequestProperty("User-agent", "Mozilla AppleWebKit Chrome Safari"); // some feeds need this to work properly
 		connection.setConnectTimeout(30000);
 		connection.setReadTimeout(30000);
 		connection.setUseCaches(false);
