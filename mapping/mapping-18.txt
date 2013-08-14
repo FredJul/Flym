@@ -124,8 +124,9 @@ android.support.v4.app.Fragment -> android.support.v4.app.Fragment:
     boolean isDetached() -> f
     boolean isHidden() -> g
     void onHiddenChanged(boolean) -> a
-    void setMenuVisibility(boolean) -> b
-    void setUserVisibleHint(boolean) -> c
+    void setHasOptionsMenu(boolean) -> b
+    void setMenuVisibility(boolean) -> c
+    void setUserVisibleHint(boolean) -> d
     android.support.v4.app.LoaderManager getLoaderManager() -> h
     void startActivity(android.content.Intent) -> a
     void onActivityResult(int,int,android.content.Intent) -> a
@@ -539,37 +540,11 @@ android.support.v4.app.LoaderManagerImpl$LoaderInfo -> android.support.v4.app.af
     void callOnLoadFinished(android.support.v4.content.Loader,java.lang.Object) -> b
     java.lang.String toString() -> toString
     void dump(java.lang.String,java.io.FileDescriptor,java.io.PrintWriter,java.lang.String[]) -> a
-android.support.v4.app.NavUtils -> android.support.v4.app.ag:
-    android.support.v4.app.NavUtils$NavUtilsImpl IMPL -> a
-    android.content.Intent getParentActivityIntent(android.content.Context,android.content.ComponentName) -> a
-    java.lang.String getParentActivityName(android.content.Context,android.content.ComponentName) -> b
-android.support.v4.app.NavUtils$NavUtilsImpl -> android.support.v4.app.ah:
-    java.lang.String getParentActivityName(android.content.Context,android.content.pm.ActivityInfo) -> a
-android.support.v4.app.NavUtils$NavUtilsImplBase -> android.support.v4.app.ai:
-    java.lang.String getParentActivityName(android.content.Context,android.content.pm.ActivityInfo) -> a
-android.support.v4.app.NavUtils$NavUtilsImplJB -> android.support.v4.app.aj:
-    java.lang.String getParentActivityName(android.content.Context,android.content.pm.ActivityInfo) -> a
-android.support.v4.app.NavUtilsJB -> android.support.v4.app.ak:
-    java.lang.String getParentActivityName(android.content.pm.ActivityInfo) -> a
-android.support.v4.app.NoSaveStateFrameLayout -> android.support.v4.app.al:
+android.support.v4.app.NoSaveStateFrameLayout -> android.support.v4.app.ag:
     android.view.ViewGroup wrap(android.view.View) -> a
     void dispatchSaveInstanceState(android.util.SparseArray) -> dispatchSaveInstanceState
     void dispatchRestoreInstanceState(android.util.SparseArray) -> dispatchRestoreInstanceState
-android.support.v4.app.SuperNotCalledException -> android.support.v4.app.am:
-android.support.v4.app.TaskStackBuilder -> android.support.v4.app.an:
-    android.support.v4.app.TaskStackBuilder$TaskStackBuilderImpl IMPL -> a
-    java.util.ArrayList mIntents -> b
-    android.content.Context mSourceContext -> c
-    android.support.v4.app.TaskStackBuilder create(android.content.Context) -> a
-    android.support.v4.app.TaskStackBuilder addNextIntent(android.content.Intent) -> a
-    android.support.v4.app.TaskStackBuilder addNextIntentWithParentStack(android.content.Intent) -> b
-    android.support.v4.app.TaskStackBuilder addParentStack(android.content.ComponentName) -> a
-    java.util.Iterator iterator() -> iterator
-    void startActivities() -> a
-    void startActivities(android.os.Bundle) -> a
-android.support.v4.app.TaskStackBuilder$TaskStackBuilderImpl -> android.support.v4.app.ao:
-android.support.v4.app.TaskStackBuilder$TaskStackBuilderImplBase -> android.support.v4.app.ap:
-android.support.v4.app.TaskStackBuilder$TaskStackBuilderImplHoneycomb -> android.support.v4.app.aq:
+android.support.v4.app.SuperNotCalledException -> android.support.v4.app.ah:
 android.support.v4.content.AsyncTaskLoader -> android.support.v4.a.a:
     android.support.v4.content.AsyncTaskLoader$LoadTask mTask -> a
     android.support.v4.content.AsyncTaskLoader$LoadTask mCancellingTask -> b
@@ -596,13 +571,7 @@ android.support.v4.content.AsyncTaskLoader$LoadTask -> android.support.v4.a.b:
     void onCancelled() -> a
     void run() -> run
     java.lang.Object doInBackground(java.lang.Object[]) -> a
-android.support.v4.content.ContextCompat -> android.support.v4.a.c:
-    boolean startActivities(android.content.Context,android.content.Intent[],android.os.Bundle) -> a
-android.support.v4.content.ContextCompatHoneycomb -> android.support.v4.a.d:
-    void startActivities(android.content.Context,android.content.Intent[]) -> a
-android.support.v4.content.ContextCompatJellybean -> android.support.v4.a.e:
-    void startActivities(android.content.Context,android.content.Intent[],android.os.Bundle) -> a
-android.support.v4.content.CursorLoader -> android.support.v4.a.f:
+android.support.v4.content.CursorLoader -> android.support.v4.a.c:
     android.support.v4.content.Loader$ForceLoadContentObserver mObserver -> f
     android.net.Uri mUri -> g
     java.lang.String[] mProjection -> h
@@ -620,19 +589,7 @@ android.support.v4.content.CursorLoader -> android.support.v4.a.f:
     java.lang.Object loadInBackground() -> d
     void onCanceled(java.lang.Object) -> a
     void deliverResult(java.lang.Object) -> b
-android.support.v4.content.IntentCompat -> android.support.v4.a.g:
-    android.support.v4.content.IntentCompat$IntentCompatImpl IMPL -> a
-    android.content.Intent makeMainActivity(android.content.ComponentName) -> a
-android.support.v4.content.IntentCompat$IntentCompatImpl -> android.support.v4.a.h:
-    android.content.Intent makeMainActivity(android.content.ComponentName) -> a
-android.support.v4.content.IntentCompat$IntentCompatImplBase -> android.support.v4.a.i:
-    android.content.Intent makeMainActivity(android.content.ComponentName) -> a
-android.support.v4.content.IntentCompat$IntentCompatImplHC -> android.support.v4.a.j:
-    android.content.Intent makeMainActivity(android.content.ComponentName) -> a
-android.support.v4.content.IntentCompat$IntentCompatImplIcsMr1 -> android.support.v4.a.k:
-android.support.v4.content.IntentCompatHoneycomb -> android.support.v4.a.l:
-    android.content.Intent makeMainActivity(android.content.ComponentName) -> a
-android.support.v4.content.Loader -> android.support.v4.a.m:
+android.support.v4.content.Loader -> android.support.v4.a.d:
     int mId -> m
     android.support.v4.content.Loader$OnLoadCompleteListener mListener -> n
     android.content.Context mContext -> o
@@ -666,13 +623,13 @@ android.support.v4.content.Loader -> android.support.v4.a.m:
     java.lang.String dataToString(java.lang.Object) -> c
     java.lang.String toString() -> toString
     void dump(java.lang.String,java.io.FileDescriptor,java.io.PrintWriter,java.lang.String[]) -> a
-android.support.v4.content.Loader$ForceLoadContentObserver -> android.support.v4.a.n:
+android.support.v4.content.Loader$ForceLoadContentObserver -> android.support.v4.a.e:
     android.support.v4.content.Loader this$0 -> a
     boolean deliverSelfNotifications() -> deliverSelfNotifications
     void onChange(boolean) -> onChange
-android.support.v4.content.Loader$OnLoadCompleteListener -> android.support.v4.a.o:
+android.support.v4.content.Loader$OnLoadCompleteListener -> android.support.v4.a.f:
     void onLoadComplete(android.support.v4.content.Loader,java.lang.Object) -> a
-android.support.v4.content.ModernAsyncTask -> android.support.v4.a.p:
+android.support.v4.content.ModernAsyncTask -> android.support.v4.a.g:
     java.util.concurrent.ThreadFactory sThreadFactory -> a
     java.util.concurrent.BlockingQueue sPoolWorkQueue -> b
     java.util.concurrent.Executor THREAD_POOL_EXECUTOR -> d
@@ -698,30 +655,30 @@ android.support.v4.content.ModernAsyncTask -> android.support.v4.a.p:
     java.lang.Object access$300(android.support.v4.content.ModernAsyncTask,java.lang.Object) -> a
     void access$400(android.support.v4.content.ModernAsyncTask,java.lang.Object) -> b
     void access$500(android.support.v4.content.ModernAsyncTask,java.lang.Object) -> c
-android.support.v4.content.ModernAsyncTask$1 -> android.support.v4.a.q:
+android.support.v4.content.ModernAsyncTask$1 -> android.support.v4.a.h:
     java.util.concurrent.atomic.AtomicInteger mCount -> a
     java.lang.Thread newThread(java.lang.Runnable) -> newThread
-android.support.v4.content.ModernAsyncTask$2 -> android.support.v4.a.r:
+android.support.v4.content.ModernAsyncTask$2 -> android.support.v4.a.i:
     android.support.v4.content.ModernAsyncTask this$0 -> a
     java.lang.Object call() -> call
-android.support.v4.content.ModernAsyncTask$3 -> android.support.v4.a.s:
+android.support.v4.content.ModernAsyncTask$3 -> android.support.v4.a.j:
     android.support.v4.content.ModernAsyncTask this$0 -> a
     void done() -> done
-android.support.v4.content.ModernAsyncTask$4 -> android.support.v4.a.t:
+android.support.v4.content.ModernAsyncTask$4 -> android.support.v4.a.k:
     int[] $SwitchMap$android$support$v4$content$ModernAsyncTask$Status -> a
-android.support.v4.content.ModernAsyncTask$AsyncTaskResult -> android.support.v4.a.u:
+android.support.v4.content.ModernAsyncTask$AsyncTaskResult -> android.support.v4.a.l:
     android.support.v4.content.ModernAsyncTask mTask -> a
     java.lang.Object[] mData -> b
-android.support.v4.content.ModernAsyncTask$InternalHandler -> android.support.v4.a.v:
+android.support.v4.content.ModernAsyncTask$InternalHandler -> android.support.v4.a.m:
     void handleMessage(android.os.Message) -> handleMessage
-android.support.v4.content.ModernAsyncTask$Status -> android.support.v4.a.w:
+android.support.v4.content.ModernAsyncTask$Status -> android.support.v4.a.n:
     android.support.v4.content.ModernAsyncTask$Status PENDING -> a
     android.support.v4.content.ModernAsyncTask$Status RUNNING -> b
     android.support.v4.content.ModernAsyncTask$Status FINISHED -> c
     android.support.v4.content.ModernAsyncTask$Status[] $VALUES -> d
     android.support.v4.content.ModernAsyncTask$Status[] values() -> values
     android.support.v4.content.ModernAsyncTask$Status valueOf(java.lang.String) -> valueOf
-android.support.v4.content.ModernAsyncTask$WorkerRunnable -> android.support.v4.a.x:
+android.support.v4.content.ModernAsyncTask$WorkerRunnable -> android.support.v4.a.o:
     java.lang.Object[] mParams -> b
 android.support.v4.os.ParcelableCompat -> android.support.v4.b.a:
     android.os.Parcelable$Creator newCreator(android.support.v4.os.ParcelableCompatCreatorCallbacks) -> a
@@ -1877,6 +1834,8 @@ net.fred.feedex.PrefsManager -> net.fred.feedex.b:
     void putLong(java.lang.String,long) -> b
     java.lang.String getString(java.lang.String,java.lang.String) -> a
     void putString(java.lang.String,java.lang.String) -> b
+    void registerOnSharedPreferenceChangeListener(android.content.SharedPreferences$OnSharedPreferenceChangeListener) -> a
+    void unregisterOnSharedPreferenceChangeListener(android.content.SharedPreferences$OnSharedPreferenceChangeListener) -> b
 net.fred.feedex.ThrottledContentObserver -> net.fred.feedex.c:
     long mUpdateThrottle -> a
     android.os.Handler mHandler -> b
@@ -1989,7 +1948,7 @@ net.fred.feedex.activity.EntriesListActivity -> net.fred.feedex.activity.Entries
     void onCreate(android.os.Bundle) -> onCreate
     void onResume() -> onResume
     boolean onPrepareOptionsMenu(android.view.Menu) -> onPrepareOptionsMenu
-    boolean onMenuItemSelected(int,android.view.MenuItem) -> onMenuItemSelected
+    boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
 net.fred.feedex.activity.EntryActivity -> net.fred.feedex.activity.EntryActivity:
     android.view.animation.TranslateAnimation SLIDE_IN_RIGHT -> a
     android.view.animation.TranslateAnimation SLIDE_IN_LEFT -> b
@@ -2031,42 +1990,42 @@ net.fred.feedex.activity.EntryActivity -> net.fred.feedex.activity.EntryActivity
     java.lang.String title -> L
     java.lang.String enclosure -> M
     android.view.ViewGroup$LayoutParams layoutParams -> N
-    android.view.View backBtn -> O
-    android.view.View forwardBtn -> P
-    android.widget.ImageView fullscreenBtn -> Q
-    boolean mIsFullscreen -> R
-    boolean localPictures -> S
-    boolean mFromWidget -> T
-    android.view.View$OnKeyListener onKeyEventListener -> U
-    android.view.GestureDetector gestureDetector -> V
-    android.view.View$OnTouchListener onTouchListener -> W
-    net.fred.feedex.service.FetcherService mBoundService -> X
-    android.content.ServiceConnection mServiceConnection -> Y
-    net.fred.feedex.activity.EntryActivity$JavaScriptObject injectedJSObject -> Z
+    android.view.View cancelFullscreenBtn -> O
+    android.view.View backBtn -> P
+    android.view.View forwardBtn -> Q
+    boolean localPictures -> R
+    boolean mFromWidget -> S
+    android.view.View$OnKeyListener onKeyEventListener -> T
+    android.view.GestureDetector gestureDetector -> U
+    android.view.View$OnTouchListener onTouchListener -> V
+    net.fred.feedex.service.FetcherService mBoundService -> W
+    android.content.ServiceConnection mServiceConnection -> X
+    net.fred.feedex.activity.EntryActivity$JavaScriptObject injectedJSObject -> Y
     android.view.animation.TranslateAnimation generateAnimation(float,float) -> a
     void onCreate(android.os.Bundle) -> onCreate
+    void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
     void onRestoreInstanceState(android.os.Bundle) -> onRestoreInstanceState
     void onResume() -> onResume
     void onPause() -> onPause
-    void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
     void onNewIntent(android.content.Intent) -> onNewIntent
+    void toggleFullScreen() -> b
     void reload(boolean) -> a
     java.lang.String generateHtmlContent(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,long) -> a
     void setupWebview(android.webkit.WebView) -> a
     void showEnclosure(android.net.Uri,java.lang.String,int,int) -> a
-    void setupNavigationButton() -> b
+    void setupNavigationButton() -> c
     void switchEntry(long,android.view.animation.Animation,android.view.animation.Animation) -> a
-    void nextEntry() -> c
-    void previousEntry() -> d
+    void nextEntry() -> d
+    void previousEntry() -> e
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
-    boolean onMenuItemSelected(int,android.view.MenuItem) -> onMenuItemSelected
+    boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     boolean onKeyDown(int,android.view.KeyEvent) -> onKeyDown
-    void scrollUp() -> e
-    void scrollDown() -> f
+    void scrollUp() -> f
+    void scrollDown() -> g
     void unregisterReceiver(android.content.BroadcastReceiver) -> unregisterReceiver
     void onClickBackBtn(android.view.View) -> onClickBackBtn
     void onClickForwardBtn(android.view.View) -> onClickForwardBtn
-    void onClickFullscreenBtn(android.view.View) -> onClickFullscreenBtn
+    void onClickCancelFullscreenBtn(android.view.View) -> onClickCancelFullscreenBtn
     void access$0(net.fred.feedex.activity.EntryActivity) -> a
     void access$1(net.fred.feedex.activity.EntryActivity) -> b
     android.view.GestureDetector access$2(net.fred.feedex.activity.EntryActivity) -> c
@@ -2181,8 +2140,8 @@ net.fred.feedex.activity.MainActivity -> net.fred.feedex.activity.MainActivity:
     void onCreate(android.os.Bundle) -> onCreate
     void onResume() -> onResume
     void onPause() -> onPause
-    boolean onPrepareOptionsMenu(android.view.Menu) -> onPrepareOptionsMenu
-    boolean onMenuItemSelected(int,android.view.MenuItem) -> onMenuItemSelected
+    boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
+    boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     void onActionModeFinished(android.view.ActionMode) -> onActionModeFinished
     void onActionModeStarted(android.view.ActionMode) -> onActionModeStarted
     void onTabSelected(android.app.ActionBar$Tab,android.app.FragmentTransaction) -> onTabSelected
@@ -2394,7 +2353,7 @@ net.fred.feedex.fragment.EntriesListFragment -> net.fred.feedex.b.a:
     void onCreate(android.os.Bundle) -> d
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
     void onListItemClick(android.widget.ListView,android.view.View,int,long) -> a
-    void onPrepareOptionsMenu(android.view.Menu) -> a
+    void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> a
     boolean onOptionsItemSelected(android.view.MenuItem) -> a
     android.support.v4.content.Loader onCreateLoader(int,android.os.Bundle) -> a
     void onLoadFinished(android.support.v4.content.Loader,android.database.Cursor) -> a
@@ -2412,8 +2371,8 @@ net.fred.feedex.fragment.FeedsListFragment -> net.fred.feedex.b.c:
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
     void moveItem(boolean,boolean,boolean,long,int,int) -> a
     void onDestroy() -> o
-    void setFeedSortEnabled(boolean) -> d
-    void onPrepareOptionsMenu(android.view.Menu) -> a
+    void setFeedSortEnabled(boolean) -> e
+    void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> a
     boolean onOptionsItemSelected(android.view.MenuItem) -> a
     net.fred.feedex.adapter.FeedsCursorAdapter access$0(net.fred.feedex.fragment.FeedsListFragment) -> a
     net.fred.feedex.view.DragNDropExpandableListView access$1(net.fred.feedex.fragment.FeedsListFragment) -> b
@@ -2503,7 +2462,8 @@ net.fred.feedex.fragment.FeedsListFragment$4 -> net.fred.feedex.b.u:
     net.fred.feedex.fragment.FeedsListFragment this$0 -> a
     boolean onChildClick(android.widget.ExpandableListView,android.view.View,int,int,long) -> onChildClick
 net.fred.feedex.fragment.FeedsListFragment$5 -> net.fred.feedex.b.v:
-    net.fred.feedex.fragment.FeedsListFragment this$0 -> a
+    boolean fromHasGroupIndicator -> a
+    net.fred.feedex.fragment.FeedsListFragment this$0 -> b
     void onStopDrag(android.view.View) -> a
     void onStartDrag(android.view.View) -> b
     void onDrop(int,int) -> a
@@ -2626,11 +2586,29 @@ net.fred.feedex.parser.RssAtomParser$FeedFilters -> net.fred.feedex.c.d:
     java.util.ArrayList mFilters -> a
     net.fred.feedex.parser.RssAtomParser this$0 -> b
     boolean isEntryFiltered(java.lang.String,java.lang.String) -> a
-net.fred.feedex.provider.FeedData -> net.fred.feedex.provider.a:
+net.fred.feedex.provider.DatabaseHelper -> net.fred.feedex.provider.a:
+    java.lang.String EXTERNAL_FOLDER -> a
+    java.lang.String BACKUP_OPML -> b
+    android.os.Handler mHandler -> c
+    void onCreate(android.database.sqlite.SQLiteDatabase) -> onCreate
+    void exportToOPML() -> a
+    java.lang.String createTable(java.lang.String,java.lang.String[],java.lang.String[]) -> a
+    void onUpgrade(android.database.sqlite.SQLiteDatabase,int,int) -> onUpgrade
+    void executeCatchedSQL(android.database.sqlite.SQLiteDatabase,java.lang.String) -> a
+    java.lang.String access$0() -> b
+net.fred.feedex.provider.DatabaseHelper$1 -> net.fred.feedex.provider.b:
+    net.fred.feedex.provider.DatabaseHelper this$0 -> a
+    boolean val$hasBackup -> b
+    void run() -> run
+net.fred.feedex.provider.DatabaseHelper$1$1 -> net.fred.feedex.provider.c:
+    net.fred.feedex.provider.DatabaseHelper$1 this$1 -> a
+    boolean val$hasBackup -> b
+    void run() -> run
+net.fred.feedex.provider.FeedData -> net.fred.feedex.provider.d:
     void deletePicturesOfFeed(android.content.Context,android.net.Uri,java.lang.String) -> a
     android.content.ContentValues getReadContentValues() -> a
     android.content.ContentValues getUnreadContentValues() -> b
-net.fred.feedex.provider.FeedData$EntryColumns -> net.fred.feedex.provider.b:
+net.fred.feedex.provider.FeedData$EntryColumns -> net.fred.feedex.provider.e:
     java.lang.String[] COLUMNS -> a
     java.lang.String[] TYPES -> b
     android.net.Uri CONTENT_URI -> c
@@ -2644,10 +2622,10 @@ net.fred.feedex.provider.FeedData$EntryColumns -> net.fred.feedex.provider.b:
     android.net.Uri CONTENT_URI(java.lang.String) -> b
     android.net.Uri CONTENT_URI(long) -> c
     android.net.Uri PARENT_URI(java.lang.String) -> c
-net.fred.feedex.provider.FeedData$FeedColumns -> net.fred.feedex.provider.c:
-    android.net.Uri CONTENT_URI -> a
-    java.lang.String[] COLUMNS -> b
-    java.lang.String[] TYPES -> c
+net.fred.feedex.provider.FeedData$FeedColumns -> net.fred.feedex.provider.f:
+    java.lang.String[] COLUMNS -> a
+    java.lang.String[] TYPES -> b
+    android.net.Uri CONTENT_URI -> c
     android.net.Uri GROUPS_CONTENT_URI -> d
     java.lang.String[] PROJECTION_ID -> e
     java.lang.String[] PROJECTION_GROUP_ID -> f
@@ -2657,20 +2635,18 @@ net.fred.feedex.provider.FeedData$FeedColumns -> net.fred.feedex.provider.c:
     android.net.Uri GROUPS_CONTENT_URI(long) -> b
     android.net.Uri FEEDS_FOR_GROUPS_CONTENT_URI(java.lang.String) -> b
     android.net.Uri FEEDS_FOR_GROUPS_CONTENT_URI(long) -> c
-net.fred.feedex.provider.FeedData$FilterColumns -> net.fred.feedex.provider.d:
-    android.net.Uri CONTENT_URI -> a
-    java.lang.String[] COLUMNS -> b
-    java.lang.String[] TYPES -> c
+net.fred.feedex.provider.FeedData$FilterColumns -> net.fred.feedex.provider.g:
+    java.lang.String[] COLUMNS -> a
+    java.lang.String[] TYPES -> b
+    android.net.Uri CONTENT_URI -> c
     android.net.Uri FILTERS_FOR_FEED_CONTENT_URI(java.lang.String) -> a
 net.fred.feedex.provider.FeedDataContentProvider -> net.fred.feedex.provider.FeedDataContentProvider:
-    java.lang.String FOLDER -> c
-    java.lang.String TABLE_ENTRIES_WITH_FEED_INFO -> d
+    java.lang.String ENTRIES_TABLE_WITH_FEED_INFO -> c
     java.lang.String IMAGE_FOLDER -> a
     java.io.File IMAGE_FOLDER_FILE -> b
-    java.lang.String BACKUP_OPML -> e
-    android.content.UriMatcher URI_MATCHER -> f
-    net.fred.feedex.provider.FeedDataContentProvider$DatabaseHelper mDatabaseHelper -> g
-    java.lang.String[] MAXPRIORITY -> h
+    android.content.UriMatcher URI_MATCHER -> d
+    net.fred.feedex.provider.DatabaseHelper mDatabaseHelper -> e
+    java.lang.String[] MAXPRIORITY -> f
     java.lang.String getType(android.net.Uri) -> getType
     boolean onCreate() -> onCreate
     android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String) -> query
@@ -2680,24 +2656,9 @@ net.fred.feedex.provider.FeedDataContentProvider -> net.fred.feedex.provider.Fee
     java.lang.String getFeedIdFromEntryId(long) -> a
     void notifyGroupFromFeedId(java.lang.String) -> a
     void notifyAllFromEntryUri(android.net.Uri,boolean) -> a
-    java.lang.String access$0() -> a
-net.fred.feedex.provider.FeedDataContentProvider$1 -> net.fred.feedex.provider.e:
+net.fred.feedex.provider.FeedDataContentProvider$1 -> net.fred.feedex.provider.h:
     net.fred.feedex.provider.FeedDataContentProvider this$0 -> a
     java.lang.String val$feedId -> b
-    void run() -> run
-net.fred.feedex.provider.FeedDataContentProvider$DatabaseHelper -> net.fred.feedex.provider.f:
-    android.os.Handler mHandler -> a
-    void onCreate(android.database.sqlite.SQLiteDatabase) -> onCreate
-    java.lang.String createTable(java.lang.String,java.lang.String[],java.lang.String[]) -> a
-    void onUpgrade(android.database.sqlite.SQLiteDatabase,int,int) -> onUpgrade
-    void executeCatchedSQL(android.database.sqlite.SQLiteDatabase,java.lang.String) -> a
-net.fred.feedex.provider.FeedDataContentProvider$DatabaseHelper$1 -> net.fred.feedex.provider.g:
-    net.fred.feedex.provider.FeedDataContentProvider$DatabaseHelper this$1 -> a
-    boolean val$hasBackup -> b
-    void run() -> run
-net.fred.feedex.provider.FeedDataContentProvider$DatabaseHelper$1$1 -> net.fred.feedex.provider.h:
-    net.fred.feedex.provider.FeedDataContentProvider$DatabaseHelper$1 this$2 -> a
-    boolean val$hasBackup -> b
     void run() -> run
 net.fred.feedex.provider.PictureFilenameFilter -> net.fred.feedex.provider.i:
     java.util.regex.Pattern pattern -> a
