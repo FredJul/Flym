@@ -14,9 +14,13 @@
         android:showAsAction="ifRoom|withText"
         android:title="@string/menu_share"/>
     <item
+        android:id="@+id/menu_full_screen"
+        android:icon="@drawable/full_screen"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/menu_full_screen"/>
+    <item
         android:id="@+id/menu_copy_clipboard"
         android:icon="@drawable/content_copy"
-        android:showAsAction="ifRoom|withText"
         android:title="@string/menu_copy_clipboard"/>
     <item
         android:id="@+id/menu_mark_as_unread"

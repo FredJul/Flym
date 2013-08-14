@@ -94,6 +94,7 @@
     <string name="menu_star">Поместить в избранное</string>
     <string name="menu_unstar">Убрать из избранного</string>
     <string name="menu_share">Поделиться</string>
+    <string name="menu_full_screen">Полный экран</string>
     <string name="menu_copy_clipboard">Скопировать ссылку</string>
     <string name="menu_mark_as_unread">Пометить как непрочитанное</string>
     <string name="share_favorites_title">FeedEx: избранные новости</string>

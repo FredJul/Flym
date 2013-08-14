@@ -14,15 +14,16 @@
     </ViewFlipper>
 
     <ImageView
-        android:id="@+id/fullscreenBtn"
+        android:id="@+id/cancelFullscreenBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/round_background"
-        android:onClick="onClickFullscreenBtn"
-        android:src="@drawable/full_screen" />
+        android:onClick="onClickCancelFullscreenBtn"
+        android:src="@drawable/cancel_full_screen"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/backBtn"

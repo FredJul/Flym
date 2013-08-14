@@ -97,7 +97,6 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -177,9 +176,7 @@ public class EntryActivity extends ProgressActivity {
 
 	private String link, title, enclosure;
 	private LayoutParams layoutParams;
-	private View backBtn, forwardBtn;
-	private ImageView fullscreenBtn;
-	private boolean mIsFullscreen = false;
+	private View cancelFullscreenBtn, backBtn, forwardBtn;
 	private boolean localPictures;
 
 	private boolean mFromWidget = false;
@@ -343,9 +340,9 @@ public class EntryActivity extends ProgressActivity {
 			MainActivity.mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		}
 
+		cancelFullscreenBtn = findViewById(R.id.cancelFullscreenBtn);
 		backBtn = findViewById(R.id.backBtn);
 		forwardBtn = findViewById(R.id.forwardBtn);
-		fullscreenBtn = (ImageView) findViewById(R.id.fullscreenBtn);
 
 		viewFlipper = (ViewFlipper) findViewById(R.id.content_flipper);
 
@@ -360,12 +357,26 @@ public class EntryActivity extends ProgressActivity {
 	}
 
 	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		webView.saveState(outState);
+		outState.putLongArray(SAVE_INSTANCE_ENTRIES_IDS, mEntriesIds);
+		outState.putBoolean(SAVE_INSTANCE_IS_FULLSCREEN, !getActionBar().isShowing());
+
+		float positionTopView = webView.getTop();
+		float contentHeight = webView.getContentHeight();
+		float currentScrollPosition = webView.getScrollY();
+
+		outState.putFloat(SAVE_INSTANCE_SCROLL_PERCENTAGE, (currentScrollPosition - positionTopView) / contentHeight);
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		mEntriesIds = savedInstanceState.getLongArray(SAVE_INSTANCE_ENTRIES_IDS);
 		mScrollPercentage = savedInstanceState.getFloat(SAVE_INSTANCE_SCROLL_PERCENTAGE);
 		if (savedInstanceState.getBoolean(SAVE_INSTANCE_IS_FULLSCREEN)) {
-			onClickFullscreenBtn(null);
+			toggleFullScreen();
 		}
 		webView.restoreState(savedInstanceState);
 	}
@@ -395,23 +406,23 @@ public class EntryActivity extends ProgressActivity {
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		webView.saveState(outState);
-		outState.putLongArray(SAVE_INSTANCE_ENTRIES_IDS, mEntriesIds);
-		outState.putBoolean(SAVE_INSTANCE_IS_FULLSCREEN, mIsFullscreen);
-
-		float positionTopView = webView.getTop();
-		float contentHeight = webView.getContentHeight();
-		float currentScrollPosition = webView.getScrollY();
-
-		outState.putFloat(SAVE_INSTANCE_SCROLL_PERCENTAGE, (currentScrollPosition - positionTopView) / contentHeight);
-		super.onSaveInstanceState(outState);
-	}
-
-	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		setIntent(intent);
+	}
+
+	private void toggleFullScreen() {
+		if (getActionBar().isShowing()) {
+			getActionBar().hide();
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+			cancelFullscreenBtn.setVisibility(View.VISIBLE);
+		} else {
+			getActionBar().show();
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			cancelFullscreenBtn.setVisibility(View.GONE);
+		}
 	}
 
 	private void reload(boolean forceUpdate) {
@@ -723,7 +734,7 @@ public class EntryActivity extends ProgressActivity {
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			if (mFromWidget) {
@@ -733,7 +744,7 @@ public class EntryActivity extends ProgressActivity {
 			finish();
 
 			return true;
-		case R.id.menu_star: {
+		case R.id.menu_star:
 			favorite = !favorite;
 
 			ContentValues values = new ContentValues();
@@ -749,13 +760,15 @@ public class EntryActivity extends ProgressActivity {
 				item.setTitle(R.string.menu_star).setIcon(R.drawable.rating_not_important);
 			}
 			break;
-		}
-		case R.id.menu_share: {
+		case R.id.menu_share:
 			if (link != null) {
 				startActivity(Intent.createChooser(
 						new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, link)
 								.setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)));
 			}
+			break;
+		case R.id.menu_full_screen: {
+			toggleFullScreen();
 			break;
 		}
 		case R.id.menu_copy_clipboard: {
@@ -766,7 +779,7 @@ public class EntryActivity extends ProgressActivity {
 			Toast.makeText(this, R.string.copied_clipboard, Toast.LENGTH_SHORT).show();
 			break;
 		}
-		case R.id.menu_mark_as_unread: {
+		case R.id.menu_mark_as_unread:
 			new Thread() {
 				@Override
 				public void run() {
@@ -778,7 +791,6 @@ public class EntryActivity extends ProgressActivity {
 			}.start();
 			finish();
 			break;
-		}
 		}
 
 		return true;
@@ -830,20 +842,8 @@ public class EntryActivity extends ProgressActivity {
 		nextEntry();
 	}
 
-	public void onClickFullscreenBtn(View view) {
-		mIsFullscreen = !mIsFullscreen;
-
-		if (mIsFullscreen) {
-			getActionBar().hide();
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-			fullscreenBtn.setImageResource(R.drawable.return_from_full_screen);
-		} else {
-			getActionBar().show();
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-			fullscreenBtn.setImageResource(R.drawable.full_screen);
-		}
+	public void onClickCancelFullscreenBtn(View view) {
+		toggleFullScreen();
 	}
 
 	private class JavaScriptObject {

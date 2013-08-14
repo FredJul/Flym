@@ -94,6 +94,7 @@
     <string name="menu_star">Destaca</string>
     <string name="menu_unstar">No destacar</string>
     <string name="menu_share">Compartir</string>
+    <string name="menu_full_screen">Pantalla completa</string>
     <string name="menu_copy_clipboard">Copiar enlace</string>
     <string name="menu_mark_as_unread">Marcar como no leído</string>
     <string name="share_favorites_title">FeedEx: Entradas destacadas</string>
