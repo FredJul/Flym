@@ -5,19 +5,19 @@
     <item
         android:id="@+id/menu_add_feed"
         android:icon="@drawable/content_new"
-        android:showAsAction="always|withText"
+        android:showAsAction="always"
         android:title="@string/menu_add_feed"
         tools:ignore="AlwaysShowAction"/>
     <item
         android:id="@+id/menu_refresh"
         android:icon="@drawable/refresh"
-        android:showAsAction="always|withText"
+        android:showAsAction="always"
         android:title="@string/menu_refresh"
         tools:ignore="AlwaysShowAction"/>
     <item
         android:id="@+id/menu_all_read"
         android:icon="@drawable/read_all"
-        android:showAsAction="always|withText"
+        android:showAsAction="always"
         android:title="@string/menu_all_read"
         tools:ignore="AlwaysShowAction"/>
     <item

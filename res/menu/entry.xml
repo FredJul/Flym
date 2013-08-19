@@ -5,18 +5,18 @@
     <item
         android:id="@+id/menu_star"
         android:icon="@drawable/rating_not_important"
-        android:showAsAction="always|withText"
+        android:showAsAction="always"
         android:title="@string/menu_star"
         tools:ignore="AlwaysShowAction"/>
     <item
         android:id="@+id/menu_share"
         android:icon="@drawable/social_share"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="ifRoom"
         android:title="@string/menu_share"/>
     <item
         android:id="@+id/menu_full_screen"
         android:icon="@drawable/full_screen"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="ifRoom"
         android:title="@string/menu_full_screen"/>
     <item
         android:id="@+id/menu_copy_clipboard"
