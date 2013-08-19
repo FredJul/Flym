@@ -44,6 +44,8 @@
 
 package net.fred.feedex.activity;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 
 import net.fred.feedex.Constants;
@@ -530,7 +532,12 @@ public class EntryActivity extends ProgressActivity {
 			link = entryCursor.getString(linkPosition);
 			enclosure = entryCursor.getString(enclosurePosition);
 
-			String baseUrl = link.replaceAll("/[^/]*\\.[^/]*$", "");
+			String baseUrl = "";
+			try {
+				URL url = new URL(link);
+				baseUrl = url.getProtocol() + "://" + url.getHost();
+			} catch (MalformedURLException e) {
+			}
 			webView.loadDataWithBaseURL(baseUrl, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML,
 					Constants.UTF8, null);
 		}
