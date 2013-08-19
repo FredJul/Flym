@@ -94,6 +94,7 @@
     <string name="menu_star">Marca</string>
     <string name="menu_unstar">Treu la marca</string>
     <string name="menu_share">Comparteix</string>
+    <string name="menu_full_screen">Pantalla completa</string>
     <string name="menu_copy_clipboard">Copia l\'enllaç</string>
     <string name="menu_mark_as_unread">Marca com a no llegit</string>
     <string name="share_favorites_title">FeedEx: entrades destacades</string>
