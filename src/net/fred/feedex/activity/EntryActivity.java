@@ -529,8 +529,10 @@ public class EntryActivity extends ProgressActivity {
 			long timestamp = entryCursor.getLong(datePosition);
 			link = entryCursor.getString(linkPosition);
 			enclosure = entryCursor.getString(enclosurePosition);
-			webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8,
-					null);
+
+			String baseUrl = link.replaceAll("/[^/]*\\.[^/]*$", "");
+			webView.loadDataWithBaseURL(baseUrl, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML,
+					Constants.UTF8, null);
 		}
 
 		entryCursor.close();
