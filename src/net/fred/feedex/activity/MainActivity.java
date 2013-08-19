@@ -123,6 +123,7 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 			@Override
 			public void onPageSelected(int position) {
 				actionBar.setSelectedNavigationItem(position);
+				invalidateOptionsMenu(); // Do not do it into onTabSelected()!
 			}
 		});
 
@@ -210,7 +211,6 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 		// When the given tab is selected, switch to the corresponding page in the ViewPager.
 		mViewPager.setCurrentItem(tab.getPosition());
-		invalidateOptionsMenu();
 
 		if (mActionMode != null) {
 			mActionMode.finish();
