@@ -30,6 +30,8 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.service.FetcherService;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -55,6 +57,15 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
 	private final int loaderId = new Random().nextInt();
 
+	private final OnSharedPreferenceChangeListener prefListener = new OnSharedPreferenceChangeListener() {
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+			if (PrefsManager.SHOW_READ.equals(key)) {
+				getLoaderManager().restartLoader(loaderId, null, EntriesListFragment.this);
+			}
+		}
+	};
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,6 +81,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 				mUri = getArguments().getParcelable(ARG_URI);
 
 				mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
+				PrefsManager.registerOnSharedPreferenceChangeListener(prefListener);
 				getLoaderManager().initLoader(loaderId, null, this);
 			}
 		}
@@ -86,6 +98,12 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 		lv.setFastScrollEnabled(true);
 
 		return rootView;
+	}
+
+	@Override
+	public void onDestroy() {
+		PrefsManager.unregisterOnSharedPreferenceChangeListener(prefListener);
+		super.onStop();
 	}
 
 	@Override
@@ -153,7 +171,6 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 				PrefsManager.putBoolean(PrefsManager.SHOW_READ, false);
 				item.setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
 			}
-			getLoaderManager().restartLoader(loaderId, null, this);
 			return true;
 		}
 		case R.id.menu_settings: {
