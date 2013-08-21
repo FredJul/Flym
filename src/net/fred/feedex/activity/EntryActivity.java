@@ -717,7 +717,7 @@ public class EntryActivity extends ProgressActivity {
 		viewFlipper.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				webView0.clearView();
+				webView0.loadUrl("about:blank");
 			}
 		}, ANIM_DURATION);
 	}
