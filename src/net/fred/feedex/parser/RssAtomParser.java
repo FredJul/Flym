@@ -569,11 +569,13 @@ public class RssAtomParser extends DefaultHandler {
 
 	public static Pair<String, Vector<String>> improveHtmlContent(String content, boolean fetchImages) {
 		if (content != null) {
-			// remove trashes, ads, and lazy loading images stuff
+			// remove trashes
 			String newContent = content.trim().replaceAll("<[/]?[ ]?span(.|\n)*?>", "").replaceAll("<blockquote", "<div")
-					.replaceAll("</blockquote", "</div").replaceAll("(href|src)=(\"|')//", "$1=$2http://")
-					.replaceAll("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "")
-					.replaceAll(" src=[^>]+ original[-]*src=(\"|')", " src=$1");
+					.replaceAll("</blockquote", "</div").replaceAll("(href|src)=(\"|')//", "$1=$2http://");
+			// remove ads
+			newContent = newContent.replaceAll("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
+			// remove lazy loading images stuff
+			newContent = newContent.replaceAll(" src=[^>]+ original[-]*src=(\"|')", " src=$1");
 
 			if (newContent.length() > 0) {
 				Vector<String> images = null;
