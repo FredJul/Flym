@@ -133,7 +133,7 @@ public class RssAtomParser extends DefaultHandler {
 			new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ssZ", Locale.US), new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSz", Locale.US) };
 
 	// middle() is group 1; s* is important for non-whitespaces; ' also usable
-	private static final Pattern IMG_PATTERN = Pattern.compile("<img src=\\s*['\"]([^'\"]+)['\"][^>]*>");
+	private static final Pattern IMG_PATTERN = Pattern.compile("<img src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
 
 	private final Date realLastUpdateDate;
 	private long newRealLastUpdate;
