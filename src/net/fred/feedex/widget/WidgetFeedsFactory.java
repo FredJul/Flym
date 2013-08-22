@@ -58,18 +58,20 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.util.TypedValue;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 public class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
 	private Context context = null;
-	private final int appWidgetId;
+	private final int appWidgetId, fontSize;
 	private Cursor cursor;
 	private ThrottledContentObserver mContentObserver;
 
 	public WidgetFeedsFactory(Context ctxt, Intent intent) {
 		this.context = ctxt;
 		appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+		fontSize = intent.getIntExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, 0);
 	}
 
 	@Override
@@ -104,6 +106,7 @@ public class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory
 
 		if (cursor.moveToPosition(position)) {
 			row.setTextViewText(android.R.id.text1, cursor.getString(0));
+			row.setTextViewTextSize(android.R.id.text1, TypedValue.COMPLEX_UNIT_SP, 15 + (fontSize*2));
 			Intent intent = new Intent(Intent.ACTION_VIEW, EntryColumns.CONTENT_URI(cursor.getString(1)));
 			intent.putExtra(Constants.INTENT_FROM_WIDGET, true);
 			row.setOnClickFillInIntent(android.R.id.content, intent);

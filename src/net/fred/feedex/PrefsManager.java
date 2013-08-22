@@ -58,8 +58,7 @@ public class PrefsManager {
 	}
 
 	public static void putBoolean(String key, boolean value) {
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext());
-		SharedPreferences.Editor editor = settings.edit();
+		SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).edit();
 		editor.putBoolean(key, value);
 		editor.commit();
 	}
@@ -70,8 +69,7 @@ public class PrefsManager {
 	}
 
 	public static void putInteger(String key, int value) {
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext());
-		SharedPreferences.Editor editor = settings.edit();
+		SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).edit();
 		editor.putInt(key, value);
 		editor.commit();
 	}
@@ -82,8 +80,7 @@ public class PrefsManager {
 	}
 
 	public static void putLong(String key, long value) {
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext());
-		SharedPreferences.Editor editor = settings.edit();
+		SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).edit();
 		editor.putLong(key, value);
 		editor.commit();
 	}
@@ -94,9 +91,14 @@ public class PrefsManager {
 	}
 
 	public static void putString(String key, String value) {
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext());
-		SharedPreferences.Editor editor = settings.edit();
+		SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).edit();
 		editor.putString(key, value);
+		editor.commit();
+	}
+
+	public static void remove(String key) {
+		SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).edit();
+		editor.remove(key);
 		editor.commit();
 	}
 

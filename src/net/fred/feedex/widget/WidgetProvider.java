@@ -39,6 +39,7 @@ public class WidgetProvider extends AppWidgetProvider {
 			Intent svcIntent = new Intent(context, WidgetService.class);
 
 			svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+			svcIntent.putExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, PrefsManager.getInteger(appWidgetIds[i] + ".fontsize", 0));
 			svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
 			RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget);

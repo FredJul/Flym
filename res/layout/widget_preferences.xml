@@ -13,6 +13,17 @@
         android:summary="@string/settings_widget_background_description"
         android:title="@string/settings_widget_background" />
 
+    <ListPreference
+        android:name="@string/settings_font_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="0"
+        android:entries="@array/settings_font_sizes"
+        android:entryValues="@array/settings_font_size_values"
+        android:inputType="number"
+        android:key="widget.fontsize"
+        android:title="@string/settings_font_size" />
+
     <PreferenceCategory
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

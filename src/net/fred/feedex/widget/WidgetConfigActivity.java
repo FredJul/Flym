@@ -128,15 +128,19 @@ public class WidgetConfigActivity extends PreferenceActivity {
 					}
 
 					String feedIds = builder.toString();
-
 					PrefsManager.putString(widgetId + ".feeds", feedIds);
 
 					int color = PrefsManager.getInteger("widget.background", WidgetProvider.STANDARD_BACKGROUND);
-
 					PrefsManager.putInteger(widgetId + ".background", color);
 
+					int fontsize = Integer.parseInt(PrefsManager.getString("widget.fontsize", "0"));
+					if (fontsize > 0) {
+						PrefsManager.putInteger(widgetId + ".fontsize", fontsize);
+					} else {
+						PrefsManager.remove(widgetId + ".fontsize");
+					}
+
 					// Now we need to update the widget
-					//AppWidgetManager.getInstance(WidgetConfigActivity.this).notifyAppWidgetViewDataChanged(widgetId, R.id.feedsListView);
 					Intent intent = new Intent(WidgetConfigActivity.this, WidgetProvider.class);
 					intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 					intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[] { widgetId });
@@ -146,7 +150,6 @@ public class WidgetConfigActivity extends PreferenceActivity {
 					} catch (CanceledException e) {
 					}
 
-					// WidgetProvider.updateAppWidget(WidgetConfigActivity.this, widgetId, hideRead, feedIds, color);
 					setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
 					finish();
 				}

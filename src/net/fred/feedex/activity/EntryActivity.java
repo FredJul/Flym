@@ -548,7 +548,7 @@ public class EntryActivity extends ProgressActivity {
 	private String generateHtmlContent(String title, String link, String abstractText, String enclosure, String author, long timestamp) {
 		StringBuilder content = new StringBuilder();
 
-		int fontsize = Integer.parseInt(PrefsManager.getString(PrefsManager.FONT_SIZE, "1"));
+		int fontsize = Integer.parseInt(PrefsManager.getString(PrefsManager.FONT_SIZE, "0"));
 		if (fontsize > 0) {
 			content.append(FONTSIZE_START).append(fontsize).append(FONTSIZE_MIDDLE);
 		} else {
