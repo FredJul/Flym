@@ -112,7 +112,6 @@
     <string name="transparency">Transparence</string>
     
     <!-- SETTINGS -->
-    <string name="settings_screen_proxy">Proxy</string>
     <string name="settings_category_refresh">Mise à jour automatique</string>
     <string name="settings_refresh_enabled">Activer la mise à jour auto</string>
     <string name="settings_refresh_enabled_description">Active la mise à jour automatique des flux</string>
@@ -143,13 +142,6 @@
     <string name="settings_visible_feeds">Flux visibles</string>
     <string name="settings_widget_background">Arrière-plan</string>
     <string name="settings_widget_background_description">Couleur et transparence de l\'arrière-plan du widget</string>
-    <string name="settings_category_network">Réseau</string>
-    <string name="settings_proxy_enabled">Activé</string>
-    <string name="settings_proxy_wifi_only">Wifi seulement</string>
-    <string name="settings_proxy_wifi_only_description">Utilise le proxy pour le wifi seulement</string>
-    <string name="settings_proxy_host">Hôte</string>
-    <string name="settings_proxy_port">Port</string>
-    <string name="settings_proxy_type">Type</string>
     <string name="all_feeds">Tous les flux (y compris ceux à venir)</string>
 
     <string-array name="settings_intervals">

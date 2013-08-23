@@ -112,7 +112,6 @@
     <string name="transparency">Transparenz</string>
     
     <!-- SETTINGS -->
-    <string name="settings_screen_proxy">Proxy</string>
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>
     <string name="settings_refresh_enabled">Automatisches Aktualisieren aktivieren</string>
     <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren aller Feeds</string>
@@ -143,13 +142,6 @@
     <string name="settings_visible_feeds">Sichtbare Feeds</string>
     <string name="settings_widget_background">Hintergrund</string>
     <string name="settings_widget_background_description">Farbe und Transparenz des Widget-Hintergrundes</string>
-    <string name="settings_category_network">Netzwerk</string>
-    <string name="settings_proxy_enabled">aktiviert</string>
-    <string name="settings_proxy_wifi_only">Nur WLAN</string>
-    <string name="settings_proxy_wifi_only_description">Proxy nur für WLAN nutzen</string>
-    <string name="settings_proxy_host">Host</string>
-    <string name="settings_proxy_port">Port</string>
-    <string name="settings_proxy_type">Typ</string>
     <string name="all_feeds">Alle Feeds (auch zukünftige)</string>
 
     <string-array name="settings_intervals">

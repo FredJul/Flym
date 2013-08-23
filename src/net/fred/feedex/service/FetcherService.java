@@ -53,13 +53,14 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.net.ProxySelector;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
@@ -127,10 +128,9 @@ public class FetcherService extends IntentService {
 	private static final String _HTTP = "http";
 	private static final String _HTTPS = "https";
 	/* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
-	private static final Pattern FEED_LINK_PATTERN = Pattern
-			.compile("[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>", Pattern.CASE_INSENSITIVE);
-
-	private static Proxy proxy;
+	private static final Pattern FEED_LINK_PATTERN = Pattern.compile(
+			"[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>",
+			Pattern.CASE_INSENSITIVE);
 
 	private NotificationManager mNotifMgr;
 	private final HashSet<Long> mMobilizingEntries = new HashSet<Long>();
@@ -204,19 +204,6 @@ public class FetcherService extends IntentService {
 
 		if (isFromAutoRefresh) {
 			PrefsManager.putLong(PrefsManager.LAST_SCHEDULED_REFRESH, SystemClock.elapsedRealtime());
-		}
-
-		if (PrefsManager.getBoolean(PrefsManager.PROXY_ENABLED, false)
-				&& (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !PrefsManager.getBoolean(PrefsManager.PROXY_WIFI_ONLY, false))) {
-			try {
-				proxy = new Proxy(ZERO.equals(PrefsManager.getString(PrefsManager.PROXY_TYPE, ZERO)) ? Proxy.Type.HTTP : Proxy.Type.SOCKS,
-						new InetSocketAddress(PrefsManager.getString(PrefsManager.PROXY_HOST, ""), Integer.parseInt(PrefsManager.getString(
-								PrefsManager.PROXY_PORT, DEFAULT_PROXY_PORT))));
-			} catch (Exception e) {
-				proxy = null;
-			}
-		} else {
-			proxy = null;
 		}
 
 		if (intent.hasExtra(Constants.ENTRY_URI)) { // == Constants.ACTION_MOBILIZE_FEED
@@ -662,6 +649,17 @@ public class FetcherService extends IntentService {
 	}
 
 	public static final HttpURLConnection setupConnection(URL url, int cycle) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+		// Try to get the system proxy
+		Proxy proxy = null;
+		try {
+			ProxySelector defaultProxySelector = ProxySelector.getDefault();
+			List<Proxy> proxyList = defaultProxySelector.select(url.toURI());
+			if (!proxyList.isEmpty()) {
+				proxy = proxyList.get(0);
+			}
+		} catch (Throwable t) {
+		}
+
 		HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
 
 		connection.setDoInput(true);

@@ -112,7 +112,6 @@
     <string name="transparency">Transparència</string>
     
     <!-- SETTINGS -->
-    <string name="settings_screen_proxy">Proxy</string>
     <string name="settings_category_refresh">Actualització automàtica</string>
     <string name="settings_refresh_enabled">Activa les actualitzacions automàtiques</string>
     <string name="settings_refresh_enabled_description">Descarrega el contingut dels canals automàticament.</string>
@@ -143,13 +142,6 @@
     <string name="settings_visible_feeds">Canals visibles</string>
     <string name="settings_widget_background">Fons</string>
     <string name="settings_widget_background_description">Color i transparència del fons del giny.</string>
-    <string name="settings_category_network">Xarxa</string>
-    <string name="settings_proxy_enabled">Activat</string>
-    <string name="settings_proxy_wifi_only">Només en Wi-Fi</string>
-    <string name="settings_proxy_wifi_only_description">Utilitza la pasarel·la només en Wi-Fi.</string>
-    <string name="settings_proxy_host">Màquina</string>
-    <string name="settings_proxy_port">Port</string>
-    <string name="settings_proxy_type">Tipus</string>
     <string name="all_feeds">Tots els canals (futurs inclosos)</string>
 
     <string-array name="settings_intervals">

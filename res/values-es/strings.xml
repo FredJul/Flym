@@ -112,7 +112,6 @@
     <string name="transparency">Transparencia</string>
     
     <!-- SETTINGS -->
-    <string name="settings_screen_proxy">Proxy</string>
     <string name="settings_category_refresh">Actualización automáticas</string>
     <string name="settings_refresh_enabled">Habilitar actualizaciones automáticas</string>
     <string name="settings_refresh_enabled_description">Activa las actualizaciones automáticas de las fuentes.</string>
@@ -143,13 +142,6 @@
     <string name="settings_visible_feeds">Visibilidad de las fuentes</string>
     <string name="settings_widget_background">Fondo</string>
     <string name="settings_widget_background_description">Color i transparencia del fondo del widget.</string>
-    <string name="settings_category_network">Red</string>
-    <string name="settings_proxy_enabled">Habilitado</string>
-    <string name="settings_proxy_wifi_only">Solo en Wi-Fi</string>
-    <string name="settings_proxy_wifi_only_description">Utiliza el proxy solo mientras se esté conectado a una red Wi-Fi.</string>
-    <string name="settings_proxy_host">Máquina</string>
-    <string name="settings_proxy_port">Puerto</string>
-    <string name="settings_proxy_type">Tipo</string>
     <string name="all_feeds">Todas las fuentes (incl. futuras)</string>
 
     <string-array name="settings_intervals">
