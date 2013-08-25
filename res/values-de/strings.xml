@@ -18,13 +18,13 @@
  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ THE SOFTWARE.
 -->
 <resources>
 
     <!-- GENERAL -->
     <string name="never">nie</string>
-    <string name="update">Update</string>
+    <string name="update">aktualisiert</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Einstellungen</string>
     <string name="menu_refresh">Aktualisieren</string>
@@ -35,7 +35,7 @@
     <string name="network_error">Kein Internet</string>
     <string name="loading">Laden…</string>
     <string name="no_result">Kein Ergebnis</string>
-    
+
     <!-- FEEDS -->
     <string name="menu_add_feed">Feed hinzufügen</string>
     <string name="no_feeds">Keine Feeds</string>
@@ -44,7 +44,7 @@
     <string name="edit_feed_title">Feed bearbeiten</string>
     <string name="new_feed_title">Neuer Feed</string>
     <string name="context_menu_edit">Bearbeiten</string>
-    <string name="menu_add_group">Gruppe hinzufügen</string>
+    <string name="menu_add_group">Gruppe erstellen</string>
     <string name="menu_import">Aus OPML importieren</string>
     <string name="menu_export">Nach OPML exportieren</string>
     <string name="menu_enable_feed_sort">Feeds sortieren</string>
@@ -68,7 +68,7 @@
     <string name="filter_apply_to_content">Auf den Inhalt anwenden</string>
     <string name="feed_search">Feed-Suche</string>
     <string name="feed_search_by_web_search">Finde einen Feed anhand von Stichpunkten</string>
-    <string name="feed_search_by_topic">Erstelle einen Feed nach Themen(via Faroo)</string>
+    <string name="feed_search_by_topic">Erstelle einen Feed nach Themen (via Faroo)</string>
     <string name="feed_search_by_youtube">Finde einen Feed anhand des Youtube-Channel-Namens</string>
     <string name="select_file">Datei auswählen(SD-root)</string>
     <string name="question_delete_feed">Willst du diesen Feed wirklich löschen?</string>
@@ -81,7 +81,7 @@
     <string name="to_group_message">Du kannst den Feed entweder in oder über diese Gruppe positionieren. Was willst du tun?</string>
     <string name="to_group_above">Über die Gruppe</string>
     <string name="to_group_into">In die Gruppe</string>
-    
+
     <!-- ENTRIES -->
     <string name="all">Einträge</string>
     <string name="overview">Feeds</string>
@@ -104,16 +104,16 @@
     <string name="see_enclosure">Anhang ansehen</string>
     <string name="see_link">Im Browser ansehen</string>
     <string name="cant_open_link">Keine Anwendung für diesen Link gefunden</string>
-    
+
     <!-- WIDGET -->
     <string name="red">Rot</string>
     <string name="green">Grün</string>
     <string name="blue">Blau</string>
     <string name="transparency">Transparenz</string>
-    
+
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>
-    <string name="settings_refresh_enabled">Automatisches Aktualisieren aktivieren</string>
+    <string name="settings_refresh_enabled">Automatisches Aktualisieren</string>
     <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren aller Feeds</string>
     <string name="settings_refresh_interval">Aktualisierungsintervall</string>
     <string name="settings_refresh_interval_description">Intervall zwischen zwei automatischen Aktualisierungen</string>
@@ -128,7 +128,7 @@
     <string name="settings_lighttheme">Helles Thema</string>
     <string name="settings_lighttheme_description">Helles Thema nutzen</string>
     <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
-    <string name="settings_keep_time_description">Einträge, die älter als sind, als ausgewählt, werden gelöscht</string>
+    <string name="settings_keep_time_description">Einträge, die älter sind, als ausgewählt, werden gelöscht</string>
     <string name="settings_disable_pictures">Bilder deaktivieren</string>
     <string name="settings_disable_pictures_description">Keine Bilder zeigen oder laden</string>
     <string name="settings_fetch_pictures">Bilder herunterladen</string>
