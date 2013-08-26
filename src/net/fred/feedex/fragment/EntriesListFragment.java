@@ -46,6 +46,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import net.fred.feedex.view.SwipeDismissListViewTouchListener;
 
 public class EntriesListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 	public static final String ARG_URI = "uri";
@@ -96,6 +97,31 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
 		final ListView lv = (ListView) rootView.findViewById(android.R.id.list);
 		lv.setFastScrollEnabled(true);
+
+        /*Test Swipe*/
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        lv,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    if(SwipeDismissListViewTouchListener.mSwipeDetected==1) mEntriesCursorAdapter.markAsRead(mEntriesCursorAdapter.getItemId(position));
+                                    if(SwipeDismissListViewTouchListener.mSwipeDetected==2) mEntriesCursorAdapter.changeFavorite(mEntriesCursorAdapter.getItemId(position));
+                                }
+                                mEntriesCursorAdapter.notifyDataSetChanged();
+                            }
+                        });
+        lv.setOnTouchListener(touchListener);
+        // Setting this scroll listener is required to ensure that during ListView scrolling,
+        // we don't look for swipes.
+        lv.setOnScrollListener(touchListener.makeScrollListener());
+        /*Test Swipe end*/
 
 		return rootView;
 	}
