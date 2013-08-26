@@ -242,7 +242,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 		}.start();
 	}
 
-	public void markAsUnread(final long id) {
+	private void markAsUnread(final long id) {
 		markedAsUnread.add(id);
 		markedAsRead.remove(id);
 
