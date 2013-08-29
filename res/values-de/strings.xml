@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  Copyright (c) 2010-2012 Stefan Handschuh
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,7 +17,8 @@
  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ THE SOFTWARE.
+
 -->
 <resources>
 
@@ -53,8 +53,12 @@
     <string name="error_feed_process">Der Feed kann nicht bearbeitet werden.</string>
     <string name="error_feed_url_exists">Diese Adresse existiert schon.</string>
     <string name="error_feed_import">Die ausgewählte Datei konnte nicht importiert werden.</string>
-    <string name="error_feed_export">Der Export ist fehlgeschlagen. Stelle sicher, dass du eine beschreibbare SD-Karte eingelegt hast.</string>
-    <string name="error_external_storage_not_available">Der externe Speicher (z.B. eine SD-Karte) ist nicht verfügbar.</string>
+    <string name="error_feed_export">Der Export ist fehlgeschlagen. Stelle sicher, dass du eine
+        beschreibbare SD-Karte eingelegt hast.
+    </string>
+    <string name="error_external_storage_not_available">Der externe Speicher (z.B. eine SD-Karte)
+        ist nicht verfügbar.
+    </string>
     <string name="feed_url">URL-Adresse</string>
     <string name="optional">(optional)</string>
     <string name="website_or_feed">(Website oder Feed)</string>
@@ -69,16 +73,20 @@
     <string name="feed_search">Feed-Suche</string>
     <string name="feed_search_by_web_search">Finde einen Feed anhand von Stichpunkten</string>
     <string name="feed_search_by_topic">Erstelle einen Feed nach Themen (via Faroo)</string>
-    <string name="feed_search_by_youtube">Finde einen Feed anhand des Youtube-Channel-Namens</string>
+    <string name="feed_search_by_youtube">Finde einen Feed anhand des Youtube-Channel-Namens
+    </string>
     <string name="select_file">Datei auswählen(SD-root)</string>
     <string name="question_delete_feed">Willst du diesen Feed wirklich löschen?</string>
-    <string name="question_delete_group">Willst du diese Gruppe mit allen Feeds wirklich löschen?</string>
+    <string name="question_delete_group">Willst du diese Gruppe mit allen Feeds wirklich löschen?
+    </string>
     <string name="question_delete_filter">Willst du diesen Filter wirklich löschen?</string>
     <string name="add_group_title">Gruppenname wählen</string>
     <string name="edit_group_title">Gruppennamen bearbeiten</string>
     <string name="message_exported_to">Nach %s exportiert.</string>
     <string name="to_group_title">Feed-Verschiebung</string>
-    <string name="to_group_message">Du kannst den Feed entweder in oder über diese Gruppe positionieren. Was willst du tun?</string>
+    <string name="to_group_message">Du kannst den Feed entweder in oder über diese Gruppe
+        positionieren. Was willst du tun?
+    </string>
     <string name="to_group_above">Über die Gruppe</string>
     <string name="to_group_into">In die Gruppe</string>
 
@@ -114,34 +122,54 @@
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>
     <string name="settings_refresh_enabled">Automatisches Aktualisieren</string>
-    <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren aller Feeds</string>
+    <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren
+        aller Feeds
+    </string>
     <string name="settings_refresh_interval">Aktualisierungsintervall</string>
-    <string name="settings_refresh_interval_description">Intervall zwischen zwei automatischen Aktualisierungen</string>
+    <string name="settings_refresh_interval_description">Intervall zwischen zwei automatischen
+        Aktualisierungen
+    </string>
     <string name="settings_category_notifications">Benachrichtigungen</string>
     <string name="settings_notifications_enabled">Benachrichtigungen aktivieren</string>
-    <string name="settings_notifications_enabled_description">Aktiviert Benachrichtigungen bei neuen Einträgen</string>
+    <string name="settings_notifications_enabled_description">Aktiviert Benachrichtigungen bei neuen
+        Einträgen
+    </string>
     <string name="settings_notifications_ringtone">Klingelton</string>
-    <string name="settings_notifications_ringtone_description">Wähle einen Klingelton, der bei neuen Einträgen abgespielt wird</string>
+    <string name="settings_notifications_ringtone_description">Wähle einen Klingelton, der bei neuen
+        Einträgen abgespielt wird
+    </string>
     <string name="settings_notifications_vibrate">Vibrieren</string>
-    <string name="settings_notifications_vibrate_description">Aktiviert Vibration bei neuen Einträgen</string>
+    <string name="settings_notifications_vibrate_description">Aktiviert Vibration bei neuen
+        Einträgen
+    </string>
     <string name="settings_category_content_presentation">Anzeige der Inhalte</string>
     <string name="settings_lighttheme">Helles Thema</string>
     <string name="settings_lighttheme_description">Helles Thema nutzen</string>
     <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
-    <string name="settings_keep_time_description">Einträge, die älter sind, als ausgewählt, werden gelöscht</string>
+    <string name="settings_keep_time_description">Einträge, die älter sind, als ausgewählt, werden
+        gelöscht
+    </string>
     <string name="settings_disable_pictures">Bilder deaktivieren</string>
     <string name="settings_disable_pictures_description">Keine Bilder zeigen oder laden</string>
     <string name="settings_fetch_pictures">Bilder herunterladen</string>
-    <string name="settings_fetch_pictures_description">Alle Bilder herunterladen und lokal speichern</string>
+    <string name="settings_fetch_pictures_description">Alle Bilder herunterladen und lokal
+        speichern
+    </string>
     <string name="settings_font_size">Textgröße</string>
     <string name="settings_font_size_description">Textgröße für Inhalte</string>
     <string name="settings_refresh_on_open">Feeds beim Öffnen aktualisieren</string>
-    <string name="settings_refresh_on_open_description">Aktualisiert alle Feeds beim Öffnen der Anwendung</string>
+    <string name="settings_refresh_on_open_description">Aktualisiert alle Feeds beim Öffnen der
+        Anwendung
+    </string>
     <string name="settings_refresh_wifi_only">Nur über WLAN aktualisieren</string>
-    <string name="settings_refresh_wifi_only_description">Die automatische Aktualisierung wird nur bei aktiver WLAN-Verbindung durchgeführt</string>
+    <string name="settings_refresh_wifi_only_description">Die automatische Aktualisierung wird nur
+        bei aktiver WLAN-Verbindung durchgeführt
+    </string>
     <string name="settings_visible_feeds">Sichtbare Feeds</string>
     <string name="settings_widget_background">Hintergrund</string>
-    <string name="settings_widget_background_description">Farbe und Transparenz des Widget-Hintergrundes</string>
+    <string name="settings_widget_background_description">Farbe und Transparenz des
+        Widget-Hintergrundes
+    </string>
     <string name="all_feeds">Alle Feeds (auch zukünftige)</string>
 
     <string-array name="settings_intervals">

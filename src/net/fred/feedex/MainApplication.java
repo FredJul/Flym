@@ -1,6 +1,6 @@
 /**
  * FeedEx
- * 
+ *
  * Copyright (c) 2012-2013 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,15 +24,15 @@ import android.content.Context;
 
 public class MainApplication extends Application {
 
-	private static Context mContext;
+    private static Context mContext;
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		mContext = getApplicationContext();
-	}
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mContext = getApplicationContext();
+    }
 
-	public static Context getAppContext() {
-		return mContext;
-	}
+    public static Context getAppContext() {
+        return mContext;
+    }
 }

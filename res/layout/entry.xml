@@ -2,15 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <ViewFlipper
         android:id="@+id/content_flipper"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
-    </ViewFlipper>
+        android:layout_alignParentTop="true"></ViewFlipper>
 
     <ImageView
         android:id="@+id/backBtn"

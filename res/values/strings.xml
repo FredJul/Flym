@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  Copyright (c) 2010-2012 Stefan Handschuh
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,7 +34,7 @@
     <string name="network_error">The network is not set up</string>
     <string name="loading">Loading…</string>
     <string name="no_result">No result</string>
-    
+
     <!-- FEEDS -->
     <string name="menu_add_feed">Add feed</string>
     <string name="no_feeds">No feeds</string>
@@ -53,8 +52,12 @@
     <string name="error_feed_process">The feed can not be processed.</string>
     <string name="error_feed_url_exists">The address already exists.</string>
     <string name="error_feed_import">The selected file could not be imported.</string>
-    <string name="error_feed_export">The export has failed. Make sure you have a writable SD-card mounted.</string>
-    <string name="error_external_storage_not_available">The external storage (e.g. SD-card) is not available.</string>
+    <string name="error_feed_export">The export has failed. Make sure you have a writable SD-card
+        mounted.
+    </string>
+    <string name="error_external_storage_not_available">The external storage (e.g. SD-card) is not
+        available.
+    </string>
     <string name="feed_url">URL address</string>
     <string name="optional">(optional)</string>
     <string name="website_or_feed">(website or feed)</string>
@@ -72,16 +75,20 @@
     <string name="feed_search_by_youtube">Find feed by Youtube channel name</string>
     <string name="select_file">Select file (SD-root)</string>
     <string name="question_delete_feed">Do you really want to delete this feed?</string>
-    <string name="question_delete_group">Do you really want to delete this group and all of its feeds?</string>
+    <string name="question_delete_group">Do you really want to delete this group and all of its
+        feeds?
+    </string>
     <string name="question_delete_filter">Do you really want to delete this filter?</string>
     <string name="add_group_title">Select group name</string>
     <string name="edit_group_title">Edit group name</string>
     <string name="message_exported_to">Exported into %s.</string>
     <string name="to_group_title">Feed move action</string>
-    <string name="to_group_message">You can either put this feed into or above this group. What do you want to do?</string>
+    <string name="to_group_message">You can either put this feed into or above this group. What do
+        you want to do?
+    </string>
     <string name="to_group_above">Above the group</string>
     <string name="to_group_into">Into the group</string>
-    
+
     <!-- ENTRIES -->
     <string name="all">Entries</string>
     <string name="overview">Feeds</string>
@@ -104,44 +111,61 @@
     <string name="see_enclosure">See enclosure</string>
     <string name="see_link">See in browser</string>
     <string name="cant_open_link">No application found for this link</string>
-    
+
     <!-- WIDGET -->
     <string name="red">Red</string>
     <string name="green">Green</string>
     <string name="blue">Blue</string>
     <string name="transparency">Transparency</string>
-    
+
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automated refresh</string>
     <string name="settings_refresh_enabled">Enable automatic refresh</string>
-    <string name="settings_refresh_enabled_description">Enable the automatic refresh of feeds</string>
+    <string name="settings_refresh_enabled_description">Enable the automatic refresh of feeds
+    </string>
     <string name="settings_refresh_interval">Refresh interval</string>
-    <string name="settings_refresh_interval_description">Interval between two automated refreshes</string>
+    <string name="settings_refresh_interval_description">Interval between two automated refreshes
+    </string>
     <string name="settings_category_notifications">Notifications</string>
     <string name="settings_notifications_enabled">Enable notifications</string>
-    <string name="settings_notifications_enabled_description">Enable notifications in case of new entries</string>
+    <string name="settings_notifications_enabled_description">Enable notifications in case of new
+        entries
+    </string>
     <string name="settings_notifications_ringtone">Ringtone</string>
-    <string name="settings_notifications_ringtone_description">Select a ringtone that will be played on new entries</string>
+    <string name="settings_notifications_ringtone_description">Select a ringtone that will be played
+        on new entries
+    </string>
     <string name="settings_notifications_vibrate">Vibrate</string>
-    <string name="settings_notifications_vibrate_description">Enable the vibration on new entries</string>
+    <string name="settings_notifications_vibrate_description">Enable the vibration on new entries
+    </string>
     <string name="settings_category_content_presentation">Content presentation</string>
     <string name="settings_lighttheme">Light theme</string>
     <string name="settings_lighttheme_description">Use the light theme</string>
     <string name="settings_keep_time">Time that the entries will be kept</string>
-    <string name="settings_keep_time_description">The entries that are older than the given date will be deleted</string>
+    <string name="settings_keep_time_description">The entries that are older than the given date
+        will be deleted
+    </string>
     <string name="settings_disable_pictures">Disable pictures</string>
     <string name="settings_disable_pictures_description">Do not show and load any pictures</string>
     <string name="settings_fetch_pictures">Download pictures</string>
-    <string name="settings_fetch_pictures_description">Download all pictures and store them locally</string>
+    <string name="settings_fetch_pictures_description">Download all pictures and store them
+        locally
+    </string>
     <string name="settings_font_size">Text size</string>
     <string name="settings_font_size_description">Text size for entries content display</string>
     <string name="settings_refresh_on_open">Refresh feeds on open</string>
-    <string name="settings_refresh_on_open_description">Refreshes all feeds after opening the application</string>
+    <string name="settings_refresh_on_open_description">Refreshes all feeds after opening the
+        application
+    </string>
     <string name="settings_refresh_wifi_only">Refresh only with Wifi</string>
-    <string name="settings_refresh_wifi_only_description">Automatic refresh will be done if when the wifi is enabled</string>
+    <string name="settings_refresh_wifi_only_description">Automatic refresh will be done if when the
+        wifi is enabled
+    </string>
     <string name="settings_visible_feeds">Visible feeds</string>
     <string name="settings_widget_background">Background</string>
-    <string name="settings_widget_background_description">Color and transparency of the widget background</string>
+    <string name="settings_widget_background_description">Color and transparency of the widget
+        background
+    </string>
     <string name="all_feeds">All feeds (incl. future)</string>
 
     <string-array name="settings_intervals">

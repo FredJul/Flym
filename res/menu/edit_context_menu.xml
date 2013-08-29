@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <item
         android:id="@+id/menu_edit"
         android:icon="@drawable/content_edit"
         android:showAsAction="always"
         android:title="@string/context_menu_edit"
-        tools:ignore="AlwaysShowAction"/>
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/menu_delete"
         android:icon="@drawable/content_discard"
         android:showAsAction="always"
         android:title="@string/context_menu_delete"
-        tools:ignore="AlwaysShowAction"/>
+        tools:ignore="AlwaysShowAction" />
 
 </menu>

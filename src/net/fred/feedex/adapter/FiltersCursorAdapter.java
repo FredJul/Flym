@@ -1,6 +1,6 @@
 /**
  * FeedEx
- * 
+ *
  * Copyright (c) 2012-2013 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,78 +19,79 @@
 
 package net.fred.feedex.adapter;
 
-import net.fred.feedex.R;
-import net.fred.feedex.provider.FeedData.FilterColumns;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
+import net.fred.feedex.R;
+import net.fred.feedex.provider.FeedData.FilterColumns;
+
 public class FiltersCursorAdapter extends ResourceCursorAdapter {
 
-	private int filterTextColumnPosition;
-	private int isAppliedToTitleColumnPosition;
+    private int filterTextColumnPosition;
+    private int isAppliedToTitleColumnPosition;
 
-	private int mSelectedFilter = -1;
+    private int mSelectedFilter = -1;
 
-	public FiltersCursorAdapter(Context context, Cursor cursor) {
-		super(context, android.R.layout.simple_list_item_2, cursor, 0);
+    public FiltersCursorAdapter(Context context, Cursor cursor) {
+        super(context, android.R.layout.simple_list_item_2, cursor, 0);
 
-		reinit(cursor);
-	}
+        reinit(cursor);
+    }
 
-	@Override
-	public void bindView(View view, final Context context, Cursor cursor) {
-		TextView filterTextTextView = (TextView) view.findViewById(android.R.id.text1);
-		TextView isAppliedToTitleTextView = (TextView) view.findViewById(android.R.id.text2);
+    @Override
+    public void bindView(View view, final Context context, Cursor cursor) {
+        TextView filterTextTextView = (TextView) view.findViewById(android.R.id.text1);
+        TextView isAppliedToTitleTextView = (TextView) view.findViewById(android.R.id.text2);
 
-		if (cursor.getPosition() == mSelectedFilter) {
-			view.setBackgroundResource(android.R.color.holo_blue_dark);
-		} else {
-			view.setBackgroundResource(android.R.color.transparent);
-		}
+        if (cursor.getPosition() == mSelectedFilter) {
+            view.setBackgroundResource(android.R.color.holo_blue_dark);
+        } else {
+            view.setBackgroundResource(android.R.color.transparent);
+        }
 
-		filterTextTextView.setText(cursor.getString(filterTextColumnPosition));
-		isAppliedToTitleTextView.setText(cursor.getInt(isAppliedToTitleColumnPosition) == 1 ? R.string.filter_apply_to_title : R.string.filter_apply_to_content);
-	}
+        filterTextTextView.setText(cursor.getString(filterTextColumnPosition));
+        isAppliedToTitleTextView.setText(cursor.getInt(isAppliedToTitleColumnPosition) == 1 ? R.string.filter_apply_to_title : R.string.filter_apply_to_content);
+    }
 
-	@Override
-	public void changeCursor(Cursor cursor) {
-		reinit(cursor);
-		super.changeCursor(cursor);
-	}
+    @Override
+    public void changeCursor(Cursor cursor) {
+        reinit(cursor);
+        super.changeCursor(cursor);
+    }
 
-	@Override
-	public Cursor swapCursor(Cursor newCursor) {
-		reinit(newCursor);
-		return super.swapCursor(newCursor);
-	}
+    @Override
+    public Cursor swapCursor(Cursor newCursor) {
+        reinit(newCursor);
+        return super.swapCursor(newCursor);
+    }
 
-	@Override
-	public void notifyDataSetChanged() {
-		reinit(null);
-		super.notifyDataSetChanged();
-	}
+    @Override
+    public void notifyDataSetChanged() {
+        reinit(null);
+        super.notifyDataSetChanged();
+    }
 
-	@Override
-	public void notifyDataSetInvalidated() {
-		reinit(null);
-		super.notifyDataSetInvalidated();
-	}
+    @Override
+    public void notifyDataSetInvalidated() {
+        reinit(null);
+        super.notifyDataSetInvalidated();
+    }
 
-	private void reinit(Cursor cursor) {
-		if (cursor != null) {
-			filterTextColumnPosition = cursor.getColumnIndex(FilterColumns.FILTER_TEXT);
-			isAppliedToTitleColumnPosition = cursor.getColumnIndex(FilterColumns.IS_APPLIED_TO_TITLE);
-		}
-	}
+    private void reinit(Cursor cursor) {
+        if (cursor != null) {
+            filterTextColumnPosition = cursor.getColumnIndex(FilterColumns.FILTER_TEXT);
+            isAppliedToTitleColumnPosition = cursor.getColumnIndex(FilterColumns.IS_APPLIED_TO_TITLE);
+        }
+    }
 
-	public void setSelectedFilter(int filterPos) {
-		mSelectedFilter = filterPos;
-	}
+    public void setSelectedFilter(int filterPos) {
+        mSelectedFilter = filterPos;
+    }
 
-	public int getSelectedFilter() {
-		return mSelectedFilter;
-	}
+    public int getSelectedFilter() {
+        return mSelectedFilter;
+    }
 }

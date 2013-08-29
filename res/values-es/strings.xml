@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  Copyright (c) 2010-2012 Stefan Handschuh
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,9 +34,9 @@
     <string name="network_error">No se ha configurado la red</string>
     <string name="loading">Cargando…</string>
     <string name="no_result">Sin resultados</string>
-    
+
     <!-- FEEDS -->
-    <string name="menu_add_feed"> fuente</string>
+    <string name="menu_add_feed">fuente</string>
     <string name="no_feeds">No hay fuentes</string>
     <string name="no_filters">No hay filtros</string>
     <string name="context_menu_delete">Eliminar</string>
@@ -53,8 +52,11 @@
     <string name="error_feed_process">No se ha podido procesar la fuente.</string>
     <string name="error_feed_url_exists">Ya existe esta dirección.</string>
     <string name="error_feed_import">No se ha podido importar el archivo seleccionado.</string>
-    <string name="error_feed_export">No se ha podido exportar las fuentes. Compruebe los permisos en la tarjeta SD.</string>
-    <string name="error_external_storage_not_available">El almacenaje externo no está disponible.</string>
+    <string name="error_feed_export">No se ha podido exportar las fuentes. Compruebe los permisos en
+        la tarjeta SD.
+    </string>
+    <string name="error_external_storage_not_available">El almacenaje externo no está disponible.
+    </string>
     <string name="feed_url">Dirección URL</string>
     <string name="optional">(opcional)</string>
     <string name="website_or_feed">(página web o fuente)</string>
@@ -78,10 +80,12 @@
     <string name="edit_group_title">Editar nombre de grupo</string>
     <string name="message_exported_to">Exportar a %s</string>
     <string name="to_group_title">Mover la fuente</string>
-    <string name="to_group_message">Puede mover la fuente al grupo o encima del grupo. ¿Qué desea hacer?</string>
+    <string name="to_group_message">Puede mover la fuente al grupo o encima del grupo. ¿Qué desea
+        hacer?
+    </string>
     <string name="to_group_above">Encima del grupo</string>
     <string name="to_group_into">Al grupo</string>
-    
+
     <!-- ENTRIES -->
     <string name="all">Entradas</string>
     <string name="overview">Fuentes</string>
@@ -104,44 +108,63 @@
     <string name="see_enclosure">Ver el adjunto</string>
     <string name="see_link">Ver en el navegador</string>
     <string name="cant_open_link">No se ha encontrado una aplicación para este enlace.</string>
-    
+
     <!-- WIDGET -->
     <string name="red">Rojo</string>
     <string name="green">Verde</string>
     <string name="blue">Azul</string>
     <string name="transparency">Transparencia</string>
-    
+
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Actualización automáticas</string>
     <string name="settings_refresh_enabled">Habilitar actualizaciones automáticas</string>
-    <string name="settings_refresh_enabled_description">Activa las actualizaciones automáticas de las fuentes.</string>
+    <string name="settings_refresh_enabled_description">Activa las actualizaciones automáticas de
+        las fuentes.
+    </string>
     <string name="settings_refresh_interval">Intervalo entre actualizaciones</string>
-    <string name="settings_refresh_interval_description">Define el tiempo que transcurre entre dos actualizaciones automáticas.</string>
+    <string name="settings_refresh_interval_description">Define el tiempo que transcurre entre dos
+        actualizaciones automáticas.
+    </string>
     <string name="settings_category_notifications">Notificaciones</string>
     <string name="settings_notifications_enabled">Habilitar notificaciones</string>
-    <string name="settings_notifications_enabled_description">Habilita las notificaciones de nuevas entradas.</string>
+    <string name="settings_notifications_enabled_description">Habilita las notificaciones de nuevas
+        entradas.
+    </string>
     <string name="settings_notifications_ringtone">Tono</string>
-    <string name="settings_notifications_ringtone_description">Selecciona el tono que anunciará las nuevas entradas.</string>
+    <string name="settings_notifications_ringtone_description">Selecciona el tono que anunciará las
+        nuevas entradas.
+    </string>
     <string name="settings_notifications_vibrate">Vibración</string>
-    <string name="settings_notifications_vibrate_description">Hará vibrar el terminal al recibir nuevas entradas.</string>
+    <string name="settings_notifications_vibrate_description">Hará vibrar el terminal al recibir
+        nuevas entradas.
+    </string>
     <string name="settings_category_content_presentation">Modo de presentación</string>
     <string name="settings_lighttheme">Tema claro</string>
     <string name="settings_lighttheme_description">Usar el tema claro</string>
     <string name="settings_keep_time">Tiempo de retención de las entradas</string>
-    <string name="settings_keep_time_description">Las entradas que superen el timepo de retención serán eliminadas.</string>
+    <string name="settings_keep_time_description">Las entradas que superen el timepo de retención
+        serán eliminadas.
+    </string>
     <string name="settings_disable_pictures">Deshabilitar las imágenes</string>
     <string name="settings_disable_pictures_description">No mostrar imágenes</string>
     <string name="settings_fetch_pictures">Descargar imágenes</string>
     <string name="settings_fetch_pictures_description">Descarga las imágenes localmente.</string>
     <string name="settings_font_size">Tamaño del texto</string>
-    <string name="settings_font_size_description">Selecciona el tamaño del texto de las entradas.</string>
+    <string name="settings_font_size_description">Selecciona el tamaño del texto de las entradas.
+    </string>
     <string name="settings_refresh_on_open">Actualizar las fuentes al inicio</string>
-    <string name="settings_refresh_on_open_description">Actualiza las fuentes al iniciar la aplicación.</string>
+    <string name="settings_refresh_on_open_description">Actualiza las fuentes al iniciar la
+        aplicación.
+    </string>
     <string name="settings_refresh_wifi_only">Actualizar solo en Wi-Fi.</string>
-    <string name="settings_refresh_wifi_only_description">Solo se actualizarán las entradas cuando se esté conectado a una red Wi-Fi.</string>
+    <string name="settings_refresh_wifi_only_description">Solo se actualizarán las entradas cuando
+        se esté conectado a una red Wi-Fi.
+    </string>
     <string name="settings_visible_feeds">Visibilidad de las fuentes</string>
     <string name="settings_widget_background">Fondo</string>
-    <string name="settings_widget_background_description">Color i transparencia del fondo del widget.</string>
+    <string name="settings_widget_background_description">Color i transparencia del fondo del
+        widget.
+    </string>
     <string name="all_feeds">Todas las fuentes (incl. futuras)</string>
 
     <string-array name="settings_intervals">

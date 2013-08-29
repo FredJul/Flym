@@ -1,6 +1,6 @@
 /**
  * FeedEx
- * 
+ *
  * Copyright (c) 2012-2013 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,14 +19,15 @@
 
 package net.fred.feedex.receiver;
 
-import net.fred.feedex.service.FetcherService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import net.fred.feedex.service.FetcherService;
+
 public class MobilizeFeedBroadcastReceiver extends BroadcastReceiver {
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		context.startService(new Intent(context, FetcherService.class).putExtras(intent)); // a thread would mark the process as inactive
-	}
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        context.startService(new Intent(context, FetcherService.class).putExtras(intent)); // a thread would mark the process as inactive
+    }
 }

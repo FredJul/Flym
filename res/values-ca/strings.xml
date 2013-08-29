@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  Copyright (c) 2010-2012 Stefan Handschuh
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,7 +34,7 @@
     <string name="network_error">No hi ha connectivitat</string>
     <string name="loading">S\'està carregant.</string>
     <string name="no_result">No hi ha resultats</string>
-    
+
     <!-- FEEDS -->
     <string name="menu_add_feed">Afegir un canal</string>
     <string name="no_feeds">No hi ha canals</string>
@@ -53,8 +52,12 @@
     <string name="error_feed_process">No s\'ha pogut processar el canal.</string>
     <string name="error_feed_url_exists">Ja existeix aquesta adreça.</string>
     <string name="error_feed_import">No s\'ha pogut importar el fitxer sel·leccionat.</string>
-    <string name="error_feed_export">No s\'ha pogut exportar el fitxer. Comproveu la memòria externa.</string>
-    <string name="error_external_storage_not_available">The external storage (e.g. SD-card) is not available.</string>
+    <string name="error_feed_export">No s\'ha pogut exportar el fitxer. Comproveu la memòria
+        externa.
+    </string>
+    <string name="error_external_storage_not_available">The external storage (e.g. SD-card) is not
+        available.
+    </string>
     <string name="feed_url">Adreça URL</string>
     <string name="optional">(opcional)</string>
     <string name="website_or_feed">(lloc web o canal)</string>
@@ -78,10 +81,12 @@
     <string name="edit_group_title">Edició del nom del grup</string>
     <string name="message_exported_to">S\'ha exportat a %s.</string>
     <string name="to_group_title">Relocalització del canal</string>
-    <string name="to_group_message">Podeu posar el canal dins del grup o bé a sobre d\'aquest. Què voleu fer?</string>
+    <string name="to_group_message">Podeu posar el canal dins del grup o bé a sobre d\'aquest. Què
+        voleu fer?
+    </string>
     <string name="to_group_above">Situa a sobre del grup</string>
     <string name="to_group_into">Afegeix al grup</string>
-    
+
     <!-- ENTRIES -->
     <string name="all">Entrades</string>
     <string name="overview">Canals</string>
@@ -104,44 +109,63 @@
     <string name="see_enclosure">Mostra el fitxer adjunt</string>
     <string name="see_link">Mostra al navegador</string>
     <string name="cant_open_link">No s\'ha trobat una aplicació\'per aquest enllaç.</string>
-    
+
     <!-- WIDGET -->
     <string name="red">Vermell</string>
     <string name="green">Verd</string>
     <string name="blue">Blau</string>
     <string name="transparency">Transparència</string>
-    
+
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Actualització automàtica</string>
     <string name="settings_refresh_enabled">Activa les actualitzacions automàtiques</string>
-    <string name="settings_refresh_enabled_description">Descarrega el contingut dels canals automàticament.</string>
+    <string name="settings_refresh_enabled_description">Descarrega el contingut dels canals
+        automàticament.
+    </string>
     <string name="settings_refresh_interval">Interval entre actualitzacions</string>
-    <string name="settings_refresh_interval_description">Defineix el temps que transcorre entre dues actualitzacions automàtiques.</string>
+    <string name="settings_refresh_interval_description">Defineix el temps que transcorre entre dues
+        actualitzacions automàtiques.
+    </string>
     <string name="settings_category_notifications">Notificacions</string>
     <string name="settings_notifications_enabled">Activa les notificacions</string>
     <string name="settings_notifications_enabled_description">Notifica les noves entrades.</string>
     <string name="settings_notifications_ringtone">So</string>
-    <string name="settings_notifications_ringtone_description">Sel·lecciona el so que es reproduirà al mostrar la notificació.</string>
+    <string name="settings_notifications_ringtone_description">Sel·lecciona el so que es reproduirà
+        al mostrar la notificació.
+    </string>
     <string name="settings_notifications_vibrate">Vibra</string>
-    <string name="settings_notifications_vibrate_description">Vibra el terminal al mostrar la notificació.</string>
+    <string name="settings_notifications_vibrate_description">Vibra el terminal al mostrar la
+        notificació.
+    </string>
     <string name="settings_category_content_presentation">Presentació del contingut</string>
     <string name="settings_lighttheme">Tema clar</string>
     <string name="settings_lighttheme_description">Utilitza el tema clar</string>
     <string name="settings_keep_time">Temps de conservació d\'entrades</string>
-    <string name="settings_keep_time_description">Les entrades més antigues que aquest paràmetre seran eliminades.</string>
+    <string name="settings_keep_time_description">Les entrades més antigues que aquest paràmetre
+        seran eliminades.
+    </string>
     <string name="settings_disable_pictures">Desactiva imatges</string>
-    <string name="settings_disable_pictures_description">No es carregaran ni mostraran imatges.</string>
+    <string name="settings_disable_pictures_description">No es carregaran ni mostraran imatges.
+    </string>
     <string name="settings_fetch_pictures">Descarrega imatges</string>
-    <string name="settings_fetch_pictures_description">Descarrega les imatges i les emmagatzema localment.</string>
+    <string name="settings_fetch_pictures_description">Descarrega les imatges i les emmagatzema
+        localment.
+    </string>
     <string name="settings_font_size">Mida del text</string>
-    <string name="settings_font_size_description">Sel·lecciona la mida del text de les entrades.</string>
+    <string name="settings_font_size_description">Sel·lecciona la mida del text de les entrades.
+    </string>
     <string name="settings_refresh_on_open">Actualitza els canals a l\'inici</string>
-    <string name="settings_refresh_on_open_description">Descarregarà nous continguts dels canals a l\'inici de l\'aplicació.</string>
+    <string name="settings_refresh_on_open_description">Descarregarà nous continguts dels canals a
+        l\'inici de l\'aplicació.
+    </string>
     <string name="settings_refresh_wifi_only">Actualitza els canals només en Wi-Fi</string>
-    <string name="settings_refresh_wifi_only_description">Només es descarregaran nous continguts dins d\'una connexió Wi-Fi.</string>
+    <string name="settings_refresh_wifi_only_description">Només es descarregaran nous continguts
+        dins d\'una connexió Wi-Fi.
+    </string>
     <string name="settings_visible_feeds">Canals visibles</string>
     <string name="settings_widget_background">Fons</string>
-    <string name="settings_widget_background_description">Color i transparència del fons del giny.</string>
+    <string name="settings_widget_background_description">Color i transparència del fons del giny.
+    </string>
     <string name="all_feeds">Tots els canals (futurs inclosos)</string>
 
     <string-array name="settings_intervals">

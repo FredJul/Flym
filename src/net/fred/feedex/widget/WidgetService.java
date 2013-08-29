@@ -1,6 +1,6 @@
 /**
  * FeedEx
- * 
+ *
  * Copyright (c) 2012-2013 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,8 +23,8 @@ import android.content.Intent;
 import android.widget.RemoteViewsService;
 
 public class WidgetService extends RemoteViewsService {
-	@Override
-	public RemoteViewsFactory onGetViewFactory(Intent intent) {
-		return (new WidgetFeedsFactory(this.getApplicationContext(), intent));
-	}
+    @Override
+    public RemoteViewsFactory onGetViewFactory(Intent intent) {
+        return (new WidgetFeedsFactory(this.getApplicationContext(), intent));
+    }
 }

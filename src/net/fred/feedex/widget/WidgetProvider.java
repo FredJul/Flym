@@ -1,6 +1,6 @@
 /**
  * FeedEx
- * 
+ *
  * Copyright (c) 2012-2013 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,9 +19,6 @@
 
 package net.fred.feedex.widget;
 
-import net.fred.feedex.PrefsManager;
-import net.fred.feedex.R;
-import net.fred.feedex.activity.MainActivity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -30,11 +27,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
 
-public class WidgetProvider extends AppWidgetProvider {
-	public static final int STANDARD_BACKGROUND = 0x7c000000;
+import net.fred.feedex.PrefsManager;
+import net.fred.feedex.R;
+import net.fred.feedex.activity.MainActivity;
 
-	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+public class WidgetProvider extends AppWidgetProvider {
+    public static final int STANDARD_BACKGROUND = 0x7c000000;
+
+    @Override
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             Intent svcIntent = new Intent(context, WidgetService.class);
 
@@ -52,6 +53,6 @@ public class WidgetProvider extends AppWidgetProvider {
             appWidgetManager.updateAppWidget(appWidgetId, widget);
         }
 
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
-	}
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
+    }
 }
