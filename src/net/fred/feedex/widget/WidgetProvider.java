@@ -35,22 +35,22 @@ public class WidgetProvider extends AppWidgetProvider {
 
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		for (int i = 0; i < appWidgetIds.length; i++) {
-			Intent svcIntent = new Intent(context, WidgetService.class);
+        for (int appWidgetId : appWidgetIds) {
+            Intent svcIntent = new Intent(context, WidgetService.class);
 
-			svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-			svcIntent.putExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, PrefsManager.getInteger(appWidgetIds[i] + ".fontsize", 0));
-			svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
+            svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            svcIntent.putExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, PrefsManager.getInteger(appWidgetId + ".fontsize", 0));
+            svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
-			RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget);
-			widget.setOnClickPendingIntent(R.id.feed_icon, PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0));
-			widget.setPendingIntentTemplate(R.id.feedsListView, PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW), 0));
+            RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget);
+            widget.setOnClickPendingIntent(R.id.feed_icon, PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0));
+            widget.setPendingIntentTemplate(R.id.feedsListView, PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW), 0));
 
-			widget.setRemoteAdapter(R.id.feedsListView, svcIntent);
-			widget.setInt(R.id.feedsListView, "setBackgroundColor", PrefsManager.getInteger(appWidgetIds[i] + ".background", STANDARD_BACKGROUND));
+            widget.setRemoteAdapter(R.id.feedsListView, svcIntent);
+            widget.setInt(R.id.feedsListView, "setBackgroundColor", PrefsManager.getInteger(appWidgetId + ".background", STANDARD_BACKGROUND));
 
-			appWidgetManager.updateAppWidget(appWidgetIds[i], widget);
-		}
+            appWidgetManager.updateAppWidget(appWidgetId, widget);
+        }
 
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}

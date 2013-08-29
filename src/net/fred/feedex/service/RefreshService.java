@@ -78,11 +78,6 @@ public class RefreshService extends Service {
 	}
 
 	@Override
-	public void onRebind(Intent intent) {
-		super.onRebind(intent);
-	}
-
-	@Override
 	public boolean onUnbind(Intent intent) {
 		return true; // we want to use rebind
 	}
@@ -106,7 +101,7 @@ public class RefreshService extends Service {
 		int time = 3600000;
 		try {
 			time = Math.max(60000, Integer.parseInt(PrefsManager.getString(PrefsManager.REFRESH_INTERVAL, SIXTYMINUTES)));
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 
 		long initialRefreshTime = SystemClock.elapsedRealtime() + 10000;

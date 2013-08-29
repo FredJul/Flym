@@ -82,10 +82,7 @@ public class FeedDataContentProvider extends ContentProvider {
 	private static final int URI_FAVORITES = 14;
 	private static final int URI_FAVORITES_ENTRY = 15;
 
-	private static final String ENTRIES_TABLE_WITH_FEED_INFO = new StringBuilder(EntryColumns.TABLE_NAME).append(" JOIN (SELECT ")
-			.append(FeedColumns._ID).append(" AS joined_feed_id, ").append(FeedColumns.NAME).append(", ").append(FeedColumns.ICON).append(", ")
-			.append(FeedColumns.GROUP_ID).append(" FROM ").append(FeedColumns.TABLE_NAME).append(") AS f ON (").append(EntryColumns.TABLE_NAME)
-			.append('.').append(EntryColumns.FEED_ID).append(" = f.joined_feed_id)").toString();
+	private static final String ENTRIES_TABLE_WITH_FEED_INFO = EntryColumns.TABLE_NAME + " JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.NAME + ", " + FeedColumns.ICON + ", " + FeedColumns.GROUP_ID + " FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + EntryColumns.TABLE_NAME + '.' + EntryColumns.FEED_ID + " = f.joined_feed_id)";
 
 	public static final String IMAGE_FOLDER = DatabaseHelper.EXTERNAL_FOLDER + "images/";
 	public static final File IMAGE_FOLDER_FILE = new File(IMAGE_FOLDER);
@@ -235,7 +232,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		long newId = -1;
+		long newId;
 
 		int option = URI_MATCHER.match(uri);
 
@@ -418,8 +415,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
 		int count = database.update(table, values, where.toString(), selectionArgs);
 
-		// == is ok here
-		if (table == FeedColumns.TABLE_NAME
+        if (FeedColumns.TABLE_NAME.equals(table)
 				&& (values.containsKey(FeedColumns.NAME) || values.containsKey(FeedColumns.URL) || values.containsKey(FeedColumns.PRIORITY))) {
 			mDatabaseHelper.exportToOPML();
 		}
@@ -566,7 +562,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
 		int count = database.delete(table, where.toString(), selectionArgs);
 
-		if (table == FeedColumns.TABLE_NAME) { // == is ok here
+		if (FeedColumns.TABLE_NAME.equals(table)) {
 			mDatabaseHelper.exportToOPML();
 		}
 		if (count > 0) {
@@ -575,7 +571,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		return count;
 	}
 
-	public static String getFeedIdFromEntryId(long entryId) {
+	private static String getFeedIdFromEntryId(long entryId) {
 		ContentResolver cr = MainApplication.getAppContext().getContentResolver();
 		Cursor c = cr.query(EntryColumns.CONTENT_URI(entryId), new String[] { EntryColumns.FEED_ID }, null, null, null);
 		if (c.moveToFirst()) {
@@ -586,11 +582,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		return null;
 	}
 
-	public static void notifyGroupFromFeedId(long feedId) {
-		notifyGroupFromFeedId(Long.toString(feedId));
-	}
-
-	public static void notifyGroupFromFeedId(String feedId) {
+    public static void notifyGroupFromFeedId(String feedId) {
 		ContentResolver cr = MainApplication.getAppContext().getContentResolver();
 		Cursor c = cr.query(FeedColumns.CONTENT_URI(feedId), FeedColumns.PROJECTION_GROUP_ID, null, null, null);
 		if (c.moveToFirst()) {
@@ -627,7 +619,7 @@ public class FeedDataContentProvider extends ContentProvider {
 			if (!uriStr.startsWith(EntryColumns.CONTENT_URI.toString())) {
 				cr.notifyChange(ContentUris.withAppendedId(EntryColumns.CONTENT_URI, entryId), null);
 			}
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 	}
 }

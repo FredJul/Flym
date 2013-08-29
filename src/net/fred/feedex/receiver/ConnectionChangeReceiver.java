@@ -36,16 +36,16 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (mConnection == true && intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
+		if (mConnection && intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
 			mConnection = false;
-		} else if (mConnection == false && !intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
+		} else if (!mConnection && !intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
 			mConnection = true;
 
 			if (!FetcherService.isRefreshingFeeds && PrefsManager.getBoolean(PrefsManager.REFRESH_ENABLED, true)) {
 				int time = 3600000;
 				try {
 					time = Math.max(60000, Integer.parseInt(PrefsManager.getString(PrefsManager.REFRESH_INTERVAL, RefreshService.SIXTYMINUTES)));
-				} catch (Exception e) {
+				} catch (Exception ignored) {
 				}
 
 				long lastRefresh = PrefsManager.getLong(PrefsManager.LAST_SCHEDULED_REFRESH, 0);

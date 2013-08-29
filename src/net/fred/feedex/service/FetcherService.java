@@ -44,44 +44,6 @@
 
 package net.fred.feedex.service;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.Proxy;
-import java.net.ProxySelector;
-import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Vector;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.zip.GZIPInputStream;
-
-import net.fred.feedex.Constants;
-import net.fred.feedex.MainApplication;
-import net.fred.feedex.PrefsManager;
-import net.fred.feedex.R;
-import net.fred.feedex.activity.MainActivity;
-import net.fred.feedex.parser.RssAtomParser;
-import net.fred.feedex.provider.FeedData.EntryColumns;
-import net.fred.feedex.provider.FeedData.FeedColumns;
-import net.fred.feedex.provider.FeedDataContentProvider;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -99,9 +61,45 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.text.Html;
-import android.util.Base64;
 import android.util.Pair;
 import android.util.Xml;
+
+import net.fred.feedex.Constants;
+import net.fred.feedex.MainApplication;
+import net.fred.feedex.PrefsManager;
+import net.fred.feedex.R;
+import net.fred.feedex.activity.MainActivity;
+import net.fred.feedex.parser.RssAtomParser;
+import net.fred.feedex.provider.FeedData.EntryColumns;
+import net.fred.feedex.provider.FeedData.FeedColumns;
+import net.fred.feedex.provider.FeedDataContentProvider;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.URL;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
 
 public class FetcherService extends IntentService {
 
@@ -120,11 +118,9 @@ public class FetcherService extends IntentService {
 	private static final String HTML_BODY = "<body";
 	private static final String ENCODING = "encoding=\"";
 	private static final String SERVICENAME = "RssFetcherService";
-	private static final String ZERO = "0";
-	private static final String GZIP = "gzip";
+    private static final String GZIP = "gzip";
 	private static final String FILE_FAVICON = "/favicon.ico";
-	private static final String DEFAULT_PROXY_PORT = "8080";
-	private static final String PROTOCOL_SEPARATOR = "://";
+    private static final String PROTOCOL_SEPARATOR = "://";
 	private static final String _HTTP = "http";
 	private static final String _HTTPS = "https";
 	/* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
@@ -227,7 +223,7 @@ public class FetcherService extends IntentService {
 					cursor.close();
 
 					if (newCount > 0) {
-						String text = new StringBuilder().append(newCount).append(' ').append(getString(R.string.new_entries)).toString();
+						String text = String.valueOf(newCount) + ' ' + getString(R.string.new_entries);
 
 						Intent notificationIntent = new Intent(FetcherService.this, MainActivity.class);
 						PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent,
@@ -275,7 +271,7 @@ public class FetcherService extends IntentService {
 
 	private void mobilizeEntry(Uri uri) {
 		String entryIdStr = uri.getLastPathSegment();
-		long entryId = -1;
+		long entryId;
 		try {
 			entryId = Long.parseLong(entryIdStr);
 		} catch (NumberFormatException e) {
@@ -303,7 +299,7 @@ public class FetcherService extends IntentService {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(getConnectionInputStream(connection)));
 
 				StringBuilder sb = new StringBuilder();
-				String line = null;
+				String line;
 				while ((line = reader.readLine()) != null) {
 					sb.append(line);
 				}
@@ -338,7 +334,7 @@ public class FetcherService extends IntentService {
 						}
 					}
 				}
-			} catch (Throwable e) {
+			} catch (Throwable ignored) {
 			} finally {
 				if (connection != null) {
 					connection.disconnect();
@@ -377,7 +373,7 @@ public class FetcherService extends IntentService {
 					int result = 0;
 					try {
 						result = refreshFeed(feedId);
-					} catch (Exception ex) {
+					} catch (Exception ignored) {
 					}
 					return result;
 				}
@@ -390,7 +386,7 @@ public class FetcherService extends IntentService {
 			try {
 				Future<Integer> f = completionService.take();
 				globalResult += f.get();
-			} catch (Exception e) {
+			} catch (Exception ignored) {
 			}
 		}
 
@@ -431,11 +427,11 @@ public class FetcherService extends IntentService {
 					if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
 						BufferedReader reader = new BufferedReader(new InputStreamReader(getConnectionInputStream(connection)));
 
-						String line = null;
+						String line;
 						int posStart = -1;
 
 						while ((line = reader.readLine()) != null) {
-							if (line.indexOf(HTML_BODY) > -1) {
+							if (line.contains(HTML_BODY)) {
 								break;
 							} else {
 								Matcher matcher = FEED_LINK_PATTERN.matcher(line);
@@ -459,7 +455,7 @@ public class FetcherService extends IntentService {
 												url = feedUrl + url;
 											}
 										} else if (!url.startsWith(Constants.HTTP) && !url.startsWith(Constants.HTTPS)) {
-											url = new StringBuilder(feedUrl).append('/').append(url).toString();
+											url = feedUrl + '/' + url;
 										}
 										values.put(FeedColumns.URL, url);
 										cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
@@ -577,7 +573,7 @@ public class FetcherService extends IntentService {
 									StringReader reader = new StringReader(new String(ouputStream.toByteArray(), index2 > -1 ? contentType.substring(
 											index + 8, index2) : contentType.substring(index + 8)));
 									Xml.parse(reader, handler);
-								} catch (Exception e) {
+								} catch (Exception ignored) {
 								}
 							} else {
 								StringReader reader = new StringReader(new String(ouputStream.toByteArray()));
@@ -626,7 +622,7 @@ public class FetcherService extends IntentService {
 							retrieveFavicon(this, connection.getURL(), id);
 						}
 					}
-				} catch (Throwable e) {
+				} catch (Throwable ignored) {
 				}
 
 				if (connection != null) {
@@ -640,15 +636,15 @@ public class FetcherService extends IntentService {
 		return handler != null ? handler.getNewCount() : 0;
 	}
 
-	public static final HttpURLConnection setupConnection(String url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+	public static HttpURLConnection setupConnection(String url) throws IOException {
 		return setupConnection(new URL(url));
 	}
 
-	public static final HttpURLConnection setupConnection(URL url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+	public static HttpURLConnection setupConnection(URL url) throws IOException {
 		return setupConnection(url, 0);
 	}
 
-	public static final HttpURLConnection setupConnection(URL url, int cycle) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+	public static HttpURLConnection setupConnection(URL url, int cycle) throws IOException {
 		// Try to get the system proxy
 		Proxy proxy = null;
 		try {
@@ -657,7 +653,7 @@ public class FetcherService extends IntentService {
 			if (!proxyList.isEmpty()) {
 				proxy = proxyList.get(0);
 			}
-		} catch (Throwable t) {
+		} catch (Throwable ignored) {
 		}
 
 		HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
@@ -668,10 +664,6 @@ public class FetcherService extends IntentService {
 		connection.setConnectTimeout(30000);
 		connection.setReadTimeout(30000);
 		connection.setUseCaches(false);
-
-		if (url.getUserInfo() != null) {
-			connection.setRequestProperty("Authorization", "Basic " + Base64.encode(url.getUserInfo().getBytes(), Base64.DEFAULT));
-		}
 
 		connection.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 		connection.connect();
@@ -716,8 +708,7 @@ public class FetcherService extends IntentService {
 	private static void retrieveFavicon(Context context, URL url, String id) {
 		HttpURLConnection iconURLConnection;
 		try {
-			iconURLConnection = setupConnection(new URL(new StringBuilder(url.getProtocol()).append(PROTOCOL_SEPARATOR).append(url.getHost())
-					.append(FILE_FAVICON).toString()));
+			iconURLConnection = setupConnection(new URL(url.getProtocol() + PROTOCOL_SEPARATOR + url.getHost() + FILE_FAVICON));
 
 			ContentValues values = new ContentValues();
 			try {
@@ -732,7 +723,7 @@ public class FetcherService extends IntentService {
 				context.getContentResolver().update(FeedColumns.CONTENT_URI(id), values, null, null);
 				FeedDataContentProvider.notifyGroupFromFeedId(id);
 			}
-		} catch (Throwable t) {
+		} catch (Throwable ignored) {
 		}
 	}
 

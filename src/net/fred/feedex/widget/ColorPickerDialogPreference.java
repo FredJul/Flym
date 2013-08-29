@@ -59,7 +59,7 @@ public class ColorPickerDialogPreference extends DialogPreference {
 	private SeekBar blueSeekBar;
 	private SeekBar transparencySeekBar;
 
-	int color;
+	private int color;
 
 	public ColorPickerDialogPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);

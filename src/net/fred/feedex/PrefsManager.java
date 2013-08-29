@@ -106,7 +106,7 @@ public class PrefsManager {
 	public static void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
 		try {
 			PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).unregisterOnSharedPreferenceChangeListener(listener);
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 	}
 }

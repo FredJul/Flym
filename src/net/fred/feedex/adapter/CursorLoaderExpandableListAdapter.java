@@ -54,9 +54,9 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	/**
 	 * The map of a group position to the group's children cursor
 	 */
-	SparseArray<Pair<Cursor, Boolean>> mChildrenCursors = new SparseArray<Pair<Cursor, Boolean>>();
+	private final SparseArray<Pair<Cursor, Boolean>> mChildrenCursors = new SparseArray<Pair<Cursor, Boolean>>();
 
-	LoaderManager.LoaderCallbacks<Cursor> mGroupLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
+	private final LoaderManager.LoaderCallbacks<Cursor> mGroupLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
 		@Override
 		public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 			CursorLoader cursorLoader = new CursorLoader(mActivity, mGroupUri, null, null, null, null) {
@@ -90,14 +90,14 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	};
 
 	private void setAllChildrenCursorsAsObsolete() {
-		int key = 0;
+		int key;
 		for (int i = 0; i < mChildrenCursors.size(); i++) {
 			key = mChildrenCursors.keyAt(i);
 			mChildrenCursors.put(key, new Pair<Cursor, Boolean>(mChildrenCursors.get(key).first, true));
 		}
 	}
 
-	LoaderManager.LoaderCallbacks<Cursor> mChildrenLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
+	private final LoaderManager.LoaderCallbacks<Cursor> mChildrenLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
 		@Override
 		public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 			CursorLoader cursorLoader = new CursorLoader(mActivity, (Uri) args.getParcelable(URI_ARG), null, null, null, null) {
@@ -130,10 +130,6 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	/**
 	 * Constructor.
 	 * 
-	 * @param context
-	 *            The context where the ListView associated with this SimpleListItemFactory is running
-	 * @param cursor
-	 *            The database cursor
 	 * @param collapsedGroupLayout
 	 *            resource identifier of a layout file that defines the views for collapsed groups.
 	 * @param expandedGroupLayout
@@ -158,10 +154,6 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 	/**
 	 * Constructor.
 	 * 
-	 * @param context
-	 *            The context where the ListView associated with this SimpleListItemFactory is running
-	 * @param cursor
-	 *            The database cursor
 	 * @param groupLayout
 	 *            resource identifier of a layout file that defines the views for all groups.
 	 * @param childLayout
@@ -173,31 +165,25 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 
 	/**
 	 * Makes a new child view to hold the data pointed to by cursor.
-	 * 
-	 * @param context
-	 *            Interface to application's global information
-	 * @param isLastChild
-	 *            Whether the child is the last child within its group.
-	 * @param parent
-	 *            The parent to which the new view is attached to
-	 * @return the newly created view.
+	 *
+     * @param parent
+     *            The parent to which the new view is attached to
+     * @return the newly created view.
 	 */
-	public View newChildView(Context context, ViewGroup parent) {
+	public View newChildView(ViewGroup parent) {
 		return mInflater.inflate(mChildLayout, parent, false);
 	}
 
 	/**
 	 * Makes a new group view to hold the group data pointed to by cursor.
-	 * 
-	 * @param context
-	 *            Interface to application's global information
-	 * @param isExpanded
-	 *            Whether the group is expanded.
-	 * @param parent
-	 *            The parent to which the new view is attached to
-	 * @return The newly created view.
+	 *
+     * @param isExpanded
+     *            Whether the group is expanded.
+     * @param parent
+     *            The parent to which the new view is attached to
+     * @return The newly created view.
 	 */
-	public View newGroupView(Context context, boolean isExpanded, ViewGroup parent) {
+	public View newGroupView(boolean isExpanded, ViewGroup parent) {
 		return mInflater.inflate((isExpanded) ? mExpandedGroupLayout : mCollapsedGroupLayout, parent, false);
 	}
 
@@ -246,7 +232,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 
 		View v;
 		if (convertView == null) {
-			v = newChildView(mActivity, parent);
+			v = newChildView(parent);
 		} else {
 			v = convertView;
 		}
@@ -259,7 +245,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 		Pair<Cursor, Boolean> childCursor = mChildrenCursors.get(groupPosition);
 
 		// We need to restart the loader
-		if ((childCursor == null || childCursor.second == true) && mGroupCursor != null && !mGroupCursor.isClosed() && mGroupCursor.moveToPosition(groupPosition)) {
+		if ((childCursor == null || childCursor.second) && mGroupCursor != null && !mGroupCursor.isClosed() && mGroupCursor.moveToPosition(groupPosition)) {
 			Bundle args = new Bundle();
 			args.putParcelable(URI_ARG, getChildrenUri(mGroupCursor));
 			mLoaderMgr.restartLoader(groupPosition + 1, args, mChildrenLoaderCallback);
@@ -307,7 +293,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 
 		View v;
 		if (convertView == null) {
-			v = newGroupView(mActivity, isExpanded, parent);
+			v = newGroupView(isExpanded, parent);
 		} else {
 			v = convertView;
 		}

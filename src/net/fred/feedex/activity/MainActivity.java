@@ -56,14 +56,7 @@ import android.view.View;
 
 public class MainActivity extends ProgressFragmentActivity implements ActionBar.TabListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-	/**
-	 * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a
-	 * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which will keep every loaded fragment in memory. If this becomes too memory
-	 * intensive, it may be best to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
-	 */
-	private SectionsPagerAdapter mSectionsPagerAdapter;
-
-	/**
+    /**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	private ViewPager mViewPager;
@@ -105,16 +98,21 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 			Method setHasEmbeddedTabsMethod = actionBar.getClass().getDeclaredMethod("setHasEmbeddedTabs", boolean.class);
 			setHasEmbeddedTabsMethod.setAccessible(true);
 			setHasEmbeddedTabsMethod.invoke(actionBar, false);
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+		/*
+	  The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a
+	  {@link android.support.v4.app.FragmentPagerAdapter} derivative, which will keep every loaded fragment in memory. If this becomes too memory
+	  intensive, it may be best to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
+	 */
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mSectionsPagerAdapter);
+		mViewPager.setAdapter(sectionsPagerAdapter);
 
 		// When swiping between different sections, select the corresponding
 		// tab. We can also use ActionBar.Tab#select() to do this if we have
@@ -128,12 +126,12 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 		});
 
 		// For each of the sections in the app, add a tab to the action bar.
-		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+		for (int i = 0; i < sectionsPagerAdapter.getCount(); i++) {
 			// Create a tab with text corresponding to the page title defined by
 			// the adapter. Also specify this Activity object, which implements
 			// the TabListener interface, as the callback (listener) for when
 			// this tab is selected.
-			actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
+			actionBar.addTab(actionBar.newTab().setText(sectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
 		}
 
 		if (PrefsManager.getBoolean(PrefsManager.REFRESH_ENABLED, true)) {

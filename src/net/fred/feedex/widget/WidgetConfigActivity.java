@@ -62,10 +62,7 @@ import android.view.View.OnClickListener;
 public class WidgetConfigActivity extends PreferenceActivity {
 	private int widgetId;
 
-	private static final String NAMECOLUMN = new StringBuilder("ifnull(").append(FeedColumns.NAME).append(',').append(FeedColumns.URL)
-			.append(") as title").toString();
-
-	public static final String ZERO = "0";
+	private static final String NAME_COLUMN = "ifnull(" + FeedColumns.NAME + ',' + FeedColumns.URL + ") as title";
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -85,7 +82,7 @@ public class WidgetConfigActivity extends PreferenceActivity {
 
 		final PreferenceCategory feedsPreferenceCategory = (PreferenceCategory) findPreference("widget.visiblefeeds");
 
-		Cursor cursor = this.getContentResolver().query(FeedColumns.CONTENT_URI, new String[] { FeedColumns._ID, NAMECOLUMN }, null, null, null);
+		Cursor cursor = this.getContentResolver().query(FeedColumns.CONTENT_URI, new String[] { FeedColumns._ID, NAME_COLUMN}, null, null, null);
 
 		if (cursor.moveToFirst()) {
 			int[] ids = new int[cursor.getCount() + 1];
@@ -94,7 +91,7 @@ public class WidgetConfigActivity extends PreferenceActivity {
 
 			checkboxPreference.setTitle(R.string.all_feeds);
 			feedsPreferenceCategory.addPreference(checkboxPreference);
-			checkboxPreference.setKey(ZERO);
+			checkboxPreference.setKey("0");
 			checkboxPreference.setDisableDependentsState(true);
 			ids[0] = 0;
 			for (int n = 1; !cursor.isAfterLast(); cursor.moveToNext(), n++) {
@@ -103,7 +100,7 @@ public class WidgetConfigActivity extends PreferenceActivity {
 				ids[n] = cursor.getInt(0);
 				checkboxPreference.setKey(Integer.toString(ids[n]));
 				feedsPreferenceCategory.addPreference(checkboxPreference);
-				checkboxPreference.setDependency(ZERO);
+				checkboxPreference.setDependency("0");
 			}
 			cursor.close();
 
@@ -147,7 +144,7 @@ public class WidgetConfigActivity extends PreferenceActivity {
 					PendingIntent pendingIntent = PendingIntent.getBroadcast(WidgetConfigActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 					try {
 						pendingIntent.send();
-					} catch (CanceledException e) {
+					} catch (CanceledException ignored) {
 					}
 
 					setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));

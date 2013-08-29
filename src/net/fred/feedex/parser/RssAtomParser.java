@@ -124,9 +124,7 @@ public class RssAtomParser extends DefaultHandler {
 
 	private static final String[][] TIMEZONES_REPLACE = { { "MEST", "+0200" }, { "EST", "-0500" }, { "PST", "-0800" } };
 
-	private static long KEEP_TIME = 345600000l; // 4 days
-
-	private static final DateFormat[] PUBDATE_DATE_FORMATS = { new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss", Locale.US),
+    private static final DateFormat[] PUBDATE_DATE_FORMATS = { new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss", Locale.US),
 			new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US), new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.US) };
 
 	private static final DateFormat[] UPDATE_DATE_FORMATS = { new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss", Locale.US),
@@ -178,8 +176,8 @@ public class RssAtomParser extends DefaultHandler {
 	private final ArrayList<Vector<String>> entriesImages = new ArrayList<Vector<String>>();
 
 	public RssAtomParser(Date realLastUpdateDate, final String id, String feedName, String url, boolean retrieveFullText) {
-		KEEP_TIME = Long.parseLong(PrefsManager.getString(PrefsManager.KEEP_TIME, "4")) * 86400000l;
-		long keepDateBorderTime = KEEP_TIME > 0 ? System.currentTimeMillis() - KEEP_TIME : 0;
+        long keepTime = Long.parseLong(PrefsManager.getString(PrefsManager.KEEP_TIME, "4")) * 86400000l;
+		long keepDateBorderTime = keepTime > 0 ? System.currentTimeMillis() - keepTime : 0;
 
 		keepDateBorder = new Date(keepDateBorderTime);
 		this.realLastUpdateDate = realLastUpdateDate;
@@ -192,8 +190,7 @@ public class RssAtomParser extends DefaultHandler {
 		filters = new FeedFilters(id);
 
 		// Remove old stuffs
-		final String query = new StringBuilder(EntryColumns.DATE).append('<').append(keepDateBorderTime).append(Constants.DB_AND)
-				.append(EntryColumns.WHERE_NOT_FAVORITE).toString();
+		final String query = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
 		FeedData.deletePicturesOfFeed(MainApplication.getAppContext(), feedEntiresUri, query);
 		MainApplication.getAppContext().getContentResolver().delete(feedEntiresUri, query, null);
 
@@ -514,7 +511,7 @@ public class RssAtomParser extends DefaultHandler {
 			try {
 				Date result = format.parse(dateStr);
 				return (result.getTime() > now ? new Date(now) : result);
-			} catch (ParseException e) {
+			} catch (ParseException ignored) {
 			} // just do nothing
 		}
 
@@ -545,7 +542,7 @@ public class RssAtomParser extends DefaultHandler {
 			try {
 				Date result = format.parse(dateStr);
 				return (result.getTime() > now ? new Date(now) : result);
-			} catch (ParseException e) {
+			} catch (ParseException ignored) {
 			} // just do nothing
 		}
 
@@ -560,7 +557,7 @@ public class RssAtomParser extends DefaultHandler {
 				.replace(Constants.HTML_GT, Constants.GT).replace(Constants.HTML_QUOT, Constants.QUOT)
 				.replace(Constants.HTML_APOSTROPHE, Constants.APOSTROPHE);
 
-		if (result.indexOf(ANDRHOMBUS) > -1) {
+		if (result.contains(ANDRHOMBUS)) {
 			return Html.fromHtml(result, null, null).toString();
 		} else {
 			return result;
@@ -593,9 +590,7 @@ public class RssAtomParser extends DefaultHandler {
 							// parameters
 							newContent = newContent.replace(
 									match,
-									new StringBuilder(Constants.FILE_URL).append(FeedDataContentProvider.IMAGE_FOLDER)
-											.append(Constants.IMAGEID_REPLACEMENT)
-											.append(URLEncoder.encode(match.substring(match.lastIndexOf('/') + 1), Constants.UTF8)).toString()
+									(Constants.FILE_URL + FeedDataContentProvider.IMAGE_FOLDER + Constants.IMAGEID_REPLACEMENT + URLEncoder.encode(match.substring(match.lastIndexOf('/') + 1), Constants.UTF8))
 											.replace(PERCENT, PERCENT_REPLACE));
 						} catch (UnsupportedEncodingException e) {
 							// UTF-8 should be supported
@@ -618,14 +613,12 @@ public class RssAtomParser extends DefaultHandler {
 					byte[] data = FetcherService.getBytes(new URL(img).openStream());
 
 					// see the comment where the img regex is executed for details about this replacement
-					FileOutputStream fos = new FileOutputStream(new StringBuilder(FeedDataContentProvider.IMAGE_FOLDER).append(entryId)
-							.append(Constants.IMAGEFILE_IDSEPARATOR)
-							.append(URLEncoder.encode(img.substring(img.lastIndexOf('/') + 1), Constants.UTF8)).toString()
+					FileOutputStream fos = new FileOutputStream((FeedDataContentProvider.IMAGE_FOLDER + entryId + Constants.IMAGEFILE_IDSEPARATOR + URLEncoder.encode(img.substring(img.lastIndexOf('/') + 1), Constants.UTF8))
 							.replace(PERCENT, PERCENT_REPLACE));
 
 					fos.write(data);
 					fos.close();
-				} catch (Exception e) {
+				} catch (Exception ignored) {
 				}
 			}
 		}
@@ -669,12 +662,12 @@ public class RssAtomParser extends DefaultHandler {
 				}
 			}
 
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 
 		ContentValues values = new ContentValues();
 		if (feedName == null && feedTitle != null) {
-			values.put(FeedColumns.NAME, feedTitle.toString().trim());
+			values.put(FeedColumns.NAME, feedTitle.trim());
 		}
 		values.putNull(FeedColumns.ERROR);
 		values.put(FeedColumns.LAST_UPDATE, System.currentTimeMillis() - 3000); // by precaution to not miss some feeds
@@ -687,7 +680,7 @@ public class RssAtomParser extends DefaultHandler {
 	}
 
 	private class FeedFilters {
-		ArrayList<Pair<String, Pair<Boolean, Boolean>>> mFilters = new ArrayList<Pair<String, Pair<Boolean, Boolean>>>();
+		private final ArrayList<Pair<String, Pair<Boolean, Boolean>>> mFilters = new ArrayList<Pair<String, Pair<Boolean, Boolean>>>();
 
 		public FeedFilters(String feedId) {
 			ContentResolver cr = MainApplication.getAppContext().getContentResolver();

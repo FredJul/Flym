@@ -46,7 +46,6 @@ package net.fred.feedex.parser;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -88,9 +87,9 @@ public class OPML {
 	private static final String FILTER_CLOSING = "'/>\n";
 	private static final String CLOSING = "</body>\n</opml>\n";
 
-	private static OPMLParser parser = new OPMLParser();
+	private static final OPMLParser parser = new OPMLParser();
 
-	public static void importFromFile(String filename) throws FileNotFoundException, IOException, SAXException {
+	public static void importFromFile(String filename) throws IOException, SAXException {
 		Xml.parse(new InputStreamReader(new FileInputStream(filename)), parser);
 	}
 
@@ -218,8 +217,7 @@ public class OPML {
 						values.put(FeedColumns.IS_GROUP, true);
 						values.put(FeedColumns.NAME, title);
 
-						Cursor cursor = cr.query(FeedColumns.GROUPS_CONTENT_URI, null, new StringBuilder(FeedColumns.NAME).append(Constants.DB_ARG)
-								.toString(), new String[] { title }, null);
+						Cursor cursor = cr.query(FeedColumns.GROUPS_CONTENT_URI, null, FeedColumns.NAME + Constants.DB_ARG, new String[] { title }, null);
 
 						if (!cursor.moveToFirst()) {
 							groupId = cr.insert(FeedColumns.GROUPS_CONTENT_URI, values).getLastPathSegment();
@@ -238,7 +236,7 @@ public class OPML {
 					}
 					values.put(FeedColumns.RETRIEVE_FULLTEXT, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_RETRIEVE_FULLTEXT)));
 
-					Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(),
+					Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, FeedColumns.URL + Constants.DB_ARG,
 							new String[] { url }, null);
 					feedId = null;
 					if (!cursor.moveToFirst()) {

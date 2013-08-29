@@ -42,7 +42,7 @@ public interface DragNDropListener {
 	 * @param x
 	 *            horizontal coordinate of MotionEvent.
 	 * @param y
-	 *            verital coordinate of MotionEvent.
+	 *            vertical coordinate of MotionEvent.
 	 * @param listView
 	 *            the listView
 	 */
@@ -59,9 +59,9 @@ public interface DragNDropListener {
 	/**
 	 * Called when an item is to be dropped.
 	 * 
-	 * @param from
+	 * @param flatPosFrom
 	 *            index item started at.
-	 * @param to
+	 * @param flatPosTo
 	 *            index to place item at.
 	 */
 	void onDrop(int flatPosFrom, int flatPosTo);

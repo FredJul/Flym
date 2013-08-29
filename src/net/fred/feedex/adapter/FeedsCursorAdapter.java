@@ -164,10 +164,8 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 			if (formattedDate == null) {
 				Date date = new Date(timestamp);
 
-				formattedDate = new StringBuilder(context.getString(R.string.update))
-						.append(COLON)
-						.append(timestamp == 0 ? context.getString(R.string.never) : new StringBuilder(Constants.DATE_FORMAT.format(date))
-								.append(' ').append(Constants.TIME_FORMAT.format(date))).toString();
+				formattedDate = context.getString(R.string.update) + COLON + (timestamp == 0 ? context.getString(R.string.never) : new StringBuilder(Constants.DATE_FORMAT.format(date))
+                        .append(' ').append(Constants.TIME_FORMAT.format(date)));
 				mFormattedDateCache.put(timestamp, formattedDate);
 			}
 
@@ -257,7 +255,7 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 			if (!mGroupInitDone.get(groupPosition)) {
 				mGroupInitDone.put(groupPosition, true);
 
-				boolean savedExpandedState = cursor.getInt(isGroupCollapsedPosition) == 1 ? false : true;
+				boolean savedExpandedState = cursor.getInt(isGroupCollapsedPosition) != 1;
 				if (savedExpandedState && !isExpanded) {
 					mActivity.runOnUiThread(new Runnable() {
 						@Override
@@ -351,7 +349,4 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 		mListView.invalidateViews();
 	}
 
-	public long getSelectedFeed() {
-		return mSelectedFeedId;
-	}
 }

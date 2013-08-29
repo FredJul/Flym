@@ -179,9 +179,8 @@ public class EntryActivity extends ProgressActivity {
 	private String link, title, enclosure;
 	private LayoutParams layoutParams;
 	private View cancelFullscreenBtn, backBtn, forwardBtn;
-	private boolean localPictures;
 
-	private boolean mFromWidget = false;
+    private boolean mFromWidget = false;
 
 	final private OnKeyListener onKeyEventListener = new OnKeyListener() {
 		@Override
@@ -439,7 +438,7 @@ public class EntryActivity extends ProgressActivity {
 
 		if (entryCursor.moveToFirst()) {
 			String contentText = entryCursor.getString(mobilizedHtmlPosition);
-			if (contentText == null || (forceUpdate && preferFullText == false)) {
+			if (contentText == null || (forceUpdate && !preferFullText)) {
 				preferFullText = false;
 				contentText = entryCursor.getString(abstractPosition);
 			} else {
@@ -508,7 +507,7 @@ public class EntryActivity extends ProgressActivity {
 			invalidateOptionsMenu();
 
 			// loadData does not recognize the encoding without correct html-header
-			localPictures = contentText.indexOf(Constants.IMAGEID_REPLACEMENT) > -1;
+            boolean localPictures = contentText.contains(Constants.IMAGEID_REPLACEMENT);
 
 			if (localPictures) {
 				contentText = contentText.replace(Constants.IMAGEID_REPLACEMENT, _id + Constants.IMAGEFILE_IDSEPARATOR);
@@ -536,7 +535,7 @@ public class EntryActivity extends ProgressActivity {
 			try {
 				URL url = new URL(link);
 				baseUrl = url.getProtocol() + "://" + url.getHost();
-			} catch (MalformedURLException e) {
+			} catch (MalformedURLException ignored) {
 			}
 			webView.loadDataWithBaseURL(baseUrl, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML,
 					Constants.UTF8, null);
@@ -575,7 +574,7 @@ public class EntryActivity extends ProgressActivity {
 		}
 		content.append(BUTTON_END);
 
-		if (enclosure != null && enclosure.length() > 6 && enclosure.indexOf(IMAGE_ENCLOSURE) == -1) {
+		if (enclosure != null && enclosure.length() > 6 && !enclosure.contains(IMAGE_ENCLOSURE)) {
 			content.append(BUTTON_START).append(getString(R.string.see_enclosure)).append(BUTTON_MIDDLE)
 					.append("injectedJSObject.onClickEnclosure();").append(BUTTON_END);
 		}

@@ -122,7 +122,7 @@ public class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory
 						}
 					}
 
-				} catch (Throwable e) {
+				} catch (Throwable ignored) {
 				}
 			}
 		}
@@ -165,11 +165,11 @@ public class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory
 			if (selection.length() > 0) {
 				selection.append(Constants.DB_AND);
 			}
-			selection.append(EntryColumns.FEED_ID).append(" IN (" + feedIds).append(')');
+			selection.append(EntryColumns.FEED_ID).append(" IN (").append(feedIds).append(')');
 		}
 
 		ContentResolver cr = context.getContentResolver();
 		cursor = cr.query(EntryColumns.CONTENT_URI, new String[] { EntryColumns.TITLE, EntryColumns._ID, FeedColumns.ICON }, selection.toString(), null,
-				new StringBuilder(EntryColumns.DATE).append(Constants.DB_DESC).toString());
+                EntryColumns.DATE + Constants.DB_DESC);
 	}
 }

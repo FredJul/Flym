@@ -305,7 +305,7 @@ public class FeedsListFragment extends ListFragment {
 								@Override
 								public void run() {
 									String groupName = input.getText().toString();
-									if (groupName != null && !groupName.isEmpty()) {
+									if (!groupName.isEmpty()) {
 										ContentResolver cr = getActivity().getContentResolver();
 										ContentValues values = new ContentValues();
 										values.put(FeedColumns.IS_GROUP, true);
@@ -339,8 +339,7 @@ public class FeedsListFragment extends ListFragment {
 										@Override
 										public void run() {
 											try {
-												OPML.importFromFile(new StringBuilder(Environment.getExternalStorageDirectory().toString())
-														.append(File.separator).append(fileNames[which]).toString());
+												OPML.importFromFile(Environment.getExternalStorageDirectory().toString() + File.separator + fileNames[which]);
 											} catch (Exception e) {
 												getActivity().runOnUiThread(new Runnable() {
 													@Override
@@ -371,8 +370,7 @@ public class FeedsListFragment extends ListFragment {
 							@Override
 							public void run() {
 								try {
-									final String filename = new StringBuilder(Environment.getExternalStorageDirectory().toString())
-											.append("/FeedEx_").append(System.currentTimeMillis()).append(".opml").toString();
+									final String filename = Environment.getExternalStorageDirectory().toString() + "/FeedEx_" + System.currentTimeMillis() + ".opml";
 
 									OPML.exportToFile(filename);
 									getActivity().runOnUiThread(new Runnable() {
@@ -571,7 +569,7 @@ public class FeedsListFragment extends ListFragment {
 									@Override
 									public void run() {
 										String groupName = input.getText().toString();
-										if (groupName != null && !groupName.isEmpty()) {
+										if (!groupName.isEmpty()) {
 											ContentResolver cr = getActivity().getContentResolver();
 											ContentValues values = new ContentValues();
 											values.put(FeedColumns.NAME, groupName);

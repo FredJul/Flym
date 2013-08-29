@@ -78,7 +78,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 		try {
 			File folder = new File(EXTERNAL_FOLDER);
 			folder.mkdir(); // maybe we use the boolean return value later
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 	}
 
@@ -105,7 +105,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 										// No database and no backup, automatically add the default feeds
 										OPML.importFromFile(MainApplication.getAppContext().getResources().openRawResource(R.raw.default_feeds));
 									}
-								} catch (Exception e) {
+								} catch (Exception ignored) {
 								}
 							}
 						}).start();
@@ -116,7 +116,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 	public void exportToOPML() {
 		try {
 			OPML.exportToFile(BACKUP_OPML);
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 	}
 
@@ -143,21 +143,19 @@ class DatabaseHelper extends SQLiteOpenHelper {
 		if (oldVersion < 2) {
 			executeCatchedSQL(
 					database,
-					new StringBuilder(ALTER_TABLE).append(FeedColumns.TABLE_NAME).append(ADD).append(FeedData.FeedColumns.REAL_LAST_UPDATE)
-							.append(' ').append(FeedData.TYPE_DATE_TIME).toString());
+                    ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.REAL_LAST_UPDATE + ' ' + FeedData.TYPE_DATE_TIME);
 		}
 		if (oldVersion < 3) {
 			executeCatchedSQL(
 					database,
-					new StringBuilder(ALTER_TABLE).append(FeedColumns.TABLE_NAME).append(ADD).append(FeedData.FeedColumns.RETRIEVE_FULLTEXT)
-							.append(' ').append(FeedData.TYPE_BOOLEAN).toString());
+                    ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.RETRIEVE_FULLTEXT + ' ' + FeedData.TYPE_BOOLEAN);
 		}
 	}
 
 	private void executeCatchedSQL(SQLiteDatabase database, String query) {
 		try {
 			database.execSQL(query);
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 	}
 }

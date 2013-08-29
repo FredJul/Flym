@@ -36,8 +36,7 @@ public class DragNDropExpandableListView extends ExpandableListView {
 	private boolean mDragMode;
 
 	private int mStartPosition;
-	private int mEndPosition;
-	private int mDragPointOffset; // Used to adjust drag view location
+    private int mDragPointOffset; // Used to adjust drag view location
 
 	private ImageView mDragView;
 
@@ -95,10 +94,10 @@ public class DragNDropExpandableListView extends ExpandableListView {
 		case MotionEvent.ACTION_UP:
 		default:
 			mDragMode = false;
-			mEndPosition = pointToPosition(x, y);
+            int endPosition = pointToPosition(x, y);
 			stopDrag(mStartPosition - getFirstVisiblePosition());
-			if (mDragNDropListener != null && mStartPosition != INVALID_POSITION && mEndPosition != INVALID_POSITION)
-				mDragNDropListener.onDrop(mStartPosition, mEndPosition);
+			if (mDragNDropListener != null && mStartPosition != INVALID_POSITION && endPosition != INVALID_POSITION)
+				mDragNDropListener.onDrop(mStartPosition, endPosition);
 			break;
 		}
 

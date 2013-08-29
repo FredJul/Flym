@@ -107,9 +107,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 	private CheckBox mRetrieveFulltextCb;
 	private ListView mFiltersListView;
 	private String mPreviousName;
-	private View mFiltersLayout, mButtonLayout;
 
-	private FiltersCursorAdapter mFiltersCursorAdapter;
+    private FiltersCursorAdapter mFiltersCursorAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -128,13 +127,13 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 		mUrlEditText = (EditText) findViewById(R.id.feed_url);
 		mRetrieveFulltextCb = (CheckBox) findViewById(R.id.retrieve_fulltext);
 		mFiltersListView = (ListView) findViewById(android.R.id.list);
-		mFiltersLayout = findViewById(R.id.filters_layout);
-		mButtonLayout = findViewById(R.id.button_layout);
+        View filtersLayout = findViewById(R.id.filters_layout);
+        View buttonLayout = findViewById(R.id.button_layout);
 
 		if (intent.getAction().equals(Intent.ACTION_INSERT) || intent.getAction().equals(Intent.ACTION_SEND)) {
 			setTitle(R.string.new_feed_title);
 
-			mFiltersLayout.setVisibility(View.GONE);
+			filtersLayout.setVisibility(View.GONE);
 
 			if (intent.hasExtra(Intent.EXTRA_TEXT)) {
 				mUrlEditText.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
@@ -144,7 +143,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 		} else if (intent.getAction().equals(Intent.ACTION_EDIT)) {
 			setTitle(R.string.edit_feed_title);
 
-			mButtonLayout.setVisibility(View.GONE);
+			buttonLayout.setVisibility(View.GONE);
 
 			mFiltersCursorAdapter = new FiltersCursorAdapter(this, null);
 			mFiltersListView.setAdapter(mFiltersCursorAdapter);
@@ -185,7 +184,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 			ContentResolver cr = getContentResolver();
 
 			Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID,
-					new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(), new String[] { url }, null);
+                    FeedColumns.URL + Constants.DB_ARG, new String[] { url }, null);
 
 			if (cursor.moveToFirst() && !getIntent().getData().getLastPathSegment().equals(cursor.getString(0))) {
 				cursor.close();
@@ -300,7 +299,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 			url = Constants.HTTP + url;
 		}
 
-		Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, new StringBuilder(FeedColumns.URL).append(Constants.DB_ARG).toString(),
+		Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, FeedColumns.URL + Constants.DB_ARG,
 				new String[] { url }, null);
 
 		if (cursor.moveToFirst()) {
@@ -382,7 +381,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 										@Override
 										public void run() {
 											String filter = filterText.getText().toString();
-											if (filter != null && !filter.isEmpty()) {
+											if (!filter.isEmpty()) {
 												ContentResolver cr = getContentResolver();
 												ContentValues values = new ContentValues();
 												values.put(FilterColumns.FILTER_TEXT, filter);
@@ -456,7 +455,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 							String tmp = searchText.getText().toString();
 							try {
 								tmp = URLEncoder.encode(searchText.getText().toString(), Constants.UTF8);
-							} catch (UnsupportedEncodingException e1) {
+							} catch (UnsupportedEncodingException ignored) {
 							}
 							final String text = tmp;
 
@@ -549,7 +548,7 @@ class GetFeedSearchResultsLoader extends AsyncTaskLoader<ArrayList<HashMap<Strin
 			BufferedReader reader = new BufferedReader(new InputStreamReader(FetcherService.getConnectionInputStream(conn)));
 
 			StringBuilder sb = new StringBuilder();
-			String line = null;
+			String line;
 			while ((line = reader.readLine()) != null) {
 				sb.append(line);
 			}
@@ -572,7 +571,7 @@ class GetFeedSearchResultsLoader extends AsyncTaskLoader<ArrayList<HashMap<Strin
 
 						results.add(map);
 					}
-				} catch (Exception e) {
+				} catch (Exception ignored) {
 				}
 			}
 

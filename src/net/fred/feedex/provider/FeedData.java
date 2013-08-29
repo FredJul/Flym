@@ -88,32 +88,32 @@ public class FeedData {
 		public static final String[] TYPES = new String[] { TYPE_PRIMARY_KEY, TYPE_TEXT_UNIQUE, TYPE_TEXT, TYPE_BOOLEAN, TYPE_BOOLEAN,
 				TYPE_EXTERNAL_ID, TYPE_DATE_TIME, TYPE_DATE_TIME, TYPE_BOOLEAN, "BLOB", TYPE_TEXT, TYPE_INT, TYPE_INT };
 
-		public static final Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds").toString());
+		public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/feeds");
 
-		public static final Uri CONTENT_URI(String feedId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).toString());
+		public static Uri CONTENT_URI(String feedId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId);
 		}
 
-		public static final Uri CONTENT_URI(long feedId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).toString());
+		public static Uri CONTENT_URI(long feedId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId);
 		}
 
-		public static final Uri GROUPS_CONTENT_URI = Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/groups").toString());
+		public static final Uri GROUPS_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/groups");
 
-		public static final Uri GROUPS_CONTENT_URI(String groupId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/groups/").append(groupId).toString());
+		public static Uri GROUPS_CONTENT_URI(String groupId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId);
 		}
 
-		public static final Uri GROUPS_CONTENT_URI(long groupId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/groups/").append(groupId).toString());
+		public static Uri GROUPS_CONTENT_URI(long groupId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId);
 		}
 
-		public static final Uri FEEDS_FOR_GROUPS_CONTENT_URI(String groupId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/groups/").append(groupId).append("/feeds").toString());
+		public static Uri FEEDS_FOR_GROUPS_CONTENT_URI(String groupId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/feeds");
 		}
 
-		public static final Uri FEEDS_FOR_GROUPS_CONTENT_URI(long groupId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/groups/").append(groupId).append("/feeds").toString());
+		public static Uri FEEDS_FOR_GROUPS_CONTENT_URI(long groupId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/feeds");
 		}
 
 		public static final String[] PROJECTION_ID = new String[] { FeedColumns._ID };
@@ -132,14 +132,14 @@ public class FeedData {
 		public static final String[] COLUMNS = new String[] { _ID, FEED_ID, FILTER_TEXT, IS_REGEX, IS_APPLIED_TO_TITLE };
 		public static final String[] TYPES = new String[] { TYPE_PRIMARY_KEY, TYPE_EXTERNAL_ID, TYPE_TEXT, TYPE_BOOLEAN, TYPE_BOOLEAN };
 
-		public static final Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/filters").toString());
+		public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/filters");
 
-		public static final Uri FILTERS_FOR_FEED_CONTENT_URI(String feedId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).append("/filters").toString());
+		public static Uri FILTERS_FOR_FEED_CONTENT_URI(String feedId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/filters");
 		}
 
-		public static final Uri FILTERS_FOR_FEED_CONTENT_URI(long feedId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).append("/filters").toString());
+		public static Uri FILTERS_FOR_FEED_CONTENT_URI(long feedId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/filters");
 		}
 	}
 
@@ -163,44 +163,42 @@ public class FeedData {
 		public static final String[] TYPES = new String[] { TYPE_PRIMARY_KEY, TYPE_EXTERNAL_ID, TYPE_TEXT, TYPE_TEXT, TYPE_TEXT, TYPE_DATE_TIME,
 				TYPE_BOOLEAN, TYPE_TEXT, TYPE_BOOLEAN, TYPE_TEXT, TYPE_TEXT, TYPE_TEXT };
 
-		public static final Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/entries").toString());
-		public static final Uri FAVORITES_CONTENT_URI = Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/favorites").toString());
+		public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/entries");
+		public static final Uri FAVORITES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/favorites");
 
 		public static Uri ENTRIES_FOR_FEED_CONTENT_URI(String feedId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).append("/entries").toString());
+			return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/entries");
 		}
 
 		public static Uri ENTRIES_FOR_FEED_CONTENT_URI(long feedId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/feeds/").append(feedId).append("/entries").toString());
+			return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/entries");
 		}
 
 		public static Uri ENTRIES_FOR_GROUP_CONTENT_URI(String groupId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/groups/").append(groupId).append("/entries").toString());
+			return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/entries");
 		}
 
 		public static Uri ENTRIES_FOR_GROUP_CONTENT_URI(long groupId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/groups/").append(groupId).append("/entries").toString());
+			return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/entries");
 		}
 
 		public static Uri CONTENT_URI(String entryId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/entries/").append(entryId).toString());
+			return Uri.parse(CONTENT_AUTHORITY + "/entries/" + entryId);
 		}
 
 		public static Uri CONTENT_URI(long entryId) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append("/entries/").append(entryId).toString());
+			return Uri.parse(CONTENT_AUTHORITY + "/entries/" + entryId);
 		}
 
 		public static Uri PARENT_URI(String path) {
-			return Uri.parse(new StringBuilder(CONTENT_AUTHORITY).append(path.substring(0, path.lastIndexOf('/'))).toString());
+			return Uri.parse(CONTENT_AUTHORITY + path.substring(0, path.lastIndexOf('/')));
 		}
 
 		public static final String[] PROJECTION_ID = new String[] { EntryColumns._ID };
 
-		public static final String WHERE_UNREAD = new StringBuilder("(").append(EntryColumns.IS_READ).append(Constants.DB_IS_NULL)
-				.append(Constants.DB_OR).append(EntryColumns.IS_READ).append(Constants.DB_IS_FALSE).append(')').toString();
+		public static final String WHERE_UNREAD = "(" + EntryColumns.IS_READ + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_READ + Constants.DB_IS_FALSE + ')';
 
-		public static final String WHERE_NOT_FAVORITE = new StringBuilder("(").append(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_NULL)
-				.append(Constants.DB_OR).append(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_FALSE).append(')').toString();
+		public static final String WHERE_NOT_FAVORITE = "(" + EntryColumns.IS_FAVORITE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_FAVORITE + Constants.DB_IS_FALSE + ')';
 	}
 
 	public static synchronized void deletePicturesOfFeed(Context context, Uri entriesUri, String selection) {
@@ -221,13 +219,13 @@ public class FeedData {
 		}
 	}
 
-	public static final ContentValues getReadContentValues() {
+	public static ContentValues getReadContentValues() {
 		ContentValues values = new ContentValues();
 		values.put(EntryColumns.IS_READ, true);
 		return values;
 	}
 
-	public static final ContentValues getUnreadContentValues() {
+	public static ContentValues getUnreadContentValues() {
 		ContentValues values = new ContentValues();
 		values.putNull(EntryColumns.IS_READ);
 		return values;
