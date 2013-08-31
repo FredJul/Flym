@@ -38,6 +38,12 @@ public class PrefsManager {
     public static final String FETCH_PICTURES = "pictures.fetch";
     public static final String DISABLE_PICTURES = "pictures.disable";
 
+    public static final String PROXY_ENABLED = "proxy.enabled";
+    public static final String PROXY_PORT = "proxy.port";
+    public static final String PROXY_HOST = "proxy.host";
+    public static final String PROXY_WIFI_ONLY = "proxy.wifionly";
+    public static final String PROXY_TYPE = "proxy.type";
+
     public static final String KEEP_TIME = "keeptime";
 
     public static final String FONT_SIZE = "fontsize";

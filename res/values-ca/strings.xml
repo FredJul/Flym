@@ -167,6 +167,15 @@
     <string name="settings_widget_background_description">Color i transparència del fons del giny.
     </string>
     <string name="all_feeds">Tots els canals (futurs inclosos)</string>
+    <string name="settings_screen_proxy">Proxy</string>
+    <string name="settings_category_network">Xarxa</string>
+    <string name="settings_proxy_enabled">Activat</string>
+    <string name="settings_proxy_wifi_only">Només en Wi-Fi</string>
+    <string name="settings_proxy_wifi_only_description">Utilitza la pasarel·la només en Wi-Fi.
+    </string>
+    <string name="settings_proxy_host">Màquina</string>
+    <string name="settings_proxy_port">Port</string>
+    <string name="settings_proxy_type">Tipus</string>
 
     <string-array name="settings_intervals">
         <item>1 minut</item>

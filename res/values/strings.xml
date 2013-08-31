@@ -167,6 +167,14 @@
         background
     </string>
     <string name="all_feeds">All feeds (incl. future)</string>
+    <string name="settings_screen_proxy">Proxy</string>
+    <string name="settings_category_network">Network</string>
+    <string name="settings_proxy_enabled">Enabled</string>
+    <string name="settings_proxy_wifi_only">Wifi only</string>
+    <string name="settings_proxy_wifi_only_description">Use Proxy only for wifi</string>
+    <string name="settings_proxy_host">Host</string>
+    <string name="settings_proxy_port">Port</string>
+    <string name="settings_proxy_type">Type</string>
 
     <string-array name="settings_intervals">
         <item>1 minute</item>

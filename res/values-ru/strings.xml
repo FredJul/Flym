@@ -162,6 +162,15 @@
     <string name="settings_widget_background">Фон</string>
     <string name="settings_widget_background_description">Цвета и прозрачность фона виджета</string>
     <string name="all_feeds">Все ленты (включая будущие)</string>
+    <string name="settings_screen_proxy">Прокси-сервер</string>
+    <string name="settings_category_network">Сеть</string>
+    <string name="settings_proxy_enabled">Включено</string>
+    <string name="settings_proxy_wifi_only">Только WiFi</string>
+    <string name="settings_proxy_wifi_only_description">Использовать прокси-сервер только для WiFi
+    </string>
+    <string name="settings_proxy_host">Адрес сервера</string>
+    <string name="settings_proxy_port">Порт</string>
+    <string name="settings_proxy_type">Тип соединения</string>
 
     <string-array name="settings_intervals">
         <item>1 минута</item>

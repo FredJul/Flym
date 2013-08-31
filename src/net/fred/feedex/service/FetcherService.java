@@ -83,6 +83,7 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.ProxySelector;
 import java.net.URL;
@@ -645,15 +646,31 @@ public class FetcherService extends IntentService {
     }
 
     public static HttpURLConnection setupConnection(URL url, int cycle) throws IOException {
-        // Try to get the system proxy
         Proxy proxy = null;
-        try {
-            ProxySelector defaultProxySelector = ProxySelector.getDefault();
-            List<Proxy> proxyList = defaultProxySelector.select(url.toURI());
-            if (!proxyList.isEmpty()) {
-                proxy = proxyList.get(0);
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) MainApplication.getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (PrefsManager.getBoolean(PrefsManager.PROXY_ENABLED, false)
+                && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !PrefsManager.getBoolean(PrefsManager.PROXY_WIFI_ONLY, false))) {
+            try {
+                proxy = new Proxy("0".equals(PrefsManager.getString(PrefsManager.PROXY_TYPE, "0")) ? Proxy.Type.HTTP : Proxy.Type.SOCKS,
+                        new InetSocketAddress(PrefsManager.getString(PrefsManager.PROXY_HOST, ""), Integer.parseInt(PrefsManager.getString(
+                                PrefsManager.PROXY_PORT, "8080"))));
+            } catch (Exception e) {
+                proxy = null;
             }
-        } catch (Throwable ignored) {
+        }
+
+        if (proxy == null) {
+            // Try to get the system proxy
+            try {
+                ProxySelector defaultProxySelector = ProxySelector.getDefault();
+                List<Proxy> proxyList = defaultProxySelector.select(url.toURI());
+                if (!proxyList.isEmpty()) {
+                    proxy = proxyList.get(0);
+                }
+            } catch (Throwable ignored) {
+            }
         }
 
         HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
