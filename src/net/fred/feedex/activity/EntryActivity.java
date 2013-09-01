@@ -99,8 +99,6 @@ import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.service.FetcherService.FetcherServiceListener;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
 
 public class EntryActivity extends ProgressActivity {
@@ -532,13 +530,13 @@ public class EntryActivity extends ProgressActivity {
             link = entryCursor.getString(linkPosition);
             enclosure = entryCursor.getString(enclosurePosition);
 
-            String baseUrl = "";
-            try {
-                URL url = new URL(link);
-                baseUrl = url.getProtocol() + "://" + url.getHost();
-            } catch (MalformedURLException ignored) {
-            }
-            webView.loadDataWithBaseURL(baseUrl, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML,
+//            String baseUrl = "";
+//            try {
+//                URL url = new URL(link);
+//                baseUrl = url.getProtocol() + "://" + url.getHost();
+//            } catch (MalformedURLException ignored) {
+//            }
+            webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML,
                     Constants.UTF8, null);
         }
 
