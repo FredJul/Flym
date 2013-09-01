@@ -69,6 +69,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -118,10 +119,6 @@ public class RssAtomParser extends DefaultHandler {
     private static final String ATTRIBUTE_LENGTH = "length";
     private static final String ATTRIBUTE_REL = "rel";
 
-    private static final String PERCENT = "%";
-    // This can be any valid filename character sequence which does not contain '%'
-    private static final String PERCENT_REPLACE = "____";
-
     private static final String[][] TIMEZONES_REPLACE = {{"MEST", "+0200"}, {"EST", "-0500"}, {"PST", "-0800"}};
 
     private static final DateFormat[] PUBDATE_DATE_FORMATS = {new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss", Locale.US),
@@ -130,8 +127,15 @@ public class RssAtomParser extends DefaultHandler {
     private static final DateFormat[] UPDATE_DATE_FORMATS = {new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss", Locale.US),
             new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ssZ", Locale.US), new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSz", Locale.US)};
 
+    public static final File IMAGE_FOLDER_FILE = new File(MainApplication.getAppContext().getCacheDir(), "images/");
+    public static final String IMAGE_FOLDER = IMAGE_FOLDER_FILE.getAbsolutePath() + '/';
+
     // middle() is group 1; s* is important for non-whitespaces; ' also usable
-    private static final Pattern IMG_PATTERN = Pattern.compile("<img src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
+    private static final Pattern IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
+
+    private static final String PERCENT = "%";
+    // This can be any valid filename character sequence which does not contain '%'
+    private static final String PERCENT_REPLACE = "____";
 
     private final Date realLastUpdateDate;
     private long newRealLastUpdate;
@@ -191,7 +195,7 @@ public class RssAtomParser extends DefaultHandler {
 
         // Remove old stuffs
         final String query = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
-        FeedData.deletePicturesOfFeed(MainApplication.getAppContext(), feedEntiresUri, query);
+        deletePicturesOfFeed(feedEntiresUri, query);
         MainApplication.getAppContext().getContentResolver().delete(feedEntiresUri, query, null);
 
         int index = url.indexOf('/', 8); // this also covers https://
@@ -586,7 +590,7 @@ public class RssAtomParser extends DefaultHandler {
                             // parameters
                             newContent = newContent.replace(
                                     match,
-                                    (Constants.FILE_URL + FeedDataContentProvider.IMAGE_FOLDER + Constants.IMAGEID_REPLACEMENT + URLEncoder.encode(match.substring(match.lastIndexOf('/') + 1), Constants.UTF8))
+                                    (Constants.FILE_URL + IMAGE_FOLDER + Constants.IMAGEID_REPLACEMENT + URLEncoder.encode(match.substring(match.lastIndexOf('/') + 1), Constants.UTF8))
                                             .replace(PERCENT, PERCENT_REPLACE));
                         } catch (UnsupportedEncodingException e) {
                             // UTF-8 should be supported
@@ -603,13 +607,13 @@ public class RssAtomParser extends DefaultHandler {
 
     public static void downloadImages(String entryId, Vector<String> images) {
         if (images != null) {
-            FeedDataContentProvider.IMAGE_FOLDER_FILE.mkdir(); // create images dir
+            IMAGE_FOLDER_FILE.mkdir(); // create images dir
             for (String img : images) {
                 try {
                     byte[] data = FetcherService.getBytes(new URL(img).openStream());
 
                     // see the comment where the img regex is executed for details about this replacement
-                    FileOutputStream fos = new FileOutputStream((FeedDataContentProvider.IMAGE_FOLDER + entryId + Constants.IMAGEFILE_IDSEPARATOR + URLEncoder.encode(img.substring(img.lastIndexOf('/') + 1), Constants.UTF8))
+                    FileOutputStream fos = new FileOutputStream((IMAGE_FOLDER + entryId + Constants.IMAGEFILE_IDSEPARATOR + URLEncoder.encode(img.substring(img.lastIndexOf('/') + 1), Constants.UTF8))
                             .replace(PERCENT, PERCENT_REPLACE));
 
                     fos.write(data);
@@ -617,6 +621,26 @@ public class RssAtomParser extends DefaultHandler {
                 } catch (Exception ignored) {
                 }
             }
+        }
+    }
+
+    public static synchronized void deletePicturesOfFeed(Uri entriesUri, String selection) {
+        if (IMAGE_FOLDER_FILE.exists()) {
+            PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
+
+            Cursor cursor = MainApplication.getAppContext().getContentResolver().query(entriesUri, EntryColumns.PROJECTION_ID, selection, null, null);
+
+            while (cursor.moveToNext()) {
+                filenameFilter.setEntryId(cursor.getString(0));
+
+                File[] files = IMAGE_FOLDER_FILE.listFiles(filenameFilter);
+                if (files != null) {
+                    for (File file : files) {
+                        file.delete();
+                    }
+                }
+            }
+            cursor.close();
         }
     }
 

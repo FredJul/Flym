@@ -42,7 +42,7 @@
  *     THE SOFTWARE.
  */
 
-package net.fred.feedex.provider;
+package net.fred.feedex.parser;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -66,10 +66,6 @@ class PictureFilenameFilter implements FilenameFilter {
 
     @Override
     public boolean accept(File dir, String filename) {
-        if (dir != null && dir.equals(FeedDataContentProvider.IMAGE_FOLDER_FILE)) { // this should be always true but lets check it anyway
-            return pattern.matcher(filename).find();
-        } else {
-            return false;
-        }
+        return pattern.matcher(filename).find();
     }
 }

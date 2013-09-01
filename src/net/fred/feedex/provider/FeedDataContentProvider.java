@@ -63,8 +63,6 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
 
-import java.io.File;
-
 public class FeedDataContentProvider extends ContentProvider {
 
     private static final int URI_GROUPS = 1;
@@ -84,9 +82,6 @@ public class FeedDataContentProvider extends ContentProvider {
     private static final int URI_FAVORITES_ENTRY = 15;
 
     private static final String ENTRIES_TABLE_WITH_FEED_INFO = EntryColumns.TABLE_NAME + " JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.NAME + ", " + FeedColumns.ICON + ", " + FeedColumns.GROUP_ID + " FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + EntryColumns.TABLE_NAME + '.' + EntryColumns.FEED_ID + " = f.joined_feed_id)";
-
-    public static final String IMAGE_FOLDER = DatabaseHelper.EXTERNAL_FOLDER + "images/";
-    public static final File IMAGE_FOLDER_FILE = new File(IMAGE_FOLDER);
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 

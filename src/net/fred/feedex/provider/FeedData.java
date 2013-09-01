@@ -45,14 +45,10 @@
 package net.fred.feedex.provider;
 
 import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
 import net.fred.feedex.Constants;
-
-import java.io.File;
 
 public class FeedData {
     public static final String CONTENT = "content://";
@@ -200,24 +196,6 @@ public class FeedData {
         public static final String WHERE_UNREAD = "(" + EntryColumns.IS_READ + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_READ + Constants.DB_IS_FALSE + ')';
 
         public static final String WHERE_NOT_FAVORITE = "(" + EntryColumns.IS_FAVORITE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_FAVORITE + Constants.DB_IS_FALSE + ')';
-    }
-
-    public static synchronized void deletePicturesOfFeed(Context context, Uri entriesUri, String selection) {
-        if (FeedDataContentProvider.IMAGE_FOLDER_FILE.exists()) {
-            PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
-
-            Cursor cursor = context.getContentResolver().query(entriesUri, EntryColumns.PROJECTION_ID, selection, null, null);
-
-            while (cursor.moveToNext()) {
-                filenameFilter.setEntryId(cursor.getString(0));
-
-                File[] files = FeedDataContentProvider.IMAGE_FOLDER_FILE.listFiles(filenameFilter);
-                for (int n = 0, i = files != null ? files.length : 0; n < i; n++) {
-                    files[n].delete();
-                }
-            }
-            cursor.close();
-        }
     }
 
     public static ContentValues getReadContentValues() {

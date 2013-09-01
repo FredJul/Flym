@@ -64,8 +64,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "FeedEx.db";
     private static final int DATABASE_VERSION = 3;
 
-    public static final String EXTERNAL_FOLDER = Environment.getExternalStorageDirectory() + "/FeedEx/";
-    private static final String BACKUP_OPML = EXTERNAL_FOLDER + "backup.opml";
+    private static final String BACKUP_OPML = Environment.getExternalStorageDirectory() + "/FeedEx_auto_backup.opml";
 
     private static final String ALTER_TABLE = "ALTER TABLE ";
     private static final String ADD = " ADD ";
@@ -75,12 +74,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Handler handler, Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mHandler = handler;
-
-        try {
-            File folder = new File(EXTERNAL_FOLDER);
-            folder.mkdir(); // maybe we use the boolean return value later
-        } catch (Exception ignored) {
-        }
     }
 
     @Override
