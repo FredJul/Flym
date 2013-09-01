@@ -86,7 +86,7 @@ import java.util.regex.Pattern;
 public class RssAtomParser extends DefaultHandler {
 
     private static final String URL_SPACE = "%20";
-    private static final String ANDRHOMBUS = "&#";
+    private static final String AND_SHARP = "&#";
     private static final String HTML_TAG_REGEX = "<(.|\n)*?>";
 
     private static final String TAG_RSS = "rss";
@@ -101,11 +101,11 @@ public class RssAtomParser extends DefaultHandler {
     private static final String TAG_MEDIA_DESCRIPTION = "media:description";
     private static final String TAG_CONTENT = "content";
     private static final String TAG_MEDIA_CONTENT = "media:content";
-    private static final String TAG_ENCODEDCONTENT = "encoded";
+    private static final String TAG_ENCODED_CONTENT = "encoded";
     private static final String TAG_SUMMARY = "summary";
     private static final String TAG_PUBDATE = "pubDate";
     private static final String TAG_DATE = "date";
-    private static final String TAG_LASTBUILDDATE = "lastBuildDate";
+    private static final String TAG_LAST_BUILD_DATE = "lastBuildDate";
     private static final String TAG_ENCLOSURE = "enclosure";
     private static final String TAG_GUID = "guid";
     private static final String TAG_AUTHOR = "author";
@@ -119,9 +119,7 @@ public class RssAtomParser extends DefaultHandler {
     private static final String ATTRIBUTE_REL = "rel";
 
     private static final String PERCENT = "%";
-    /**
-     * This can be any valid filename character sequence which does not contain '%'
-     */
+    // This can be any valid filename character sequence which does not contain '%'
     private static final String PERCENT_REPLACE = "____";
 
     private static final String[][] TIMEZONES_REPLACE = {{"MEST", "+0200"}, {"EST", "-0500"}, {"PST", "-0800"}};
@@ -268,10 +266,10 @@ public class RssAtomParser extends DefaultHandler {
         } else if (TAG_DATE.equals(localName)) {
             dateTagEntered = true;
             dateStringBuilder = new StringBuilder();
-        } else if (TAG_LASTBUILDDATE.equals(localName)) {
+        } else if (TAG_LAST_BUILD_DATE.equals(localName)) {
             lastBuildDateTagEntered = true;
             dateStringBuilder = new StringBuilder();
-        } else if (TAG_ENCODEDCONTENT.equals(localName)) {
+        } else if (TAG_ENCODED_CONTENT.equals(localName)) {
             descriptionTagEntered = true;
             description = new StringBuilder();
         } else if (TAG_ENCLOSURE.equals(localName)) {
@@ -333,7 +331,7 @@ public class RssAtomParser extends DefaultHandler {
         if (TAG_TITLE.equals(localName)) {
             titleTagEntered = false;
         } else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName)) || TAG_SUMMARY.equals(localName)
-                || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName)) || TAG_ENCODEDCONTENT.equals(localName)) {
+                || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName)) || TAG_ENCODED_CONTENT.equals(localName)) {
             descriptionTagEntered = false;
         } else if (TAG_LINK.equals(localName)) {
             linkTagEntered = false;
@@ -347,7 +345,7 @@ public class RssAtomParser extends DefaultHandler {
         } else if (TAG_PUBDATE.equals(localName)) {
             entryDate = parsePubdateDate(dateStringBuilder.toString());
             pubDateTagEntered = false;
-        } else if (TAG_LASTBUILDDATE.equals(localName)) {
+        } else if (TAG_LAST_BUILD_DATE.equals(localName)) {
             entryDate = parsePubdateDate(dateStringBuilder.toString());
             lastBuildDateTagEntered = false;
         } else if (TAG_DATE.equals(localName)) {
@@ -559,7 +557,7 @@ public class RssAtomParser extends DefaultHandler {
                 .replace(Constants.HTML_GT, Constants.GT).replace(Constants.HTML_QUOT, Constants.QUOT)
                 .replace(Constants.HTML_APOSTROPHE, Constants.APOSTROPHE);
 
-        if (result.contains(ANDRHOMBUS)) {
+        if (result.contains(AND_SHARP)) {
             return Html.fromHtml(result, null, null).toString();
         } else {
             return result;
