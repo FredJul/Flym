@@ -215,10 +215,6 @@ public class RssAtomParser extends DefaultHandler {
                 feedTitle = title.toString();
             }
             title = null;
-
-            if (entryDate != null && entryDate.getTime() > newRealLastUpdate) {
-                newRealLastUpdate = entryDate.getTime();
-            }
         } else if (TAG_TITLE.equals(localName)) {
             if (title == null) {
                 titleTagEntered = true;
