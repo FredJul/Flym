@@ -265,12 +265,7 @@ public class FeedsListFragment extends ListFragment {
             }
             case R.id.menu_refresh: {
                 if (!FetcherService.isRefreshingFeeds) {
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            getActivity().sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS));
-                        }
-                    }.start();
+                    getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS));
                 }
                 return true;
             }
@@ -340,7 +335,8 @@ public class FeedsListFragment extends ListFragment {
                                     @Override
                                     public void run() {
                                         try {
-                                            OPML.importFromFile(Environment.getExternalStorageDirectory().toString() + File.separator + fileNames[which]);
+                                            OPML.importFromFile(Environment.getExternalStorageDirectory().toString() + File.separator
+                                                    + fileNames[which]);
                                         } catch (Exception e) {
                                             getActivity().runOnUiThread(new Runnable() {
                                                 @Override
@@ -371,7 +367,8 @@ public class FeedsListFragment extends ListFragment {
                         @Override
                         public void run() {
                             try {
-                                final String filename = Environment.getExternalStorageDirectory().toString() + "/FeedEx_" + System.currentTimeMillis() + ".opml";
+                                final String filename = Environment.getExternalStorageDirectory().toString() + "/FeedEx_"
+                                        + System.currentTimeMillis() + ".opml";
 
                                 OPML.exportToFile(filename);
                                 getActivity().runOnUiThread(new Runnable() {
@@ -442,13 +439,9 @@ public class FeedsListFragment extends ListFragment {
 
                     // since we have acquired the networkInfo, we use it for basic checks
                     if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                        final Intent intent = new Intent(Constants.ACTION_REFRESH_FEEDS).putExtra(Constants.FEED_ID, Long.toString(feedId));
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                getActivity().sendBroadcast(intent);
-                            }
-                        }.start();
+                        getActivity().startService(
+                                new Intent(getActivity(), FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS).putExtra(Constants.FEED_ID,
+                                        Long.toString(feedId)));
                     } else {
                         Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_LONG).show();
                     }

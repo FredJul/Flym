@@ -48,6 +48,7 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -57,8 +58,6 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Binder;
-import android.os.IBinder;
 import android.os.SystemClock;
 import android.text.Html;
 import android.util.Pair;
@@ -70,13 +69,17 @@ import net.fred.feedex.PrefsManager;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.MainActivity;
 import net.fred.feedex.parser.RssAtomParser;
+import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
+import net.fred.feedex.provider.FeedData.TaskColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -87,8 +90,9 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.ProxySelector;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Callable;
@@ -104,7 +108,18 @@ import java.util.zip.GZIPInputStream;
 
 public class FetcherService extends IntentService {
 
+    public static final File IMAGE_FOLDER_FILE = new File(MainApplication.getAppContext().getCacheDir(), "images/");
+    public static final String IMAGE_FOLDER = IMAGE_FOLDER_FILE.getAbsolutePath() + '/';
+
+    public static final String PERCENT = "%";
+    // This can be any valid filename character sequence which does not contain '%'
+    public static final String PERCENT_REPLACE = "____";
+
+    // middle() is group 1; s* is important for non-whitespaces; ' also usable
+    private static final Pattern IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
+
     private static final int THREAD_NUMBER = 3;
+    private static final int MAX_TASK_ATTEMPT = 3;
 
     private static final String MOBILIZER_URL = "http://ftr.fivefilters.org/makefulltextfeed.php?url=";
 
@@ -124,60 +139,19 @@ public class FetcherService extends IntentService {
     private static final String PROTOCOL_SEPARATOR = "://";
     private static final String _HTTP = "http";
     private static final String _HTTPS = "https";
+    private static final String URL_SPACE = "%20";
     /* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
     private static final Pattern FEED_LINK_PATTERN = Pattern.compile(
             "[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>",
             Pattern.CASE_INSENSITIVE);
 
     private NotificationManager mNotifMgr;
-    private final HashSet<Long> mMobilizingEntries = new HashSet<Long>();
 
     public static boolean isRefreshingFeeds = false;
-
-    /**
-     * Listener for this service
-     */
-    public interface FetcherServiceListener {
-        public void onMobilizationFinished(long entryId);
-
-        public void onMobilizationError(long entryId);
-    }
-
-    private FetcherServiceListener mListener = null; // Only one listener at a time
-
-    /**
-     * Class for clients to access. Because we know this service always runs in the same process as its clients, we don't need to deal with IPC.
-     */
-    public class LocalBinder extends Binder {
-        public FetcherService getService() {
-            return FetcherService.this;
-        }
-    }
-
-    private final IBinder mBinder = new LocalBinder();
 
     public FetcherService() {
         super(SERVICENAME);
         HttpURLConnection.setFollowRedirects(true);
-    }
-
-    public void setListener(FetcherServiceListener listener) {
-        mListener = listener;
-    }
-
-    public boolean isMobilizing(long entryId) {
-        return mMobilizingEntries.contains(entryId);
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
-
-    @Override
-    public boolean onUnbind(Intent intent) {
-        mListener = null;
-        return super.onUnbind(intent);
     }
 
     @Override
@@ -193,19 +167,19 @@ public class FetcherService extends IntentService {
         boolean skipFetch = isFromAutoRefresh && PrefsManager.getBoolean(PrefsManager.REFRESH_WIFI_ONLY, false)
                 && networkInfo.getType() != ConnectivityManager.TYPE_WIFI;
         if (networkInfo == null || networkInfo.getState() != NetworkInfo.State.CONNECTED || skipFetch) {
-            if (Constants.ACTION_REFRESH_FEEDS.equals(intent.getAction())) {
-                sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINISHED));
-            }
             return;
         }
 
-        if (isFromAutoRefresh) {
-            PrefsManager.putLong(PrefsManager.LAST_SCHEDULED_REFRESH, SystemClock.elapsedRealtime());
-        }
+        if (Constants.ACTION_MOBILIZE_FEEDS.equals(intent.getAction())) {
+            mobilizeAllEntries();
+            downloadAllImages();
+        } else { // == Constants.ACTION_REFRESH_FEEDS
+            sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS));
 
-        if (intent.hasExtra(Constants.ENTRY_URI)) { // == Constants.ACTION_MOBILIZE_FEED
-            mobilizeEntry((Uri) intent.getParcelableExtra(Constants.ENTRY_URI));
-        } else if (!isRefreshingFeeds) { // == Constants.ACTION_REFRESH_FEEDS
+            if (isFromAutoRefresh) {
+                PrefsManager.putLong(PrefsManager.LAST_SCHEDULED_REFRESH, SystemClock.elapsedRealtime());
+            }
+
             String feedId = intent.getStringExtra(Constants.FEED_ID);
 
             if (feedId == null) {
@@ -257,6 +231,9 @@ public class FetcherService extends IntentService {
                 }
             }
 
+            mobilizeAllEntries();
+            downloadAllImages();
+
             if (feedId == null) {
                 isRefreshingFeeds = false;
             }
@@ -270,85 +247,186 @@ public class FetcherService extends IntentService {
         mNotifMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    private void mobilizeEntry(Uri uri) {
-        String entryIdStr = uri.getLastPathSegment();
-        long entryId;
-        try {
-            entryId = Long.parseLong(entryIdStr);
-        } catch (NumberFormatException e) {
-            return;
+    public static boolean isMobilizing(long entryId) {
+        Cursor cursor = MainApplication
+                .getAppContext()
+                .getContentResolver()
+                .query(TaskColumns.CONTENT_URI, TaskColumns.PROJECTION_ID,
+                        TaskColumns.ENTRY_ID + '=' + entryId + Constants.DB_AND + TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
+        boolean result = cursor.moveToFirst();
+        cursor.close();
+
+        return result;
+    }
+
+    public static void addImagesToDownload(String entryId, Vector<String> images) {
+        ContentValues[] values = new ContentValues[images.size()];
+        for (int i = 0; i < images.size(); i++) {
+            values[i] = new ContentValues();
+            values[i].put(TaskColumns.ENTRY_ID, entryId);
+            values[i].put(TaskColumns.IMG_URL_TO_DL, images.get(i));
         }
 
-        if (mMobilizingEntries.contains(entryId)) {
-            return;
+        MainApplication.getAppContext().getContentResolver().bulkInsert(TaskColumns.CONTENT_URI, values);
+    }
+
+    public static void addEntriesToMobilize(long[] entriesId) {
+        ContentValues[] values = new ContentValues[entriesId.length];
+        for (int i = 0; i < entriesId.length; i++) {
+            values[i] = new ContentValues();
+            values[i].put(TaskColumns.ENTRY_ID, entriesId[i]);
         }
 
-        mMobilizingEntries.add(entryId);
+        MainApplication.getAppContext().getContentResolver().bulkInsert(TaskColumns.CONTENT_URI, values);
+    }
 
-        boolean success = false;
-
+    private void mobilizeAllEntries() {
         ContentResolver cr = getContentResolver();
-        Cursor entryCursor = cr.query(uri, null, null, null, null);
+        Cursor cursor = cr.query(TaskColumns.CONTENT_URI, new String[]{TaskColumns._ID, TaskColumns.ENTRY_ID, TaskColumns.NUMBER_ATTEMPT},
+                TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
 
-        if (entryCursor.moveToNext()) {
-            HttpURLConnection connection = null;
-            int linkPosition = entryCursor.getColumnIndex(EntryColumns.LINK);
+        ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 
-            try {
-                String link = entryCursor.getString(linkPosition);
-                connection = setupConnection(MOBILIZER_URL + link);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(getConnectionInputStream(connection)));
+        while (cursor.moveToNext()) {
+            long taskId = cursor.getLong(0);
+            long entryId = cursor.getLong(1);
+            int nbAttempt = 0;
+            if (!cursor.isNull(2)) {
+                nbAttempt = cursor.getInt(2);
+            }
 
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
+            boolean success = false;
 
-                String mobilizedHtml = null;
-                Pattern p = Pattern.compile("<description>[^<]*</description>.*<description>(.*)&lt;p&gt;&lt;em&gt;This entry passed through the");
-                Matcher m = p.matcher(sb.toString());
-                if (m.find()) {
-                    mobilizedHtml = m.toMatchResult().group(1);
-                } else {
-                    p = Pattern.compile("<description>[^<]*</description>.*<description>(.*)</description>");
-                    m = p.matcher(sb.toString());
-                    if (m.find()) {
-                        mobilizedHtml = m.toMatchResult().group(1);
-                    }
-                }
+            Uri entryUri = EntryColumns.CONTENT_URI(entryId);
+            Cursor entryCursor = cr.query(entryUri, null, null, null, null);
 
-                if (mobilizedHtml != null) {
-                    String realHtml = Html.fromHtml(mobilizedHtml, null, null).toString();
-                    Pair<String, Vector<String>> improvedContent = RssAtomParser.improveHtmlContent(realHtml,
-                            PrefsManager.getBoolean(PrefsManager.FETCH_PICTURES, false));
-                    if (improvedContent.first != null) {
-                        ContentValues values = new ContentValues();
-                        values.put(EntryColumns.MOBILIZED_HTML, improvedContent.first);
-                        if (cr.update(uri, values, null, null) > 0) {
-                            RssAtomParser.downloadImages(entryIdStr, improvedContent.second);
+            if (entryCursor.moveToFirst()) {
+                if (entryCursor.isNull(entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML))) { // If we didn't already mobilized it
+                    int linkPosition = entryCursor.getColumnIndex(EntryColumns.LINK);
+                    HttpURLConnection connection = null;
 
-                            if (mListener != null) {
-                                success = true;
-                                mListener.onMobilizationFinished(entryId);
+                    try {
+                        String link = entryCursor.getString(linkPosition);
+                        connection = setupConnection(MOBILIZER_URL + link);
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(getConnectionInputStream(connection)));
+
+                        StringBuilder sb = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            sb.append(line);
+                        }
+
+                        String mobilizedHtml = null;
+                        Pattern p = Pattern
+                                .compile("<description>[^<]*</description>.*<description>(.*)&lt;p&gt;&lt;em&gt;This entry passed through the");
+                        Matcher m = p.matcher(sb.toString());
+                        if (m.find()) {
+                            mobilizedHtml = m.toMatchResult().group(1);
+                        } else {
+                            p = Pattern.compile("<description>[^<]*</description>.*<description>(.*)</description>");
+                            m = p.matcher(sb.toString());
+                            if (m.find()) {
+                                mobilizedHtml = m.toMatchResult().group(1);
                             }
                         }
+
+                        if (mobilizedHtml != null) {
+                            String realHtml = Html.fromHtml(mobilizedHtml, null, null).toString();
+                            Pair<String, Vector<String>> improvedContent = improveHtmlContent(realHtml,
+                                    PrefsManager.getBoolean(PrefsManager.FETCH_PICTURES, false));
+                            if (improvedContent.first != null) {
+                                ContentValues values = new ContentValues();
+                                values.put(EntryColumns.MOBILIZED_HTML, improvedContent.first);
+                                if (cr.update(entryUri, values, null, null) > 0) {
+                                    addImagesToDownload(String.valueOf(entryId), improvedContent.second);
+
+                                    success = true;
+                                    operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
+                                }
+                            }
+                        }
+                    } catch (Throwable ignored) {
+                    } finally {
+                        if (connection != null) {
+                            connection.disconnect();
+                        }
                     }
+                } else { // We already mobilized it
+                    success = true;
+                    operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
                 }
-            } catch (Throwable ignored) {
-            } finally {
-                if (connection != null) {
-                    connection.disconnect();
+            }
+            entryCursor.close();
+
+            if (!success) {
+                if (nbAttempt + 1 > MAX_TASK_ATTEMPT) {
+                    operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
+                } else {
+                    ContentValues values = new ContentValues();
+                    values.put(TaskColumns.NUMBER_ATTEMPT, nbAttempt + 1);
+                    operations.add(ContentProviderOperation.newUpdate(TaskColumns.CONTENT_URI(taskId)).withValues(values).build());
                 }
             }
         }
-        entryCursor.close();
 
-        if (!success && mListener != null) {
-            mListener.onMobilizationError(entryId);
+        cursor.close();
+
+        if (!operations.isEmpty()) {
+            try {
+                cr.applyBatch(FeedData.AUTHORITY, operations);
+            } catch (Throwable ignored) {
+            }
+        }
+    }
+
+    private void downloadAllImages() {
+        ContentResolver cr = getContentResolver();
+        Cursor cursor = cr.query(TaskColumns.CONTENT_URI, new String[]{TaskColumns._ID, TaskColumns.ENTRY_ID, TaskColumns.IMG_URL_TO_DL,
+                TaskColumns.NUMBER_ATTEMPT}, TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NOT_NULL, null, null);
+
+        ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
+
+        IMAGE_FOLDER_FILE.mkdir(); // create images dir
+
+        while (cursor.moveToNext()) {
+            long taskId = cursor.getLong(0);
+            long entryId = cursor.getLong(1);
+            String imgPath = cursor.getString(2);
+            int nbAttempt = 0;
+            if (!cursor.isNull(3)) {
+                nbAttempt = cursor.getInt(3);
+            }
+
+            try {
+                byte[] data = FetcherService.getBytes(new URL(imgPath).openStream());
+
+                // see the comment where the img regex is executed for details about this replacement
+                FileOutputStream fos = new FileOutputStream((IMAGE_FOLDER + entryId + Constants.IMAGEFILE_IDSEPARATOR + URLEncoder.encode(
+                        imgPath.substring(imgPath.lastIndexOf('/') + 1), Constants.UTF8)).replace(PERCENT, PERCENT_REPLACE));
+
+                fos.write(data);
+                fos.close();
+
+                operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
+            } catch (Exception e) {
+                if (nbAttempt + 1 > MAX_TASK_ATTEMPT) {
+                    operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
+                } else {
+                    ContentValues values = new ContentValues();
+                    values.put(TaskColumns.NUMBER_ATTEMPT, nbAttempt + 1);
+                    operations.add(ContentProviderOperation.newUpdate(TaskColumns.CONTENT_URI(taskId)).withValues(values).build());
+                }
+            }
         }
 
-        mMobilizingEntries.remove(entryId);
+        cursor.close();
+
+        if (!operations.isEmpty()) {
+            try {
+                cr.applyBatch(FeedData.AUTHORITY, operations);
+            } catch (Throwable ignored) {
+            }
+        }
     }
 
     private int refreshFeeds() {
@@ -520,7 +598,6 @@ public class FetcherService extends IntentService {
                     }
 
                     ContentValues values = new ContentValues();
-
                     values.put(FeedColumns.FETCH_MODE, fetchMode);
                     cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
                 }
@@ -637,6 +714,47 @@ public class FetcherService extends IntentService {
         return handler != null ? handler.getNewCount() : 0;
     }
 
+    public static Pair<String, Vector<String>> improveHtmlContent(String content, boolean fetchImages) {
+        if (content != null) {
+            // remove trashes
+            String newContent = content.trim().replaceAll("<[/]?[ ]?span(.|\n)*?>", "").replaceAll("<blockquote", "<div")
+                    .replaceAll("</blockquote", "</div").replaceAll("(href|src)=(\"|')//", "$1=$2http://");
+            // remove ads
+            newContent = newContent.replaceAll("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
+            // remove lazy loading images stuff
+            newContent = newContent.replaceAll(" src=[^>]+ original[-]*src=(\"|')", " src=$1");
+
+            if (newContent.length() > 0) {
+                Vector<String> images = null;
+                if (fetchImages) {
+                    images = new Vector<String>(4);
+
+                    Matcher matcher = IMG_PATTERN.matcher(content);
+
+                    while (matcher.find()) {
+                        String match = matcher.group(1).replace(" ", URL_SPACE);
+
+                        images.add(match);
+                        try {
+                            // replace the '%' that may occur while urlencode such that the img-src url (in the abstract text) does reinterpret the
+                            // parameters
+                            newContent = newContent.replace(
+                                    match,
+                                    (Constants.FILE_URL + IMAGE_FOLDER + Constants.IMAGEID_REPLACEMENT + URLEncoder.encode(
+                                            match.substring(match.lastIndexOf('/') + 1), Constants.UTF8)).replace(PERCENT, PERCENT_REPLACE));
+                        } catch (UnsupportedEncodingException e) {
+                            // UTF-8 should be supported
+                        }
+                    }
+                }
+
+                return new Pair<String, Vector<String>>(newContent, images);
+            }
+        }
+
+        return new Pair<String, Vector<String>>(null, null);
+    }
+
     public static HttpURLConnection setupConnection(String url) throws IOException {
         return setupConnection(new URL(url));
     }
@@ -648,7 +766,8 @@ public class FetcherService extends IntentService {
     public static HttpURLConnection setupConnection(URL url, int cycle) throws IOException {
         Proxy proxy = null;
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) MainApplication.getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) MainApplication.getAppContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (PrefsManager.getBoolean(PrefsManager.PROXY_ENABLED, false)
                 && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !PrefsManager.getBoolean(PrefsManager.PROXY_WIFI_ONLY, false))) {

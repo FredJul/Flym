@@ -51,12 +51,11 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -66,7 +65,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.os.Handler;
 import android.text.format.DateFormat;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -95,9 +94,9 @@ import net.fred.feedex.Utils;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
+import net.fred.feedex.provider.FeedData.TaskColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
-import net.fred.feedex.service.FetcherService.FetcherServiceListener;
 
 import java.util.Date;
 
@@ -206,58 +205,21 @@ public class EntryActivity extends ProgressActivity {
         }
     };
 
-    private FetcherService mBoundService = null;
-
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+    private final ContentObserver mTasksObserver = new ContentObserver(new Handler()) {
         @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            // This is called when the connection with the service has been
-            // established, giving us the service object we can use to
-            // interact with the service. Because we have bound to a explicit
-            // service that we know is running in our own process, we can
-            // cast its IBinder to a concrete class and directly access it.
-            mBoundService = ((FetcherService.LocalBinder) service).getService();
-            mBoundService.setListener(new FetcherServiceListener() {
+        public void onChange(boolean selfChange) {
+            boolean isMobilizing = FetcherService.isMobilizing(_id);
+            if ((getProgressBar().getVisibility() == View.VISIBLE && isMobilizing)
+                    || (getProgressBar().getVisibility() == View.GONE && !isMobilizing)) {
+                return; // no change => no update
+            }
 
-                @Override
-                public void onMobilizationFinished(long entryId) {
-                    if (entryId == _id) {
-                        EntryActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                getProgressBar().setVisibility(View.GONE);
-                                preferFullText = true;
-                                reload(true);
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onMobilizationError(long entryId) {
-                    if (entryId == _id) {
-                        EntryActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                getProgressBar().setVisibility(View.GONE);
-                                Toast.makeText(EntryActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                }
-
-            });
-
-            getProgressBar().setVisibility(mBoundService.isMobilizing(_id) ? View.VISIBLE : View.GONE);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName className) {
-            // This is called when the connection with the service has been
-            // unexpectedly disconnected -- that is, its process crashed.
-            // Because it is running in our same process, we should never
-            // see this happen.
-            mBoundService = null;
+            if (isMobilizing) { // We start a mobilization
+                getProgressBar().setVisibility(isMobilizing ? View.VISIBLE : View.GONE);
+            } else { // We finished one
+                preferFullText = true;
+                reload(true);
+            }
         }
     };
 
@@ -393,7 +355,7 @@ public class EntryActivity extends ProgressActivity {
         webView.onResume();
         reload(false);
 
-        bindService(new Intent(this, FetcherService.class), mServiceConnection, Context.BIND_AUTO_CREATE);
+        getContentResolver().registerContentObserver(TaskColumns.CONTENT_URI, true, mTasksObserver);
     }
 
     @Override
@@ -402,7 +364,7 @@ public class EntryActivity extends ProgressActivity {
 
         webView.onPause();
 
-        unbindService(mServiceConnection);
+        getContentResolver().unregisterContentObserver(mTasksObserver);
     }
 
     @Override
@@ -518,7 +480,7 @@ public class EntryActivity extends ProgressActivity {
             } else {
                 if (webView.getSettings().getBlockNetworkImage()) {
                     /*
-					 * setBlockNetwortImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
+                     * setBlockNetwortImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
 					 */
                     webView.loadData("", TEXT_HTML, Constants.UTF8);
                     webView.getSettings().setBlockNetworkImage(false);
@@ -530,14 +492,17 @@ public class EntryActivity extends ProgressActivity {
             link = entryCursor.getString(linkPosition);
             enclosure = entryCursor.getString(enclosurePosition);
 
-//            String baseUrl = "";
-//            try {
-//                URL url = new URL(link);
-//                baseUrl = url.getProtocol() + "://" + url.getHost();
-//            } catch (MalformedURLException ignored) {
-//            }
-            webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML,
-                    Constants.UTF8, null);
+            // String baseUrl = "";
+            // try {
+            // URL url = new URL(link);
+            // baseUrl = url.getProtocol() + "://" + url.getHost();
+            // } catch (MalformedURLException ignored) {
+            // }
+            webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8,
+                    null);
+
+            // Listen the mobilizing task
+            getProgressBar().setVisibility(FetcherService.isMobilizing(_id) ? View.VISIBLE : View.GONE);
         }
 
         entryCursor.close();
@@ -692,8 +657,6 @@ public class EntryActivity extends ProgressActivity {
     }
 
     private void switchEntry(long id, Animation inAnimation, Animation outAnimation) {
-        getProgressBar().setVisibility(mBoundService != null && mBoundService.isMobilizing(id) ? View.VISIBLE : View.GONE);
-
         uri = parentUri.buildUpon().appendPath(String.valueOf(id)).build();
         getIntent().setData(uri);
         mScrollPercentage = 0;
@@ -878,31 +841,31 @@ public class EntryActivity extends ProgressActivity {
                 final boolean alreadyMobilized = entryCursor.moveToFirst() && !entryCursor.isNull(mobilizedHtmlPosition);
                 entryCursor.close();
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (alreadyMobilized) {
+                if (alreadyMobilized) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
                             preferFullText = true;
                             reload(true);
-                        } else {
-                            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                            final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                        }
+                    });
+                } else {
+                    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-                            // since we have acquired the networkInfo, we use it for basic checks
-                            if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                                getProgressBar().setVisibility(View.VISIBLE);
-                                new Thread() {
-                                    @Override
-                                    public void run() {
-                                        sendBroadcast(new Intent(Constants.ACTION_MOBILIZE_FEED).putExtra(Constants.ENTRY_URI, uri));
-                                    }
-                                }.start();
-                            } else {
+                    // since we have acquired the networkInfo, we use it for basic checks
+                    if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                        FetcherService.addEntriesToMobilize(new long[]{_id});
+                        startService(new Intent(EntryActivity.this, FetcherService.class).setAction(Constants.ACTION_MOBILIZE_FEEDS));
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
                                 Toast.makeText(EntryActivity.this, R.string.network_error, Toast.LENGTH_LONG).show();
                             }
-                        }
+                        });
                     }
-                });
+                }
             }
         }
 

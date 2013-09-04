@@ -151,12 +151,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
             }
             case R.id.menu_refresh: {
                 if (!FetcherService.isRefreshingFeeds) {
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            getActivity().sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS));
-                        }
-                    }.start();
+                    getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS));
                 }
                 return true;
             }

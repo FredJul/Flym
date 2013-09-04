@@ -56,13 +56,14 @@ import net.fred.feedex.parser.OPML;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
+import net.fred.feedex.provider.FeedData.TaskColumns;
 
 import java.io.File;
 
 class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "FeedEx.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String BACKUP_OPML = Environment.getExternalStorageDirectory() + "/FeedEx_auto_backup.opml";
 
@@ -81,6 +82,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(createTable(FeedColumns.TABLE_NAME, FeedColumns.COLUMNS, FeedColumns.TYPES));
         database.execSQL(createTable(FilterColumns.TABLE_NAME, FilterColumns.COLUMNS, FilterColumns.TYPES));
         database.execSQL(createTable(EntryColumns.TABLE_NAME, EntryColumns.COLUMNS, EntryColumns.TYPES));
+        database.execSQL(createTable(TaskColumns.TABLE_NAME, TaskColumns.COLUMNS, TaskColumns.TYPES));
 
         // Check if we need to import the backup
         File backupFile = new File(BACKUP_OPML);
@@ -143,6 +145,9 @@ class DatabaseHelper extends SQLiteOpenHelper {
             executeCatchedSQL(
                     database,
                     ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.RETRIEVE_FULLTEXT + ' ' + FeedData.TYPE_BOOLEAN);
+        }
+        if (oldVersion < 4) {
+            executeCatchedSQL(database, createTable(TaskColumns.TABLE_NAME, TaskColumns.COLUMNS, TaskColumns.TYPES));
         }
     }
 

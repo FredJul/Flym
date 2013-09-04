@@ -73,12 +73,7 @@ public class GeneralPrefsActivity extends PreferenceActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (Boolean.TRUE.equals(newValue)) {
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            startService(new Intent(GeneralPrefsActivity.this, RefreshService.class));
-                        }
-                    }.start();
+                    startService(new Intent(GeneralPrefsActivity.this, RefreshService.class));
                 } else {
                     PrefsManager.putLong(PrefsManager.LAST_SCHEDULED_REFRESH, 0);
                     stopService(new Intent(GeneralPrefsActivity.this, RefreshService.class));

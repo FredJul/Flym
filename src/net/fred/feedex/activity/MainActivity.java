@@ -105,10 +105,10 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
         /*
-	  The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a
-	  {@link android.support.v4.app.FragmentPagerAdapter} derivative, which will keep every loaded fragment in memory. If this becomes too memory
-	  intensive, it may be best to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
-	 */
+         * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a {@link
+		 * android.support.v4.app.FragmentPagerAdapter} derivative, which will keep every loaded fragment in memory. If this becomes too memory
+		 * intensive, it may be best to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
+		 */
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
@@ -143,12 +143,7 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
         }
         if (PrefsManager.getBoolean(PrefsManager.REFRESH_ON_OPEN_ENABLED, false)) {
             if (!FetcherService.isRefreshingFeeds) {
-                new Thread() {
-                    @Override
-                    public void run() {
-                        sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS));
-                    }
-                }.start();
+                startService(new Intent(MainActivity.this, FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS));
             }
         }
 

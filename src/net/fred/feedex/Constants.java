@@ -30,7 +30,7 @@ public final class Constants {
 
     public static final String ACTION_REFRESH_FEEDS = "net.fred.feedex.REFRESH";
     public static final String ACTION_REFRESH_FINISHED = "net.fred.feedex.REFRESH_FINISHED";
-    public static final String ACTION_MOBILIZE_FEED = "net.fred.feedex.MOBILIZE_FEED";
+    public static final String ACTION_MOBILIZE_FEEDS = "net.fred.feedex.MOBILIZE_FEEDS";
 
     public static final String FEED_ID = "feedid";
 
@@ -39,6 +39,7 @@ public final class Constants {
     public static final String DB_IS_TRUE = "=1";
     public static final String DB_IS_FALSE = "=0";
     public static final String DB_IS_NULL = " IS NULL";
+    public static final String DB_IS_NOT_NULL = " IS NOT NULL";
     public static final String DB_DESC = " DESC";
     public static final String DB_ARG = "=?";
     public static final String DB_AND = " AND ";

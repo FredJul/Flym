@@ -62,6 +62,7 @@ import net.fred.feedex.MainApplication;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
+import net.fred.feedex.provider.FeedData.TaskColumns;
 
 public class FeedDataContentProvider extends ContentProvider {
 
@@ -80,6 +81,8 @@ public class FeedDataContentProvider extends ContentProvider {
     private static final int URI_ENTRY = 13;
     private static final int URI_FAVORITES = 14;
     private static final int URI_FAVORITES_ENTRY = 15;
+    private static final int URI_TASKS = 16;
+    private static final int URI_TASK = 17;
 
     private static final String ENTRIES_TABLE_WITH_FEED_INFO = EntryColumns.TABLE_NAME + " JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.NAME + ", " + FeedColumns.ICON + ", " + FeedColumns.GROUP_ID + " FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + EntryColumns.TABLE_NAME + '.' + EntryColumns.FEED_ID + " = f.joined_feed_id)";
 
@@ -101,6 +104,8 @@ public class FeedDataContentProvider extends ContentProvider {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/#", URI_ENTRY);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites", URI_FAVORITES);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites/#", URI_FAVORITES_ENTRY);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "tasks", URI_TASKS);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "tasks/#", URI_TASK);
     }
 
     private DatabaseHelper mDatabaseHelper;
@@ -130,6 +135,10 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_ENTRY_FOR_FEED:
             case URI_ENTRY_FOR_GROUP:
                 return "vnd.android.cursor.item/vnd.feedex.entry";
+            case URI_TASKS:
+                return "vnd.android.cursor.dir/vnd.feedex.task";
+            case URI_TASK:
+                return "vnd.android.cursor.item/vnd.feedex.task";
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -215,6 +224,15 @@ public class FeedDataContentProvider extends ContentProvider {
                 queryBuilder.appendWhere(new StringBuilder(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_TRUE));
                 break;
             }
+            case URI_TASKS: {
+                queryBuilder.setTables(TaskColumns.TABLE_NAME);
+                break;
+            }
+            case URI_TASK: {
+                queryBuilder.setTables(TaskColumns.TABLE_NAME);
+                queryBuilder.appendWhere(new StringBuilder(EntryColumns._ID).append('=').append(uri.getPathSegments().get(1)));
+                break;
+            }
         }
 
         SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
@@ -274,6 +292,10 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             case URI_ENTRIES: {
                 newId = database.insert(EntryColumns.TABLE_NAME, null, values);
+                break;
+            }
+            case URI_TASKS: {
+                newId = database.insert(TaskColumns.TABLE_NAME, null, values);
                 break;
             }
             default:
@@ -398,6 +420,15 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_FAVORITES: {
                 table = EntryColumns.TABLE_NAME;
                 where.append(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_TRUE);
+                break;
+            }
+            case URI_TASKS: {
+                table = TaskColumns.TABLE_NAME;
+                break;
+            }
+            case URI_TASK: {
+                table = TaskColumns.TABLE_NAME;
+                where.append(TaskColumns._ID).append('=').append(uri.getPathSegments().get(1));
                 break;
             }
         }
@@ -546,6 +577,15 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_FAVORITES: {
                 table = EntryColumns.TABLE_NAME;
                 where.append(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_TRUE);
+                break;
+            }
+            case URI_TASKS: {
+                table = TaskColumns.TABLE_NAME;
+                break;
+            }
+            case URI_TASK: {
+                table = TaskColumns.TABLE_NAME;
+                where.append(TaskColumns._ID).append('=').append(uri.getPathSegments().get(1));
                 break;
             }
         }

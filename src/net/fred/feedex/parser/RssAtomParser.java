@@ -48,7 +48,6 @@ import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.Html;
@@ -70,10 +69,6 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -86,7 +81,6 @@ import java.util.regex.Pattern;
 
 public class RssAtomParser extends DefaultHandler {
 
-    private static final String URL_SPACE = "%20";
     private static final String AND_SHARP = "&#";
     private static final String HTML_TAG_REGEX = "<(.|\n)*?>";
 
@@ -126,16 +120,6 @@ public class RssAtomParser extends DefaultHandler {
 
     private static final DateFormat[] UPDATE_DATE_FORMATS = {new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss", Locale.US),
             new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ssZ", Locale.US), new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSz", Locale.US)};
-
-    public static final File IMAGE_FOLDER_FILE = new File(MainApplication.getAppContext().getCacheDir(), "images/");
-    public static final String IMAGE_FOLDER = IMAGE_FOLDER_FILE.getAbsolutePath() + '/';
-
-    // middle() is group 1; s* is important for non-whitespaces; ' also usable
-    private static final Pattern IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
-
-    private static final String PERCENT = "%";
-    // This can be any valid filename character sequence which does not contain '%'
-    private static final String PERCENT_REPLACE = "____";
 
     private final Date realLastUpdateDate;
     private long newRealLastUpdate;
@@ -366,7 +350,7 @@ public class RssAtomParser extends DefaultHandler {
                 Pair<String, Vector<String>> improvedContent = null;
                 if (description != null) {
                     // Improve the description
-                    improvedContent = improveHtmlContent(description.toString(), fetchImages);
+                    improvedContent = FetcherService.improveHtmlContent(description.toString(), fetchImages);
                     entriesImages.add(improvedContent.second);
                     if (improvedContent.first != null) {
                         values.put(EntryColumns.ABSTRACT, improvedContent.first);
@@ -564,68 +548,8 @@ public class RssAtomParser extends DefaultHandler {
         }
     }
 
-    public static Pair<String, Vector<String>> improveHtmlContent(String content, boolean fetchImages) {
-        if (content != null) {
-            // remove trashes
-            String newContent = content.trim().replaceAll("<[/]?[ ]?span(.|\n)*?>", "").replaceAll("<blockquote", "<div")
-                    .replaceAll("</blockquote", "</div").replaceAll("(href|src)=(\"|')//", "$1=$2http://");
-            // remove ads
-            newContent = newContent.replaceAll("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
-            // remove lazy loading images stuff
-            newContent = newContent.replaceAll(" src=[^>]+ original[-]*src=(\"|')", " src=$1");
-
-            if (newContent.length() > 0) {
-                Vector<String> images = null;
-                if (fetchImages) {
-                    images = new Vector<String>(4);
-
-                    Matcher matcher = IMG_PATTERN.matcher(content);
-
-                    while (matcher.find()) {
-                        String match = matcher.group(1).replace(" ", URL_SPACE);
-
-                        images.add(match);
-                        try {
-                            // replace the '%' that may occur while urlencode such that the img-src url (in the abstract text) does reinterpret the
-                            // parameters
-                            newContent = newContent.replace(
-                                    match,
-                                    (Constants.FILE_URL + IMAGE_FOLDER + Constants.IMAGEID_REPLACEMENT + URLEncoder.encode(match.substring(match.lastIndexOf('/') + 1), Constants.UTF8))
-                                            .replace(PERCENT, PERCENT_REPLACE));
-                        } catch (UnsupportedEncodingException e) {
-                            // UTF-8 should be supported
-                        }
-                    }
-                }
-
-                return new Pair<String, Vector<String>>(newContent, images);
-            }
-        }
-
-        return new Pair<String, Vector<String>>(null, null);
-    }
-
-    public static void downloadImages(String entryId, Vector<String> images) {
-        if (images != null) {
-            IMAGE_FOLDER_FILE.mkdir(); // create images dir
-            for (String img : images) {
-                try {
-                    byte[] data = FetcherService.getBytes(new URL(img).openStream());
-
-                    // see the comment where the img regex is executed for details about this replacement
-                    FileOutputStream fos = new FileOutputStream((IMAGE_FOLDER + entryId + Constants.IMAGEFILE_IDSEPARATOR + URLEncoder.encode(img.substring(img.lastIndexOf('/') + 1), Constants.UTF8))
-                            .replace(PERCENT, PERCENT_REPLACE));
-
-                    fos.write(data);
-                    fos.close();
-                } catch (Exception ignored) {
-                }
-            }
-        }
-    }
-
     public static synchronized void deletePicturesOfFeed(Uri entriesUri, String selection) {
-        if (IMAGE_FOLDER_FILE.exists()) {
+        if (FetcherService.IMAGE_FOLDER_FILE.exists()) {
             PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
 
             Cursor cursor = MainApplication.getAppContext().getContentResolver().query(entriesUri, EntryColumns.PROJECTION_ID, selection, null, null);
@@ -633,7 +557,7 @@ public class RssAtomParser extends DefaultHandler {
             while (cursor.moveToNext()) {
                 filenameFilter.setEntryId(cursor.getString(0));
 
-                File[] files = IMAGE_FOLDER_FILE.listFiles(filenameFilter);
+                File[] files = FetcherService.IMAGE_FOLDER_FILE.listFiles(filenameFilter);
                 if (files != null) {
                     for (File file : files) {
                         file.delete();
@@ -660,8 +584,7 @@ public class RssAtomParser extends DefaultHandler {
 
         try {
             if (!inserts.isEmpty()) {
-                ContentProviderResult[] results;
-                results = cr.applyBatch(FeedData.AUTHORITY, inserts);
+                ContentProviderResult[] results = cr.applyBatch(FeedData.AUTHORITY, inserts);
                 cr.notifyChange(EntryColumns.CONTENT_URI, null);
                 FeedDataContentProvider.notifyGroupFromFeedId(id);
 
@@ -669,19 +592,20 @@ public class RssAtomParser extends DefaultHandler {
                     for (int i = 0; i < results.length; ++i) {
                         Vector<String> images = entriesImages.get(i);
                         if (images != null) {
-                            downloadImages(results[i].uri.getLastPathSegment(), images);
+                            FetcherService.addImagesToDownload(results[i].uri.getLastPathSegment(), images);
                         }
                     }
                 }
 
                 if (retrieveFullText) {
-                    for (ContentProviderResult result : results) {
-                        MainApplication.getAppContext().sendBroadcast(
-                                new Intent(Constants.ACTION_MOBILIZE_FEED).putExtra(Constants.ENTRY_URI, result.uri));
+                    long[] entriesId = new long[results.length];
+                    for (int i = 0; i < results.length; i++) {
+                        entriesId[i] = Long.valueOf(results[i].uri.getLastPathSegment());
                     }
+
+                    FetcherService.addEntriesToMobilize(entriesId);
                 }
             }
-
         } catch (Exception ignored) {
         }
 

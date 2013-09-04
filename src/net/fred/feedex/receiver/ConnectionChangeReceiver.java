@@ -26,7 +26,6 @@ import android.net.ConnectivityManager;
 import android.os.SystemClock;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.MainApplication;
 import net.fred.feedex.PrefsManager;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.service.RefreshService;
@@ -51,8 +50,8 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 
                 long lastRefresh = PrefsManager.getLong(PrefsManager.LAST_SCHEDULED_REFRESH, 0);
                 if (SystemClock.elapsedRealtime() - lastRefresh > time) {
-                    MainApplication.getAppContext().sendBroadcast(
-                            new Intent(Constants.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
+
+                    context.startService(new Intent(context, FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
                 }
             }
         }

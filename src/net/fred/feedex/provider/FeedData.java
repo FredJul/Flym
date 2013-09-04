@@ -198,6 +198,29 @@ public class FeedData {
         public static final String WHERE_NOT_FAVORITE = "(" + EntryColumns.IS_FAVORITE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_FAVORITE + Constants.DB_IS_FALSE + ')';
     }
 
+    public static class TaskColumns implements BaseColumns {
+        public static final String TABLE_NAME = "tasks";
+
+        public static final String ENTRY_ID = "entryid";
+        public static final String IMG_URL_TO_DL = "imgurl_to_dl";
+        public static final String NUMBER_ATTEMPT = "number_attempt";
+
+        public static final String[] COLUMNS = new String[]{_ID, ENTRY_ID, IMG_URL_TO_DL, NUMBER_ATTEMPT};
+        public static final String[] TYPES = new String[]{TYPE_PRIMARY_KEY, TYPE_EXTERNAL_ID, TYPE_TEXT, TYPE_INT};
+
+        public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/tasks");
+
+        public static Uri CONTENT_URI(String taskId) {
+            return Uri.parse(CONTENT_AUTHORITY + "/tasks/" + taskId);
+        }
+
+        public static Uri CONTENT_URI(long taskId) {
+            return Uri.parse(CONTENT_AUTHORITY + "/tasks/" + taskId);
+        }
+
+        public static final String[] PROJECTION_ID = new String[]{EntryColumns._ID};
+    }
+
     public static ContentValues getReadContentValues() {
         ContentValues values = new ContentValues();
         values.put(EntryColumns.IS_READ, true);
