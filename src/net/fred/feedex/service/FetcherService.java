@@ -429,6 +429,26 @@ public class FetcherService extends IntentService {
         }
     }
 
+    public static synchronized void deletePicturesOfFeed(Uri entriesUri, String selection) {
+        if (IMAGE_FOLDER_FILE.exists()) {
+            PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
+
+            Cursor cursor = MainApplication.getAppContext().getContentResolver().query(entriesUri, EntryColumns.PROJECTION_ID, selection, null, null);
+
+            while (cursor.moveToNext()) {
+                filenameFilter.setEntryId(cursor.getString(0));
+
+                File[] files = IMAGE_FOLDER_FILE.listFiles(filenameFilter);
+                if (files != null) {
+                    for (File file : files) {
+                        file.delete();
+                    }
+                }
+            }
+            cursor.close();
+        }
+    }
+
     private int refreshFeeds() {
         ContentResolver cr = getContentResolver();
         final Cursor cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);

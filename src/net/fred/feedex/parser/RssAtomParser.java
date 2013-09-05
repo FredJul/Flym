@@ -68,7 +68,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -144,7 +143,7 @@ public class RssAtomParser extends DefaultHandler {
     private StringBuilder entryLink;
     private StringBuilder description;
     private StringBuilder enclosure;
-    private final Uri feedEntiresUri;
+    private final Uri feedEntriesUri;
     private int newCount = 0;
     private final String feedName;
     private String feedTitle;
@@ -172,15 +171,15 @@ public class RssAtomParser extends DefaultHandler {
         newRealLastUpdate = realLastUpdateDate.getTime();
         this.id = id;
         this.feedName = feedName;
-        feedEntiresUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(id);
+        feedEntriesUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(id);
         this.retrieveFullText = retrieveFullText;
 
         filters = new FeedFilters(id);
 
         // Remove old stuffs
         final String query = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
-        deletePicturesOfFeed(feedEntiresUri, query);
-        MainApplication.getAppContext().getContentResolver().delete(feedEntiresUri, query, null);
+        FetcherService.deletePicturesOfFeed(feedEntriesUri, query);
+        MainApplication.getAppContext().getContentResolver().delete(feedEntriesUri, query, null);
 
         int index = url.indexOf('/', 8); // this also covers https://
         if (index > -1) {
@@ -398,7 +397,7 @@ public class RssAtomParser extends DefaultHandler {
                     // First, try to update the feed
                     ContentResolver cr = MainApplication.getAppContext().getContentResolver();
                     if ((entryLinkString.length() == 0 && guidString == null)
-                            || cr.update(feedEntiresUri, values, existanceStringBuilder.toString(), existanceValues) == 0) {
+                            || cr.update(feedEntriesUri, values, existanceStringBuilder.toString(), existanceValues) == 0) {
 
                         // We put the date only for new entry (no need to change the past, you may already read it)
                         if (entryDate != null) {
@@ -410,7 +409,7 @@ public class RssAtomParser extends DefaultHandler {
                         values.put(EntryColumns.LINK, entryLinkString);
 
                         // We cannot update, we need to insert it
-                        inserts.add(ContentProviderOperation.newInsert(feedEntiresUri).withValues(values).build());
+                        inserts.add(ContentProviderOperation.newInsert(feedEntriesUri).withValues(values).build());
 
                         newCount++;
                     } else if (entryDate == null) {
@@ -545,26 +544,6 @@ public class RssAtomParser extends DefaultHandler {
             return Html.fromHtml(result, null, null).toString();
         } else {
             return result;
-        }
-    }
-
-    public static synchronized void deletePicturesOfFeed(Uri entriesUri, String selection) {
-        if (FetcherService.IMAGE_FOLDER_FILE.exists()) {
-            PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
-
-            Cursor cursor = MainApplication.getAppContext().getContentResolver().query(entriesUri, EntryColumns.PROJECTION_ID, selection, null, null);
-
-            while (cursor.moveToNext()) {
-                filenameFilter.setEntryId(cursor.getString(0));
-
-                File[] files = FetcherService.IMAGE_FOLDER_FILE.listFiles(filenameFilter);
-                if (files != null) {
-                    for (File file : files) {
-                        file.delete();
-                    }
-                }
-            }
-            cursor.close();
         }
     }
 

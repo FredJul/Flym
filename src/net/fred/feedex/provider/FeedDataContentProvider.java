@@ -63,6 +63,7 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
 import net.fred.feedex.provider.FeedData.TaskColumns;
+import net.fred.feedex.service.FetcherService;
 
 public class FeedDataContentProvider extends ContentProvider {
 
@@ -504,8 +505,10 @@ public class FeedDataContentProvider extends ContentProvider {
                 new Thread() {
                     @Override
                     public void run() {
-                        delete(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedId), null, null);
+                        Uri entriesUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedId);
+                        delete(entriesUri, null, null);
                         delete(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), null, null);
+                        FetcherService.deletePicturesOfFeed(entriesUri, null);
                     }
                 }.start();
 

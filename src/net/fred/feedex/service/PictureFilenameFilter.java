@@ -42,7 +42,7 @@
  *     THE SOFTWARE.
  */
 
-package net.fred.feedex.parser;
+package net.fred.feedex.service;
 
 import java.io.File;
 import java.io.FilenameFilter;
