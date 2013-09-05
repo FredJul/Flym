@@ -25,5 +25,5 @@ local.properties
 .gradle/
 gradle/
 build
-FeedEx.iml
+*.iml
 .classpath
