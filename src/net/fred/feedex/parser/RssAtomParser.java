@@ -55,6 +55,7 @@ import android.util.Pair;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
+import net.fred.feedex.NetworkUtils;
 import net.fred.feedex.PrefsManager;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
@@ -178,7 +179,7 @@ public class RssAtomParser extends DefaultHandler {
 
         // Remove old stuffs
         final String query = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
-        FetcherService.deletePicturesOfFeed(feedEntriesUri, query);
+        NetworkUtils.deleteFeedImagesCache(feedEntriesUri, query);
         MainApplication.getAppContext().getContentResolver().delete(feedEntriesUri, query, null);
 
         int index = url.indexOf('/', 8); // this also covers https://

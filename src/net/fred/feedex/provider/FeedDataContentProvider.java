@@ -59,11 +59,11 @@ import android.text.TextUtils;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
+import net.fred.feedex.NetworkUtils;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
 import net.fred.feedex.provider.FeedData.TaskColumns;
-import net.fred.feedex.service.FetcherService;
 
 public class FeedDataContentProvider extends ContentProvider {
 
@@ -508,7 +508,7 @@ public class FeedDataContentProvider extends ContentProvider {
                         Uri entriesUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedId);
                         delete(entriesUri, null, null);
                         delete(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), null, null);
-                        FetcherService.deletePicturesOfFeed(entriesUri, null);
+                        NetworkUtils.deleteFeedImagesCache(entriesUri, null);
                     }
                 }.start();
 

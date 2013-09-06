@@ -65,6 +65,7 @@ import android.util.Xml;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
+import net.fred.feedex.NetworkUtils;
 import net.fred.feedex.PrefsManager;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.MainActivity;
@@ -108,16 +109,6 @@ import java.util.zip.GZIPInputStream;
 
 public class FetcherService extends IntentService {
 
-    public static final File IMAGE_FOLDER_FILE = new File(MainApplication.getAppContext().getCacheDir(), "images/");
-    public static final String IMAGE_FOLDER = IMAGE_FOLDER_FILE.getAbsolutePath() + '/';
-
-    public static final String PERCENT = "%";
-    // This can be any valid filename character sequence which does not contain '%'
-    public static final String PERCENT_REPLACE = "____";
-
-    // middle() is group 1; s* is important for non-whitespaces; ' also usable
-    private static final Pattern IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
-
     private static final int THREAD_NUMBER = 3;
     private static final int MAX_TASK_ATTEMPT = 3;
 
@@ -134,16 +125,14 @@ public class FetcherService extends IntentService {
     private static final String HTML_BODY = "<body";
     private static final String ENCODING = "encoding=\"";
     private static final String SERVICENAME = "RssFetcherService";
-    private static final String GZIP = "gzip";
-    private static final String FILE_FAVICON = "/favicon.ico";
-    private static final String PROTOCOL_SEPARATOR = "://";
-    private static final String _HTTP = "http";
-    private static final String _HTTPS = "https";
     private static final String URL_SPACE = "%20";
     /* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
     private static final Pattern FEED_LINK_PATTERN = Pattern.compile(
             "[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>",
             Pattern.CASE_INSENSITIVE);
+
+    // middle() is group 1; s* is important for non-whitespaces; ' also usable
+    private static final Pattern IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
 
     private NotificationManager mNotifMgr;
 
@@ -307,8 +296,8 @@ public class FetcherService extends IntentService {
 
                     try {
                         String link = entryCursor.getString(linkPosition);
-                        connection = setupConnection(MOBILIZER_URL + link);
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(getConnectionInputStream(connection)));
+                        connection = NetworkUtils.setupConnection(MOBILIZER_URL + link);
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(NetworkUtils.getConnectionInputStream(connection)));
 
                         StringBuilder sb = new StringBuilder();
                         String line;
@@ -380,13 +369,11 @@ public class FetcherService extends IntentService {
     }
 
     private void downloadAllImages() {
-        ContentResolver cr = getContentResolver();
-        Cursor cursor = cr.query(TaskColumns.CONTENT_URI, new String[]{TaskColumns._ID, TaskColumns.ENTRY_ID, TaskColumns.IMG_URL_TO_DL,
-                TaskColumns.NUMBER_ATTEMPT}, TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NOT_NULL, null, null);
+        ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+        Cursor cursor = cr.query(FeedData.TaskColumns.CONTENT_URI, new String[]{FeedData.TaskColumns._ID, FeedData.TaskColumns.ENTRY_ID, FeedData.TaskColumns.IMG_URL_TO_DL,
+                FeedData.TaskColumns.NUMBER_ATTEMPT}, FeedData.TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NOT_NULL, null, null);
 
         ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
-
-        IMAGE_FOLDER_FILE.mkdir(); // create images dir
 
         while (cursor.moveToNext()) {
             long taskId = cursor.getLong(0);
@@ -398,23 +385,17 @@ public class FetcherService extends IntentService {
             }
 
             try {
-                byte[] data = FetcherService.getBytes(new URL(imgPath).openStream());
+                NetworkUtils.downloadImage(entryId, imgPath);
 
-                // see the comment where the img regex is executed for details about this replacement
-                FileOutputStream fos = new FileOutputStream((IMAGE_FOLDER + entryId + Constants.IMAGEFILE_IDSEPARATOR + URLEncoder.encode(
-                        imgPath.substring(imgPath.lastIndexOf('/') + 1), Constants.UTF8)).replace(PERCENT, PERCENT_REPLACE));
-
-                fos.write(data);
-                fos.close();
-
-                operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
+                // If we are here, everything is OK
+                operations.add(ContentProviderOperation.newDelete(FeedData.TaskColumns.CONTENT_URI(taskId)).build());
             } catch (Exception e) {
                 if (nbAttempt + 1 > MAX_TASK_ATTEMPT) {
-                    operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
+                    operations.add(ContentProviderOperation.newDelete(FeedData.TaskColumns.CONTENT_URI(taskId)).build());
                 } else {
                     ContentValues values = new ContentValues();
-                    values.put(TaskColumns.NUMBER_ATTEMPT, nbAttempt + 1);
-                    operations.add(ContentProviderOperation.newUpdate(TaskColumns.CONTENT_URI(taskId)).withValues(values).build());
+                    values.put(FeedData.TaskColumns.NUMBER_ATTEMPT, nbAttempt + 1);
+                    operations.add(ContentProviderOperation.newUpdate(FeedData.TaskColumns.CONTENT_URI(taskId)).withValues(values).build());
                 }
             }
         }
@@ -426,26 +407,6 @@ public class FetcherService extends IntentService {
                 cr.applyBatch(FeedData.AUTHORITY, operations);
             } catch (Throwable ignored) {
             }
-        }
-    }
-
-    public static synchronized void deletePicturesOfFeed(Uri entriesUri, String selection) {
-        if (IMAGE_FOLDER_FILE.exists()) {
-            PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
-
-            Cursor cursor = MainApplication.getAppContext().getContentResolver().query(entriesUri, EntryColumns.PROJECTION_ID, selection, null, null);
-
-            while (cursor.moveToNext()) {
-                filenameFilter.setEntryId(cursor.getString(0));
-
-                File[] files = IMAGE_FOLDER_FILE.listFiles(filenameFilter);
-                if (files != null) {
-                    for (File file : files) {
-                        file.delete();
-                    }
-                }
-            }
-            cursor.close();
         }
     }
 
@@ -514,7 +475,7 @@ public class FetcherService extends IntentService {
 
             try {
                 String feedUrl = cursor.getString(urlPosition);
-                connection = setupConnection(feedUrl);
+                connection = NetworkUtils.setupConnection(feedUrl);
                 String contentType = connection.getContentType();
                 int fetchMode = cursor.getInt(fetchmodePosition);
 
@@ -524,7 +485,7 @@ public class FetcherService extends IntentService {
 
                 if (fetchMode == 0) {
                     if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(getConnectionInputStream(connection)));
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(NetworkUtils.getConnectionInputStream(connection)));
 
                         String line;
                         int posStart = -1;
@@ -559,7 +520,7 @@ public class FetcherService extends IntentService {
                                         values.put(FeedColumns.URL, url);
                                         cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
                                         connection.disconnect();
-                                        connection = setupConnection(url);
+                                        connection = NetworkUtils.setupConnection(url);
                                         contentType = connection.getContentType();
                                         break;
                                     }
@@ -569,7 +530,7 @@ public class FetcherService extends IntentService {
                         // this indicates a badly configured feed
                         if (posStart == -1) {
                             connection.disconnect();
-                            connection = setupConnection(feedUrl);
+                            connection = NetworkUtils.setupConnection(feedUrl);
                             contentType = connection.getContentType();
                         }
                     }
@@ -591,7 +552,7 @@ public class FetcherService extends IntentService {
                         }
 
                     } else {
-                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getConnectionInputStream(connection)));
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(NetworkUtils.getConnectionInputStream(connection)));
 
                         char[] chars = new char[20];
 
@@ -600,7 +561,7 @@ public class FetcherService extends IntentService {
                         String xmlDescription = new String(chars, 0, length);
 
                         connection.disconnect();
-                        connection = setupConnection(connection.getURL());
+                        connection = NetworkUtils.setupConnection(connection.getURL());
 
                         int start = xmlDescription != null ? xmlDescription.indexOf(ENCODING) : -1;
 
@@ -630,19 +591,19 @@ public class FetcherService extends IntentService {
 
                             int index2 = contentType.indexOf(';', index);
 
-                            InputStream inputStream = getConnectionInputStream(connection);
+                            InputStream inputStream = NetworkUtils.getConnectionInputStream(connection);
                             Xml.parse(inputStream,
                                     Xml.findEncodingByName(index2 > -1 ? contentType.substring(index + 8, index2) : contentType.substring(index + 8)),
                                     handler);
                         } else {
-                            InputStreamReader reader = new InputStreamReader(getConnectionInputStream(connection));
+                            InputStreamReader reader = new InputStreamReader(NetworkUtils.getConnectionInputStream(connection));
                             Xml.parse(reader, handler);
                         }
                         break;
                     }
                     case FETCHMODE_REENCODE: {
                         ByteArrayOutputStream ouputStream = new ByteArrayOutputStream();
-                        InputStream inputStream = getConnectionInputStream(connection);
+                        InputStream inputStream = NetworkUtils.getConnectionInputStream(connection);
 
                         byte[] byteBuffer = new byte[4096];
 
@@ -715,9 +676,9 @@ public class FetcherService extends IntentService {
                     if (handler != null && cursor.getBlob(iconPosition) == null) {
                         String feedLink = handler.getFeedLink();
                         if (feedLink != null) {
-                            retrieveFavicon(this, new URL(feedLink), id);
+                            NetworkUtils.retrieveFavicon(this, new URL(feedLink), id);
                         } else {
-                            retrieveFavicon(this, connection.getURL(), id);
+                            NetworkUtils.retrieveFavicon(this, connection.getURL(), id);
                         }
                     }
                 } catch (Throwable ignored) {
@@ -760,8 +721,8 @@ public class FetcherService extends IntentService {
                             // parameters
                             newContent = newContent.replace(
                                     match,
-                                    (Constants.FILE_URL + IMAGE_FOLDER + Constants.IMAGEID_REPLACEMENT + URLEncoder.encode(
-                                            match.substring(match.lastIndexOf('/') + 1), Constants.UTF8)).replace(PERCENT, PERCENT_REPLACE));
+                                    (Constants.FILE_URL + NetworkUtils.IMAGE_FOLDER + Constants.IMAGEID_REPLACEMENT + URLEncoder.encode(
+                                            match.substring(match.lastIndexOf('/') + 1), Constants.UTF8)).replace(NetworkUtils.PERCENT, NetworkUtils.PERCENT_REPLACE));
                         } catch (UnsupportedEncodingException e) {
                             // UTF-8 should be supported
                         }
@@ -773,126 +734,5 @@ public class FetcherService extends IntentService {
         }
 
         return new Pair<String, Vector<String>>(null, null);
-    }
-
-    public static HttpURLConnection setupConnection(String url) throws IOException {
-        return setupConnection(new URL(url));
-    }
-
-    public static HttpURLConnection setupConnection(URL url) throws IOException {
-        return setupConnection(url, 0);
-    }
-
-    public static HttpURLConnection setupConnection(URL url, int cycle) throws IOException {
-        Proxy proxy = null;
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) MainApplication.getAppContext()
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (PrefsManager.getBoolean(PrefsManager.PROXY_ENABLED, false)
-                && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !PrefsManager.getBoolean(PrefsManager.PROXY_WIFI_ONLY, false))) {
-            try {
-                proxy = new Proxy("0".equals(PrefsManager.getString(PrefsManager.PROXY_TYPE, "0")) ? Proxy.Type.HTTP : Proxy.Type.SOCKS,
-                        new InetSocketAddress(PrefsManager.getString(PrefsManager.PROXY_HOST, ""), Integer.parseInt(PrefsManager.getString(
-                                PrefsManager.PROXY_PORT, "8080"))));
-            } catch (Exception e) {
-                proxy = null;
-            }
-        }
-
-        if (proxy == null) {
-            // Try to get the system proxy
-            try {
-                ProxySelector defaultProxySelector = ProxySelector.getDefault();
-                List<Proxy> proxyList = defaultProxySelector.select(url.toURI());
-                if (!proxyList.isEmpty()) {
-                    proxy = proxyList.get(0);
-                }
-            } catch (Throwable ignored) {
-            }
-        }
-
-        HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
-
-        connection.setDoInput(true);
-        connection.setDoOutput(false);
-        connection.setRequestProperty("User-agent", "Mozilla AppleWebKit Chrome Safari"); // some feeds need this to work properly
-        connection.setConnectTimeout(30000);
-        connection.setReadTimeout(30000);
-        connection.setUseCaches(false);
-
-        connection.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-        connection.connect();
-
-        String location = connection.getHeaderField("Location");
-
-        if (location != null
-                && (url.getProtocol().equals(_HTTP) && location.startsWith(Constants.HTTPS) || url.getProtocol().equals(_HTTPS)
-                && location.startsWith(Constants.HTTP))) {
-            // if location != null, the system-automatic redirect has failed
-            // which indicates a protocol change
-
-            connection.disconnect();
-
-            if (cycle < 5) {
-                return setupConnection(new URL(location), cycle + 1);
-            } else {
-                throw new IOException("Too many redirects.");
-            }
-        }
-        return connection;
-    }
-
-    public static byte[] getBytes(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-        byte[] buffer = new byte[4096];
-
-        int n;
-
-        while ((n = inputStream.read(buffer)) > 0) {
-            output.write(buffer, 0, n);
-        }
-
-        byte[] result = output.toByteArray();
-
-        output.close();
-        inputStream.close();
-        return result;
-    }
-
-    private static void retrieveFavicon(Context context, URL url, String id) {
-        HttpURLConnection iconURLConnection;
-        try {
-            iconURLConnection = setupConnection(new URL(url.getProtocol() + PROTOCOL_SEPARATOR + url.getHost() + FILE_FAVICON));
-
-            ContentValues values = new ContentValues();
-            try {
-                byte[] iconBytes = getBytes(getConnectionInputStream(iconURLConnection));
-                values.put(FeedColumns.ICON, iconBytes);
-            } catch (Exception e) {
-                // no icon found or error
-                values.put(FeedColumns.ICON, new byte[0]);
-            } finally {
-                iconURLConnection.disconnect();
-
-                context.getContentResolver().update(FeedColumns.CONTENT_URI(id), values, null, null);
-                FeedDataContentProvider.notifyGroupFromFeedId(id);
-            }
-        } catch (Throwable ignored) {
-        }
-    }
-
-    /**
-     * This is a small wrapper for getting the properly encoded inputstream if is is gzip compressed and not properly recognized.
-     */
-    public static InputStream getConnectionInputStream(HttpURLConnection connection) throws IOException {
-        InputStream inputStream = connection.getInputStream();
-
-        if (GZIP.equals(connection.getContentEncoding()) && !(inputStream instanceof GZIPInputStream)) {
-            return new GZIPInputStream(inputStream);
-        } else {
-            return inputStream;
-        }
     }
 }

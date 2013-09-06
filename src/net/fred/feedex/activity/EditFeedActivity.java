@@ -77,6 +77,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import net.fred.feedex.Constants;
+import net.fred.feedex.NetworkUtils;
 import net.fred.feedex.R;
 import net.fred.feedex.Utils;
 import net.fred.feedex.adapter.FiltersCursorAdapter;
@@ -544,38 +545,36 @@ class GetFeedSearchResultsLoader extends AsyncTaskLoader<ArrayList<HashMap<Strin
     @Override
     public ArrayList<HashMap<String, String>> loadInBackground() {
         try {
-            HttpURLConnection conn = FetcherService.setupConnection("https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=" + mSearchText);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(FetcherService.getConnectionInputStream(conn)));
+            HttpURLConnection conn = NetworkUtils.setupConnection("https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=" + mSearchText);
+            try {
+                String jsonStr = new String(NetworkUtils.getBytes(NetworkUtils.getConnectionInputStream(conn)));
 
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
-            conn.disconnect();
+                // Parse results
+                final ArrayList<HashMap<String, String>> results = new ArrayList<HashMap<String, String>>();
+                JSONObject response = new JSONObject(jsonStr).getJSONObject("responseData");
+                JSONArray entries = response.getJSONArray("entries");
+                for (int i = 0; i < entries.length(); i++) {
+                    try {
+                        JSONObject entry = (JSONObject) entries.get(i);
+                        String url = entry.get(EditFeedActivity.FEED_SEARCH_URL).toString();
+                        if (!url.isEmpty()) {
+                            HashMap<String, String> map = new HashMap<String, String>();
+                            map.put(EditFeedActivity.FEED_SEARCH_TITLE, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_TITLE).toString())
+                                    .toString());
+                            map.put(EditFeedActivity.FEED_SEARCH_URL, url);
+                            map.put(EditFeedActivity.FEED_SEARCH_DESC, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_DESC).toString()).toString());
 
-            // Parse results
-            final ArrayList<HashMap<String, String>> results = new ArrayList<HashMap<String, String>>();
-            JSONObject response = new JSONObject(sb.toString()).getJSONObject("responseData");
-            JSONArray entries = response.getJSONArray("entries");
-            for (int i = 0; i < entries.length(); i++) {
-                try {
-                    JSONObject entry = (JSONObject) entries.get(i);
-                    String url = entry.get(EditFeedActivity.FEED_SEARCH_URL).toString();
-                    if (!url.isEmpty()) {
-                        HashMap<String, String> map = new HashMap<String, String>();
-                        map.put(EditFeedActivity.FEED_SEARCH_TITLE, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_TITLE).toString())
-                                .toString());
-                        map.put(EditFeedActivity.FEED_SEARCH_URL, url);
-                        map.put(EditFeedActivity.FEED_SEARCH_DESC, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_DESC).toString()).toString());
-
-                        results.add(map);
+                            results.add(map);
+                        }
+                    } catch (Exception ignored) {
                     }
-                } catch (Exception ignored) {
                 }
-            }
 
-            return results;
+                return results;
+            }
+            finally {
+                conn.disconnect();
+            }
         } catch (Exception e) {
             return null;
         }
