@@ -39,7 +39,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.PrefsManager;
+import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.GeneralPrefsActivity;
 import net.fred.feedex.adapter.EntriesCursorAdapter;
@@ -61,7 +61,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     private final OnSharedPreferenceChangeListener prefListener = new OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (PrefsManager.SHOW_READ.equals(key)) {
+            if (PrefUtils.SHOW_READ.equals(key)) {
                 getLoaderManager().restartLoader(loaderId, null, EntriesListFragment.this);
             }
         }
@@ -82,7 +82,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                 mUri = getArguments().getParcelable(ARG_URI);
 
                 mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
-                PrefsManager.registerOnSharedPreferenceChangeListener(prefListener);
+                PrefUtils.registerOnSharedPreferenceChangeListener(prefListener);
                 getLoaderManager().initLoader(loaderId, null, this);
             }
         }
@@ -103,7 +103,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onDestroy() {
-        PrefsManager.unregisterOnSharedPreferenceChangeListener(prefListener);
+        PrefUtils.unregisterOnSharedPreferenceChangeListener(prefListener);
         super.onStop();
     }
 
@@ -121,7 +121,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         } else {
             menu.findItem(R.id.menu_share_starred).setVisible(false);
 
-            if (!PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)) {
+            if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
                 menu.findItem(R.id.menu_hide_read).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
             }
         }
@@ -160,11 +160,11 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                 return true;
             }
             case R.id.menu_hide_read: {
-                if (!PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)) {
-                    PrefsManager.putBoolean(PrefsManager.SHOW_READ, true);
+                if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
+                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
                     item.setTitle(R.string.context_menu_hide_read).setIcon(R.drawable.hide_reads);
                 } else {
-                    PrefsManager.putBoolean(PrefsManager.SHOW_READ, false);
+                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
                     item.setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
                 }
                 return true;
@@ -179,7 +179,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, PrefsManager.getBoolean(PrefsManager.SHOW_READ, true)
+        CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)
                 || EntryColumns.FAVORITES_CONTENT_URI.equals(mUri) ? null : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;

@@ -19,8 +19,6 @@
 
 package net.fred.feedex;
 
-import android.content.ContentProviderOperation;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -39,12 +37,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.ProxySelector;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -171,12 +167,12 @@ public class NetworkUtils {
         ConnectivityManager connectivityManager = (ConnectivityManager) MainApplication.getAppContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (PrefsManager.getBoolean(PrefsManager.PROXY_ENABLED, false)
-                && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !PrefsManager.getBoolean(PrefsManager.PROXY_WIFI_ONLY, false))) {
+        if (PrefUtils.getBoolean(PrefUtils.PROXY_ENABLED, false)
+                && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !PrefUtils.getBoolean(PrefUtils.PROXY_WIFI_ONLY, false))) {
             try {
-                proxy = new Proxy("0".equals(PrefsManager.getString(PrefsManager.PROXY_TYPE, "0")) ? Proxy.Type.HTTP : Proxy.Type.SOCKS,
-                        new InetSocketAddress(PrefsManager.getString(PrefsManager.PROXY_HOST, ""), Integer.parseInt(PrefsManager.getString(
-                                PrefsManager.PROXY_PORT, "8080"))));
+                proxy = new Proxy("0".equals(PrefUtils.getString(PrefUtils.PROXY_TYPE, "0")) ? Proxy.Type.HTTP : Proxy.Type.SOCKS,
+                        new InetSocketAddress(PrefUtils.getString(PrefUtils.PROXY_HOST, ""), Integer.parseInt(PrefUtils.getString(
+                                PrefUtils.PROXY_PORT, "8080"))));
             } catch (Exception e) {
                 proxy = null;
             }

@@ -42,9 +42,9 @@ import android.view.View;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
-import net.fred.feedex.PrefsManager;
+import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
-import net.fred.feedex.Utils;
+import net.fred.feedex.UiUtils;
 import net.fred.feedex.fragment.EntriesListFragment;
 import net.fred.feedex.fragment.FeedsListFragment;
 import net.fred.feedex.provider.FeedData.EntryColumns;
@@ -85,7 +85,7 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Utils.setPreferenceTheme(this);
+        UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -135,13 +135,13 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
             actionBar.addTab(actionBar.newTab().setText(sectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
         }
 
-        if (PrefsManager.getBoolean(PrefsManager.REFRESH_ENABLED, true)) {
+        if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
             // starts the service independent to this activity
             startService(new Intent(this, RefreshService.class));
         } else {
             stopService(new Intent(this, RefreshService.class));
         }
-        if (PrefsManager.getBoolean(PrefsManager.REFRESH_ON_OPEN_ENABLED, false)) {
+        if (PrefUtils.getBoolean(PrefUtils.REFRESH_ON_OPEN_ENABLED, false)) {
             if (!FetcherService.isRefreshingFeeds) {
                 startService(new Intent(MainActivity.this, FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS));
             }

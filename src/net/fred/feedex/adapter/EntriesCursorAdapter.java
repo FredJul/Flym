@@ -65,7 +65,7 @@ import android.widget.TextView;
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
-import net.fred.feedex.Utils;
+import net.fred.feedex.UiUtils;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
@@ -152,7 +152,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
 
                 if (bitmap != null) {
-                    int bitmapSizeInDip = Utils.dpToPixel(18);
+                    int bitmapSizeInDip = UiUtils.dpToPixel(18);
                     if (bitmap.getHeight() != bitmapSizeInDip) {
                         bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
                     }

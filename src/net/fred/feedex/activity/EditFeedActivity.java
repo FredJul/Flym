@@ -79,17 +79,14 @@ import android.widget.Toast;
 import net.fred.feedex.Constants;
 import net.fred.feedex.NetworkUtils;
 import net.fred.feedex.R;
-import net.fred.feedex.Utils;
+import net.fred.feedex.UiUtils;
 import net.fred.feedex.adapter.FiltersCursorAdapter;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
-import net.fred.feedex.service.FetcherService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
@@ -113,7 +110,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Utils.setPreferenceTheme(this);
+        UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
         ActionBar actionBar = getActionBar();
@@ -571,8 +568,7 @@ class GetFeedSearchResultsLoader extends AsyncTaskLoader<ArrayList<HashMap<Strin
                 }
 
                 return results;
-            }
-            finally {
+            } finally {
                 conn.disconnect();
             }
         } catch (Exception e) {

@@ -56,7 +56,7 @@ import android.util.Pair;
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.NetworkUtils;
-import net.fred.feedex.PrefsManager;
+import net.fred.feedex.PrefUtils;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
@@ -164,7 +164,7 @@ public class RssAtomParser extends DefaultHandler {
     private final ArrayList<Vector<String>> entriesImages = new ArrayList<Vector<String>>();
 
     public RssAtomParser(Date realLastUpdateDate, final String id, String feedName, String url, boolean retrieveFullText) {
-        long keepTime = Long.parseLong(PrefsManager.getString(PrefsManager.KEEP_TIME, "4")) * 86400000l;
+        long keepTime = Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l;
         long keepDateBorderTime = keepTime > 0 ? System.currentTimeMillis() - keepTime : 0;
 
         keepDateBorder = new Date(keepDateBorderTime);

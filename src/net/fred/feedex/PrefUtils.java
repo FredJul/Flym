@@ -23,7 +23,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 
-public class PrefsManager {
+public class PrefUtils {
 
     public static final String REFRESH_INTERVAL = "refresh.interval";
     public static final String REFRESH_ENABLED = "refresh.enabled";

@@ -54,7 +54,7 @@ import android.os.IBinder;
 import android.os.SystemClock;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.PrefsManager;
+import net.fred.feedex.PrefUtils;
 
 public class RefreshService extends Service {
     public static final String SIXTYMINUTES = "3600000";
@@ -62,7 +62,7 @@ public class RefreshService extends Service {
     private final OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (PrefsManager.REFRESH_INTERVAL.equals(key)) {
+            if (PrefUtils.REFRESH_INTERVAL.equals(key)) {
                 restartTimer(false);
             }
         }
@@ -88,7 +88,7 @@ public class RefreshService extends Service {
         super.onCreate();
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        PrefsManager.registerOnSharedPreferenceChangeListener(listener);
+        PrefUtils.registerOnSharedPreferenceChangeListener(listener);
         restartTimer(true);
     }
 
@@ -101,14 +101,14 @@ public class RefreshService extends Service {
 
         int time = 3600000;
         try {
-            time = Math.max(60000, Integer.parseInt(PrefsManager.getString(PrefsManager.REFRESH_INTERVAL, SIXTYMINUTES)));
+            time = Math.max(60000, Integer.parseInt(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, SIXTYMINUTES)));
         } catch (Exception ignored) {
         }
 
         long initialRefreshTime = SystemClock.elapsedRealtime() + 10000;
 
         if (created) {
-            long lastRefresh = PrefsManager.getLong(PrefsManager.LAST_SCHEDULED_REFRESH, 0);
+            long lastRefresh = PrefUtils.getLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
 
             if (lastRefresh > 0) {
                 // this indicates a service restart by the system
@@ -124,7 +124,7 @@ public class RefreshService extends Service {
         if (timerIntent != null) {
             alarmManager.cancel(timerIntent);
         }
-        PrefsManager.unregisterOnSharedPreferenceChangeListener(listener);
+        PrefUtils.unregisterOnSharedPreferenceChangeListener(listener);
         super.onDestroy();
     }
 }

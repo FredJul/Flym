@@ -88,9 +88,9 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.PrefsManager;
+import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
-import net.fred.feedex.Utils;
+import net.fred.feedex.UiUtils;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
@@ -121,9 +121,9 @@ public class EntryActivity extends ProgressActivity {
     private static final String TEXT_HTML = "text/html";
     private static final String HTML_IMG_REGEX = "<[/]?[ ]?img(.|\n)*?>";
 
-    private static final String BACKGROUND_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#f6f6f6" : "#181b1f";
-    private static final String TEXT_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";
-    private static final String BUTTON_COLOR = PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true) ? "#D0D0D0" : "#505050";
+    private static final String BACKGROUND_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#f6f6f6" : "#181b1f";
+    private static final String TEXT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";
+    private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#D0D0D0" : "#505050";
 
     private static final String CSS = "<head><style type='text/css'>body {background-color:"
             + BACKGROUND_COLOR
@@ -225,7 +225,7 @@ public class EntryActivity extends ProgressActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Utils.setPreferenceTheme(this);
+        UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
         ActionBar actionBar = getActionBar();
@@ -449,7 +449,7 @@ public class EntryActivity extends ProgressActivity {
             }
 
             if (iconBytes != null && iconBytes.length > 0) {
-                int bitmapSizeInDip = Utils.dpToPixel(24);
+                int bitmapSizeInDip = UiUtils.dpToPixel(24);
                 Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
                 if (bitmap != null) {
                     if (bitmap.getHeight() != bitmapSizeInDip) {
@@ -474,7 +474,7 @@ public class EntryActivity extends ProgressActivity {
                 contentText = contentText.replace(Constants.IMAGEID_REPLACEMENT, _id + Constants.IMAGEFILE_IDSEPARATOR);
             }
 
-            if (PrefsManager.getBoolean(PrefsManager.DISABLE_PICTURES, false)) {
+            if (PrefUtils.getBoolean(PrefUtils.DISABLE_PICTURES, false)) {
                 contentText = contentText.replaceAll(HTML_IMG_REGEX, "");
                 webView.getSettings().setBlockNetworkImage(true);
             } else {
@@ -511,7 +511,7 @@ public class EntryActivity extends ProgressActivity {
     private String generateHtmlContent(String title, String link, String abstractText, String enclosure, String author, long timestamp) {
         StringBuilder content = new StringBuilder();
 
-        int fontsize = Integer.parseInt(PrefsManager.getString(PrefsManager.FONT_SIZE, "0"));
+        int fontsize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"));
         if (fontsize > 0) {
             content.append(FONTSIZE_START).append(fontsize).append(FONTSIZE_MIDDLE);
         } else {
@@ -598,7 +598,7 @@ public class EntryActivity extends ProgressActivity {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
-                    Utils.showSimpleDialog(EntryActivity.this, R.string.error, R.string.cant_open_link);
+                    UiUtils.showSimpleDialog(EntryActivity.this, R.string.error, R.string.cant_open_link);
                 }
                 return true;
             }
@@ -627,7 +627,7 @@ public class EntryActivity extends ProgressActivity {
             Cursor cursor = getContentResolver().query(
                     parentUri,
                     EntryColumns.PROJECTION_ID,
-                    PrefsManager.getBoolean(PrefsManager.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null
+                    PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null
                             : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
 
             mEntriesIds = new long[cursor.getCount()];

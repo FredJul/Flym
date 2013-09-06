@@ -27,7 +27,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
 
-import net.fred.feedex.PrefsManager;
+import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.MainActivity;
 
@@ -40,7 +40,7 @@ public class WidgetProvider extends AppWidgetProvider {
             Intent svcIntent = new Intent(context, WidgetService.class);
 
             svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            svcIntent.putExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, PrefsManager.getInteger(appWidgetId + ".fontsize", 0));
+            svcIntent.putExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, PrefUtils.getInteger(appWidgetId + ".fontsize", 0));
             svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
             RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget);
@@ -48,7 +48,7 @@ public class WidgetProvider extends AppWidgetProvider {
             widget.setPendingIntentTemplate(R.id.feedsListView, PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW), 0));
 
             widget.setRemoteAdapter(R.id.feedsListView, svcIntent);
-            widget.setInt(R.id.feedsListView, "setBackgroundColor", PrefsManager.getInteger(appWidgetId + ".background", STANDARD_BACKGROUND));
+            widget.setInt(R.id.feedsListView, "setBackgroundColor", PrefUtils.getInteger(appWidgetId + ".background", STANDARD_BACKGROUND));
 
             appWidgetManager.updateAppWidget(appWidgetId, widget);
         }

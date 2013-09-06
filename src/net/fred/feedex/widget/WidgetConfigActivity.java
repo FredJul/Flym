@@ -56,7 +56,7 @@ import android.preference.PreferenceCategory;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-import net.fred.feedex.PrefsManager;
+import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 
@@ -126,16 +126,16 @@ public class WidgetConfigActivity extends PreferenceActivity {
                     }
 
                     String feedIds = builder.toString();
-                    PrefsManager.putString(widgetId + ".feeds", feedIds);
+                    PrefUtils.putString(widgetId + ".feeds", feedIds);
 
-                    int color = PrefsManager.getInteger("widget.background", WidgetProvider.STANDARD_BACKGROUND);
-                    PrefsManager.putInteger(widgetId + ".background", color);
+                    int color = PrefUtils.getInteger("widget.background", WidgetProvider.STANDARD_BACKGROUND);
+                    PrefUtils.putInteger(widgetId + ".background", color);
 
-                    int fontsize = Integer.parseInt(PrefsManager.getString("widget.fontsize", "0"));
+                    int fontsize = Integer.parseInt(PrefUtils.getString("widget.fontsize", "0"));
                     if (fontsize > 0) {
-                        PrefsManager.putInteger(widgetId + ".fontsize", fontsize);
+                        PrefUtils.putInteger(widgetId + ".fontsize", fontsize);
                     } else {
-                        PrefsManager.remove(widgetId + ".fontsize");
+                        PrefUtils.remove(widgetId + ".fontsize");
                     }
 
                     // Now we need to update the widget

@@ -6,9 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.util.TypedValue;
 
-public class Utils {
+public class UiUtils {
     static public void setPreferenceTheme(Activity a) {
-        if (!PrefsManager.getBoolean(PrefsManager.LIGHT_THEME, true)) {
+        if (!PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
             a.setTheme(android.R.style.Theme_Holo);
         }
     }

@@ -26,7 +26,7 @@ import android.net.ConnectivityManager;
 import android.os.SystemClock;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.PrefsManager;
+import net.fred.feedex.PrefUtils;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.service.RefreshService;
 
@@ -41,14 +41,14 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         } else if (!mConnection && !intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
             mConnection = true;
 
-            if (!FetcherService.isRefreshingFeeds && PrefsManager.getBoolean(PrefsManager.REFRESH_ENABLED, true)) {
+            if (!FetcherService.isRefreshingFeeds && PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
                 int time = 3600000;
                 try {
-                    time = Math.max(60000, Integer.parseInt(PrefsManager.getString(PrefsManager.REFRESH_INTERVAL, RefreshService.SIXTYMINUTES)));
+                    time = Math.max(60000, Integer.parseInt(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, RefreshService.SIXTYMINUTES)));
                 } catch (Exception ignored) {
                 }
 
-                long lastRefresh = PrefsManager.getLong(PrefsManager.LAST_SCHEDULED_REFRESH, 0);
+                long lastRefresh = PrefUtils.getLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
                 if (SystemClock.elapsedRealtime() - lastRefresh > time) {
 
                     context.startService(new Intent(context, FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));

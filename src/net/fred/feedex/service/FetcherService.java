@@ -66,7 +66,7 @@ import android.util.Xml;
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.NetworkUtils;
-import net.fred.feedex.PrefsManager;
+import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.MainActivity;
 import net.fred.feedex.parser.RssAtomParser;
@@ -78,23 +78,16 @@ import net.fred.feedex.provider.FeedDataContentProvider;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.ProxySelector;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
@@ -105,7 +98,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.GZIPInputStream;
 
 public class FetcherService extends IntentService {
 
@@ -153,7 +145,7 @@ public class FetcherService extends IntentService {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         boolean isFromAutoRefresh = intent.getBooleanExtra(Constants.FROM_AUTO_REFRESH, false);
-        boolean skipFetch = isFromAutoRefresh && PrefsManager.getBoolean(PrefsManager.REFRESH_WIFI_ONLY, false)
+        boolean skipFetch = isFromAutoRefresh && PrefUtils.getBoolean(PrefUtils.REFRESH_WIFI_ONLY, false)
                 && networkInfo.getType() != ConnectivityManager.TYPE_WIFI;
         if (networkInfo == null || networkInfo.getState() != NetworkInfo.State.CONNECTED || skipFetch) {
             return;
@@ -166,7 +158,7 @@ public class FetcherService extends IntentService {
             sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS));
 
             if (isFromAutoRefresh) {
-                PrefsManager.putLong(PrefsManager.LAST_SCHEDULED_REFRESH, SystemClock.elapsedRealtime());
+                PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, SystemClock.elapsedRealtime());
             }
 
             String feedId = intent.getStringExtra(Constants.FEED_ID);
@@ -178,7 +170,7 @@ public class FetcherService extends IntentService {
             int newCount = (feedId == null ? refreshFeeds() : refreshFeed(feedId));
 
             if (newCount > 0) {
-                if (PrefsManager.getBoolean(PrefsManager.NOTIFICATIONS_ENABLED, true)) {
+                if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
                     Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{COUNT}, EntryColumns.WHERE_UNREAD, null,
                             null);
 
@@ -204,11 +196,11 @@ public class FetcherService extends IntentService {
                                 .setContentText(text) //
                                 .setLights(0xffffffff, 300, 1000);
 
-                        if (PrefsManager.getBoolean(PrefsManager.NOTIFICATIONS_VIBRATE, false)) {
+                        if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_VIBRATE, false)) {
                             notifBuilder.setVibrate(new long[]{0, 1000});
                         }
 
-                        String ringtone = PrefsManager.getString(PrefsManager.NOTIFICATIONS_RINGTONE, null);
+                        String ringtone = PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, null);
                         if (ringtone != null && ringtone.length() > 0) {
                             notifBuilder.setSound(Uri.parse(ringtone));
                         }
@@ -322,7 +314,7 @@ public class FetcherService extends IntentService {
                         if (mobilizedHtml != null) {
                             String realHtml = Html.fromHtml(mobilizedHtml, null, null).toString();
                             Pair<String, Vector<String>> improvedContent = improveHtmlContent(realHtml,
-                                    PrefsManager.getBoolean(PrefsManager.FETCH_PICTURES, false));
+                                    PrefUtils.getBoolean(PrefUtils.FETCH_PICTURES, false));
                             if (improvedContent.first != null) {
                                 ContentValues values = new ContentValues();
                                 values.put(EntryColumns.MOBILIZED_HTML, improvedContent.first);
@@ -481,7 +473,7 @@ public class FetcherService extends IntentService {
 
                 handler = new RssAtomParser(new Date(cursor.getLong(realLastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl,
                         cursor.getInt(retrieveFullscreenPosition) == 1);
-                handler.setFetchImages(PrefsManager.getBoolean(PrefsManager.FETCH_PICTURES, false));
+                handler.setFetchImages(PrefUtils.getBoolean(PrefUtils.FETCH_PICTURES, false));
 
                 if (fetchMode == 0) {
                     if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {

@@ -58,7 +58,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import net.fred.feedex.R;
-import net.fred.feedex.Utils;
+import net.fred.feedex.UiUtils;
 import net.fred.feedex.fragment.EntriesListFragment;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 
@@ -69,7 +69,7 @@ public class EntriesListActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Utils.setPreferenceTheme(this);
+        UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
         ActionBar actionBar = getActionBar();
@@ -104,7 +104,7 @@ public class EntriesListActivity extends FragmentActivity {
         }
 
         if (iconBytes != null && iconBytes.length > 0) {
-            int bitmapSizeInDip = Utils.dpToPixel(24);
+            int bitmapSizeInDip = UiUtils.dpToPixel(24);
             Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
             if (bitmap != null) {
                 if (bitmap.getHeight() != bitmapSizeInDip) {

@@ -52,15 +52,15 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
 
-import net.fred.feedex.PrefsManager;
+import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
-import net.fred.feedex.Utils;
+import net.fred.feedex.UiUtils;
 import net.fred.feedex.service.RefreshService;
 
 public class GeneralPrefsActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Utils.setPreferenceTheme(this);
+        UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
         ActionBar actionBar = getActionBar();
@@ -68,25 +68,25 @@ public class GeneralPrefsActivity extends PreferenceActivity {
 
         addPreferencesFromResource(R.layout.preferences);
 
-        Preference preference = findPreference(PrefsManager.REFRESH_ENABLED);
+        Preference preference = findPreference(PrefUtils.REFRESH_ENABLED);
         preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (Boolean.TRUE.equals(newValue)) {
                     startService(new Intent(GeneralPrefsActivity.this, RefreshService.class));
                 } else {
-                    PrefsManager.putLong(PrefsManager.LAST_SCHEDULED_REFRESH, 0);
+                    PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
                     stopService(new Intent(GeneralPrefsActivity.this, RefreshService.class));
                 }
                 return true;
             }
         });
 
-        preference = findPreference(PrefsManager.LIGHT_THEME);
+        preference = findPreference(PrefUtils.LIGHT_THEME);
         preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                PrefsManager.putBoolean(PrefsManager.LIGHT_THEME, Boolean.TRUE.equals(newValue));
+                PrefUtils.putBoolean(PrefUtils.LIGHT_THEME, Boolean.TRUE.equals(newValue));
                 android.os.Process.killProcess(android.os.Process.myPid());
 
                 // this return statement will never be reached

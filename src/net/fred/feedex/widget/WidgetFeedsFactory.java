@@ -56,7 +56,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.PrefsManager;
+import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
 import net.fred.feedex.ThrottledContentObserver;
 import net.fred.feedex.provider.FeedData.EntryColumns;
@@ -161,7 +161,7 @@ public class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory
         StringBuilder selection = new StringBuilder();
         // selection.append(EntryColumns.WHERE_UNREAD);
 
-        String feedIds = PrefsManager.getString(appWidgetId + ".feeds", "");
+        String feedIds = PrefUtils.getString(appWidgetId + ".feeds", "");
         if (feedIds.length() > 0) {
             if (selection.length() > 0) {
                 selection.append(Constants.DB_AND);
