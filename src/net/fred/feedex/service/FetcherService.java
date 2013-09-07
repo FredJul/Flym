@@ -690,16 +690,16 @@ public class FetcherService extends IntentService {
     public static Pair<String, Vector<String>> improveHtmlContent(String content, boolean fetchImages) {
         if (content != null) {
             // remove trashes
-            String newContent = content.trim().replaceAll("(?i)<[/]?[ ]?span(.|\n)*?>", "").replaceAll("(?i)<blockquote", "<div")
+            content = content.trim().replaceAll("(?i)<[/]?[ ]?span(.|\n)*?>", "").replaceAll("(?i)<blockquote", "<div")
                     .replaceAll("(?i)</blockquote", "</div");
             // remove ads
-            newContent = newContent.replaceAll("(?i)<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
+            content = content.replaceAll("(?i)<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
             // remove lazy loading images stuff
-            newContent = newContent.replaceAll("(?i)\\s+src=[^>]+\\s+original[-]*src=(\"|')", " src=$1");
+            content = content.replaceAll("(?i)\\s+src=[^>]+\\s+original[-]*src=(\"|')", " src=$1");
             // remove bad image paths
-            newContent = newContent.replaceAll("(?i)\\s+(href|src)=(\"|')//", " $1=$2http://");
+            content = content.replaceAll("(?i)\\s+(href|src)=(\"|')//", " $1=$2http://");
 
-            if (newContent.length() > 0) {
+            if (content.length() > 0) {
                 Vector<String> images = null;
                 if (fetchImages) {
                     images = new Vector<String>(4);
@@ -713,7 +713,7 @@ public class FetcherService extends IntentService {
                         try {
                             // replace the '%' that may occur while urlencode such that the img-src url (in the abstract text) does reinterpret the
                             // parameters
-                            newContent = newContent.replace(
+                            content = content.replace(
                                     match,
                                     (Constants.FILE_URL + NetworkUtils.IMAGE_FOLDER + Constants.IMAGEID_REPLACEMENT + URLEncoder.encode(
                                             match.substring(match.lastIndexOf('/') + 1), Constants.UTF8)).replace(NetworkUtils.PERCENT, NetworkUtils.PERCENT_REPLACE));
@@ -723,7 +723,7 @@ public class FetcherService extends IntentService {
                     }
                 }
 
-                return new Pair<String, Vector<String>>(newContent, images);
+                return new Pair<String, Vector<String>>(content, images);
             }
         }
 
