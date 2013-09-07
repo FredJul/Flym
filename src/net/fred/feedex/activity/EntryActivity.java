@@ -119,7 +119,7 @@ public class EntryActivity extends ProgressActivity {
     }
 
     private static final String TEXT_HTML = "text/html";
-    private static final String HTML_IMG_REGEX = "<[/]?[ ]?img(.|\n)*?>";
+    private static final String HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>";
 
     private static final String BACKGROUND_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#f6f6f6" : "#181b1f";
     private static final String TEXT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";

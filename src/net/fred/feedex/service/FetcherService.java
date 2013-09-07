@@ -690,12 +690,14 @@ public class FetcherService extends IntentService {
     public static Pair<String, Vector<String>> improveHtmlContent(String content, boolean fetchImages) {
         if (content != null) {
             // remove trashes
-            String newContent = content.trim().replaceAll("<[/]?[ ]?span(.|\n)*?>", "").replaceAll("<blockquote", "<div")
-                    .replaceAll("</blockquote", "</div").replaceAll("(href|src)=(\"|')//", "$1=$2http://");
+            String newContent = content.trim().replaceAll("(?i)<[/]?[ ]?span(.|\n)*?>", "").replaceAll("(?i)<blockquote", "<div")
+                    .replaceAll("(?i)</blockquote", "</div");
             // remove ads
-            newContent = newContent.replaceAll("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
+            newContent = newContent.replaceAll("(?i)<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
             // remove lazy loading images stuff
-            newContent = newContent.replaceAll(" src=[^>]+ original[-]*src=(\"|')", " src=$1");
+            newContent = newContent.replaceAll("(?i)\\s+src=[^>]+\\s+original[-]*src=(\"|')", " src=$1");
+            // remove bad image paths
+            newContent = newContent.replaceAll("(?i)\\s+(href|src)=(\"|')//", " $1=$2http://");
 
             if (newContent.length() > 0) {
                 Vector<String> images = null;
