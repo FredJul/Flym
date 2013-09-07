@@ -148,6 +148,11 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
         if (oldVersion < 4) {
             executeCatchedSQL(database, createTable(TaskColumns.TABLE_NAME, TaskColumns.COLUMNS, TaskColumns.TYPES));
+            // Remove old FeedEx directory (now useless)
+            try {
+                deleteFileOrDir(new File(Environment.getExternalStorageDirectory() + "/FeedEx/"));
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -156,5 +161,13 @@ class DatabaseHelper extends SQLiteOpenHelper {
             database.execSQL(query);
         } catch (Exception ignored) {
         }
+    }
+
+    private void deleteFileOrDir(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteFileOrDir(child);
+
+        fileOrDirectory.delete();
     }
 }
