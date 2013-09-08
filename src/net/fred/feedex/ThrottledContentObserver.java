@@ -41,7 +41,7 @@ public abstract class ThrottledContentObserver extends ContentObserver {
             mOnChangeTask = new Runnable() {
                 @Override
                 public void run() {
-                    onChangeThrottled(selfChange);
+                    onChangeThrottled();
                     mOnChangeTask = null;
                 }
             };
@@ -52,5 +52,5 @@ public abstract class ThrottledContentObserver extends ContentObserver {
         super.onChange(selfChange);
     }
 
-    abstract public void onChangeThrottled(boolean selfChange);
+    abstract public void onChangeThrottled();
 }

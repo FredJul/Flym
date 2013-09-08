@@ -80,7 +80,7 @@ public class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory
 
         mContentObserver = new ThrottledContentObserver(new Handler(), 3000) {
             @Override
-            public void onChangeThrottled(boolean selfChange) {
+            public void onChangeThrottled() {
                 AppWidgetManager.getInstance(context).notifyAppWidgetViewDataChanged(appWidgetId, R.id.feedsListView);
             }
         };

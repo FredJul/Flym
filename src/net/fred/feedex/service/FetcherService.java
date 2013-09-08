@@ -228,27 +228,33 @@ public class FetcherService extends IntentService {
         mNotifMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    public static boolean isMobilizing(long entryId) {
+    public static long getMobilizingTaskId(long entryId) {
+        long result = -1;
+
         Cursor cursor = MainApplication
                 .getAppContext()
                 .getContentResolver()
                 .query(TaskColumns.CONTENT_URI, TaskColumns.PROJECTION_ID,
                         TaskColumns.ENTRY_ID + '=' + entryId + Constants.DB_AND + TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
-        boolean result = cursor.moveToFirst();
+        if (cursor.moveToFirst()) {
+            result = cursor.getLong(0);
+        }
         cursor.close();
 
         return result;
     }
 
     public static void addImagesToDownload(String entryId, Vector<String> images) {
-        ContentValues[] values = new ContentValues[images.size()];
-        for (int i = 0; i < images.size(); i++) {
-            values[i] = new ContentValues();
-            values[i].put(TaskColumns.ENTRY_ID, entryId);
-            values[i].put(TaskColumns.IMG_URL_TO_DL, images.get(i));
-        }
+        if (images != null) {
+            ContentValues[] values = new ContentValues[images.size()];
+            for (int i = 0; i < images.size(); i++) {
+                values[i] = new ContentValues();
+                values[i].put(TaskColumns.ENTRY_ID, entryId);
+                values[i].put(TaskColumns.IMG_URL_TO_DL, images.get(i));
+            }
 
-        MainApplication.getAppContext().getContentResolver().bulkInsert(TaskColumns.CONTENT_URI, values);
+            MainApplication.getAppContext().getContentResolver().bulkInsert(TaskColumns.CONTENT_URI, values);
+        }
     }
 
     public static void addEntriesToMobilize(long[] entriesId) {
@@ -319,10 +325,9 @@ public class FetcherService extends IntentService {
                                 ContentValues values = new ContentValues();
                                 values.put(EntryColumns.MOBILIZED_HTML, improvedContent.first);
                                 if (cr.update(entryUri, values, null, null) > 0) {
-                                    addImagesToDownload(String.valueOf(entryId), improvedContent.second);
-
                                     success = true;
                                     operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
+                                    addImagesToDownload(String.valueOf(entryId), improvedContent.second);
                                 }
                             }
                         }

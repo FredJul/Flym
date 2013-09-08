@@ -55,7 +55,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -90,6 +89,7 @@ import android.widget.ViewFlipper;
 import net.fred.feedex.Constants;
 import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
+import net.fred.feedex.ThrottledContentObserver;
 import net.fred.feedex.UiUtils;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
@@ -205,17 +205,17 @@ public class EntryActivity extends ProgressActivity {
         }
     };
 
-    private final ContentObserver mTasksObserver = new ContentObserver(new Handler()) {
+    private final ThrottledContentObserver mTasksObserver = new ThrottledContentObserver(new Handler(), 2000) {
         @Override
-        public void onChange(boolean selfChange) {
-            boolean isMobilizing = FetcherService.isMobilizing(_id);
+        public void onChangeThrottled() {
+            boolean isMobilizing = FetcherService.getMobilizingTaskId(_id) != -1;
             if ((getProgressBar().getVisibility() == View.VISIBLE && isMobilizing)
                     || (getProgressBar().getVisibility() == View.GONE && !isMobilizing)) {
                 return; // no change => no update
             }
 
             if (isMobilizing) { // We start a mobilization
-                getProgressBar().setVisibility(isMobilizing ? View.VISIBLE : View.GONE);
+                getProgressBar().setVisibility(View.VISIBLE);
             } else { // We finished one
                 preferFullText = true;
                 reload(true);
@@ -354,8 +354,6 @@ public class EntryActivity extends ProgressActivity {
         parentUri = EntryColumns.PARENT_URI(uri.getPath());
         webView.onResume();
         reload(false);
-
-        getContentResolver().registerContentObserver(TaskColumns.CONTENT_URI, true, mTasksObserver);
     }
 
     @Override
@@ -395,7 +393,8 @@ public class EntryActivity extends ProgressActivity {
 
         _id = newId;
 
-        Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
+        ContentResolver cr = getContentResolver();
+        Cursor entryCursor = cr.query(uri, null, null, null, null);
 
         if (entryCursor.moveToFirst()) {
             String contentText = entryCursor.getString(mobilizedHtmlPosition);
@@ -414,7 +413,6 @@ public class EntryActivity extends ProgressActivity {
 
             // Mark the article as read
             if (entryCursor.getInt(isReadPosition) != 1) {
-                ContentResolver cr = getContentResolver();
                 if (cr.update(uri, FeedData.getReadContentValues(), null, null) > 0) {
                     FeedDataContentProvider.notifyAllFromEntryUri(uri, false);
                 }
@@ -429,7 +427,7 @@ public class EntryActivity extends ProgressActivity {
             }
 
             title = entryCursor.getString(titlePosition);
-            Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI(feedId), new String[]{FeedColumns.NAME, FeedColumns.URL}, null,
+            Cursor cursor = cr.query(FeedColumns.CONTENT_URI(feedId), new String[]{FeedColumns.NAME, FeedColumns.URL}, null,
                     null, null);
             if (cursor.moveToFirst()) {
                 setTitle(cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0));
@@ -439,7 +437,7 @@ public class EntryActivity extends ProgressActivity {
             cursor.close();
 
             if (iconBytes == null || iconBytes.length == 0) {
-                Cursor iconCursor = getContentResolver().query(FeedColumns.CONTENT_URI(Integer.toString(feedId)),
+                Cursor iconCursor = cr.query(FeedColumns.CONTENT_URI(Integer.toString(feedId)),
                         new String[]{FeedColumns._ID, FeedColumns.ICON}, null, null, null);
 
                 if (iconCursor.moveToFirst()) {
@@ -502,7 +500,15 @@ public class EntryActivity extends ProgressActivity {
                     null);
 
             // Listen the mobilizing task
-            getProgressBar().setVisibility(FetcherService.isMobilizing(_id) ? View.VISIBLE : View.GONE);
+            long mobilizingTaskId = FetcherService.getMobilizingTaskId(_id);
+            if (mobilizingTaskId != -1) {
+                getProgressBar().setVisibility(View.VISIBLE);
+                cr.unregisterContentObserver(mTasksObserver);
+                cr.registerContentObserver(TaskColumns.CONTENT_URI(mobilizingTaskId), false, mTasksObserver);
+            } else {
+                getProgressBar().setVisibility(View.GONE);
+                cr.unregisterContentObserver(mTasksObserver);
+            }
         }
 
         entryCursor.close();
@@ -837,7 +843,8 @@ public class EntryActivity extends ProgressActivity {
         @JavascriptInterface
         public void onClickFullText() {
             if (getProgressBar().getVisibility() != View.VISIBLE) {
-                Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
+                ContentResolver cr = getContentResolver();
+                Cursor entryCursor = cr.query(uri, null, null, null, null);
                 final boolean alreadyMobilized = entryCursor.moveToFirst() && !entryCursor.isNull(mobilizedHtmlPosition);
                 entryCursor.close();
 
@@ -856,7 +863,18 @@ public class EntryActivity extends ProgressActivity {
                     // since we have acquired the networkInfo, we use it for basic checks
                     if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
                         FetcherService.addEntriesToMobilize(new long[]{_id});
-                        startService(new Intent(EntryActivity.this, FetcherService.class).setAction(Constants.ACTION_MOBILIZE_FEEDS));
+                        long mobilizingTaskId = FetcherService.getMobilizingTaskId(_id);
+                        if (mobilizingTaskId != -1) {
+                            cr.unregisterContentObserver(mTasksObserver);
+                            cr.registerContentObserver(TaskColumns.CONTENT_URI(mobilizingTaskId), false, mTasksObserver);
+                            startService(new Intent(EntryActivity.this, FetcherService.class).setAction(Constants.ACTION_MOBILIZE_FEEDS));
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getProgressBar().setVisibility(View.VISIBLE);
+                                }
+                            });
+                        }
                     } else {
                         runOnUiThread(new Runnable() {
                             @Override

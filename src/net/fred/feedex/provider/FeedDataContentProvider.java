@@ -451,6 +451,7 @@ public class FeedDataContentProvider extends ContentProvider {
         if (count > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
+
         return count;
     }
 
