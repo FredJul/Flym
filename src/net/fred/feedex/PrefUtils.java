@@ -108,14 +108,14 @@ public class PrefUtils {
     public static void registerOnPrefChangeListener(OnSharedPreferenceChangeListener listener) {
         try {
             PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).registerOnSharedPreferenceChangeListener(listener);
-        } catch (Exception e) { // Seems to be possible to have a NPE here... Why??
+        } catch (Exception ignored) { // Seems to be possible to have a NPE here... Why??
         }
     }
 
     public static void unregisterOnPrefChangeListener(OnSharedPreferenceChangeListener listener) {
         try {
             PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).unregisterOnSharedPreferenceChangeListener(listener);
-        } catch (Exception ignored) {
+        } catch (Exception ignored) { // Seems to be possible to have a NPE here... Why??
         }
     }
 }
