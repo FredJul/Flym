@@ -1857,11 +1857,10 @@ net.fred.feedex.ThrottledContentObserver -> net.fred.feedex.e:
     android.os.Handler mHandler -> b
     java.lang.Runnable mOnChangeTask -> c
     void onChange(boolean) -> onChange
-    void onChangeThrottled(boolean) -> a
+    void onChangeThrottled() -> a
     void access$0(net.fred.feedex.ThrottledContentObserver,java.lang.Runnable) -> a
 net.fred.feedex.ThrottledContentObserver$1 -> net.fred.feedex.f:
     net.fred.feedex.ThrottledContentObserver this$0 -> a
-    boolean val$selfChange -> b
     void run() -> run
 net.fred.feedex.UiUtils -> net.fred.feedex.g:
     void setPreferenceTheme(android.app.Activity) -> a
@@ -2011,7 +2010,7 @@ net.fred.feedex.activity.EntryActivity -> net.fred.feedex.activity.EntryActivity
     android.view.View$OnKeyListener onKeyEventListener -> S
     android.view.GestureDetector gestureDetector -> T
     android.view.View$OnTouchListener onTouchListener -> U
-    android.database.ContentObserver mTasksObserver -> V
+    net.fred.feedex.ThrottledContentObserver mTasksObserver -> V
     net.fred.feedex.activity.EntryActivity$JavaScriptObject injectedJSObject -> W
     android.view.animation.TranslateAnimation generateAnimation(float,float) -> a
     void onCreate(android.os.Bundle) -> onCreate
@@ -2046,15 +2045,16 @@ net.fred.feedex.activity.EntryActivity -> net.fred.feedex.activity.EntryActivity
     void access$5(net.fred.feedex.activity.EntryActivity,boolean) -> b
     android.net.Uri access$6(net.fred.feedex.activity.EntryActivity) -> e
     int access$7(net.fred.feedex.activity.EntryActivity) -> f
-    java.lang.String access$8(net.fred.feedex.activity.EntryActivity) -> g
-    void access$9(net.fred.feedex.activity.EntryActivity,android.net.Uri,java.lang.String,int,int) -> a
-    long access$10(net.fred.feedex.activity.EntryActivity) -> h
-    android.webkit.WebView access$11(net.fred.feedex.activity.EntryActivity) -> i
-    void access$12(net.fred.feedex.activity.EntryActivity) -> j
-    long access$13(net.fred.feedex.activity.EntryActivity) -> k
-    void access$14(net.fred.feedex.activity.EntryActivity) -> l
-    float access$15(net.fred.feedex.activity.EntryActivity) -> m
-    android.webkit.WebView access$16(net.fred.feedex.activity.EntryActivity) -> n
+    net.fred.feedex.ThrottledContentObserver access$8(net.fred.feedex.activity.EntryActivity) -> g
+    java.lang.String access$9(net.fred.feedex.activity.EntryActivity) -> h
+    void access$10(net.fred.feedex.activity.EntryActivity,android.net.Uri,java.lang.String,int,int) -> a
+    long access$11(net.fred.feedex.activity.EntryActivity) -> i
+    android.webkit.WebView access$12(net.fred.feedex.activity.EntryActivity) -> j
+    void access$13(net.fred.feedex.activity.EntryActivity) -> k
+    long access$14(net.fred.feedex.activity.EntryActivity) -> l
+    void access$15(net.fred.feedex.activity.EntryActivity) -> m
+    float access$16(net.fred.feedex.activity.EntryActivity) -> n
+    android.webkit.WebView access$17(net.fred.feedex.activity.EntryActivity) -> o
 net.fred.feedex.activity.EntryActivity$1 -> net.fred.feedex.activity.l:
     net.fred.feedex.activity.EntryActivity this$0 -> a
     boolean onKey(android.view.View,int,android.view.KeyEvent) -> onKey
@@ -2063,7 +2063,7 @@ net.fred.feedex.activity.EntryActivity$2 -> net.fred.feedex.activity.m:
     boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
 net.fred.feedex.activity.EntryActivity$3 -> net.fred.feedex.activity.n:
     net.fred.feedex.activity.EntryActivity this$0 -> a
-    void onChange(boolean) -> onChange
+    void onChangeThrottled() -> a
 net.fred.feedex.activity.EntryActivity$4 -> net.fred.feedex.activity.o:
     net.fred.feedex.activity.EntryActivity this$0 -> a
     boolean onDown(android.view.MotionEvent) -> onDown
@@ -2107,16 +2107,19 @@ net.fred.feedex.activity.EntryActivity$JavaScriptObject$3 -> net.fred.feedex.act
 net.fred.feedex.activity.EntryActivity$JavaScriptObject$4 -> net.fred.feedex.activity.x:
     net.fred.feedex.activity.EntryActivity$JavaScriptObject this$1 -> a
     void run() -> run
+net.fred.feedex.activity.EntryActivity$JavaScriptObject$5 -> net.fred.feedex.activity.y:
+    net.fred.feedex.activity.EntryActivity$JavaScriptObject this$1 -> a
+    void run() -> run
 net.fred.feedex.activity.GeneralPrefsActivity -> net.fred.feedex.activity.GeneralPrefsActivity:
     void onCreate(android.os.Bundle) -> onCreate
     boolean onMenuItemSelected(int,android.view.MenuItem) -> onMenuItemSelected
-net.fred.feedex.activity.GeneralPrefsActivity$1 -> net.fred.feedex.activity.y:
+net.fred.feedex.activity.GeneralPrefsActivity$1 -> net.fred.feedex.activity.z:
     net.fred.feedex.activity.GeneralPrefsActivity this$0 -> a
     boolean onPreferenceChange(android.preference.Preference,java.lang.Object) -> onPreferenceChange
-net.fred.feedex.activity.GeneralPrefsActivity$2 -> net.fred.feedex.activity.z:
+net.fred.feedex.activity.GeneralPrefsActivity$2 -> net.fred.feedex.activity.aa:
     net.fred.feedex.activity.GeneralPrefsActivity this$0 -> a
     boolean onPreferenceChange(android.preference.Preference,java.lang.Object) -> onPreferenceChange
-net.fred.feedex.activity.GetFeedSearchResultsLoader -> net.fred.feedex.activity.aa:
+net.fred.feedex.activity.GetFeedSearchResultsLoader -> net.fred.feedex.activity.ab:
     java.lang.String mSearchText -> a
     java.util.ArrayList loadInBackground() -> a
     java.lang.Object loadInBackground() -> loadInBackground
@@ -2124,9 +2127,8 @@ net.fred.feedex.activity.MainActivity -> net.fred.feedex.activity.MainActivity:
     android.support.v4.view.ViewPager mViewPager -> o
     android.view.ActionMode mActionMode -> p
     android.app.NotificationManager mNotificationManager -> n
-    android.content.BroadcastReceiver mRefreshReceiver -> q
-    android.content.BroadcastReceiver mRefreshFinishedReceiver -> r
-    int loaderId -> s
+    android.content.SharedPreferences$OnSharedPreferenceChangeListener isRefreshingListener -> q
+    int loaderId -> r
     void onCreate(android.os.Bundle) -> onCreate
     void onResume() -> onResume
     void onPause() -> onPause
@@ -2141,13 +2143,10 @@ net.fred.feedex.activity.MainActivity -> net.fred.feedex.activity.MainActivity:
     void onLoadFinished(android.support.v4.content.Loader,android.database.Cursor) -> a
     void onLoaderReset(android.support.v4.content.Loader) -> a
     void onLoadFinished(android.support.v4.content.Loader,java.lang.Object) -> a
-net.fred.feedex.activity.MainActivity$1 -> net.fred.feedex.activity.ab:
+net.fred.feedex.activity.MainActivity$1 -> net.fred.feedex.activity.ac:
     net.fred.feedex.activity.MainActivity this$0 -> a
-    void onReceive(android.content.Context,android.content.Intent) -> onReceive
-net.fred.feedex.activity.MainActivity$2 -> net.fred.feedex.activity.ac:
-    net.fred.feedex.activity.MainActivity this$0 -> a
-    void onReceive(android.content.Context,android.content.Intent) -> onReceive
-net.fred.feedex.activity.MainActivity$3 -> net.fred.feedex.activity.ad:
+    void onSharedPreferenceChanged(android.content.SharedPreferences,java.lang.String) -> onSharedPreferenceChanged
+net.fred.feedex.activity.MainActivity$2 -> net.fred.feedex.activity.ad:
     net.fred.feedex.activity.MainActivity this$0 -> a
     android.app.ActionBar val$actionBar -> b
     void onPageSelected(int) -> a
@@ -2646,13 +2645,12 @@ net.fred.feedex.receiver.ConnectionChangeReceiver -> net.fred.feedex.receiver.Co
     boolean mConnection -> a
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
 net.fred.feedex.service.FetcherService -> net.fred.feedex.service.FetcherService:
-    java.util.regex.Pattern FEED_LINK_PATTERN -> b
-    java.util.regex.Pattern IMG_PATTERN -> c
-    android.app.NotificationManager mNotifMgr -> d
-    boolean isRefreshingFeeds -> a
+    java.util.regex.Pattern FEED_LINK_PATTERN -> a
+    java.util.regex.Pattern IMG_PATTERN -> b
+    android.app.NotificationManager mNotifMgr -> c
     void onHandleIntent(android.content.Intent) -> onHandleIntent
     void onCreate() -> onCreate
-    boolean isMobilizing(long) -> a
+    long getMobilizingTaskId(long) -> a
     void addImagesToDownload(java.lang.String,java.util.Vector) -> a
     void addEntriesToMobilize(long[]) -> a
     void mobilizeAllEntries() -> a
@@ -2671,9 +2669,8 @@ net.fred.feedex.service.FetcherService$2 -> net.fred.feedex.service.b:
     java.lang.Object call() -> call
 net.fred.feedex.service.RefreshService -> net.fred.feedex.service.RefreshService:
     android.content.SharedPreferences$OnSharedPreferenceChangeListener listener -> a
-    android.content.Intent refreshBroadcastIntent -> b
-    android.app.AlarmManager alarmManager -> c
-    android.app.PendingIntent timerIntent -> d
+    android.app.AlarmManager alarmManager -> b
+    android.app.PendingIntent timerIntent -> c
     android.os.IBinder onBind(android.content.Intent) -> onBind
     boolean onUnbind(android.content.Intent) -> onUnbind
     void onCreate() -> onCreate
@@ -2683,6 +2680,8 @@ net.fred.feedex.service.RefreshService -> net.fred.feedex.service.RefreshService
 net.fred.feedex.service.RefreshService$1 -> net.fred.feedex.service.c:
     net.fred.feedex.service.RefreshService this$0 -> a
     void onSharedPreferenceChanged(android.content.SharedPreferences,java.lang.String) -> onSharedPreferenceChanged
+net.fred.feedex.service.RefreshService$RefreshAlarmReceiver -> net.fred.feedex.service.RefreshService$RefreshAlarmReceiver:
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
 net.fred.feedex.view.DragNDropExpandableListView -> net.fred.feedex.view.DragNDropExpandableListView:
     boolean mDragNDropEnabled -> a
     boolean mDragMode -> b
@@ -2751,7 +2750,7 @@ net.fred.feedex.widget.WidgetFeedsFactory -> net.fred.feedex.widget.c:
     int access$1(net.fred.feedex.widget.WidgetFeedsFactory) -> b
 net.fred.feedex.widget.WidgetFeedsFactory$1 -> net.fred.feedex.widget.d:
     net.fred.feedex.widget.WidgetFeedsFactory this$0 -> a
-    void onChangeThrottled(boolean) -> a
+    void onChangeThrottled() -> a
 net.fred.feedex.widget.WidgetProvider -> net.fred.feedex.widget.WidgetProvider:
     void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]) -> onUpdate
 net.fred.feedex.widget.WidgetService -> net.fred.feedex.widget.WidgetService:
