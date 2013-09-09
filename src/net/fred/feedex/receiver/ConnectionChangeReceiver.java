@@ -44,13 +44,12 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
             if (!FetcherService.isRefreshingFeeds && PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
                 int time = 3600000;
                 try {
-                    time = Math.max(60000, Integer.parseInt(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, RefreshService.SIXTYMINUTES)));
+                    time = Math.max(60000, Integer.parseInt(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, RefreshService.SIXTY_MINUTES)));
                 } catch (Exception ignored) {
                 }
 
                 long lastRefresh = PrefUtils.getLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
                 if (SystemClock.elapsedRealtime() - lastRefresh > time) {
-
                     context.startService(new Intent(context, FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
                 }
             }

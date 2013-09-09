@@ -47,6 +47,8 @@ package net.fred.feedex.service;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -57,7 +59,14 @@ import net.fred.feedex.Constants;
 import net.fred.feedex.PrefUtils;
 
 public class RefreshService extends Service {
-    public static final String SIXTYMINUTES = "3600000";
+    public static final String SIXTY_MINUTES = "3600000";
+
+    public static class RefreshAlarmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            context.startService(new Intent(context, FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
+        }
+    }
 
     private final OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
         @Override
@@ -68,7 +77,6 @@ public class RefreshService extends Service {
         }
     };
 
-    private final Intent refreshBroadcastIntent = new Intent(Constants.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true);
     private AlarmManager alarmManager;
     private PendingIntent timerIntent;
 
@@ -94,14 +102,14 @@ public class RefreshService extends Service {
 
     private void restartTimer(boolean created) {
         if (timerIntent == null) {
-            timerIntent = PendingIntent.getBroadcast(this, 0, refreshBroadcastIntent, 0);
+            timerIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, RefreshAlarmReceiver.class), 0);
         } else {
             alarmManager.cancel(timerIntent);
         }
 
         int time = 3600000;
         try {
-            time = Math.max(60000, Integer.parseInt(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, SIXTYMINUTES)));
+            time = Math.max(60000, Integer.parseInt(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, SIXTY_MINUTES)));
         } catch (Exception ignored) {
         }
 

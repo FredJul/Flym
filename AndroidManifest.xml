@@ -104,6 +104,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".service.RefreshService$RefreshAlarmReceiver" />
     </application>
 
 </manifest>
