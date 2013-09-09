@@ -109,13 +109,14 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(sectionsPagerAdapter);
 
+        int currentTab = PrefUtils.getInteger(PrefUtils.CURRENT_TAB_IDX, 0);
         // For each of the sections in the app, add a tab to the action bar.
         for (int i = 0; i < sectionsPagerAdapter.getCount(); i++) {
             // Create a tab with text corresponding to the page title defined by
             // the adapter. Also specify this Activity object, which implements
             // the TabListener interface, as the callback (listener) for when
             // this tab is selected.
-            actionBar.addTab(actionBar.newTab().setText(sectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
+            actionBar.addTab(actionBar.newTab().setText(sectionsPagerAdapter.getPageTitle(i)).setTabListener(this), currentTab == i ? true : false);
         }
 
         // When swiping between different sections, select the corresponding
@@ -129,7 +130,6 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
                 invalidateOptionsMenu(); // Do not do it into onTabSelected()!
             }
         });
-        actionBar.setSelectedNavigationItem(PrefUtils.getInteger(PrefUtils.CURRENT_TAB_IDX, 0));
 
         if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
             // starts the service independent to this activity
