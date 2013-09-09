@@ -109,17 +109,6 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(sectionsPagerAdapter);
 
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
-                invalidateOptionsMenu(); // Do not do it into onTabSelected()!
-            }
-        });
-
         // For each of the sections in the app, add a tab to the action bar.
         for (int i = 0; i < sectionsPagerAdapter.getCount(); i++) {
             // Create a tab with text corresponding to the page title defined by
@@ -128,6 +117,19 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
             // this tab is selected.
             actionBar.addTab(actionBar.newTab().setText(sectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
         }
+
+        // When swiping between different sections, select the corresponding
+        // tab. We can also use ActionBar.Tab#select() to do this if we have
+        // a reference to the Tab.
+        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                actionBar.setSelectedNavigationItem(position);
+                PrefUtils.putInteger(PrefUtils.CURRENT_TAB_IDX, position);
+                invalidateOptionsMenu(); // Do not do it into onTabSelected()!
+            }
+        });
+        actionBar.setSelectedNavigationItem(PrefUtils.getInteger(PrefUtils.CURRENT_TAB_IDX, 0));
 
         if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
             // starts the service independent to this activity
