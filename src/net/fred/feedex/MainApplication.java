@@ -24,15 +24,15 @@ import android.content.Context;
 
 public class MainApplication extends Application {
 
-    private static Context mContext;
+    private static Context context;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext = getApplicationContext();
+        context = getApplicationContext();
     }
 
-    public static Context getAppContext() {
-        return mContext;
+    public static Context getContext() {
+        return context;
     }
 }

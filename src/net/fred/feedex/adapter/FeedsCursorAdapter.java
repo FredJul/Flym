@@ -54,7 +54,7 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
     private static final String COUNT_UNREAD = "COUNT(*)";
     private static final String WHERE_UNREAD = EntryColumns.IS_READ + " is null";
 
-    private static final String COLON = MainApplication.getAppContext().getString(R.string.colon);
+    private static final String COLON = MainApplication.getContext().getString(R.string.colon);
 
     private final FragmentActivity mActivity;
     private int isGroupPosition = -1;

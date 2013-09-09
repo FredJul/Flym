@@ -135,7 +135,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 ContentValues values = new ContentValues();
                 values.put(EntryColumns.IS_FAVORITE, newFavorite ? 1 : 0);
 
-                ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
                 Uri entryUri = ContentUris.withAppendedId(uri, id);
                 if (cr.update(entryUri, values, null, null) > 0) {
                     FeedDataContentProvider.notifyAllFromEntryUri(entryUri, true);
@@ -208,7 +208,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         new Thread() {
             @Override
             public void run() {
-                ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
 
                 if (cr.update(uri, FeedData.getReadContentValues(), EntryColumns.WHERE_UNREAD, null) > 0) {
                     if (!uri.toString().startsWith(EntryColumns.CONTENT_URI.toString())) {
@@ -229,7 +229,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         new Thread() {
             @Override
             public void run() {
-                ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
                 Uri entryUri = ContentUris.withAppendedId(uri, id);
                 if (cr.update(entryUri, FeedData.getReadContentValues(), null, null) > 0) {
                     FeedDataContentProvider.notifyAllFromEntryUri(entryUri, false);
@@ -245,7 +245,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         new Thread() {
             @Override
             public void run() {
-                ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
                 Uri entryUri = ContentUris.withAppendedId(uri, id);
                 if (cr.update(entryUri, FeedData.getUnreadContentValues(), null, null) > 0) {
                     FeedDataContentProvider.notifyAllFromEntryUri(entryUri, false);

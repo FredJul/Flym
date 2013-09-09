@@ -63,7 +63,7 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
 
     private ActionMode mActionMode;
 
-    static NotificationManager mNotificationManager = (NotificationManager) MainApplication.getAppContext().getSystemService(
+    static NotificationManager mNotificationManager = (NotificationManager) MainApplication.getContext().getSystemService(
             Context.NOTIFICATION_SERVICE);
 
     private final SharedPreferences.OnSharedPreferenceChangeListener isRefreshingListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -261,12 +261,12 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return MainApplication.getAppContext().getString(R.string.overview).toUpperCase(Locale.getDefault());
+                    return MainApplication.getContext().getString(R.string.overview).toUpperCase(Locale.getDefault());
                 case 1: {
-                    return MainApplication.getAppContext().getString(R.string.all).toUpperCase(Locale.getDefault());
+                    return MainApplication.getContext().getString(R.string.all).toUpperCase(Locale.getDefault());
                 }
                 case 2:
-                    return MainApplication.getAppContext().getString(R.string.favorites).toUpperCase(Locale.getDefault());
+                    return MainApplication.getContext().getString(R.string.favorites).toUpperCase(Locale.getDefault());
             }
             return null;
         }

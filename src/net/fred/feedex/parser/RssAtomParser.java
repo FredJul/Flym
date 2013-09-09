@@ -180,7 +180,7 @@ public class RssAtomParser extends DefaultHandler {
         // Remove old stuffs
         final String query = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
         NetworkUtils.deleteFeedImagesCache(feedEntriesUri, query);
-        MainApplication.getAppContext().getContentResolver().delete(feedEntriesUri, query, null);
+        MainApplication.getContext().getContentResolver().delete(feedEntriesUri, query, null);
 
         int index = url.indexOf('/', 8); // this also covers https://
         if (index > -1) {
@@ -396,7 +396,7 @@ public class RssAtomParser extends DefaultHandler {
                             guidString} : new String[]{entryLinkString});
 
                     // First, try to update the feed
-                    ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+                    ContentResolver cr = MainApplication.getContext().getContentResolver();
                     if ((entryLinkString.length() == 0 && guidString == null)
                             || cr.update(feedEntriesUri, values, existanceStringBuilder.toString(), existanceValues) == 0) {
 
@@ -560,7 +560,7 @@ public class RssAtomParser extends DefaultHandler {
 
     @Override
     public void endDocument() throws SAXException {
-        ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+        ContentResolver cr = MainApplication.getContext().getContentResolver();
 
         try {
             if (!inserts.isEmpty()) {
@@ -607,7 +607,7 @@ public class RssAtomParser extends DefaultHandler {
         private final ArrayList<Pair<String, Pair<Boolean, Boolean>>> mFilters = new ArrayList<Pair<String, Pair<Boolean, Boolean>>>();
 
         public FeedFilters(String feedId) {
-            ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+            ContentResolver cr = MainApplication.getContext().getContentResolver();
             Cursor c = cr.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), new String[]{FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
                     FilterColumns.IS_APPLIED_TO_TITLE}, null, null, null);
             while (c.moveToNext()) {

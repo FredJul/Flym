@@ -47,7 +47,7 @@ import java.util.zip.GZIPInputStream;
 
 public class NetworkUtils {
 
-    public static final File IMAGE_FOLDER_FILE = new File(MainApplication.getAppContext().getCacheDir(), "images/");
+    public static final File IMAGE_FOLDER_FILE = new File(MainApplication.getContext().getCacheDir(), "images/");
     public static final String IMAGE_FOLDER = IMAGE_FOLDER_FILE.getAbsolutePath() + '/';
 
     public static final String PERCENT = "%";
@@ -99,7 +99,7 @@ public class NetworkUtils {
         if (IMAGE_FOLDER_FILE.exists()) {
             PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
 
-            Cursor cursor = MainApplication.getAppContext().getContentResolver().query(entriesUri, FeedData.EntryColumns.PROJECTION_ID, selection, null, null);
+            Cursor cursor = MainApplication.getContext().getContentResolver().query(entriesUri, FeedData.EntryColumns.PROJECTION_ID, selection, null, null);
 
             while (cursor.moveToNext()) {
                 filenameFilter.setEntryId(cursor.getString(0));
@@ -164,7 +164,7 @@ public class NetworkUtils {
     public static HttpURLConnection setupConnection(URL url, int cycle) throws IOException {
         Proxy proxy = null;
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) MainApplication.getAppContext()
+        ConnectivityManager connectivityManager = (ConnectivityManager) MainApplication.getContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (PrefUtils.getBoolean(PrefUtils.PROXY_ENABLED, false)

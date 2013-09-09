@@ -23,8 +23,8 @@ package net.fred.feedex;
 import java.text.DateFormat;
 
 public final class Constants {
-    public static final DateFormat DATE_FORMAT = android.text.format.DateFormat.getDateFormat(MainApplication.getAppContext());
-    public static final DateFormat TIME_FORMAT = android.text.format.DateFormat.getTimeFormat(MainApplication.getAppContext());
+    public static final DateFormat DATE_FORMAT = android.text.format.DateFormat.getDateFormat(MainApplication.getContext());
+    public static final DateFormat TIME_FORMAT = android.text.format.DateFormat.getTimeFormat(MainApplication.getContext());
 
     public static final String INTENT_FROM_WIDGET = "fromWidget";
 

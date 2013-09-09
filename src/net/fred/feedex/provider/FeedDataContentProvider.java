@@ -613,7 +613,7 @@ public class FeedDataContentProvider extends ContentProvider {
     }
 
     private static String getFeedIdFromEntryId(long entryId) {
-        ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+        ContentResolver cr = MainApplication.getContext().getContentResolver();
         Cursor c = cr.query(EntryColumns.CONTENT_URI(entryId), new String[]{EntryColumns.FEED_ID}, null, null, null);
         if (c.moveToFirst()) {
             return c.getString(0);
@@ -624,7 +624,7 @@ public class FeedDataContentProvider extends ContentProvider {
     }
 
     public static void notifyGroupFromFeedId(String feedId) {
-        ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+        ContentResolver cr = MainApplication.getContext().getContentResolver();
         Cursor c = cr.query(FeedColumns.CONTENT_URI(feedId), FeedColumns.PROJECTION_GROUP_ID, null, null, null);
         if (c.moveToFirst()) {
             String groupId = c.getString(0);
@@ -638,7 +638,7 @@ public class FeedDataContentProvider extends ContentProvider {
     }
 
     public static void notifyAllFromEntryUri(Uri entryUri, boolean onlyStarredOrUnstarred) {
-        ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+        ContentResolver cr = MainApplication.getContext().getContentResolver();
 
         try {
             long entryId = Long.parseLong(entryUri.getLastPathSegment());

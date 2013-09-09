@@ -98,7 +98,7 @@ public class OPML {
     }
 
     public static void exportToFile(String filename) throws IOException {
-        Cursor cursor = MainApplication.getAppContext().getContentResolver()
+        Cursor cursor = MainApplication.getContext().getContentResolver()
                 .query(FeedColumns.GROUPS_CONTENT_URI, FEEDS_PROJECTION, null, null, null);
 
         StringBuilder builder = new StringBuilder(START);
@@ -111,7 +111,7 @@ public class OPML {
             if (cursor.getInt(1) == 1) { // If it is a group
                 builder.append(OUTLINE_NORMAL_CLOSING);
 
-                Cursor cursorChildren = MainApplication.getAppContext().getContentResolver()
+                Cursor cursorChildren = MainApplication.getContext().getContentResolver()
                         .query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(cursor.getString(0)), FEEDS_PROJECTION, null, null, null);
                 while (cursorChildren.moveToNext()) {
                     builder.append("\t");
@@ -122,7 +122,7 @@ public class OPML {
                     builder.append(OUTLINE_RETRIEVE_FULLTEXT);
                     builder.append(cursorChildren.getInt(4) == 1 ? Constants.TRUE : "false");
 
-                    Cursor cursorFilters = MainApplication.getAppContext().getContentResolver()
+                    Cursor cursorFilters = MainApplication.getContext().getContentResolver()
                             .query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(cursorChildren.getString(0)), FILTERS_PROJECTION, null, null, null);
                     if (cursorFilters.getCount() != 0) {
                         builder.append(OUTLINE_NORMAL_CLOSING);
@@ -151,7 +151,7 @@ public class OPML {
                 builder.append(TextUtils.htmlEncode(cursor.getString(3)));
                 builder.append(OUTLINE_RETRIEVE_FULLTEXT);
                 builder.append(cursor.getInt(4) == 1 ? Constants.TRUE : "false");
-                Cursor cursorFilters = MainApplication.getAppContext().getContentResolver()
+                Cursor cursorFilters = MainApplication.getContext().getContentResolver()
                         .query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(cursor.getString(0)), FILTERS_PROJECTION, null, null, null);
                 if (cursorFilters.getCount() != 0) {
                     builder.append(OUTLINE_NORMAL_CLOSING);
@@ -209,7 +209,7 @@ public class OPML {
                 String url = attributes.getValue("", ATTRIBUTE_XMLURL);
                 String title = attributes.getValue("", ATTRIBUTE_TITLE);
 
-                ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
 
                 if (url == null) { // No url => this is a group
                     if (title != null) {
@@ -256,7 +256,7 @@ public class OPML {
                     values.put(FilterColumns.IS_REGEX, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_REGEX)));
                     values.put(FilterColumns.IS_APPLIED_TO_TITLE, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_APPLIED_TO_TITLE)));
 
-                    ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+                    ContentResolver cr = MainApplication.getContext().getContentResolver();
                     cr.insert(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), values);
                 }
             }

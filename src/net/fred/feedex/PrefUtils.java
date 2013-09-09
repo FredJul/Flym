@@ -56,65 +56,65 @@ public class PrefUtils {
     public static final String CURRENT_TAB_IDX = "CURRENT_TAB_IDX";
 
     public static boolean getBoolean(String key, boolean defValue) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext());
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());
         return settings.getBoolean(key, defValue);
     }
 
     public static void putBoolean(String key, boolean value) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit();
         editor.putBoolean(key, value);
         editor.commit();
     }
 
     public static int getInteger(String key, int defValue) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext());
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());
         return settings.getInt(key, defValue);
     }
 
     public static void putInteger(String key, int value) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit();
         editor.putInt(key, value);
         editor.commit();
     }
 
     public static long getLong(String key, long defValue) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext());
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());
         return settings.getLong(key, defValue);
     }
 
     public static void putLong(String key, long value) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit();
         editor.putLong(key, value);
         editor.commit();
     }
 
     public static String getString(String key, String defValue) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext());
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());
         return settings.getString(key, defValue);
     }
 
     public static void putString(String key, String value) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit();
         editor.putString(key, value);
         editor.commit();
     }
 
     public static void remove(String key) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit();
         editor.remove(key);
         editor.commit();
     }
 
     public static void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
         try {
-            PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).registerOnSharedPreferenceChangeListener(listener);
+            PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).registerOnSharedPreferenceChangeListener(listener);
         } catch (Exception e) { // Seems to be possible to have a NPE here... Why??
         }
     }
 
     public static void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
         try {
-            PreferenceManager.getDefaultSharedPreferences(MainApplication.getAppContext()).unregisterOnSharedPreferenceChangeListener(listener);
+            PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).unregisterOnSharedPreferenceChangeListener(listener);
         } catch (Exception ignored) {
         }
     }

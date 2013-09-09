@@ -182,7 +182,7 @@ public class FetcherService extends IntentService {
                         PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent,
                                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-                        Notification.Builder notifBuilder = new Notification.Builder(MainApplication.getAppContext()) //
+                        Notification.Builder notifBuilder = new Notification.Builder(MainApplication.getContext()) //
                                 .setContentIntent(contentIntent) //
                                 .setSmallIcon(R.drawable.ic_statusbar_rss) //
                                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon)) //
@@ -226,7 +226,7 @@ public class FetcherService extends IntentService {
         long result = -1;
 
         Cursor cursor = MainApplication
-                .getAppContext()
+                .getContext()
                 .getContentResolver()
                 .query(TaskColumns.CONTENT_URI, TaskColumns.PROJECTION_ID,
                         TaskColumns.ENTRY_ID + '=' + entryId + Constants.DB_AND + TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
@@ -247,7 +247,7 @@ public class FetcherService extends IntentService {
                 values[i].put(TaskColumns.IMG_URL_TO_DL, images.get(i));
             }
 
-            MainApplication.getAppContext().getContentResolver().bulkInsert(TaskColumns.CONTENT_URI, values);
+            MainApplication.getContext().getContentResolver().bulkInsert(TaskColumns.CONTENT_URI, values);
         }
     }
 
@@ -258,7 +258,7 @@ public class FetcherService extends IntentService {
             values[i].put(TaskColumns.ENTRY_ID, entriesId[i]);
         }
 
-        MainApplication.getAppContext().getContentResolver().bulkInsert(TaskColumns.CONTENT_URI, values);
+        MainApplication.getContext().getContentResolver().bulkInsert(TaskColumns.CONTENT_URI, values);
     }
 
     private void mobilizeAllEntries() {
@@ -360,7 +360,7 @@ public class FetcherService extends IntentService {
     }
 
     private void downloadAllImages() {
-        ContentResolver cr = MainApplication.getAppContext().getContentResolver();
+        ContentResolver cr = MainApplication.getContext().getContentResolver();
         Cursor cursor = cr.query(FeedData.TaskColumns.CONTENT_URI, new String[]{FeedData.TaskColumns._ID, FeedData.TaskColumns.ENTRY_ID, FeedData.TaskColumns.IMG_URL_TO_DL,
                 FeedData.TaskColumns.NUMBER_ATTEMPT}, FeedData.TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NOT_NULL, null, null);
 
