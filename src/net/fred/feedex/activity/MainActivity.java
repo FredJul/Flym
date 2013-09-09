@@ -150,7 +150,7 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
     protected void onResume() {
         super.onResume();
         getProgressBar().setVisibility(PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false) ? View.VISIBLE : View.GONE);
-        PrefUtils.registerOnSharedPreferenceChangeListener(isRefreshingListener);
+        PrefUtils.registerOnPrefChangeListener(isRefreshingListener);
 
         if (mNotificationManager != null) {
             mNotificationManager.cancel(0);
@@ -163,7 +163,7 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
             mActionMode.finish();
         }
 
-        PrefUtils.unregisterOnSharedPreferenceChangeListener(isRefreshingListener);
+        PrefUtils.unregisterOnPrefChangeListener(isRefreshingListener);
 
         super.onPause();
     }

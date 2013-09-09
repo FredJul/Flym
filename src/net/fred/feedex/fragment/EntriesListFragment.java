@@ -82,7 +82,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                 mUri = getArguments().getParcelable(ARG_URI);
 
                 mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
-                PrefUtils.registerOnSharedPreferenceChangeListener(prefListener);
+                PrefUtils.registerOnPrefChangeListener(prefListener);
                 getLoaderManager().initLoader(loaderId, null, this);
             }
         }
@@ -103,7 +103,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onDestroy() {
-        PrefUtils.unregisterOnSharedPreferenceChangeListener(prefListener);
+        PrefUtils.unregisterOnPrefChangeListener(prefListener);
         super.onStop();
     }
 

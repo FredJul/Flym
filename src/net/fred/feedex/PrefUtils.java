@@ -105,14 +105,14 @@ public class PrefUtils {
         editor.commit();
     }
 
-    public static void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+    public static void registerOnPrefChangeListener(OnSharedPreferenceChangeListener listener) {
         try {
             PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).registerOnSharedPreferenceChangeListener(listener);
         } catch (Exception e) { // Seems to be possible to have a NPE here... Why??
         }
     }
 
-    public static void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+    public static void unregisterOnPrefChangeListener(OnSharedPreferenceChangeListener listener) {
         try {
             PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).unregisterOnSharedPreferenceChangeListener(listener);
         } catch (Exception ignored) {

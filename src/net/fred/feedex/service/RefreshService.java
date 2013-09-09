@@ -96,7 +96,7 @@ public class RefreshService extends Service {
         super.onCreate();
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        PrefUtils.registerOnSharedPreferenceChangeListener(listener);
+        PrefUtils.registerOnPrefChangeListener(listener);
         restartTimer(true);
     }
 
@@ -132,7 +132,7 @@ public class RefreshService extends Service {
         if (timerIntent != null) {
             alarmManager.cancel(timerIntent);
         }
-        PrefUtils.unregisterOnSharedPreferenceChangeListener(listener);
+        PrefUtils.unregisterOnPrefChangeListener(listener);
         super.onDestroy();
     }
 }
