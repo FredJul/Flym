@@ -111,6 +111,7 @@ public class FeedsListFragment extends ListFragment {
         mListView = (DragNDropExpandableListView) rootView.findViewById(android.R.id.list);
         mListAdapter.setExpandableListView(mListView);
         mListView.setFastScrollEnabled(true);
+        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -129,7 +130,7 @@ public class FeedsListFragment extends ListFragment {
                 }
                 actionMode.setTag(new Pair<Long, String>(feedId, title));
 
-                mListAdapter.setSelectedFeed(feedId);
+                mListView.setItemChecked(position, true);
                 return true;
             }
         });
@@ -519,7 +520,9 @@ public class FeedsListFragment extends ListFragment {
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            mListAdapter.setSelectedFeed(-1);
+            for (int i = 0; i < mListView.getCount(); i++) {
+                mListView.setItemChecked(i, false);
+            }
         }
     };
 
@@ -610,7 +613,9 @@ public class FeedsListFragment extends ListFragment {
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            mListAdapter.setSelectedFeed(-1);
+            for (int i = 0; i < mListView.getCount(); i++) {
+                mListView.setItemChecked(i, false);
+            }
         }
     };
 }

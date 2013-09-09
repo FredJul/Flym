@@ -73,8 +73,6 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 
     private final Vector<View> sortViews = new Vector<View>();
 
-    private long mSelectedFeedId = -1;
-
     private final Map<Long, Integer> mUnreadItemsByFeed = new HashMap<Long, Integer>();
 
     private static final int CACHE_MAX_ENTRIES = 100;
@@ -147,13 +145,6 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
         view.findViewById(R.id.indicator).setVisibility(View.INVISIBLE);
 
         TextView textView = ((TextView) view.findViewById(android.R.id.text1));
-        long feedId = cursor.getLong(idPosition);
-        if (feedId == mSelectedFeedId) {
-            view.setBackgroundResource(android.R.color.holo_blue_dark);
-        } else {
-            view.setBackgroundResource(android.R.color.transparent);
-        }
-
         TextView updateTextView = ((TextView) view.findViewById(android.R.id.text2));
         updateTextView.setVisibility(View.VISIBLE);
 
@@ -195,6 +186,7 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
             textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }
 
+        long feedId = cursor.getLong(idPosition);
         int unreadCount;
         synchronized (mUnreadItemsByFeed) {
             unreadCount = mUnreadItemsByFeed.get(feedId);
@@ -222,13 +214,6 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
         ImageView indicatorImage = (ImageView) view.findViewById(R.id.indicator);
 
         if (cursor.getInt(isGroupPosition) == 1) {
-            long feedId = cursor.getLong(idPosition);
-            if (feedId == mSelectedFeedId) {
-                view.setBackgroundResource(android.R.color.holo_blue_dark);
-            } else {
-                view.setBackgroundResource(android.R.color.transparent);
-            }
-
             indicatorImage.setVisibility(View.VISIBLE);
 
             TextView textView = ((TextView) view.findViewById(android.R.id.text1));
@@ -236,6 +221,7 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
             textView.setText(cursor.getString(namePosition));
             textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 
+            long feedId = cursor.getLong(idPosition);
             int unreadCount;
             synchronized (mUnreadItemsByFeed) {
                 unreadCount = mUnreadItemsByFeed.get(feedId);
@@ -344,10 +330,4 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
             iconPosition = cursor.getColumnIndex(FeedColumns.ICON);
         }
     }
-
-    public void setSelectedFeed(long feedId) {
-        mSelectedFeedId = feedId;
-        mListView.invalidateViews();
-    }
-
 }
