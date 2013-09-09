@@ -74,6 +74,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.fred.feedex.Constants;
+import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.GeneralPrefsActivity;
 import net.fred.feedex.adapter.FeedsCursorAdapter;
@@ -264,8 +265,8 @@ public class FeedsListFragment extends ListFragment {
                 return true;
             }
             case R.id.menu_refresh: {
-                if (!FetcherService.isRefreshingFeeds) {
-                    getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS));
+                if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+                    getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
                 }
                 return true;
             }
@@ -440,7 +441,7 @@ public class FeedsListFragment extends ListFragment {
                     // since we have acquired the networkInfo, we use it for basic checks
                     if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
                         getActivity().startService(
-                                new Intent(getActivity(), FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS).putExtra(Constants.FEED_ID,
+                                new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FEED_ID,
                                         Long.toString(feedId)));
                     } else {
                         Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_LONG).show();

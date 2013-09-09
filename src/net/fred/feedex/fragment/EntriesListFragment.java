@@ -150,8 +150,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                 return true;
             }
             case R.id.menu_refresh: {
-                if (!FetcherService.isRefreshingFeeds) {
-                    getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS));
+                if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+                    getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
                 }
                 return true;
             }

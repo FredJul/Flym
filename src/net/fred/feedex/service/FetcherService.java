@@ -101,6 +101,9 @@ import java.util.regex.Pattern;
 
 public class FetcherService extends IntentService {
 
+    public static final String ACTION_REFRESH_FEEDS = "net.fred.feedex.REFRESH";
+    public static final String ACTION_MOBILIZE_FEEDS = "net.fred.feedex.MOBILIZE_FEEDS";
+
     private static final int THREAD_NUMBER = 3;
     private static final int MAX_TASK_ATTEMPT = 3;
 
@@ -128,8 +131,6 @@ public class FetcherService extends IntentService {
 
     private NotificationManager mNotifMgr;
 
-    public static boolean isRefreshingFeeds = false;
-
     public FetcherService() {
         super(SERVICENAME);
         HttpURLConnection.setFollowRedirects(true);
@@ -151,22 +152,18 @@ public class FetcherService extends IntentService {
             return;
         }
 
-        if (Constants.ACTION_MOBILIZE_FEEDS.equals(intent.getAction())) {
+        if (ACTION_MOBILIZE_FEEDS.equals(intent.getAction())) {
             mobilizeAllEntries();
             downloadAllImages();
+
         } else { // == Constants.ACTION_REFRESH_FEEDS
-            sendBroadcast(new Intent(Constants.ACTION_REFRESH_FEEDS));
+            PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);
 
             if (isFromAutoRefresh) {
                 PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, SystemClock.elapsedRealtime());
             }
 
             String feedId = intent.getStringExtra(Constants.FEED_ID);
-
-            if (feedId == null) {
-                isRefreshingFeeds = true;
-            }
-
             int newCount = (feedId == null ? refreshFeeds() : refreshFeed(feedId));
 
             if (newCount > 0) {
@@ -215,10 +212,7 @@ public class FetcherService extends IntentService {
             mobilizeAllEntries();
             downloadAllImages();
 
-            if (feedId == null) {
-                isRefreshingFeeds = false;
-            }
-            sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINISHED));
+            PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false);
         }
     }
 

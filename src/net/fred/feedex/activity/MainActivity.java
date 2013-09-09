@@ -22,10 +22,9 @@ package net.fred.feedex.activity;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -67,17 +66,12 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
     static NotificationManager mNotificationManager = (NotificationManager) MainApplication.getAppContext().getSystemService(
             Context.NOTIFICATION_SERVICE);
 
-    private final BroadcastReceiver mRefreshReceiver = new BroadcastReceiver() {
+    private final SharedPreferences.OnSharedPreferenceChangeListener isRefreshingListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            getProgressBar().setVisibility(View.VISIBLE);
-        }
-    };
-
-    private final BroadcastReceiver mRefreshFinishedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            getProgressBar().setVisibility(View.GONE);
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (PrefUtils.IS_REFRESHING.equals(key)) {
+                getProgressBar().setVisibility(PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false) ? View.VISIBLE : View.GONE);
+            }
         }
     };
 
@@ -142,8 +136,8 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
             stopService(new Intent(this, RefreshService.class));
         }
         if (PrefUtils.getBoolean(PrefUtils.REFRESH_ON_OPEN_ENABLED, false)) {
-            if (!FetcherService.isRefreshingFeeds) {
-                startService(new Intent(MainActivity.this, FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS));
+            if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+                startService(new Intent(MainActivity.this, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
             }
         }
 
@@ -153,9 +147,8 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
     @Override
     protected void onResume() {
         super.onResume();
-        getProgressBar().setVisibility(FetcherService.isRefreshingFeeds ? View.VISIBLE : View.GONE);
-        registerReceiver(mRefreshReceiver, new IntentFilter(Constants.ACTION_REFRESH_FEEDS));
-        registerReceiver(mRefreshFinishedReceiver, new IntentFilter(Constants.ACTION_REFRESH_FINISHED));
+        getProgressBar().setVisibility(PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false) ? View.VISIBLE : View.GONE);
+        PrefUtils.registerOnSharedPreferenceChangeListener(isRefreshingListener);
 
         if (mNotificationManager != null) {
             mNotificationManager.cancel(0);
@@ -168,8 +161,8 @@ public class MainActivity extends ProgressFragmentActivity implements ActionBar.
             mActionMode.finish();
         }
 
-        unregisterReceiver(mRefreshReceiver);
-        unregisterReceiver(mRefreshFinishedReceiver);
+        PrefUtils.unregisterOnSharedPreferenceChangeListener(isRefreshingListener);
+
         super.onPause();
     }
 

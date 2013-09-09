@@ -28,10 +28,6 @@ public final class Constants {
 
     public static final String INTENT_FROM_WIDGET = "fromWidget";
 
-    public static final String ACTION_REFRESH_FEEDS = "net.fred.feedex.REFRESH";
-    public static final String ACTION_REFRESH_FINISHED = "net.fred.feedex.REFRESH_FINISHED";
-    public static final String ACTION_MOBILIZE_FEEDS = "net.fred.feedex.MOBILIZE_FEEDS";
-
     public static final String FEED_ID = "feedid";
 
     public static final String ENTRY_URI = "entry_uri";

@@ -41,7 +41,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         } else if (!mConnection && !intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
             mConnection = true;
 
-            if (!FetcherService.isRefreshingFeeds && PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
+            if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false) && PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
                 int time = 3600000;
                 try {
                     time = Math.max(60000, Integer.parseInt(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, RefreshService.SIXTY_MINUTES)));
@@ -50,7 +50,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 
                 long lastRefresh = PrefUtils.getLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
                 if (SystemClock.elapsedRealtime() - lastRefresh > time) {
-                    context.startService(new Intent(context, FetcherService.class).setAction(Constants.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
+                    context.startService(new Intent(context, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
                 }
             }
         }

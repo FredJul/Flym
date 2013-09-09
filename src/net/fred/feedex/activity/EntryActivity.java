@@ -867,7 +867,7 @@ public class EntryActivity extends ProgressActivity {
                         if (mobilizingTaskId != -1) {
                             cr.unregisterContentObserver(mTasksObserver);
                             cr.registerContentObserver(TaskColumns.CONTENT_URI(mobilizingTaskId), false, mTasksObserver);
-                            startService(new Intent(EntryActivity.this, FetcherService.class).setAction(Constants.ACTION_MOBILIZE_FEEDS));
+                            startService(new Intent(EntryActivity.this, FetcherService.class).setAction(FetcherService.ACTION_MOBILIZE_FEEDS));
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
