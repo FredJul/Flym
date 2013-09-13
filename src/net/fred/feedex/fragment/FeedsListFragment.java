@@ -77,6 +77,7 @@ import net.fred.feedex.Constants;
 import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.GeneralPrefsActivity;
+import net.fred.feedex.activity.MainActivity;
 import net.fred.feedex.adapter.FeedsCursorAdapter;
 import net.fred.feedex.parser.OPML;
 import net.fred.feedex.provider.FeedData;
@@ -99,6 +100,7 @@ public class FeedsListFragment extends ListFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
 
         mListAdapter = new FeedsCursorAdapter(getActivity(), FeedColumns.GROUPS_CONTENT_URI);
@@ -249,8 +251,10 @@ public class FeedsListFragment extends ListFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (mListView.isDragNDropEnabled()) {
             inflater.inflate(R.menu.feed_overview_sorting, menu);
+            MainActivity.positionFragment=-2;
         } else {
             inflater.inflate(R.menu.feed_overview, menu);
+            MainActivity.positionFragment=-1;
         }
 
         super.onCreateOptionsMenu(menu, inflater);

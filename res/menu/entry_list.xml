@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <item
-        android:id="@+id/menu_hide_read"
-        android:icon="@drawable/hide_reads"
-        android:showAsAction="always"
-        android:title="@string/context_menu_hide_read"
-        tools:ignore="AlwaysShowAction" />
-    <item
-        android:id="@+id/menu_share_starred"
-        android:icon="@drawable/social_share"
-        android:showAsAction="always"
-        android:title="@string/context_menu_share_starred"
-        tools:ignore="AlwaysShowAction" />
-    <item
-        android:id="@+id/menu_refresh"
-        android:icon="@drawable/refresh"
-        android:showAsAction="always"
-        android:title="@string/menu_refresh"
-        tools:ignore="AlwaysShowAction" />
-    <item
-        android:id="@+id/menu_all_read"
-        android:icon="@drawable/read_all"
-        android:showAsAction="always"
-        android:title="@string/menu_all_read"
-        tools:ignore="AlwaysShowAction" />
-    <item
-        android:id="@+id/menu_settings"
-        android:icon="@drawable/action_settings"
-        android:title="@string/menu_settings" />
+        <item
+            android:id="@+id/menu_hide_read"
+            android:icon="@drawable/hide_reads"
+            android:showAsAction="always"
+            android:title="@string/context_menu_hide_read"
+            tools:ignore="AlwaysShowAction" />
+        <item
+            android:id="@+id/menu_share_starred"
+            android:icon="@drawable/social_share"
+            android:showAsAction="always"
+            android:title="@string/context_menu_share_starred"
+            tools:ignore="AlwaysShowAction" />
+    <group android:id="@+id/entry_list">
+        <item
+            android:id="@+id/menu_refresh"
+            android:icon="@drawable/refresh"
+            android:showAsAction="always"
+            android:title="@string/menu_refresh"
+            tools:ignore="AlwaysShowAction" />
+        <item
+            android:id="@+id/menu_all_read"
+            android:icon="@drawable/read_all"
+            android:showAsAction="always"
+            android:title="@string/menu_all_read"
+            tools:ignore="AlwaysShowAction" />
+        <item
+            android:id="@+id/menu_settings"
+            android:icon="@drawable/action_settings"
+            android:title="@string/menu_settings" />
+    </group>
 
 </menu>

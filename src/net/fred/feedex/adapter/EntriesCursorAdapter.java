@@ -138,7 +138,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
                 Uri entryUri = ContentUris.withAppendedId(uri, id);
                 if (cr.update(entryUri, values, null, null) > 0) {
-                    FeedDataContentProvider.notifyAllFromEntryUri(entryUri, true);
+                    FeedDataContentProvider.notifyAllFromEntryUri(entryUri, false); //Receive New Favorite on MainActivity
                 }
             }
         });
