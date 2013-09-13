@@ -88,6 +88,9 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     private final Uri uri;
     private final boolean showFeedInfo;
 
+    public View viewPublic;
+    public Cursor cursorPublic;
+
     private final Vector<Long> markedAsRead = new Vector<Long>();
     private final Vector<Long> markedAsUnread = new Vector<Long>();
     private final Vector<Long> favorited = new Vector<Long>();
@@ -103,6 +106,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
+        viewPublic=view;
+        cursorPublic=cursor;
         final TextView textView = (TextView) view.findViewById(android.R.id.text1);
         textView.setText(cursor.getString(titleColumnPosition));
 
@@ -252,6 +257,37 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 }
             }
         }.start();
+    }
+
+    public void markasReaderorUnread(final long id){
+        if (markedAsUnread.contains(id) || (cursorPublic.isNull(isReadColumn) && !markedAsRead.contains(id)))  markAsRead(id);
+        else markAsUnread(id);
+    }
+
+    public void changeFavorite(final long id){
+        final ImageView starImgView = (ImageView) viewPublic.findViewById(android.R.id.icon);
+        boolean favorite = !unfavorited.contains(id) && (cursorPublic.getInt(favoriteColumn) == 1 || favorited.contains(id));
+        if(favorite){
+            viewPublic.setTag(Constants.FALSE);
+            starImgView.setImageResource(R.drawable.dimmed_rating_not_important);
+            unfavorited.add(id);
+            favorited.remove(id);
+            favorite=false;
+        }else{
+            viewPublic.setTag(Constants.TRUE);
+            starImgView.setImageResource(R.drawable.dimmed_rating_important);
+            favorited.add(id);
+            unfavorited.remove(id);
+            favorite=true;
+        }
+        ContentValues values = new ContentValues();
+        values.put(EntryColumns.IS_FAVORITE, favorite ? 1 : 0);
+
+        ContentResolver cr = MainApplication.getContext().getContentResolver();
+        Uri entryUri = ContentUris.withAppendedId(uri, id);
+        if (cr.update(entryUri, values, null, null) > 0) {
+            FeedDataContentProvider.notifyAllFromEntryUri(entryUri, false); //Receive New Favorite on MainActivity
+        }
     }
 
     @Override
