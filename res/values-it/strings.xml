@@ -48,14 +48,14 @@
     <string name="menu_export">Esporta OPML</string>
     <string name="menu_enable_feed_sort">Ordina feed</string>
     <string name="menu_disable_feed_sort">Ferma ordinamento feed</string>
-    <string name="error_feed_error">L\'indirizzo del feed non può essere raggiunto.</string>
+    <string name="error_feed_error">L'indirizzo del feed non può essere raggiunto.</string>
     <string name="error_feed_process">Il feed non può essere processato.</string>
-    <string name="error_feed_url_exists">L\'indirizzo è già presente.</string>
+    <string name="error_feed_url_exists">L'indirizzo è già presente.</string>
     <string name="error_feed_import">Il file selezionato non può essere importato.</string>
-    <string name="error_feed_export">L\'esportazione è fallita. Controllare di avere una scheda SD
+    <string name="error_feed_export">L'esportazione è fallita. Controllare di avere una scheda SD
         scrivibile e correttamente montata.
     </string>
-    <string name="error_external_storage_not_available">L\'archivio esterno (per esempio la scheda SD)
+    <string name="error_external_storage_not_available">L'archivio esterno (per esempio la scheda SD)
         non è disponibile.
     </string>
     <string name="feed_url">Indirizzo URL</string>
@@ -66,7 +66,7 @@
     <string name="filter_add_title">Aggiungi filtro</string>
     <string name="filter_delete_title">Elimina filtro</string>
     <string name="filter_edit_title">Modifica filtro</string>
-    <string name="filter_is_regex">è un\'espressione regolare</string>
+    <string name="filter_is_regex">è un'espressione regolare</string>
     <string name="filter_apply_to_title">Applica al titolo</string>
     <string name="filter_apply_to_content">Applica al contenuto</string>
     <string name="feed_search">Ricerca feed</string>
@@ -119,22 +119,22 @@
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Aggiornamento automatico</string>
     <string name="settings_refresh_enabled">Attiva aggiornamento automatico</string>
-    <string name="settings_refresh_enabled_description">Attiva l\'aggiornamento automatico dei feed
+    <string name="settings_refresh_enabled_description">Attiva l'aggiornamento automatico dei feed
     </string>
     <string name="settings_refresh_interval">Intervallo</string>
     <string name="settings_refresh_interval_description">Intervallo tra due aggiornamenti automatici
     </string>
     <string name="settings_category_notifications">Notifiche</string>
     <string name="settings_notifications_enabled">Attiva notifiche</string>
-    <string name="settings_notifications_enabled_description">Attiva le notifiche all\'arrivo di nuovi
+    <string name="settings_notifications_enabled_description">Attiva le notifiche all'arrivo di nuovi
         articoli
     </string>
     <string name="settings_notifications_ringtone">Suoneria</string>
     <string name="settings_notifications_ringtone_description">Seleziona una suoneria che sarà
-        utilizzata all\'arrivo di nuovi articoli
+        utilizzata all'arrivo di nuovi articoli
     </string>
     <string name="settings_notifications_vibrate">Vibrazione</string>
-    <string name="settings_notifications_vibrate_description">Attiva la vibrazione all\'arrivo di
+    <string name="settings_notifications_vibrate_description">Attiva la vibrazione all'arrivo di
         nuovi articoli
     </string>
     <string name="settings_category_content_presentation">Aspetto e contenuti</string>
@@ -155,12 +155,12 @@
     <string name="settings_font_size">Dimensione testo</string>
     <string name="settings_font_size_description">Dimensione del testo dei contenuti degli articoli
     </string>
-    <string name="settings_refresh_on_open">Aggiorna feed all\'apertura</string>
-    <string name="settings_refresh_on_open_description">Aggiorna tutti i feed all\'apertura
-        dell\'applicazione
+    <string name="settings_refresh_on_open">Aggiorna feed all'apertura</string>
+    <string name="settings_refresh_on_open_description">Aggiorna tutti i feed all'apertura
+        dell'applicazione
     </string>
     <string name="settings_refresh_wifi_only">Aggiorna solo in WiFi</string>
-    <string name="settings_refresh_wifi_only_description">L\'aggiornamento automatico viene eseguito
+    <string name="settings_refresh_wifi_only_description">L'aggiornamento automatico viene eseguito
         solo quando si è connessi ad una rete WiFi
     </string>
     <string name="settings_visible_feeds">Feed visibili</string>
