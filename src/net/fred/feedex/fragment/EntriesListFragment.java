@@ -127,36 +127,35 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
             final int position = lv.pointToPosition(
                     Math.round(e1.getX()), Math.round(e1.getY()));
-
-            //String countryName = (String) lv.getItemAtPosition(position);
-
-            if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH) {
-                if (Math.abs(e1.getX() - e2.getX()) > SWIPE_MAX_OFF_PATH
-                        || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {
-                    return false;
+            if(position!=-1){
+                if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH) {
+                    if (Math.abs(e1.getX() - e2.getX()) > SWIPE_MAX_OFF_PATH
+                            || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {
+                        return false;
+                    }
+                    if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE) {
+                        //Toast.makeText(DemoSwipe.this, "bottomToTop" + countryName,
+                        //        Toast.LENGTH_SHORT).show();
+                    } else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE) {
+                        //Toast.makeText(DemoSwipe.this,
+                        //       "topToBottom  " + countryName, Toast.LENGTH_SHORT)
+                        //       .show();
+                    }
+                } else {
+                    if (Math.abs(velocityX) < SWIPE_THRESHOLD_VELOCITY) {
+                        return false;
+                    }
+                    if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
+                        //Toast.makeText(DemoSwipe.this,
+                        //        "swipe RightToLeft " + countryName, 5000).show();
+                        mEntriesCursorAdapter.markasReaderorUnread(mEntriesCursorAdapter.getItemId(position));
+                    } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
+                        mEntriesCursorAdapter.changeFavorite(mEntriesCursorAdapter.getItemId(position));
+                        //Toast.makeText(DemoSwipe.this,
+                        //        "swipe LeftToright  " + countryName, 5000).show();
+                    }
+                    mEntriesCursorAdapter.notifyDataSetChanged();
                 }
-                if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE) {
-                    //Toast.makeText(DemoSwipe.this, "bottomToTop" + countryName,
-                    //        Toast.LENGTH_SHORT).show();
-                } else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE) {
-                    //Toast.makeText(DemoSwipe.this,
-                    //       "topToBottom  " + countryName, Toast.LENGTH_SHORT)
-                    //       .show();
-                }
-            } else {
-                if (Math.abs(velocityX) < SWIPE_THRESHOLD_VELOCITY) {
-                    return false;
-                }
-                if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
-                    //Toast.makeText(DemoSwipe.this,
-                    //        "swipe RightToLeft " + countryName, 5000).show();
-                    mEntriesCursorAdapter.markasReaderorUnread(mEntriesCursorAdapter.getItemId(position));
-                } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
-                    mEntriesCursorAdapter.changeFavorite(mEntriesCursorAdapter.getItemId(position));
-                    //Toast.makeText(DemoSwipe.this,
-                    //        "swipe LeftToright  " + countryName, 5000).show();
-                }
-                mEntriesCursorAdapter.notifyDataSetChanged();
             }
 
             return super.onFling(e1, e2, velocityX, velocityY);
