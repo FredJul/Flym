@@ -129,8 +129,6 @@ public class FetcherService extends IntentService {
     // middle() is group 1; s* is important for non-whitespaces; ' also usable
     private static final Pattern IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern DIV_TAG = Pattern.compile("<div([^>]*>.*)</div>");
-
     private NotificationManager mNotifMgr;
 
     public FetcherService() {
@@ -699,25 +697,6 @@ public class FetcherService extends IntentService {
             content = content.replaceAll("(?i)\\s+src=[^>]+\\s+original[-]*src=(\"|')", " src=$1");
             // remove bad image paths
             content = content.replaceAll("(?i)\\s+(href|src)=(\"|')//", " $1=$2http://");
-
-            // Remove unmatched div tags
-            content = content.replaceAll("(?i)<div>", "<div");
-            content = content.replaceAll("(?i)</div>", "</div");
-            boolean found = false;
-            do {
-                Matcher matcher = DIV_TAG.matcher(content);
-                while (matcher.find()) {
-                    String matchedStr = matcher.group(1);
-                    if (!matchedStr.contains("<div")) {
-                        content = content.replace(matcher.group(0), "<__DIV__" + matchedStr + "</__DIV__>");
-                        found = true;
-                    }
-                }
-            } while (found);
-            content = content.replaceAll("<div[^>]*>>", "");
-            content = content.replaceAll("</div>", "");
-            content = content.replaceAll("<__DIV__", "<div");
-            content = content.replaceAll("</__DIV__>", "</div>");
 
             if (content.length() > 0) {
                 Vector<String> images = null;
