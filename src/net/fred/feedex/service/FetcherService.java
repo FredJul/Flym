@@ -701,10 +701,10 @@ public class FetcherService extends IntentService {
             content = content.replaceAll("(?i)\\s+(href|src)=(\"|')//", " $1=$2http://");
 
             // Remove unmatched div tags
-            content = content.replaceAll("(?i)<div", "<div").replaceAll("(?i)</div>", "</div>");
-            boolean found;
+            content = content.replaceAll("(?i)<div>", "<div");
+            content = content.replaceAll("(?i)</div>", "</div");
+            boolean found = false;
             do {
-                found = false;
                 Matcher matcher = DIV_TAG.matcher(content);
                 while (matcher.find()) {
                     String matchedStr = matcher.group(1);
@@ -714,8 +714,10 @@ public class FetcherService extends IntentService {
                     }
                 }
             } while (found);
-            content = content.replaceAll("<div[^>]*>", "").replaceAll("</div>", "");
-            content = content.replaceAll("<__DIV__", "<div").replaceAll("</__DIV__>", "</div>");
+            content = content.replaceAll("<div[^>]*>>", "");
+            content = content.replaceAll("</div>", "");
+            content = content.replaceAll("<__DIV__", "<div");
+            content = content.replaceAll("</__DIV__>", "</div>");
 
             if (content.length() > 0) {
                 Vector<String> images = null;
