@@ -30,6 +30,8 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+
+        PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false); // init
     }
 
     public static Context getContext() {

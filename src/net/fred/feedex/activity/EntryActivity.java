@@ -604,7 +604,7 @@ public class EntryActivity extends ProgressActivity {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
-                    UiUtils.showSimpleDialog(EntryActivity.this, R.string.error, R.string.cant_open_link);
+                    Toast.makeText(EntryActivity.this, R.string.cant_open_link, Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }

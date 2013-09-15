@@ -168,7 +168,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                     cursor.close();
                 } else {
                     cursor.close();
-                    Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
