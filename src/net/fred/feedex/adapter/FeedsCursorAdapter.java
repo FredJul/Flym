@@ -22,7 +22,6 @@ package net.fred.feedex.adapter;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -45,14 +44,11 @@ import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.view.DragNDropExpandableListView;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Vector;
 
 public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
-    private static final String COUNT_UNREAD = "COUNT(*)";
-    private static final String WHERE_UNREAD = EntryColumns.IS_READ + " is null";
+    private static final String WHERE_UNREAD = EntryColumns.IS_READ + " IS NULL";
 
     private static final String COLON = MainApplication.getContext().getString(R.string.colon);
 
@@ -66,14 +62,8 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
     private int errorPosition = -1;
     private int iconPosition = -1;
 
-    private boolean feedSort;
-
     private DragNDropExpandableListView mListView;
     private final SparseBooleanArray mGroupInitDone = new SparseBooleanArray();
-
-    private final Vector<View> sortViews = new Vector<View>();
-
-    private final Map<Long, Integer> mUnreadItemsByFeed = new HashMap<Long, Integer>();
 
     private static final int CACHE_MAX_ENTRIES = 100;
     private final Map<Long, String> mFormattedDateCache = new LinkedHashMap<Long, String>(CACHE_MAX_ENTRIES + 1, .75F, true) {
@@ -93,14 +83,12 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 
     public void setExpandableListView(DragNDropExpandableListView listView) {
         mListView = listView;
-        mListView.setDragNDropEnabled(feedSort);
 
         mListView.setOnGroupClickListener(new OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 Cursor cursor = getGroup(groupPosition);
                 if (cursor.getInt(isGroupPosition) != 1) {
-                    startFeedActivity(id);
                     return false;
                 }
 
@@ -120,24 +108,6 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
     @Override
     protected void onCursorLoaded(Context context, Cursor cursor) {
         getCursorPositions(cursor);
-
-        while (cursor.moveToNext()) {
-
-            long feedId = cursor.getLong(idPosition);
-            Uri uri;
-            if (cursor.getInt(isGroupPosition) != 1) {
-                uri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedId);
-            } else {
-                uri = EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedId);
-            }
-
-            Cursor countCursor = context.getContentResolver().query(uri, new String[]{COUNT_UNREAD}, WHERE_UNREAD, null, null);
-            countCursor.moveToFirst();
-            synchronized (mUnreadItemsByFeed) {
-                mUnreadItemsByFeed.put(feedId, countCursor.getInt(0));
-            }
-            countCursor.close();
-        }
     }
 
     @Override
@@ -186,27 +156,7 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
             textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }
 
-        long feedId = cursor.getLong(idPosition);
-        int unreadCount;
-        synchronized (mUnreadItemsByFeed) {
-            unreadCount = mUnreadItemsByFeed.get(feedId);
-        }
-
-        if (unreadCount > 0) {
-            textView.setEnabled(true);
-            updateTextView.setEnabled(true);
-        } else {
-            textView.setEnabled(false);
-            updateTextView.setEnabled(false);
-        }
-        textView.setText((cursor.isNull(namePosition) ? cursor.getString(linkPosition) : cursor.getString(namePosition))
-                + (unreadCount > 0 ? " (" + unreadCount + ")" : ""));
-
-        View sortView = view.findViewById(R.id.sortitem);
-        if (!sortViews.contains(sortView)) { // as we are reusing views, this is fine
-            sortViews.add(sortView);
-        }
-        sortView.setVisibility(feedSort ? View.VISIBLE : View.GONE);
+        textView.setText((cursor.isNull(namePosition) ? cursor.getString(linkPosition) : cursor.getString(namePosition)));
     }
 
     @Override
@@ -220,23 +170,9 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
             textView.setEnabled(true);
             textView.setText(cursor.getString(namePosition));
             textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-
-            long feedId = cursor.getLong(idPosition);
-            int unreadCount;
-            synchronized (mUnreadItemsByFeed) {
-                unreadCount = mUnreadItemsByFeed.get(feedId);
-            }
-
-            textView.setText(cursor.getString(namePosition)
-                    + (unreadCount > 0 ? " (" + unreadCount + ")" : ""));
+            textView.setText(cursor.getString(namePosition));
 
             view.findViewById(android.R.id.text2).setVisibility(View.GONE);
-
-            View sortView = view.findViewById(R.id.sortitem);
-            if (!sortViews.contains(sortView)) { // as we are reusing views, this is fine
-                sortViews.add(sortView);
-            }
-            sortView.setVisibility(feedSort ? View.VISIBLE : View.GONE);
 
             final int groupPosition = cursor.getPosition();
             if (!mGroupInitDone.get(groupPosition)) {
@@ -273,47 +209,19 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
         return FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupCursor.getLong(idPosition));
     }
 
-    public void startFeedActivity(long id) {
-        setFeedSortEnabled(false);
-
-        mListView.setDragNDropEnabled(false);
-        mActivity.invalidateOptionsMenu();
-
-        Intent intent = new Intent(Intent.ACTION_VIEW, EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(id));
-
-        intent.putExtra(FeedColumns._ID, id);
-        mActivity.startActivity(intent);
-    }
-
-    public void setFeedSortEnabled(boolean enabled) {
-        feedSort = enabled;
-
-		/*
-         * we do not want to call notifyDataSetChanged as this requeries the cursor
-		 */
-        int visibility = feedSort ? View.VISIBLE : View.GONE;
-
-        for (View sortView : sortViews) {
-            sortView.setVisibility(visibility);
-        }
-    }
-
     @Override
     public void notifyDataSetChanged() {
-        sortViews.clear();
         getCursorPositions(null);
         super.notifyDataSetChanged();
     }
 
     @Override
     public void notifyDataSetChanged(Cursor data) {
-        sortViews.clear();
         getCursorPositions(data);
     }
 
     @Override
     public void notifyDataSetInvalidated() {
-        sortViews.clear();
         getCursorPositions(null);
         super.notifyDataSetInvalidated();
     }

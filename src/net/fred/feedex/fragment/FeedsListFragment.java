@@ -47,12 +47,9 @@ package net.fred.feedex.fragment;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ListFragment;
@@ -68,12 +65,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.fred.feedex.Constants;
 import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.GeneralPrefsActivity;
@@ -83,7 +78,6 @@ import net.fred.feedex.parser.OPML;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
-import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.view.DragNDropExpandableListView;
 import net.fred.feedex.view.DragNDropListener;
@@ -138,14 +132,6 @@ public class FeedsListFragment extends ListFragment {
         });
 
         mListView.setAdapter(mListAdapter);
-
-        mListView.setOnChildClickListener(new OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                mListAdapter.startFeedActivity(id);
-                return false;
-            }
-        });
 
         mListView.setDragNDropListener(new DragNDropListener() {
             boolean fromHasGroupIndicator = false;
@@ -239,31 +225,16 @@ public class FeedsListFragment extends ListFragment {
         super.onDestroy();
     }
 
-    private void setFeedSortEnabled(boolean enabled) {
-        if (enabled != mListView.isDragNDropEnabled()) {
-            mListAdapter.setFeedSortEnabled(enabled);
-            mListView.setDragNDropEnabled(enabled);
-            getActivity().invalidateOptionsMenu();
-        }
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (mListView.isDragNDropEnabled()) {
-            inflater.inflate(R.menu.feed_overview_sorting, menu);
-            MainActivity.positionFragment=-2;
-        } else {
-            inflater.inflate(R.menu.feed_overview, menu);
-            MainActivity.positionFragment=-1;
-        }
+        inflater.inflate(R.menu.feed_overview, menu);
+        MainActivity.positionFragment = -1;
 
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        setFeedSortEnabled(false);
-
         switch (item.getItemId()) {
             case R.id.menu_add_feed: {
                 startActivity(new Intent(Intent.ACTION_INSERT).setData(FeedColumns.CONTENT_URI));
@@ -399,14 +370,6 @@ public class FeedsListFragment extends ListFragment {
                 }
                 break;
             }
-            case R.id.menu_enable_feed_sort: {
-                setFeedSortEnabled(true);
-                return true;
-            }
-            case R.id.menu_disable_feed_sort: {
-                // do nothing as the feed sort gets disabled anyway
-                return true;
-            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -439,38 +402,6 @@ public class FeedsListFragment extends ListFragment {
             final String title = tag.second;
 
             switch (item.getItemId()) {
-                case R.id.menu_refresh:
-                    ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-                    final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-                    // since we have acquired the networkInfo, we use it for basic checks
-                    if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                        getActivity().startService(
-                                new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FEED_ID,
-                                        Long.toString(feedId)));
-                    } else {
-                        Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_LONG).show();
-                    }
-
-                    mode.finish(); // Action picked, so close the CAB
-                    return true;
-                case R.id.menu_mark_as_read:
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            String id = Long.toString(feedId);
-                            ContentResolver cr = getActivity().getContentResolver();
-                            if (cr.update(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(id), FeedData.getReadContentValues(), EntryColumns.WHERE_UNREAD, null) > 0) {
-                                cr.notifyChange(EntryColumns.CONTENT_URI, null);
-                                cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
-                                cr.notifyChange(FeedColumns.CONTENT_URI(id), null);
-                                FeedDataContentProvider.notifyGroupFromFeedId(id);
-                            }
-                        }
-                    }.start();
-
-                    mode.finish(); // Action picked, so close the CAB
-                    return true;
                 case R.id.menu_edit:
                     startActivity(new Intent(Intent.ACTION_EDIT).setData(FeedColumns.CONTENT_URI(feedId)));
 

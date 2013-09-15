@@ -32,7 +32,6 @@ import android.widget.ImageView;
 
 public class DragNDropExpandableListView extends ExpandableListView {
 
-    private boolean mDragNDropEnabled = false;
     private boolean mDragMode;
 
     private int mStartPosition;
@@ -50,17 +49,9 @@ public class DragNDropExpandableListView extends ExpandableListView {
         mDragNDropListener = l;
     }
 
-    public void setDragNDropEnabled(boolean enabled) {
-        mDragNDropEnabled = enabled;
-    }
-
-    public boolean isDragNDropEnabled() {
-        return mDragNDropEnabled;
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (!mDragNDropEnabled || ev.getActionIndex() != 0) {
+        if (ev.getActionIndex() != 0) {
             return super.onTouchEvent(ev);
         }
 
