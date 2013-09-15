@@ -46,7 +46,6 @@ import android.widget.ListView;
 import net.fred.feedex.Constants;
 import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
-import net.fred.feedex.activity.GeneralPrefsActivity;
 import net.fred.feedex.adapter.EntriesCursorAdapter;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.service.FetcherService;
@@ -129,7 +128,6 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
             }
 
             return super.onFling(e1, e2, velocityX, velocityY);
-
         }
 
         @Override
@@ -219,10 +217,6 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                     PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
                     item.setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
                 }
-                return true;
-            }
-            case R.id.menu_settings: {
-                startActivity(new Intent(getActivity(), GeneralPrefsActivity.class));
                 return true;
             }
         }

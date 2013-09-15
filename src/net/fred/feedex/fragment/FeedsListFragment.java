@@ -69,16 +69,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
-import net.fred.feedex.activity.GeneralPrefsActivity;
-import net.fred.feedex.activity.MainActivity;
 import net.fred.feedex.adapter.FeedsCursorAdapter;
 import net.fred.feedex.parser.OPML;
-import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
-import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.view.DragNDropExpandableListView;
 import net.fred.feedex.view.DragNDropListener;
 
@@ -228,8 +223,6 @@ public class FeedsListFragment extends ListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.feed_overview, menu);
-        MainActivity.positionFragment = -1;
-
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -238,30 +231,6 @@ public class FeedsListFragment extends ListFragment {
         switch (item.getItemId()) {
             case R.id.menu_add_feed: {
                 startActivity(new Intent(Intent.ACTION_INSERT).setData(FeedColumns.CONTENT_URI));
-                return true;
-            }
-            case R.id.menu_refresh: {
-                if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-                    getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
-                }
-                return true;
-            }
-            case R.id.menu_settings: {
-                startActivity(new Intent(getActivity(), GeneralPrefsActivity.class));
-                return true;
-            }
-            case R.id.menu_all_read: {
-                new Thread() {
-                    @Override
-                    public void run() {
-                        ContentResolver cr = getActivity().getContentResolver();
-                        if (cr.update(EntryColumns.CONTENT_URI, FeedData.getReadContentValues(), EntryColumns.WHERE_UNREAD, null) > 0) {
-                            cr.notifyChange(FeedColumns.CONTENT_URI, null);
-                            cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-                            cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
-                        }
-                    }
-                }.start();
                 return true;
             }
             case R.id.menu_add_group: {

@@ -25,10 +25,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -72,7 +70,6 @@ public class MainActivity extends ProgressFragmentActivity {
 
     private CharSequence mTitle;
 
-    public static int positionFragment;
     private final int loaderId = new Random().nextInt();//TODO
 
     @Override
@@ -145,37 +142,16 @@ public class MainActivity extends ProgressFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_activity, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+        if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.drawer, menu);
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.menu_refresh_main).setVisible(drawerOpen);
-        menu.findItem(R.id.menu_settings_main).setVisible(drawerOpen);
-        menu.findItem(R.id.menu_sort_main).setVisible(drawerOpen);
-        switch (positionFragment) {
-            case 1:
-                menu.setGroupVisible(R.id.entry_list, !drawerOpen);
-                menu.findItem(R.id.menu_share_starred).setVisible(!drawerOpen);
-                break;
-            case -1:
-                menu.setGroupVisible(R.id.overview, !drawerOpen);
-                break;
-            case -2:
-                menu.findItem(R.id.menu_disable_feed_sort).setVisible(!drawerOpen);
-                break;
-            default:
-                menu.setGroupVisible(R.id.entry_list, !drawerOpen);
-                menu.findItem(R.id.menu_hide_read).setVisible(!drawerOpen);
-                break;
+            getSupportFragmentManager().getFragments().get(0).setHasOptionsMenu(false);
+        } else {
+            getSupportFragmentManager().getFragments().get(0).setHasOptionsMenu(true);
         }
 
-        return super.onPrepareOptionsMenu(menu);
-
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -183,12 +159,10 @@ public class MainActivity extends ProgressFragmentActivity {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
+
         switch (item.getItemId()) {
             case R.id.menu_sort_main:
-                //positionFragment = -1;
-                FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-                tx.replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, FeedsListFragment.class.getName()));
-                tx.commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, FeedsListFragment.class.getName())).commit();
                 setTitle(MainApplication.getContext().getString(R.string.overview));
                 mDrawerLayout.closeDrawers();
                 return true;
@@ -206,10 +180,8 @@ public class MainActivity extends ProgressFragmentActivity {
     }
 
     private void selectDrawerItem(int position) {
-        positionFragment = position;
         Bundle args = new Bundle();
         args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
-        FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
 
         switch (position) {
             case 0:
@@ -232,20 +204,11 @@ public class MainActivity extends ProgressFragmentActivity {
                 setTitle(mDrawerAdapter.getItemName(position));
                 break;
         }
-        tx.replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, EntriesListFragment.class.getName(), args));
-        tx.commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, EntriesListFragment.class.getName(), args)).commit();
 
-        mHandler.postDelayed(mLaunchTaskCloseDrawer, 10);
+        mDrawerList.setItemChecked(position, true);
+        mDrawerLayout.closeDrawer(mDrawerList);
     }
-
-    Handler mHandler = new Handler();
-    private Runnable mLaunchTaskCloseDrawer = new Runnable() {
-        public void run() {
-            // update selected item and title, then close the drawer
-            mDrawerList.setItemChecked(positionFragment, true);
-            mDrawerLayout.closeDrawer(mDrawerList);
-        }
-    };
 
     @Override
     public void setTitle(CharSequence title) {

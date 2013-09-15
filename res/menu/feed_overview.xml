@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <group android:id="@+id/overview">
-        <item
+
+    <item
             android:id="@+id/menu_add_feed"
             android:icon="@drawable/content_new"
             android:showAsAction="always"
@@ -11,8 +11,10 @@
         <item
             android:id="@+id/menu_add_group"
             android:icon="@drawable/add_group"
-            android:title="@string/menu_add_group" />
-        <item
+            android:showAsAction="always"
+            android:title="@string/menu_add_group"
+            tools:ignore="AlwaysShowAction" />
+    <item
             android:id="@+id/menu_import"
             android:icon="@drawable/action_import"
             android:title="@string/menu_import" />
@@ -20,10 +22,4 @@
             android:id="@+id/menu_export"
             android:icon="@drawable/action_export"
             android:title="@string/menu_export" />
-        <item
-            android:id="@+id/menu_settings"
-            android:icon="@drawable/action_settings"
-            android:title="@string/menu_settings" />
-    </group>
-
 </menu>
