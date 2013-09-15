@@ -35,8 +35,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,9 +53,9 @@ import net.fred.feedex.UiUtils;
 import net.fred.feedex.adapter.MenuListAdapter;
 import net.fred.feedex.fragment.EntriesListFragment;
 import net.fred.feedex.fragment.FeedsListFragment;
+import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.service.RefreshService;
-import net.fred.feedex.provider.FeedData;
 
 import java.util.Random;
 
@@ -85,7 +85,7 @@ public class MainActivity extends ProgressFragmentActivity implements LoaderMana
 
     private SparseArray<feedObject> feed = new SparseArray<feedObject>();
 
-    public class feedObject{
+    public class feedObject {
         public int feedPosition;
         public String feedOrgroupName;
         public Boolean isGroup;
@@ -170,7 +170,7 @@ public class MainActivity extends ProgressFragmentActivity implements LoaderMana
         menu.findItem(R.id.menu_refresh_main).setVisible(drawerOpen);
         menu.findItem(R.id.menu_settings_main).setVisible(drawerOpen);
         menu.findItem(R.id.menu_sort_main).setVisible(drawerOpen);
-        switch (positionFragment){
+        switch (positionFragment) {
             case 1:
                 menu.setGroupVisible(R.id.entry_list, !drawerOpen);
                 menu.findItem(R.id.menu_share_starred).setVisible(!drawerOpen);
@@ -196,19 +196,19 @@ public class MainActivity extends ProgressFragmentActivity implements LoaderMana
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        switch(item.getItemId()) {
-            case R.id.menu_sort_main :
+        switch (item.getItemId()) {
+            case R.id.menu_sort_main:
                 //positionFragment = -1;
                 FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-                tx.replace(R.id.content_frame,Fragment.instantiate(MainActivity.this, FeedsListFragment.class.getName()));
+                tx.replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, FeedsListFragment.class.getName()));
                 tx.commit();
                 setTitle(MainApplication.getContext().getString(R.string.overview));
                 mDrawerLayout.closeDrawers();
                 return true;
-            case R.id.menu_settings_main :
+            case R.id.menu_settings_main:
                 startActivity(new Intent(this, GeneralPrefsActivity.class));
                 return true;
-            case R.id.menu_refresh_main :
+            case R.id.menu_refresh_main:
                 if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
                     MainApplication.getContext().startService(new Intent(MainApplication.getContext(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
                 }
@@ -228,36 +228,39 @@ public class MainActivity extends ProgressFragmentActivity implements LoaderMana
 
     private void selectItem(int position) {
         positionFragment = position;
-        Bundle args=new Bundle();
+        Bundle args = new Bundle();
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
 
-        switch(position){
+        switch (position) {
             case 0:
                 args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.CONTENT_URI);
                 args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
-                tx.replace(R.id.content_frame,Fragment.instantiate(MainActivity.this, EntriesListFragment.class.getName(), args));
+                tx.replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, EntriesListFragment.class.getName(), args));
                 tx.commit();
                 setTitle(MainApplication.getContext().getString(R.string.all));
                 break;
             case 1:
                 args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.FAVORITES_CONTENT_URI);
                 args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
-                tx.replace(R.id.content_frame,Fragment.instantiate(MainActivity.this, EntriesListFragment.class.getName(), args));
+                tx.replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, EntriesListFragment.class.getName(), args));
                 tx.commit();
                 setTitle(MainApplication.getContext().getString(R.string.favorites));
                 break;
             default:
                 feedObject feedId = feed.get(position);
-                if(feedId.isGroup==false) args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedId.feedPosition));
-                else args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedId.feedPosition));
+                if (feedId.isGroup != null && !feedId.isGroup)
+                    args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedId.feedPosition));
+                else
+                    args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedId.feedPosition));
                 args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
-                tx.replace(R.id.content_frame,Fragment.instantiate(MainActivity.this, EntriesListFragment.class.getName(), args));
+                tx.replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, EntriesListFragment.class.getName(), args));
                 tx.commit();
                 setTitle(feedId.feedOrgroupName);
                 break;
         }
-        mHandler.postDelayed(mLaunchTaskCloseDrawer,10);
+        mHandler.postDelayed(mLaunchTaskCloseDrawer, 10);
     }
+
     Handler mHandler = new Handler();
     private Runnable mLaunchTaskCloseDrawer = new Runnable() {
         public void run() {
@@ -301,59 +304,59 @@ public class MainActivity extends ProgressFragmentActivity implements LoaderMana
     public void onLoaderReset(Loader<Cursor> loader) {
     }
 
-    private void initDrawer(Cursor data){
+    private void initDrawer(Cursor data) {
         Cursor countCursor;
         feedObject drawerItem = new feedObject();
         /*All Feeds*/
-        drawerItem.feedOrgroupName= MainApplication.getContext().getString(R.string.all);
-        drawerItem.isGroup=false;
-        countCursor = getApplicationContext().getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] { "COUNT(*)" }, FeedData.EntryColumns.WHERE_UNREAD, null, null);
+        drawerItem.feedOrgroupName = MainApplication.getContext().getString(R.string.all);
+        drawerItem.isGroup = false;
+        countCursor = getApplicationContext().getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[]{"COUNT(*)"}, FeedData.EntryColumns.WHERE_UNREAD, null, null);
         countCursor.moveToFirst();
-        drawerItem.feedCount =  countCursor.getInt(0);
+        drawerItem.feedCount = countCursor.getInt(0);
         countCursor.close();
-        drawerItem.iconFeed= BitmapFactory.decodeResource(MainApplication.getContext().getResources(),R.drawable.ic_statusbar_rss);
-        feed.put(0,drawerItem );//Save All Feeds Item
+        drawerItem.iconFeed = BitmapFactory.decodeResource(MainApplication.getContext().getResources(), R.drawable.ic_statusbar_rss);
+        feed.put(0, drawerItem);//Save All Feeds Item
         /*Favorite Feeds*/
         drawerItem = new feedObject();
-        drawerItem.feedOrgroupName= MainApplication.getContext().getString(R.string.favorites);
-        drawerItem.isGroup=false;
-        countCursor = getApplicationContext().getContentResolver().query(FeedData.EntryColumns.FAVORITES_CONTENT_URI, new String[] { "COUNT(*)" }, null, null, null);
+        drawerItem.feedOrgroupName = MainApplication.getContext().getString(R.string.favorites);
+        drawerItem.isGroup = false;
+        countCursor = getApplicationContext().getContentResolver().query(FeedData.EntryColumns.FAVORITES_CONTENT_URI, new String[]{"COUNT(*)"}, null, null, null);
         countCursor.moveToFirst();
-        drawerItem.feedCount =  countCursor.getInt(0);
+        drawerItem.feedCount = countCursor.getInt(0);
         countCursor.close();
-        drawerItem.iconFeed= BitmapFactory.decodeResource(MainApplication.getContext().getResources(),R.drawable.dimmed_rating_important);
-        feed.put(1,drawerItem );//Save Favorites Feeds Item
-        int i=2;
+        drawerItem.iconFeed = BitmapFactory.decodeResource(MainApplication.getContext().getResources(), R.drawable.dimmed_rating_important);
+        feed.put(1, drawerItem);//Save Favorites Feeds Item
+        int i = 2;
         /*Receive Group*/
-        while(data.moveToNext()){
+        while (data.moveToNext()) {
             drawerItem = new feedObject();
             long positionGroup = data.getLong(data.getColumnIndex(FeedData.FeedColumns._ID));
             drawerItem.feedOrgroupName = data.getString(data.getColumnIndex(FeedData.FeedColumns.NAME));
             drawerItem.feedPosition = (int) positionGroup;
-            if(data.getString(data.getColumnIndex(FeedData.FeedColumns.URL))!=null) { //check if it's a group or a feed group
+            if (data.getString(data.getColumnIndex(FeedData.FeedColumns.URL)) != null) { //check if it's a group or a feed group
                 drawerItem.isGroup = false;
                 byte[] iconBytes = data.getBlob(data.getColumnIndex(FeedData.FeedColumns.ICON));
                 if (iconBytes != null && iconBytes.length > 0) {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
-                    drawerItem.iconFeed= bitmap;
+                    drawerItem.iconFeed = bitmap;
                 }
-                countCursor = getApplicationContext().getContentResolver().query(FeedData.EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI((int)positionGroup), new String[] { "COUNT(*)" }, FeedData.EntryColumns.IS_READ + " is null", null, null);
+                countCursor = getApplicationContext().getContentResolver().query(FeedData.EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI((int) positionGroup), new String[]{"COUNT(*)"}, FeedData.EntryColumns.IS_READ + " is null", null, null);
                 countCursor.moveToFirst();
-                drawerItem.feedCount =  countCursor.getInt(0);
+                drawerItem.feedCount = countCursor.getInt(0);
                 countCursor.close();
             } else {
                 drawerItem.isGroup = true;
-                countCursor = getApplicationContext().getContentResolver().query(FeedData.EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI((int) positionGroup), new String[] { "COUNT(*)" }, FeedData.EntryColumns.IS_READ + " is null", null, null);
+                countCursor = getApplicationContext().getContentResolver().query(FeedData.EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI((int) positionGroup), new String[]{"COUNT(*)"}, FeedData.EntryColumns.IS_READ + " is null", null, null);
                 countCursor.moveToFirst();
-                drawerItem.feedCount =  countCursor.getInt(0);
+                drawerItem.feedCount = countCursor.getInt(0);
                 countCursor.close();
             }
 
             feed.put(i, drawerItem); //Save Group
 
             /*Receive Feeds for Group above*/
-            Cursor feedCursor = getApplicationContext().getContentResolver().query(FeedData.FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(positionGroup),null, null, null, null);
-            while(feedCursor.moveToNext()){
+            Cursor feedCursor = getApplicationContext().getContentResolver().query(FeedData.FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(positionGroup), null, null, null, null);
+            while (feedCursor.moveToNext()) {
                 i++;
                 drawerItem = new feedObject();
                 long feedPosition = feedCursor.getLong(feedCursor.getColumnIndex(FeedData.FeedColumns._ID));
@@ -363,12 +366,13 @@ public class MainActivity extends ProgressFragmentActivity implements LoaderMana
                 byte[] iconBytes = feedCursor.getBlob(feedCursor.getColumnIndex(FeedData.FeedColumns.ICON));
                 if (iconBytes != null && iconBytes.length > 0) {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
-                    drawerItem.iconFeed= bitmap;
-                }else   drawerItem.iconFeed = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.ic_statusbar_rss);
+                    drawerItem.iconFeed = bitmap;
+                } else
+                    drawerItem.iconFeed = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.ic_statusbar_rss);
                 /*Receive Unread Counter for Feed above*/
-                countCursor = getApplicationContext().getContentResolver().query(FeedData.EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI((int)feedPosition), new String[] { "COUNT(*)" }, FeedData.EntryColumns.IS_READ + " is null", null, null);
+                countCursor = getApplicationContext().getContentResolver().query(FeedData.EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI((int) feedPosition), new String[]{"COUNT(*)"}, FeedData.EntryColumns.IS_READ + " is null", null, null);
                 countCursor.moveToFirst();
-                drawerItem.feedCount =  countCursor.getInt(0);
+                drawerItem.feedCount = countCursor.getInt(0);
                 countCursor.close();
                 feed.put(i, drawerItem); //Save Feed
             }
@@ -381,7 +385,6 @@ public class MainActivity extends ProgressFragmentActivity implements LoaderMana
         mDrawerList.setAdapter(mMenuAdapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
     }
-
 
 
 }

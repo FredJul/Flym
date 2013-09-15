@@ -31,18 +31,17 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.ListView;
-
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.PrefUtils;
@@ -61,7 +60,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     private Uri mUri;
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
-    SwipeGestureListener gestureListener;
+    private SwipeGestureListener mGestureListener;
     private ListView lv;
 
     private final int loaderId = new Random().nextInt();
@@ -98,63 +97,33 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     }
 
     class SwipeGestureListener extends SimpleOnGestureListener implements OnTouchListener {
-        Context context;
-        GestureDetector gDetector;
         static final int SWIPE_MIN_DISTANCE = 120;
         static final int SWIPE_MAX_OFF_PATH = 250;
         static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
-        public SwipeGestureListener() {
-            super();
-        }
+        private GestureDetector mGestureDetector;
 
         public SwipeGestureListener(Context context) {
-            this(context, null);
-        }
-
-        public SwipeGestureListener(Context context, GestureDetector gDetector) {
-
-            if (gDetector == null)
-                gDetector = new GestureDetector(context, this);
-
-            this.context = context;
-            this.gDetector = gDetector;
+            mGestureDetector = new GestureDetector(context, this);
         }
 
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                               float velocityY) {
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-            final int position = lv.pointToPosition(
-                    Math.round(e1.getX()), Math.round(e1.getY()));
-
-            //String countryName = (String) lv.getItemAtPosition(position);
+            final int position = lv.pointToPosition(Math.round(e1.getX()), Math.round(e1.getY()));
 
             if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH) {
-                if (Math.abs(e1.getX() - e2.getX()) > SWIPE_MAX_OFF_PATH
-                        || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {
+                if (Math.abs(e1.getX() - e2.getX()) > SWIPE_MAX_OFF_PATH || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {
                     return false;
-                }
-                if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE) {
-                    //Toast.makeText(DemoSwipe.this, "bottomToTop" + countryName,
-                    //        Toast.LENGTH_SHORT).show();
-                } else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE) {
-                    //Toast.makeText(DemoSwipe.this,
-                    //       "topToBottom  " + countryName, Toast.LENGTH_SHORT)
-                    //       .show();
                 }
             } else {
                 if (Math.abs(velocityX) < SWIPE_THRESHOLD_VELOCITY) {
                     return false;
                 }
                 if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
-                    //Toast.makeText(DemoSwipe.this,
-                    //        "swipe RightToLeft " + countryName, 5000).show();
                     mEntriesCursorAdapter.markasReaderorUnread(mEntriesCursorAdapter.getItemId(position));
                 } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
                     mEntriesCursorAdapter.changeFavorite(mEntriesCursorAdapter.getItemId(position));
-                    //Toast.makeText(DemoSwipe.this,
-                    //        "swipe LeftToright  " + countryName, 5000).show();
                 }
                 mEntriesCursorAdapter.notifyDataSetChanged();
             }
@@ -165,14 +134,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-
-            return gDetector.onTouchEvent(event);
+            return mGestureDetector.onTouchEvent(event);
         }
-
-        public GestureDetector getDetector() {
-            return gDetector;
-        }
-
     }
 
     @Override
@@ -184,8 +147,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
         lv = (ListView) rootView.findViewById(android.R.id.list);
         lv.setFastScrollEnabled(true);
-        gestureListener = new SwipeGestureListener(getActivity());
-        lv.setOnTouchListener(gestureListener);
+        mGestureListener = new SwipeGestureListener(getActivity());
+        lv.setOnTouchListener(mGestureListener);
 
         return rootView;
     }
