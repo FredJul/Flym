@@ -85,24 +85,15 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if (lv != null) {
-                int position = lv.pointToPosition(Math.round(e1.getX()), Math.round(e1.getY()));
+            if (lv != null && Math.abs(e1.getY() - e2.getY()) <= SWIPE_MAX_OFF_PATH && Math.abs(velocityX) >= SWIPE_THRESHOLD_VELOCITY) {
+                int position = lv.pointToPosition(Math.round(e2.getX()), Math.round(e2.getY()));
 
-                if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH) {
-                    if (Math.abs(e1.getX() - e2.getX()) > SWIPE_MAX_OFF_PATH || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {
-                        return false;
-                    }
-                } else {
-                    if (Math.abs(velocityX) < SWIPE_THRESHOLD_VELOCITY) {
-                        return false;
-                    }
-                    if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
-                        mEntriesCursorAdapter.markAsReadOrUnread(mEntriesCursorAdapter.getItemId(position));
-                    } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
-                        mEntriesCursorAdapter.changeFavorite(mEntriesCursorAdapter.getItemId(position));
-                    }
-                    mEntriesCursorAdapter.notifyDataSetChanged();
+                if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
+                    mEntriesCursorAdapter.changeFavorite(mEntriesCursorAdapter.getItemId(position));
+                } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
+                    mEntriesCursorAdapter.markAsReadOrUnread(mEntriesCursorAdapter.getItemId(position));
                 }
+                mEntriesCursorAdapter.notifyDataSetChanged();
             }
 
             return super.onFling(e1, e2, velocityX, velocityY);
