@@ -20,14 +20,13 @@
 package net.fred.feedex.adapter;
 
 import android.app.Activity;
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -42,7 +41,7 @@ import net.fred.feedex.Constants;
  */
 public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableListAdapter {
     private static final String URI_ARG = "uri";
-    private final FragmentActivity mActivity;
+    private final Activity mActivity;
     private final LoaderManager mLoaderMgr;
     private final Uri mGroupUri;
 
@@ -135,9 +134,9 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
      * @param expandedGroupLayout  resource identifier of a layout file that defines the views for expanded groups.
      * @param childLayout          resource identifier of a layout file that defines the views for all children but the last..
      */
-    public CursorLoaderExpandableListAdapter(FragmentActivity activity, Uri groupUri, int collapsedGroupLayout, int expandedGroupLayout, int childLayout) {
+    public CursorLoaderExpandableListAdapter(Activity activity, Uri groupUri, int collapsedGroupLayout, int expandedGroupLayout, int childLayout) {
         mActivity = activity;
-        mLoaderMgr = activity.getSupportLoaderManager();
+        mLoaderMgr = activity.getLoaderManager();
         mGroupUri = groupUri;
 
         mCollapsedGroupLayout = collapsedGroupLayout;
@@ -155,7 +154,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
      * @param groupLayout resource identifier of a layout file that defines the views for all groups.
      * @param childLayout resource identifier of a layout file that defines the views for all children.
      */
-    public CursorLoaderExpandableListAdapter(FragmentActivity activity, Uri groupUri, int groupLayout, int childLayout) {
+    public CursorLoaderExpandableListAdapter(Activity activity, Uri groupUri, int groupLayout, int childLayout) {
         this(activity, groupUri, groupLayout, groupLayout, childLayout);
     }
 

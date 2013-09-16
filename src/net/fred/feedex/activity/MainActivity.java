@@ -19,12 +19,12 @@
 
 package net.fred.feedex.activity;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -48,7 +48,7 @@ import net.fred.feedex.service.RefreshService;
 
 import java.util.Random;
 
-public class MainActivity extends ProgressFragmentActivity {
+public class MainActivity extends ProgressActivity {
 
     private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
 
@@ -167,9 +167,9 @@ public class MainActivity extends ProgressFragmentActivity {
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.drawer, menu);
 
-            getSupportFragmentManager().getFragments().get(0).setHasOptionsMenu(false);
+            getFragmentManager().findFragmentById(R.id.content_frame).setHasOptionsMenu(false);
         } else {
-            getSupportFragmentManager().getFragments().get(0).setHasOptionsMenu(true);
+            getFragmentManager().findFragmentById(R.id.content_frame).setHasOptionsMenu(true);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -183,7 +183,7 @@ public class MainActivity extends ProgressFragmentActivity {
 
         switch (item.getItemId()) {
             case R.id.menu_edit:
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, FeedsListFragment.class.getName())).commit();
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, FeedsListFragment.class.getName())).commit();
                 setTitle(MainApplication.getContext().getString(R.string.overview));
                 mDrawerLayout.closeDrawers();
                 return true;
@@ -227,7 +227,7 @@ public class MainActivity extends ProgressFragmentActivity {
                 setTitle(mDrawerAdapter.getItemName(position));
                 break;
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, EntriesListFragment.class.getName(), args)).commit();
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, EntriesListFragment.class.getName(), args)).commit();
 
         mDrawerList.setItemChecked(position, true);
         mDrawerLayout.closeDrawer(mDrawerList);

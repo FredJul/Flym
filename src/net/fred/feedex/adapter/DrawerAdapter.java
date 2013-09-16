@@ -1,15 +1,34 @@
+/**
+ * FeedEx
+ *
+ * Copyright (c) 2012-2013 Frederic Julian
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package net.fred.feedex.adapter;
 
+import android.app.Activity;
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +57,7 @@ public class DrawerAdapter extends BaseAdapter implements LoaderManager.LoaderCa
     private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
 
-    private final FragmentActivity mActivity;
+    private final Activity mActivity;
     private final LoaderManager mLoaderMgr;
     private Cursor mFeedsCursor;
 
@@ -49,9 +68,9 @@ public class DrawerAdapter extends BaseAdapter implements LoaderManager.LoaderCa
         public View separator;
     }
 
-    public DrawerAdapter(FragmentActivity activity, int loaderId) {
+    public DrawerAdapter(Activity activity, int loaderId) {
         mActivity = activity;
-        mLoaderMgr = activity.getSupportLoaderManager();
+        mLoaderMgr = activity.getLoaderManager();
 
         mLoaderMgr.restartLoader(loaderId, null, this);
     }

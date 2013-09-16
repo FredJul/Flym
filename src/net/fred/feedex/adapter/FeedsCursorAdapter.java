@@ -19,6 +19,7 @@
 
 package net.fred.feedex.adapter;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,7 +28,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.support.v4.app.FragmentActivity;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -52,7 +52,7 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 
     private static final String COLON = MainApplication.getContext().getString(R.string.colon);
 
-    private final FragmentActivity mActivity;
+    private final Activity mActivity;
     private int isGroupPosition = -1;
     private int isGroupCollapsedPosition = -1;
     private int namePosition = -1;
@@ -75,7 +75,7 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
         }
     };
 
-    public FeedsCursorAdapter(FragmentActivity activity, Uri groupUri) {
+    public FeedsCursorAdapter(Activity activity, Uri groupUri) {
         super(activity, groupUri, R.layout.feed_list_item, R.layout.feed_list_item);
 
         mActivity = activity;

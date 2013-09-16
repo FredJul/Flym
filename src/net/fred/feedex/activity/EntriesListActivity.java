@@ -45,13 +45,13 @@
 package net.fred.feedex.activity;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -61,7 +61,7 @@ import net.fred.feedex.UiUtils;
 import net.fred.feedex.fragment.EntriesListFragment;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 
-public class EntriesListActivity extends FragmentActivity {
+public class EntriesListActivity extends Activity {
     private static final String[] FEED_PROJECTION = {FeedColumns.NAME, FeedColumns.URL, FeedColumns.ICON};
 
     private byte[] iconBytes = null;
@@ -99,7 +99,7 @@ public class EntriesListActivity extends FragmentActivity {
             args.putParcelable(EntriesListFragment.ARG_URI, intent.getData());
             fragment.setArguments(args);
             fragment.setHasOptionsMenu(true);
-            getSupportFragmentManager().beginTransaction().add(android.R.id.content, fragment, "fragment").commit();
+            getFragmentManager().beginTransaction().add(android.R.id.content, fragment, "fragment").commit();
         }
 
         if (iconBytes != null && iconBytes.length > 0) {

@@ -45,6 +45,7 @@
 package net.fred.feedex.fragment;
 
 import android.app.AlertDialog;
+import android.app.ListFragment;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -52,7 +53,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ListFragment;
 import android.util.Pair;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
