@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.EntriesCursorAdapter;
 import net.fred.feedex.provider.FeedData.EntryColumns;
+import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 
 import java.util.Random;
@@ -201,7 +203,13 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
             }
             case R.id.menu_refresh: {
                 if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-                    getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
+                    if (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
+                        getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FEED_ID,
+                                mUri.getPathSegments().get(1)));
+                    }
+                     else {
+                        getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
+                    }
                 }
                 return true;
             }

@@ -67,31 +67,26 @@ import net.fred.feedex.provider.FeedData.TaskColumns;
 
 public class FeedDataContentProvider extends ContentProvider {
 
-    private static final int URI_GROUPED_FEEDS = 1;
-    private static final int URI_GROUPS = 2;
-    private static final int URI_GROUP = 3;
-    private static final int URI_FEEDS_FOR_GROUPS = 4;
-    private static final int URI_FEEDS = 5;
-    private static final int URI_FEED = 6;
-    private static final int URI_FILTERS = 7;
-    private static final int URI_FILTERS_FOR_FEED = 8;
-    private static final int URI_ENTRIES_FOR_FEED = 9;
-    private static final int URI_ENTRY_FOR_FEED = 10;
-    private static final int URI_ENTRIES_FOR_GROUP = 11;
-    private static final int URI_ENTRY_FOR_GROUP = 12;
-    private static final int URI_ENTRIES = 13;
-    private static final int URI_ENTRY = 14;
-    private static final int URI_FAVORITES = 15;
-    private static final int URI_FAVORITES_ENTRY = 16;
-    private static final int URI_TASKS = 17;
-    private static final int URI_TASK = 18;
+    public static final int URI_GROUPED_FEEDS = 1;
+    public static final int URI_GROUPS = 2;
+    public static final int URI_GROUP = 3;
+    public static final int URI_FEEDS_FOR_GROUPS = 4;
+    public static final int URI_FEEDS = 5;
+    public static final int URI_FEED = 6;
+    public static final int URI_FILTERS = 7;
+    public static final int URI_FILTERS_FOR_FEED = 8;
+    public static final int URI_ENTRIES_FOR_FEED = 9;
+    public static final int URI_ENTRY_FOR_FEED = 10;
+    public static final int URI_ENTRIES_FOR_GROUP = 11;
+    public static final int URI_ENTRY_FOR_GROUP = 12;
+    public static final int URI_ENTRIES = 13;
+    public static final int URI_ENTRY = 14;
+    public static final int URI_FAVORITES = 15;
+    public static final int URI_FAVORITES_ENTRY = 16;
+    public static final int URI_TASKS = 17;
+    public static final int URI_TASK = 18;
 
-    private static final String FEEDS_TABLE_WITH_GROUP_PRIORITY = FeedColumns.TABLE_NAME + " LEFT JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.PRIORITY +
-            " AS group_priority FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + FeedColumns.TABLE_NAME + '.' + FeedColumns.GROUP_ID + " = f.joined_feed_id)";
-    private static final String ENTRIES_TABLE_WITH_FEED_INFO = EntryColumns.TABLE_NAME + " JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.NAME + ", " +
-            FeedColumns.ICON + ", " + FeedColumns.GROUP_ID + " FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + EntryColumns.TABLE_NAME + '.' + EntryColumns.FEED_ID + " = f.joined_feed_id)";
-
-    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+    public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "grouped_feeds", URI_GROUPED_FEEDS);
@@ -113,6 +108,11 @@ public class FeedDataContentProvider extends ContentProvider {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "tasks", URI_TASKS);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "tasks/#", URI_TASK);
     }
+
+    private static final String FEEDS_TABLE_WITH_GROUP_PRIORITY = FeedColumns.TABLE_NAME + " LEFT JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.PRIORITY +
+            " AS group_priority FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + FeedColumns.TABLE_NAME + '.' + FeedColumns.GROUP_ID + " = f.joined_feed_id)";
+    private static final String ENTRIES_TABLE_WITH_FEED_INFO = EntryColumns.TABLE_NAME + " JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.NAME + ", " +
+            FeedColumns.ICON + ", " + FeedColumns.GROUP_ID + " FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + EntryColumns.TABLE_NAME + '.' + EntryColumns.FEED_ID + " = f.joined_feed_id)";
 
     private DatabaseHelper mDatabaseHelper;
 

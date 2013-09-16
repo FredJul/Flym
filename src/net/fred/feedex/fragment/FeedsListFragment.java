@@ -225,7 +225,7 @@ public class FeedsListFragment extends ListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.feed_overview, menu);
+        inflater.inflate(R.menu.feed_list, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
