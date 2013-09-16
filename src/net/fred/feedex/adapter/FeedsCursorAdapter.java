@@ -39,7 +39,6 @@ import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.UiUtils;
-import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.view.DragNDropExpandableListView;
 
@@ -48,7 +47,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
-    private static final String WHERE_UNREAD = EntryColumns.IS_READ + " IS NULL";
 
     private static final String COLON = MainApplication.getContext().getString(R.string.colon);
 

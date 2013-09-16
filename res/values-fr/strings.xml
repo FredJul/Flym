@@ -47,8 +47,6 @@
     <string name="menu_add_group">Ajouter un groupe</string>
     <string name="menu_import">Importer depuis OPML</string>
     <string name="menu_export">Exporter vers OPML</string>
-    <string name="menu_enable_feed_sort">Trier des flux</string>
-    <string name="menu_disable_feed_sort">Arrêter le tri des flux</string>
     <string name="error_feed_error">L\'adresse du flux n\'est pas accessible.</string>
     <string name="error_feed_process">Le flux ne peut pas être traité.</string>
     <string name="error_feed_url_exists">L\'adresse existe déjà.</string>
@@ -94,7 +92,6 @@
     <string name="all">Articles</string>
     <string name="no_entries">Pas d\'article</string>
     <string name="favorites">Favoris</string>
-    <string name="context_menu_mark_as_read">Marquer comme lu</string>
     <string name="context_menu_hide_read">Cacher les articles lus</string>
     <string name="context_menu_show_read">Afficher les articles lus</string>
     <string name="context_menu_share_starred">Partager les favoris</string>

@@ -47,8 +47,6 @@
     <string name="menu_add_group">Añadir grupo</string>
     <string name="menu_import">Importar desde OPML</string>
     <string name="menu_export">Exportar a OPML</string>
-    <string name="menu_enable_feed_sort">Ordenar fuente</string>
-    <string name="menu_disable_feed_sort">Detener ordenado de fuentes</string>
     <string name="error_feed_error">No hay conectividad a la dirección de la fuente.</string>
     <string name="error_feed_process">No se ha podido procesar la fuente.</string>
     <string name="error_feed_url_exists">Ya existe esta dirección.</string>
@@ -91,7 +89,6 @@
     <string name="all">Entradas</string>
     <string name="no_entries">No hay entradas</string>
     <string name="favorites">Destacadas</string>
-    <string name="context_menu_mark_as_read">Marcar como leído</string>
     <string name="context_menu_hide_read">Ocultar entradas leídas</string>
     <string name="context_menu_show_read">Mostrar entradas leídas</string>
     <string name="context_menu_share_starred">Compartir entradas seleccionadas</string>

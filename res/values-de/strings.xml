@@ -48,8 +48,6 @@
     <string name="menu_add_group">Gruppe erstellen</string>
     <string name="menu_import">Aus OPML importieren</string>
     <string name="menu_export">Nach OPML exportieren</string>
-    <string name="menu_enable_feed_sort">Feeds sortieren</string>
-    <string name="menu_disable_feed_sort">Feed-Sortierung beenden</string>
     <string name="error_feed_error">Zugriff auf Feed-Adresse nicht möglich.</string>
     <string name="error_feed_process">Der Feed kann nicht bearbeitet werden.</string>
     <string name="error_feed_url_exists">Diese Adresse existiert schon.</string>
@@ -95,7 +93,6 @@
     <string name="all">Einträge</string>
     <string name="no_entries">Keine Einträge</string>
     <string name="favorites">Favorisiert</string>
-    <string name="context_menu_mark_as_read">Alle als gelesen markieren</string>
     <string name="context_menu_hide_read">Gelesene Einträge verstecken</string>
     <string name="context_menu_show_read">Gelesene Einträge anzeigen</string>
     <string name="context_menu_share_starred">Favorisierte Einträge teilen</string>

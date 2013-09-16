@@ -60,7 +60,6 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     private Uri mUri;
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
-    private SwipeGestureListener mGestureListener;
     private ListView lv;
 
     private final OnSharedPreferenceChangeListener prefListener = new OnSharedPreferenceChangeListener() {
@@ -136,8 +135,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
         lv = (ListView) rootView.findViewById(android.R.id.list);
         lv.setFastScrollEnabled(true);
-        mGestureListener = new SwipeGestureListener(getActivity());
-        lv.setOnTouchListener(mGestureListener);
+        lv.setOnTouchListener(new SwipeGestureListener(getActivity()));
 
         return rootView;
     }

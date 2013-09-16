@@ -47,8 +47,6 @@
     <string name="menu_add_group">Добавить группу</string>
     <string name="menu_import">Импорт из OPML-файла</string>
     <string name="menu_export">Экспорт в OPML-файл</string>
-    <string name="menu_enable_feed_sort">Сортировка лент</string>
-    <string name="menu_disable_feed_sort">Закончить сортировку</string>
     <string name="error_feed_error">Адрес ленты не доступен.</string>
     <string name="error_feed_process">Лента не может быть добавлена.</string>
     <string name="error_feed_url_exists">Такой адрес уже есть.</string>
@@ -94,7 +92,6 @@
     <string name="all">Новости</string>
     <string name="no_entries">Нет новостей</string>
     <string name="favorites">Избранное</string>
-    <string name="context_menu_mark_as_read">Пометить как прочитанное</string>
     <string name="context_menu_hide_read">Скрыть прочитанные новости</string>
     <string name="context_menu_show_read">Показать прочитанные новости</string>
     <string name="context_menu_share_starred">Поделиться избранными новостями</string>

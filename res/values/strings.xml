@@ -49,8 +49,6 @@
     <string name="menu_add_group">Add group</string>
     <string name="menu_import">Import from OPML</string>
     <string name="menu_export">Export to OPML</string>
-    <string name="menu_enable_feed_sort">Sort feeds</string>
-    <string name="menu_disable_feed_sort">Stop feed sort</string>
     <string name="error_feed_error">The feed address could not accessed.</string>
     <string name="error_feed_process">The feed can not be processed.</string>
     <string name="error_feed_url_exists">The address already exists.</string>
@@ -96,7 +94,6 @@
     <string name="all">Entries</string>
     <string name="no_entries">No entries</string>
     <string name="favorites">Starred</string>
-    <string name="context_menu_mark_as_read">Mark as read</string>
     <string name="context_menu_hide_read">Hide read entries</string>
     <string name="context_menu_show_read">Show read entries</string>
     <string name="context_menu_share_starred">Share starred entries</string>
