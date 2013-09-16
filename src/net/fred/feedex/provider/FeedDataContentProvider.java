@@ -636,6 +636,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
     public static void notifyGroupFromFeedId(String feedId) {
         ContentResolver cr = MainApplication.getContext().getContentResolver();
+        cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
         Cursor c = cr.query(FeedColumns.CONTENT_URI(feedId), FeedColumns.PROJECTION_GROUP_ID, null, null, null);
         if (c.moveToFirst()) {
             String groupId = c.getString(0);
