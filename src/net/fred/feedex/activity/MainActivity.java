@@ -93,6 +93,7 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectDrawerItem(position);
+                mDrawerLayout.closeDrawer(mDrawerList);
             }
         });
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -261,8 +262,6 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
                     mDrawerLayout.openDrawer(mDrawerList);
                 }
             }, 500);
-        } else {
-            mDrawerLayout.closeDrawer(mDrawerList); // We clicked on it, so we close it
         }
     }
 
