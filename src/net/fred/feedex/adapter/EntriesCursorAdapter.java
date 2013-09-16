@@ -221,6 +221,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                     }
                     cr.notifyChange(FeedColumns.CONTENT_URI, null);
                     cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+                    cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
                     cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
                 }
             }

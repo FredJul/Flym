@@ -206,6 +206,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                 cr.update(getIntent().getData(), values, null, null);
                 if (!name.equals(mPreviousName)) {
                     cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+                    cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
                 }
             }
         }
@@ -318,6 +319,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
             values.put(FeedColumns.RETRIEVE_FULLTEXT, mRetrieveFulltextCb.isChecked() ? 1 : null);
             cr.insert(FeedColumns.CONTENT_URI, values);
             cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+            cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
         }
 
         setResult(RESULT_OK);

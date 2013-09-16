@@ -221,6 +221,7 @@ public class OPML {
 
                         if (!cursor.moveToFirst()) {
                             groupId = cr.insert(FeedColumns.GROUPS_CONTENT_URI, values).getLastPathSegment();
+                            cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
                         }
                         cursor.close();
                     }
@@ -241,6 +242,7 @@ public class OPML {
                     feedId = null;
                     if (!cursor.moveToFirst()) {
                         feedId = cr.insert(FeedColumns.CONTENT_URI, values).getLastPathSegment();
+                        cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
                         if (groupId == null) {
                             cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
                         } else {

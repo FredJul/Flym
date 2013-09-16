@@ -196,12 +196,14 @@ public class FeedsListFragment extends ListFragment {
             values.put(FeedColumns.PRIORITY, packedGroupPosTo + 1);
             cr.update(FeedColumns.CONTENT_URI(mListView.getItemIdAtPosition(flatPosFrom)), values, null, null);
             cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+            cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
 
         } else if (!fromIsGroup && toIsGroup) {
             values.put(FeedColumns.PRIORITY, packedGroupPosTo + 1);
             values.putNull(FeedColumns.GROUP_ID);
             cr.update(FeedColumns.CONTENT_URI(mListView.getItemIdAtPosition(flatPosFrom)), values, null, null);
             cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+            cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
 
         } else if ((!fromIsGroup && !toIsGroup) || (fromIsFeedWithoutGroup && !toIsGroup)) {
             int groupPrio = ExpandableListView.getPackedPositionChild(packedPosTo) + 1;
@@ -211,6 +213,7 @@ public class FeedsListFragment extends ListFragment {
             values.put(FeedColumns.GROUP_ID, mListView.getItemIdAtPosition(flatGroupPosTo));
             cr.update(FeedColumns.CONTENT_URI(mListView.getItemIdAtPosition(flatPosFrom)), values, null, null);
             cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+            cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
         }
     }
 
@@ -402,6 +405,7 @@ public class FeedsListFragment extends ListFragment {
                                             if (cr.delete(FeedColumns.CONTENT_URI(feedId), null, null) > 0) {
                                                 cr.notifyChange(EntryColumns.CONTENT_URI, null);
                                                 cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
+                                                cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
 
                                                 if (groupId == null) {
                                                     cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
@@ -477,6 +481,7 @@ public class FeedsListFragment extends ListFragment {
                                                 values.put(FeedColumns.NAME, groupName);
                                                 if (cr.update(FeedColumns.CONTENT_URI(groupId), values, null, null) > 0) {
                                                     cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+                                                    cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
                                                 }
                                             }
                                         }
@@ -501,6 +506,7 @@ public class FeedsListFragment extends ListFragment {
                                             if (cr.delete(FeedColumns.GROUPS_CONTENT_URI(groupId), null, null) > 0) {
                                                 cr.notifyChange(EntryColumns.CONTENT_URI, null);
                                                 cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
+                                                cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
                                             }
                                         }
                                     }.start();
