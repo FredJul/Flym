@@ -162,6 +162,14 @@ public class DrawerAdapter extends BaseAdapter implements LoaderManager.LoaderCa
         return -1;
     }
 
+    public byte[] getItemIcon(int position) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
+            return mFeedsCursor.getBlob(POS_ICON);
+        }
+
+        return null;
+    }
+
     public String getItemName(int position) {
         if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
             return mFeedsCursor.getString(POS_NAME);

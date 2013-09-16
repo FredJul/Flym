@@ -23,6 +23,9 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -66,6 +69,7 @@ public class MainActivity extends ProgressActivity {
     private ActionBarDrawerToggle mDrawerToggle;
 
     private CharSequence mTitle;
+    private BitmapDrawable mIcon;
     private int mCurrentDrawerPos;
 
     private final int loaderId = new Random().nextInt();//TODO
@@ -97,11 +101,15 @@ public class MainActivity extends ProgressActivity {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
             public void onDrawerClosed(View view) {
                 getActionBar().setTitle(mTitle);
+                if (mIcon != null) {
+                    getActionBar().setIcon(mIcon);
+                }
                 invalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerView) {
                 getActionBar().setTitle(R.string.app_name);
+                getActionBar().setIcon(R.drawable.icon);
                 invalidateOptionsMenu();
             }
         };
@@ -199,6 +207,7 @@ public class MainActivity extends ProgressActivity {
 
     private void selectDrawerItem(int position) {
         mCurrentDrawerPos = position;
+        mIcon = null;
 
         Bundle args = new Bundle();
         args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
@@ -207,10 +216,12 @@ public class MainActivity extends ProgressActivity {
             case 0:
                 args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.CONTENT_URI);
                 setTitle(MainApplication.getContext().getString(R.string.all));
+                getActionBar().setIcon(R.drawable.ic_statusbar_rss);
                 break;
             case 1:
                 args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.FAVORITES_CONTENT_URI);
                 setTitle(MainApplication.getContext().getString(R.string.favorites));
+                getActionBar().setIcon(R.drawable.dimmed_rating_important);
                 break;
             default:
                 args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.FAVORITES_CONTENT_URI);
@@ -218,6 +229,20 @@ public class MainActivity extends ProgressActivity {
                 if (mDrawerAdapter.isItemAGroup(position)) {
                     args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId));
                 } else {
+                    byte[] iconBytes = mDrawerAdapter.getItemIcon(position);
+                    if (iconBytes != null && iconBytes.length > 0) {
+                        int bitmapSizeInDip = UiUtils.dpToPixel(24);
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
+                        if (bitmap != null) {
+                            if (bitmap.getHeight() != bitmapSizeInDip) {
+                                bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
+                            }
+
+                            mIcon = new BitmapDrawable(getResources(), bitmap);
+                            getActionBar().setIcon(mIcon);
+                        }
+                    }
+
                     args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId));
                     args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, false);
                 }
