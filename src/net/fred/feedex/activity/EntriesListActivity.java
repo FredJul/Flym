@@ -45,8 +45,6 @@
 package net.fred.feedex.activity;
 
 import android.app.ActionBar;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -57,6 +55,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import net.fred.feedex.Constants;
 import net.fred.feedex.R;
 import net.fred.feedex.UiUtils;
 import net.fred.feedex.fragment.EntriesListFragment;
@@ -114,17 +113,13 @@ public class EntriesListActivity extends FragmentActivity {
                 getActionBar().setIcon(new BitmapDrawable(getResources(), bitmap));
             }
         }
-
-        if (MainActivity.mNotificationManager == null) {
-            MainActivity.mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (MainActivity.mNotificationManager != null) {
-            MainActivity.mNotificationManager.cancel(0);
+        if (Constants.NOTIF_MGR != null) {
+            Constants.NOTIF_MGR.cancel(0);
         }
     }
 

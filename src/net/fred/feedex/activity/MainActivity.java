@@ -19,8 +19,6 @@
 
 package net.fred.feedex.activity;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -36,6 +34,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
@@ -51,8 +50,7 @@ import java.util.Random;
 
 public class MainActivity extends ProgressFragmentActivity {
 
-    static NotificationManager mNotificationManager = (NotificationManager) MainApplication.getContext().getSystemService(
-            Context.NOTIFICATION_SERVICE);
+    private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
 
     private final SharedPreferences.OnSharedPreferenceChangeListener isRefreshingListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
@@ -69,6 +67,7 @@ public class MainActivity extends ProgressFragmentActivity {
     private ActionBarDrawerToggle mDrawerToggle;
 
     private CharSequence mTitle;
+    private int mCurrentDrawerPos;
 
     private final int loaderId = new Random().nextInt();//TODO
 
@@ -108,7 +107,23 @@ public class MainActivity extends ProgressFragmentActivity {
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        selectDrawerItem(0);
+
+        if (savedInstanceState == null) {
+            selectDrawerItem(0);
+
+            // First open => we open the drawer for you
+            if (PrefUtils.getBoolean(PrefUtils.FIRST_OPEN, true)) {
+                PrefUtils.putBoolean(PrefUtils.FIRST_OPEN, false);
+                mDrawerLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDrawerLayout.openDrawer(mDrawerList);
+                    }
+                }, 500);
+            }
+        } else {
+            selectDrawerItem(savedInstanceState.getInt(STATE_CURRENT_DRAWER_POS));
+        }
 
         if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
             // starts the service independent to this activity
@@ -124,13 +139,19 @@ public class MainActivity extends ProgressFragmentActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(STATE_CURRENT_DRAWER_POS, mCurrentDrawerPos);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         getProgressBar().setVisibility(PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false) ? View.VISIBLE : View.GONE);
         PrefUtils.registerOnPrefChangeListener(isRefreshingListener);
 
-        if (mNotificationManager != null) {
-            mNotificationManager.cancel(0);
+        if (Constants.NOTIF_MGR != null) {
+            Constants.NOTIF_MGR.cancel(0);
         }
     }
 
@@ -180,6 +201,8 @@ public class MainActivity extends ProgressFragmentActivity {
     }
 
     private void selectDrawerItem(int position) {
+        mCurrentDrawerPos = position;
+
         Bundle args = new Bundle();
         args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
 
@@ -219,6 +242,7 @@ public class MainActivity extends ProgressFragmentActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
     }
 

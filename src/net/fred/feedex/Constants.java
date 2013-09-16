@@ -20,9 +20,15 @@
 
 package net.fred.feedex;
 
+import android.app.NotificationManager;
+import android.content.Context;
+
 import java.text.DateFormat;
 
 public final class Constants {
+
+    public static NotificationManager NOTIF_MGR = (NotificationManager) MainApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
     public static final DateFormat DATE_FORMAT = android.text.format.DateFormat.getDateFormat(MainApplication.getContext());
     public static final DateFormat TIME_FORMAT = android.text.format.DateFormat.getTimeFormat(MainApplication.getContext());
 

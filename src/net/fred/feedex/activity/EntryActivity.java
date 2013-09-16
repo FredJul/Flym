@@ -46,7 +46,6 @@ package net.fred.feedex.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -298,9 +297,6 @@ public class EntryActivity extends ProgressActivity {
         authorPosition = entryCursor.getColumnIndex(EntryColumns.AUTHOR);
 
         entryCursor.close();
-        if (MainActivity.mNotificationManager == null) {
-            MainActivity.mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        }
 
         cancelFullscreenBtn = findViewById(R.id.cancelFullscreenBtn);
         backBtn = findViewById(R.id.backBtn);
@@ -346,8 +342,8 @@ public class EntryActivity extends ProgressActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (MainActivity.mNotificationManager != null) {
-            MainActivity.mNotificationManager.cancel(0);
+        if (Constants.NOTIF_MGR != null) {
+            Constants.NOTIF_MGR.cancel(0);
         }
 
         uri = getIntent().getData();

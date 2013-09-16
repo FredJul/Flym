@@ -25,6 +25,8 @@ import android.preference.PreferenceManager;
 
 public class PrefUtils {
 
+    public static final String FIRST_OPEN = "FIRST_OPEN";
+
     public static final String IS_REFRESHING = "IS_REFRESHING";
 
     public static final String REFRESH_INTERVAL = "refresh.interval";
