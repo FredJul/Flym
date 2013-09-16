@@ -106,8 +106,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
-        viewPublic=view;
-        cursorPublic=cursor;
+        viewPublic = view;
+        cursorPublic = cursor;
         final TextView textView = (TextView) view.findViewById(android.R.id.text1);
         textView.setText(cursor.getString(titleColumnPosition));
 
@@ -260,26 +260,27 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         }.start();
     }
 
-    public void markasReaderorUnread(final long id){
-        if (markedAsUnread.contains(id) || (cursorPublic.isNull(isReadColumn) && !markedAsRead.contains(id)))  markAsRead(id);
+    public void markAsReadOrUnread(final long id) {
+        if (markedAsUnread.contains(id) || (cursorPublic.isNull(isReadColumn) && !markedAsRead.contains(id)))
+            markAsRead(id);
         else markAsUnread(id);
     }
 
-    public void changeFavorite(final long id){
+    public void changeFavorite(final long id) {
         final ImageView starImgView = (ImageView) viewPublic.findViewById(android.R.id.icon);
         boolean favorite = !unfavorited.contains(id) && (cursorPublic.getInt(favoriteColumn) == 1 || favorited.contains(id));
-        if(favorite){
+        if (favorite) {
             viewPublic.setTag(Constants.FALSE);
             starImgView.setImageResource(R.drawable.dimmed_rating_not_important);
             unfavorited.add(id);
             favorited.remove(id);
-            favorite=false;
-        }else{
+            favorite = false;
+        } else {
             viewPublic.setTag(Constants.TRUE);
             starImgView.setImageResource(R.drawable.dimmed_rating_important);
             favorited.add(id);
             unfavorited.remove(id);
-            favorite=true;
+            favorite = true;
         }
         ContentValues values = new ContentValues();
         values.put(EntryColumns.IS_FAVORITE, favorite ? 1 : 0);

@@ -74,29 +74,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         }
     };
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            Bundle args = getArguments();
-
-            if (args.containsKey(ARG_SHOW_FEED_INFO)) {
-                mShowFeedInfo = getArguments().getBoolean(ARG_SHOW_FEED_INFO);
-            }
-
-            if (args.containsKey(ARG_URI)) {
-                mUri = getArguments().getParcelable(ARG_URI);
-
-                mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
-                PrefUtils.registerOnPrefChangeListener(prefListener);
-                getLoaderManager().initLoader(loaderId, null, this);
-            }
-        }
-    }
-
-    class SwipeGestureListener extends SimpleOnGestureListener implements OnTouchListener {
+    private class SwipeGestureListener extends SimpleOnGestureListener implements OnTouchListener {
         static final int SWIPE_MIN_DISTANCE = 120;
         static final int SWIPE_MAX_OFF_PATH = 250;
         static final int SWIPE_THRESHOLD_VELOCITY = 200;
@@ -121,7 +99,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                     return false;
                 }
                 if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
-                    mEntriesCursorAdapter.markasReaderorUnread(mEntriesCursorAdapter.getItemId(position));
+                    mEntriesCursorAdapter.markAsReadOrUnread(mEntriesCursorAdapter.getItemId(position));
                 } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
                     mEntriesCursorAdapter.changeFavorite(mEntriesCursorAdapter.getItemId(position));
                 }
@@ -134,6 +112,28 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             return mGestureDetector.onTouchEvent(event);
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            Bundle args = getArguments();
+
+            if (args.containsKey(ARG_SHOW_FEED_INFO)) {
+                mShowFeedInfo = getArguments().getBoolean(ARG_SHOW_FEED_INFO);
+            }
+
+            if (args.containsKey(ARG_URI)) {
+                mUri = getArguments().getParcelable(ARG_URI);
+
+                mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
+                PrefUtils.registerOnPrefChangeListener(prefListener);
+                getLoaderManager().initLoader(loaderId, null, this);
+            }
         }
     }
 
