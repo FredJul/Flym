@@ -182,18 +182,18 @@ public class MainActivity extends ProgressFragmentActivity {
         }
 
         switch (item.getItemId()) {
-            case R.id.menu_sort_main:
+            case R.id.menu_edit:
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, FeedsListFragment.class.getName())).commit();
                 setTitle(MainApplication.getContext().getString(R.string.overview));
                 mDrawerLayout.closeDrawers();
-                return true;
-            case R.id.menu_settings_main:
-                startActivity(new Intent(this, GeneralPrefsActivity.class));
                 return true;
             case R.id.menu_refresh_main:
                 if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
                     MainApplication.getContext().startService(new Intent(MainApplication.getContext(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
                 }
+                return true;
+            case R.id.menu_settings_main:
+                startActivity(new Intent(this, GeneralPrefsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

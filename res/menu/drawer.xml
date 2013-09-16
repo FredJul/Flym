@@ -3,19 +3,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/menu_sort_main"
-        android:icon="@drawable/sort"
+        android:id="@+id/menu_edit"
+        android:icon="@drawable/content_edit"
         android:showAsAction="always"
-        android:title="@string/menu_settings" />
-    <item
-        android:id="@+id/menu_settings_main"
-        android:icon="@drawable/action_settings"
-        android:showAsAction="always"
-        android:title="@string/menu_settings" />
+        android:title="@string/context_menu_edit"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/menu_refresh_main"
         android:icon="@drawable/refresh"
         android:showAsAction="always"
         android:title="@string/menu_refresh"
+        tools:ignore="AlwaysShowAction" />
+    <item
+        android:id="@+id/menu_settings_main"
+        android:icon="@drawable/action_settings"
+        android:showAsAction="always"
+        android:title="@string/menu_settings"
         tools:ignore="AlwaysShowAction" />
 </menu>
