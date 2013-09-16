@@ -36,6 +36,7 @@
     <string name="no_result">Нет результатов</string>
 
     <!-- FEEDS -->
+    <string name="feeds">Ленты</string>
     <string name="menu_add_feed">Добавить ленту</string>
     <string name="no_feeds">Нет лент</string>
     <string name="no_filters">Нет фильтров</string>
@@ -91,7 +92,6 @@
 
     <!-- ENTRIES -->
     <string name="all">Новости</string>
-    <string name="overview">Ленты</string>
     <string name="no_entries">Нет новостей</string>
     <string name="favorites">Избранное</string>
     <string name="context_menu_mark_as_read">Пометить как прочитанное</string>

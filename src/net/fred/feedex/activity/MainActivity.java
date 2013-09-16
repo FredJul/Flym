@@ -41,7 +41,6 @@ import net.fred.feedex.R;
 import net.fred.feedex.UiUtils;
 import net.fred.feedex.adapter.DrawerAdapter;
 import net.fred.feedex.fragment.EntriesListFragment;
-import net.fred.feedex.fragment.FeedsListFragment;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.service.RefreshService;
@@ -183,9 +182,7 @@ public class MainActivity extends ProgressActivity {
 
         switch (item.getItemId()) {
             case R.id.menu_edit:
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, FeedsListFragment.class.getName())).commit();
-                setTitle(MainApplication.getContext().getString(R.string.overview));
-                mDrawerLayout.closeDrawers();
+                startActivity(new Intent(this, FeedsListActivity.class));
                 return true;
             case R.id.menu_refresh_main:
                 if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {

@@ -46,25 +46,13 @@ package net.fred.feedex.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 
-import net.fred.feedex.Constants;
-import net.fred.feedex.R;
 import net.fred.feedex.UiUtils;
-import net.fred.feedex.fragment.EntriesListFragment;
-import net.fred.feedex.provider.FeedData.FeedColumns;
+import net.fred.feedex.fragment.FeedsListFragment;
 
-public class EntriesListActivity extends Activity {
-    private static final String[] FEED_PROJECTION = {FeedColumns.NAME, FeedColumns.URL, FeedColumns.ICON};
-
-    private byte[] iconBytes = null;
+public class FeedsListActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,57 +63,10 @@ public class EntriesListActivity extends Activity {
         if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
 
-        Intent intent = getIntent();
-        long feedId = intent.getLongExtra(FeedColumns._ID, 0);
-
-        String title = null;
-        if (feedId > 0) {
-            Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI(feedId), FEED_PROJECTION, null, null, null);
-
-            if (cursor.moveToFirst()) {
-                title = cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0);
-                iconBytes = cursor.getBlob(2);
-            }
-            cursor.close();
-        }
-
-        if (title != null) {
-            setTitle(title);
-        }
-
         if (savedInstanceState == null) {
-            EntriesListFragment fragment = new EntriesListFragment();
-            Bundle args = new Bundle();
-            args.putParcelable(EntriesListFragment.ARG_URI, intent.getData());
-            fragment.setArguments(args);
-            getFragmentManager().beginTransaction().add(android.R.id.content, fragment, EntriesListFragment.class.getName()).commit();
+            FeedsListFragment fragment = new FeedsListFragment();
+            getFragmentManager().beginTransaction().add(android.R.id.content, fragment, FeedsListFragment.class.getName()).commit();
         }
-
-        if (iconBytes != null && iconBytes.length > 0) {
-            int bitmapSizeInDip = UiUtils.dpToPixel(24);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
-            if (bitmap != null) {
-                if (bitmap.getHeight() != bitmapSizeInDip) {
-                    bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
-                }
-
-                getActionBar().setIcon(new BitmapDrawable(getResources(), bitmap));
-            }
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (Constants.NOTIF_MGR != null) {
-            Constants.NOTIF_MGR.cancel(0);
-        }
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.removeItem(R.id.menu_refresh); // We do not want the refresh option here
-        return true;
     }
 
     @Override

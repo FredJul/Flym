@@ -36,6 +36,7 @@
     <string name="no_result">Nessun risultato</string>
 
     <!-- FEEDS -->
+    <string name="feeds">Feed</string>
     <string name="menu_add_feed">Aggiungi feed</string>
     <string name="no_feeds">Nessun feed</string>
     <string name="no_filters">Nessun filtro</string>
@@ -89,7 +90,6 @@
 
     <!-- ENTRIES -->
     <string name="all">Articoli</string>
-    <string name="overview">Feed</string>
     <string name="no_entries">Nessun articolo</string>
     <string name="favorites">Preferiti</string>
     <string name="context_menu_mark_as_read">Segna come letto</string>

@@ -36,6 +36,7 @@
     <string name="no_result">Sin resultados</string>
 
     <!-- FEEDS -->
+    <string name="feeds">Fuentes</string>
     <string name="menu_add_feed">fuente</string>
     <string name="no_feeds">No hay fuentes</string>
     <string name="no_filters">No hay filtros</string>
@@ -88,7 +89,6 @@
 
     <!-- ENTRIES -->
     <string name="all">Entradas</string>
-    <string name="overview">Fuentes</string>
     <string name="no_entries">No hay entradas</string>
     <string name="favorites">Destacadas</string>
     <string name="context_menu_mark_as_read">Marcar como leído</string>

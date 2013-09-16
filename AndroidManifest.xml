@@ -39,6 +39,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.FeedsListActivity"
+            android:label="@string/feeds"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".activity.EntriesListActivity"
             android:launchMode="singleTask">
             <intent-filter>

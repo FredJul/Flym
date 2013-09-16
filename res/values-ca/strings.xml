@@ -22,6 +22,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="feeds">Canals</string>
     <string name="never">mai</string>
     <string name="update">Actualitza</string>
     <string name="colon">:u00A0</string>
@@ -89,7 +90,6 @@
 
     <!-- ENTRIES -->
     <string name="all">Entrades</string>
-    <string name="overview">Canals</string>
     <string name="no_entries">No hi ha entrades</string>
     <string name="favorites">Destacats</string>
     <string name="context_menu_mark_as_read">Marca com a llegit</string>

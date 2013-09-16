@@ -36,6 +36,7 @@
     <string name="no_result">Aucun résultat</string>
 
     <!-- FEEDS -->
+    <string name="feeds">Flux</string>
     <string name="menu_add_feed">Ajouter un flux</string>
     <string name="no_feeds">Pas de flux</string>
     <string name="no_filters">Pas de filtres</string>
@@ -91,7 +92,6 @@
 
     <!-- ENTRIES -->
     <string name="all">Articles</string>
-    <string name="overview">Flux</string>
     <string name="no_entries">Pas d\'article</string>
     <string name="favorites">Favoris</string>
     <string name="context_menu_mark_as_read">Marquer comme lu</string>

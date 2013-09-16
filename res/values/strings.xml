@@ -38,6 +38,7 @@
     <string name="drawer_close">Close navigation drawer</string>
 
     <!-- FEEDS -->
+    <string name="feeds">Feeds</string>
     <string name="menu_add_feed">Add feed</string>
     <string name="no_feeds">No feeds</string>
     <string name="no_filters">No filters</string>
@@ -93,7 +94,6 @@
 
     <!-- ENTRIES -->
     <string name="all">Entries</string>
-    <string name="overview">Feeds</string>
     <string name="no_entries">No entries</string>
     <string name="favorites">Starred</string>
     <string name="context_menu_mark_as_read">Mark as read</string>
