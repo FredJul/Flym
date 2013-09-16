@@ -1,60 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ns_menu_row"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="36dp">
+    <!-- icon -->
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="5dp"
+        android:layout_centerVertical="true" />
 
-        <!-- icon -->
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="5dp"></ImageView>
+    <!-- text -->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/icon"
+        android:layout_toLeftOf="@+id/unread_count"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:textColor="#EEEEEE"
+        android:singleLine="true" />
 
-        <!-- text -->
-        <TextView
-            android:id="@+id/title"
-            style="?android:attr/spinnerDropDownItemStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/icon"
-            android:layout_toLeftOf="@+id/menurow_counter"
-            android:gravity="center_vertical"
-            android:minHeight="?android:attr/listPreferredItemHeightSmall"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp"
-            android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall"></TextView>
+    <!-- unread counter -->
+    <TextView
+        android:id="@+id/unread_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="12dp"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:textColor="#EEEEEE" />
 
-        <!-- counter -->
-        <TextView
-            android:id="@+id/menurow_counter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="12dp"
-
-            android:gravity="center_vertical"
-            android:minHeight="?android:attr/listPreferredItemHeightSmall"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp"></TextView>
-    </RelativeLayout>
-
-    <!-- divider
     <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="1dp"
-            android:layout_marginTop="1dp"
-            android:background="#DADADC" ></View>   -->
-
-</LinearLayout>
+        android:id="@+id/separator"
+        android:layout_height="2dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:background="#515151" />
+</RelativeLayout>
