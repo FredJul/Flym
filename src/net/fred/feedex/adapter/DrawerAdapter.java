@@ -19,16 +19,11 @@
 
 package net.fred.feedex.adapter;
 
-import android.app.Activity;
-import android.app.LoaderManager;
 import android.content.Context;
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,13 +31,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import net.fred.feedex.Constants;
 import net.fred.feedex.R;
 import net.fred.feedex.UiUtils;
-import net.fred.feedex.provider.FeedData.EntryColumns;
-import net.fred.feedex.provider.FeedData.FeedColumns;
 
-public class DrawerAdapter extends BaseAdapter implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DrawerAdapter extends BaseAdapter {
 
     private static final int POS_ID = 0;
     private static final int POS_NAME = 1;
@@ -57,8 +49,7 @@ public class DrawerAdapter extends BaseAdapter implements LoaderManager.LoaderCa
     private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
 
-    private final Activity mActivity;
-    private final LoaderManager mLoaderMgr;
+    private final Context mContext;
     private Cursor mFeedsCursor;
 
     private static class ViewHolder {
@@ -68,15 +59,18 @@ public class DrawerAdapter extends BaseAdapter implements LoaderManager.LoaderCa
         public View separator;
     }
 
-    public DrawerAdapter(Activity activity, int loaderId) {
-        mActivity = activity;
-        mLoaderMgr = activity.getLoaderManager();
+    public DrawerAdapter(Context context, Cursor feedCursor) {
+        mContext = context;
+        mFeedsCursor = feedCursor;
+    }
 
-        mLoaderMgr.restartLoader(loaderId, null, this);
+    public void setCursor(Cursor feedCursor) {
+        mFeedsCursor = feedCursor;
+        notifyDataSetChanged();
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.drawer_list_item, parent, false);
@@ -184,25 +178,5 @@ public class DrawerAdapter extends BaseAdapter implements LoaderManager.LoaderCa
         }
 
         return false;
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        CursorLoader cursorLoader = new CursorLoader(mActivity, FeedColumns.GROUPED_FEEDS_CONTENT_URI, new String[]{FeedColumns._ID, FeedColumns.NAME, FeedColumns.IS_GROUP, FeedColumns.GROUP_ID, FeedColumns.ICON,
-                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + "=" + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ")",
-                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)",
-                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ")"}, null, null, null);
-        cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
-        return cursorLoader;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        mFeedsCursor = cursor;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
     }
 }

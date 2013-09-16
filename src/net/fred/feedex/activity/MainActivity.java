@@ -20,9 +20,13 @@
 package net.fred.feedex.activity;
 
 import android.app.Fragment;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -50,7 +54,7 @@ import net.fred.feedex.service.RefreshService;
 
 import java.util.Random;
 
-public class MainActivity extends ProgressActivity {
+public class MainActivity extends ProgressActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
 
@@ -85,8 +89,6 @@ public class MainActivity extends ProgressActivity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mDrawerAdapter = new DrawerAdapter(this, loaderId);
-        mDrawerList.setAdapter(mDrawerAdapter);
         mDrawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -115,22 +117,11 @@ public class MainActivity extends ProgressActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        if (savedInstanceState == null) {
-            selectDrawerItem(0);
-
-            // First open => we open the drawer for you
-            if (PrefUtils.getBoolean(PrefUtils.FIRST_OPEN, true)) {
-                PrefUtils.putBoolean(PrefUtils.FIRST_OPEN, false);
-                mDrawerLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDrawerLayout.openDrawer(mDrawerList);
-                    }
-                }, 500);
-            }
-        } else {
-            selectDrawerItem(savedInstanceState.getInt(STATE_CURRENT_DRAWER_POS));
+        if (savedInstanceState != null) {
+            mCurrentDrawerPos = savedInstanceState.getInt(STATE_CURRENT_DRAWER_POS);
         }
+
+        getLoaderManager().initLoader(loaderId, null, this);
 
         if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
             // starts the service independent to this activity
@@ -170,13 +161,16 @@ public class MainActivity extends ProgressActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Fragment fragment = getFragmentManager().findFragmentById(R.id.content_frame);
         if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.drawer, menu);
 
-            getFragmentManager().findFragmentById(R.id.content_frame).setHasOptionsMenu(false);
-        } else {
-            getFragmentManager().findFragmentById(R.id.content_frame).setHasOptionsMenu(true);
+            if (fragment != null) {
+                fragment.setHasOptionsMenu(false);
+            }
+        } else if (fragment != null) {
+            fragment.setHasOptionsMenu(true);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -249,10 +243,27 @@ public class MainActivity extends ProgressActivity {
                 setTitle(mDrawerAdapter.getItemName(position));
                 break;
         }
-        getFragmentManager().beginTransaction().replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, EntriesListFragment.class.getName(), args)).commit();
+
+        // Replace the fragment only if it need to
+        Fragment oldFragment = getFragmentManager().findFragmentById(R.id.content_frame);
+        if (oldFragment == null || !oldFragment.getArguments().getParcelable(EntriesListFragment.ARG_URI).equals(args.getParcelable(EntriesListFragment.ARG_URI))) {
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, EntriesListFragment.class.getName(), args)).commit();
+        }
 
         mDrawerList.setItemChecked(position, true);
-        mDrawerLayout.closeDrawer(mDrawerList);
+
+        // First open => we open the drawer for you
+        if (PrefUtils.getBoolean(PrefUtils.FIRST_OPEN, true)) {
+            PrefUtils.putBoolean(PrefUtils.FIRST_OPEN, false);
+            mDrawerLayout.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mDrawerLayout.openDrawer(mDrawerList);
+                }
+            }, 500);
+        } else {
+            mDrawerLayout.closeDrawer(mDrawerList); // We clicked on it, so we close it
+        }
     }
 
     @Override
@@ -272,5 +283,37 @@ public class MainActivity extends ProgressActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        CursorLoader cursorLoader = new CursorLoader(this, FeedData.FeedColumns.GROUPED_FEEDS_CONTENT_URI, new String[]{FeedData.FeedColumns._ID, FeedData.FeedColumns.NAME, FeedData.FeedColumns.IS_GROUP, FeedData.FeedColumns.GROUP_ID, FeedData.FeedColumns.ICON,
+                "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_READ + " IS NULL AND " + FeedData.EntryColumns.FEED_ID + "=" + FeedData.FeedColumns.TABLE_NAME + "." + FeedData.FeedColumns._ID + ")",
+                "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_READ + " IS NULL)",
+                "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_READ + " IS NULL AND " + FeedData.EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ")"}, null, null, null);
+        cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        if (mDrawerAdapter != null) {
+            mDrawerAdapter.setCursor(cursor);
+        } else {
+            mDrawerAdapter = new DrawerAdapter(this, cursor);
+            mDrawerList.setAdapter(mDrawerAdapter);
+
+            // We don't have any menu yet, we need to display it
+            mDrawerList.post(new Runnable() {
+                @Override
+                public void run() {
+                    selectDrawerItem(mCurrentDrawerPos);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
     }
 }
