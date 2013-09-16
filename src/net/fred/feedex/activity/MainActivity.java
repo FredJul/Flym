@@ -52,11 +52,11 @@ import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.service.RefreshService;
 
-import java.util.Random;
-
 public class MainActivity extends ProgressActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
+
+    private static final int LOADER_ID = 0;
 
     private final SharedPreferences.OnSharedPreferenceChangeListener isRefreshingListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
@@ -75,8 +75,6 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
     private CharSequence mTitle;
     private BitmapDrawable mIcon;
     private int mCurrentDrawerPos;
-
-    private final int loaderId = new Random().nextInt();//TODO
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +120,7 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
             mCurrentDrawerPos = savedInstanceState.getInt(STATE_CURRENT_DRAWER_POS);
         }
 
-        getLoaderManager().initLoader(loaderId, null, this);
+        getLoaderManager().initLoader(LOADER_ID, null, this);
 
         if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
             // starts the service independent to this activity

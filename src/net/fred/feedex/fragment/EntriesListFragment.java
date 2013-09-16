@@ -51,11 +51,11 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 
-import java.util.Random;
-
 public class EntriesListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String ARG_URI = "uri";
     public static final String ARG_SHOW_FEED_INFO = "show_feedinfo";
+
+    private static final int LOADER_ID = 1;
 
     private Uri mUri;
     private boolean mShowFeedInfo = false;
@@ -63,13 +63,11 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     private SwipeGestureListener mGestureListener;
     private ListView lv;
 
-    private final int loaderId = new Random().nextInt();
-
     private final OnSharedPreferenceChangeListener prefListener = new OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (PrefUtils.SHOW_READ.equals(key)) {
-                getLoaderManager().restartLoader(loaderId, null, EntriesListFragment.this);
+                getLoaderManager().restartLoader(LOADER_ID, null, EntriesListFragment.this);
             }
         }
     };
@@ -133,7 +131,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
                 mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
                 PrefUtils.registerOnPrefChangeListener(prefListener);
-                getLoaderManager().initLoader(loaderId, null, this);
+                getLoaderManager().initLoader(LOADER_ID, null, this);
             }
         }
     }
