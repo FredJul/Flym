@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -206,8 +205,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                     if (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
                         getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FEED_ID,
                                 mUri.getPathSegments().get(1)));
-                    }
-                     else {
+                    } else {
                         getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
                     }
                 }
