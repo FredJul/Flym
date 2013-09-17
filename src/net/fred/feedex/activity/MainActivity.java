@@ -101,10 +101,7 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
             public void onDrawerClosed(View view) {
-                getActionBar().setTitle(mTitle);
-                if (mIcon != null) {
-                    getActionBar().setIcon(mIcon);
-                }
+                refreshTitleAndIcon();
                 invalidateOptionsMenu();
             }
 
@@ -132,6 +129,26 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
             if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
                 startService(new Intent(MainActivity.this, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
             }
+        }
+    }
+
+    private void refreshTitleAndIcon() {
+        getActionBar().setTitle(mTitle);
+        switch (mCurrentDrawerPos) {
+            case 0:
+                getActionBar().setTitle(R.string.all);
+                getActionBar().setIcon(R.drawable.ic_statusbar_rss);
+                break;
+            case 1:
+                getActionBar().setTitle(R.string.favorites);
+                getActionBar().setIcon(R.drawable.dimmed_rating_important);
+                break;
+            default:
+                getActionBar().setTitle(mTitle);
+                if (mIcon != null) {
+                    getActionBar().setIcon(mIcon);
+                }
+                break;
         }
     }
 
@@ -208,13 +225,9 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
         switch (position) {
             case 0:
                 args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.CONTENT_URI);
-                setTitle(MainApplication.getContext().getString(R.string.all));
-                getActionBar().setIcon(R.drawable.ic_statusbar_rss);
                 break;
             case 1:
                 args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.FAVORITES_CONTENT_URI);
-                setTitle(MainApplication.getContext().getString(R.string.favorites));
-                getActionBar().setIcon(R.drawable.dimmed_rating_important);
                 break;
             default:
                 args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.FAVORITES_CONTENT_URI);
@@ -232,14 +245,13 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
                             }
 
                             mIcon = new BitmapDrawable(getResources(), bitmap);
-                            getActionBar().setIcon(mIcon);
                         }
                     }
 
                     args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId));
                     args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, false);
                 }
-                setTitle(mDrawerAdapter.getItemName(position));
+                mTitle = mDrawerAdapter.getItemName(position);
                 break;
         }
 
@@ -261,12 +273,6 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
                 }
             }, 500);
         }
-    }
-
-    @Override
-    public void setTitle(CharSequence title) {
-        mTitle = title;
-        getActionBar().setTitle(mTitle);
     }
 
     @Override
@@ -305,6 +311,7 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
                 @Override
                 public void run() {
                     selectDrawerItem(mCurrentDrawerPos);
+                    refreshTitleAndIcon();
                 }
             });
         }
