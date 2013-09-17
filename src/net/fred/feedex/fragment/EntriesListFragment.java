@@ -41,6 +41,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import net.fred.feedex.Constants;
@@ -73,8 +75,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     private class SwipeGestureListener extends SimpleOnGestureListener implements OnTouchListener {
         static final int SWIPE_MIN_DISTANCE = 120;
-        static final int SWIPE_MAX_OFF_PATH = 250;
-        static final int SWIPE_THRESHOLD_VELOCITY = 200;
+        static final int SWIPE_MAX_OFF_PATH = 150;
+        static final int SWIPE_THRESHOLD_VELOCITY = 150;
 
         private GestureDetector mGestureDetector;
 
@@ -86,13 +88,19 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             if (lv != null && Math.abs(e1.getY() - e2.getY()) <= SWIPE_MAX_OFF_PATH && Math.abs(velocityX) >= SWIPE_THRESHOLD_VELOCITY) {
                 int position = lv.pointToPosition(Math.round(e2.getX()), Math.round(e2.getY()));
+                View view = lv.getChildAt(position - lv.getFirstVisiblePosition());
 
-                if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
-                    mEntriesCursorAdapter.changeFavorite(mEntriesCursorAdapter.getItemId(position));
-                } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
-                    mEntriesCursorAdapter.markAsReadOrUnread(mEntriesCursorAdapter.getItemId(position));
+                if (view != null) {
+                    if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
+                        ImageView star = (ImageView) view.findViewById(android.R.id.icon);
+                        star.callOnClick();
+                    } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
+                        CheckBox cb = (CheckBox) view.findViewById(android.R.id.checkbox);
+                        cb.setChecked(!cb.isChecked());
+                    }
+
+                    return true;
                 }
-                mEntriesCursorAdapter.notifyDataSetChanged();
             }
 
             return super.onFling(e1, e2, velocityX, velocityY);
