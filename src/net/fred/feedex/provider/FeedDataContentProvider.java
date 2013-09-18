@@ -415,8 +415,8 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             case URI_ENTRIES_FOR_GROUP: {
-                table = ENTRIES_TABLE_WITH_FEED_INFO;
-                where.append(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1));
+                table = EntryColumns.TABLE_NAME;
+                where.append(EntryColumns.FEED_ID).append(" IN (SELECT ").append(FeedColumns._ID).append(" FROM ").append(FeedColumns.TABLE_NAME).append(" WHERE ").append(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1)).append(')');
                 break;
             }
             case URI_ENTRIES: {
@@ -528,7 +528,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
                 // Update the priorities
                 Cursor priorityCursor = database.query(FeedColumns.TABLE_NAME, new String[]{FeedColumns.PRIORITY, FeedColumns.GROUP_ID},
-                        FeedColumns._ID + "=" + feedId, null, null, null, null);
+                        FeedColumns._ID + '=' + feedId, null, null, null, null);
 
                 if (priorityCursor.moveToNext()) {
                     int priority = priorityCursor.getInt(0);
@@ -575,8 +575,8 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             case URI_ENTRIES_FOR_GROUP: {
-                table = ENTRIES_TABLE_WITH_FEED_INFO;
-                where.append(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1));
+                table = EntryColumns.TABLE_NAME;
+                where.append(EntryColumns.FEED_ID).append(" IN (SELECT ").append(FeedColumns._ID).append(" FROM ").append(FeedColumns.TABLE_NAME).append(" WHERE ").append(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1)).append(')');
                 break;
             }
             case URI_ENTRIES: {
