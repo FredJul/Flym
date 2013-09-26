@@ -292,8 +292,7 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
                 "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_READ + " IS NULL AND " + FeedData.EntryColumns.FEED_ID + "="
                         + FeedData.FeedColumns.TABLE_NAME + "." + FeedData.FeedColumns._ID + ")",
                 "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_READ + " IS NULL)",
-                "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_READ + " IS NULL AND " + FeedData.EntryColumns.IS_FAVORITE
-                        + Constants.DB_IS_TRUE + ")"}, null, null, null);
+                "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ")"}, null, null, null);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
     }
