@@ -164,6 +164,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear(); // This is needed to remove a bug on Android 4.0.3
+
         inflater.inflate(R.menu.entry_list, menu);
 
         if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
