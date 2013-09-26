@@ -19,7 +19,6 @@
 
 package net.fred.feedex.activity;
 
-import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -30,6 +29,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -67,6 +67,7 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
         }
     };
 
+    private EntriesListFragment mEntriesFragment;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private DrawerAdapter mDrawerAdapter;
@@ -82,6 +83,8 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        mEntriesFragment = (EntriesListFragment) getFragmentManager().findFragmentById(R.id.fragment);
 
         mTitle = getTitle();
 
@@ -177,16 +180,13 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Fragment fragment = getFragmentManager().findFragmentById(R.id.content_frame);
         if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.drawer, menu);
 
-            if (fragment != null) {
-                fragment.setHasOptionsMenu(false);
-            }
-        } else if (fragment != null) {
-            fragment.setHasOptionsMenu(true);
+            mEntriesFragment.setHasOptionsMenu(false);
+        } else {
+            mEntriesFragment.setHasOptionsMenu(true);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -219,21 +219,20 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
         mCurrentDrawerPos = position;
         mIcon = null;
 
-        Bundle args = new Bundle();
-        args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, true);
+        Uri newUri;
+        boolean showFeedInfo = true;
 
         switch (position) {
             case 0:
-                args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.CONTENT_URI);
+                newUri = FeedData.EntryColumns.CONTENT_URI;
                 break;
             case 1:
-                args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.FAVORITES_CONTENT_URI);
+                newUri = FeedData.EntryColumns.FAVORITES_CONTENT_URI;
                 break;
             default:
-                args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.FAVORITES_CONTENT_URI);
                 long feedOrGroupId = mDrawerAdapter.getItemId(position);
                 if (mDrawerAdapter.isItemAGroup(position)) {
-                    args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId));
+                    newUri = FeedData.EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
                 } else {
                     byte[] iconBytes = mDrawerAdapter.getItemIcon(position);
                     if (iconBytes != null && iconBytes.length > 0) {
@@ -248,17 +247,15 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
                         }
                     }
 
-                    args.putParcelable(EntriesListFragment.ARG_URI, FeedData.EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId));
-                    args.putBoolean(EntriesListFragment.ARG_SHOW_FEED_INFO, false);
+                    newUri = FeedData.EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
+                    showFeedInfo = false;
                 }
                 mTitle = mDrawerAdapter.getItemName(position);
                 break;
         }
 
-        // Replace the fragment only if it need to
-        Fragment oldFragment = getFragmentManager().findFragmentById(R.id.content_frame);
-        if (oldFragment == null || !oldFragment.getArguments().getParcelable(EntriesListFragment.ARG_URI).equals(args.getParcelable(EntriesListFragment.ARG_URI))) {
-            getFragmentManager().beginTransaction().replace(R.id.content_frame, Fragment.instantiate(MainActivity.this, EntriesListFragment.class.getName(), args)).commit();
+        if (!newUri.equals(mEntriesFragment.getUri())) {
+            mEntriesFragment.setData(newUri, showFeedInfo);
         }
 
         mDrawerList.setItemChecked(position, true);

@@ -54,8 +54,8 @@ import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 
 public class EntriesListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    public static final String ARG_URI = "uri";
-    public static final String ARG_SHOW_FEED_INFO = "show_feedinfo";
+    private static final String STATE_URI = "STATE_URI";
+    private static final String STATE_SHOW_FEED_INFO = "STATE_SHOW_FEED_INFO";
 
     private static final int LOADER_ID = 1;
 
@@ -117,29 +117,32 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            Bundle args = getArguments();
+        if (savedInstanceState != null) {
+            mUri = savedInstanceState.getParcelable(STATE_URI);
+            mShowFeedInfo = savedInstanceState.getBoolean(STATE_SHOW_FEED_INFO);
 
-            if (args.containsKey(ARG_SHOW_FEED_INFO)) {
-                mShowFeedInfo = getArguments().getBoolean(ARG_SHOW_FEED_INFO);
-            }
-
-            if (args.containsKey(ARG_URI)) {
-                mUri = getArguments().getParcelable(ARG_URI);
-
-                mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
-                PrefUtils.registerOnPrefChangeListener(prefListener);
-                getLoaderManager().initLoader(LOADER_ID, null, this);
-            }
+            mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
+            getLoaderManager().initLoader(LOADER_ID, null, this);
         }
+
+        PrefUtils.registerOnPrefChangeListener(prefListener);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(STATE_URI, mUri);
+        outState.putBoolean(STATE_SHOW_FEED_INFO, mShowFeedInfo);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.entry_list_fragment, container, false);
 
-        if (mEntriesCursorAdapter != null)
+        if (mEntriesCursorAdapter != null) {
             setListAdapter(mEntriesCursorAdapter);
+        }
 
         lv = (ListView) rootView.findViewById(android.R.id.list);
         lv.setFastScrollEnabled(true);
@@ -223,6 +226,19 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public Uri getUri() {
+        return mUri;
+    }
+
+    public void setData(Uri uri, boolean showFeedInfo) {
+        mUri = uri;
+        mShowFeedInfo = showFeedInfo;
+
+        mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
+        setListAdapter(mEntriesCursorAdapter);
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
