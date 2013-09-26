@@ -423,8 +423,7 @@ public class EntryActivity extends ProgressActivity {
             }
 
             title = entryCursor.getString(titlePosition);
-            Cursor cursor = cr.query(FeedColumns.CONTENT_URI(feedId), new String[]{FeedColumns.NAME, FeedColumns.URL}, null,
-                    null, null);
+            Cursor cursor = cr.query(FeedColumns.CONTENT_URI(feedId), new String[]{FeedColumns.NAME, FeedColumns.URL}, null, null, null);
             if (cursor.moveToFirst()) {
                 setTitle(cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0));
             } else { // fallback, should not be possible
@@ -473,9 +472,7 @@ public class EntryActivity extends ProgressActivity {
                 webView.getSettings().setBlockNetworkImage(true);
             } else {
                 if (webView.getSettings().getBlockNetworkImage()) {
-                    /*
-                     * setBlockNetwortImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
-					 */
+                    // setBlockNetwortImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
                     webView.loadData("", TEXT_HTML, Constants.UTF8);
                     webView.getSettings().setBlockNetworkImage(false);
                 }
@@ -513,9 +510,9 @@ public class EntryActivity extends ProgressActivity {
     private String generateHtmlContent(String title, String link, String abstractText, String enclosure, String author, long timestamp) {
         StringBuilder content = new StringBuilder();
 
-        int fontsize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"));
-        if (fontsize > 0) {
-            content.append(FONTSIZE_START).append(fontsize).append(FONTSIZE_MIDDLE);
+        int fontSize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"));
+        if (fontSize > 0) {
+            content.append(FONTSIZE_START).append(fontSize).append(FONTSIZE_MIDDLE);
         } else {
             content.append(BODY_START);
         }
@@ -549,7 +546,7 @@ public class EntryActivity extends ProgressActivity {
             content.append(LINK_BUTTON_START).append(link).append(LINK_BUTTON_MIDDLE).append(getString(R.string.see_link)).append(LINK_BUTTON_END);
         }
 
-        if (fontsize > 0) {
+        if (fontSize > 0) {
             content.append(FONTSIZE_END);
         } else {
             content.append(BODY_END);
@@ -626,9 +623,7 @@ public class EntryActivity extends ProgressActivity {
         forwardBtn.setVisibility(View.GONE);
 
         if (mEntriesIds == null) {
-            Cursor cursor = getContentResolver().query(
-                    parentUri,
-                    EntryColumns.PROJECTION_ID,
+            Cursor cursor = getContentResolver().query(parentUri, EntryColumns.PROJECTION_ID,
                     PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null
                             : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
 

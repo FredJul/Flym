@@ -144,9 +144,9 @@ public class FetcherService extends IntentService {
             return;
         }
 
-        // Connectivity issue, we quit
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        // Connectivity issue, we quit
         if (networkInfo == null || networkInfo.getState() != NetworkInfo.State.CONNECTED) {
             return;
         }
@@ -154,6 +154,7 @@ public class FetcherService extends IntentService {
         boolean isFromAutoRefresh = intent.getBooleanExtra(Constants.FROM_AUTO_REFRESH, false);
         boolean skipFetch = isFromAutoRefresh && PrefUtils.getBoolean(PrefUtils.REFRESH_WIFI_ONLY, false)
                 && networkInfo.getType() != ConnectivityManager.TYPE_WIFI;
+        // We need to skip the fetching process, so we quit
         if (skipFetch) {
             return;
         }
@@ -174,8 +175,7 @@ public class FetcherService extends IntentService {
 
             if (newCount > 0) {
                 if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
-                    Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{COUNT}, EntryColumns.WHERE_UNREAD, null,
-                            null);
+                    Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{COUNT}, EntryColumns.WHERE_UNREAD, null, null);
 
                     cursor.moveToFirst();
                     newCount = cursor.getInt(0); // The number has possibly changed
@@ -231,11 +231,8 @@ public class FetcherService extends IntentService {
     public static long getMobilizingTaskId(long entryId) {
         long result = -1;
 
-        Cursor cursor = MainApplication
-                .getContext()
-                .getContentResolver()
-                .query(TaskColumns.CONTENT_URI, TaskColumns.PROJECTION_ID,
-                        TaskColumns.ENTRY_ID + '=' + entryId + Constants.DB_AND + TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
+        Cursor cursor = MainApplication.getContext().getContentResolver().query(TaskColumns.CONTENT_URI, TaskColumns.PROJECTION_ID,
+                TaskColumns.ENTRY_ID + '=' + entryId + Constants.DB_AND + TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
         if (cursor.moveToFirst()) {
             result = cursor.getLong(0);
         }
