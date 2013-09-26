@@ -1,7 +1,6 @@
--keepattributes JavascriptInterface
+-renamesourcefileattribute SourceFile    
+-keepattributes SourceFile,LineNumberTable
 
--keep public class net.fred.feedex.activity.EntryActivity$JavaScriptObject
--keepclassmembers class net.fred.feedex.activity.EntryActivity$JavaScriptObject {
-    <fields>;
-    <methods>;
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
 }
