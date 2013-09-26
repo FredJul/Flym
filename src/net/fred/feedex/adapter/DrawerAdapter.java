@@ -210,7 +210,7 @@ public class DrawerAdapter extends BaseAdapter {
 
     public String getItemName(int position) {
         if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
-            return mFeedsCursor.getString(POS_NAME);
+            return mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME);
         }
 
         return null;
