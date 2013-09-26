@@ -290,10 +290,13 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        CursorLoader cursorLoader = new CursorLoader(this, FeedData.FeedColumns.GROUPED_FEEDS_CONTENT_URI, new String[]{FeedData.FeedColumns._ID, FeedData.FeedColumns.URL, FeedData.FeedColumns.NAME, FeedData.FeedColumns.IS_GROUP, FeedData.FeedColumns.GROUP_ID, FeedData.FeedColumns.ICON,
-                "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_READ + " IS NULL AND " + FeedData.EntryColumns.FEED_ID + "=" + FeedData.FeedColumns.TABLE_NAME + "." + FeedData.FeedColumns._ID + ")",
+        CursorLoader cursorLoader = new CursorLoader(this, FeedData.FeedColumns.GROUPED_FEEDS_CONTENT_URI, new String[]{FeedData.FeedColumns._ID, FeedData.FeedColumns.URL,
+                FeedData.FeedColumns.NAME, FeedData.FeedColumns.IS_GROUP, FeedData.FeedColumns.GROUP_ID, FeedData.FeedColumns.ICON, FeedData.FeedColumns.LAST_UPDATE, FeedData.FeedColumns.ERROR,
+                "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_READ + " IS NULL AND " + FeedData.EntryColumns.FEED_ID + "="
+                        + FeedData.FeedColumns.TABLE_NAME + "." + FeedData.FeedColumns._ID + ")",
                 "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_READ + " IS NULL)",
-                "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_READ + " IS NULL AND " + FeedData.EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ")"}, null, null, null);
+                "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_READ + " IS NULL AND " + FeedData.EntryColumns.IS_FAVORITE
+                        + Constants.DB_IS_TRUE + ")"}, null, null, null);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
     }

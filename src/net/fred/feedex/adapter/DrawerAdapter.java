@@ -31,8 +31,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.fred.feedex.Constants;
+import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.UiUtils;
+
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class DrawerAdapter extends BaseAdapter {
 
@@ -42,13 +48,27 @@ public class DrawerAdapter extends BaseAdapter {
     private static final int POS_IS_GROUP = 3;
     private static final int POS_GROUP_ID = 4;
     private static final int POS_ICON = 5;
-    private static final int POS_UNREAD = 6;
-    private static final int POS_ALL_UNREAD = 7;
-    private static final int POS_FAVORITES_UNREAD = 8;
+    private static final int POS_LAST_UPDATE = 6;
+    private static final int POS_ERROR = 7;
+    private static final int POS_UNREAD = 8;
+    private static final int POS_ALL_UNREAD = 9;
+    private static final int POS_FAVORITES_UNREAD = 10;
 
     private static final int ITEM_PADDING = UiUtils.dpToPixel(20);
     private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
+
+    private static final String COLON = MainApplication.getContext().getString(R.string.colon);
+
+    private static final int CACHE_MAX_ENTRIES = 100;
+    private final Map<Long, String> mFormattedDateCache = new LinkedHashMap<Long, String>(CACHE_MAX_ENTRIES + 1, .75F, true) {
+        private static final long serialVersionUID = -3678524849080041298L;
+
+        @Override
+        public boolean removeEldestEntry(Map.Entry<Long, String> eldest) {
+            return size() > CACHE_MAX_ENTRIES;
+        }
+    };
 
     private final Context mContext;
     private Cursor mFeedsCursor;
@@ -56,6 +76,7 @@ public class DrawerAdapter extends BaseAdapter {
     private static class ViewHolder {
         public ImageView iconView;
         public TextView titleTxt;
+        public TextView stateTxt;
         public TextView unreadTxt;
         public View separator;
     }
@@ -78,7 +99,8 @@ public class DrawerAdapter extends BaseAdapter {
 
             ViewHolder holder = new ViewHolder();
             holder.iconView = (ImageView) convertView.findViewById(R.id.icon);
-            holder.titleTxt = (TextView) convertView.findViewById(R.id.title);
+            holder.titleTxt = (TextView) convertView.findViewById(android.R.id.text1);
+            holder.stateTxt = (TextView) convertView.findViewById(android.R.id.text2);
             holder.unreadTxt = (TextView) convertView.findViewById(R.id.unread_count);
             holder.separator = convertView.findViewById(R.id.separator);
             convertView.setTag(holder);
@@ -91,6 +113,7 @@ public class DrawerAdapter extends BaseAdapter {
         holder.titleTxt.setText("");
         holder.titleTxt.setTextColor(NORMAL_TEXT_COLOR);
         holder.titleTxt.setAllCaps(false);
+        holder.stateTxt.setVisibility(View.GONE);
         holder.unreadTxt.setText("");
         convertView.setPadding(0, 0, 0, 0);
         holder.separator.setVisibility(View.GONE);
@@ -113,6 +136,26 @@ public class DrawerAdapter extends BaseAdapter {
                 holder.titleTxt.setAllCaps(true);
                 holder.separator.setVisibility(View.VISIBLE);
             } else {
+                holder.stateTxt.setVisibility(View.VISIBLE);
+
+                if (mFeedsCursor.isNull(POS_ERROR)) {
+                    long timestamp = mFeedsCursor.getLong(POS_LAST_UPDATE);
+
+                    // Date formatting is expensive, look at the cache
+                    String formattedDate = mFormattedDateCache.get(timestamp);
+                    if (formattedDate == null) {
+                        Date date = new Date(timestamp);
+
+                        formattedDate = mContext.getString(R.string.update) + COLON + (timestamp == 0 ? mContext.getString(R.string.never) : new StringBuilder(Constants.DATE_FORMAT.format(date))
+                                .append(' ').append(Constants.TIME_FORMAT.format(date)));
+                        mFormattedDateCache.put(timestamp, formattedDate);
+                    }
+
+                    holder.stateTxt.setText(formattedDate);
+                } else {
+                    holder.stateTxt.setText(new StringBuilder(mContext.getString(R.string.error)).append(COLON).append(mFeedsCursor.getString(POS_ERROR)));
+                }
+
                 byte[] iconBytes = mFeedsCursor.getBlob(POS_ICON);
                 if (iconBytes != null && iconBytes.length > 0) {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);

@@ -12,18 +12,37 @@
         android:layout_centerVertical="true" />
 
     <!-- text -->
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/icon"
         android:layout_toLeftOf="@+id/unread_count"
         android:layout_centerVertical="true"
-        android:gravity="center_vertical"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:textColor="#EEEEEE"
-        android:singleLine="true" />
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:id="@android:id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:textColor="#EEEEEE"
+            android:singleLine="true"
+            android:textIsSelectable="false" />
+
+        <TextView
+            android:id="@android:id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.5"
+            android:textColor="#EEEEEE"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:singleLine="true"
+            android:textIsSelectable="false" />
+    </LinearLayout>
 
     <!-- unread counter -->
     <TextView

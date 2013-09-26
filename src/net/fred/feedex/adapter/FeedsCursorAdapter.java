@@ -35,43 +35,23 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import net.fred.feedex.Constants;
-import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.UiUtils;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.view.DragNDropExpandableListView;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
-
-    private static final String COLON = MainApplication.getContext().getString(R.string.colon);
 
     private final Activity mActivity;
     private int isGroupPosition = -1;
     private int isGroupCollapsedPosition = -1;
     private int namePosition = -1;
-    private int lastUpdateColumn = -1;
     private int idPosition = -1;
     private int linkPosition = -1;
-    private int errorPosition = -1;
     private int iconPosition = -1;
 
     private DragNDropExpandableListView mListView;
     private final SparseBooleanArray mGroupInitDone = new SparseBooleanArray();
-
-    private static final int CACHE_MAX_ENTRIES = 100;
-    private final Map<Long, String> mFormattedDateCache = new LinkedHashMap<Long, String>(CACHE_MAX_ENTRIES + 1, .75F, true) {
-        private static final long serialVersionUID = -3678524849080041298L;
-
-        @Override
-        public boolean removeEldestEntry(Map.Entry<Long, String> eldest) {
-            return size() > CACHE_MAX_ENTRIES;
-        }
-    };
 
     public FeedsCursorAdapter(Activity activity, Uri groupUri) {
         super(activity, groupUri, R.layout.feed_list_item, R.layout.feed_list_item);
@@ -113,27 +93,6 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
         view.findViewById(R.id.indicator).setVisibility(View.INVISIBLE);
 
         TextView textView = ((TextView) view.findViewById(android.R.id.text1));
-        TextView updateTextView = ((TextView) view.findViewById(android.R.id.text2));
-        updateTextView.setVisibility(View.VISIBLE);
-
-        if (cursor.isNull(errorPosition)) {
-            long timestamp = cursor.getLong(lastUpdateColumn);
-
-            // Date formatting is expensive, look at the cache
-            String formattedDate = mFormattedDateCache.get(timestamp);
-            if (formattedDate == null) {
-                Date date = new Date(timestamp);
-
-                formattedDate = context.getString(R.string.update) + COLON + (timestamp == 0 ? context.getString(R.string.never) : new StringBuilder(Constants.DATE_FORMAT.format(date))
-                        .append(' ').append(Constants.TIME_FORMAT.format(date)));
-                mFormattedDateCache.put(timestamp, formattedDate);
-            }
-
-            updateTextView.setText(formattedDate);
-        } else {
-            updateTextView.setText(new StringBuilder(context.getString(R.string.error)).append(COLON).append(cursor.getString(errorPosition)));
-        }
-
         byte[] iconBytes = cursor.getBlob(iconPosition);
 
         if (iconBytes != null && iconBytes.length > 0) {
@@ -169,8 +128,6 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
             textView.setText(cursor.getString(namePosition));
             textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             textView.setText(cursor.getString(namePosition));
-
-            view.findViewById(android.R.id.text2).setVisibility(View.GONE);
 
             final int groupPosition = cursor.getPosition();
             if (!mGroupInitDone.get(groupPosition)) {
@@ -229,10 +186,8 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
             isGroupPosition = cursor.getColumnIndex(FeedColumns.IS_GROUP);
             isGroupCollapsedPosition = cursor.getColumnIndex(FeedColumns.IS_GROUP_COLLAPSED);
             namePosition = cursor.getColumnIndex(FeedColumns.NAME);
-            lastUpdateColumn = cursor.getColumnIndex(FeedColumns.LAST_UPDATE);
             idPosition = cursor.getColumnIndex(FeedColumns._ID);
             linkPosition = cursor.getColumnIndex(FeedColumns.URL);
-            errorPosition = cursor.getColumnIndex(FeedColumns.ERROR);
             iconPosition = cursor.getColumnIndex(FeedColumns.ICON);
         }
     }

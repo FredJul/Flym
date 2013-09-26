@@ -5,43 +5,28 @@
     android:paddingTop="5dip"
     android:background="?android:attr/activatedBackgroundIndicator">
 
-<ImageView
+    <ImageView
         android:id="@+id/indicator"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp" />
 
-    <LinearLayout
+    <TextView
+        android:id="@android:id/text1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:drawablePadding="3dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_toLeftOf="@+id/sortItem"
         android:layout_toRightOf="@id/indicator"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@android:id/text1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:drawablePadding="3dp"
-            android:gravity="top"
-            android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="false" />
-
-        <TextView
-            android:id="@android:id/text2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0.7"
-            android:drawablePadding="3dp"
-            android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textIsSelectable="false" />
-    </LinearLayout>
+        android:layout_centerVertical="true"
+        android:minHeight="30dp"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textIsSelectable="false" />
 
     <ImageView
         android:id="@+id/sortItem"
