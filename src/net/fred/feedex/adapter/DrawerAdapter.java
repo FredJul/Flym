@@ -37,13 +37,14 @@ import net.fred.feedex.UiUtils;
 public class DrawerAdapter extends BaseAdapter {
 
     private static final int POS_ID = 0;
-    private static final int POS_NAME = 1;
-    private static final int POS_IS_GROUP = 2;
-    private static final int POS_GROUP_ID = 3;
-    private static final int POS_ICON = 4;
-    private static final int POS_UNREAD = 5;
-    private static final int POS_ALL_UNREAD = 6;
-    private static final int POS_FAVORITES_UNREAD = 7;
+    private static final int POS_URL = 1;
+    private static final int POS_NAME = 2;
+    private static final int POS_IS_GROUP = 3;
+    private static final int POS_GROUP_ID = 4;
+    private static final int POS_ICON = 5;
+    private static final int POS_UNREAD = 6;
+    private static final int POS_ALL_UNREAD = 7;
+    private static final int POS_FAVORITES_UNREAD = 8;
 
     private static final int ITEM_PADDING = UiUtils.dpToPixel(20);
     private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
@@ -105,7 +106,7 @@ public class DrawerAdapter extends BaseAdapter {
                 }
             }
         } else if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
-            holder.titleTxt.setText(mFeedsCursor.getString(POS_NAME));
+            holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
 
             if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
                 holder.titleTxt.setTextColor(GROUP_TEXT_COLOR);
