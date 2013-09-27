@@ -348,7 +348,12 @@ public class EntryActivity extends ProgressActivity {
 
         uri = getIntent().getData();
         parentUri = EntryColumns.PARENT_URI(uri.getPath());
-        webView.onResume();
+
+        try {
+            webView.onResume();
+        } catch (Exception unused) { // Seems possible to have an NPE here on some phones...
+        }
+
         reload(false);
     }
 
@@ -356,7 +361,10 @@ public class EntryActivity extends ProgressActivity {
     protected void onPause() {
         super.onPause();
 
-        webView.onPause();
+        try {
+            webView.onPause();
+        } catch (Exception unused) { // Seems possible to have an NPE here on some phones...
+        }
 
         getContentResolver().unregisterContentObserver(mTasksObserver);
     }
