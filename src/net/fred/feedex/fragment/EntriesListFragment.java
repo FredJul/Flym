@@ -86,7 +86,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if (lv != null && Math.abs(e1.getY() - e2.getY()) <= SWIPE_MAX_OFF_PATH && Math.abs(velocityX) >= SWIPE_THRESHOLD_VELOCITY) {
+            if (lv != null && e1 != null && e2 != null && Math.abs(e1.getY() - e2.getY()) <= SWIPE_MAX_OFF_PATH && Math.abs(velocityX) >= SWIPE_THRESHOLD_VELOCITY) {
                 int position = lv.pointToPosition(Math.round(e2.getX()), Math.round(e2.getY()));
                 View view = lv.getChildAt(position - lv.getFirstVisiblePosition());
 
