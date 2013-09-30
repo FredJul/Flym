@@ -56,7 +56,7 @@ import android.os.IBinder;
 import android.os.SystemClock;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.PrefUtils;
+import net.fred.feedex.utils.PrefUtils;
 
 public class RefreshService extends Service {
     public static final String SIXTY_MINUTES = "3600000";

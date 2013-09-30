@@ -86,16 +86,16 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
-import net.fred.feedex.ThrottledContentObserver;
-import net.fred.feedex.UiUtils;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.TaskColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
+import net.fred.feedex.utils.PrefUtils;
+import net.fred.feedex.utils.ThrottledContentObserver;
+import net.fred.feedex.utils.UiUtils;
 
 import java.util.Date;
 

@@ -36,8 +36,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.fred.feedex.R;
-import net.fred.feedex.UiUtils;
 import net.fred.feedex.provider.FeedData.FeedColumns;
+import net.fred.feedex.utils.UiUtils;
 import net.fred.feedex.view.DragNDropExpandableListView;
 
 public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {

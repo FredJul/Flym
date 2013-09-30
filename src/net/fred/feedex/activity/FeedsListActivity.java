@@ -49,8 +49,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import net.fred.feedex.UiUtils;
 import net.fred.feedex.fragment.FeedsListFragment;
+import net.fred.feedex.utils.UiUtils;
 
 public class FeedsListActivity extends Activity {
 

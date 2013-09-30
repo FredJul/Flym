@@ -52,10 +52,10 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
 
-import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
-import net.fred.feedex.UiUtils;
 import net.fred.feedex.service.RefreshService;
+import net.fred.feedex.utils.PrefUtils;
+import net.fred.feedex.utils.UiUtils;
 
 public class GeneralPrefsActivity extends PreferenceActivity {
     @Override

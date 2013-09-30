@@ -65,8 +65,6 @@ import android.util.Xml;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
-import net.fred.feedex.NetworkUtils;
-import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.MainActivity;
 import net.fred.feedex.parser.RssAtomParser;
@@ -75,6 +73,8 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.TaskColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
+import net.fred.feedex.utils.NetworkUtils;
+import net.fred.feedex.utils.PrefUtils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;

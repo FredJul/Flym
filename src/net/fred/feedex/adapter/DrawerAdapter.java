@@ -34,7 +34,7 @@ import android.widget.TextView;
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
-import net.fred.feedex.UiUtils;
+import net.fred.feedex.utils.UiUtils;
 
 import java.util.Date;
 import java.util.LinkedHashMap;

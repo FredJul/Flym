@@ -1770,7 +1770,7 @@ net.fred.feedex.MainApplication -> net.fred.feedex.MainApplication:
     android.content.Context context -> a
     31:35:void onCreate() -> onCreate
     38:38:android.content.Context getContext() -> a
-net.fred.feedex.NetworkUtils -> net.fred.feedex.b:
+net.fred.feedex.utils.NetworkUtils -> net.fred.feedex.b:
     java.io.File IMAGE_FOLDER_FILE -> a
     java.lang.String IMAGE_FOLDER -> b
     86:96:void downloadImage(long,java.lang.String) -> a
@@ -1781,11 +1781,11 @@ net.fred.feedex.NetworkUtils -> net.fred.feedex.b:
     161:161:java.net.HttpURLConnection setupConnection(java.net.URL) -> a
     165:221:java.net.HttpURLConnection setupConnection(java.net.URL,int) -> a
     228:233:java.io.InputStream getConnectionInputStream(java.net.HttpURLConnection) -> a
-net.fred.feedex.NetworkUtils$PictureFilenameFilter -> net.fred.feedex.c:
+net.fred.feedex.utils.NetworkUtils$PictureFilenameFilter -> net.fred.feedex.c:
     java.util.regex.Pattern pattern -> a
     76:77:void setEntryId(java.lang.String) -> a
     81:81:boolean accept(java.io.File,java.lang.String) -> accept
-net.fred.feedex.PrefUtils -> net.fred.feedex.d:
+net.fred.feedex.utils.PrefUtils -> net.fred.feedex.d:
     60:61:boolean getBoolean(java.lang.String,boolean) -> a
     65:68:void putBoolean(java.lang.String,boolean) -> b
     71:72:int getInteger(java.lang.String,int) -> a
@@ -1797,17 +1797,17 @@ net.fred.feedex.PrefUtils -> net.fred.feedex.d:
     104:107:void remove(java.lang.String) -> a
     111:114:void registerOnPrefChangeListener(android.content.SharedPreferences$OnSharedPreferenceChangeListener) -> a
     118:121:void unregisterOnPrefChangeListener(android.content.SharedPreferences$OnSharedPreferenceChangeListener) -> b
-net.fred.feedex.ThrottledContentObserver -> net.fred.feedex.e:
+net.fred.feedex.utils.ThrottledContentObserver -> net.fred.feedex.e:
     long mUpdateThrottle -> a
     android.os.Handler mHandler -> b
     java.lang.Runnable mOnChangeTask -> c
     40:53:void onChange(boolean) -> onChange
     void onChangeThrottled() -> a
-    30:30:void access$0(net.fred.feedex.ThrottledContentObserver,java.lang.Runnable) -> a
-net.fred.feedex.ThrottledContentObserver$1 -> net.fred.feedex.f:
-    net.fred.feedex.ThrottledContentObserver this$0 -> a
+    30:30:void access$0(net.fred.feedex.utils.ThrottledContentObserver,java.lang.Runnable) -> a
+net.fred.feedex.utils.ThrottledContentObserver$1 -> net.fred.feedex.f:
+    net.fred.feedex.utils.ThrottledContentObserver this$0 -> a
     44:46:void run() -> run
-net.fred.feedex.UiUtils -> net.fred.feedex.g:
+net.fred.feedex.utils.UiUtils -> net.fred.feedex.g:
     8:11:void setPreferenceTheme(android.app.Activity) -> a
     14:14:int dpToPixel(int) -> a
 net.fred.feedex.activity.EditFeedActivity -> net.fred.feedex.activity.EditFeedActivity:
@@ -1945,7 +1945,7 @@ net.fred.feedex.activity.EntryActivity -> net.fred.feedex.activity.EntryActivity
     android.view.View$OnKeyListener onKeyEventListener -> S
     android.view.GestureDetector gestureDetector -> T
     android.view.View$OnTouchListener onTouchListener -> U
-    net.fred.feedex.ThrottledContentObserver mTasksObserver -> V
+    net.fred.feedex.utils.ThrottledContentObserver mTasksObserver -> V
     net.fred.feedex.activity.EntryActivity$JavaScriptObject injectedJSObject -> W
     115:117:android.view.animation.TranslateAnimation generateAnimation(float,float) -> a
     227:315:void onCreate(android.os.Bundle) -> onCreate
@@ -1980,7 +1980,7 @@ net.fred.feedex.activity.EntryActivity -> net.fred.feedex.activity.EntryActivity
     384:384:void access$5(net.fred.feedex.activity.EntryActivity,boolean) -> b
     163:163:android.net.Uri access$6(net.fred.feedex.activity.EntryActivity) -> e
     155:155:int access$7(net.fred.feedex.activity.EntryActivity) -> f
-    207:207:net.fred.feedex.ThrottledContentObserver access$8(net.fred.feedex.activity.EntryActivity) -> g
+    207:207:net.fred.feedex.utils.ThrottledContentObserver access$8(net.fred.feedex.activity.EntryActivity) -> g
     176:176:java.lang.String access$9(net.fred.feedex.activity.EntryActivity) -> h
     607:607:void access$10(net.fred.feedex.activity.EntryActivity,android.net.Uri,java.lang.String,int,int) -> a
     160:160:long access$11(net.fred.feedex.activity.EntryActivity) -> i
@@ -2686,7 +2686,7 @@ net.fred.feedex.widget.WidgetFeedsFactory -> net.fred.feedex.widget.c:
     int mAppWidgetId -> b
     int mFontSize -> c
     android.database.Cursor mCursor -> d
-    net.fred.feedex.ThrottledContentObserver mContentObserver -> e
+    net.fred.feedex.utils.ThrottledContentObserver mContentObserver -> e
     60:70:void onCreate() -> onCreate
     74:77:void onDestroy() -> onDestroy
     81:81:int getCount() -> getCount

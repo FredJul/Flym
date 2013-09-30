@@ -26,9 +26,9 @@ import android.net.ConnectivityManager;
 import android.os.SystemClock;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.PrefUtils;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.service.RefreshService;
+import net.fred.feedex.utils.PrefUtils;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
 

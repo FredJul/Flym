@@ -43,14 +43,14 @@ import android.widget.ListView;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
-import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
-import net.fred.feedex.UiUtils;
 import net.fred.feedex.adapter.DrawerAdapter;
 import net.fred.feedex.fragment.EntriesListFragment;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.service.RefreshService;
+import net.fred.feedex.utils.PrefUtils;
+import net.fred.feedex.utils.UiUtils;
 
 public class MainActivity extends ProgressActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 

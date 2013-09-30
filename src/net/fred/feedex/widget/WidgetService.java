@@ -31,10 +31,10 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
-import net.fred.feedex.ThrottledContentObserver;
 import net.fred.feedex.provider.FeedData;
+import net.fred.feedex.utils.PrefUtils;
+import net.fred.feedex.utils.ThrottledContentObserver;
 
 public class WidgetService extends RemoteViewsService {
     @Override

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.fred.feedex;
+package net.fred.feedex.utils;
 
 import android.database.ContentObserver;
 import android.os.Handler;

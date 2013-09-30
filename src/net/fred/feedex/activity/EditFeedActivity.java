@@ -77,12 +77,12 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.NetworkUtils;
 import net.fred.feedex.R;
-import net.fred.feedex.UiUtils;
 import net.fred.feedex.adapter.FiltersCursorAdapter;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
+import net.fred.feedex.utils.NetworkUtils;
+import net.fred.feedex.utils.UiUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

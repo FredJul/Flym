@@ -46,12 +46,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.PrefUtils;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.EntriesCursorAdapter;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
+import net.fred.feedex.utils.PrefUtils;
 
 public class EntriesListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String STATE_URI = "STATE_URI";

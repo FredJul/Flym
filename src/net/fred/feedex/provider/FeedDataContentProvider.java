@@ -59,11 +59,11 @@ import android.text.TextUtils;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
-import net.fred.feedex.NetworkUtils;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
 import net.fred.feedex.provider.FeedData.TaskColumns;
+import net.fred.feedex.utils.NetworkUtils;
 
 public class FeedDataContentProvider extends ContentProvider {
 

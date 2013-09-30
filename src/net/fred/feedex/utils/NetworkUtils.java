@@ -17,7 +17,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.fred.feedex;
+package net.fred.feedex.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -26,6 +26,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 
+import net.fred.feedex.Constants;
+import net.fred.feedex.MainApplication;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedDataContentProvider;
 

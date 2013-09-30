@@ -22,6 +22,8 @@ package net.fred.feedex;
 import android.app.Application;
 import android.content.Context;
 
+import net.fred.feedex.utils.PrefUtils;
+
 public class MainApplication extends Application {
 
     private static Context context;

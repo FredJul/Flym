@@ -55,14 +55,14 @@ import android.util.Pair;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
-import net.fred.feedex.NetworkUtils;
-import net.fred.feedex.PrefUtils;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
+import net.fred.feedex.utils.NetworkUtils;
+import net.fred.feedex.utils.PrefUtils;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

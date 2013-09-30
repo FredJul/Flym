@@ -48,8 +48,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import net.fred.feedex.PrefUtils;
 import net.fred.feedex.service.RefreshService;
+import net.fred.feedex.utils.PrefUtils;
 
 public class BootCompletedBroadcastReceiver extends BroadcastReceiver {
     @Override
