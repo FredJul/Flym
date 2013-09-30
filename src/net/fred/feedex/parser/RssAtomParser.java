@@ -141,6 +141,7 @@ public class RssAtomParser extends DefaultHandler {
     private StringBuilder dateStringBuilder;
     private String feedLink;
     private Date entryDate;
+    private Date entryUpdateDate;
     private StringBuilder entryLink;
     private StringBuilder description;
     private StringBuilder enclosure;
@@ -324,7 +325,7 @@ public class RssAtomParser extends DefaultHandler {
                 feedLink = entryLink.toString();
             }
         } else if (TAG_UPDATED.equals(localName)) {
-            entryDate = parseUpdateDate(dateStringBuilder.toString());
+            entryUpdateDate = parseUpdateDate(dateStringBuilder.toString());
             updatedTagEntered = false;
         } else if (TAG_PUBDATE.equals(localName)) {
             entryDate = parsePubdateDate(dateStringBuilder.toString());
@@ -337,7 +338,17 @@ public class RssAtomParser extends DefaultHandler {
             dateTagEntered = false;
         } else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
             entryTagEntered = false;
-            if (title != null && (entryDate == null || ((entryDate.after(realLastUpdateDate)) && entryDate.after(keepDateBorder)))) {
+
+            boolean updateOnly = false;
+            // Old entryDate but recent update date => we need to not insert it!
+            if (entryUpdateDate != null && entryDate != null && (entryDate.before(realLastUpdateDate) || entryDate.before(keepDateBorder))) {
+                updateOnly = true;
+                if (entryUpdateDate.after(entryDate)) {
+                    entryDate = entryUpdateDate;
+                }
+            }
+
+            if (title != null && (entryDate == null || (entryDate.after(realLastUpdateDate) && entryDate.after(keepDateBorder)))) {
                 ContentValues values = new ContentValues();
 
                 if (entryDate != null && entryDate.getTime() > newRealLastUpdate) {
@@ -397,9 +408,11 @@ public class RssAtomParser extends DefaultHandler {
 
                     // First, try to update the feed
                     ContentResolver cr = MainApplication.getContext().getContentResolver();
-                    if ((entryLinkString.length() == 0 && guidString == null)
-                            || cr.update(feedEntriesUri, values, existanceStringBuilder.toString(), existanceValues) == 0) {
+                    boolean isUpdated = (!entryLinkString.isEmpty() || guidString != null)
+                            && cr.update(feedEntriesUri, values, existanceStringBuilder.toString(), existanceValues) != 0;
 
+                    // Insert it only if necessary
+                    if (!isUpdated && !updateOnly) {
                         // We put the date only for new entry (no need to change the past, you may already read it)
                         if (entryDate != null) {
                             values.put(EntryColumns.DATE, entryDate.getTime());
@@ -413,7 +426,10 @@ public class RssAtomParser extends DefaultHandler {
                         inserts.add(ContentProviderOperation.newInsert(feedEntriesUri).withValues(values).build());
 
                         newCount++;
-                    } else if (entryDate == null) {
+                    }
+
+                    // No date, but we managed to update an entry => we already parsed the following entries and don't need to continue
+                    if (isUpdated && entryDate == null) {
                         cancel();
                     }
                 }
