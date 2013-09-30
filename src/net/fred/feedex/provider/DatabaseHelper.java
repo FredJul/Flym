@@ -79,10 +79,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL(createTable(FeedColumns.TABLE_NAME, FeedColumns.COLUMNS, FeedColumns.TYPES));
-        database.execSQL(createTable(FilterColumns.TABLE_NAME, FilterColumns.COLUMNS, FilterColumns.TYPES));
-        database.execSQL(createTable(EntryColumns.TABLE_NAME, EntryColumns.COLUMNS, EntryColumns.TYPES));
-        database.execSQL(createTable(TaskColumns.TABLE_NAME, TaskColumns.COLUMNS, TaskColumns.TYPES));
+        database.execSQL(createTable(FeedColumns.TABLE_NAME, FeedColumns.COLUMNS));
+        database.execSQL(createTable(FilterColumns.TABLE_NAME, FilterColumns.COLUMNS));
+        database.execSQL(createTable(EntryColumns.TABLE_NAME, EntryColumns.COLUMNS));
+        database.execSQL(createTable(TaskColumns.TABLE_NAME, TaskColumns.COLUMNS));
 
         // Check if we need to import the backup
         File backupFile = new File(BACKUP_OPML);
@@ -116,8 +116,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private String createTable(String tableName, String[] columns, String[] types) {
-        if (tableName == null || columns == null || types == null || types.length != columns.length || types.length == 0) {
+    private String createTable(String tableName, String[][] columns) {
+        if (tableName == null || columns == null || columns.length == 0) {
             throw new IllegalArgumentException("Invalid parameters for creating table " + tableName);
         } else {
             StringBuilder stringBuilder = new StringBuilder("CREATE TABLE ");
@@ -128,7 +128,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 if (n > 0) {
                     stringBuilder.append(", ");
                 }
-                stringBuilder.append(columns[n]).append(' ').append(types[n]);
+                stringBuilder.append(columns[n][0]).append(' ').append(columns[n][1]);
             }
             return stringBuilder.append(");").toString();
         }
@@ -147,7 +147,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.RETRIEVE_FULLTEXT + ' ' + FeedData.TYPE_BOOLEAN);
         }
         if (oldVersion < 4) {
-            executeCatchedSQL(database, createTable(TaskColumns.TABLE_NAME, TaskColumns.COLUMNS, TaskColumns.TYPES));
+            executeCatchedSQL(database, createTable(TaskColumns.TABLE_NAME, TaskColumns.COLUMNS));
             // Remove old FeedEx directory (now useless)
             try {
                 deleteFileOrDir(new File(Environment.getExternalStorageDirectory() + "/FeedEx/"));

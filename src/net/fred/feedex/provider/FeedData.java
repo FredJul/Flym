@@ -80,10 +80,9 @@ public class FeedData {
         public static final String PRIORITY = "priority";
         public static final String FETCH_MODE = "fetchmode";
 
-        public static final String[] COLUMNS = new String[]{_ID, URL, NAME, IS_GROUP, IS_GROUP_COLLAPSED, GROUP_ID, LAST_UPDATE, REAL_LAST_UPDATE,
-                RETRIEVE_FULLTEXT, ICON, ERROR, PRIORITY, FETCH_MODE};
-        public static final String[] TYPES = new String[]{TYPE_PRIMARY_KEY, TYPE_TEXT_UNIQUE, TYPE_TEXT, TYPE_BOOLEAN, TYPE_BOOLEAN,
-                TYPE_EXTERNAL_ID, TYPE_DATE_TIME, TYPE_DATE_TIME, TYPE_BOOLEAN, "BLOB", TYPE_TEXT, TYPE_INT, TYPE_INT};
+        public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {URL, TYPE_TEXT_UNIQUE}, {NAME, TYPE_TEXT}, {IS_GROUP, TYPE_BOOLEAN},
+                {IS_GROUP_COLLAPSED, TYPE_BOOLEAN}, {GROUP_ID, TYPE_EXTERNAL_ID}, {LAST_UPDATE, TYPE_DATE_TIME}, {REAL_LAST_UPDATE, TYPE_DATE_TIME},
+                {RETRIEVE_FULLTEXT, TYPE_BOOLEAN}, {ICON, "BLOB"}, {ERROR, TYPE_TEXT}, {PRIORITY, TYPE_INT}, {FETCH_MODE, TYPE_INT}};
 
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/feeds");
 
@@ -128,8 +127,8 @@ public class FeedData {
         public static final String IS_REGEX = "isregex";
         public static final String IS_APPLIED_TO_TITLE = "isappliedtotitle";
 
-        public static final String[] COLUMNS = new String[]{_ID, FEED_ID, FILTER_TEXT, IS_REGEX, IS_APPLIED_TO_TITLE};
-        public static final String[] TYPES = new String[]{TYPE_PRIMARY_KEY, TYPE_EXTERNAL_ID, TYPE_TEXT, TYPE_BOOLEAN, TYPE_BOOLEAN};
+        public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {FEED_ID, TYPE_EXTERNAL_ID}, {FILTER_TEXT, TYPE_TEXT},
+                {IS_REGEX, TYPE_BOOLEAN}, {IS_APPLIED_TO_TITLE, TYPE_BOOLEAN}};
 
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/filters");
 
@@ -157,10 +156,9 @@ public class FeedData {
         public static final String GUID = "guid";
         public static final String AUTHOR = "author";
 
-        public static final String[] COLUMNS = new String[]{_ID, FEED_ID, TITLE, ABSTRACT, MOBILIZED_HTML, DATE, IS_READ, LINK, IS_FAVORITE,
-                ENCLOSURE, GUID, AUTHOR};
-        public static final String[] TYPES = new String[]{TYPE_PRIMARY_KEY, TYPE_EXTERNAL_ID, TYPE_TEXT, TYPE_TEXT, TYPE_TEXT, TYPE_DATE_TIME,
-                TYPE_BOOLEAN, TYPE_TEXT, TYPE_BOOLEAN, TYPE_TEXT, TYPE_TEXT, TYPE_TEXT};
+        public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {FEED_ID, TYPE_EXTERNAL_ID}, {TITLE, TYPE_TEXT},
+                {ABSTRACT, TYPE_TEXT}, {MOBILIZED_HTML, TYPE_TEXT}, {DATE, TYPE_DATE_TIME}, {IS_READ, TYPE_BOOLEAN}, {LINK, TYPE_TEXT},
+                {IS_FAVORITE, TYPE_BOOLEAN}, {ENCLOSURE, TYPE_TEXT}, {GUID, TYPE_TEXT}, {AUTHOR, TYPE_TEXT}};
 
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/entries");
         public static final Uri FAVORITES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/favorites");
@@ -207,8 +205,8 @@ public class FeedData {
         public static final String IMG_URL_TO_DL = "imgurl_to_dl";
         public static final String NUMBER_ATTEMPT = "number_attempt";
 
-        public static final String[] COLUMNS = new String[]{_ID, ENTRY_ID, IMG_URL_TO_DL, NUMBER_ATTEMPT};
-        public static final String[] TYPES = new String[]{TYPE_PRIMARY_KEY, TYPE_EXTERNAL_ID, TYPE_TEXT, TYPE_INT};
+        public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {ENTRY_ID, TYPE_EXTERNAL_ID}, {IMG_URL_TO_DL, TYPE_TEXT},
+                {NUMBER_ATTEMPT, TYPE_INT}};
 
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/tasks");
 
