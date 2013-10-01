@@ -145,6 +145,8 @@ public class RssAtomParser extends DefaultHandler {
     private String feedLink;
     private Date entryDate;
     private Date entryUpdateDate;
+    private Date previousEntryDate;
+    private Date previousEntryUpdateDate;
     private StringBuilder entryLink;
     private StringBuilder description;
     private StringBuilder enclosure;
@@ -201,6 +203,12 @@ public class RssAtomParser extends DefaultHandler {
             entryTagEntered = true;
             description = null;
             entryLink = null;
+
+            // Save the previous (if no date are found for this entry)
+            previousEntryDate = entryDate;
+            previousEntryUpdateDate = entryUpdateDate;
+            entryDate = null;
+            entryUpdateDate = null;
 
             // This is the retrieved feed title
             if (feedTitle == null && title != null && title.length() > 0) {
@@ -349,6 +357,11 @@ public class RssAtomParser extends DefaultHandler {
                 if (entryUpdateDate.after(entryDate)) {
                     entryDate = entryUpdateDate;
                 }
+            } else if (entryDate == null && entryUpdateDate != null) { // only one updateDate, copy it into entryDate
+                entryDate = entryUpdateDate;
+            } else if (entryDate == null && entryUpdateDate == null) { // nothing, we need to retrieve the previous date
+                entryDate = previousEntryDate;
+                entryUpdateDate = previousEntryUpdateDate;
             }
 
             if (title != null && (entryDate == null || (entryDate.after(realLastUpdateDate) && entryDate.after(keepDateBorder)))) {
