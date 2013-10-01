@@ -65,8 +65,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "FeedEx.db";
     private static final int DATABASE_VERSION = 4;
 
-    private static final String BACKUP_OPML = Environment.getExternalStorageDirectory() + "/FeedEx_auto_backup.opml";
-
     private static final String ALTER_TABLE = "ALTER TABLE ";
     private static final String ADD = " ADD ";
 
@@ -85,7 +83,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(createTable(TaskColumns.TABLE_NAME, TaskColumns.COLUMNS));
 
         // Check if we need to import the backup
-        File backupFile = new File(BACKUP_OPML);
+        File backupFile = new File(OPML.BACKUP_OPML);
         final boolean hasBackup = backupFile.exists();
         mHandler.post(new Runnable() { // In order to it after the database is created
             @Override
@@ -96,7 +94,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                         try {
                             if (hasBackup) {
                                 // Perform an automated import of the backup
-                                OPML.importFromFile(BACKUP_OPML);
+                                OPML.importFromFile(OPML.BACKUP_OPML);
                             } else {
                                 // No database and no backup, automatically add the default feeds
                                 OPML.importFromFile(MainApplication.getContext().getResources().openRawResource(R.raw.default_feeds));
@@ -111,7 +109,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     public void exportToOPML() {
         try {
-            OPML.exportToFile(BACKUP_OPML);
+            OPML.exportToFile(OPML.BACKUP_OPML);
         } catch (Exception ignored) {
         }
     }

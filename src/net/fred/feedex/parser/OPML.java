@@ -47,6 +47,7 @@ package net.fred.feedex.parser;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Xml;
 
@@ -68,6 +69,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class OPML {
+
+    public static final String BACKUP_OPML = Environment.getExternalStorageDirectory() + "/FeedEx_auto_backup.opml";
+
     private static final String[] FEEDS_PROJECTION = new String[]{FeedColumns._ID, FeedColumns.IS_GROUP, FeedColumns.NAME, FeedColumns.URL,
             FeedColumns.RETRIEVE_FULLTEXT};
     private static final String[] FILTERS_PROJECTION = new String[]{FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
@@ -88,9 +92,18 @@ public class OPML {
     private static final String CLOSING = "</body>\n</opml>\n";
 
     private static final OPMLParser parser = new OPMLParser();
+    private static boolean autoBackupEnabled = true;
 
     public static void importFromFile(String filename) throws IOException, SAXException {
-        Xml.parse(new InputStreamReader(new FileInputStream(filename)), parser);
+        if (BACKUP_OPML.equals(filename)) {
+            autoBackupEnabled = false;  // Do not write the auto backup file while reading it...
+        }
+
+        try {
+            Xml.parse(new InputStreamReader(new FileInputStream(filename)), parser);
+        } finally {
+            autoBackupEnabled = true;
+        }
     }
 
     public static void importFromFile(InputStream input) throws IOException, SAXException {
@@ -98,6 +111,10 @@ public class OPML {
     }
 
     public static void exportToFile(String filename) throws IOException {
+        if (BACKUP_OPML.equals(filename) && !autoBackupEnabled) {
+            return;
+        }
+
         Cursor cursor = MainApplication.getContext().getContentResolver()
                 .query(FeedColumns.GROUPS_CONTENT_URI, FEEDS_PROJECTION, null, null, null);
 
