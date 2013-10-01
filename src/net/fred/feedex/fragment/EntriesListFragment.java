@@ -170,6 +170,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
         if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
             menu.findItem(R.id.menu_hide_read).setVisible(false);
+            menu.findItem(R.id.menu_refresh).setVisible(false);
         } else {
             menu.findItem(R.id.menu_share_starred).setVisible(false);
 
