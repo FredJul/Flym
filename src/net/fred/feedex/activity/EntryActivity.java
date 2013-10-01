@@ -66,7 +66,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateFormat;
 import android.view.GestureDetector;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -232,12 +231,7 @@ public class EntryActivity extends ProgressActivity {
 
         setContentView(R.layout.entry);
 
-        gestureDetector = new GestureDetector(this, new OnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent e) {
-                return false;
-            }
-
+        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                 if (Math.abs(velocityY) * 1.5 < Math.abs(velocityX)) {
@@ -252,24 +246,6 @@ public class EntryActivity extends ProgressActivity {
                     }
                 }
 
-                return false;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent e) {
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                return false;
-            }
-
-            @Override
-            public void onShowPress(MotionEvent e) {
-            }
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
                 return false;
             }
         });
