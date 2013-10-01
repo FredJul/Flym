@@ -473,8 +473,8 @@ public class EntryActivity extends ProgressActivity {
             // baseUrl = url.getProtocol() + "://" + url.getHost();
             // } catch (MalformedURLException ignored) {
             // }
-            webView.loadDataWithBaseURL(null, generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8,
-                    null);
+            webView.loadDataWithBaseURL("", generateHtmlContent(title, link, contentText, enclosure, author, timestamp), TEXT_HTML, Constants.UTF8,
+                    null); // do not put 'null' to the base url...
 
             // Listen the mobilizing task
             long mobilizingTaskId = FetcherService.getMobilizingTaskId(_id);
