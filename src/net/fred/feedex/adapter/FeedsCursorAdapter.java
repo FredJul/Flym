@@ -20,18 +20,13 @@
 package net.fred.feedex.adapter;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.util.SparseBooleanArray;
 import android.view.View;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,14 +39,12 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 
     private final Activity mActivity;
     private int isGroupPosition = -1;
-    private int isGroupCollapsedPosition = -1;
     private int namePosition = -1;
     private int idPosition = -1;
     private int linkPosition = -1;
     private int iconPosition = -1;
 
     private DragNDropExpandableListView mListView;
-    private final SparseBooleanArray mGroupInitDone = new SparseBooleanArray();
 
     public FeedsCursorAdapter(Activity activity, Uri groupUri) {
         super(activity, groupUri, R.layout.feed_list_item, R.layout.feed_list_item);
@@ -61,26 +54,6 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 
     public void setExpandableListView(DragNDropExpandableListView listView) {
         mListView = listView;
-
-        mListView.setOnGroupClickListener(new OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                Cursor cursor = getGroup(groupPosition);
-                if (cursor.getInt(isGroupPosition) != 1) {
-                    return false;
-                }
-
-                ContentValues values = new ContentValues();
-                if (mListView.isGroupExpanded(groupPosition)) {
-                    values.put(FeedColumns.IS_GROUP_COLLAPSED, true);
-                } else {
-                    values.put(FeedColumns.IS_GROUP_COLLAPSED, false);
-                }
-                ContentResolver cr = mActivity.getContentResolver();
-                cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
-                return false;
-            }
-        });
     }
 
     @Override
@@ -129,30 +102,10 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
             textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             textView.setText(cursor.getString(namePosition));
 
-            final int groupPosition = cursor.getPosition();
-            if (!mGroupInitDone.get(groupPosition)) {
-                mGroupInitDone.put(groupPosition, true);
-
-                boolean savedExpandedState = cursor.getInt(isGroupCollapsedPosition) != 1;
-                if (savedExpandedState && !isExpanded) {
-                    mActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mListView.expandGroup(groupPosition);
-                        }
-                    });
-                }
-
-                if (savedExpandedState)
-                    indicatorImage.setImageResource(R.drawable.group_expanded);
-                else
-                    indicatorImage.setImageResource(R.drawable.group_collapsed);
-            } else {
-                if (isExpanded)
-                    indicatorImage.setImageResource(R.drawable.group_expanded);
-                else
-                    indicatorImage.setImageResource(R.drawable.group_collapsed);
-            }
+            if (isExpanded)
+                indicatorImage.setImageResource(R.drawable.group_expanded);
+            else
+                indicatorImage.setImageResource(R.drawable.group_collapsed);
         } else {
             bindChildView(view, context, cursor);
             indicatorImage.setVisibility(View.GONE);
@@ -184,7 +137,6 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
     private synchronized void getCursorPositions(Cursor cursor) {
         if (cursor != null && isGroupPosition == -1) {
             isGroupPosition = cursor.getColumnIndex(FeedColumns.IS_GROUP);
-            isGroupCollapsedPosition = cursor.getColumnIndex(FeedColumns.IS_GROUP_COLLAPSED);
             namePosition = cursor.getColumnIndex(FeedColumns.NAME);
             idPosition = cursor.getColumnIndex(FeedColumns._ID);
             linkPosition = cursor.getColumnIndex(FeedColumns.URL);
