@@ -99,6 +99,7 @@ public class RssAtomParser extends DefaultHandler {
     private static final String TAG_ENCODED_CONTENT = "encoded";
     private static final String TAG_SUMMARY = "summary";
     private static final String TAG_PUBDATE = "pubDate";
+    private static final String TAG_PUBLISHED = "published";
     private static final String TAG_DATE = "date";
     private static final String TAG_LAST_BUILD_DATE = "lastBuildDate";
     private static final String TAG_ENCLOSURE = "enclosure";
@@ -119,7 +120,8 @@ public class RssAtomParser extends DefaultHandler {
             new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US), new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.US)};
 
     private static final DateFormat[] UPDATE_DATE_FORMATS = {new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss", Locale.US),
-            new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ssZ", Locale.US), new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSz", Locale.US)};
+            new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ssZ", Locale.US), new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSz", Locale.US),
+            new SimpleDateFormat("yyyy-MM-dd", Locale.US)};
 
     private final Date realLastUpdateDate;
     private long newRealLastUpdate;
@@ -132,6 +134,7 @@ public class RssAtomParser extends DefaultHandler {
     private boolean linkTagEntered = false;
     private boolean descriptionTagEntered = false;
     private boolean pubDateTagEntered = false;
+    private boolean publishedTagEntered = false;
     private boolean dateTagEntered = false;
     private boolean lastBuildDateTagEntered = false;
     private boolean guidTagEntered = false;
@@ -248,6 +251,9 @@ public class RssAtomParser extends DefaultHandler {
         } else if (TAG_PUBDATE.equals(localName)) {
             pubDateTagEntered = true;
             dateStringBuilder = new StringBuilder();
+        } else if (TAG_PUBLISHED.equals(localName)) {
+            publishedTagEntered = true;
+            dateStringBuilder = new StringBuilder();
         } else if (TAG_DATE.equals(localName)) {
             dateTagEntered = true;
             dateStringBuilder = new StringBuilder();
@@ -292,17 +298,11 @@ public class RssAtomParser extends DefaultHandler {
     public void characters(char[] ch, int start, int length) throws SAXException {
         if (titleTagEntered) {
             title.append(ch, start, length);
-        } else if (updatedTagEntered) {
-            dateStringBuilder.append(ch, start, length);
         } else if (linkTagEntered) {
             entryLink.append(ch, start, length);
         } else if (descriptionTagEntered) {
             description.append(ch, start, length);
-        } else if (pubDateTagEntered) {
-            dateStringBuilder.append(ch, start, length);
-        } else if (dateTagEntered) {
-            dateStringBuilder.append(ch, start, length);
-        } else if (lastBuildDateTagEntered) {
+        } else if (updatedTagEntered || pubDateTagEntered || publishedTagEntered || dateTagEntered || lastBuildDateTagEntered) {
             dateStringBuilder.append(ch, start, length);
         } else if (guidTagEntered) {
             guid.append(ch, start, length);
@@ -330,6 +330,9 @@ public class RssAtomParser extends DefaultHandler {
         } else if (TAG_PUBDATE.equals(localName)) {
             entryDate = parsePubdateDate(dateStringBuilder.toString());
             pubDateTagEntered = false;
+        } else if (TAG_PUBLISHED.equals(localName)) {
+            entryDate = parsePubdateDate(dateStringBuilder.toString());
+            publishedTagEntered = false;
         } else if (TAG_LAST_BUILD_DATE.equals(localName)) {
             entryDate = parsePubdateDate(dateStringBuilder.toString());
             lastBuildDateTagEntered = false;
@@ -501,12 +504,11 @@ public class RssAtomParser extends DefaultHandler {
     }
 
     private Date parseUpdateDate(String dateStr) {
+        dateStr = improveDateString(dateStr);
         return parseUpdateDate(dateStr, true);
     }
 
     private Date parseUpdateDate(String dateStr, boolean tryAllFormat) {
-        dateStr = dateStr.replace("T", " ").replace("Z", "").replaceAll("  ", " ").trim(); // fix useless char
-
         for (DateFormat format : UPDATE_DATE_FORMATS) {
             try {
                 Date result = format.parse(dateStr);
@@ -522,22 +524,11 @@ public class RssAtomParser extends DefaultHandler {
     }
 
     private Date parsePubdateDate(String dateStr) {
+        dateStr = improveDateString(dateStr);
         return parsePubdateDate(dateStr, true);
     }
 
     private Date parsePubdateDate(String dateStr, boolean tryAllFormat) {
-        // We remove the first part if necessary (the day display)
-        int coma = dateStr.indexOf(", ");
-        if (coma != -1) {
-            dateStr = dateStr.substring(coma + 2);
-        }
-
-        dateStr = dateStr.replace("T", " ").replace("Z", "").replaceAll("  ", " ").trim(); // fix useless char
-
-        for (String[] timezoneReplace : TIMEZONES_REPLACE) {
-            dateStr = dateStr.replace(timezoneReplace[0], timezoneReplace[1]);
-        }
-
         for (DateFormat format : PUBDATE_DATE_FORMATS) {
             try {
                 Date result = format.parse(dateStr);
@@ -550,6 +541,23 @@ public class RssAtomParser extends DefaultHandler {
             return parseUpdateDate(dateStr, false);
         else
             return null;
+    }
+
+    private String improveDateString(String dateStr) {
+        // We remove the first part if necessary (the day display)
+        int coma = dateStr.indexOf(", ");
+        if (coma != -1) {
+            dateStr = dateStr.substring(coma + 2);
+        }
+
+        dateStr = dateStr.replace("T", " ").replace("Z", "").replaceAll("  ", " ").trim(); // fix useless char
+
+        // Replace bad timezones
+        for (String[] timezoneReplace : TIMEZONES_REPLACE) {
+            dateStr = dateStr.replace(timezoneReplace[0], timezoneReplace[1]);
+        }
+
+        return dateStr;
     }
 
     private static String unescapeTitle(String title) {
