@@ -69,12 +69,12 @@ public class PrefUtils {
         editor.commit();
     }
 
-    public static int getInteger(String key, int defValue) {
+    public static int getInt(String key, int defValue) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());
         return settings.getInt(key, defValue);
     }
 
-    public static void putInteger(String key, int value) {
+    public static void putInt(String key, int value) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit();
         editor.putInt(key, value);
         editor.commit();

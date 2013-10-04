@@ -128,12 +128,12 @@ public class WidgetConfigActivity extends PreferenceActivity {
                     String feedIds = builder.toString();
                     PrefUtils.putString(widgetId + ".feeds", feedIds);
 
-                    int color = PrefUtils.getInteger("widget.background", WidgetProvider.STANDARD_BACKGROUND);
-                    PrefUtils.putInteger(widgetId + ".background", color);
+                    int color = PrefUtils.getInt("widget.background", WidgetProvider.STANDARD_BACKGROUND);
+                    PrefUtils.putInt(widgetId + ".background", color);
 
                     int fontsize = Integer.parseInt(PrefUtils.getString("widget.fontsize", "0"));
                     if (fontsize > 0) {
-                        PrefUtils.putInteger(widgetId + ".fontsize", fontsize);
+                        PrefUtils.putInt(widgetId + ".fontsize", fontsize);
                     } else {
                         PrefUtils.remove(widgetId + ".fontsize");
                     }
