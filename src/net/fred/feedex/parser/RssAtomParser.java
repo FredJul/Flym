@@ -87,7 +87,7 @@ public class RssAtomParser extends DefaultHandler {
     private static final String TAG_RSS = "rss";
     private static final String TAG_RDF = "rdf";
     private static final String TAG_FEED = "feed";
-    private static final String TAG_ENTRY = "entry";
+    private static final String TAG_ENTRY = "activity_entry";
     private static final String TAG_ITEM = "item";
     private static final String TAG_UPDATED = "updated";
     private static final String TAG_TITLE = "title";
@@ -204,7 +204,7 @@ public class RssAtomParser extends DefaultHandler {
             description = null;
             entryLink = null;
 
-            // Save the previous (if no date are found for this entry)
+            // Save the previous (if no date are found for this activity_entry)
             previousEntryDate = entryDate;
             previousEntryUpdateDate = entryUpdateDate;
             entryDate = null;
@@ -384,7 +384,7 @@ public class RssAtomParser extends DefaultHandler {
                     }
                 }
 
-                // Try to find if the entry is not filtered and need to be processed
+                // Try to find if the activity_entry is not filtered and need to be processed
                 if (!filters.isEntryFiltered(improvedTitle, improvedContent == null ? null : improvedContent.first)) {
 
                     if (author != null) {
@@ -429,7 +429,7 @@ public class RssAtomParser extends DefaultHandler {
 
                     // Insert it only if necessary
                     if (!isUpdated && !updateOnly) {
-                        // We put the date only for new entry (no need to change the past, you may already read it)
+                        // We put the date only for new activity_entry (no need to change the past, you may already read it)
                         if (entryDate != null) {
                             values.put(EntryColumns.DATE, entryDate.getTime());
                         } else {
@@ -444,7 +444,7 @@ public class RssAtomParser extends DefaultHandler {
                         newCount++;
                     }
 
-                    // No date, but we managed to update an entry => we already parsed the following entries and don't need to continue
+                    // No date, but we managed to update an activity_entry => we already parsed the following entries and don't need to continue
                     if (isUpdated && entryDate == null) {
                         cancel();
                     }

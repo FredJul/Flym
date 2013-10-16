@@ -97,7 +97,7 @@ public class FeedsListFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.feed_list_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_feed_list, container, false);
 
         mListView = (DragNDropExpandableListView) rootView.findViewById(android.R.id.list);
         mListAdapter.setExpandableListView(mListView);

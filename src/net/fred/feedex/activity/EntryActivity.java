@@ -229,7 +229,7 @@ public class EntryActivity extends ProgressActivity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        setContentView(R.layout.entry);
+        setContentView(R.layout.activity_entry);
 
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             @Override

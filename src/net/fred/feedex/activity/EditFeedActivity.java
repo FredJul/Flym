@@ -116,7 +116,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        setContentView(R.layout.feed_edit);
+        setContentView(R.layout.activity_feed_edit);
         setResult(RESULT_CANCELED);
 
         Intent intent = getIntent();
@@ -242,7 +242,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
     }
 
     public void onClickAddFilter(View view) {
-        final View dialogView = getLayoutInflater().inflate(R.layout.filter_edit, null);
+        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_filter_edit, null);
 
         new AlertDialog.Builder(this) //
                 .setTitle(R.string.filter_add_title) //
@@ -356,7 +356,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                 case R.id.menu_edit:
                     Cursor c = mFiltersCursorAdapter.getCursor();
                     if (c.moveToPosition(mFiltersCursorAdapter.getSelectedFilter())) {
-                        final View dialogView = getLayoutInflater().inflate(R.layout.filter_edit, null);
+                        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_filter_edit, null);
                         final EditText filterText = (EditText) dialogView.findViewById(R.id.filterText);
                         final CheckBox regexCheckBox = (CheckBox) dialogView.findViewById(R.id.regexCheckBox);
                         final RadioButton applyTitleRadio = (RadioButton) dialogView.findViewById(R.id.applyTitleRadio);
@@ -439,7 +439,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
     };
 
     public void onClickSearch(View view) {
-        final View dialogView = getLayoutInflater().inflate(R.layout.search_feed, null);
+        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_search_feed, null);
         final EditText searchText = (EditText) dialogView.findViewById(R.id.searchText);
         final RadioGroup radioGroup = (RadioGroup) dialogView.findViewById(R.id.radioGroup);
 
@@ -492,7 +492,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                                                 int[] to = new int[]{android.R.id.text1, android.R.id.text2};
 
                                                 // fill in the grid_item layout
-                                                SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.search_result_item, from,
+                                                SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.item_search_result, from,
                                                         to);
                                                 builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
                                                     @Override

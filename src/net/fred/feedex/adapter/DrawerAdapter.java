@@ -95,7 +95,7 @@ public class DrawerAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.drawer_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.item_drawer_list, parent, false);
 
             ViewHolder holder = new ViewHolder();
             holder.iconView = (ImageView) convertView.findViewById(R.id.icon);

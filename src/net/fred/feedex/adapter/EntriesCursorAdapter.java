@@ -94,7 +94,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     private final Vector<Long> unfavorited = new Vector<Long>();
 
     public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo) {
-        super(context, R.layout.entry_list_item, cursor, 0);
+        super(context, R.layout.item_entry_list, cursor, 0);
         this.uri = uri;
         this.showFeedInfo = showFeedInfo;
 

@@ -47,7 +47,7 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
     private DragNDropExpandableListView mListView;
 
     public FeedsCursorAdapter(Activity activity, Uri groupUri) {
-        super(activity, groupUri, R.layout.feed_list_item, R.layout.feed_list_item);
+        super(activity, groupUri, R.layout.item_feed_list, R.layout.item_feed_list);
 
         mActivity = activity;
     }

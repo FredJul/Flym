@@ -26,7 +26,7 @@ public abstract class ProgressActivity extends Activity {
     }
 
     private ViewGroup init() {
-        super.setContentView(R.layout.progress_activity);
+        super.setContentView(R.layout.activity_progress);
         mProgressBar = (ProgressBar) findViewById(R.id.activity_bar);
         return (ViewGroup) findViewById(R.id.activity_frame);
     }

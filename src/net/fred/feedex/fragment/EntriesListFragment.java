@@ -138,7 +138,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.entry_list_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_entry_list, container, false);
 
         if (mEntriesCursorAdapter != null) {
             setListAdapter(mEntriesCursorAdapter);

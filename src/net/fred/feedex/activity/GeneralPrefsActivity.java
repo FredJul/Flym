@@ -66,7 +66,7 @@ public class GeneralPrefsActivity extends PreferenceActivity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        addPreferencesFromResource(R.layout.preferences);
+        addPreferencesFromResource(R.layout.activity_preferences);
 
         Preference preference = findPreference(PrefUtils.REFRESH_ENABLED);
         preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {

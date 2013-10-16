@@ -6,7 +6,7 @@
     <net.fred.feedex.widget.ColorPickerDialogPreference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:dialogLayout="@layout/color_transparency_picker"
+        android:dialogLayout="@layout/dialog_color_transparency_picker"
         android:key="widget.background"
         android:negativeButtonText="@android:string/cancel"
         android:positiveButtonText="@android:string/ok"
