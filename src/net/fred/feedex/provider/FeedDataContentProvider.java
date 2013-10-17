@@ -136,12 +136,12 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_ENTRIES:
             case URI_ENTRIES_FOR_FEED:
             case URI_ENTRIES_FOR_GROUP:
-                return "vnd.android.cursor.dir/vnd.feedex.activity_entry";
+                return "vnd.android.cursor.dir/vnd.feedex.entry";
             case URI_FAVORITES_ENTRY:
             case URI_ENTRY:
             case URI_ENTRY_FOR_FEED:
             case URI_ENTRY_FOR_GROUP:
-                return "vnd.android.cursor.item/vnd.feedex.activity_entry";
+                return "vnd.android.cursor.item/vnd.feedex.entry";
             case URI_TASKS:
                 return "vnd.android.cursor.dir/vnd.feedex.task";
             case URI_TASK:
