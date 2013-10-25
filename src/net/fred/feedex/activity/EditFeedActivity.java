@@ -136,8 +136,6 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
             if (intent.hasExtra(Intent.EXTRA_TEXT)) {
                 mUrlEditText.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
             }
-
-            restoreInstanceState(savedInstanceState);
         } else if (intent.getAction().equals(Intent.ACTION_EDIT)) {
             setTitle(R.string.edit_feed_title);
 
@@ -157,7 +155,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 
             getLoaderManager().initLoader(0, null, this);
 
-            if (!restoreInstanceState(savedInstanceState)) {
+            if (savedInstanceState == null) {
                 Cursor cursor = getContentResolver().query(intent.getData(), FEED_PROJECTION, null, null, null);
 
                 if (cursor.moveToNext()) {
@@ -212,22 +210,6 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
         }
 
         super.onDestroy();
-    }
-
-    private boolean restoreInstanceState(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            mNameEditText.setText(savedInstanceState.getCharSequence(FeedColumns.NAME));
-            mUrlEditText.setText(savedInstanceState.getCharSequence(FeedColumns.URL));
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putCharSequence(FeedColumns.NAME, mNameEditText.getText());
-        outState.putCharSequence(FeedColumns.URL, mUrlEditText.getText());
     }
 
     @Override
