@@ -215,6 +215,11 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
             }
             case R.id.menu_all_read: {
                 mEntriesCursorAdapter.markAllAsRead();
+
+                // If we are on "all items" uri, we can remove the notification here
+                if (EntryColumns.CONTENT_URI.equals(mUri) && Constants.NOTIF_MGR != null) {
+                    Constants.NOTIF_MGR.cancel(0);
+                }
                 return true;
             }
             case R.id.menu_hide_read: {

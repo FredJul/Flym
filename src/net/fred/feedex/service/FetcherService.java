@@ -46,7 +46,6 @@ package net.fred.feedex.service;
 
 import android.app.IntentService;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
@@ -131,8 +130,6 @@ public class FetcherService extends IntentService {
 
     private static final Pattern DIV_TAG = Pattern.compile("<div([^>]*>.*)</div>");
 
-    private NotificationManager mNotifMgr;
-
     public FetcherService() {
         super(SERVICENAME);
         HttpURLConnection.setFollowRedirects(true);
@@ -208,10 +205,12 @@ public class FetcherService extends IntentService {
                             notifBuilder.setSound(Uri.parse(ringtone));
                         }
 
-                        mNotifMgr.notify(0, notifBuilder.getNotification());
+                        if (Constants.NOTIF_MGR != null) {
+                            Constants.NOTIF_MGR.notify(0, notifBuilder.getNotification());
+                        }
                     }
-                } else {
-                    mNotifMgr.cancel(0);
+                } else if (Constants.NOTIF_MGR != null) {
+                    Constants.NOTIF_MGR.cancel(0);
                 }
             }
 
@@ -220,12 +219,6 @@ public class FetcherService extends IntentService {
 
             PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false);
         }
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        mNotifMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     public static long getMobilizingTaskId(long entryId) {
