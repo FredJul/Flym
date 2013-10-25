@@ -77,6 +77,8 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
     private BitmapDrawable mIcon;
     private int mCurrentDrawerPos;
 
+    private boolean mIsDrawerMoving = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
@@ -103,15 +105,17 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
         getActionBar().setHomeButtonEnabled(true);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
-            public void onDrawerClosed(View view) {
-                refreshTitleAndIcon();
-                invalidateOptionsMenu();
-            }
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                if (mIsDrawerMoving && newState == DrawerLayout.STATE_IDLE) {
+                    mIsDrawerMoving = false;
+                    invalidateOptionsMenu();
+                } else if (!mIsDrawerMoving) {
+                    mIsDrawerMoving = true;
+                    invalidateOptionsMenu();
+                }
 
-            public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(R.string.app_name);
-                getActionBar().setIcon(R.drawable.icon);
-                invalidateOptionsMenu();
+                super.onDrawerStateChanged(newState);
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -180,12 +184,19 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+        boolean isOpened = mDrawerLayout.isDrawerOpen(mDrawerList);
+        if (isOpened && !mIsDrawerMoving || !isOpened && mIsDrawerMoving) {
+            getActionBar().setTitle(R.string.app_name);
+            getActionBar().setIcon(R.drawable.icon);
+
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.drawer, menu);
 
             mEntriesFragment.setHasOptionsMenu(false);
         } else {
+            refreshTitleAndIcon();
+            invalidateOptionsMenu();
+
             mEntriesFragment.setHasOptionsMenu(true);
         }
 
