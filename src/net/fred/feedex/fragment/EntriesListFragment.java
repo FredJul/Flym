@@ -62,7 +62,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     private Uri mUri;
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
-    private ListView mLv;
+    private ListView mListView;
 
     private final OnSharedPreferenceChangeListener prefListener = new OnSharedPreferenceChangeListener() {
         @Override
@@ -86,9 +86,9 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if (mLv != null && e1 != null && e2 != null && Math.abs(e1.getY() - e2.getY()) <= SWIPE_MAX_OFF_PATH && Math.abs(velocityX) >= SWIPE_THRESHOLD_VELOCITY) {
-                int position = mLv.pointToPosition(Math.round(e2.getX()), Math.round(e2.getY()));
-                View view = mLv.getChildAt(position - mLv.getFirstVisiblePosition());
+            if (mListView != null && e1 != null && e2 != null && Math.abs(e1.getY() - e2.getY()) <= SWIPE_MAX_OFF_PATH && Math.abs(velocityX) >= SWIPE_THRESHOLD_VELOCITY) {
+                int position = mListView.pointToPosition(Math.round(e2.getX()), Math.round(e2.getY()));
+                View view = mListView.getChildAt(position - mListView.getFirstVisiblePosition());
 
                 if (view != null) {
                     if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
@@ -144,9 +144,9 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
             setListAdapter(mEntriesCursorAdapter);
         }
 
-        mLv = (ListView) rootView.findViewById(android.R.id.list);
-        mLv.setFastScrollEnabled(true);
-        mLv.setOnTouchListener(new SwipeGestureListener(getActivity()));
+        mListView = (ListView) rootView.findViewById(android.R.id.list);
+        mListView.setFastScrollEnabled(true);
+        mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
 
         return rootView;
     }
