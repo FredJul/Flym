@@ -44,7 +44,6 @@
 
 package net.fred.feedex.activity;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -63,8 +62,7 @@ public class GeneralPrefsActivity extends PreferenceActivity {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         addPreferencesFromResource(R.layout.activity_preferences);
 

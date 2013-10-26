@@ -52,7 +52,7 @@ import net.fred.feedex.service.RefreshService;
 import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 
-public class MainActivity extends ProgressActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
 
@@ -171,10 +171,6 @@ public class MainActivity extends ProgressActivity implements LoaderManager.Load
         super.onResume();
         getProgressBar().setVisibility(PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false) ? View.VISIBLE : View.GONE);
         PrefUtils.registerOnPrefChangeListener(isRefreshingListener);
-
-        if (Constants.NOTIF_MGR != null) {
-            Constants.NOTIF_MGR.cancel(0);
-        }
     }
 
     @Override

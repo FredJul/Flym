@@ -44,7 +44,6 @@
 
 package net.fred.feedex.activity;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.LoaderManager;
@@ -113,8 +112,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.activity_feed_edit);
         setResult(RESULT_CANCELED);

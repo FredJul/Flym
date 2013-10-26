@@ -44,7 +44,6 @@
 
 package net.fred.feedex.activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -59,13 +58,11 @@ public class FeedsListActivity extends Activity {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             FeedsListFragment fragment = new FeedsListFragment();
-            getFragmentManager().beginTransaction().add(android.R.id.content, fragment, FeedsListFragment.class.getName()).commit();
+            getFragmentManager().beginTransaction().add(android.R.id.content, fragment, fragment.getClass().getName()).commit();
         }
     }
 
