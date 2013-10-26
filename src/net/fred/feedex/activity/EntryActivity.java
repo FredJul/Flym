@@ -177,7 +177,7 @@ public class EntryActivity extends ProgressActivity {
 
     private boolean mFromWidget = false;
 
-    final private OnKeyListener onKeyEventListener = new OnKeyListener() {
+    final private OnKeyListener mOnKeyEventListener = new OnKeyListener() {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -193,12 +193,12 @@ public class EntryActivity extends ProgressActivity {
         }
     };
 
-    private GestureDetector gestureDetector;
+    private GestureDetector mGestureDetector;
 
-    final private OnTouchListener onTouchListener = new OnTouchListener() {
+    final private OnTouchListener mOnTouchListener = new OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            return gestureDetector.onTouchEvent(event);
+            return mGestureDetector.onTouchEvent(event);
         }
     };
 
@@ -230,7 +230,7 @@ public class EntryActivity extends ProgressActivity {
 
         setContentView(R.layout.activity_entry);
 
-        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+        mGestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                 if (Math.abs(velocityY) * 1.5 < Math.abs(velocityX)) {
@@ -544,8 +544,8 @@ public class EntryActivity extends ProgressActivity {
         wv.setBackgroundColor(Color.parseColor(BACKGROUND_COLOR));
 
         // For scrolling & gesture
-        wv.setOnKeyListener(onKeyEventListener);
-        wv.setOnTouchListener(onTouchListener);
+        wv.setOnKeyListener(mOnKeyEventListener);
+        wv.setOnTouchListener(mOnTouchListener);
 
         // For javascript
         wv.getSettings().setJavaScriptEnabled(true);
