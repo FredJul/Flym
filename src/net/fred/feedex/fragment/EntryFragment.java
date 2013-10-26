@@ -153,7 +153,7 @@ public class EntryFragment extends Fragment {
 
     private static final String IMAGE_ENCLOSURE = "[@]image/";
 
-    private int mTitlePosition, mDatePosition, mMobilizedHtmlPosition, mAbstractPosition, mLinkPosition, mFeedIdPosition, mIsFavoritePosition,
+    private int mTitlePosition = -1, mDatePosition, mMobilizedHtmlPosition, mAbstractPosition, mLinkPosition, mFeedIdPosition, mIsFavoritePosition,
             mIsReadPosition, mEnclosurePosition, mAuthorPosition;
 
     private long mId = -1;
@@ -244,21 +244,6 @@ public class EntryFragment extends Fragment {
             }
         });
 
-        Cursor entryCursor = MainApplication.getContext().getContentResolver().query(mUri, null, null, null, null);
-
-        mTitlePosition = entryCursor.getColumnIndex(EntryColumns.TITLE);
-        mDatePosition = entryCursor.getColumnIndex(EntryColumns.DATE);
-        mAbstractPosition = entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
-        mMobilizedHtmlPosition = entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
-        mLinkPosition = entryCursor.getColumnIndex(EntryColumns.LINK);
-        mFeedIdPosition = entryCursor.getColumnIndex(EntryColumns.FEED_ID);
-        mIsFavoritePosition = entryCursor.getColumnIndex(EntryColumns.IS_FAVORITE);
-        mIsReadPosition = entryCursor.getColumnIndex(EntryColumns.IS_READ);
-        mEnclosurePosition = entryCursor.getColumnIndex(EntryColumns.ENCLOSURE);
-        mAuthorPosition = entryCursor.getColumnIndex(EntryColumns.AUTHOR);
-
-        entryCursor.close();
-
         mCancelFullscreenBtn = rootView.findViewById(R.id.cancelFullscreenBtn);
         mCancelFullscreenBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -340,6 +325,74 @@ public class EntryFragment extends Fragment {
         MainApplication.getContext().getContentResolver().unregisterContentObserver(mTasksObserver);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.entry, menu);
+
+        if (mFavorite) {
+            MenuItem item = menu.findItem(R.id.menu_star);
+            item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Activity activity = getActivity();
+
+        switch (item.getItemId()) {
+            case R.id.menu_star:
+                mFavorite = !mFavorite;
+
+                ContentValues values = new ContentValues();
+                values.put(EntryColumns.IS_FAVORITE, mFavorite ? 1 : 0);
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                if (cr.update(mUri, values, null, null) > 0) {
+                    FeedDataContentProvider.notifyAllFromEntryUri(mUri, true);
+                }
+
+                if (mFavorite) {
+                    item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
+                } else {
+                    item.setTitle(R.string.menu_star).setIcon(R.drawable.rating_not_important);
+                }
+                break;
+            case R.id.menu_share:
+                if (mLink != null) {
+                    startActivity(Intent.createChooser(
+                            new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, mTitle).putExtra(Intent.EXTRA_TEXT, mLink)
+                                    .setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)));
+                }
+                break;
+            case R.id.menu_full_screen: {
+                toggleFullScreen();
+                break;
+            }
+            case R.id.menu_copy_clipboard: {
+                ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Copied Text", mLink);
+                clipboard.setPrimaryClip(clip);
+
+                Toast.makeText(activity, R.string.copied_clipboard, Toast.LENGTH_SHORT).show();
+                break;
+            }
+            case R.id.menu_mark_as_unread:
+                new Thread() {
+                    @Override
+                    public void run() {
+                        ContentResolver cr = MainApplication.getContext().getContentResolver();
+                        if (cr.update(mUri, FeedData.getUnreadContentValues(), null, null) > 0) {
+                            FeedDataContentProvider.notifyAllFromEntryUri(mUri, false);
+                        }
+                    }
+                }.start();
+                activity.finish();
+                break;
+        }
+
+        return true;
+    }
+
     private void registerContentObserver() {
         ContentResolver cr = MainApplication.getContext().getContentResolver();
         BaseActivity activity = (BaseActivity) getActivity();
@@ -355,17 +408,6 @@ public class EntryFragment extends Fragment {
         }
     }
 
-    private void toggleFullScreen() {
-        BaseActivity activty = (BaseActivity) getActivity();
-        if (activty.getActionBar().isShowing()) {
-            mCancelFullscreenBtn.setVisibility(View.VISIBLE);
-        } else {
-            mCancelFullscreenBtn.setVisibility(View.GONE);
-        }
-
-        activty.toggleFullScreen();
-    }
-
     private void reload(boolean forceUpdate) {
         mId = Long.parseLong(mUri.getLastPathSegment());
 
@@ -373,6 +415,20 @@ public class EntryFragment extends Fragment {
         Cursor entryCursor = cr.query(mUri, null, null, null, null);
 
         if (entryCursor.moveToFirst()) {
+
+            if (mTitlePosition == -1) {
+                mTitlePosition = entryCursor.getColumnIndex(EntryColumns.TITLE);
+                mDatePosition = entryCursor.getColumnIndex(EntryColumns.DATE);
+                mAbstractPosition = entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
+                mMobilizedHtmlPosition = entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
+                mLinkPosition = entryCursor.getColumnIndex(EntryColumns.LINK);
+                mFeedIdPosition = entryCursor.getColumnIndex(EntryColumns.FEED_ID);
+                mIsFavoritePosition = entryCursor.getColumnIndex(EntryColumns.IS_FAVORITE);
+                mIsReadPosition = entryCursor.getColumnIndex(EntryColumns.IS_READ);
+                mEnclosurePosition = entryCursor.getColumnIndex(EntryColumns.ENCLOSURE);
+                mAuthorPosition = entryCursor.getColumnIndex(EntryColumns.AUTHOR);
+            }
+
             String contentText = entryCursor.getString(mMobilizedHtmlPosition);
             if (contentText == null || (forceUpdate && !mPreferFullText)) {
                 mPreferFullText = false;
@@ -659,72 +715,15 @@ public class EntryFragment extends Fragment {
         switchEntry(mPreviousId, SLIDE_IN_LEFT, SLIDE_OUT_RIGHT);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.entry, menu);
-
-        if (mFavorite) {
-            MenuItem item = menu.findItem(R.id.menu_star);
-            item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
-        }
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Activity activity = getActivity();
-
-        switch (item.getItemId()) {
-            case R.id.menu_star:
-                mFavorite = !mFavorite;
-
-                ContentValues values = new ContentValues();
-                values.put(EntryColumns.IS_FAVORITE, mFavorite ? 1 : 0);
-                ContentResolver cr = MainApplication.getContext().getContentResolver();
-                if (cr.update(mUri, values, null, null) > 0) {
-                    FeedDataContentProvider.notifyAllFromEntryUri(mUri, true);
-                }
-
-                if (mFavorite) {
-                    item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
-                } else {
-                    item.setTitle(R.string.menu_star).setIcon(R.drawable.rating_not_important);
-                }
-                break;
-            case R.id.menu_share:
-                if (mLink != null) {
-                    startActivity(Intent.createChooser(
-                            new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, mTitle).putExtra(Intent.EXTRA_TEXT, mLink)
-                                    .setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)));
-                }
-                break;
-            case R.id.menu_full_screen: {
-                toggleFullScreen();
-                break;
-            }
-            case R.id.menu_copy_clipboard: {
-                ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Copied Text", mLink);
-                clipboard.setPrimaryClip(clip);
-
-                Toast.makeText(activity, R.string.copied_clipboard, Toast.LENGTH_SHORT).show();
-                break;
-            }
-            case R.id.menu_mark_as_unread:
-                new Thread() {
-                    @Override
-                    public void run() {
-                        ContentResolver cr = MainApplication.getContext().getContentResolver();
-                        if (cr.update(mUri, FeedData.getUnreadContentValues(), null, null) > 0) {
-                            FeedDataContentProvider.notifyAllFromEntryUri(mUri, false);
-                        }
-                    }
-                }.start();
-                activity.finish();
-                break;
+    private void toggleFullScreen() {
+        BaseActivity activity = (BaseActivity) getActivity();
+        if (activity.getActionBar().isShowing()) {
+            mCancelFullscreenBtn.setVisibility(View.VISIBLE);
+        } else {
+            mCancelFullscreenBtn.setVisibility(View.GONE);
         }
 
-        return true;
+        activity.toggleFullScreen();
     }
 
     private class JavaScriptObject {
