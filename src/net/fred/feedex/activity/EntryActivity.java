@@ -100,9 +100,9 @@ import java.util.Date;
 
 public class EntryActivity extends ProgressActivity {
 
-    private static final String SAVE_INSTANCE_SCROLL_PERCENTAGE = "scrollPercentage";
-    private static final String SAVE_INSTANCE_ENTRIES_IDS = "entriesIds";
-    private static final String SAVE_INSTANCE_IS_FULLSCREEN = "isFullscreen";
+    private static final String STATE_SCROLL_PERCENTAGE = "STATE_SCROLL_PERCENTAGE";
+    private static final String STATE_ENTRIES_IDS = "STATE_ENTRIES_IDS";
+    private static final String STATE_IS_FULLSCREEN = "STATE_IS_FULLSCREEN";
 
     private static final long ANIM_DURATION = 250;
     private static final TranslateAnimation SLIDE_IN_RIGHT = generateAnimation(1, 0);
@@ -292,23 +292,23 @@ public class EntryActivity extends ProgressActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         mWebView.saveState(outState);
-        outState.putLongArray(SAVE_INSTANCE_ENTRIES_IDS, mEntriesIds);
-        outState.putBoolean(SAVE_INSTANCE_IS_FULLSCREEN, !getActionBar().isShowing());
+        outState.putLongArray(STATE_ENTRIES_IDS, mEntriesIds);
+        outState.putBoolean(STATE_IS_FULLSCREEN, !getActionBar().isShowing());
 
         float positionTopView = mWebView.getTop();
         float contentHeight = mWebView.getContentHeight();
         float currentScrollPosition = mWebView.getScrollY();
 
-        outState.putFloat(SAVE_INSTANCE_SCROLL_PERCENTAGE, (currentScrollPosition - positionTopView) / contentHeight);
+        outState.putFloat(STATE_SCROLL_PERCENTAGE, (currentScrollPosition - positionTopView) / contentHeight);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        mEntriesIds = savedInstanceState.getLongArray(SAVE_INSTANCE_ENTRIES_IDS);
-        mScrollPercentage = savedInstanceState.getFloat(SAVE_INSTANCE_SCROLL_PERCENTAGE);
-        if (savedInstanceState.getBoolean(SAVE_INSTANCE_IS_FULLSCREEN)) {
+        mEntriesIds = savedInstanceState.getLongArray(STATE_ENTRIES_IDS);
+        mScrollPercentage = savedInstanceState.getFloat(STATE_SCROLL_PERCENTAGE);
+        if (savedInstanceState.getBoolean(STATE_IS_FULLSCREEN)) {
             toggleFullScreen();
         }
         mWebView.restoreState(savedInstanceState);
