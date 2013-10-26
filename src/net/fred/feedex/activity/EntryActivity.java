@@ -390,12 +390,12 @@ public class EntryActivity extends ProgressActivity {
                 }
             }
 
-            int _feedId = entryCursor.getInt(mFeedIdPosition);
-            if (mFeedId != _feedId) {
+            int feedId = entryCursor.getInt(mFeedIdPosition);
+            if (mFeedId != feedId) {
                 if (mFeedId != 0) {
                     mIconBytes = null; // triggers re-fetch of the icon
                 }
-                mFeedId = _feedId;
+                mFeedId = feedId;
             }
 
             mTitle = entryCursor.getString(mTitlePosition);
