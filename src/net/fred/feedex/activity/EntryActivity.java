@@ -175,8 +175,6 @@ public class EntryActivity extends ProgressActivity {
     private LayoutParams mLayoutParams;
     private View mCancelFullscreenBtn, mBackBtn, mForwardBtn;
 
-    private boolean mFromWidget = false;
-
     final private OnKeyListener mOnKeyEventListener = new OnKeyListener() {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -252,11 +250,6 @@ public class EntryActivity extends ProgressActivity {
         mUri = getIntent().getData();
         mParentUri = EntryColumns.PARENT_URI(mUri.getPath());
         mFeedId = 0;
-
-        Bundle b = getIntent().getExtras();
-        if (b != null) {
-            mFromWidget = b.getBoolean(Constants.INTENT_FROM_WIDGET, false);
-        }
 
         Cursor entryCursor = getContentResolver().query(mUri, null, null, null, null);
 
@@ -687,7 +680,8 @@ public class EntryActivity extends ProgressActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (mFromWidget) {
+                Bundle b = getIntent().getExtras();
+                if (b != null && b.getBoolean(Constants.INTENT_FROM_WIDGET, false)) {
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
                 }
