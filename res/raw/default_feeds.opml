@@ -2,7 +2,7 @@
 <opml version="1.1">
 <body>
 	<outline title="News" >
-		<outline title="Times - World" type="rss" xmlUrl="http://rss.nytimes.com/services/xml/rss/nyt/World.xml" />
+		<outline title="Times - World" type="rss" xmlUrl="http://rss.nytimes.com/services/xml/rss/nyt/World.xml" retrieveFullText='true'/>
 	</outline>
 </body>
 </opml>
