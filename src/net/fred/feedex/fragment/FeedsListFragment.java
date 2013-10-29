@@ -84,15 +84,12 @@ import java.util.regex.Pattern;
 
 public class FeedsListFragment extends ListFragment {
 
-    private FeedsCursorAdapter mListAdapter;
     private DragNDropExpandableListView mListView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
-
-        mListAdapter = new FeedsCursorAdapter(getActivity(), FeedColumns.GROUPS_CONTENT_URI);
     }
 
     @Override
@@ -100,7 +97,6 @@ public class FeedsListFragment extends ListFragment {
         View rootView = inflater.inflate(R.layout.fragment_feed_list, container, false);
 
         mListView = (DragNDropExpandableListView) rootView.findViewById(android.R.id.list);
-        mListAdapter.setExpandableListView(mListView);
         mListView.setFastScrollEnabled(true);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -126,7 +122,7 @@ public class FeedsListFragment extends ListFragment {
             }
         });
 
-        mListView.setAdapter(mListAdapter);
+        mListView.setAdapter(new FeedsCursorAdapter(getActivity(), FeedColumns.GROUPS_CONTENT_URI));
 
         mListView.setDragNDropListener(new DragNDropListener() {
             boolean fromHasGroupIndicator = false;
