@@ -488,7 +488,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                                         @Override
                                         public void onLoaderReset(Loader<ArrayList<HashMap<String, String>>> loader) {
                                         }
-                                    }).forceLoad();
+                                    });
                                     break;
 
                                 case R.id.byTopic:
@@ -556,5 +556,10 @@ class GetFeedSearchResultsLoader extends AsyncTaskLoader<ArrayList<HashMap<Strin
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    protected void onStartLoading() {
+        forceLoad();
     }
 }
