@@ -44,7 +44,7 @@ public class EntryActivity extends BaseActivity {
         if (item.getItemId() == android.R.id.home) {
             Bundle b = getIntent().getExtras();
             if (b != null && b.getBoolean(Constants.INTENT_FROM_WIDGET, false)) {
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
             }
             finish();

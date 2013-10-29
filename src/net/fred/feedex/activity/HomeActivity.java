@@ -52,7 +52,7 @@ import net.fred.feedex.service.RefreshService;
 import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 
-public class MainActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
 
@@ -135,7 +135,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
         if (PrefUtils.getBoolean(PrefUtils.REFRESH_ON_OPEN_ENABLED, false)) {
             if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-                startService(new Intent(MainActivity.this, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
+                startService(new Intent(HomeActivity.this, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
             }
         }
     }

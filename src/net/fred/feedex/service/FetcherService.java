@@ -65,7 +65,7 @@ import android.util.Xml;
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
-import net.fred.feedex.activity.MainActivity;
+import net.fred.feedex.activity.HomeActivity;
 import net.fred.feedex.parser.RssAtomParser;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
@@ -181,7 +181,7 @@ public class FetcherService extends IntentService {
                     if (newCount > 0) {
                         String text = String.valueOf(newCount) + ' ' + getString(R.string.new_entries);
 
-                        Intent notificationIntent = new Intent(FetcherService.this, MainActivity.class);
+                        Intent notificationIntent = new Intent(FetcherService.this, HomeActivity.class);
                         PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent,
                                 PendingIntent.FLAG_UPDATE_CURRENT);
 

@@ -28,7 +28,7 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 
 import net.fred.feedex.R;
-import net.fred.feedex.activity.MainActivity;
+import net.fred.feedex.activity.HomeActivity;
 import net.fred.feedex.utils.PrefUtils;
 
 public class WidgetProvider extends AppWidgetProvider {
@@ -44,7 +44,7 @@ public class WidgetProvider extends AppWidgetProvider {
             svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
             RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget);
-            widget.setOnClickPendingIntent(R.id.feed_icon, PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0));
+            widget.setOnClickPendingIntent(R.id.feed_icon, PendingIntent.getActivity(context, 0, new Intent(context, HomeActivity.class), 0));
             widget.setPendingIntentTemplate(R.id.feedsListView, PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW), 0));
 
             widget.setRemoteAdapter(R.id.feedsListView, svcIntent);
