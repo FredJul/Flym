@@ -84,7 +84,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
 
         mEntriesFragment = (EntriesListFragment) getFragmentManager().findFragmentById(R.id.fragment);
 
