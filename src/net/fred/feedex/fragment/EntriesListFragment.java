@@ -259,11 +259,11 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mEntriesCursorAdapter.changeCursor(data);
+        mEntriesCursorAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mEntriesCursorAdapter.changeCursor(null);
+        mEntriesCursorAdapter.swapCursor(null);
     }
 }

@@ -260,12 +260,12 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mFiltersCursorAdapter.changeCursor(data);
+        mFiltersCursorAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mFiltersCursorAdapter.changeCursor(null);
+        mFiltersCursorAdapter.swapCursor(null);
     }
 
     public void onClickOk(View view) {

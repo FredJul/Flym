@@ -326,5 +326,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
+        mDrawerAdapter.setCursor(null);
     }
 }
