@@ -33,27 +33,17 @@ import android.widget.TextView;
 import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.utils.UiUtils;
-import net.fred.feedex.view.DragNDropExpandableListView;
 
 public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 
-    private final Activity mActivity;
     private int isGroupPosition = -1;
     private int namePosition = -1;
     private int idPosition = -1;
     private int linkPosition = -1;
     private int iconPosition = -1;
 
-    private DragNDropExpandableListView mListView;
-
     public FeedsCursorAdapter(Activity activity, Uri groupUri) {
         super(activity, groupUri, R.layout.item_feed_list, R.layout.item_feed_list);
-
-        mActivity = activity;
-    }
-
-    public void setExpandableListView(DragNDropExpandableListView listView) {
-        mListView = listView;
     }
 
     @Override
