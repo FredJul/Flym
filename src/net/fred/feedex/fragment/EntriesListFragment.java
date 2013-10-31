@@ -19,6 +19,7 @@
 
 package net.fred.feedex.fragment;
 
+import android.app.Activity;
 import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.ContentUris;
@@ -54,11 +55,17 @@ import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
 
 public class EntriesListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    public interface Callbacks {
+        public void onEntrySelected(Uri entryUri);
+    }
+
     private static final String STATE_URI = "STATE_URI";
     private static final String STATE_SHOW_FEED_INFO = "STATE_SHOW_FEED_INFO";
 
     private static final int LOADER_ID = 1;
 
+    private Callbacks mCallbacks;
     private Uri mUri;
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
@@ -129,6 +136,25 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // Activities containing this fragment must implement its callbacks.
+        if (!(activity instanceof Callbacks)) {
+            throw new IllegalStateException("Activity must implement fragment's callbacks.");
+        }
+
+        mCallbacks = (Callbacks) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        mCallbacks = null;
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(STATE_URI, mUri);
         outState.putBoolean(STATE_SHOW_FEED_INFO, mShowFeedInfo);
@@ -159,7 +185,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
-        startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, id)));
+        mCallbacks.onEntrySelected(ContentUris.withAppendedId(mUri, id));
     }
 
     @Override

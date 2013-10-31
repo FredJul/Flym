@@ -19,6 +19,7 @@
 
 package net.fred.feedex.activity;
 
+import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -46,13 +47,14 @@ import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.DrawerAdapter;
 import net.fred.feedex.fragment.EntriesListFragment;
+import net.fred.feedex.fragment.EntryFragment;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.service.RefreshService;
 import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 
-public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, EntriesListFragment.Callbacks {
 
     private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
 
@@ -68,6 +70,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     };
 
     private EntriesListFragment mEntriesFragment;
+    private EntryFragment mEntryFragment;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private DrawerAdapter mDrawerAdapter;
@@ -86,7 +89,12 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         setContentView(R.layout.activity_home);
 
-        mEntriesFragment = (EntriesListFragment) getFragmentManager().findFragmentById(R.id.fragment);
+        mEntriesFragment = (EntriesListFragment) getFragmentManager().findFragmentById(R.id.entries_list_fragment);
+        Fragment entryFragment = getFragmentManager().findFragmentById(R.id.entry_fragment);
+        if (entryFragment != null) {
+            mEntryFragment = (EntryFragment) entryFragment;
+            mEntriesFragment.getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        }
 
         mTitle = getTitle();
 
@@ -190,11 +198,17 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             inflater.inflate(R.menu.drawer, menu);
 
             mEntriesFragment.setHasOptionsMenu(false);
+            if (mEntryFragment != null) {
+                mEntryFragment.setHasOptionsMenu(false);
+            }
         } else {
             refreshTitleAndIcon();
             invalidateOptionsMenu();
 
             mEntriesFragment.setHasOptionsMenu(true);
+            if (mEntryFragment != null) {
+                mEntryFragment.setHasOptionsMenu(true);
+            }
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -327,5 +341,14 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mDrawerAdapter.setCursor(null);
+    }
+
+    @Override
+    public void onEntrySelected(Uri entryUri) {
+        if (mEntryFragment == null) {
+            startActivity(new Intent(Intent.ACTION_VIEW, entryUri));
+        } else {
+            mEntryFragment.setData(entryUri);
+        }
     }
 }

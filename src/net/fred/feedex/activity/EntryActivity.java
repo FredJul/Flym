@@ -25,6 +25,7 @@ import android.view.MenuItem;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
+import net.fred.feedex.fragment.EntryFragment;
 import net.fred.feedex.utils.UiUtils;
 
 public class EntryActivity extends BaseActivity {
@@ -35,6 +36,9 @@ public class EntryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_entry);
+
+        EntryFragment entryFragment = (EntryFragment) getFragmentManager().findFragmentById(R.id.entry_fragment);
+        entryFragment.setData(getIntent().getData());
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }

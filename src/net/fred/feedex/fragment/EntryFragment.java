@@ -209,14 +209,14 @@ public class EntryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
 
-        if (savedInstanceState == null) {
-            mUri = getActivity().getIntent().getData();
-        } else {
+        if (savedInstanceState != null) {
             mUri = savedInstanceState.getParcelable(STATE_URI);
             mEntriesIds = savedInstanceState.getLongArray(STATE_ENTRIES_IDS);
             mScrollPercentage = savedInstanceState.getFloat(STATE_SCROLL_PERCENTAGE);
+            if (mUri != null) {
+                mParentUri = EntryColumns.PARENT_URI(mUri.getPath());
+            }
         }
-        mParentUri = EntryColumns.PARENT_URI(mUri.getPath());
 
         super.onCreate(savedInstanceState);
     }
@@ -277,7 +277,9 @@ public class EntryFragment extends Fragment {
         mWebView0 = new WebView(getActivity());
         setupWebview(mWebView0);
 
-        reload(false);
+        if (mUri != null) {
+            reload(false);
+        }
 
         return rootView;
     }
@@ -391,6 +393,19 @@ public class EntryFragment extends Fragment {
         }
 
         return true;
+    }
+
+    public Uri getUri() {
+        return mUri;
+    }
+
+    public void setData(Uri uri) {
+        mUri = uri;
+        mParentUri = EntryColumns.PARENT_URI(mUri.getPath());
+
+        if (mWebView != null) { // If the view is already created, just load the new entry
+            reload(false);
+        }
     }
 
     private void registerContentObserver() {
