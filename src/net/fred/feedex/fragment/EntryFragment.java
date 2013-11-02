@@ -401,10 +401,14 @@ public class EntryFragment extends Fragment {
 
     public void setData(Uri uri) {
         mUri = uri;
-        mParentUri = EntryColumns.PARENT_URI(mUri.getPath());
+        if (mUri != null) {
+            mParentUri = EntryColumns.PARENT_URI(mUri.getPath());
 
-        if (mWebView != null) { // If the view is already created, just load the new entry
-            reload(false);
+            if (mWebView != null) { // If the view is already created, just load the new entry
+                reload(false);
+            }
+        } else if (mWebView != null) {
+            mWebView.loadUrl("about:blank");
         }
     }
 
