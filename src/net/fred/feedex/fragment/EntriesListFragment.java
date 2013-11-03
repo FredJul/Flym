@@ -293,12 +293,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         boolean firstLoad = mEntriesCursorAdapter.getCursor() == null;
         mEntriesCursorAdapter.swapCursor(data);
 
-        if (firstLoad) {
-            if (data.getCount() > 0) {
-                mCallbacks.onEntriesListLoaded(data);
-            } else {
-                mCallbacks.onEntrySelected(null);
-            }
+        if (firstLoad && data.getCount() > 0) {
+            mCallbacks.onEntriesListLoaded(data);
         }
     }
 
