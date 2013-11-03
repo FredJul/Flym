@@ -57,6 +57,8 @@ import net.fred.feedex.utils.PrefUtils;
 public class EntriesListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public interface Callbacks {
+        public void onEntriesListLoaded(Cursor data);
+
         public void onEntrySelected(Uri entryUri);
     }
 
@@ -288,15 +290,14 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (mEntriesCursorAdapter.getCursor() == null) {
+        boolean dontHaveData = mEntriesCursorAdapter.getCursor() == null;
+        mEntriesCursorAdapter.swapCursor(data);
+
+        if (dontHaveData) {
             if (data.getCount() > 0) {
-                mEntriesCursorAdapter.swapCursor(data);
-                data.moveToFirst();
-                long id = data.getLong(data.getColumnIndex(EntryColumns._ID));
-                mListView.performItemClick(null, 0, id);
+                mCallbacks.onEntriesListLoaded(data);
             } else {
                 mCallbacks.onEntrySelected(null);
-                mEntriesCursorAdapter.swapCursor(null);
             }
         }
     }

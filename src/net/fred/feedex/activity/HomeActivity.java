@@ -48,7 +48,8 @@ import net.fred.feedex.R;
 import net.fred.feedex.adapter.DrawerAdapter;
 import net.fred.feedex.fragment.EntriesListFragment;
 import net.fred.feedex.fragment.EntryFragment;
-import net.fred.feedex.provider.FeedData;
+import net.fred.feedex.provider.FeedData.EntryColumns;
+import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.service.RefreshService;
 import net.fred.feedex.utils.PrefUtils;
@@ -246,15 +247,15 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         switch (position) {
             case 0:
-                newUri = FeedData.EntryColumns.CONTENT_URI;
+                newUri = EntryColumns.CONTENT_URI;
                 break;
             case 1:
-                newUri = FeedData.EntryColumns.FAVORITES_CONTENT_URI;
+                newUri = EntryColumns.FAVORITES_CONTENT_URI;
                 break;
             default:
                 long feedOrGroupId = mDrawerAdapter.getItemId(position);
                 if (mDrawerAdapter.isItemAGroup(position)) {
-                    newUri = FeedData.EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
+                    newUri = EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
                 } else {
                     byte[] iconBytes = mDrawerAdapter.getItemIcon(position);
                     if (iconBytes != null && iconBytes.length > 0) {
@@ -269,7 +270,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                         }
                     }
 
-                    newUri = FeedData.EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
+                    newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
                     showFeedInfo = false;
                 }
                 mTitle = mDrawerAdapter.getItemName(position);
@@ -309,12 +310,12 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        CursorLoader cursorLoader = new CursorLoader(this, FeedData.FeedColumns.GROUPED_FEEDS_CONTENT_URI, new String[]{FeedData.FeedColumns._ID, FeedData.FeedColumns.URL,
-                FeedData.FeedColumns.NAME, FeedData.FeedColumns.IS_GROUP, FeedData.FeedColumns.GROUP_ID, FeedData.FeedColumns.ICON, FeedData.FeedColumns.LAST_UPDATE, FeedData.FeedColumns.ERROR,
-                "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_READ + " IS NULL AND " + FeedData.EntryColumns.FEED_ID + "="
-                        + FeedData.FeedColumns.TABLE_NAME + "." + FeedData.FeedColumns._ID + ")",
-                "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_READ + " IS NULL)",
-                "(SELECT COUNT(*) FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " + FeedData.EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ")"}, null, null, null);
+        CursorLoader cursorLoader = new CursorLoader(this, FeedColumns.GROUPED_FEEDS_CONTENT_URI, new String[]{FeedColumns._ID, FeedColumns.URL,
+                FeedColumns.NAME, FeedColumns.IS_GROUP, FeedColumns.GROUP_ID, FeedColumns.ICON, FeedColumns.LAST_UPDATE, FeedColumns.ERROR,
+                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + "="
+                        + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ")",
+                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)",
+                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ")"}, null, null, null);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
     }
@@ -341,6 +342,15 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mDrawerAdapter.setCursor(null);
+    }
+
+    @Override
+    public void onEntriesListLoaded(Cursor data) {
+        if (mEntryFragment != null) {
+            data.moveToFirst();
+            long id = data.getLong(data.getColumnIndex(EntryColumns._ID));
+            mEntriesFragment.getListView().performItemClick(null, 0, id);
+        }
     }
 
     @Override
