@@ -409,6 +409,9 @@ public class EntryFragment extends Fragment {
             }
         } else if (mWebView != null) {
             mWebView.loadUrl("about:blank");
+            mEntriesIds = null;
+            mScrollPercentage = 0;
+            setupNavigationButton();
         }
     }
 
@@ -460,6 +463,17 @@ public class EntryFragment extends Fragment {
             }
 
             // Need to be done before the "mark as read" action
+            Cursor entriesCursor = MainApplication.getContext().getContentResolver().query(mParentUri, EntryColumns.PROJECTION_ID,
+                    PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(mParentUri) ? null
+                            : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
+
+            mEntriesIds = new long[entriesCursor.getCount()];
+            int i = 0;
+            while (entriesCursor.moveToNext()) {
+                mEntriesIds[i++] = entriesCursor.getLong(0);
+            }
+
+            entriesCursor.close();
             setupNavigationButton();
 
             // Mark the article as read
@@ -669,33 +683,21 @@ public class EntryFragment extends Fragment {
         mNextId = -1;
         mForwardBtn.setVisibility(View.GONE);
 
-        if (mEntriesIds == null) {
-            Cursor cursor = MainApplication.getContext().getContentResolver().query(mParentUri, EntryColumns.PROJECTION_ID,
-                    PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(mParentUri) ? null
-                            : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
+        if (mEntriesIds != null) {
+            for (int i = 0; i < mEntriesIds.length; ++i) {
+                if (mId == mEntriesIds[i]) {
+                    if (i > 0) {
+                        mPreviousId = mEntriesIds[i - 1];
+                        mBackBtn.setVisibility(View.VISIBLE);
+                    }
 
-            mEntriesIds = new long[cursor.getCount()];
-            int i = 0;
-            while (cursor.moveToNext()) {
-                mEntriesIds[i++] = cursor.getLong(0);
-            }
+                    if (i < mEntriesIds.length - 1) {
+                        mNextId = mEntriesIds[i + 1];
+                        mForwardBtn.setVisibility(View.VISIBLE);
+                    }
 
-            cursor.close();
-        }
-
-        for (int i = 0; i < mEntriesIds.length; ++i) {
-            if (mId == mEntriesIds[i]) {
-                if (i > 0) {
-                    mPreviousId = mEntriesIds[i - 1];
-                    mBackBtn.setVisibility(View.VISIBLE);
+                    break;
                 }
-
-                if (i < mEntriesIds.length - 1) {
-                    mNextId = mEntriesIds[i + 1];
-                    mForwardBtn.setVisibility(View.VISIBLE);
-                }
-
-                break;
             }
         }
     }
