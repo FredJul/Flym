@@ -63,6 +63,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     }
 
     private static final String STATE_URI = "STATE_URI";
+    private static final String STATE_NEED_DEFAULT_SELECTION = "STATE_NEED_DEFAULT_SELECTION";
     private static final String STATE_SHOW_FEED_INFO = "STATE_SHOW_FEED_INFO";
 
     private static final int LOADER_ID = 1;
@@ -72,6 +73,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
     private ListView mListView;
+    private boolean mNeedDefaultSelection = false;
 
     private final OnSharedPreferenceChangeListener prefListener = new OnSharedPreferenceChangeListener() {
         @Override
@@ -132,6 +134,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         if (savedInstanceState != null) {
             mUri = savedInstanceState.getParcelable(STATE_URI);
             mShowFeedInfo = savedInstanceState.getBoolean(STATE_SHOW_FEED_INFO);
+            mNeedDefaultSelection = savedInstanceState.getBoolean(STATE_NEED_DEFAULT_SELECTION);
 
             mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
             getLoaderManager().initLoader(LOADER_ID, null, this);
@@ -163,6 +166,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(STATE_URI, mUri);
         outState.putBoolean(STATE_SHOW_FEED_INFO, mShowFeedInfo);
+        outState.putBoolean(STATE_NEED_DEFAULT_SELECTION, mNeedDefaultSelection);
 
         super.onSaveInstanceState(outState);
     }
@@ -274,6 +278,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     public void setData(Uri uri, boolean showFeedInfo) {
         mUri = uri;
         mShowFeedInfo = showFeedInfo;
+        mNeedDefaultSelection = true;
 
         mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
         setListAdapter(mEntriesCursorAdapter);
@@ -290,12 +295,13 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        boolean firstLoad = mEntriesCursorAdapter.getCursor() == null;
         mEntriesCursorAdapter.swapCursor(data);
 
-        if (firstLoad && data.getCount() > 0) {
+        if (mNeedDefaultSelection && data.getCount() > 0) {
             mCallbacks.onEntriesListLoaded(data);
         }
+
+        mNeedDefaultSelection = false;
     }
 
     @Override
