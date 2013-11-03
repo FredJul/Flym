@@ -347,9 +347,13 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public void onEntriesListLoaded(Cursor data) {
         if (mEntryFragment != null) {
-            data.moveToFirst();
-            long id = data.getLong(data.getColumnIndex(EntryColumns._ID));
-            mEntriesFragment.getListView().performItemClick(null, 0, id);
+            if (data != null) {
+                data.moveToFirst();
+                long id = data.getLong(data.getColumnIndex(EntryColumns._ID));
+                mEntriesFragment.getListView().performItemClick(null, 0, id);
+            } else {
+                mEntryFragment.setData(null);
+            }
         }
     }
 

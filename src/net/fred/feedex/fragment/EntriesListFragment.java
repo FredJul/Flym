@@ -258,6 +258,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                 return true;
             }
             case R.id.menu_hide_read: {
+                mNeedDefaultSelection = true;
                 if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
                     PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
                     item.setTitle(R.string.context_menu_hide_read).setIcon(R.drawable.hide_reads);
@@ -296,9 +297,12 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mEntriesCursorAdapter.swapCursor(data);
-
-        if (mNeedDefaultSelection && data.getCount() > 0) {
-            mCallbacks.onEntriesListLoaded(data);
+        if (mNeedDefaultSelection) {
+            if (data.getCount() > 0) {
+                mCallbacks.onEntriesListLoaded(data);
+            } else {
+                mCallbacks.onEntriesListLoaded(null);
+            }
         }
 
         mNeedDefaultSelection = false;
