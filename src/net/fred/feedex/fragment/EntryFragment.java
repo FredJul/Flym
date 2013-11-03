@@ -85,7 +85,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
@@ -100,6 +99,7 @@ import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.ThrottledContentObserver;
 import net.fred.feedex.utils.UiUtils;
+import net.fred.feedex.view.EntryView;
 
 import java.util.Date;
 
@@ -173,7 +173,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
     private WebView mWebView;
     private WebView mWebView0; // only needed for the animation
 
-    private ViewFlipper mViewFlipper;
+    private EntryView mEntryView;
 
     private float mScrollPercentage = 0;
 
@@ -267,13 +267,13 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
             }
         });
 
-        mViewFlipper = (ViewFlipper) rootView.findViewById(R.id.content_flipper);
+        mEntryView = (EntryView) rootView.findViewById(R.id.entry);
 
         mLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
         mWebView = new WebView(getActivity());
         setupWebview(mWebView);
-        mViewFlipper.addView(mWebView, mLayoutParams);
+        mEntryView.addView(mWebView, mLayoutParams);
 
         mWebView0 = new WebView(getActivity());
         setupWebview(mWebView0);
@@ -651,14 +651,14 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
 
         getLoaderManager().restartLoader(LOADER_ID, null, this).forceLoad();
 
-        mViewFlipper.setInAnimation(inAnimation);
-        mViewFlipper.setOutAnimation(outAnimation);
-        mViewFlipper.addView(mWebView, mLayoutParams);
-        mViewFlipper.showNext();
-        mViewFlipper.removeViewAt(0);
+        mEntryView.setInAnimation(inAnimation);
+        mEntryView.setOutAnimation(outAnimation);
+        mEntryView.addView(mWebView, mLayoutParams);
+        mEntryView.showNext();
+        mEntryView.removeViewAt(0);
 
         // To clear memory and avoid possible glitches
-        mViewFlipper.postDelayed(new Runnable() {
+        mEntryView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mWebView0.loadUrl("about:blank");

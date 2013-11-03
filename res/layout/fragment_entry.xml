@@ -4,8 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ViewFlipper
-        android:id="@+id/content_flipper"
+    <net.fred.feedex.view.EntryView
+        android:id="@+id/entry"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
