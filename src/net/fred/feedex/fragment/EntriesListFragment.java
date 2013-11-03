@@ -290,15 +290,15 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (mEntriesCursorAdapter.getCursor() == null) {
             if (data.getCount() > 0) {
+                mEntriesCursorAdapter.swapCursor(data);
                 data.moveToFirst();
                 long id = data.getLong(data.getColumnIndex(EntryColumns._ID));
-                mCallbacks.onEntrySelected(ContentUris.withAppendedId(mUri, id));
+                mListView.performItemClick(null, 0, id);
             } else {
                 mCallbacks.onEntrySelected(null);
+                mEntriesCursorAdapter.swapCursor(null);
             }
         }
-
-        mEntriesCursorAdapter.swapCursor(data);
     }
 
     @Override
