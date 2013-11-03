@@ -15,13 +15,22 @@
             android:name="net.fred.feedex.fragment.EntriesListFragment"
             android:id="@+id/entries_list_fragment" />
 
-        <fragment
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:name="net.fred.feedex.fragment.EntryFragment"
-            android:id="@+id/entry_fragment" />
+            android:layout_weight="3">
 
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:name="net.fred.feedex.fragment.EntryFragment"
+                android:id="@+id/entry_fragment" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/drawer_shadow" />
+        </FrameLayout>
     </LinearLayout>
 
     <ListView
