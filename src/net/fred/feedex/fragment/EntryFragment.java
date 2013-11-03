@@ -47,13 +47,16 @@ package net.fred.feedex.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.LoaderManager;
 import android.content.ActivityNotFoundException;
+import android.content.AsyncTaskLoader;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -100,7 +103,9 @@ import net.fred.feedex.utils.UiUtils;
 
 import java.util.Date;
 
-public class EntryFragment extends Fragment {
+public class EntryFragment extends Fragment implements LoaderManager.LoaderCallbacks<EntryLoaderResult> {
+
+    private static final int LOADER_ID = 2;
 
     private static final String STATE_URI = "STATE_URI";
     private static final String STATE_SCROLL_PERCENTAGE = "STATE_SCROLL_PERCENTAGE";
@@ -153,18 +158,17 @@ public class EntryFragment extends Fragment {
 
     private static final String IMAGE_ENCLOSURE = "[@]image/";
 
-    private int mTitlePosition = -1, mDatePosition, mMobilizedHtmlPosition, mAbstractPosition, mLinkPosition, mFeedIdPosition, mIsFavoritePosition,
-            mIsReadPosition, mEnclosurePosition, mAuthorPosition;
+    private int mTitlePosition = -1, mDatePosition, mMobilizedHtmlPosition, mAbstractPosition, mLinkPosition, mIsFavoritePosition,
+            mEnclosurePosition, mAuthorPosition;
 
     private long mId = -1;
     private long mNextId = -1;
     private long mPreviousId = -1;
     private long[] mEntriesIds;
+    private EntryLoaderResult mLoaderResult;
 
-    private Uri mUri, mParentUri;
-    private int mFeedId;
+    private Uri mUri;
     private boolean mFavorite, mPreferFullText = true;
-    private byte[] mIconBytes = null;
 
     private WebView mWebView;
     private WebView mWebView0; // only needed for the animation
@@ -200,7 +204,7 @@ public class EntryFragment extends Fragment {
                 activity.getProgressBar().setVisibility(View.VISIBLE);
             } else { // We finished one
                 mPreferFullText = true;
-                reload(true);
+                getLoaderManager().restartLoader(LOADER_ID, null, EntryFragment.this).forceLoad();
             }
         }
     };
@@ -213,9 +217,6 @@ public class EntryFragment extends Fragment {
             mUri = savedInstanceState.getParcelable(STATE_URI);
             mEntriesIds = savedInstanceState.getLongArray(STATE_ENTRIES_IDS);
             mScrollPercentage = savedInstanceState.getFloat(STATE_SCROLL_PERCENTAGE);
-            if (mUri != null) {
-                mParentUri = EntryColumns.PARENT_URI(mUri.getPath());
-            }
         }
 
         super.onCreate(savedInstanceState);
@@ -278,7 +279,7 @@ public class EntryFragment extends Fragment {
         setupWebview(mWebView0);
 
         if (mUri != null) {
-            reload(false);
+            getLoaderManager().restartLoader(LOADER_ID, null, EntryFragment.this).forceLoad();
         }
 
         return rootView;
@@ -402,10 +403,8 @@ public class EntryFragment extends Fragment {
     public void setData(Uri uri) {
         mUri = uri;
         if (mUri != null) {
-            mParentUri = EntryColumns.PARENT_URI(mUri.getPath());
-
             if (mWebView != null) { // If the view is already created, just load the new entry
-                reload(false);
+                getLoaderManager().restartLoader(LOADER_ID, null, this).forceLoad();
             }
         } else if (mWebView != null) {
             mWebView.loadUrl("about:blank");
@@ -433,28 +432,11 @@ public class EntryFragment extends Fragment {
     private void reload(boolean forceUpdate) {
         mId = Long.parseLong(mUri.getLastPathSegment());
 
-        ContentResolver cr = MainApplication.getContext().getContentResolver();
-        Cursor entryCursor = cr.query(mUri, null, null, null, null);
-
-        if (entryCursor.moveToFirst()) {
-
-            if (mTitlePosition == -1) {
-                mTitlePosition = entryCursor.getColumnIndex(EntryColumns.TITLE);
-                mDatePosition = entryCursor.getColumnIndex(EntryColumns.DATE);
-                mAbstractPosition = entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
-                mMobilizedHtmlPosition = entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
-                mLinkPosition = entryCursor.getColumnIndex(EntryColumns.LINK);
-                mFeedIdPosition = entryCursor.getColumnIndex(EntryColumns.FEED_ID);
-                mIsFavoritePosition = entryCursor.getColumnIndex(EntryColumns.IS_FAVORITE);
-                mIsReadPosition = entryCursor.getColumnIndex(EntryColumns.IS_READ);
-                mEnclosurePosition = entryCursor.getColumnIndex(EntryColumns.ENCLOSURE);
-                mAuthorPosition = entryCursor.getColumnIndex(EntryColumns.AUTHOR);
-            }
-
-            String contentText = entryCursor.getString(mMobilizedHtmlPosition);
+        if (mLoaderResult.entryCursor != null && mLoaderResult.entryCursor.moveToFirst()) {
+            String contentText = mLoaderResult.entryCursor.getString(mMobilizedHtmlPosition);
             if (contentText == null || (forceUpdate && !mPreferFullText)) {
                 mPreferFullText = false;
-                contentText = entryCursor.getString(mAbstractPosition);
+                contentText = mLoaderResult.entryCursor.getString(mAbstractPosition);
             } else {
                 mPreferFullText = true;
             }
@@ -463,57 +445,14 @@ public class EntryFragment extends Fragment {
             }
 
             // Need to be done before the "mark as read" action
-            Cursor entriesCursor = MainApplication.getContext().getContentResolver().query(mParentUri, EntryColumns.PROJECTION_ID,
-                    PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(mParentUri) ? null
-                            : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
-
-            mEntriesIds = new long[entriesCursor.getCount()];
-            int i = 0;
-            while (entriesCursor.moveToNext()) {
-                mEntriesIds[i++] = entriesCursor.getLong(0);
-            }
-
-            entriesCursor.close();
             setupNavigationButton();
 
-            // Mark the article as read
-            if (entryCursor.getInt(mIsReadPosition) != 1) {
-                if (cr.update(mUri, FeedData.getReadContentValues(), null, null) > 0) {
-                    FeedDataContentProvider.notifyAllFromEntryUri(mUri, false);
-                }
-            }
-
-            int feedId = entryCursor.getInt(mFeedIdPosition);
-            if (mFeedId != feedId) {
-                if (mFeedId != 0) {
-                    mIconBytes = null; // triggers re-fetch of the icon
-                }
-                mFeedId = feedId;
-            }
-
             BaseActivity activity = (BaseActivity) getActivity();
-            mTitle = entryCursor.getString(mTitlePosition);
-            Cursor cursor = cr.query(FeedColumns.CONTENT_URI(mFeedId), new String[]{FeedColumns.NAME, FeedColumns.URL}, null, null, null);
-            if (cursor.moveToFirst()) {
-                activity.setTitle(cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0));
-            } else { // fallback, should not be possible
-                activity.setTitle(mTitle);
-            }
-            cursor.close();
+            activity.setTitle(mLoaderResult.feedTitle);
 
-            if (mIconBytes == null || mIconBytes.length == 0) {
-                Cursor iconCursor = cr.query(FeedColumns.CONTENT_URI(Integer.toString(mFeedId)),
-                        new String[]{FeedColumns._ID, FeedColumns.ICON}, null, null, null);
-
-                if (iconCursor.moveToFirst()) {
-                    mIconBytes = iconCursor.getBlob(1);
-                }
-                iconCursor.close();
-            }
-
-            if (mIconBytes != null && mIconBytes.length > 0) {
+            if (mLoaderResult.iconBytes != null && mLoaderResult.iconBytes.length > 0) {
                 int bitmapSizeInDip = UiUtils.dpToPixel(24);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(mIconBytes, 0, mIconBytes.length);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(mLoaderResult.iconBytes, 0, mLoaderResult.iconBytes.length);
                 if (bitmap != null) {
                     if (bitmap.getHeight() != bitmapSizeInDip) {
                         bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
@@ -527,7 +466,7 @@ public class EntryFragment extends Fragment {
                 activity.getActionBar().setIcon(R.drawable.icon);
             }
 
-            mFavorite = entryCursor.getInt(mIsFavoritePosition) == 1;
+            mFavorite = mLoaderResult.entryCursor.getInt(mIsFavoritePosition) == 1;
             activity.invalidateOptionsMenu();
 
             // loadData does not recognize the encoding without correct html-header
@@ -548,10 +487,11 @@ public class EntryFragment extends Fragment {
                 }
             }
 
-            String author = entryCursor.getString(mAuthorPosition);
-            long timestamp = entryCursor.getLong(mDatePosition);
-            mLink = entryCursor.getString(mLinkPosition);
-            mEnclosure = entryCursor.getString(mEnclosurePosition);
+            String author = mLoaderResult.entryCursor.getString(mAuthorPosition);
+            long timestamp = mLoaderResult.entryCursor.getLong(mDatePosition);
+            mLink = mLoaderResult.entryCursor.getString(mLinkPosition);
+            mTitle = mLoaderResult.entryCursor.getString(mTitlePosition);
+            mEnclosure = mLoaderResult.entryCursor.getString(mEnclosurePosition);
 
             // String baseUrl = "";
             // try {
@@ -565,8 +505,6 @@ public class EntryFragment extends Fragment {
             // Listen the mobilizing task
             registerContentObserver();
         }
-
-        entryCursor.close();
     }
 
     private String generateHtmlContent(String title, String link, String abstractText, String enclosure, String author, long timestamp) {
@@ -703,7 +641,7 @@ public class EntryFragment extends Fragment {
     }
 
     private void switchEntry(long id, Animation inAnimation, Animation outAnimation) {
-        mUri = mParentUri.buildUpon().appendPath(String.valueOf(id)).build();
+        mUri = EntryColumns.PARENT_URI(mUri.getPath()).buildUpon().appendPath(String.valueOf(id)).build();
         mScrollPercentage = 0;
 
         WebView tmp = mWebView; // switch reference
@@ -711,7 +649,7 @@ public class EntryFragment extends Fragment {
         mWebView = mWebView0;
         mWebView0 = tmp;
 
-        reload(false);
+        getLoaderManager().restartLoader(LOADER_ID, null, this).forceLoad();
 
         mViewFlipper.setInAnimation(inAnimation);
         mViewFlipper.setOutAnimation(outAnimation);
@@ -830,4 +768,107 @@ public class EntryFragment extends Fragment {
     }
 
     private final JavaScriptObject injectedJSObject = new JavaScriptObject();
+
+    @Override
+    public Loader<EntryLoaderResult> onCreateLoader(int id, Bundle args) {
+        return new EntryLoader(getActivity(), mUri);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<EntryLoaderResult> loader, EntryLoaderResult result) {
+        if (mLoaderResult != null && mLoaderResult.entryCursor != null) {
+            mLoaderResult.entryCursor.close();
+        }
+        mLoaderResult = result;
+        if (mEntriesIds == null) {
+            mEntriesIds = mLoaderResult.entriesIds;
+        }
+
+        if (mLoaderResult.entryCursor != null && mTitlePosition == -1) {
+            mTitlePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.TITLE);
+            mDatePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.DATE);
+            mAbstractPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
+            mMobilizedHtmlPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
+            mLinkPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.LINK);
+            mIsFavoritePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.IS_FAVORITE);
+            mEnclosurePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.ENCLOSURE);
+            mAuthorPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.AUTHOR);
+        }
+
+        reload(false);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<EntryLoaderResult> loader) {
+        if (mLoaderResult != null && mLoaderResult.entryCursor != null) {
+            mLoaderResult.entryCursor.close();
+        }
+    }
 }
+
+class EntryLoaderResult {
+    Cursor entryCursor;
+    long feedId;
+    long[] entriesIds;
+    String feedTitle;
+    byte[] iconBytes;
+}
+
+class EntryLoader extends AsyncTaskLoader<EntryLoaderResult> {
+
+    private final Uri mUri;
+
+    public EntryLoader(Context context, Uri uri) {
+        super(context);
+        mUri = uri;
+    }
+
+    @Override
+    public EntryLoaderResult loadInBackground() {
+        EntryLoaderResult result = new EntryLoaderResult();
+
+        // Get the entry cursor
+        Context context = MainApplication.getContext();
+        ContentResolver cr = context.getContentResolver();
+        result.entryCursor = cr.query(mUri, null, null, null, null);
+
+        if (result.entryCursor != null) {
+            result.entryCursor.moveToFirst();
+
+            // Mark the article as read
+            if (result.entryCursor.getInt(result.entryCursor.getColumnIndex(EntryColumns.IS_READ)) != 1) {
+                if (cr.update(mUri, FeedData.getReadContentValues(), null, null) > 0) {
+                    FeedDataContentProvider.notifyAllFromEntryUri(mUri, false);
+                }
+            }
+
+            // Get all the other entry ids (for navigation)
+            Uri parentUri = EntryColumns.PARENT_URI(mUri.getPath());
+            Cursor entriesCursor = context.getContentResolver().query(parentUri, EntryColumns.PROJECTION_ID,
+                    PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null
+                            : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
+
+            if (entriesCursor != null && entriesCursor.getCount() > 0) {
+                result.entriesIds = new long[entriesCursor.getCount()];
+                int i = 0;
+                while (entriesCursor.moveToNext()) {
+                    result.entriesIds[i++] = entriesCursor.getLong(0);
+                }
+
+                entriesCursor.close();
+            }
+
+            // Get the feedId & title & icon
+            result.feedId = result.entryCursor.getInt(result.entryCursor.getColumnIndex(EntryColumns.FEED_ID));
+            Cursor feedCursor = cr.query(FeedColumns.CONTENT_URI(result.feedId), new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.ICON}, null, null, null);
+            if (feedCursor.moveToFirst()) {
+                result.feedTitle = feedCursor.isNull(0) ? feedCursor.getString(1) : feedCursor.getString(0);
+                result.iconBytes = feedCursor.getBlob(2);
+            }
+            feedCursor.close();
+        }
+
+        return result;
+    }
+}
+

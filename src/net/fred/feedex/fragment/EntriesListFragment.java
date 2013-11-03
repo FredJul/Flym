@@ -290,10 +290,10 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        boolean dontHaveData = mEntriesCursorAdapter.getCursor() == null;
+        boolean firstLoad = mEntriesCursorAdapter.getCursor() == null;
         mEntriesCursorAdapter.swapCursor(data);
 
-        if (dontHaveData) {
+        if (firstLoad) {
             if (data.getCount() > 0) {
                 mCallbacks.onEntriesListLoaded(data);
             } else {
