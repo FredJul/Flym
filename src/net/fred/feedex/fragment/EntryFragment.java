@@ -528,13 +528,6 @@ class EntryLoader extends AsyncTaskLoader<EntryLoaderResult> {
         if (result.entryCursor != null) {
             result.entryCursor.moveToFirst();
 
-            // Mark the article as read
-            if (result.entryCursor.getInt(result.entryCursor.getColumnIndex(EntryColumns.IS_READ)) != 1) {
-                if (cr.update(mUri, FeedData.getReadContentValues(), null, null) > 0) {
-                    FeedDataContentProvider.notifyAllFromEntryUri(mUri, false);
-                }
-            }
-
             // Get all the other entry ids (for navigation)
             Uri parentUri = EntryColumns.PARENT_URI(mUri.getPath());
             Cursor entriesCursor = context.getContentResolver().query(parentUri, EntryColumns.PROJECTION_ID,
@@ -549,6 +542,13 @@ class EntryLoader extends AsyncTaskLoader<EntryLoaderResult> {
                 }
 
                 entriesCursor.close();
+            }
+
+            // Mark the article as read
+            if (result.entryCursor.getInt(result.entryCursor.getColumnIndex(EntryColumns.IS_READ)) != 1) {
+                if (cr.update(mUri, FeedData.getReadContentValues(), null, null) > 0) {
+                    FeedDataContentProvider.notifyAllFromEntryUri(mUri, false);
+                }
             }
 
             // Get the feedId & title & icon
