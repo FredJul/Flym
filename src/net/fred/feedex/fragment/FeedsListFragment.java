@@ -44,6 +44,7 @@
 
 package net.fred.feedex.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.content.ContentResolver;
@@ -83,6 +84,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FeedsListFragment extends ListFragment {
+
+    private static final int REQUEST_PICK_OPML_FILE = 1;
 
     private DragNDropExpandableListView mListView;
 
@@ -262,41 +265,49 @@ public class FeedsListFragment extends ListFragment {
             case R.id.menu_import: {
                 if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
                         || Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-                    builder.setTitle(R.string.select_file);
-
+                    // First, try to use a file app
                     try {
-                        final String[] fileNames = Environment.getExternalStorageDirectory().list(new FilenameFilter() {
-                            @Override
-                            public boolean accept(File dir, String filename) {
-                                return new File(dir, filename).isFile();
-                            }
-                        });
-                        builder.setItems(fileNames, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, final int which) {
-                                new Thread(new Runnable() { // To not block the UI
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            OPML.importFromFile(Environment.getExternalStorageDirectory().toString() + File.separator
-                                                    + fileNames[which]);
-                                        } catch (Exception e) {
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
-                                                }
-                                            });
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("file/*");
+                        startActivityForResult(intent, REQUEST_PICK_OPML_FILE);
+                    } catch (Exception unused) { // Else use a custom file selector
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                        builder.setTitle(R.string.select_file);
+
+                        try {
+                            final String[] fileNames = Environment.getExternalStorageDirectory().list(new FilenameFilter() {
+                                @Override
+                                public boolean accept(File dir, String filename) {
+                                    return new File(dir, filename).isFile();
+                                }
+                            });
+                            builder.setItems(fileNames, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, final int which) {
+                                    new Thread(new Runnable() { // To not block the UI
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                OPML.importFromFile(Environment.getExternalStorageDirectory().toString() + File.separator
+                                                        + fileNames[which]);
+                                            } catch (Exception e) {
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                            }
                                         }
-                                    }
-                                }).start();
-                            }
-                        });
-                        builder.show();
-                    } catch (Exception e) {
-                        Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
+                                    }).start();
+                                }
+                            });
+                            builder.show();
+                        } catch (Exception unused2) {
+                            Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
+                        }
                     }
                 } else {
                     Toast.makeText(getActivity(), R.string.error_external_storage_not_available, Toast.LENGTH_LONG).show();
@@ -341,6 +352,29 @@ public class FeedsListFragment extends ListFragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        if (requestCode == REQUEST_PICK_OPML_FILE && resultCode == Activity.RESULT_OK) {
+            new Thread(new Runnable() { // To not block the UI
+                @Override
+                public void run() {
+                    try {
+                        OPML.importFromFile(data.getData().getPath());
+                    } catch (Exception e) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                }
+            }).start();
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private final ActionMode.Callback mFeedActionModeCallback = new ActionMode.Callback() {
