@@ -184,9 +184,9 @@ public class RssAtomParser extends DefaultHandler {
         filters = new FeedFilters(id);
 
         // Remove old stuffs
-        final String query = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
-        NetworkUtils.deleteFeedImagesCache(feedEntriesUri, query);
-        MainApplication.getContext().getContentResolver().delete(feedEntriesUri, query, null);
+        final String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE + Constants.DB_AND + EntryColumns.WHERE_READ;
+        NetworkUtils.deleteFeedImagesCache(feedEntriesUri, where);
+        MainApplication.getContext().getContentResolver().delete(feedEntriesUri, where, null);
 
         int index = url.indexOf('/', 8); // this also covers https://
         if (index > -1) {
