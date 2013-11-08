@@ -127,7 +127,7 @@ public class EntryView extends ViewFlipper {
     private static final String BUTTON_START = "<div style='text-align: center'><input type='button' value='";
     private static final String BUTTON_MIDDLE = "' onclick='";
     private static final String BUTTON_END = "' style='background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
-            + "; border: none; border-radius:0.2cm; padding: 0.3cm;'/></div>";
+            + "; text-decoration: none; font-family: sans-serif-light; font-size: 100%; border: none; border-radius:0.2cm; padding: 0.3cm;'/></div>";
 
     private static final String LINK_BUTTON_START = "<div style='text-align: center; margin-top:0.4cm'><a href='";
     private static final String LINK_BUTTON_MIDDLE = "' style='background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
