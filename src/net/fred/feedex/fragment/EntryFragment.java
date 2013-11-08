@@ -165,10 +165,10 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onResume() {
         super.onResume();
 
-        if (getActivity().getActionBar().isShowing()) {
-            mCancelFullscreenBtn.setVisibility(View.GONE);
-        } else {
+        if (((BaseActivity)getActivity()).isFullScreen()) {
             mCancelFullscreenBtn.setVisibility(View.VISIBLE);
+        } else {
+            mCancelFullscreenBtn.setVisibility(View.GONE);
         }
 
         registerContentObserver();
@@ -373,7 +373,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
 
     private void toggleFullScreen() {
         BaseActivity activity = (BaseActivity) getActivity();
-        if (activity.getActionBar().isShowing()) {
+        if (activity.isFullScreen()) {
             mCancelFullscreenBtn.setVisibility(View.VISIBLE);
         } else {
             mCancelFullscreenBtn.setVisibility(View.GONE);

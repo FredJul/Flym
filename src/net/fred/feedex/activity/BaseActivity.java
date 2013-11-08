@@ -33,14 +33,20 @@ public abstract class BaseActivity extends Activity {
     private static final String STATE_IS_FULLSCREEN = "STATE_IS_FULLSCREEN";
 
     private ProgressBar mProgressBar;
+    private boolean mIsFullScreen;
 
     @Override
     protected void onResume() {
-        super.onResume();
-
         if (Constants.NOTIF_MGR != null) {
             Constants.NOTIF_MGR.cancel(0);
         }
+
+        if (mIsFullScreen && getActionBar().isShowing()) { // This is needed for the immersive mode
+            mIsFullScreen = false;
+            toggleFullScreen();
+        }
+
+        super.onResume();
     }
 
     @Override
@@ -66,7 +72,7 @@ public abstract class BaseActivity extends Activity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(STATE_IS_FULLSCREEN, !getActionBar().isShowing());
+        outState.putBoolean(STATE_IS_FULLSCREEN, mIsFullScreen);
 
         super.onSaveInstanceState(outState);
     }
@@ -81,20 +87,34 @@ public abstract class BaseActivity extends Activity {
     }
 
     public ProgressBar getProgressBar() {
-
-
         return mProgressBar;
     }
 
+    public boolean isFullScreen() {
+        return mIsFullScreen;
+    }
+
     public void toggleFullScreen() {
-        if (getActionBar().isShowing()) {
-            getActionBar().hide();
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        mIsFullScreen = !mIsFullScreen;
+
+        if (mIsFullScreen) {
+            if (android.os.Build.VERSION.SDK_INT >= 19) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            } else {
+                getActionBar().hide();
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+            }
         } else {
-            getActionBar().show();
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            if (android.os.Build.VERSION.SDK_INT >= 19) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            } else {
+                getActionBar().show();
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            }
         }
     }
 }
