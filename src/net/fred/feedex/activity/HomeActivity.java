@@ -243,6 +243,91 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        CursorLoader cursorLoader = new CursorLoader(this, FeedColumns.GROUPED_FEEDS_CONTENT_URI, new String[]{FeedColumns._ID, FeedColumns.URL,
+                FeedColumns.NAME, FeedColumns.IS_GROUP, FeedColumns.GROUP_ID, FeedColumns.ICON, FeedColumns.LAST_UPDATE, FeedColumns.ERROR,
+                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + "="
+                        + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ")",
+                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)",
+                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ")"}, null, null, null);
+        cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        if (mDrawerAdapter != null) {
+            mDrawerAdapter.setCursor(cursor);
+        } else {
+            mDrawerAdapter = new DrawerAdapter(this, cursor);
+            mDrawerList.setAdapter(mDrawerAdapter);
+
+            // We don't have any menu yet, we need to display it
+            mDrawerList.post(new Runnable() {
+                @Override
+                public void run() {
+                    selectDrawerItem(mCurrentDrawerPos);
+                    refreshTitleAndIcon();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+        mDrawerAdapter.setCursor(null);
+    }
+
+    @Override
+    public void onEntriesListLoaded(Cursor data) {
+        if (mEntryFragment != null) {
+            if (data != null) {
+                data.moveToFirst();
+                long id = data.getLong(data.getColumnIndex(EntryColumns._ID));
+                selectEntry(0, id);
+            } else {
+                mEntryFragment.setData(null);
+            }
+        }
+    }
+    
+    @Override
+    public void onEntrySelected(Uri entryUri) {
+        if (mEntryFragment == null) {
+            startActivity(new Intent(Intent.ACTION_VIEW, entryUri));
+        } else {
+            mEntryFragment.setData(entryUri);
+        }
+    }
+    
+    @Override
+    public void onEntrySwitched(long newEntryId) {
+        // This is called is tablet mode, when a entry is switched by a gesture
+        // We need to refresh the entries list
+        
+        int currentPos = mEntriesFragment.getListView().getCheckedItemPosition();
+        if (currentPos > 0 && mEntriesFragment.getListAdapter().getItemId(currentPos - 1) == newEntryId) {
+            selectEntry(currentPos - 1, newEntryId);
+        }
+        else {
+            selectEntry(currentPos + 1, newEntryId);
+        }
+    }
+
     private void selectDrawerItem(int position) {
         mCurrentDrawerPos = position;
         mIcon = null;
@@ -299,89 +384,13 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             }, 500);
         }
     }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        CursorLoader cursorLoader = new CursorLoader(this, FeedColumns.GROUPED_FEEDS_CONTENT_URI, new String[]{FeedColumns._ID, FeedColumns.URL,
-                FeedColumns.NAME, FeedColumns.IS_GROUP, FeedColumns.GROUP_ID, FeedColumns.ICON, FeedColumns.LAST_UPDATE, FeedColumns.ERROR,
-                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + "="
-                        + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ")",
-                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)",
-                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ")"}, null, null, null);
-        cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
-        return cursorLoader;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        if (mDrawerAdapter != null) {
-            mDrawerAdapter.setCursor(cursor);
-        } else {
-            mDrawerAdapter = new DrawerAdapter(this, cursor);
-            mDrawerList.setAdapter(mDrawerAdapter);
-
-            // We don't have any menu yet, we need to display it
-            mDrawerList.post(new Runnable() {
-                @Override
-                public void run() {
-                    selectDrawerItem(mCurrentDrawerPos);
-                    refreshTitleAndIcon();
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-        mDrawerAdapter.setCursor(null);
-    }
-
-    @Override
-    public void onEntriesListLoaded(Cursor data) {
-        if (mEntryFragment != null) {
-            if (data != null) {
-                data.moveToFirst();
-                long id = data.getLong(data.getColumnIndex(EntryColumns._ID));
-                mEntriesFragment.getListView().performItemClick(null, 0, id);
-            } else {
-                mEntryFragment.setData(null);
-            }
-        }
-    }
-
-    @Override
-    public void onEntrySelected(Uri entryUri) {
-        if (mEntryFragment == null) {
-            startActivity(new Intent(Intent.ACTION_VIEW, entryUri));
-        } else {
-            mEntryFragment.setData(entryUri);
-        }
-    }
     
-    @Override
-    public void onEntrySwitched(long newEntryId) {
-        // This is called is tablet mode, when a entry is switched by a gesture
-        // We need to refresh the entries list
-        
-        int currentPos = mEntriesFragment.getSelectionPosition();
-        if (currentPos > 0 && mEntriesFragment.getListAdapter().getItemId(currentPos - 1) == newEntryId) {
-            mEntriesFragment.getListView().performItemClick(null, currentPos - 1, newEntryId);
-        }
-        else {
-            mEntriesFragment.getListView().performItemClick(null, currentPos + 1, newEntryId);
-        }
+    private void selectEntry(final int pos, final long id) {
+        mEntriesFragment.getListView().post(new Runnable() { // To make sure the click is done after the list update
+            @Override
+            public void run() {
+                mEntriesFragment.getListView().performItemClick(null, pos, id);
+            }
+        });
     }
 }

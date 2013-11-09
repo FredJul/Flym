@@ -51,7 +51,6 @@ import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.BaseActivity;
-import net.fred.feedex.fragment.EntriesListFragment.Callbacks;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
@@ -75,6 +74,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
     private static final String STATE_ENTRIES_IDS = "STATE_ENTRIES_IDS";
 
     private Callbacks mCallbacks;
+    private boolean mIsTabletMode;
     
     private int mTitlePosition = -1, mDatePosition, mMobilizedHtmlPosition, mAbstractPosition, mLinkPosition, mIsFavoritePosition,
             mEnclosurePosition, mAuthorPosition;
@@ -131,6 +131,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         // Activities containing this fragment may implement its callbacks.
         if (activity instanceof Callbacks) {
             mCallbacks = (Callbacks) activity;
+            mIsTabletMode = true;
         }
     }
 
@@ -139,6 +140,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         super.onDetach();
 
         mCallbacks = null;
+        mIsTabletMode = false;
     }
 
     @Override
@@ -214,7 +216,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
             item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
         }
         
-        if (mCallbacks != null) {   // We are in tablet mode, some features are useless
+        if (mIsTabletMode) {   // We are in tablet mode, some features are useless
             menu.findItem(R.id.menu_star).setVisible(false);
             menu.findItem(R.id.menu_mark_as_unread).setVisible(false);
         }
@@ -282,8 +284,14 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         return mUri;
     }
 
+    public long getEntryId() {
+        return mId;
+    }
+
     public void setData(Uri uri) {
         mUri = uri;
+        mId = Long.parseLong(mUri.getLastPathSegment());
+
         if (mUri != null) {
             if (mEntryView != null) { // Just load the new entry
                 getLoaderManager().restartLoader(LOADER_ID, null, this).forceLoad();
@@ -311,8 +319,6 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
     }
 
     private void reload(boolean forceUpdate) {
-        mId = Long.parseLong(mUri.getLastPathSegment());
-
         if (mLoaderResult.entryCursor != null && mLoaderResult.entryCursor.moveToFirst()) {
             String contentText = mLoaderResult.entryCursor.getString(mMobilizedHtmlPosition);
             if (contentText == null || (forceUpdate && !mPreferFullText)) {
@@ -413,11 +419,10 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onEntrySwitched(long newEntryId) {
-        if (mCallbacks != null) { // Tablet mode, we need to manage the entries list
+        if (mIsTabletMode) { // Tablet mode, we need to manage the entries list
             mCallbacks.onEntrySwitched(newEntryId);
         } else { // Just reload the webview
-            mUri = FeedData.EntryColumns.PARENT_URI(mUri.getPath()).buildUpon().appendPath(String.valueOf(newEntryId)).build();
-            getLoaderManager().restartLoader(LOADER_ID, null, this).forceLoad();
+            setData(FeedData.EntryColumns.PARENT_URI(mUri.getPath()).buildUpon().appendPath(String.valueOf(newEntryId)).build());
         }
     }
 
@@ -505,23 +510,26 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         if (mLoaderResult != null && mLoaderResult.entryCursor != null) {
             mLoaderResult.entryCursor.close();
         }
-        mLoaderResult = result;
-        if (mEntriesIds == null) {
-            mEntriesIds = mLoaderResult.entriesIds;
-        }
+        
+        if (mUri != null) { // can be null if we do a setData(null) before
+            mLoaderResult = result;
+            if (mEntriesIds == null) {
+                mEntriesIds = mLoaderResult.entriesIds;
+            }
+    
+            if (mLoaderResult.entryCursor != null && mTitlePosition == -1) {
+                mTitlePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.TITLE);
+                mDatePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.DATE);
+                mAbstractPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
+                mMobilizedHtmlPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
+                mLinkPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.LINK);
+                mIsFavoritePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.IS_FAVORITE);
+                mEnclosurePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.ENCLOSURE);
+                mAuthorPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.AUTHOR);
+            }
 
-        if (mLoaderResult.entryCursor != null && mTitlePosition == -1) {
-            mTitlePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.TITLE);
-            mDatePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.DATE);
-            mAbstractPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
-            mMobilizedHtmlPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
-            mLinkPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.LINK);
-            mIsFavoritePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.IS_FAVORITE);
-            mEnclosurePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.ENCLOSURE);
-            mAuthorPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.AUTHOR);
+            reload(false);
         }
-
-        reload(false);
     }
 
     @Override
@@ -576,7 +584,7 @@ class EntryLoader extends AsyncTaskLoader<EntryLoaderResult> {
 
                 entriesCursor.close();
             }
-
+            
             // Mark the article as read
             if (result.entryCursor.getInt(result.entryCursor.getColumnIndex(EntryColumns.IS_READ)) != 1) {
                 if (cr.update(mUri, FeedData.getReadContentValues(), null, null) > 0) {

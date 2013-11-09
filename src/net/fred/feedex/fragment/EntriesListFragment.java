@@ -73,7 +73,6 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
     private ListView mListView;
-    private int mSelectionPosition;
     private boolean mNeedDefaultSelection = false;
 
     private final OnSharedPreferenceChangeListener prefListener = new OnSharedPreferenceChangeListener() {
@@ -196,7 +195,6 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
-        mSelectionPosition = position;
         mCallbacks.onEntrySelected(ContentUris.withAppendedId(mUri, id));
     }
 
@@ -279,10 +277,6 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         return mUri;
     }
 
-    public int getSelectionPosition() {
-        return mSelectionPosition;
-    }
-
     public void setData(Uri uri, boolean showFeedInfo) {
         mUri = uri;
         mShowFeedInfo = showFeedInfo;
@@ -304,7 +298,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mEntriesCursorAdapter.swapCursor(data);
-        if (mNeedDefaultSelection) {
+        if (mNeedDefaultSelection || mListView.getCheckedItemPosition() == ListView.INVALID_POSITION) {
             if (data.getCount() > 0) {
                 mCallbacks.onEntriesListLoaded(data);
             } else {
