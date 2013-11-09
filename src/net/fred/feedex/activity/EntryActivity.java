@@ -29,7 +29,7 @@ import net.fred.feedex.fragment.EntryFragment;
 import net.fred.feedex.utils.UiUtils;
 
 public class EntryActivity extends BaseActivity {
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);

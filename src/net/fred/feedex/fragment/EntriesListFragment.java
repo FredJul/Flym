@@ -73,6 +73,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
     private ListView mListView;
+    private int mSelectionPosition;
     private boolean mNeedDefaultSelection = false;
 
     private final OnSharedPreferenceChangeListener prefListener = new OnSharedPreferenceChangeListener() {
@@ -113,6 +114,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                     // Before accepting the event, just simulate a CANCEL event to remove the item highlighting
                     MotionEvent motionEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
                     mListView.dispatchTouchEvent(motionEvent);
+                    motionEvent.recycle();
                     return true;
                 }
             }
@@ -194,6 +196,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
+        mSelectionPosition = position;
         mCallbacks.onEntrySelected(ContentUris.withAppendedId(mUri, id));
     }
 
@@ -274,6 +277,10 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     public Uri getUri() {
         return mUri;
+    }
+
+    public int getSelectionPosition() {
+        return mSelectionPosition;
     }
 
     public void setData(Uri uri, boolean showFeedInfo) {

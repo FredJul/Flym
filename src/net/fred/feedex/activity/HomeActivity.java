@@ -55,7 +55,7 @@ import net.fred.feedex.service.RefreshService;
 import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 
-public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, EntriesListFragment.Callbacks {
+public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, EntriesListFragment.Callbacks, EntryFragment.Callbacks {
 
     private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
 
@@ -106,7 +106,12 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectDrawerItem(position);
-                mDrawerLayout.closeDrawer(mDrawerList);
+                mDrawerLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDrawerLayout.closeDrawer(mDrawerList);
+                    }
+                }, 50);
             }
         });
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -363,6 +368,20 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             startActivity(new Intent(Intent.ACTION_VIEW, entryUri));
         } else {
             mEntryFragment.setData(entryUri);
+        }
+    }
+    
+    @Override
+    public void onEntrySwitched(long newEntryId) {
+        // This is called is tablet mode, when a entry is switched by a gesture
+        // We need to refresh the entries list
+        
+        int currentPos = mEntriesFragment.getSelectionPosition();
+        if (currentPos > 0 && mEntriesFragment.getListAdapter().getItemId(currentPos - 1) == newEntryId) {
+            mEntriesFragment.getListView().performItemClick(null, currentPos - 1, newEntryId);
+        }
+        else {
+            mEntriesFragment.getListView().performItemClick(null, currentPos + 1, newEntryId);
         }
     }
 }
