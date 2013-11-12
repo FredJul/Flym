@@ -116,11 +116,6 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
 
-        if (savedInstanceState != null) {
-            mUri = savedInstanceState.getParcelable(STATE_URI);
-            mEntriesIds = savedInstanceState.getLongArray(STATE_ENTRIES_IDS);
-        }
-
         super.onCreate(savedInstanceState);
     }
 
@@ -172,8 +167,9 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         mEntryView = (EntryView) rootView.findViewById(R.id.entry);
         mEntryView.setListener(this);
 
-        if (mUri != null) {
-            getLoaderManager().restartLoader(LOADER_ID, null, EntryFragment.this).forceLoad();
+        if (savedInstanceState != null) {
+            mEntriesIds = savedInstanceState.getLongArray(STATE_ENTRIES_IDS);
+            setData((Uri) savedInstanceState.getParcelable(STATE_URI));
         }
 
         return rootView;
