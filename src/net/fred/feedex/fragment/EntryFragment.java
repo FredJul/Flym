@@ -67,7 +67,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
     public interface Callbacks {
         public void onEntrySwitched(long newEntryId);
     }
-    
+
     private static final int LOADER_ID = 2;
 
     private static final String STATE_URI = "STATE_URI";
@@ -75,7 +75,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
 
     private Callbacks mCallbacks;
     private boolean mIsTabletMode;
-    
+
     private int mTitlePosition = -1, mDatePosition, mMobilizedHtmlPosition, mAbstractPosition, mLinkPosition, mIsFavoritePosition,
             mEnclosurePosition, mAuthorPosition;
 
@@ -98,7 +98,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         public void onChangeThrottled() {
             BaseActivity activity = (BaseActivity) getActivity();
             boolean isMobilizing = FetcherService.getMobilizingTaskId(mId) != -1;
-            if ((activity.getProgressBar().getVisibility() == View.VISIBLE && isMobilizing)
+            if (activity == null || (activity.getProgressBar().getVisibility() == View.VISIBLE && isMobilizing)
                     || (activity.getProgressBar().getVisibility() == View.GONE && !isMobilizing)) {
                 return; // no change => no update
             }
@@ -123,11 +123,11 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
 
         super.onCreate(savedInstanceState);
     }
-    
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        
+
         // Activities containing this fragment may implement its callbacks.
         if (activity instanceof Callbacks) {
             mCallbacks = (Callbacks) activity;
@@ -191,7 +191,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onResume() {
         super.onResume();
 
-        if (((BaseActivity)getActivity()).isFullScreen()) {
+        if (((BaseActivity) getActivity()).isFullScreen()) {
             mCancelFullscreenBtn.setVisibility(View.VISIBLE);
         } else {
             mCancelFullscreenBtn.setVisibility(View.GONE);
@@ -215,7 +215,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
             MenuItem item = menu.findItem(R.id.menu_star);
             item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
         }
-        
+
         if (mIsTabletMode) {   // We are in tablet mode, some features are useless
             menu.findItem(R.id.menu_star).setVisible(false);
             menu.findItem(R.id.menu_mark_as_unread).setVisible(false);
@@ -510,13 +510,13 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         if (mLoaderResult != null && mLoaderResult.entryCursor != null) {
             mLoaderResult.entryCursor.close();
         }
-        
+
         if (mUri != null) { // can be null if we do a setData(null) before
             mLoaderResult = result;
             if (mEntriesIds == null) {
                 mEntriesIds = mLoaderResult.entriesIds;
             }
-    
+
             if (mLoaderResult.entryCursor != null && mTitlePosition == -1) {
                 mTitlePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.TITLE);
                 mDatePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.DATE);
@@ -584,7 +584,7 @@ class EntryLoader extends AsyncTaskLoader<EntryLoaderResult> {
 
                 entriesCursor.close();
             }
-            
+
             // Mark the article as read
             if (result.entryCursor.getInt(result.entryCursor.getColumnIndex(EntryColumns.IS_READ)) != 1) {
                 if (cr.update(mUri, FeedData.getReadContentValues(), null, null) > 0) {
