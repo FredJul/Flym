@@ -75,7 +75,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     private ListView mListView;
     private boolean mNeedDefaultSelection = false;
 
-    private final OnSharedPreferenceChangeListener prefListener = new OnSharedPreferenceChangeListener() {
+    private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (PrefUtils.SHOW_READ.equals(key)) {
@@ -140,7 +140,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
             getLoaderManager().initLoader(LOADER_ID, null, this);
         }
 
-        PrefUtils.registerOnPrefChangeListener(prefListener);
+        PrefUtils.registerOnPrefChangeListener(mPrefListener);
     }
 
     @Override
@@ -188,8 +188,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onDestroy() {
-        PrefUtils.unregisterOnPrefChangeListener(prefListener);
-        super.onStop();
+        PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
+        super.onDestroy();
     }
 
     @Override
