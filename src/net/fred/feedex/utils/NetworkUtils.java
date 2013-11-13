@@ -87,14 +87,19 @@ public class NetworkUtils {
     public static void downloadImage(long entryId, String imgPath) throws IOException {
         IMAGE_FOLDER_FILE.mkdir(); // create images dir
 
-        byte[] data = getBytes(new URL(imgPath).openStream());
-
-        // see the comment where the img regex is executed for details about this replacement
+        InputStream inputStream = new URL(imgPath).openStream();
         FileOutputStream fos = new FileOutputStream((IMAGE_FOLDER + entryId + Constants.IMAGEFILE_IDSEPARATOR + URLEncoder.encode(
                 imgPath.substring(imgPath.lastIndexOf('/') + 1), Constants.UTF8)).replace(PERCENT, PERCENT_REPLACE));
 
-        fos.write(data);
+        byte[] buffer = new byte[4096];
+
+        int n;
+        while ((n = inputStream.read(buffer)) > 0) {
+            fos.write(buffer, 0, n);
+        }
+
         fos.close();
+        inputStream.close();
     }
 
     public static synchronized void deleteFeedImagesCache(Uri entriesUri, String selection) {

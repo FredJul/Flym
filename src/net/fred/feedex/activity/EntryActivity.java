@@ -38,7 +38,9 @@ public class EntryActivity extends BaseActivity {
         setContentView(R.layout.activity_entry);
 
         EntryFragment entryFragment = (EntryFragment) getFragmentManager().findFragmentById(R.id.entry_fragment);
-        entryFragment.setData(getIntent().getData());
+        if (savedInstanceState == null) { // Put the data only the first time (the fragment will save its state)
+            entryFragment.setData(getIntent().getData());
+        }
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }

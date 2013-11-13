@@ -64,10 +64,17 @@ import net.fred.feedex.view.EntryView;
 
 public class EntryFragment extends Fragment implements LoaderManager.LoaderCallbacks<EntryLoaderResult>, EntryView.OnActionListener {
 
+    public interface Callbacks {
+        public void onEntrySwitched(long newEntryId);
+    }
+
     private static final int LOADER_ID = 2;
 
     private static final String STATE_URI = "STATE_URI";
     private static final String STATE_ENTRIES_IDS = "STATE_ENTRIES_IDS";
+
+    private Callbacks mCallbacks;
+    private boolean mIsTabletMode;
 
     private int mTitlePosition = -1, mDatePosition, mMobilizedHtmlPosition, mAbstractPosition, mLinkPosition, mIsFavoritePosition,
             mEnclosurePosition, mAuthorPosition;
@@ -91,7 +98,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         public void onChangeThrottled() {
             BaseActivity activity = (BaseActivity) getActivity();
             boolean isMobilizing = FetcherService.getMobilizingTaskId(mId) != -1;
-            if ((activity.getProgressBar().getVisibility() == View.VISIBLE && isMobilizing)
+            if (activity == null || (activity.getProgressBar().getVisibility() == View.VISIBLE && isMobilizing)
                     || (activity.getProgressBar().getVisibility() == View.GONE && !isMobilizing)) {
                 return; // no change => no update
             }
@@ -109,12 +116,26 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
 
-        if (savedInstanceState != null) {
-            mUri = savedInstanceState.getParcelable(STATE_URI);
-            mEntriesIds = savedInstanceState.getLongArray(STATE_ENTRIES_IDS);
-        }
-
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // Activities containing this fragment may implement its callbacks.
+        if (activity instanceof Callbacks) {
+            mCallbacks = (Callbacks) activity;
+            mIsTabletMode = true;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        mCallbacks = null;
+        mIsTabletMode = false;
     }
 
     @Override
@@ -146,8 +167,9 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         mEntryView = (EntryView) rootView.findViewById(R.id.entry);
         mEntryView.setListener(this);
 
-        if (mUri != null) {
-            getLoaderManager().restartLoader(LOADER_ID, null, EntryFragment.this).forceLoad();
+        if (savedInstanceState != null) {
+            mEntriesIds = savedInstanceState.getLongArray(STATE_ENTRIES_IDS);
+            setData((Uri) savedInstanceState.getParcelable(STATE_URI));
         }
 
         return rootView;
@@ -165,7 +187,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onResume() {
         super.onResume();
 
-        if (((BaseActivity)getActivity()).isFullScreen()) {
+        if (((BaseActivity) getActivity()).isFullScreen()) {
             mCancelFullscreenBtn.setVisibility(View.VISIBLE);
         } else {
             mCancelFullscreenBtn.setVisibility(View.GONE);
@@ -188,6 +210,11 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         if (mFavorite) {
             MenuItem item = menu.findItem(R.id.menu_star);
             item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
+        }
+
+        if (mIsTabletMode) {   // We are in tablet mode, some features are useless
+            menu.findItem(R.id.menu_star).setVisible(false);
+            menu.findItem(R.id.menu_mark_as_unread).setVisible(false);
         }
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -253,16 +280,27 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         return mUri;
     }
 
+    public long getEntryId() {
+        return mId;
+    }
+
     public void setData(Uri uri) {
         mUri = uri;
         if (mUri != null) {
-            if (mEntryView != null) { // Jjust load the new entry
-                getLoaderManager().restartLoader(LOADER_ID, null, this).forceLoad();
-            }
-        } else if (mEntryView != null) {
+            mId = Long.parseLong(mUri.getLastPathSegment());
+        } else {
+            mId = -1;
+        }
+
+        if (mEntryView != null) {
             mEntryView.reset();
-            mEntriesIds = null;
-            setupNavigationButton();
+
+            if (mUri != null) { // Just load the new entry
+                getLoaderManager().restartLoader(LOADER_ID, null, this).forceLoad();
+            } else {
+                mEntriesIds = null;
+                setupNavigationButton();
+            }
         }
     }
 
@@ -282,8 +320,6 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
     }
 
     private void reload(boolean forceUpdate) {
-        mId = Long.parseLong(mUri.getLastPathSegment());
-
         if (mLoaderResult.entryCursor != null && mLoaderResult.entryCursor.moveToFirst()) {
             String contentText = mLoaderResult.entryCursor.getString(mMobilizedHtmlPosition);
             if (contentText == null || (forceUpdate && !mPreferFullText)) {
@@ -373,19 +409,22 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
 
     private void toggleFullScreen() {
         BaseActivity activity = (BaseActivity) getActivity();
+        activity.toggleFullScreen();
+
         if (activity.isFullScreen()) {
             mCancelFullscreenBtn.setVisibility(View.VISIBLE);
         } else {
             mCancelFullscreenBtn.setVisibility(View.GONE);
         }
-
-        activity.toggleFullScreen();
     }
 
     @Override
     public void onEntrySwitched(long newEntryId) {
-        mUri = FeedData.EntryColumns.PARENT_URI(mUri.getPath()).buildUpon().appendPath(String.valueOf(newEntryId)).build();
-        getLoaderManager().restartLoader(LOADER_ID, null, this).forceLoad();
+        if (mIsTabletMode) { // Tablet mode, we need to manage the entries list
+            mCallbacks.onEntrySwitched(newEntryId);
+        } else { // Just reload the webview
+            setData(FeedData.EntryColumns.PARENT_URI(mUri.getPath()).buildUpon().appendPath(String.valueOf(newEntryId)).build());
+        }
     }
 
     @Override
@@ -464,7 +503,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public Loader<EntryLoaderResult> onCreateLoader(int id, Bundle args) {
-        return new EntryLoader(getActivity(), mUri);
+        return new EntryLoader(getActivity(), mUri, mEntriesIds == null);
     }
 
     @Override
@@ -472,23 +511,26 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         if (mLoaderResult != null && mLoaderResult.entryCursor != null) {
             mLoaderResult.entryCursor.close();
         }
-        mLoaderResult = result;
-        if (mEntriesIds == null) {
-            mEntriesIds = mLoaderResult.entriesIds;
-        }
 
-        if (mLoaderResult.entryCursor != null && mTitlePosition == -1) {
-            mTitlePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.TITLE);
-            mDatePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.DATE);
-            mAbstractPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
-            mMobilizedHtmlPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
-            mLinkPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.LINK);
-            mIsFavoritePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.IS_FAVORITE);
-            mEnclosurePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.ENCLOSURE);
-            mAuthorPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.AUTHOR);
-        }
+        if (mUri != null) { // can be null if we do a setData(null) before
+            mLoaderResult = result;
+            if (mLoaderResult.entriesIds != null) {
+                mEntriesIds = mLoaderResult.entriesIds;
+            }
 
-        reload(false);
+            if (mLoaderResult.entryCursor != null && mTitlePosition == -1) {
+                mTitlePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.TITLE);
+                mDatePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.DATE);
+                mAbstractPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
+                mMobilizedHtmlPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
+                mLinkPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.LINK);
+                mIsFavoritePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.IS_FAVORITE);
+                mEnclosurePosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.ENCLOSURE);
+                mAuthorPosition = mLoaderResult.entryCursor.getColumnIndex(EntryColumns.AUTHOR);
+            }
+
+            reload(false);
+        }
     }
 
     @Override
@@ -510,10 +552,12 @@ class EntryLoaderResult {
 class EntryLoader extends AsyncTaskLoader<EntryLoaderResult> {
 
     private final Uri mUri;
+    private final boolean mNeedEntriesIds;
 
-    public EntryLoader(Context context, Uri uri) {
+    public EntryLoader(Context context, Uri uri, boolean needEntriesIds) {
         super(context);
         mUri = uri;
+        mNeedEntriesIds = needEntriesIds;
     }
 
     @Override
@@ -529,19 +573,21 @@ class EntryLoader extends AsyncTaskLoader<EntryLoaderResult> {
             result.entryCursor.moveToFirst();
 
             // Get all the other entry ids (for navigation)
-            Uri parentUri = EntryColumns.PARENT_URI(mUri.getPath());
-            Cursor entriesCursor = context.getContentResolver().query(parentUri, EntryColumns.PROJECTION_ID,
-                    PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null
-                            : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
+            if (mNeedEntriesIds) {
+                Uri parentUri = EntryColumns.PARENT_URI(mUri.getPath());
+                Cursor entriesCursor = context.getContentResolver().query(parentUri, EntryColumns.PROJECTION_ID,
+                        PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null
+                                : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
 
-            if (entriesCursor != null && entriesCursor.getCount() > 0) {
-                result.entriesIds = new long[entriesCursor.getCount()];
-                int i = 0;
-                while (entriesCursor.moveToNext()) {
-                    result.entriesIds[i++] = entriesCursor.getLong(0);
+                if (entriesCursor != null && entriesCursor.getCount() > 0) {
+                    result.entriesIds = new long[entriesCursor.getCount()];
+                    int i = 0;
+                    while (entriesCursor.moveToNext()) {
+                        result.entriesIds[i++] = entriesCursor.getLong(0);
+                    }
+
+                    entriesCursor.close();
                 }
-
-                entriesCursor.close();
             }
 
             // Mark the article as read

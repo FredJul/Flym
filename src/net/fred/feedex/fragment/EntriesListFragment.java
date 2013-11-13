@@ -113,6 +113,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                     // Before accepting the event, just simulate a CANCEL event to remove the item highlighting
                     MotionEvent motionEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
                     mListView.dispatchTouchEvent(motionEvent);
+                    motionEvent.recycle();
                     return true;
                 }
             }
@@ -297,7 +298,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mEntriesCursorAdapter.swapCursor(data);
-        if (mNeedDefaultSelection) {
+        if (mNeedDefaultSelection || mListView.getCheckedItemPosition() == ListView.INVALID_POSITION) {
             if (data.getCount() > 0) {
                 mCallbacks.onEntriesListLoaded(data);
             } else {
