@@ -286,16 +286,21 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
 
     public void setData(Uri uri) {
         mUri = uri;
-        mId = Long.parseLong(mUri.getLastPathSegment());
-
         if (mUri != null) {
-            if (mEntryView != null) { // Just load the new entry
-                getLoaderManager().restartLoader(LOADER_ID, null, this).forceLoad();
-            }
-        } else if (mEntryView != null) {
+            mId = Long.parseLong(mUri.getLastPathSegment());
+        } else {
+            mId = -1;
+        }
+
+        if (mEntryView != null) {
             mEntryView.reset();
-            mEntriesIds = null;
-            setupNavigationButton();
+
+            if (mUri != null) { // Just load the new entry
+                getLoaderManager().restartLoader(LOADER_ID, null, this).forceLoad();
+            } else {
+                mEntriesIds = null;
+                setupNavigationButton();
+            }
         }
     }
 
@@ -498,7 +503,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public Loader<EntryLoaderResult> onCreateLoader(int id, Bundle args) {
-        return new EntryLoader(getActivity(), mUri);
+        return new EntryLoader(getActivity(), mUri, mEntriesIds == null);
     }
 
     @Override
@@ -509,7 +514,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
 
         if (mUri != null) { // can be null if we do a setData(null) before
             mLoaderResult = result;
-            if (mEntriesIds == null) {
+            if (mLoaderResult.entriesIds != null) {
                 mEntriesIds = mLoaderResult.entriesIds;
             }
 
@@ -547,10 +552,12 @@ class EntryLoaderResult {
 class EntryLoader extends AsyncTaskLoader<EntryLoaderResult> {
 
     private final Uri mUri;
+    private final boolean mNeedEntriesIds;
 
-    public EntryLoader(Context context, Uri uri) {
+    public EntryLoader(Context context, Uri uri, boolean needEntriesIds) {
         super(context);
         mUri = uri;
+        mNeedEntriesIds = needEntriesIds;
     }
 
     @Override
@@ -566,19 +573,21 @@ class EntryLoader extends AsyncTaskLoader<EntryLoaderResult> {
             result.entryCursor.moveToFirst();
 
             // Get all the other entry ids (for navigation)
-            Uri parentUri = EntryColumns.PARENT_URI(mUri.getPath());
-            Cursor entriesCursor = context.getContentResolver().query(parentUri, EntryColumns.PROJECTION_ID,
-                    PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null
-                            : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
+            if (mNeedEntriesIds) {
+                Uri parentUri = EntryColumns.PARENT_URI(mUri.getPath());
+                Cursor entriesCursor = context.getContentResolver().query(parentUri, EntryColumns.PROJECTION_ID,
+                        PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(parentUri) ? null
+                                : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
 
-            if (entriesCursor != null && entriesCursor.getCount() > 0) {
-                result.entriesIds = new long[entriesCursor.getCount()];
-                int i = 0;
-                while (entriesCursor.moveToNext()) {
-                    result.entriesIds[i++] = entriesCursor.getLong(0);
+                if (entriesCursor != null && entriesCursor.getCount() > 0) {
+                    result.entriesIds = new long[entriesCursor.getCount()];
+                    int i = 0;
+                    while (entriesCursor.moveToNext()) {
+                        result.entriesIds[i++] = entriesCursor.getLong(0);
+                    }
+
+                    entriesCursor.close();
                 }
-
-                entriesCursor.close();
             }
 
             // Mark the article as read
