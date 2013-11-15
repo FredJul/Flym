@@ -30,6 +30,8 @@ import net.fred.feedex.utils.UiUtils;
 
 public class EntryActivity extends BaseActivity {
 
+    private EntryFragment mEntryFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
@@ -37,9 +39,9 @@ public class EntryActivity extends BaseActivity {
 
         setContentView(R.layout.activity_entry);
 
-        EntryFragment entryFragment = (EntryFragment) getFragmentManager().findFragmentById(R.id.entry_fragment);
+        mEntryFragment = (EntryFragment) getFragmentManager().findFragmentById(R.id.entry_fragment);
         if (savedInstanceState == null) { // Put the data only the first time (the fragment will save its state)
-            entryFragment.setData(getIntent().getData());
+            mEntryFragment.setData(getIntent().getData());
         }
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -58,5 +60,12 @@ public class EntryActivity extends BaseActivity {
         }
 
         return false;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        mEntryFragment.setData(getIntent().getData());
     }
 }
