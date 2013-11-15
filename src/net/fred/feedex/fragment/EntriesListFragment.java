@@ -19,7 +19,6 @@
 
 package net.fred.feedex.fragment;
 
-import android.app.Activity;
 import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.ContentUris;
@@ -56,24 +55,15 @@ import net.fred.feedex.utils.PrefUtils;
 
 public class EntriesListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public interface Callbacks {
-        public void onEntriesListLoaded(Cursor data);
-
-        public void onEntrySelected(Uri entryUri);
-    }
-
     private static final String STATE_URI = "STATE_URI";
-    private static final String STATE_NEED_DEFAULT_SELECTION = "STATE_NEED_DEFAULT_SELECTION";
     private static final String STATE_SHOW_FEED_INFO = "STATE_SHOW_FEED_INFO";
 
     private static final int LOADER_ID = 1;
 
-    private Callbacks mCallbacks;
     private Uri mUri;
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
     private ListView mListView;
-    private boolean mNeedDefaultSelection = false;
 
     private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
         @Override
@@ -135,7 +125,6 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         if (savedInstanceState != null) {
             mUri = savedInstanceState.getParcelable(STATE_URI);
             mShowFeedInfo = savedInstanceState.getBoolean(STATE_SHOW_FEED_INFO);
-            mNeedDefaultSelection = savedInstanceState.getBoolean(STATE_NEED_DEFAULT_SELECTION);
 
             mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
             getLoaderManager().initLoader(LOADER_ID, null, this);
@@ -145,29 +134,9 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        // Activities containing this fragment must implement its callbacks.
-        if (!(activity instanceof Callbacks)) {
-            throw new IllegalStateException("Activity must implement fragment's callbacks.");
-        }
-
-        mCallbacks = (Callbacks) activity;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        mCallbacks = null;
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(STATE_URI, mUri);
         outState.putBoolean(STATE_SHOW_FEED_INFO, mShowFeedInfo);
-        outState.putBoolean(STATE_NEED_DEFAULT_SELECTION, mNeedDefaultSelection);
 
         super.onSaveInstanceState(outState);
     }
@@ -195,7 +164,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
-        mCallbacks.onEntrySelected(ContentUris.withAppendedId(mUri, id));
+        startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, id)));
     }
 
     @Override
@@ -259,7 +228,6 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                 return true;
             }
             case R.id.menu_hide_read: {
-                mNeedDefaultSelection = true;
                 if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
                     PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
                     item.setTitle(R.string.context_menu_hide_read).setIcon(R.drawable.hide_reads);
@@ -280,7 +248,6 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     public void setData(Uri uri, boolean showFeedInfo) {
         mUri = uri;
         mShowFeedInfo = showFeedInfo;
-        mNeedDefaultSelection = true;
 
         mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
         setListAdapter(mEntriesCursorAdapter);
@@ -298,15 +265,6 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mEntriesCursorAdapter.swapCursor(data);
-        if (mNeedDefaultSelection || mListView.getCheckedItemPosition() == ListView.INVALID_POSITION) {
-            if (data.getCount() > 0) {
-                mCallbacks.onEntriesListLoaded(data);
-            } else {
-                mCallbacks.onEntriesListLoaded(null);
-            }
-        }
-
-        mNeedDefaultSelection = false;
     }
 
     @Override

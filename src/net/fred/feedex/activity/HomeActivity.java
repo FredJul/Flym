@@ -19,7 +19,6 @@
 
 package net.fred.feedex.activity;
 
-import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -47,7 +46,6 @@ import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.DrawerAdapter;
 import net.fred.feedex.fragment.EntriesListFragment;
-import net.fred.feedex.fragment.EntryFragment;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.service.FetcherService;
@@ -55,7 +53,7 @@ import net.fred.feedex.service.RefreshService;
 import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 
-public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, EntriesListFragment.Callbacks, EntryFragment.Callbacks {
+public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
 
@@ -71,7 +69,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     };
 
     private EntriesListFragment mEntriesFragment;
-    private EntryFragment mEntryFragment;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private DrawerAdapter mDrawerAdapter;
@@ -91,11 +88,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         setContentView(R.layout.activity_home);
 
         mEntriesFragment = (EntriesListFragment) getFragmentManager().findFragmentById(R.id.entries_list_fragment);
-        Fragment entryFragment = getFragmentManager().findFragmentById(R.id.entry_fragment);
-        if (entryFragment != null) {
-            mEntryFragment = (EntryFragment) entryFragment;
-            mEntriesFragment.getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        }
 
         mTitle = getTitle();
 
@@ -204,17 +196,11 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             inflater.inflate(R.menu.drawer, menu);
 
             mEntriesFragment.setHasOptionsMenu(false);
-            if (mEntryFragment != null) {
-                mEntryFragment.setHasOptionsMenu(false);
-            }
         } else {
             refreshTitleAndIcon();
             invalidateOptionsMenu();
 
             mEntriesFragment.setHasOptionsMenu(true);
-            if (mEntryFragment != null) {
-                mEntryFragment.setHasOptionsMenu(true);
-            }
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -292,42 +278,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         mDrawerAdapter.setCursor(null);
     }
 
-    @Override
-    public void onEntriesListLoaded(Cursor data) {
-        if (mEntryFragment != null) {
-            if (data != null) {
-                data.moveToFirst();
-                long id = data.getLong(data.getColumnIndex(EntryColumns._ID));
-                selectEntry(0, id);
-            } else {
-                mEntryFragment.setData(null);
-            }
-        }
-    }
-    
-    @Override
-    public void onEntrySelected(Uri entryUri) {
-        if (mEntryFragment == null) {
-            startActivity(new Intent(Intent.ACTION_VIEW, entryUri));
-        } else {
-            mEntryFragment.setData(entryUri);
-        }
-    }
-    
-    @Override
-    public void onEntrySwitched(long newEntryId) {
-        // This is called is tablet mode, when a entry is switched by a gesture
-        // We need to refresh the entries list
-        
-        int currentPos = mEntriesFragment.getListView().getCheckedItemPosition();
-        if (currentPos > 0 && mEntriesFragment.getListAdapter().getItemId(currentPos - 1) == newEntryId) {
-            selectEntry(currentPos - 1, newEntryId);
-        }
-        else {
-            selectEntry(currentPos + 1, newEntryId);
-        }
-    }
-
     private void selectDrawerItem(int position) {
         mCurrentDrawerPos = position;
         mIcon = null;
@@ -383,14 +333,5 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 }
             }, 500);
         }
-    }
-    
-    private void selectEntry(final int pos, final long id) {
-        mEntriesFragment.getListView().post(new Runnable() { // To make sure the click is done after the list update
-            @Override
-            public void run() {
-                mEntriesFragment.getListView().performItemClick(null, pos, id);
-            }
-        });
     }
 }

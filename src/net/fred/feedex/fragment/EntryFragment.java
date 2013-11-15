@@ -64,17 +64,10 @@ import net.fred.feedex.view.EntryView;
 
 public class EntryFragment extends Fragment implements LoaderManager.LoaderCallbacks<EntryLoaderResult>, EntryView.OnActionListener {
 
-    public interface Callbacks {
-        public void onEntrySwitched(long newEntryId);
-    }
-
     private static final int LOADER_ID = 2;
 
     private static final String STATE_URI = "STATE_URI";
     private static final String STATE_ENTRIES_IDS = "STATE_ENTRIES_IDS";
-
-    private Callbacks mCallbacks;
-    private boolean mIsTabletMode;
 
     private int mTitlePosition = -1, mDatePosition, mMobilizedHtmlPosition, mAbstractPosition, mLinkPosition, mIsFavoritePosition,
             mEnclosurePosition, mAuthorPosition;
@@ -117,25 +110,6 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         setHasOptionsMenu(true);
 
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        // Activities containing this fragment may implement its callbacks.
-        if (activity instanceof Callbacks) {
-            mCallbacks = (Callbacks) activity;
-            mIsTabletMode = true;
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        mCallbacks = null;
-        mIsTabletMode = false;
     }
 
     @Override
@@ -212,10 +186,6 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
             item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
         }
 
-        if (mIsTabletMode) {   // We are in tablet mode, some features are useless
-            menu.findItem(R.id.menu_star).setVisible(false);
-            menu.findItem(R.id.menu_mark_as_unread).setVisible(false);
-        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -420,11 +390,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onEntrySwitched(long newEntryId) {
-        if (mIsTabletMode) { // Tablet mode, we need to manage the entries list
-            mCallbacks.onEntrySwitched(newEntryId);
-        } else { // Just reload the webview
-            setData(FeedData.EntryColumns.PARENT_URI(mUri.getPath()).buildUpon().appendPath(String.valueOf(newEntryId)).build());
-        }
+        setData(FeedData.EntryColumns.PARENT_URI(mUri.getPath()).buildUpon().appendPath(String.valueOf(newEntryId)).build());
     }
 
     @Override
