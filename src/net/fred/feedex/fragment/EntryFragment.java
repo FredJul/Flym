@@ -266,7 +266,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
             mEntryView.reset();
 
             if (mUri != null) { // Just load the new entry
-                getLoaderManager().restartLoader(LOADER_ID, null, this).forceLoad();
+                getLoaderManager().restartLoader(LOADER_ID, null, this);
             } else {
                 mEntriesIds = null;
                 setupNavigationButton();
