@@ -49,7 +49,6 @@ import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.app.ProgressDialog;
-import android.content.AsyncTaskLoader;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -78,6 +77,7 @@ import android.widget.Toast;
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.FiltersCursorAdapter;
+import net.fred.feedex.loader.BaseLoader;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
 import net.fred.feedex.utils.NetworkUtils;
@@ -488,7 +488,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                                         @Override
                                         public void onLoaderReset(Loader<ArrayList<HashMap<String, String>>> loader) {
                                         }
-                                    }).forceLoad();
+                                    });
                                     break;
 
                                 case R.id.byTopic:
@@ -508,7 +508,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 /**
  * A custom Loader that loads feed search results from the google WS.
  */
-class GetFeedSearchResultsLoader extends AsyncTaskLoader<ArrayList<HashMap<String, String>>> {
+class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, String>>> {
 
     private final String mSearchText;
 

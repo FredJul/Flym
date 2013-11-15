@@ -22,7 +22,6 @@ package net.fred.feedex.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
-import android.content.AsyncTaskLoader;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
@@ -51,6 +50,7 @@ import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.BaseActivity;
+import net.fred.feedex.loader.BaseLoader;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
@@ -107,7 +107,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
                 activity.getProgressBar().setVisibility(View.VISIBLE);
             } else { // We finished one
                 mPreferFullText = true;
-                getLoaderManager().restartLoader(LOADER_ID, null, EntryFragment.this).forceLoad();
+                getLoaderManager().restartLoader(LOADER_ID, null, EntryFragment.this);
             }
         }
     };
@@ -549,7 +549,7 @@ class EntryLoaderResult {
     byte[] iconBytes;
 }
 
-class EntryLoader extends AsyncTaskLoader<EntryLoaderResult> {
+class EntryLoader extends BaseLoader<EntryLoaderResult> {
 
     private final Uri mUri;
     private final boolean mNeedEntriesIds;
