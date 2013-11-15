@@ -66,6 +66,6 @@ public class EntryActivity extends BaseActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        mEntryFragment.setData(getIntent().getData());
+        mEntryFragment.setData(intent.getData());
     }
 }
