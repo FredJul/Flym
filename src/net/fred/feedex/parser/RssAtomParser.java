@@ -285,7 +285,7 @@ public class RssAtomParser extends DefaultHandler {
     }
 
     private void startEnclosure(Attributes attributes, String url) {
-        if (enclosure == null) { // fetch the first enclosure only
+        if (enclosure == null && url != null) { // fetch the first enclosure only
             enclosure = new StringBuilder(url);
             enclosure.append(Constants.ENCLOSURE_SEPARATOR);
 
