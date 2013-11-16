@@ -75,6 +75,14 @@ import java.util.Date;
 import java.util.Vector;
 
 public class EntriesCursorAdapter extends ResourceCursorAdapter {
+
+    private static class ViewHolder {
+        public TextView titleTextView;
+        public TextView dateTextView;
+        public ImageView starImgView;
+        public CheckBox isReadCb;
+    }
+
     private int titleColumnPosition;
 
     private int dateColumn;
@@ -83,7 +91,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     private int idColumn;
     private int feedIconColumn;
     private int feedNameColumn;
-    private int linkColumn;
 
     private final Uri uri;
     private final boolean showFeedInfo;
@@ -103,31 +110,37 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
-        final TextView textView = (TextView) view.findViewById(android.R.id.text1);
-        textView.setText(cursor.getString(titleColumnPosition));
+        if (view.getTag() == null) {
+            ViewHolder holder = new ViewHolder();
+            holder.titleTextView = (TextView) view.findViewById(android.R.id.text1);
+            holder.dateTextView = (TextView) view.findViewById(android.R.id.text2);
+            holder.starImgView = (ImageView) view.findViewById(android.R.id.icon);
+            holder.isReadCb = (CheckBox) view.findViewById(android.R.id.checkbox);
+            view.setTag(holder);
+        }
 
-        final TextView dateTextView = (TextView) view.findViewById(android.R.id.text2);
-        final ImageView starImgView = (ImageView) view.findViewById(android.R.id.icon);
+        final ViewHolder holder = (ViewHolder) view.getTag();
+
+        holder.titleTextView.setText(cursor.getString(titleColumnPosition));
+
         final long id = cursor.getLong(idColumn);
-        view.setTag(cursor.getString(linkColumn));
         final boolean favorite = !unfavorited.contains(id) && (cursor.getInt(favoriteColumn) == 1 || favorited.contains(id));
-        final CheckBox viewCheckBox = (CheckBox) view.findViewById(android.R.id.checkbox);
 
-        starImgView.setImageResource(favorite ? R.drawable.dimmed_rating_important : R.drawable.dimmed_rating_not_important);
-        starImgView.setTag(favorite ? Constants.TRUE : Constants.FALSE);
-        starImgView.setOnClickListener(new OnClickListener() {
+        holder.starImgView.setImageResource(favorite ? R.drawable.dimmed_rating_important : R.drawable.dimmed_rating_not_important);
+        holder.starImgView.setTag(favorite ? Constants.TRUE : Constants.FALSE);
+        holder.starImgView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean newFavorite = !Constants.TRUE.equals(view.getTag());
 
                 if (newFavorite) {
                     view.setTag(Constants.TRUE);
-                    starImgView.setImageResource(R.drawable.dimmed_rating_important);
+                    holder.starImgView.setImageResource(R.drawable.dimmed_rating_important);
                     favorited.add(id);
                     unfavorited.remove(id);
                 } else {
                     view.setTag(Constants.FALSE);
-                    starImgView.setImageResource(R.drawable.dimmed_rating_not_important);
+                    holder.starImgView.setImageResource(R.drawable.dimmed_rating_not_important);
                     unfavorited.add(id);
                     favorited.remove(id);
                 }
@@ -157,45 +170,45 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                         bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
                     }
                 }
-                dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(context.getResources(), bitmap), null, null, null);
+                holder.dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(context.getResources(), bitmap), null, null, null);
             } else {
-                dateTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                holder.dateTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             }
         }
 
         if (showFeedInfo && feedNameColumn > -1) {
             String feedName = cursor.getString(feedNameColumn);
             if (feedName != null) {
-                dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)).append(Constants.COMMA_SPACE).append(feedName));
+                holder.dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)).append(Constants.COMMA_SPACE).append(feedName));
             } else {
-                dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)));
+                holder.dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)));
             }
         } else {
-            dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)));
+            holder.dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)));
         }
 
-        viewCheckBox.setOnCheckedChangeListener(null);
+        holder.isReadCb.setOnCheckedChangeListener(null);
         if (markedAsUnread.contains(id) || (cursor.isNull(isReadColumn) && !markedAsRead.contains(id))) {
-            textView.setEnabled(true);
-            dateTextView.setEnabled(true);
-            viewCheckBox.setChecked(false);
+            holder.titleTextView.setEnabled(true);
+            holder.dateTextView.setEnabled(true);
+            holder.isReadCb.setChecked(false);
         } else {
-            textView.setEnabled(false);
-            dateTextView.setEnabled(false);
-            viewCheckBox.setChecked(true);
+            holder.titleTextView.setEnabled(false);
+            holder.dateTextView.setEnabled(false);
+            holder.isReadCb.setChecked(true);
         }
 
-        viewCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        holder.isReadCb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     markAsRead(id);
-                    textView.setEnabled(false);
-                    dateTextView.setEnabled(false);
+                    holder.titleTextView.setEnabled(false);
+                    holder.dateTextView.setEnabled(false);
                 } else {
                     markAsUnread(id);
-                    textView.setEnabled(true);
-                    dateTextView.setEnabled(true);
+                    holder.titleTextView.setEnabled(true);
+                    holder.dateTextView.setEnabled(true);
                 }
             }
         });
@@ -291,7 +304,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             isReadColumn = cursor.getColumnIndex(EntryColumns.IS_READ);
             favoriteColumn = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
             idColumn = cursor.getColumnIndex(EntryColumns._ID);
-            linkColumn = cursor.getColumnIndex(EntryColumns.LINK);
             if (showFeedInfo) {
                 feedIconColumn = cursor.getColumnIndex(FeedColumns.ICON);
                 feedNameColumn = cursor.getColumnIndex(FeedColumns.NAME);
