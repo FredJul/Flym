@@ -421,6 +421,9 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
     public void onClickSearch(View view) {
         final View dialogView = getLayoutInflater().inflate(R.layout.dialog_search_feed, null);
         final EditText searchText = (EditText) dialogView.findViewById(R.id.searchText);
+        if (!mUrlEditText.getText().toString().startsWith(Constants.HTTP) && !mUrlEditText.getText().toString().startsWith(Constants.HTTPS)) {
+            searchText.setText(mUrlEditText.getText());
+        }
         final RadioGroup radioGroup = (RadioGroup) dialogView.findViewById(R.id.radioGroup);
 
         new AlertDialog.Builder(EditFeedActivity.this) //
