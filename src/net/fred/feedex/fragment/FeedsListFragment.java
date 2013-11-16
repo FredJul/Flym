@@ -272,42 +272,7 @@ public class FeedsListFragment extends ListFragment {
                         intent.setType("file/*");
                         startActivityForResult(intent, REQUEST_PICK_OPML_FILE);
                     } catch (Exception unused) { // Else use a custom file selector
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                        builder.setTitle(R.string.select_file);
-
-                        try {
-                            final String[] fileNames = Environment.getExternalStorageDirectory().list(new FilenameFilter() {
-                                @Override
-                                public boolean accept(File dir, String filename) {
-                                    return new File(dir, filename).isFile();
-                                }
-                            });
-                            builder.setItems(fileNames, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, final int which) {
-                                    new Thread(new Runnable() { // To not block the UI
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                OPML.importFromFile(Environment.getExternalStorageDirectory().toString() + File.separator
-                                                        + fileNames[which]);
-                                            } catch (Exception e) {
-                                                getActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    }).start();
-                                }
-                            });
-                            builder.show();
-                        } catch (Exception unused2) {
-                            Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
-                        }
+                        displayCustomFilePicker();
                     }
                 } else {
                     Toast.makeText(getActivity(), R.string.error_external_storage_not_available, Toast.LENGTH_LONG).show();
@@ -356,25 +321,68 @@ public class FeedsListFragment extends ListFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
-        if (requestCode == REQUEST_PICK_OPML_FILE && resultCode == Activity.RESULT_OK) {
-            new Thread(new Runnable() { // To not block the UI
-                @Override
-                public void run() {
-                    try {
-                        OPML.importFromFile(data.getData().getPath());
-                    } catch (Exception e) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
-                            }
-                        });
+        if (requestCode == REQUEST_PICK_OPML_FILE) {
+            if (resultCode == Activity.RESULT_OK) {
+                new Thread(new Runnable() { // To not block the UI
+                    @Override
+                    public void run() {
+                        try {
+                            OPML.importFromFile(data.getData().getPath());
+                        } catch (Exception e) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
                     }
-                }
-            }).start();
+                }).start();
+            } else {
+                displayCustomFilePicker();
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void displayCustomFilePicker() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle(R.string.select_file);
+
+        try {
+            final String[] fileNames = Environment.getExternalStorageDirectory().list(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String filename) {
+                    return new File(dir, filename).isFile();
+                }
+            });
+            builder.setItems(fileNames, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, final int which) {
+                    new Thread(new Runnable() { // To not block the UI
+                        @Override
+                        public void run() {
+                            try {
+                                OPML.importFromFile(Environment.getExternalStorageDirectory().toString() + File.separator
+                                        + fileNames[which]);
+                            } catch (Exception e) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        }
+                    }).start();
+                }
+            });
+            builder.show();
+        } catch (Exception unused) {
+            Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
+        }
     }
 
     private final ActionMode.Callback mFeedActionModeCallback = new ActionMode.Callback() {
