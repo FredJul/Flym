@@ -198,7 +198,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             mEntriesFragment.setHasOptionsMenu(false);
         } else {
             refreshTitleAndIcon();
-            invalidateOptionsMenu();
 
             mEntriesFragment.setHasOptionsMenu(true);
         }
