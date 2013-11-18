@@ -100,10 +100,15 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                         cb.setChecked(!cb.isChecked());
                     }
 
-                    // Before accepting the event, just simulate a CANCEL event to remove the item highlighting
-                    MotionEvent motionEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
-                    mListView.dispatchTouchEvent(motionEvent);
-                    motionEvent.recycle();
+                    // Just simulate a CANCEL event to remove the item highlighting
+                    mListView.post(new Runnable() { // In a post to avoid a crash on 4.0.x
+                        @Override
+                        public void run() {
+                            MotionEvent motionEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
+                            mListView.dispatchTouchEvent(motionEvent);
+                            motionEvent.recycle();
+                        }
+                    });
                     return true;
                 }
             }
