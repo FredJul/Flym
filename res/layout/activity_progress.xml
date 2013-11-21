@@ -4,7 +4,7 @@
     <FrameLayout
         android:id="@+id/activity_frame"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="match_parent" />
 
     <ProgressBar
         android:id="@+id/activity_bar"

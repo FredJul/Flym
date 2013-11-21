@@ -1,5 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
@@ -15,7 +15,7 @@
 
     <EditText
         android:id="@+id/feed_title"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/name_textview"
         android:layout_marginLeft="10dp"
@@ -37,7 +37,7 @@
 
     <EditText
         android:id="@+id/feed_url"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/url_textview"
         android:layout_marginLeft="10dp"

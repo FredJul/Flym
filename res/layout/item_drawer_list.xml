@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/activatedBackgroundIndicator">
 
-<!-- icon -->
+    <!-- icon -->
     <ImageView
         android:id="@+id/icon"
         android:layout_width="20dp"
@@ -14,7 +14,7 @@
 
     <!-- text -->
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/icon"
         android:layout_toLeftOf="@+id/unread_count"
