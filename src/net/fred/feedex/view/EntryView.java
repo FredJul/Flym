@@ -112,7 +112,7 @@ public class EntryView extends ViewFlipper {
             + BACKGROUND_COLOR
             + "; max-width: 100%; font-family: sans-serif-light}\nimg {max-width: 100%; height: auto;}\ndiv[style] {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
     private static final String BODY_START = CSS + "<body link='#97ACE5' text='" + TEXT_COLOR + "'>";
-    private static final String FONT_SIZE_START = CSS + BODY_START + "<font size='+";
+    private static final String FONT_SIZE_START = CSS + BODY_START + "<font size='";
     private static final String FONT_SIZE_MIDDLE = "'>";
     private static final String BODY_END = "<br/><br/><br/><br/></body>";
     private static final String FONT_SIZE_END = "</font>" + BODY_END;
@@ -270,8 +270,8 @@ public class EntryView extends ViewFlipper {
         StringBuilder content = new StringBuilder();
 
         int fontSize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"));
-        if (fontSize > 0) {
-            content.append(FONT_SIZE_START).append(fontSize).append(FONT_SIZE_MIDDLE);
+        if (fontSize != 0) {
+            content.append(FONT_SIZE_START).append(fontSize > 0 ? "+" : "").append(fontSize).append(FONT_SIZE_MIDDLE);
         } else {
             content.append(BODY_START);
         }
@@ -306,7 +306,7 @@ public class EntryView extends ViewFlipper {
             content.append(LINK_BUTTON_START).append(link).append(LINK_BUTTON_MIDDLE).append(context.getString(R.string.see_link)).append(LINK_BUTTON_END);
         }
 
-        if (fontSize > 0) {
+        if (fontSize != 0) {
             content.append(FONT_SIZE_END);
         } else {
             content.append(BODY_END);

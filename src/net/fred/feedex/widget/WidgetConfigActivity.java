@@ -131,9 +131,9 @@ public class WidgetConfigActivity extends PreferenceActivity {
                     int color = PrefUtils.getInt("widget.background", WidgetProvider.STANDARD_BACKGROUND);
                     PrefUtils.putInt(widgetId + ".background", color);
 
-                    int fontsize = Integer.parseInt(PrefUtils.getString("widget.fontsize", "0"));
-                    if (fontsize > 0) {
-                        PrefUtils.putInt(widgetId + ".fontsize", fontsize);
+                    int fontSize = Integer.parseInt(PrefUtils.getString("widget.fontsize", "0"));
+                    if (fontSize != 0) {
+                        PrefUtils.putInt(widgetId + ".fontsize", fontSize);
                     } else {
                         PrefUtils.remove(widgetId + ".fontsize");
                     }

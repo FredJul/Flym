@@ -87,7 +87,7 @@ class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         if (mCursor.moveToPosition(position)) {
             row.setTextViewText(android.R.id.text1, mCursor.getString(0));
-            row.setFloat(android.R.id.text1, "setTextSize", 15 + (mFontSize * 2));
+            row.setFloat(android.R.id.text1, "setTextSize", 15 + (mFontSize * 3));
             Intent intent = new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.CONTENT_URI(mCursor.getString(1)));
             intent.putExtra(Constants.INTENT_FROM_WIDGET, true);
             row.setOnClickFillInIntent(android.R.id.content, intent);

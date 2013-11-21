@@ -201,6 +201,8 @@
         <item>Jamais</item>
     </string-array>
     <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
         <item>Standard</item>
         <item>+1</item>
         <item>+2</item>
