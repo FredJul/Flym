@@ -513,7 +513,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
                 final String feedId = uri.getPathSegments().get(1);
 
-                // Remove also the feed entries
+                // Remove also the feed entries & filters
                 new Thread() {
                     @Override
                     public void run() {
@@ -566,21 +566,45 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_ENTRY_FOR_FEED:
             case URI_ENTRY_FOR_GROUP: {
                 table = EntryColumns.TABLE_NAME;
-                where.append(EntryColumns._ID).append('=').append(uri.getPathSegments().get(3));
+                final String entryId = uri.getPathSegments().get(3);
+                where.append(EntryColumns._ID).append('=').append(entryId);
+
+                // Also remove the associated tasks
+                new Thread() {
+                    @Override
+                    public void run() {
+                        delete(TaskColumns.CONTENT_URI, TaskColumns.ENTRY_ID + '=' + entryId, null);
+                    }
+                }.start();
                 break;
             }
             case URI_ENTRIES_FOR_FEED: {
                 table = EntryColumns.TABLE_NAME;
                 where.append(EntryColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1));
+
+                //TODO also remove tasks
+
                 break;
             }
             case URI_ENTRIES_FOR_GROUP: {
                 table = EntryColumns.TABLE_NAME;
                 where.append(EntryColumns.FEED_ID).append(" IN (SELECT ").append(FeedColumns._ID).append(" FROM ").append(FeedColumns.TABLE_NAME).append(" WHERE ").append(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1)).append(')');
+
+                //TODO also remove tasks
+
                 break;
             }
             case URI_ENTRIES: {
                 table = EntryColumns.TABLE_NAME;
+
+                // Also remove all tasks
+                new Thread() {
+                    @Override
+                    public void run() {
+                        delete(TaskColumns.CONTENT_URI, null, null);
+                    }
+                }.start();
+
                 break;
             }
             case URI_FAVORITES_ENTRY:
