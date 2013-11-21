@@ -70,6 +70,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.FeedsCursorAdapter;
 import net.fred.feedex.parser.OPML;
@@ -327,14 +328,18 @@ public class FeedsListFragment extends ListFragment {
                     @Override
                     public void run() {
                         try {
-                            OPML.importFromFile(data.getData().getPath());
+                            OPML.importFromFile(data.getData().getPath()); // Try to read it by its path
                         } catch (Exception e) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
-                                }
-                            });
+                            try { // Try to read it directly as an InputStream (for Google Drive)
+                                OPML.importFromFile(MainApplication.getContext().getContentResolver().openInputStream(data.getData()));
+                            } catch (Exception unused) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
                         }
                     }
                 }).start();
