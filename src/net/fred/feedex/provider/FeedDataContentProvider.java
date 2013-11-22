@@ -236,8 +236,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 queryBuilder.setTables(ENTRIES_TABLE_WITH_FEED_INFO);
                 String search = uri.getPathSegments().get(2).replaceAll("\"", "");
                 if (!search.isEmpty()) {
-                    queryBuilder.appendWhere(new StringBuilder(EntryColumns.TITLE).append(" LIKE \"%").append(search).append("%\"").append(Constants.DB_OR)
-                            .append(EntryColumns.ABSTRACT).append(" LIKE \"%").append(search).append("%\""));
+                    queryBuilder.appendWhere(getSearchWhereClause(search));
                 } else {
                     queryBuilder.appendWhere("1 = 2"); // to have 0 result with an empty search
                 }
@@ -446,8 +445,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 table = EntryColumns.TABLE_NAME;
                 String search = uri.getPathSegments().get(2).replaceAll("\"", "");
                 if (!search.isEmpty()) {
-                    where.append(new StringBuilder(EntryColumns.TITLE).append(" LIKE \"%").append(search).append("%\"").append(Constants.DB_OR)
-                            .append(EntryColumns.ABSTRACT).append(" LIKE \"%").append(search).append("%\""));
+                    where.append(getSearchWhereClause(search));
                 }
                 break;
             }
@@ -685,6 +683,12 @@ public class FeedDataContentProvider extends ContentProvider {
         c.close();
 
         return null;
+    }
+
+    private static String getSearchWhereClause(String search) {
+        return new StringBuilder(EntryColumns.TITLE).append(" LIKE \"%").append(search).append("%\"").append(Constants.DB_OR)
+                .append(EntryColumns.ABSTRACT).append(" LIKE \"%").append(search).append("%\"").append(Constants.DB_OR)
+                .append(EntryColumns.MOBILIZED_HTML).append(" LIKE \"%").append(search).append("%\"").toString();
     }
 
     public static void notifyGroupFromFeedId(String feedId) {
