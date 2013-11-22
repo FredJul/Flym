@@ -85,6 +85,8 @@ public class FeedDataContentProvider extends ContentProvider {
     public static final int URI_FAVORITES_ENTRY = 16;
     public static final int URI_TASKS = 17;
     public static final int URI_TASK = 18;
+    public static final int URI_SEARCH = 19;
+    public static final int URI_SEARCH_ENTRY = 20;
 
     public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -107,6 +109,8 @@ public class FeedDataContentProvider extends ContentProvider {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites/#", URI_FAVORITES_ENTRY);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "tasks", URI_TASKS);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "tasks/#", URI_TASK);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/search/*", URI_SEARCH);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/search/*/#", URI_SEARCH_ENTRY);
     }
 
     private static final String FEEDS_TABLE_WITH_GROUP_PRIORITY = FeedColumns.TABLE_NAME + " LEFT JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.PRIORITY +
@@ -136,11 +140,13 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_ENTRIES:
             case URI_ENTRIES_FOR_FEED:
             case URI_ENTRIES_FOR_GROUP:
+            case URI_SEARCH:
                 return "vnd.android.cursor.dir/vnd.feedex.entry";
             case URI_FAVORITES_ENTRY:
             case URI_ENTRY:
             case URI_ENTRY_FOR_FEED:
             case URI_ENTRY_FOR_GROUP:
+            case URI_SEARCH_ENTRY:
                 return "vnd.android.cursor.item/vnd.feedex.entry";
             case URI_TASKS:
                 return "vnd.android.cursor.dir/vnd.feedex.task";
@@ -206,7 +212,8 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             case URI_ENTRY_FOR_FEED:
-            case URI_ENTRY_FOR_GROUP: {
+            case URI_ENTRY_FOR_GROUP:
+            case URI_SEARCH_ENTRY: {
                 queryBuilder.setTables(EntryColumns.TABLE_NAME);
                 queryBuilder.appendWhere(new StringBuilder(EntryColumns._ID).append('=').append(uri.getPathSegments().get(3)));
                 break;
@@ -223,6 +230,17 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             case URI_ENTRIES: {
                 queryBuilder.setTables(ENTRIES_TABLE_WITH_FEED_INFO);
+                break;
+            }
+            case URI_SEARCH: {
+                queryBuilder.setTables(ENTRIES_TABLE_WITH_FEED_INFO);
+                String search = uri.getPathSegments().get(2).replaceAll("\"", "");
+                if (!search.isEmpty()) {
+                    queryBuilder.appendWhere(new StringBuilder(EntryColumns.TITLE).append(" LIKE \"%").append(search).append("%\"").append(Constants.DB_OR)
+                            .append(EntryColumns.ABSTRACT).append(" LIKE \"%").append(search).append("%\""));
+                } else {
+                    queryBuilder.appendWhere("1 = 2"); // to have 0 result with an empty search
+                }
                 break;
             }
             case URI_FAVORITES_ENTRY:
@@ -404,7 +422,8 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             case URI_ENTRY_FOR_FEED:
-            case URI_ENTRY_FOR_GROUP: {
+            case URI_ENTRY_FOR_GROUP:
+            case URI_SEARCH_ENTRY: {
                 table = EntryColumns.TABLE_NAME;
                 where.append(EntryColumns._ID).append('=').append(uri.getPathSegments().get(3));
                 break;
@@ -421,6 +440,15 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             case URI_ENTRIES: {
                 table = EntryColumns.TABLE_NAME;
+                break;
+            }
+            case URI_SEARCH: {
+                table = EntryColumns.TABLE_NAME;
+                String search = uri.getPathSegments().get(2).replaceAll("\"", "");
+                if (!search.isEmpty()) {
+                    where.append(new StringBuilder(EntryColumns.TITLE).append(" LIKE \"%").append(search).append("%\"").append(Constants.DB_OR)
+                            .append(EntryColumns.ABSTRACT).append(" LIKE \"%").append(search).append("%\""));
+                }
                 break;
             }
             case URI_FAVORITES_ENTRY:
@@ -564,7 +592,8 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             case URI_ENTRY_FOR_FEED:
-            case URI_ENTRY_FOR_GROUP: {
+            case URI_ENTRY_FOR_GROUP:
+            case URI_SEARCH_ENTRY: {
                 table = EntryColumns.TABLE_NAME;
                 final String entryId = uri.getPathSegments().get(3);
                 where.append(EntryColumns._ID).append('=').append(entryId);

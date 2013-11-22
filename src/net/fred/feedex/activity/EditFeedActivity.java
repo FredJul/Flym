@@ -427,7 +427,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
         final RadioGroup radioGroup = (RadioGroup) dialogView.findViewById(R.id.radioGroup);
 
         new AlertDialog.Builder(EditFeedActivity.this) //
-                .setIcon(R.drawable.action_search) //
+                .setIcon(R.drawable.dimmed_action_search) //
                 .setTitle(R.string.feed_search) //
                 .setView(dialogView) //
                 .setPositiveButton(android.R.string.search_go, new DialogInterface.OnClickListener() {

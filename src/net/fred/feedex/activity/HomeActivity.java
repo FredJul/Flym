@@ -19,8 +19,10 @@
 
 package net.fred.feedex.activity;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
@@ -39,6 +41,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import net.fred.feedex.Constants;
@@ -156,6 +159,10 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             case 1:
                 getActionBar().setTitle(R.string.favorites);
                 getActionBar().setIcon(R.drawable.dimmed_rating_important);
+                break;
+            case 2:
+                getActionBar().setTitle(android.R.string.search_go);
+                getActionBar().setIcon(R.drawable.action_search);
                 break;
             default:
                 getActionBar().setTitle(mTitle);
@@ -290,6 +297,24 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 break;
             case 1:
                 newUri = EntryColumns.FAVORITES_CONTENT_URI;
+                break;
+            case 2:
+                newUri = EntryColumns.SEARCH_URI(null);
+
+                final EditText input = new EditText(this);
+                input.setSingleLine(true);
+                new AlertDialog.Builder(this) //
+                        .setTitle(android.R.string.search_go) //
+                        .setView(input) //
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String search = input.getText().toString();
+                                if (!search.isEmpty()) {
+                                    mEntriesFragment.setData(EntryColumns.SEARCH_URI(search), true);
+                                }
+                            }
+                        }).setNegativeButton(android.R.string.cancel, null).show();
                 break;
             default:
                 long feedOrGroupId = mDrawerAdapter.getItemId(position);

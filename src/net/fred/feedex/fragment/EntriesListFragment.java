@@ -181,6 +181,9 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
             menu.findItem(R.id.menu_hide_read).setVisible(false);
             menu.findItem(R.id.menu_refresh).setVisible(false);
+        } else if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
+            menu.findItem(R.id.menu_hide_read).setVisible(false);
+            menu.findItem(R.id.menu_share_starred).setVisible(false);
         } else {
             menu.findItem(R.id.menu_share_starred).setVisible(false);
 
@@ -261,8 +264,9 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        boolean alwaysShowRead = EntryColumns.FAVORITES_CONTENT_URI.equals(mUri) || (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH);
         CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)
-                || EntryColumns.FAVORITES_CONTENT_URI.equals(mUri) ? null : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
+                || alwaysShowRead ? null : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
     }

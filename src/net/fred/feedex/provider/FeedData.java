@@ -47,6 +47,7 @@ package net.fred.feedex.provider;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.text.TextUtils;
 
 import net.fred.feedex.Constants;
 
@@ -188,6 +189,10 @@ public class FeedData {
 
         public static Uri PARENT_URI(String path) {
             return Uri.parse(CONTENT_AUTHORITY + path.substring(0, path.lastIndexOf('/')));
+        }
+
+        public static Uri SEARCH_URI(String search) {
+            return Uri.parse(CONTENT_AUTHORITY + "/entries/search/" + (TextUtils.isEmpty(search) ? "\"" : search.replaceAll("/", ""))); // An " is mandatory here with empty search
         }
 
         public static final String[] PROJECTION_ID = new String[]{EntryColumns._ID};

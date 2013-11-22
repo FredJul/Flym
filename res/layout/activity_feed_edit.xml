@@ -55,7 +55,7 @@
         android:layout_alignTop="@id/feed_url"
         android:layout_marginRight="5dp"
         android:onClick="onClickSearch"
-        android:src="@drawable/action_search" />
+        android:src="@drawable/dimmed_action_search" />
 
     <CheckBox
         android:id="@+id/retrieve_fulltext"
