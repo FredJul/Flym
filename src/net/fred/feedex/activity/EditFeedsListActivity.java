@@ -48,10 +48,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import net.fred.feedex.fragment.FeedsListFragment;
+import net.fred.feedex.fragment.EditFeedsListFragment;
 import net.fred.feedex.utils.UiUtils;
 
-public class FeedsListActivity extends Activity {
+public class EditFeedsListActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class FeedsListActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
-            FeedsListFragment fragment = new FeedsListFragment();
+            EditFeedsListFragment fragment = new EditFeedsListFragment();
             getFragmentManager().beginTransaction().add(android.R.id.content, fragment, fragment.getClass().getName()).commit();
         }
     }

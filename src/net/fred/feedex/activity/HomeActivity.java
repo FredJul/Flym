@@ -217,7 +217,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         switch (item.getItemId()) {
             case R.id.menu_edit:
-                startActivity(new Intent(this, FeedsListActivity.class));
+                startActivity(new Intent(this, EditFeedsListActivity.class));
                 return true;
             case R.id.menu_refresh_main:
                 if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {

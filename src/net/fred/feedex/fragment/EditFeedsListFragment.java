@@ -84,7 +84,7 @@ import java.io.FilenameFilter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FeedsListFragment extends ListFragment {
+public class EditFeedsListFragment extends ListFragment {
 
     private static final int REQUEST_PICK_OPML_FILE = 1;
 
