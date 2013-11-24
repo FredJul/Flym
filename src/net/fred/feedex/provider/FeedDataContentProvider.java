@@ -234,12 +234,7 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             case URI_SEARCH: {
                 queryBuilder.setTables(ENTRIES_TABLE_WITH_FEED_INFO);
-                String search = uri.getPathSegments().get(2).replaceAll("\"", "");
-                if (!search.isEmpty()) {
-                    queryBuilder.appendWhere(getSearchWhereClause(search));
-                } else {
-                    queryBuilder.appendWhere("1 = 2"); // to have 0 result with an empty search
-                }
+                queryBuilder.appendWhere(getSearchWhereClause(uri.getPathSegments().get(2)));
                 break;
             }
             case URI_FAVORITES_ENTRY:
@@ -443,10 +438,7 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             case URI_SEARCH: {
                 table = EntryColumns.TABLE_NAME;
-                String search = uri.getPathSegments().get(2).replaceAll("\"", "");
-                if (!search.isEmpty()) {
-                    where.append(getSearchWhereClause(search));
-                }
+                where.append(getSearchWhereClause(uri.getPathSegments().get(2)));
                 break;
             }
             case URI_FAVORITES_ENTRY:
@@ -685,10 +677,16 @@ public class FeedDataContentProvider extends ContentProvider {
         return null;
     }
 
-    private static String getSearchWhereClause(String search) {
-        return new StringBuilder(EntryColumns.TITLE).append(" LIKE \"%").append(search).append("%\"").append(Constants.DB_OR)
-                .append(EntryColumns.ABSTRACT).append(" LIKE \"%").append(search).append("%\"").append(Constants.DB_OR)
-                .append(EntryColumns.MOBILIZED_HTML).append(" LIKE \"%").append(search).append("%\"").toString();
+    private static String getSearchWhereClause(String uriSearchParam) {
+        uriSearchParam = Uri.decode(uriSearchParam).replaceAll("\"", "");
+
+        if (!uriSearchParam.isEmpty()) {
+            return new StringBuilder(EntryColumns.TITLE).append(" LIKE \"%").append(uriSearchParam).append("%\"").append(Constants.DB_OR)
+                    .append(EntryColumns.ABSTRACT).append(" LIKE \"%").append(uriSearchParam).append("%\"").append(Constants.DB_OR)
+                    .append(EntryColumns.MOBILIZED_HTML).append(" LIKE \"%").append(uriSearchParam).append("%\"").toString();
+        } else {
+            return "1 = 2"; // to have 0 result with an empty search
+        }
     }
 
     public static void notifyGroupFromFeedId(String feedId) {
