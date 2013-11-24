@@ -50,6 +50,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -678,12 +679,13 @@ public class FeedDataContentProvider extends ContentProvider {
     }
 
     private static String getSearchWhereClause(String uriSearchParam) {
-        uriSearchParam = Uri.decode(uriSearchParam).replaceAll("\"", "");
+        uriSearchParam = Uri.decode(uriSearchParam).trim();
 
         if (!uriSearchParam.isEmpty()) {
-            return new StringBuilder(EntryColumns.TITLE).append(" LIKE \"%").append(uriSearchParam).append("%\"").append(Constants.DB_OR)
-                    .append(EntryColumns.ABSTRACT).append(" LIKE \"%").append(uriSearchParam).append("%\"").append(Constants.DB_OR)
-                    .append(EntryColumns.MOBILIZED_HTML).append(" LIKE \"%").append(uriSearchParam).append("%\"").toString();
+            uriSearchParam = DatabaseUtils.sqlEscapeString("%" + Uri.decode(uriSearchParam) + "%");
+            return new StringBuilder(EntryColumns.TITLE).append(" LIKE ").append(uriSearchParam).append(Constants.DB_OR)
+                    .append(EntryColumns.ABSTRACT).append(" LIKE ").append(uriSearchParam).append(Constants.DB_OR)
+                    .append(EntryColumns.MOBILIZED_HTML).append(" LIKE ").append(uriSearchParam).toString();
         } else {
             return "1 = 2"; // to have 0 result with an empty search
         }

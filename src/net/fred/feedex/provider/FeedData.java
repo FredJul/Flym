@@ -192,7 +192,7 @@ public class FeedData {
         }
 
         public static Uri SEARCH_URI(String search) {
-            return Uri.parse(CONTENT_AUTHORITY + "/entries/search/" + (TextUtils.isEmpty(search) ? "\"" : Uri.encode(search))); // An " is mandatory here with empty search
+            return Uri.parse(CONTENT_AUTHORITY + "/entries/search/" + (TextUtils.isEmpty(search) ? " " : Uri.encode(search))); // The space is mandatory here with empty search
         }
 
         public static final String[] PROJECTION_ID = new String[]{EntryColumns._ID};
