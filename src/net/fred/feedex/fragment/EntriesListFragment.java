@@ -41,9 +41,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
@@ -64,6 +66,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
     private ListView mListView;
+    private SearchView mSearchView;
 
     private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
         @Override
@@ -158,6 +161,21 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         mListView.setFastScrollEnabled(true);
         mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
 
+        mSearchView = (SearchView) rootView.findViewById(R.id.searchView);
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mSearchView.getWindowToken(), 0);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                setData(EntryColumns.SEARCH_URI(s), true);
+                return false;
+            }
+        });
         return rootView;
     }
 
@@ -253,6 +271,10 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         return mUri;
     }
 
+    public String getCurrentSearch() {
+        return mSearchView == null ? null : mSearchView.getQuery().toString();
+    }
+
     public void setData(Uri uri, boolean showFeedInfo) {
         mUri = uri;
         mShowFeedInfo = showFeedInfo;
@@ -260,6 +282,12 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
         setListAdapter(mEntriesCursorAdapter);
         getLoaderManager().restartLoader(LOADER_ID, null, this);
+
+        if (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
+            mSearchView.setVisibility(View.VISIBLE);
+        } else {
+            mSearchView.setVisibility(View.GONE);
+        }
     }
 
     @Override
