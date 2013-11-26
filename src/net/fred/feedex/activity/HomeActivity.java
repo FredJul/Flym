@@ -31,6 +31,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -40,6 +41,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
@@ -79,6 +81,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     private int mCurrentDrawerPos;
 
     private boolean mIsDrawerMoving = false;
+
+    private boolean mCanQuit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,6 +191,23 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     protected void onPause() {
         PrefUtils.unregisterOnPrefChangeListener(isRefreshingListener);
         super.onPause();
+    }
+
+    @Override
+    public void finish() {
+        if (mCanQuit) {
+            super.finish();
+            return;
+        }
+
+        Toast.makeText(this, R.string.back_again_to_quit, Toast.LENGTH_SHORT).show();
+        mCanQuit = true;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mCanQuit = false;
+            }
+        }, 3000);
     }
 
     @Override

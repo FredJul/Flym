@@ -35,6 +35,7 @@
     <string name="network_error">Kein Internet</string>
     <string name="loading">Laden…</string>
     <string name="no_result">Kein Ergebnis</string>
+    <string name="back_again_to_quit">Zum Beenden Zurück-Taste noch einmal drücken</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>

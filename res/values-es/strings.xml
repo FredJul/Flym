@@ -34,6 +34,7 @@
     <string name="network_error">No se ha configurado la red</string>
     <string name="loading">Cargando…</string>
     <string name="no_result">Sin resultados</string>
+    <string name="back_again_to_quit">Presione atrás une vez más para salir</string>
 
     <!-- FEEDS -->
     <string name="feeds">Fuentes</string>

@@ -34,6 +34,7 @@
     <string name="network_error">Nessuna connessione disponibile</string>
     <string name="loading">Caricamento in corso…</string>
     <string name="no_result">Nessun risultato</string>
+    <string name="back_again_to_quit">Premere indietro un\'altra volta per uscire</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feed</string>

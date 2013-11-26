@@ -28,12 +28,13 @@
     <string name="menu_settings">Настройки</string>
     <string name="menu_refresh">Обновить</string>
     <string name="menu_all_read">Пометить все как прочитанное</string>
-    <string name="feedex_feeds">FeedEx feeds</string>
+    <string name="feedex_feeds">FeedEx корма</string>
     <string name="new_entries">новые записи</string>
     <string name="error">Ошибка</string>
     <string name="network_error">Нет подключения к сети</string>
     <string name="loading">Загрузка…</string>
     <string name="no_result">Нет результатов</string>
+    <string name="back_again_to_quit">Нажмите "Назад" еще раз, чтобы выйти</string>
 
     <!-- FEEDS -->
     <string name="feeds">Ленты</string>

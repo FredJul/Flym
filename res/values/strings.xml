@@ -36,6 +36,7 @@
     <string name="no_result">No result</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="back_again_to_quit">Press back once more to exit</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>

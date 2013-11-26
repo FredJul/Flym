@@ -35,6 +35,7 @@
     <string name="network_error">No hi ha connectivitat</string>
     <string name="loading">S\'està carregant.</string>
     <string name="no_result">No hi ha resultats</string>
+    <string name="back_again_to_quit">Premeu una vegada més per sortir</string>
 
     <!-- FEEDS -->
     <string name="menu_add_feed">Afegir un canal</string>
