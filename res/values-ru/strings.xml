@@ -61,6 +61,8 @@
     <string name="feed_url">URL-адрес</string>
     <string name="optional">(не обязательно)</string>
     <string name="website_or_feed">(сайта или ленты новостей)</string>
+    <string name="tab_feed_title">Ленту</string>
+    <string name="tab_filters_title">Фильтры</string>
     <string name="feed_title">НАЗВАНИЕ</string>
     <string name="feed_filters">ФИЛЬТРЫ ИСКЛЮЧЕНИЙ</string>
     <string name="filter_add_title">Добавить фильтр</string>

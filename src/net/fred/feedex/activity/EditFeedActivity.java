@@ -47,7 +47,6 @@ package net.fred.feedex.activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.LoaderManager;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -72,6 +71,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
+import android.widget.TabHost;
 import android.widget.Toast;
 
 import net.fred.feedex.Constants;
@@ -94,221 +94,21 @@ import java.util.HashMap;
 
 public class EditFeedActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final String STATE_CURRENT_TAB = "STATE_CURRENT_TAB";
+
     static final String FEED_SEARCH_TITLE = "title";
     static final String FEED_SEARCH_URL = "url";
     static final String FEED_SEARCH_DESC = "contentSnippet";
 
     private static final String[] FEED_PROJECTION = new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT};
 
+    private TabHost mTabHost;
     private EditText mNameEditText, mUrlEditText;
     private CheckBox mRetrieveFulltextCb;
     private ListView mFiltersListView;
     private String mPreviousName;
 
     private FiltersCursorAdapter mFiltersCursorAdapter;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        UiUtils.setPreferenceTheme(this);
-        super.onCreate(savedInstanceState);
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-
-        setContentView(R.layout.activity_feed_edit);
-        setResult(RESULT_CANCELED);
-
-        Intent intent = getIntent();
-
-        mNameEditText = (EditText) findViewById(R.id.feed_title);
-        mUrlEditText = (EditText) findViewById(R.id.feed_url);
-        mRetrieveFulltextCb = (CheckBox) findViewById(R.id.retrieve_fulltext);
-        mFiltersListView = (ListView) findViewById(android.R.id.list);
-        View filtersLayout = findViewById(R.id.filters_layout);
-        View buttonLayout = findViewById(R.id.button_layout);
-
-        if (intent.getAction().equals(Intent.ACTION_INSERT) || intent.getAction().equals(Intent.ACTION_SEND)) {
-            setTitle(R.string.new_feed_title);
-
-            filtersLayout.setVisibility(View.GONE);
-
-            if (intent.hasExtra(Intent.EXTRA_TEXT)) {
-                mUrlEditText.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
-            }
-        } else if (intent.getAction().equals(Intent.ACTION_EDIT)) {
-            setTitle(R.string.edit_feed_title);
-
-            buttonLayout.setVisibility(View.GONE);
-
-            mFiltersCursorAdapter = new FiltersCursorAdapter(this, null);
-            mFiltersListView.setAdapter(mFiltersCursorAdapter);
-            mFiltersListView.setOnItemLongClickListener(new OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    startActionMode(mFilterActionModeCallback);
-                    mFiltersCursorAdapter.setSelectedFilter(position);
-                    mFiltersListView.invalidateViews();
-                    return true;
-                }
-            });
-
-            getLoaderManager().initLoader(0, null, this);
-
-            if (savedInstanceState == null) {
-                Cursor cursor = getContentResolver().query(intent.getData(), FEED_PROJECTION, null, null, null);
-
-                if (cursor.moveToNext()) {
-                    mPreviousName = cursor.getString(0);
-                    mNameEditText.setText(mPreviousName);
-                    mUrlEditText.setText(cursor.getString(1));
-                    mRetrieveFulltextCb.setChecked(cursor.getInt(2) == 1);
-                    cursor.close();
-                } else {
-                    cursor.close();
-                    Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (getIntent().getAction().equals(Intent.ACTION_EDIT)) {
-            String url = mUrlEditText.getText().toString();
-            ContentResolver cr = getContentResolver();
-
-            Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID,
-                    FeedColumns.URL + Constants.DB_ARG, new String[]{url}, null);
-
-            if (cursor.moveToFirst() && !getIntent().getData().getLastPathSegment().equals(cursor.getString(0))) {
-                cursor.close();
-                Toast.makeText(EditFeedActivity.this, R.string.error_feed_url_exists, Toast.LENGTH_LONG).show();
-            } else {
-                cursor.close();
-                ContentValues values = new ContentValues();
-
-                if (!url.startsWith(Constants.HTTP) && !url.startsWith(Constants.HTTPS)) {
-                    url = Constants.HTTP + url;
-                }
-                values.put(FeedColumns.URL, url);
-
-                String name = mNameEditText.getText().toString();
-
-                values.put(FeedColumns.NAME, name.trim().length() > 0 ? name : null);
-                values.put(FeedColumns.RETRIEVE_FULLTEXT, mRetrieveFulltextCb.isChecked() ? 1 : null);
-                values.put(FeedColumns.FETCH_MODE, 0);
-                values.putNull(FeedColumns.ERROR);
-
-                cr.update(getIntent().getData(), values, null, null);
-                if (!name.equals(mPreviousName)) {
-                    cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-                    cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
-                }
-            }
-        }
-
-        super.onDestroy();
-    }
-
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-
-        return true;
-    }
-
-    public void onClickAddFilter(View view) {
-        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_filter_edit, null);
-
-        new AlertDialog.Builder(this) //
-                .setTitle(R.string.filter_add_title) //
-                .setView(dialogView) //
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        String filterText = ((EditText) dialogView.findViewById(R.id.filterText)).getText().toString();
-                        if (filterText.length() != 0) {
-                            String feedId = getIntent().getData().getLastPathSegment();
-
-                            ContentValues values = new ContentValues();
-                            values.put(FilterColumns.FILTER_TEXT, filterText);
-                            values.put(FilterColumns.IS_REGEX, ((CheckBox) dialogView.findViewById(R.id.regexCheckBox)).isChecked());
-                            values.put(FilterColumns.IS_APPLIED_TO_TITLE, ((RadioButton) dialogView.findViewById(R.id.applyTitleRadio)).isChecked());
-
-                            ContentResolver cr = getContentResolver();
-                            cr.insert(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), values);
-                        }
-                    }
-                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-            }
-        }).show();
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        CursorLoader cursorLoader = new CursorLoader(this, FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
-                null, null, null, null);
-        cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
-        return cursorLoader;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mFiltersCursorAdapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mFiltersCursorAdapter.swapCursor(null);
-    }
-
-    public void onClickOk(View view) {
-        // only in insert mode
-
-        String url = mUrlEditText.getText().toString();
-        ContentResolver cr = getContentResolver();
-
-        if (!url.startsWith(Constants.HTTP) && !url.startsWith(Constants.HTTPS)) {
-            url = Constants.HTTP + url;
-        }
-
-        Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, FeedColumns.URL + Constants.DB_ARG,
-                new String[]{url}, null);
-
-        if (cursor.moveToFirst()) {
-            cursor.close();
-            Toast.makeText(EditFeedActivity.this, R.string.error_feed_url_exists, Toast.LENGTH_LONG).show();
-        } else {
-            cursor.close();
-            ContentValues values = new ContentValues();
-
-            values.put(FeedColumns.URL, url);
-            values.putNull(FeedColumns.ERROR);
-
-            String name = mNameEditText.getText().toString();
-
-            if (name.trim().length() > 0) {
-                values.put(FeedColumns.NAME, name);
-            }
-            values.put(FeedColumns.RETRIEVE_FULLTEXT, mRetrieveFulltextCb.isChecked() ? 1 : null);
-            cr.insert(FeedColumns.CONTENT_URI, values);
-            cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-            cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
-        }
-
-        setResult(RESULT_OK);
-        finish();
-    }
-
-    public void onClickCancel(View view) {
-        finish();
-    }
 
     private final ActionMode.Callback mFilterActionModeCallback = new ActionMode.Callback() {
 
@@ -418,93 +218,339 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
         }
     };
 
-    public void onClickSearch(View view) {
-        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_search_feed, null);
-        final EditText searchText = (EditText) dialogView.findViewById(R.id.searchText);
-        if (!mUrlEditText.getText().toString().startsWith(Constants.HTTP) && !mUrlEditText.getText().toString().startsWith(Constants.HTTPS)) {
-            searchText.setText(mUrlEditText.getText());
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        UiUtils.setPreferenceTheme(this);
+        super.onCreate(savedInstanceState);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setContentView(R.layout.activity_feed_edit);
+        setResult(RESULT_CANCELED);
+
+        Intent intent = getIntent();
+
+        mTabHost = (TabHost) findViewById(R.id.tabHost);
+        mNameEditText = (EditText) findViewById(R.id.feed_title);
+        mUrlEditText = (EditText) findViewById(R.id.feed_url);
+        mRetrieveFulltextCb = (CheckBox) findViewById(R.id.retrieve_fulltext);
+        mFiltersListView = (ListView) findViewById(android.R.id.list);
+        View tabWidget = findViewById(android.R.id.tabs);
+        View buttonLayout = findViewById(R.id.button_layout);
+
+        mTabHost.setup();
+        mTabHost.addTab(mTabHost.newTabSpec("feedTab").setIndicator(getString(R.string.tab_feed_title)).setContent(R.id.feed_tab));
+        mTabHost.addTab(mTabHost.newTabSpec("filtersTab").setIndicator(getString(R.string.tab_filters_title)).setContent(R.id.filters_tab));
+
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String s) {
+                invalidateOptionsMenu();
+            }
+        });
+
+        if (savedInstanceState != null) {
+            mTabHost.setCurrentTab(savedInstanceState.getInt(STATE_CURRENT_TAB));
         }
-        final RadioGroup radioGroup = (RadioGroup) dialogView.findViewById(R.id.radioGroup);
 
-        new AlertDialog.Builder(EditFeedActivity.this) //
-                .setIcon(R.drawable.dimmed_action_search) //
-                .setTitle(R.string.feed_search) //
-                .setView(dialogView) //
-                .setPositiveButton(android.R.string.search_go, new DialogInterface.OnClickListener() {
+        if (intent.getAction().equals(Intent.ACTION_INSERT) || intent.getAction().equals(Intent.ACTION_SEND)) {
+            setTitle(R.string.new_feed_title);
+
+            tabWidget.setVisibility(View.GONE);
+
+            if (intent.hasExtra(Intent.EXTRA_TEXT)) {
+                mUrlEditText.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
+            }
+        } else if (intent.getAction().equals(Intent.ACTION_EDIT)) {
+            setTitle(R.string.edit_feed_title);
+
+            buttonLayout.setVisibility(View.GONE);
+
+            mFiltersCursorAdapter = new FiltersCursorAdapter(this, null);
+            mFiltersListView.setAdapter(mFiltersCursorAdapter);
+            mFiltersListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    startActionMode(mFilterActionModeCallback);
+                    mFiltersCursorAdapter.setSelectedFilter(position);
+                    mFiltersListView.invalidateViews();
+                    return true;
+                }
+            });
+
+            getLoaderManager().initLoader(0, null, this);
+
+            if (savedInstanceState == null) {
+                Cursor cursor = getContentResolver().query(intent.getData(), FEED_PROJECTION, null, null, null);
+
+                if (cursor.moveToNext()) {
+                    mPreviousName = cursor.getString(0);
+                    mNameEditText.setText(mPreviousName);
+                    mUrlEditText.setText(cursor.getString(1));
+                    mRetrieveFulltextCb.setChecked(cursor.getInt(2) == 1);
+                    cursor.close();
+                } else {
+                    cursor.close();
+                    Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(STATE_CURRENT_TAB, mTabHost.getCurrentTab());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (getIntent().getAction().equals(Intent.ACTION_EDIT)) {
+            String url = mUrlEditText.getText().toString();
+            ContentResolver cr = getContentResolver();
+
+            Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID,
+                    FeedColumns.URL + Constants.DB_ARG, new String[]{url}, null);
+
+            if (cursor.moveToFirst() && !getIntent().getData().getLastPathSegment().equals(cursor.getString(0))) {
+                cursor.close();
+                Toast.makeText(EditFeedActivity.this, R.string.error_feed_url_exists, Toast.LENGTH_LONG).show();
+            } else {
+                cursor.close();
+                ContentValues values = new ContentValues();
+
+                if (!url.startsWith(Constants.HTTP) && !url.startsWith(Constants.HTTPS)) {
+                    url = Constants.HTTP + url;
+                }
+                values.put(FeedColumns.URL, url);
+
+                String name = mNameEditText.getText().toString();
+
+                values.put(FeedColumns.NAME, name.trim().length() > 0 ? name : null);
+                values.put(FeedColumns.RETRIEVE_FULLTEXT, mRetrieveFulltextCb.isChecked() ? 1 : null);
+                values.put(FeedColumns.FETCH_MODE, 0);
+                values.putNull(FeedColumns.ERROR);
+
+                cr.update(getIntent().getData(), values, null, null);
+                if (!name.equals(mPreviousName)) {
+                    cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+                    cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
+                }
+            }
+        }
+
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.edit_feed, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (mTabHost.getCurrentTab() == 0) {
+            menu.findItem(R.id.menu_add_filter).setVisible(false);
+            menu.findItem(R.id.menu_search_feed).setVisible(true);
+        } else {
+            menu.findItem(R.id.menu_search_feed).setVisible(false);
+            menu.findItem(R.id.menu_add_filter).setVisible(true);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.menu_add_filter: {
+                final View dialogView = getLayoutInflater().inflate(R.layout.dialog_filter_edit, null);
+
+                new AlertDialog.Builder(this) //
+                        .setTitle(R.string.filter_add_title) //
+                        .setView(dialogView) //
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                String filterText = ((EditText) dialogView.findViewById(R.id.filterText)).getText().toString();
+                                if (filterText.length() != 0) {
+                                    String feedId = getIntent().getData().getLastPathSegment();
+
+                                    ContentValues values = new ContentValues();
+                                    values.put(FilterColumns.FILTER_TEXT, filterText);
+                                    values.put(FilterColumns.IS_REGEX, ((CheckBox) dialogView.findViewById(R.id.regexCheckBox)).isChecked());
+                                    values.put(FilterColumns.IS_APPLIED_TO_TITLE, ((RadioButton) dialogView.findViewById(R.id.applyTitleRadio)).isChecked());
+
+                                    ContentResolver cr = getContentResolver();
+                                    cr.insert(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), values);
+                                }
+                            }
+                        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        if (searchText.getText().length() > 0) {
-                            String tmp = searchText.getText().toString();
-                            try {
-                                tmp = URLEncoder.encode(searchText.getText().toString(), Constants.UTF8);
-                            } catch (UnsupportedEncodingException ignored) {
-                            }
-                            final String text = tmp;
-
-                            switch (radioGroup.getCheckedRadioButtonId()) {
-                                case R.id.byWebSearch:
-                                    final ProgressDialog pd = new ProgressDialog(EditFeedActivity.this);
-                                    pd.setMessage(getString(R.string.loading));
-                                    pd.setCancelable(true);
-                                    pd.setIndeterminate(true);
-                                    pd.show();
-
-                                    getLoaderManager().restartLoader(1, null, new LoaderCallbacks<ArrayList<HashMap<String, String>>>() {
-
-                                        @Override
-                                        public Loader<ArrayList<HashMap<String, String>>> onCreateLoader(int id, Bundle args) {
-                                            return new GetFeedSearchResultsLoader(EditFeedActivity.this, text);
-                                        }
-
-                                        @Override
-                                        public void onLoadFinished(Loader<ArrayList<HashMap<String, String>>> loader,
-                                                                   final ArrayList<HashMap<String, String>> data) {
-                                            pd.cancel();
-
-                                            if (data == null) {
-                                                Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
-                                            } else if (data.isEmpty()) {
-                                                Toast.makeText(EditFeedActivity.this, R.string.no_result, Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(EditFeedActivity.this);
-                                                builder.setTitle(R.string.feed_search);
-
-                                                // create the grid item mapping
-                                                String[] from = new String[]{FEED_SEARCH_TITLE, FEED_SEARCH_DESC};
-                                                int[] to = new int[]{android.R.id.text1, android.R.id.text2};
-
-                                                // fill in the grid_item layout
-                                                SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.item_search_result, from,
-                                                        to);
-                                                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        mNameEditText.setText(data.get(which).get(FEED_SEARCH_TITLE));
-                                                        mUrlEditText.setText(data.get(which).get(FEED_SEARCH_URL));
-                                                    }
-                                                });
-                                                builder.show();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onLoaderReset(Loader<ArrayList<HashMap<String, String>>> loader) {
-                                        }
-                                    });
-                                    break;
-
-                                case R.id.byTopic:
-                                    mUrlEditText.setText("http://www.faroo.com/api?q=" + text + "&start=1&length=10&l=en&src=news&f=rss");
-                                    break;
-
-                                case R.id.byYoutube:
-                                    mUrlEditText.setText("http://www.youtube.com/rss/user/" + text.replaceAll("\\+", "") + "/videos.rss");
-                                    break;
-                            }
-                        }
+                    public void onClick(DialogInterface dialog, int id) {
                     }
-                }).setNegativeButton(android.R.string.cancel, null).show();
+                }).show();
+                return true;
+            }
+            case R.id.menu_search_feed: {
+                final View dialogView = getLayoutInflater().inflate(R.layout.dialog_search_feed, null);
+                final EditText searchText = (EditText) dialogView.findViewById(R.id.searchText);
+                if (!mUrlEditText.getText().toString().startsWith(Constants.HTTP) && !mUrlEditText.getText().toString().startsWith(Constants.HTTPS)) {
+                    searchText.setText(mUrlEditText.getText());
+                }
+                final RadioGroup radioGroup = (RadioGroup) dialogView.findViewById(R.id.radioGroup);
+
+                new AlertDialog.Builder(EditFeedActivity.this) //
+                        .setIcon(R.drawable.action_search) //
+                        .setTitle(R.string.feed_search) //
+                        .setView(dialogView) //
+                        .setPositiveButton(android.R.string.search_go, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                if (searchText.getText().length() > 0) {
+                                    String tmp = searchText.getText().toString();
+                                    try {
+                                        tmp = URLEncoder.encode(searchText.getText().toString(), Constants.UTF8);
+                                    } catch (UnsupportedEncodingException ignored) {
+                                    }
+                                    final String text = tmp;
+
+                                    switch (radioGroup.getCheckedRadioButtonId()) {
+                                        case R.id.byWebSearch:
+                                            final ProgressDialog pd = new ProgressDialog(EditFeedActivity.this);
+                                            pd.setMessage(getString(R.string.loading));
+                                            pd.setCancelable(true);
+                                            pd.setIndeterminate(true);
+                                            pd.show();
+
+                                            getLoaderManager().restartLoader(1, null, new LoaderManager.LoaderCallbacks<ArrayList<HashMap<String, String>>>() {
+
+                                                @Override
+                                                public Loader<ArrayList<HashMap<String, String>>> onCreateLoader(int id, Bundle args) {
+                                                    return new GetFeedSearchResultsLoader(EditFeedActivity.this, text);
+                                                }
+
+                                                @Override
+                                                public void onLoadFinished(Loader<ArrayList<HashMap<String, String>>> loader,
+                                                                           final ArrayList<HashMap<String, String>> data) {
+                                                    pd.cancel();
+
+                                                    if (data == null) {
+                                                        Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+                                                    } else if (data.isEmpty()) {
+                                                        Toast.makeText(EditFeedActivity.this, R.string.no_result, Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        AlertDialog.Builder builder = new AlertDialog.Builder(EditFeedActivity.this);
+                                                        builder.setTitle(R.string.feed_search);
+
+                                                        // create the grid item mapping
+                                                        String[] from = new String[]{FEED_SEARCH_TITLE, FEED_SEARCH_DESC};
+                                                        int[] to = new int[]{android.R.id.text1, android.R.id.text2};
+
+                                                        // fill in the grid_item layout
+                                                        SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.item_search_result, from,
+                                                                to);
+                                                        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                mNameEditText.setText(data.get(which).get(FEED_SEARCH_TITLE));
+                                                                mUrlEditText.setText(data.get(which).get(FEED_SEARCH_URL));
+                                                            }
+                                                        });
+                                                        builder.show();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onLoaderReset(Loader<ArrayList<HashMap<String, String>>> loader) {
+                                                }
+                                            });
+                                            break;
+
+                                        case R.id.byTopic:
+                                            mUrlEditText.setText("http://www.faroo.com/api?q=" + text + "&start=1&length=10&l=en&src=news&f=rss");
+                                            break;
+
+                                        case R.id.byYoutube:
+                                            mUrlEditText.setText("http://www.youtube.com/rss/user/" + text.replaceAll("\\+", "") + "/videos.rss");
+                                            break;
+                                    }
+                                }
+                            }
+                        }).setNegativeButton(android.R.string.cancel, null).show();
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void onClickOk(View view) {
+        // only in insert mode
+
+        String url = mUrlEditText.getText().toString();
+        ContentResolver cr = getContentResolver();
+
+        if (!url.startsWith(Constants.HTTP) && !url.startsWith(Constants.HTTPS)) {
+            url = Constants.HTTP + url;
+        }
+
+        Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, FeedColumns.URL + Constants.DB_ARG,
+                new String[]{url}, null);
+
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            Toast.makeText(EditFeedActivity.this, R.string.error_feed_url_exists, Toast.LENGTH_LONG).show();
+        } else {
+            cursor.close();
+            ContentValues values = new ContentValues();
+
+            values.put(FeedColumns.URL, url);
+            values.putNull(FeedColumns.ERROR);
+
+            String name = mNameEditText.getText().toString();
+
+            if (name.trim().length() > 0) {
+                values.put(FeedColumns.NAME, name);
+            }
+            values.put(FeedColumns.RETRIEVE_FULLTEXT, mRetrieveFulltextCb.isChecked() ? 1 : null);
+            cr.insert(FeedColumns.CONTENT_URI, values);
+            cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+            cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
+        }
+
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    public void onClickCancel(View view) {
+        finish();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        CursorLoader cursorLoader = new CursorLoader(this, FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
+                null, null, null, null);
+        cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mFiltersCursorAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mFiltersCursorAdapter.swapCursor(null);
     }
 }
 

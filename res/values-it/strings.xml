@@ -61,6 +61,8 @@
     <string name="feed_url">Indirizzo URL</string>
     <string name="optional">(opzionale)</string>
     <string name="website_or_feed">(sito web o feed)</string>
+    <string name="tab_feed_title">Feed</string>
+    <string name="tab_filters_title">Filtri</string>
     <string name="feed_title">TITOLO</string>
     <string name="feed_filters">FILTRO ESCLUSIONI</string>
     <string name="filter_add_title">Aggiungi filtro</string>

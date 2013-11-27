@@ -3,23 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-            android:id="@+id/menu_add_feed"
-            android:icon="@drawable/content_new"
-            android:showAsAction="always"
-            android:title="@string/menu_add_feed"
-            tools:ignore="AlwaysShowAction" />
-        <item
-            android:id="@+id/menu_add_group"
-            android:icon="@drawable/add_group"
-            android:showAsAction="always"
-            android:title="@string/menu_add_group"
-            tools:ignore="AlwaysShowAction" />
+        android:id="@+id/menu_add_feed"
+        android:icon="@drawable/content_new"
+        android:showAsAction="always"
+        android:title="@string/menu_add_feed"
+        tools:ignore="AlwaysShowAction" />
     <item
-            android:id="@+id/menu_import"
-            android:icon="@drawable/action_import"
-            android:title="@string/menu_import" />
-        <item
-            android:id="@+id/menu_export"
-            android:icon="@drawable/action_export"
-            android:title="@string/menu_export" />
+        android:id="@+id/menu_add_group"
+        android:icon="@drawable/add_group"
+        android:showAsAction="always"
+        android:title="@string/menu_add_group"
+        tools:ignore="AlwaysShowAction" />
+    <item
+        android:id="@+id/menu_import"
+        android:icon="@drawable/action_import"
+        android:title="@string/menu_import" />
+    <item
+        android:id="@+id/menu_export"
+        android:icon="@drawable/action_export"
+        android:title="@string/menu_export" />
 </menu>

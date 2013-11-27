@@ -90,6 +90,188 @@ public class EditFeedsListFragment extends ListFragment {
 
     private DragNDropExpandableListView mListView;
 
+    private final ActionMode.Callback mFeedActionModeCallback = new ActionMode.Callback() {
+
+        // Called when the action mode is created; startActionMode() was called
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate a menu resource providing context menu items
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.feed_context_menu, menu);
+            return true;
+        }
+
+        // Called each time the action mode is shown. Always called after onCreateActionMode, but
+        // may be called multiple times if the mode is invalidated.
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false; // Return false if nothing is done
+        }
+
+        // Called when the user selects a contextual menu item
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            @SuppressWarnings("unchecked")
+            Pair<Long, String> tag = (Pair<Long, String>) mode.getTag();
+            final long feedId = tag.first;
+            final String title = tag.second;
+
+            switch (item.getItemId()) {
+                case R.id.menu_edit:
+                    startActivity(new Intent(Intent.ACTION_EDIT).setData(FeedColumns.CONTENT_URI(feedId)));
+
+                    mode.finish(); // Action picked, so close the CAB
+                    return true;
+                case R.id.menu_delete:
+                    new AlertDialog.Builder(getActivity()) //
+                            .setIcon(android.R.drawable.ic_dialog_alert) //
+                            .setTitle(title) //
+                            .setMessage(R.string.question_delete_feed) //
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    new Thread() {
+                                        @Override
+                                        public void run() {
+                                            ContentResolver cr = getActivity().getContentResolver();
+
+                                            // First we got the groupId (it will be deleted after)
+                                            Cursor feedCursor = cr.query(FeedColumns.CONTENT_URI(feedId), FeedColumns.PROJECTION_GROUP_ID, null, null,
+                                                    null);
+                                            String groupId = null;
+                                            if (feedCursor.moveToFirst()) {
+                                                groupId = feedCursor.getString(0);
+                                            }
+                                            feedCursor.close();
+
+                                            // Now we delete the feed
+                                            if (cr.delete(FeedColumns.CONTENT_URI(feedId), null, null) > 0) {
+                                                cr.notifyChange(EntryColumns.CONTENT_URI, null);
+                                                cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
+                                                cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
+
+                                                if (groupId == null) {
+                                                    cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+                                                } else {
+                                                    cr.notifyChange(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupId), null);
+                                                }
+                                            }
+                                        }
+                                    }.start();
+                                }
+                            }).setNegativeButton(android.R.string.no, null).show();
+
+                    mode.finish(); // Action picked, so close the CAB
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        // Called when the user exits the action mode
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            for (int i = 0; i < mListView.getCount(); i++) {
+                mListView.setItemChecked(i, false);
+            }
+        }
+    };
+
+    private final ActionMode.Callback mGroupActionModeCallback = new ActionMode.Callback() {
+
+        // Called when the action mode is created; startActionMode() was called
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate a menu resource providing context menu items
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.edit_context_menu, menu);
+            return true;
+        }
+
+        // Called each time the action mode is shown. Always called after onCreateActionMode, but
+        // may be called multiple times if the mode is invalidated.
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false; // Return false if nothing is done
+        }
+
+        // Called when the user selects a contextual menu item
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            @SuppressWarnings("unchecked")
+            Pair<Long, String> tag = (Pair<Long, String>) mode.getTag();
+            final long groupId = tag.first;
+            final String title = tag.second;
+
+            switch (item.getItemId()) {
+                case R.id.menu_edit:
+                    final EditText input = new EditText(getActivity());
+                    input.setSingleLine(true);
+                    input.setText(title);
+                    new AlertDialog.Builder(getActivity()) //
+                            .setTitle(R.string.edit_group_title) //
+                            .setView(input) //
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    new Thread() {
+                                        @Override
+                                        public void run() {
+                                            String groupName = input.getText().toString();
+                                            if (!groupName.isEmpty()) {
+                                                ContentResolver cr = getActivity().getContentResolver();
+                                                ContentValues values = new ContentValues();
+                                                values.put(FeedColumns.NAME, groupName);
+                                                if (cr.update(FeedColumns.CONTENT_URI(groupId), values, null, null) > 0) {
+                                                    cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+                                                    cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
+                                                }
+                                            }
+                                        }
+                                    }.start();
+                                }
+                            }).setNegativeButton(android.R.string.cancel, null).show();
+
+                    mode.finish(); // Action picked, so close the CAB
+                    return true;
+                case R.id.menu_delete:
+                    new AlertDialog.Builder(getActivity()) //
+                            .setIcon(android.R.drawable.ic_dialog_alert) //
+                            .setTitle(title) //
+                            .setMessage(R.string.question_delete_group) //
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    new Thread() {
+                                        @Override
+                                        public void run() {
+                                            ContentResolver cr = getActivity().getContentResolver();
+                                            if (cr.delete(FeedColumns.GROUPS_CONTENT_URI(groupId), null, null) > 0) {
+                                                cr.notifyChange(EntryColumns.CONTENT_URI, null);
+                                                cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
+                                                cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
+                                            }
+                                        }
+                                    }.start();
+                                }
+                            }).setNegativeButton(android.R.string.no, null).show();
+
+                    mode.finish(); // Action picked, so close the CAB
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        // Called when the user exits the action mode
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            for (int i = 0; i < mListView.getCount(); i++) {
+                mListView.setItemChecked(i, false);
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -103,6 +285,23 @@ public class EditFeedsListFragment extends ListFragment {
         mListView = (DragNDropExpandableListView) rootView.findViewById(android.R.id.list);
         mListView.setFastScrollEnabled(true);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        mListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                startActivity(new Intent(Intent.ACTION_EDIT).setData(FeedColumns.CONTENT_URI(id)));
+                return true;
+            }
+        });
+        mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if (v.findViewById(R.id.indicator).getVisibility() != View.VISIBLE) { // This is no a real group
+                    startActivity(new Intent(Intent.ACTION_EDIT).setData(FeedColumns.CONTENT_URI(id)));
+                    return true;
+                }
+                return false;
+            }
+        });
         mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -389,186 +588,4 @@ public class EditFeedsListFragment extends ListFragment {
             Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
         }
     }
-
-    private final ActionMode.Callback mFeedActionModeCallback = new ActionMode.Callback() {
-
-        // Called when the action mode is created; startActionMode() was called
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.feed_context_menu, menu);
-            return true;
-        }
-
-        // Called each time the action mode is shown. Always called after onCreateActionMode, but
-        // may be called multiple times if the mode is invalidated.
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
-        }
-
-        // Called when the user selects a contextual menu item
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            @SuppressWarnings("unchecked")
-            Pair<Long, String> tag = (Pair<Long, String>) mode.getTag();
-            final long feedId = tag.first;
-            final String title = tag.second;
-
-            switch (item.getItemId()) {
-                case R.id.menu_edit:
-                    startActivity(new Intent(Intent.ACTION_EDIT).setData(FeedColumns.CONTENT_URI(feedId)));
-
-                    mode.finish(); // Action picked, so close the CAB
-                    return true;
-                case R.id.menu_delete:
-                    new AlertDialog.Builder(getActivity()) //
-                            .setIcon(android.R.drawable.ic_dialog_alert) //
-                            .setTitle(title) //
-                            .setMessage(R.string.question_delete_feed) //
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    new Thread() {
-                                        @Override
-                                        public void run() {
-                                            ContentResolver cr = getActivity().getContentResolver();
-
-                                            // First we got the groupId (it will be deleted after)
-                                            Cursor feedCursor = cr.query(FeedColumns.CONTENT_URI(feedId), FeedColumns.PROJECTION_GROUP_ID, null, null,
-                                                    null);
-                                            String groupId = null;
-                                            if (feedCursor.moveToFirst()) {
-                                                groupId = feedCursor.getString(0);
-                                            }
-                                            feedCursor.close();
-
-                                            // Now we delete the feed
-                                            if (cr.delete(FeedColumns.CONTENT_URI(feedId), null, null) > 0) {
-                                                cr.notifyChange(EntryColumns.CONTENT_URI, null);
-                                                cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
-                                                cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
-
-                                                if (groupId == null) {
-                                                    cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-                                                } else {
-                                                    cr.notifyChange(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupId), null);
-                                                }
-                                            }
-                                        }
-                                    }.start();
-                                }
-                            }).setNegativeButton(android.R.string.no, null).show();
-
-                    mode.finish(); // Action picked, so close the CAB
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        // Called when the user exits the action mode
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            for (int i = 0; i < mListView.getCount(); i++) {
-                mListView.setItemChecked(i, false);
-            }
-        }
-    };
-
-    private final ActionMode.Callback mGroupActionModeCallback = new ActionMode.Callback() {
-
-        // Called when the action mode is created; startActionMode() was called
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.edit_context_menu, menu);
-            return true;
-        }
-
-        // Called each time the action mode is shown. Always called after onCreateActionMode, but
-        // may be called multiple times if the mode is invalidated.
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
-        }
-
-        // Called when the user selects a contextual menu item
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            @SuppressWarnings("unchecked")
-            Pair<Long, String> tag = (Pair<Long, String>) mode.getTag();
-            final long groupId = tag.first;
-            final String title = tag.second;
-
-            switch (item.getItemId()) {
-                case R.id.menu_edit:
-                    final EditText input = new EditText(getActivity());
-                    input.setSingleLine(true);
-                    input.setText(title);
-                    new AlertDialog.Builder(getActivity()) //
-                            .setTitle(R.string.edit_group_title) //
-                            .setView(input) //
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    new Thread() {
-                                        @Override
-                                        public void run() {
-                                            String groupName = input.getText().toString();
-                                            if (!groupName.isEmpty()) {
-                                                ContentResolver cr = getActivity().getContentResolver();
-                                                ContentValues values = new ContentValues();
-                                                values.put(FeedColumns.NAME, groupName);
-                                                if (cr.update(FeedColumns.CONTENT_URI(groupId), values, null, null) > 0) {
-                                                    cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-                                                    cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
-                                                }
-                                            }
-                                        }
-                                    }.start();
-                                }
-                            }).setNegativeButton(android.R.string.cancel, null).show();
-
-                    mode.finish(); // Action picked, so close the CAB
-                    return true;
-                case R.id.menu_delete:
-                    new AlertDialog.Builder(getActivity()) //
-                            .setIcon(android.R.drawable.ic_dialog_alert) //
-                            .setTitle(title) //
-                            .setMessage(R.string.question_delete_group) //
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    new Thread() {
-                                        @Override
-                                        public void run() {
-                                            ContentResolver cr = getActivity().getContentResolver();
-                                            if (cr.delete(FeedColumns.GROUPS_CONTENT_URI(groupId), null, null) > 0) {
-                                                cr.notifyChange(EntryColumns.CONTENT_URI, null);
-                                                cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
-                                                cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
-                                            }
-                                        }
-                                    }.start();
-                                }
-                            }).setNegativeButton(android.R.string.no, null).show();
-
-                    mode.finish(); // Action picked, so close the CAB
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        // Called when the user exits the action mode
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            for (int i = 0; i < mListView.getCount(); i++) {
-                mListView.setItemChecked(i, false);
-            }
-        }
-    };
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/menu_search_feed"
+        android:icon="@drawable/action_search"
+        android:showAsAction="always"
+        android:title="@string/feed_search"
+        tools:ignore="AlwaysShowAction" />
+    <item
+        android:id="@+id/menu_add_filter"
+        android:icon="@drawable/content_new"
+        android:showAsAction="always"
+        android:title="@string/filter_add_title"
+        tools:ignore="AlwaysShowAction" />
+</menu>
