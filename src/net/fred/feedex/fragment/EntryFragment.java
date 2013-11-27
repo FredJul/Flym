@@ -160,6 +160,7 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onResume() {
         super.onResume();
+        mEntryView.onResume();
 
         if (((BaseActivity) getActivity()).isFullScreen()) {
             mCancelFullscreenBtn.setVisibility(View.VISIBLE);
@@ -173,8 +174,15 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onPause() {
         super.onPause();
+        mEntryView.onPause();
 
         MainApplication.getContext().getContentResolver().unregisterContentObserver(mTasksObserver);
+    }
+
+    @Override
+    public void onDestroyView() {
+        mEntryView.onDestroy();
+        super.onDestroyView();
     }
 
     @Override

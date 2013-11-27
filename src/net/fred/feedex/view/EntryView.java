@@ -220,6 +220,20 @@ public class EntryView extends ViewFlipper {
         mListener = listener;
     }
 
+    public void onResume() {
+        mWebView.onResume();
+        mWebView0.onResume();
+    }
+
+    public void onPause() {
+        mWebView.onPause();
+        mWebView0.onPause();
+    }
+
+    public void onDestroy() {
+        mWebView.loadUrl("about:blank");
+    }
+
     public void reset() {
         mWebView.loadUrl("about:blank");
         mScrollPercentage = 0;
