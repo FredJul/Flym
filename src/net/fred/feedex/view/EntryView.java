@@ -108,9 +108,9 @@ public class EntryView extends ViewFlipper {
     private static final String TEXT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";
     private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#ddecf1" : "#475773";
 
-    private static final String CSS = "<head><meta name='viewport' content='width=device-width, initial-scale=1'><style type='text/css'>body {background-color:"
+    private static final String CSS = "<head><meta name='viewport' content='width=device-width, initial-scale=1'><style type='text/css'>body {max-width: 100%; font-family: sans-serif-light; background-color:"
             + BACKGROUND_COLOR
-            + "; max-width: 100%; font-family: sans-serif-light}\nimg {max-width: 100%; height: auto;}\ndiv[style] {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
+            + "}\nimg {max-width: 100%; height: auto}\niframe {max-width: 100%}\nvideo {max-width: 100%}\naudio {max-width: 100%}\ndiv[style] {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
     private static final String BODY_START = CSS + "<body link='#97ACE5' text='" + TEXT_COLOR + "'>";
     private static final String FONT_SIZE_START = CSS + BODY_START + "<font size='";
     private static final String FONT_SIZE_MIDDLE = "'>";
