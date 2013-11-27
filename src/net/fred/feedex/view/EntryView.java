@@ -108,7 +108,7 @@ public class EntryView extends ViewFlipper {
     private static final String TEXT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";
     private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#ddecf1" : "#475773";
 
-    private static final String CSS = "<head><meta name='viewport' content='width=device-width, initial-scale=1'><style type='text/css'>body {max-width: 100%; font-family: sans-serif-light; background-color:"
+    private static final String CSS = "<head><style type='text/css'>body {max-width: 100%; font-family: sans-serif-light; background-color:"
             + BACKGROUND_COLOR
             + "}\nimg {max-width: 100%; height: auto}\niframe {max-width: 100%}\nvideo {max-width: 100%}\naudio {max-width: 100%}\ndiv[style] {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
     private static final String BODY_START = CSS + "<body link='#97ACE5' text='" + TEXT_COLOR + "'>";
@@ -356,10 +356,6 @@ public class EntryView extends ViewFlipper {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void setupWebview(final WebView wv) {
-        // For zoom
-        wv.getSettings().setSupportZoom(true);
-        wv.getSettings().setBuiltInZoomControls(true);
-        wv.getSettings().setDisplayZoomControls(false);
         // For color
         wv.setBackgroundColor(Color.parseColor(BACKGROUND_COLOR));
         // For gesture
