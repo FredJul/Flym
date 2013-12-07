@@ -62,7 +62,7 @@ import net.fred.feedex.utils.ThrottledContentObserver;
 import net.fred.feedex.utils.UiUtils;
 import net.fred.feedex.view.EntryView;
 
-public class EntryFragment extends Fragment implements LoaderManager.LoaderCallbacks<EntryLoaderResult>, EntryView.OnActionListener {
+public class EntryFragment extends Fragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<EntryLoaderResult>, EntryView.OnActionListener {
 
     private static final int LOADER_ID = 2;
 
@@ -155,6 +155,20 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         outState.putLongArray(STATE_ENTRIES_IDS, mEntriesIds);
 
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        ((BaseActivity) activity).setOnFullscreenListener(this);
+    }
+
+    @Override
+    public void onDetach() {
+        ((BaseActivity) getActivity()).setOnFullscreenListener(null);
+
+        super.onDetach();
     }
 
     @Override
@@ -388,12 +402,6 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
     private void toggleFullScreen() {
         BaseActivity activity = (BaseActivity) getActivity();
         activity.toggleFullScreen();
-
-        if (activity.isFullScreen()) {
-            mCancelFullscreenBtn.setVisibility(View.VISIBLE);
-        } else {
-            mCancelFullscreenBtn.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -512,6 +520,18 @@ public class EntryFragment extends Fragment implements LoaderManager.LoaderCallb
         if (mLoaderResult != null && mLoaderResult.entryCursor != null) {
             mLoaderResult.entryCursor.close();
         }
+    }
+
+    @Override
+    public void onFullScreenEnabled(boolean isImmersive) {
+        if (!isImmersive) {
+            mCancelFullscreenBtn.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onFullScreenDisabled() {
+        mCancelFullscreenBtn.setVisibility(View.GONE);
     }
 }
 
