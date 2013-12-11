@@ -184,7 +184,7 @@ public class RssAtomParser extends DefaultHandler {
         filters = new FeedFilters(id);
 
         // Remove old stuffs
-        final String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE + Constants.DB_AND + EntryColumns.WHERE_READ;
+        final String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
         NetworkUtils.deleteFeedImagesCache(feedEntriesUri, where);
         MainApplication.getContext().getContentResolver().delete(feedEntriesUri, where, null);
 
