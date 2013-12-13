@@ -4,37 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <net.fred.feedex.view.EntryView
-        android:id="@+id/entry"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
-
-    <ImageView
-        android:id="@+id/backBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:background="@drawable/round_background"
-        android:src="@drawable/navigation_back" />
+        android:layout_height="match_parent" />
 
     <ImageView
         android:id="@+id/cancelFullscreenBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/round_background"
-        android:src="@drawable/cancel_full_screen"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/forwardBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -42,6 +18,7 @@
         android:layout_marginBottom="5dp"
         android:layout_marginRight="5dp"
         android:background="@drawable/round_background"
-        android:src="@drawable/navigation_forward" />
+        android:src="@drawable/cancel_full_screen"
+        android:visibility="gone" />
 
 </RelativeLayout>
