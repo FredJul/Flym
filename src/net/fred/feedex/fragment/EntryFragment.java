@@ -27,6 +27,7 @@ import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -37,7 +38,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
@@ -53,20 +53,17 @@ import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.activity.BaseActivity;
-import net.fred.feedex.loader.BaseLoader;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
-import net.fred.feedex.provider.FeedData.TaskColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
-import net.fred.feedex.utils.ThrottledContentObserver;
 import net.fred.feedex.utils.UiUtils;
 import net.fred.feedex.view.DepthPageTransformer;
 import net.fred.feedex.view.EntryView;
 
-public class EntryFragment extends Fragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<EntryLoaderResult>, EntryView.OnActionListener {
+public class EntryFragment extends Fragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<Cursor>, EntryView.OnActionListener {
 
     private static final String STATE_BASE_URI = "STATE_BASE_URI";
     private static final String STATE_CURRENT_PAGER_POS = "STATE_CURRENT_PAGER_POS";
@@ -87,25 +84,6 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
 
     private View mCancelFullscreenBtn;
 
-    private final ThrottledContentObserver mTasksObserver = new ThrottledContentObserver(new Handler(), 2000) {
-        @Override
-        public void onChangeThrottled() {
-            BaseActivity activity = (BaseActivity) getActivity();
-            boolean isMobilizing = FetcherService.getMobilizingTaskId(mEntriesIds[mCurrentPagerPos]) != -1;
-            if (activity == null || (activity.getProgressBar().getVisibility() == View.VISIBLE && isMobilizing)
-                    || (activity.getProgressBar().getVisibility() == View.GONE && !isMobilizing)) {
-                return; // no change => no update
-            }
-
-            if (isMobilizing) { // We start a mobilization
-                activity.getProgressBar().setVisibility(View.VISIBLE);
-            } else { // We finished one
-                mPreferFullText = true;
-                getLoaderManager().restartLoader(mEntryPager.getCurrentItem(), null, EntryFragment.this);
-            }
-        }
-    };
-
     private class EntryPagerAdapter extends PagerAdapter {
 
         private SparseArray<EntryView> mEntryViews = new SparseArray<EntryView>();
@@ -124,17 +102,13 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
             mEntryViews.put(position, view);
             container.addView(view);
             view.setListener(EntryFragment.this);
-            getLoaderManager().restartLoader(position, null, EntryFragment.this);
+            getLoaderManager().initLoader(position, null, EntryFragment.this);
             return view;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            EntryView view = (EntryView) object;
-            Cursor cursor = (Cursor) view.getTag();
-            if (cursor != null) {
-                cursor.close();
-            }
+            getLoaderManager().destroyLoader(position);
             ((ViewPager) container).removeView((View) object);
             mEntryViews.delete(position);
         }
@@ -144,18 +118,18 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
             return view == ((View) object);
         }
 
-        public void displayEntry(int pagerPos, Cursor cursor, boolean forceUpdate) {
+        public void displayEntry(int pagerPos, Cursor newCursor, boolean forceUpdate) {
             EntryView view = mEntryViews.get(pagerPos);
             if (view != null) {
-                if (cursor == null) {
-                    cursor = (Cursor) view.getTag();
+                if (newCursor == null) {
+                    newCursor = (Cursor) view.getTag(); // get the old one
                 }
 
-                if (cursor != null && cursor.moveToFirst()) {
-                    String contentText = cursor.getString(mMobilizedHtmlPos);
+                if (newCursor != null && newCursor.moveToFirst()) {
+                    String contentText = newCursor.getString(mMobilizedHtmlPos);
                     if (contentText == null || (forceUpdate && !mPreferFullText)) {
                         mPreferFullText = false;
-                        contentText = cursor.getString(mAbstractPos);
+                        contentText = newCursor.getString(mAbstractPos);
                     } else {
                         mPreferFullText = true;
                     }
@@ -163,20 +137,33 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                         contentText = "";
                     }
 
-                    String author = cursor.getString(mAuthorPos);
-                    long timestamp = cursor.getLong(mDatePos);
-                    String link = cursor.getString(mLinkPos);
-                    String title = cursor.getString(mTitlePos);
-                    String enclosure = cursor.getString(mEnclosurePos);
+                    String author = newCursor.getString(mAuthorPos);
+                    long timestamp = newCursor.getLong(mDatePos);
+                    String link = newCursor.getString(mLinkPos);
+                    String title = newCursor.getString(mTitlePos);
+                    String enclosure = newCursor.getString(mEnclosurePos);
 
                     view.setHtml(mEntriesIds[pagerPos], title, link, contentText, enclosure, author, timestamp, mPreferFullText);
-                    view.setTag(cursor);
+                    view.setTag(newCursor);
+
+                    refreshUI(newCursor);
                 }
             }
         }
 
         public Cursor getCursor(int pagerPos) {
-            return (Cursor) mEntryViews.get(pagerPos).getTag();
+            EntryView view = mEntryViews.get(pagerPos);
+            if (view != null) {
+                return (Cursor) view.getTag();
+            }
+            return null;
+        }
+
+        public void removeCursor(int pagerPos) {
+            EntryView view = mEntryViews.get(pagerPos);
+            if (view != null) {
+                view.setTag(null);
+            }
         }
 
         public void onResume() {
@@ -285,16 +272,12 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
         } else {
             mCancelFullscreenBtn.setVisibility(View.GONE);
         }
-
-        registerContentObserver();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mEntryPagerAdapter.onPause();
-
-        MainApplication.getContext().getContentResolver().unregisterContentObserver(mTasksObserver);
     }
 
     @Override
@@ -318,7 +301,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                 case R.id.menu_star: {
                     mFavorite = !mFavorite;
 
-                    Uri uri = buildUri(mEntriesIds[mCurrentPagerPos]);
+                    Uri uri = EntryColumns.CONTENT_URI(mEntriesIds[mCurrentPagerPos]);
                     ContentValues values = new ContentValues();
                     values.put(EntryColumns.IS_FAVORITE, mFavorite ? 1 : 0);
                     ContentResolver cr = MainApplication.getContext().getContentResolver();
@@ -359,7 +342,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                     break;
                 }
                 case R.id.menu_mark_as_unread: {
-                    final Uri uri = buildUri(mEntriesIds[mCurrentPagerPos]);
+                    final Uri uri = EntryColumns.CONTENT_URI(mEntriesIds[mCurrentPagerPos]);
                     new Thread() {
                         @Override
                         public void run() {
@@ -379,6 +362,8 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
     }
 
     public void setData(Uri uri) {
+        mCurrentPagerPos = -1;
+
         mBaseUri = FeedData.EntryColumns.PARENT_URI(uri.getPath());
         if (uri != null) {
             mInitialEntryId = Long.parseLong(uri.getLastPathSegment());
@@ -386,14 +371,33 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
             mInitialEntryId = -1;
         }
 
-        if (mEntryPagerAdapter != null) {
-            //TODO mEntryView.reset();
+        if (mBaseUri != null) {
 
-            if (mBaseUri != null) { // Just load the new entry
-                getLoaderManager().restartLoader(-1, null, this);
-            } else {
-                mEntriesIds = null;
+            // Load the entriesIds list. Should be in a loader... but I was too lazy to do so
+            Cursor entriesCursor = MainApplication.getContext().getContentResolver().query(mBaseUri, EntryColumns.PROJECTION_ID,
+                    PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(mBaseUri) ? null
+                            : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
+
+            if (entriesCursor != null && entriesCursor.getCount() > 0) {
+                mEntriesIds = new long[entriesCursor.getCount()];
+                int i = 0;
+                while (entriesCursor.moveToNext()) {
+                    mEntriesIds[i] = entriesCursor.getLong(0);
+                    if (mEntriesIds[i] == mInitialEntryId) {
+                        mCurrentPagerPos = i; // To immediately display the good entry
+                    }
+                    i++;
+                }
+
+                entriesCursor.close();
             }
+        } else {
+            mEntriesIds = null;
+        }
+
+        mEntryPagerAdapter.notifyDataSetChanged();
+        if (mCurrentPagerPos != -1) {
+            mEntryPager.setCurrentItem(mCurrentPagerPos);
         }
     }
 
@@ -424,11 +428,12 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
             activity.invalidateOptionsMenu();
 
             // Listen the mobilizing task
-            registerContentObserver();
+            boolean isRefreshing = FetcherService.hasTasks(mEntriesIds[mCurrentPagerPos]);
+            activity.getProgressBar().setVisibility(isRefreshing ? View.VISIBLE : View.GONE);
 
             // Mark the article as read
             if (entryCursor.getInt(mIsReadPos) != 1) {
-                final Uri uri = buildUri(mEntriesIds[mCurrentPagerPos]);
+                final Uri uri = EntryColumns.CONTENT_URI(mEntriesIds[mCurrentPagerPos]);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -438,23 +443,6 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                         }
                     }
                 }).start();
-            }
-        }
-    }
-
-    private void registerContentObserver() {
-        if (mEntriesIds != null) {
-            ContentResolver cr = MainApplication.getContext().getContentResolver();
-            BaseActivity activity = (BaseActivity) getActivity();
-
-            long mobilizingTaskId = FetcherService.getMobilizingTaskId(mEntriesIds[mCurrentPagerPos]);
-            if (mobilizingTaskId != -1) {
-                activity.getProgressBar().setVisibility(View.VISIBLE);
-                cr.unregisterContentObserver(mTasksObserver);
-                cr.registerContentObserver(TaskColumns.CONTENT_URI(mobilizingTaskId), false, mTasksObserver);
-            } else {
-                activity.getProgressBar().setVisibility(View.GONE);
-                cr.unregisterContentObserver(mTasksObserver);
             }
         }
     }
@@ -474,10 +462,6 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
     private void toggleFullScreen() {
         BaseActivity activity = (BaseActivity) getActivity();
         activity.toggleFullScreen();
-    }
-
-    private Uri buildUri(long entryId) {
-        return mBaseUri.buildUpon().appendPath(String.valueOf(entryId)).build();
     }
 
     @Override
@@ -514,19 +498,13 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                 // since we have acquired the networkInfo, we use it for basic checks
                 if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
                     FetcherService.addEntriesToMobilize(new long[]{mEntriesIds[mCurrentPagerPos]});
-                    long mobilizingTaskId = FetcherService.getMobilizingTaskId(mEntriesIds[mCurrentPagerPos]);
-                    if (mobilizingTaskId != -1) {
-                        ContentResolver cr = MainApplication.getContext().getContentResolver();
-                        cr.unregisterContentObserver(mTasksObserver);
-                        cr.registerContentObserver(FeedData.TaskColumns.CONTENT_URI(mobilizingTaskId), false, mTasksObserver);
-                        activity.startService(new Intent(activity, FetcherService.class).setAction(FetcherService.ACTION_MOBILIZE_FEEDS));
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                activity.getProgressBar().setVisibility(View.VISIBLE);
-                            }
-                        });
-                    }
+                    activity.startService(new Intent(activity, FetcherService.class).setAction(FetcherService.ACTION_MOBILIZE_FEEDS));
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            activity.getProgressBar().setVisibility(View.VISIBLE);
+                        }
+                    });
                 } else {
                     activity.runOnUiThread(new Runnable() {
                         @Override
@@ -556,59 +534,40 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
     }
 
     @Override
-    public Loader<EntryLoaderResult> onCreateLoader(int id, Bundle args) {
-        return new EntryLoader(getActivity(), id == -1 ? mBaseUri : buildUri(mEntriesIds[id]), id == -1);
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getActivity(), EntryColumns.CONTENT_URI(mEntriesIds[id]), null, null, null, null);
     }
 
     @Override
-    public void onLoadFinished(Loader<EntryLoaderResult> loader, EntryLoaderResult result) {
-        if (mBaseUri != null) { // can be null if we do a setData(null) before
-            if (result.entriesIds != null) {
-                mEntriesIds = result.entriesIds;
-                for (int i = 0; i < mEntriesIds.length; i++) {
-                    if (mEntriesIds[i] == mInitialEntryId) {
-                        mCurrentPagerPos = i; // To immediately display the good entry
-                        break;
-                    }
-                }
-                mEntryPagerAdapter.notifyDataSetChanged();
-                mEntryPager.setCurrentItem(mCurrentPagerPos);
-            }
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (mBaseUri != null && cursor != null) { // can be null if we do a setData(null) before
+            cursor.moveToFirst();
 
-            if (result.entryCursor != null && mTitlePos == -1) {
-                mTitlePos = result.entryCursor.getColumnIndex(EntryColumns.TITLE);
-                mDatePos = result.entryCursor.getColumnIndex(EntryColumns.DATE);
-                mAbstractPos = result.entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
-                mMobilizedHtmlPos = result.entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
-                mLinkPos = result.entryCursor.getColumnIndex(EntryColumns.LINK);
-                mIsFavoritePos = result.entryCursor.getColumnIndex(EntryColumns.IS_FAVORITE);
-                mIsReadPos = result.entryCursor.getColumnIndex(EntryColumns.IS_READ);
-                mEnclosurePos = result.entryCursor.getColumnIndex(EntryColumns.ENCLOSURE);
-                mAuthorPos = result.entryCursor.getColumnIndex(EntryColumns.AUTHOR);
-                mFeedNamePos = result.entryCursor.getColumnIndex(FeedColumns.NAME);
-                mFeedUrlPos = result.entryCursor.getColumnIndex(FeedColumns.URL);
-                mFeedIconPos = result.entryCursor.getColumnIndex(FeedColumns.ICON);
+            if (mTitlePos == -1) {
+                mTitlePos = cursor.getColumnIndex(EntryColumns.TITLE);
+                mDatePos = cursor.getColumnIndex(EntryColumns.DATE);
+                mAbstractPos = cursor.getColumnIndex(EntryColumns.ABSTRACT);
+                mMobilizedHtmlPos = cursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
+                mLinkPos = cursor.getColumnIndex(EntryColumns.LINK);
+                mIsFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
+                mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
+                mEnclosurePos = cursor.getColumnIndex(EntryColumns.ENCLOSURE);
+                mAuthorPos = cursor.getColumnIndex(EntryColumns.AUTHOR);
+                mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
+                mFeedUrlPos = cursor.getColumnIndex(FeedColumns.URL);
+                mFeedIconPos = cursor.getColumnIndex(FeedColumns.ICON);
             }
 
             int position = loader.getId();
             if (position != -1) {
-                if (position == mCurrentPagerPos) {
-                    refreshUI(result.entryCursor);
-                }
-                mEntryPagerAdapter.displayEntry(position, result.entryCursor, false);
+                mEntryPagerAdapter.displayEntry(position, cursor, false);
             }
-
-//TODO            if (result.entryCursor != null) {
-//                result.entryCursor.close();
-//            }
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<EntryLoaderResult> loader) {
-//TODO        if (mLoaderResult != null && mLoaderResult.entryCursor != null) {
-//            mLoaderResult.entryCursor.close();
-//        }
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mEntryPagerAdapter.removeCursor(loader.getId());
     }
 
     @Override
@@ -621,56 +580,6 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
     @Override
     public void onFullScreenDisabled() {
         mCancelFullscreenBtn.setVisibility(View.GONE);
-    }
-}
-
-class EntryLoaderResult {
-    Cursor entryCursor;
-    long[] entriesIds;
-}
-
-class EntryLoader extends BaseLoader<EntryLoaderResult> {
-
-    private final Uri mUri;
-    private final boolean mIsIdsQuery;
-
-    public EntryLoader(Context context, Uri uri, boolean isIdsQuery) {
-        super(context);
-        mUri = uri;
-        mIsIdsQuery = isIdsQuery;
-    }
-
-    @Override
-    public EntryLoaderResult loadInBackground() {
-        EntryLoaderResult result = new EntryLoaderResult();
-        Context context = MainApplication.getContext();
-        ContentResolver cr = context.getContentResolver();
-
-        // Get all the other entry ids (for navigation)
-        if (mIsIdsQuery) {
-            Cursor entriesCursor = context.getContentResolver().query(mUri, EntryColumns.PROJECTION_ID,
-                    PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(mUri) ? null
-                            : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
-
-            if (entriesCursor != null && entriesCursor.getCount() > 0) {
-                result.entriesIds = new long[entriesCursor.getCount()];
-                int i = 0;
-                while (entriesCursor.moveToNext()) {
-                    result.entriesIds[i++] = entriesCursor.getLong(0);
-                }
-
-                entriesCursor.close();
-            }
-        } else {
-            // Get the entry cursor
-            result.entryCursor = cr.query(mUri, null, null, null, null);
-
-            if (result.entryCursor != null) {
-                result.entryCursor.moveToFirst();
-            }
-        }
-
-        return result;
     }
 }
 

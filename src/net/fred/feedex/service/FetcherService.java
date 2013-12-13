@@ -221,14 +221,11 @@ public class FetcherService extends IntentService {
         }
     }
 
-    public static long getMobilizingTaskId(long entryId) {
-        long result = -1;
-
+    public static boolean hasTasks(long entryId) {
         Cursor cursor = MainApplication.getContext().getContentResolver().query(TaskColumns.CONTENT_URI, TaskColumns.PROJECTION_ID,
-                TaskColumns.ENTRY_ID + '=' + entryId + Constants.DB_AND + TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
-        if (cursor.moveToFirst()) {
-            result = cursor.getLong(0);
-        }
+                TaskColumns.ENTRY_ID + '=' + entryId, null, null);
+
+        boolean result = cursor.getCount() > 0;
         cursor.close();
 
         return result;
@@ -376,6 +373,7 @@ public class FetcherService extends IntentService {
 
                 // If we are here, everything is OK
                 operations.add(ContentProviderOperation.newDelete(FeedData.TaskColumns.CONTENT_URI(taskId)).build());
+                cr.notifyChange(EntryColumns.CONTENT_URI(entryId), null); // To refresh the view
             } catch (Exception e) {
                 if (nbAttempt + 1 > MAX_TASK_ATTEMPT) {
                     operations.add(ContentProviderOperation.newDelete(FeedData.TaskColumns.CONTENT_URI(taskId)).build());
