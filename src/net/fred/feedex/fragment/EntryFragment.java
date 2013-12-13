@@ -146,7 +146,9 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                     view.setHtml(mEntriesIds[pagerPos], title, link, contentText, enclosure, author, timestamp, mPreferFullText);
                     view.setTag(newCursor);
 
-                    refreshUI(newCursor);
+                    if (pagerPos == mCurrentPagerPos) {
+                        refreshUI(newCursor);
+                    }
                 }
             }
         }
