@@ -60,7 +60,6 @@ import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
-import net.fred.feedex.view.DepthPageTransformer;
 import net.fred.feedex.view.EntryView;
 
 public class EntryFragment extends Fragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<Cursor>, EntryView.OnActionListener {
@@ -206,7 +205,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
         });
 
         mEntryPager = (ViewPager) rootView.findViewById(R.id.pager);
-        mEntryPager.setPageTransformer(true, new DepthPageTransformer());
+        //mEntryPager.setPageTransformer(true, new DepthPageTransformer());
         mEntryPager.setAdapter(mEntryPagerAdapter);
 
         if (savedInstanceState != null) {
