@@ -87,7 +87,7 @@ public class EntryView extends WebView {
 
     private static final String CSS = "<head><style type='text/css'>body {max-width: 100%; font-family: sans-serif-light; background-color:"
             + BACKGROUND_COLOR
-            + "}\nimg {max-width: 100%; height: auto}\niframe {max-width: 100%}\nvideo {max-width: 100%}\naudio {max-width: 100%}\ndiv[style] {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
+            + "}\n* {max-width: 100%; word-break: break-word}\nimg {height: auto}\npre {white-space: pre-wrap;}</style><meta name='viewport' content='width=device-width'/></head>";
     private static final String BODY_START = CSS + "<body link='#97ACE5' text='" + TEXT_COLOR + "'>";
     private static final String FONT_SIZE_START = CSS + BODY_START + "<font size='";
     private static final String FONT_SIZE_MIDDLE = "'>";
@@ -243,6 +243,9 @@ public class EntryView extends WebView {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void setupWebview() {
+        setHorizontalScrollBarEnabled(false);
+        getSettings().setUseWideViewPort(false);
+
         // For color
         setBackgroundColor(Color.parseColor(BACKGROUND_COLOR));
 
