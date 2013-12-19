@@ -374,11 +374,13 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
         }
 
         if (mBaseUri != null) {
+            Bundle b = getActivity().getIntent().getExtras();
+            String whereClause = PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(mBaseUri) ||
+                    (b != null && b.getBoolean(Constants.INTENT_FROM_WIDGET, false)) ? null : EntryColumns.WHERE_UNREAD;
 
             // Load the entriesIds list. Should be in a loader... but I was too lazy to do so
             Cursor entriesCursor = MainApplication.getContext().getContentResolver().query(mBaseUri, EntryColumns.PROJECTION_ID,
-                    PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(mBaseUri) ? null
-                            : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
+                    whereClause, null, EntryColumns.DATE + Constants.DB_DESC);
 
             if (entriesCursor != null && entriesCursor.getCount() > 0) {
                 mEntriesIds = new long[entriesCursor.getCount()];
