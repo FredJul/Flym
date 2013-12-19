@@ -34,6 +34,8 @@
     <string name="network_error">No hi ha connectivitat</string>
     <string name="loading">S\'està carregant.</string>
     <string name="no_result">No hi ha resultats</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
     <string name="back_again_to_quit">Premeu una vegada més per sortir</string>
 
     <!-- FEEDS -->

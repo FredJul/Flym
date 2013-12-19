@@ -18,6 +18,7 @@
  */
 package net.fred.feedex.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -139,6 +140,7 @@ public abstract class BaseActivity extends Activity {
         return mIsFullScreen;
     }
 
+    @SuppressLint("InlinedApi")
     public void toggleFullScreen() {
         if (!mIsFullScreen) {
             if (android.os.Build.VERSION.SDK_INT >= 19) {

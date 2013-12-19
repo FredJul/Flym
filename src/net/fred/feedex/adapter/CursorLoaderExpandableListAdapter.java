@@ -182,7 +182,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
     /**
      * Gets the Cursor for the children at the given group. Subclasses must implement this method to return the children data for a particular group.
      * <p/>
-     * If you want to asynchronously query a provider to prevent blocking the UI, it is possible to return null and at a later time call {@link #setChildrenCursor(int, Cursor)}.
+     * If you want to asynchronously query a provider to prevent blocking the UI, it is possible to return null and at a later time call setChildrenCursor(int, Cursor).
      * <p/>
      * It is your responsibility to manage this Cursor through the Activity lifecycle. It is a good idea to use {@link Activity#managedQuery} which will handle this for you. In some situations, the
      * adapter will deactivate the Cursor on its own, but this will not always be the case, so please ensure the Cursor is properly managed.

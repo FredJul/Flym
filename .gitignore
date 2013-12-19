@@ -23,8 +23,6 @@ local.properties
 # IDE project files
 .idea/
 .gradle/
-gradle/
 .settings/
 build
 *.iml
-.classpath

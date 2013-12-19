@@ -34,6 +34,8 @@
     <string name="network_error">Нет подключения к сети</string>
     <string name="loading">Загрузка…</string>
     <string name="no_result">Нет результатов</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
     <string name="back_again_to_quit">Нажмите "Назад" еще раз, чтобы выйти</string>
 
     <!-- FEEDS -->
