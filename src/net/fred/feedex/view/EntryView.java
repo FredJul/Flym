@@ -243,6 +243,7 @@ public class EntryView extends WebView {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void setupWebview() {
+        // For scrolling
         setHorizontalScrollBarEnabled(false);
         getSettings().setUseWideViewPort(false);
 
