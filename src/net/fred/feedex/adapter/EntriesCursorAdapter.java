@@ -83,27 +83,20 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         public CheckBox isReadCb;
     }
 
-    private int titleColumnPosition;
+    private int mTitlePos, mDatePos, mIsReadPos, mFavoritePos, mIdPos, mFeedIconPos, mFeedNamePos;
 
-    private int dateColumn;
-    private int isReadColumn;
-    private int favoriteColumn;
-    private int idColumn;
-    private int feedIconColumn;
-    private int feedNameColumn;
+    private final Uri mUri;
+    private final boolean mShowFeedInfo;
 
-    private final Uri uri;
-    private final boolean showFeedInfo;
-
-    private final Vector<Long> markedAsRead = new Vector<Long>();
-    private final Vector<Long> markedAsUnread = new Vector<Long>();
-    private final Vector<Long> favorited = new Vector<Long>();
-    private final Vector<Long> unfavorited = new Vector<Long>();
+    private final Vector<Long> mMarkedAsReadEntries = new Vector<Long>();
+    private final Vector<Long> mMarkedAsUnreadEntries = new Vector<Long>();
+    private final Vector<Long> mFavoritedEntries = new Vector<Long>();
+    private final Vector<Long> mUnfavoritedEntries = new Vector<Long>();
 
     public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo) {
         super(context, R.layout.item_entry_list, cursor, 0);
-        this.uri = uri;
-        this.showFeedInfo = showFeedInfo;
+        mUri = uri;
+        mShowFeedInfo = showFeedInfo;
 
         reinit(cursor);
     }
@@ -121,10 +114,10 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         final ViewHolder holder = (ViewHolder) view.getTag();
 
-        holder.titleTextView.setText(cursor.getString(titleColumnPosition));
+        holder.titleTextView.setText(cursor.getString(mTitlePos));
 
-        final long id = cursor.getLong(idColumn);
-        final boolean favorite = !unfavorited.contains(id) && (cursor.getInt(favoriteColumn) == 1 || favorited.contains(id));
+        final long id = cursor.getLong(mIdPos);
+        final boolean favorite = !mUnfavoritedEntries.contains(id) && (cursor.getInt(mFavoritePos) == 1 || mFavoritedEntries.contains(id));
 
         holder.starImgView.setImageResource(favorite ? R.drawable.dimmed_rating_important : R.drawable.dimmed_rating_not_important);
         holder.starImgView.setTag(favorite ? Constants.TRUE : Constants.FALSE);
@@ -136,30 +129,30 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 if (newFavorite) {
                     view.setTag(Constants.TRUE);
                     holder.starImgView.setImageResource(R.drawable.dimmed_rating_important);
-                    favorited.add(id);
-                    unfavorited.remove(id);
+                    mFavoritedEntries.add(id);
+                    mUnfavoritedEntries.remove(id);
                 } else {
                     view.setTag(Constants.FALSE);
                     holder.starImgView.setImageResource(R.drawable.dimmed_rating_not_important);
-                    unfavorited.add(id);
-                    favorited.remove(id);
+                    mUnfavoritedEntries.add(id);
+                    mFavoritedEntries.remove(id);
                 }
 
                 ContentValues values = new ContentValues();
                 values.put(EntryColumns.IS_FAVORITE, newFavorite ? 1 : 0);
 
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
-                Uri entryUri = ContentUris.withAppendedId(uri, id);
+                Uri entryUri = ContentUris.withAppendedId(mUri, id);
                 if (cr.update(entryUri, values, null, null) > 0) {
                     FeedDataContentProvider.notifyAllFromEntryUri(entryUri, false); //Receive New Favorite on HomeActivity
                 }
             }
         });
 
-        Date date = new Date(cursor.getLong(dateColumn));
+        Date date = new Date(cursor.getLong(mDatePos));
 
-        if (showFeedInfo && feedIconColumn > -1) {
-            byte[] iconBytes = cursor.getBlob(feedIconColumn);
+        if (mShowFeedInfo && mFeedIconPos > -1) {
+            byte[] iconBytes = cursor.getBlob(mFeedIconPos);
 
             if (iconBytes != null && iconBytes.length > 0) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
@@ -176,8 +169,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             }
         }
 
-        if (showFeedInfo && feedNameColumn > -1) {
-            String feedName = cursor.getString(feedNameColumn);
+        if (mShowFeedInfo && mFeedNamePos > -1) {
+            String feedName = cursor.getString(mFeedNamePos);
             if (feedName != null) {
                 holder.dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)).append(Constants.COMMA_SPACE).append(feedName));
             } else {
@@ -188,7 +181,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         }
 
         holder.isReadCb.setOnCheckedChangeListener(null);
-        if (markedAsUnread.contains(id) || (cursor.isNull(isReadColumn) && !markedAsRead.contains(id))) {
+        if (mMarkedAsUnreadEntries.contains(id) || (cursor.isNull(mIsReadPos) && !mMarkedAsReadEntries.contains(id))) {
             holder.titleTextView.setEnabled(true);
             holder.dateTextView.setEnabled(true);
             holder.isReadCb.setChecked(false);
@@ -215,16 +208,16 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     }
 
     public void markAllAsRead() {
-        markedAsRead.clear();
-        markedAsUnread.clear();
+        mMarkedAsReadEntries.clear();
+        mMarkedAsUnreadEntries.clear();
 
         new Thread() {
             @Override
             public void run() {
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
 
-                if (cr.update(uri, FeedData.getReadContentValues(), EntryColumns.WHERE_UNREAD, null) > 0) {
-                    if (!uri.toString().startsWith(EntryColumns.CONTENT_URI.toString())) {
+                if (cr.update(mUri, FeedData.getReadContentValues(), EntryColumns.WHERE_UNREAD, null) > 0) {
+                    if (!mUri.toString().startsWith(EntryColumns.CONTENT_URI.toString())) {
                         cr.notifyChange(EntryColumns.CONTENT_URI, null);
                     }
                     cr.notifyChange(FeedColumns.CONTENT_URI, null);
@@ -237,14 +230,14 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     }
 
     private void markAsRead(final long id) {
-        markedAsRead.add(id);
-        markedAsUnread.remove(id);
+        mMarkedAsReadEntries.add(id);
+        mMarkedAsUnreadEntries.remove(id);
 
         new Thread() {
             @Override
             public void run() {
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
-                Uri entryUri = ContentUris.withAppendedId(uri, id);
+                Uri entryUri = ContentUris.withAppendedId(mUri, id);
                 if (cr.update(entryUri, FeedData.getReadContentValues(), null, null) > 0) {
                     FeedDataContentProvider.notifyAllFromEntryUri(entryUri, false);
                 }
@@ -253,14 +246,14 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     }
 
     private void markAsUnread(final long id) {
-        markedAsUnread.add(id);
-        markedAsRead.remove(id);
+        mMarkedAsUnreadEntries.add(id);
+        mMarkedAsReadEntries.remove(id);
 
         new Thread() {
             @Override
             public void run() {
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
-                Uri entryUri = ContentUris.withAppendedId(uri, id);
+                Uri entryUri = ContentUris.withAppendedId(mUri, id);
                 if (cr.update(entryUri, FeedData.getUnreadContentValues(), null, null) > 0) {
                     FeedDataContentProvider.notifyAllFromEntryUri(entryUri, false);
                 }
@@ -293,20 +286,20 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     }
 
     private void reinit(Cursor cursor) {
-        markedAsRead.clear();
-        markedAsUnread.clear();
-        favorited.clear();
-        unfavorited.clear();
+        mMarkedAsReadEntries.clear();
+        mMarkedAsUnreadEntries.clear();
+        mFavoritedEntries.clear();
+        mUnfavoritedEntries.clear();
 
         if (cursor != null) {
-            titleColumnPosition = cursor.getColumnIndex(EntryColumns.TITLE);
-            dateColumn = cursor.getColumnIndex(EntryColumns.DATE);
-            isReadColumn = cursor.getColumnIndex(EntryColumns.IS_READ);
-            favoriteColumn = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
-            idColumn = cursor.getColumnIndex(EntryColumns._ID);
-            if (showFeedInfo) {
-                feedIconColumn = cursor.getColumnIndex(FeedColumns.ICON);
-                feedNameColumn = cursor.getColumnIndex(FeedColumns.NAME);
+            mTitlePos = cursor.getColumnIndex(EntryColumns.TITLE);
+            mDatePos = cursor.getColumnIndex(EntryColumns.DATE);
+            mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
+            mFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
+            mIdPos = cursor.getColumnIndex(EntryColumns._ID);
+            if (mShowFeedInfo) {
+                mFeedIconPos = cursor.getColumnIndex(FeedColumns.ICON);
+                mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
             }
         }
     }
