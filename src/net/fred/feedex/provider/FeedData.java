@@ -180,6 +180,10 @@ public class FeedData {
             return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/entries");
         }
 
+        public static Uri ALL_ENTRIES_CONTENT_URI(String entryId) {
+            return Uri.parse(CONTENT_AUTHORITY + "/all_entries/" + entryId);
+        }
+
         public static Uri CONTENT_URI(String entryId) {
             return Uri.parse(CONTENT_AUTHORITY + "/entries/" + entryId);
         }

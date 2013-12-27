@@ -33,6 +33,7 @@ import android.widget.RemoteViewsService;
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedData;
+import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.ThrottledContentObserver;
 
@@ -66,7 +67,7 @@ class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
             }
         };
         ContentResolver cr = mContext.getContentResolver();
-        cr.registerContentObserver(FeedData.EntryColumns.CONTENT_URI, true, mContentObserver);
+        cr.registerContentObserver(EntryColumns.CONTENT_URI, true, mContentObserver);
     }
 
     @Override
@@ -88,7 +89,7 @@ class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
         if (mCursor.moveToPosition(position)) {
             row.setTextViewText(android.R.id.text1, mCursor.getString(0));
             row.setFloat(android.R.id.text1, "setTextSize", 15 + (mFontSize * 3));
-            Intent intent = new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.CONTENT_URI(mCursor.getString(1)));
+            Intent intent = new Intent(Intent.ACTION_VIEW, EntryColumns.ALL_ENTRIES_CONTENT_URI(mCursor.getString(1)));
             intent.putExtra(Constants.INTENT_FROM_WIDGET, true);
             row.setOnClickFillInIntent(android.R.id.content, intent);
 
@@ -147,11 +148,11 @@ class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
             if (selection.length() > 0) {
                 selection.append(Constants.DB_AND);
             }
-            selection.append(FeedData.EntryColumns.FEED_ID).append(" IN (").append(feedIds).append(')');
+            selection.append(EntryColumns.FEED_ID).append(" IN (").append(feedIds).append(')');
         }
 
         ContentResolver cr = mContext.getContentResolver();
-        mCursor = cr.query(FeedData.EntryColumns.CONTENT_URI, new String[]{FeedData.EntryColumns.TITLE, FeedData.EntryColumns._ID, FeedData.FeedColumns.ICON}, selection.toString(), null,
-                FeedData.EntryColumns.DATE + Constants.DB_DESC);
+        mCursor = cr.query(EntryColumns.ALL_ENTRIES_CONTENT_URI, new String[]{EntryColumns.TITLE, EntryColumns._ID, FeedData.FeedColumns.ICON}, selection.toString(), null,
+                EntryColumns.DATE + Constants.DB_DESC);
     }
 }
