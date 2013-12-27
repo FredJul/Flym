@@ -29,7 +29,6 @@ import android.net.Uri;
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.provider.FeedData;
-import net.fred.feedex.provider.FeedDataContentProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -147,14 +146,13 @@ public class NetworkUtils {
             try {
                 byte[] iconBytes = getBytes(getConnectionInputStream(iconURLConnection));
                 values.put(FeedData.FeedColumns.ICON, iconBytes);
+                context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
             } catch (Exception e) {
                 // no icon found or error
                 values.put(FeedData.FeedColumns.ICON, new byte[0]);
+                context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
             } finally {
                 iconURLConnection.disconnect();
-
-                context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
-                FeedDataContentProvider.notifyGroupFromFeedId(id);
             }
         } catch (Throwable ignored) {
         }

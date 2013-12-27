@@ -68,7 +68,6 @@ import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
-import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.utils.UiUtils;
 
 import java.util.Date;
@@ -143,9 +142,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
                 Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                if (cr.update(entryUri, values, null, null) > 0) {
-                    FeedDataContentProvider.notifyAllFromEntryUri(entryUri, false); //Receive New Favorite on HomeActivity
-                }
+                cr.update(entryUri, values, null, null);
             }
         });
 
@@ -238,9 +235,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             public void run() {
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
                 Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                if (cr.update(entryUri, FeedData.getReadContentValues(), null, null) > 0) {
-                    FeedDataContentProvider.notifyAllFromEntryUri(entryUri, false);
-                }
+                cr.update(entryUri, FeedData.getReadContentValues(), null, null);
             }
         }.start();
     }
@@ -254,9 +249,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             public void run() {
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
                 Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                if (cr.update(entryUri, FeedData.getUnreadContentValues(), null, null) > 0) {
-                    FeedDataContentProvider.notifyAllFromEntryUri(entryUri, false);
-                }
+                cr.update(entryUri, FeedData.getUnreadContentValues(), null, null);
             }
         }.start();
     }

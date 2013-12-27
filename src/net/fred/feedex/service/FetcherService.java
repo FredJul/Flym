@@ -71,7 +71,6 @@ import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.TaskColumns;
-import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.utils.NetworkUtils;
 import net.fred.feedex.utils.PrefUtils;
 
@@ -638,9 +637,7 @@ public class FetcherService extends IntentService {
                     values.put(FeedColumns.FETCH_MODE, 0);
 
                     values.put(FeedColumns.ERROR, getString(R.string.error_feed_error));
-                    if (cr.update(FeedColumns.CONTENT_URI(id), values, null, null) > 0) {
-                        FeedDataContentProvider.notifyGroupFromFeedId(id);
-                    }
+                    cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
                 }
             } catch (Throwable e) {
                 if (handler == null || (handler != null && !handler.isDone() && !handler.isCancelled())) {
@@ -650,9 +647,7 @@ public class FetcherService extends IntentService {
                     values.put(FeedColumns.FETCH_MODE, 0);
 
                     values.put(FeedColumns.ERROR, e.getMessage() != null ? e.getMessage() : getString(R.string.error_feed_process));
-                    if (cr.update(FeedColumns.CONTENT_URI(id), values, null, null) > 0) {
-                        FeedDataContentProvider.notifyGroupFromFeedId(id);
-                    }
+                    cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
                 }
             } finally {
 

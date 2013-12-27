@@ -161,6 +161,7 @@ public class FeedData {
                 {IS_FAVORITE, TYPE_BOOLEAN}, {ENCLOSURE, TYPE_TEXT}, {GUID, TYPE_TEXT}, {AUTHOR, TYPE_TEXT}};
 
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/entries");
+        public static final Uri ALL_ENTRIES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/all_entries");
         public static final Uri FAVORITES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/favorites");
 
         public static Uri ENTRIES_FOR_FEED_CONTENT_URI(String feedId) {

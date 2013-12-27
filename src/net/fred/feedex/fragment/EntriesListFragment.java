@@ -294,8 +294,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         boolean alwaysShowRead = EntryColumns.FAVORITES_CONTENT_URI.equals(mUri) || (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH);
-        CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)
-                || alwaysShowRead ? null : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
+        CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, (PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)
+                || alwaysShowRead) ? null : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
     }

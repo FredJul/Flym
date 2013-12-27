@@ -59,7 +59,6 @@ import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
-import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.NetworkUtils;
 import net.fred.feedex.utils.PrefUtils;
@@ -602,8 +601,6 @@ public class RssAtomParser extends DefaultHandler {
         try {
             if (!inserts.isEmpty()) {
                 ContentProviderResult[] results = cr.applyBatch(FeedData.AUTHORITY, inserts);
-                cr.notifyChange(EntryColumns.CONTENT_URI, null);
-                FeedDataContentProvider.notifyGroupFromFeedId(id);
 
                 if (fetchImages) {
                     for (int i = 0; i < results.length; ++i) {
@@ -633,9 +630,7 @@ public class RssAtomParser extends DefaultHandler {
         values.putNull(FeedColumns.ERROR);
         values.put(FeedColumns.LAST_UPDATE, System.currentTimeMillis() - 3000); // by precaution to not miss some feeds
         values.put(FeedData.FeedColumns.REAL_LAST_UPDATE, newRealLastUpdate);
-        if (cr.update(FeedColumns.CONTENT_URI(id), values, null, null) > 0) {
-            FeedDataContentProvider.notifyGroupFromFeedId(id);
-        }
+        cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
 
         super.endDocument();
     }

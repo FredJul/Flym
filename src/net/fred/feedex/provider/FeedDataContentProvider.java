@@ -82,12 +82,14 @@ public class FeedDataContentProvider extends ContentProvider {
     public static final int URI_ENTRY_FOR_GROUP = 12;
     public static final int URI_ENTRIES = 13;
     public static final int URI_ENTRY = 14;
-    public static final int URI_FAVORITES = 15;
-    public static final int URI_FAVORITES_ENTRY = 16;
-    public static final int URI_TASKS = 17;
-    public static final int URI_TASK = 18;
-    public static final int URI_SEARCH = 19;
-    public static final int URI_SEARCH_ENTRY = 20;
+    public static final int URI_ALL_ENTRIES = 15;
+    public static final int URI_ALL_ENTRIES_ENTRY = 16;
+    public static final int URI_FAVORITES = 17;
+    public static final int URI_FAVORITES_ENTRY = 18;
+    public static final int URI_TASKS = 19;
+    public static final int URI_TASK = 20;
+    public static final int URI_SEARCH = 21;
+    public static final int URI_SEARCH_ENTRY = 22;
 
     public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -106,6 +108,8 @@ public class FeedDataContentProvider extends ContentProvider {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/filters", URI_FILTERS_FOR_FEED);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "entries", URI_ENTRIES);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/#", URI_ENTRY);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "all_entries", URI_ALL_ENTRIES);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "all_entries/#", URI_ALL_ENTRIES_ENTRY);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites", URI_FAVORITES);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites/#", URI_FAVORITES_ENTRY);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "tasks", URI_TASKS);
@@ -123,9 +127,9 @@ public class FeedDataContentProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        int option = URI_MATCHER.match(uri);
+        int matchCode = URI_MATCHER.match(uri);
 
-        switch (option) {
+        switch (matchCode) {
             case URI_GROUPED_FEEDS:
             case URI_GROUPS:
             case URI_FEEDS_FOR_GROUPS:
@@ -138,6 +142,7 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_FILTERS_FOR_FEED:
                 return "vnd.android.cursor.dir/vnd.feedex.filter";
             case URI_FAVORITES:
+            case URI_ALL_ENTRIES:
             case URI_ENTRIES:
             case URI_ENTRIES_FOR_FEED:
             case URI_ENTRIES_FOR_GROUP:
@@ -145,6 +150,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 return "vnd.android.cursor.dir/vnd.feedex.entry";
             case URI_FAVORITES_ENTRY:
             case URI_ENTRY:
+            case URI_ALL_ENTRIES_ENTRY:
             case URI_ENTRY_FOR_FEED:
             case URI_ENTRY_FOR_GROUP:
             case URI_SEARCH_ENTRY:
@@ -169,13 +175,13 @@ public class FeedDataContentProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
-        int option = URI_MATCHER.match(uri);
+        int matchCode = URI_MATCHER.match(uri);
 
-        if ((option == URI_FEEDS || option == URI_GROUPS || option == URI_FEEDS_FOR_GROUPS) && sortOrder == null) {
+        if ((matchCode == URI_FEEDS || matchCode == URI_GROUPS || matchCode == URI_FEEDS_FOR_GROUPS) && sortOrder == null) {
             sortOrder = FeedColumns.PRIORITY;
         }
 
-        switch (option) {
+        switch (matchCode) {
             case URI_GROUPED_FEEDS: {
                 queryBuilder.setTables(FEEDS_TABLE_WITH_GROUP_PRIORITY);
                 sortOrder = "IFNULL(group_priority, " + FeedColumns.PRIORITY + "), IFNULL(" + FeedColumns.GROUP_ID + ", " + FeedColumns._ID + "), " + FeedColumns.IS_GROUP + " DESC, " + FeedColumns.PRIORITY;
@@ -229,6 +235,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 queryBuilder.appendWhere(new StringBuilder(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1)));
                 break;
             }
+            case URI_ALL_ENTRIES:
             case URI_ENTRIES: {
                 queryBuilder.setTables(ENTRIES_TABLE_WITH_FEED_INFO);
                 break;
@@ -239,6 +246,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             case URI_FAVORITES_ENTRY:
+            case URI_ALL_ENTRIES_ENTRY:
             case URI_ENTRY: {
                 queryBuilder.setTables(ENTRIES_TABLE_WITH_FEED_INFO);
                 queryBuilder.appendWhere(new StringBuilder(EntryColumns._ID).append('=').append(uri.getPathSegments().get(1)));
@@ -274,11 +282,11 @@ public class FeedDataContentProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         long newId;
 
-        int option = URI_MATCHER.match(uri);
+        int matchCode = URI_MATCHER.match(uri);
 
         SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 
-        switch (option) {
+        switch (matchCode) {
             case URI_GROUPS:
             case URI_FEEDS: {
                 Cursor cursor;
@@ -315,6 +323,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 newId = database.insert(EntryColumns.TABLE_NAME, null, values);
                 break;
             }
+            case URI_ALL_ENTRIES:
             case URI_ENTRIES: {
                 newId = database.insert(EntryColumns.TABLE_NAME, null, values);
                 break;
@@ -327,7 +336,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 throw new IllegalArgumentException("Illegal insert");
         }
         if (newId > -1) {
-            getContext().getContentResolver().notifyChange(uri, null);
+            notifyChangeOnAllUris(matchCode, uri);
             return ContentUris.withAppendedId(uri, newId);
         } else {
             throw new SQLException("Could not insert row into " + uri);
@@ -336,7 +345,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        int option = URI_MATCHER.match(uri);
+        int matchCode = URI_MATCHER.match(uri);
 
         String table = null;
 
@@ -344,7 +353,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
         SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 
-        switch (option) {
+        switch (matchCode) {
             case URI_FEED: {
                 table = FeedColumns.TABLE_NAME;
 
@@ -433,6 +442,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 where.append(EntryColumns.FEED_ID).append(" IN (SELECT ").append(FeedColumns._ID).append(" FROM ").append(FeedColumns.TABLE_NAME).append(" WHERE ").append(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1)).append(')');
                 break;
             }
+            case URI_ALL_ENTRIES:
             case URI_ENTRIES: {
                 table = EntryColumns.TABLE_NAME;
                 break;
@@ -443,6 +453,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             case URI_FAVORITES_ENTRY:
+            case URI_ALL_ENTRIES_ENTRY:
             case URI_ENTRY: {
                 table = EntryColumns.TABLE_NAME;
                 where.append(EntryColumns._ID).append('=').append(uri.getPathSegments().get(1));
@@ -479,7 +490,7 @@ public class FeedDataContentProvider extends ContentProvider {
             mDatabaseHelper.exportToOPML();
         }
         if (count > 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
+            notifyChangeOnAllUris(matchCode, uri);
         }
 
         return count;
@@ -487,7 +498,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        int option = URI_MATCHER.match(uri);
+        int matchCode = URI_MATCHER.match(uri);
 
         String table = null;
 
@@ -495,7 +506,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
         SQLiteDatabase database = mDatabaseHelper.getWritableDatabase();
 
-        switch (option) {
+        switch (matchCode) {
             case URI_GROUP: {
                 table = FeedColumns.TABLE_NAME;
 
@@ -614,6 +625,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
                 break;
             }
+            case URI_ALL_ENTRIES:
             case URI_ENTRIES: {
                 table = EntryColumns.TABLE_NAME;
 
@@ -628,6 +640,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             case URI_FAVORITES_ENTRY:
+            case URI_ALL_ENTRIES_ENTRY:
             case URI_ENTRY: {
                 table = EntryColumns.TABLE_NAME;
                 where.append(EntryColumns._ID).append('=').append(uri.getPathSegments().get(1));
@@ -662,7 +675,7 @@ public class FeedDataContentProvider extends ContentProvider {
             mDatabaseHelper.exportToOPML();
         }
         if (count > 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
+            notifyChangeOnAllUris(matchCode, uri);
         }
         return count;
     }
@@ -691,45 +704,30 @@ public class FeedDataContentProvider extends ContentProvider {
         }
     }
 
-    public static void notifyGroupFromFeedId(String feedId) {
-        ContentResolver cr = MainApplication.getContext().getContentResolver();
-        cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
-        Cursor c = cr.query(FeedColumns.CONTENT_URI(feedId), FeedColumns.PROJECTION_GROUP_ID, null, null, null);
-        if (c.moveToFirst()) {
-            String groupId = c.getString(0);
-            if (groupId == null) {
-                cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-            } else {
-                cr.notifyChange(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupId), null);
-            }
-        }
-        c.close();
-    }
+    private void notifyChangeOnAllUris(int matchCode, Uri uri) {
+        ContentResolver cr = getContext().getContentResolver();
+        cr.notifyChange(uri, null);
 
-    public static void notifyAllFromEntryUri(Uri entryUri, boolean onlyStarredOrUnstarred) {
-        ContentResolver cr = MainApplication.getContext().getContentResolver();
-
-        try {
-            long entryId = Long.parseLong(entryUri.getLastPathSegment());
-
-            String uriStr = entryUri.toString();
-            if (!onlyStarredOrUnstarred) {
-                String feedId = FeedDataContentProvider.getFeedIdFromEntryId(entryId);
-                if (feedId != null) {
-                    FeedDataContentProvider.notifyGroupFromFeedId(feedId);
-                }
-                if (!uriStr.startsWith(FeedColumns.CONTENT_URI.toString())) {
-                    cr.notifyChange(ContentUris.withAppendedId(FeedColumns.CONTENT_URI, entryId), null);
-                }
+        switch (matchCode) {
+            case URI_FEED:
+            case URI_GROUPS:
+            case URI_FEEDS_FOR_GROUPS:
+            case URI_FEEDS:
+            case URI_FAVORITES_ENTRY:
+            case URI_ENTRY_FOR_FEED:
+            case URI_ENTRY_FOR_GROUP:
+            case URI_SEARCH_ENTRY:
+            case URI_ENTRIES_FOR_FEED:
+            case URI_ENTRIES_FOR_GROUP:
+            case URI_ALL_ENTRIES:
+            case URI_ENTRIES:
+            case URI_SEARCH:
+            case URI_ALL_ENTRIES_ENTRY:
+            case URI_ENTRY:
+            case URI_FAVORITES: {
+                cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null); // To update the drawer menu
+                break;
             }
-
-            if (!uriStr.startsWith(EntryColumns.FAVORITES_CONTENT_URI.toString())) {
-                cr.notifyChange(ContentUris.withAppendedId(EntryColumns.FAVORITES_CONTENT_URI, entryId), null);
-            }
-            if (!uriStr.startsWith(EntryColumns.CONTENT_URI.toString())) {
-                cr.notifyChange(ContentUris.withAppendedId(EntryColumns.CONTENT_URI, entryId), null);
-            }
-        } catch (Exception ignored) {
         }
     }
 }

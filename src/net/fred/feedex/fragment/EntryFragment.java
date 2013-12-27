@@ -56,7 +56,6 @@ import net.fred.feedex.activity.BaseActivity;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
-import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
@@ -325,19 +324,22 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                 case R.id.menu_star: {
                     mFavorite = !mFavorite;
 
-                    Uri uri = EntryColumns.CONTENT_URI(mEntriesIds[mCurrentPagerPos]);
-                    ContentValues values = new ContentValues();
-                    values.put(EntryColumns.IS_FAVORITE, mFavorite ? 1 : 0);
-                    ContentResolver cr = MainApplication.getContext().getContentResolver();
-                    if (cr.update(uri, values, null, null) > 0) {
-                        FeedDataContentProvider.notifyAllFromEntryUri(uri, true);
-                    }
-
                     if (mFavorite) {
                         item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
                     } else {
                         item.setTitle(R.string.menu_star).setIcon(R.drawable.rating_not_important);
                     }
+
+                    final Uri uri = buildUri(mEntriesIds[mCurrentPagerPos]);
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            ContentValues values = new ContentValues();
+                            values.put(EntryColumns.IS_FAVORITE, mFavorite ? 1 : 0);
+                            ContentResolver cr = MainApplication.getContext().getContentResolver();
+                            cr.update(uri, values, null, null);
+                        }
+                    }.start();
                     break;
                 }
                 case R.id.menu_share: {
@@ -366,14 +368,12 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                     break;
                 }
                 case R.id.menu_mark_as_unread: {
-                    final Uri uri = EntryColumns.CONTENT_URI(mEntriesIds[mCurrentPagerPos]);
+                    final Uri uri = buildUri(mEntriesIds[mCurrentPagerPos]);
                     new Thread() {
                         @Override
                         public void run() {
                             ContentResolver cr = MainApplication.getContext().getContentResolver();
-                            if (cr.update(uri, FeedData.getUnreadContentValues(), null, null) > 0) {
-                                FeedDataContentProvider.notifyAllFromEntryUri(uri, false);
-                            }
+                            cr.update(uri, FeedData.getUnreadContentValues(), null, null);
                         }
                     }.start();
                     activity.finish();
@@ -427,6 +427,10 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
         }
     }
 
+    private Uri buildUri(long entryId) {
+        return mBaseUri.buildUpon().appendPath(String.valueOf(entryId)).build();
+    }
+
     private void refreshUI(Cursor entryCursor) {
         if (entryCursor != null) {
             String feedTitle = entryCursor.isNull(mFeedNamePos) ? entryCursor.getString(mFeedUrlPos) : entryCursor.getString(mFeedNamePos);
@@ -459,14 +463,12 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
 
             // Mark the article as read
             if (entryCursor.getInt(mIsReadPos) != 1) {
-                final Uri uri = EntryColumns.CONTENT_URI(mEntriesIds[mCurrentPagerPos]);
+                final Uri uri = mBaseUri.buildUpon().appendPath(String.valueOf(mEntriesIds[mCurrentPagerPos])).build();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         ContentResolver cr = MainApplication.getContext().getContentResolver();
-                        if (cr.update(uri, FeedData.getReadContentValues(), null, null) > 0) {
-                            FeedDataContentProvider.notifyAllFromEntryUri(uri, false);
-                        }
+                        cr.update(uri, FeedData.getReadContentValues(), null, null);
                     }
                 }).start();
             }

@@ -311,7 +311,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         switch (position) {
             case 0:
-                newUri = EntryColumns.CONTENT_URI;
+                newUri = EntryColumns.ALL_ENTRIES_CONTENT_URI;
                 break;
             case 1:
                 newUri = EntryColumns.FAVORITES_CONTENT_URI;
