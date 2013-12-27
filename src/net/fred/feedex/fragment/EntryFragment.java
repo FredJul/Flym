@@ -68,6 +68,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
     private static final String STATE_CURRENT_PAGER_POS = "STATE_CURRENT_PAGER_POS";
     private static final String STATE_ENTRIES_IDS = "STATE_ENTRIES_IDS";
     private static final String STATE_INITIAL_ENTRY_ID = "STATE_INITIAL_ENTRY_ID";
+    private static final String STATE_SCROLL_PERCENTAGE = "STATE_SCROLL_PERCENTAGE";
 
     private int mTitlePos = -1, mDatePos, mMobilizedHtmlPos, mAbstractPos, mLinkPos, mIsFavoritePos, mIsReadPos, mEnclosurePos, mAuthorPos, mFeedNamePos, mFeedUrlPos, mFeedIconPos;
 
@@ -85,6 +86,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
 
     private class EntryPagerAdapter extends PagerAdapter {
 
+        private float mScrollPercentage = 0;
         private SparseArray<EntryView> mEntryViews = new SparseArray<EntryView>();
 
         public EntryPagerAdapter() {
@@ -117,6 +119,19 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
             return view == ((View) object);
         }
 
+        public float getScrollPercentage() {
+            EntryView view = mEntryViews.get(mCurrentPagerPos);
+            if (view != null) {
+                return view.getScrollPercentage();
+            }
+
+            return 0;
+        }
+
+        public void setScrollPercentage(float scrollPercentage) {
+            mScrollPercentage = scrollPercentage;
+        }
+
         public void displayEntry(int pagerPos, Cursor newCursor, boolean forceUpdate) {
             EntryView view = mEntryViews.get(pagerPos);
             if (view != null) {
@@ -141,6 +156,12 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                     String link = newCursor.getString(mLinkPos);
                     String title = newCursor.getString(mTitlePos);
                     String enclosure = newCursor.getString(mEnclosurePos);
+
+                    // Set the saved scroll position (not saved by the view itself due to the ViewPager)
+                    if (mScrollPercentage != 0 && pagerPos == mCurrentPagerPos) {
+                        view.setScrollPercentage(mScrollPercentage);
+                        mScrollPercentage = 0;
+                    }
 
                     view.setHtml(mEntriesIds[pagerPos], title, link, contentText, enclosure, author, timestamp, mPreferFullText);
                     view.setTag(newCursor);
@@ -215,6 +236,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
             mCurrentPagerPos = savedInstanceState.getInt(STATE_CURRENT_PAGER_POS);
             mEntryPager.getAdapter().notifyDataSetChanged();
             mEntryPager.setCurrentItem(mCurrentPagerPos);
+            mEntryPagerAdapter.setScrollPercentage(savedInstanceState.getFloat(STATE_SCROLL_PERCENTAGE));
         }
 
         mEntryPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -245,6 +267,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
         outState.putLongArray(STATE_ENTRIES_IDS, mEntriesIds);
         outState.putLong(STATE_INITIAL_ENTRY_ID, mInitialEntryId);
         outState.putInt(STATE_CURRENT_PAGER_POS, mCurrentPagerPos);
+        outState.putFloat(STATE_SCROLL_PERCENTAGE, mEntryPagerAdapter.getScrollPercentage());
 
         super.onSaveInstanceState(outState);
     }

@@ -141,12 +141,7 @@ public class EntryView extends WebView {
     protected Parcelable onSaveInstanceState() {
         Bundle bundle = new Bundle();
         bundle.putParcelable("superInstanceState", super.onSaveInstanceState());
-
-        float positionTopView = getTop();
-        float contentHeight = getContentHeight();
-        float currentScrollPosition = getScrollY();
-
-        bundle.putFloat(STATE_SCROLL_PERCENTAGE, (currentScrollPosition - positionTopView) / contentHeight);
+        bundle.putFloat(STATE_SCROLL_PERCENTAGE, getScrollPercentage());
 
         return bundle;
     }
@@ -156,6 +151,18 @@ public class EntryView extends WebView {
         Bundle bundle = (Bundle) state;
         mScrollPercentage = bundle.getFloat(STATE_SCROLL_PERCENTAGE);
         super.onRestoreInstanceState(bundle.getParcelable("superInstanceState"));
+    }
+
+    public float getScrollPercentage() {
+        float positionTopView = getTop();
+        float contentHeight = getContentHeight();
+        float currentScrollPosition = getScrollY();
+
+        return (currentScrollPosition - positionTopView) / contentHeight;
+    }
+
+    public void setScrollPercentage(float scrollPercentage) {
+        mScrollPercentage = scrollPercentage;
     }
 
     public void setListener(OnActionListener listener) {
