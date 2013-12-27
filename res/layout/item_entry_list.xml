@@ -5,23 +5,23 @@
     android:paddingTop="5dip"
     android:background="?android:attr/activatedBackgroundIndicator">
 
-<ImageView
-        android:id="@android:id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="5dip" />
-
     <CheckBox
         android:id="@android:id/checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="5dip"
+        android:layout_marginLeft="5dip"
         android:focusable="false"
         android:focusableInTouchMode="false" />
+
+    <ImageView
+        android:id="@android:id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dip" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,8 +29,8 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dip"
         android:layout_marginRight="5dip"
-        android:layout_toLeftOf="@android:id/checkbox"
-        android:layout_toRightOf="@android:id/icon"
+        android:layout_toRightOf="@android:id/checkbox"
+        android:layout_toLeftOf="@android:id/icon"
         android:orientation="vertical">
 
         <TextView

@@ -95,12 +95,13 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                 View view = mListView.getChildAt(position - mListView.getFirstVisiblePosition());
 
                 if (view != null) {
+                    // Just click on views, the adapter will do the real stuff
                     if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
-                        ImageView star = (ImageView) view.findViewById(android.R.id.icon);
-                        star.callOnClick();
-                    } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
                         CheckBox cb = (CheckBox) view.findViewById(android.R.id.checkbox);
                         cb.setChecked(!cb.isChecked());
+                    } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
+                        ImageView star = (ImageView) view.findViewById(android.R.id.icon);
+                        star.callOnClick();
                     }
 
                     // Just simulate a CANCEL event to remove the item highlighting
