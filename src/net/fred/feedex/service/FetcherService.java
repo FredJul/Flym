@@ -353,8 +353,8 @@ public class FetcherService extends IntentService {
 
     private void downloadAllImages() {
         ContentResolver cr = MainApplication.getContext().getContentResolver();
-        Cursor cursor = cr.query(FeedData.TaskColumns.CONTENT_URI, new String[]{FeedData.TaskColumns._ID, FeedData.TaskColumns.ENTRY_ID, FeedData.TaskColumns.IMG_URL_TO_DL,
-                FeedData.TaskColumns.NUMBER_ATTEMPT}, FeedData.TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NOT_NULL, null, null);
+        Cursor cursor = cr.query(TaskColumns.CONTENT_URI, new String[]{TaskColumns._ID, TaskColumns.ENTRY_ID, TaskColumns.IMG_URL_TO_DL,
+                TaskColumns.NUMBER_ATTEMPT}, TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NOT_NULL, null, null);
 
         ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 
@@ -371,15 +371,15 @@ public class FetcherService extends IntentService {
                 NetworkUtils.downloadImage(entryId, imgPath);
 
                 // If we are here, everything is OK
-                operations.add(ContentProviderOperation.newDelete(FeedData.TaskColumns.CONTENT_URI(taskId)).build());
+                operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
                 cr.notifyChange(EntryColumns.CONTENT_URI(entryId), null); // To refresh the view
             } catch (Exception e) {
                 if (nbAttempt + 1 > MAX_TASK_ATTEMPT) {
-                    operations.add(ContentProviderOperation.newDelete(FeedData.TaskColumns.CONTENT_URI(taskId)).build());
+                    operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
                 } else {
                     ContentValues values = new ContentValues();
-                    values.put(FeedData.TaskColumns.NUMBER_ATTEMPT, nbAttempt + 1);
-                    operations.add(ContentProviderOperation.newUpdate(FeedData.TaskColumns.CONTENT_URI(taskId)).withValues(values).build());
+                    values.put(TaskColumns.NUMBER_ATTEMPT, nbAttempt + 1);
+                    operations.add(ContentProviderOperation.newUpdate(TaskColumns.CONTENT_URI(taskId)).withValues(values).build());
                 }
             }
         }
