@@ -67,7 +67,7 @@ class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
             }
         };
         ContentResolver cr = mContext.getContentResolver();
-        cr.registerContentObserver(EntryColumns.CONTENT_URI, true, mContentObserver);
+        cr.registerContentObserver(EntryColumns.ALL_ENTRIES_CONTENT_URI, true, mContentObserver);
     }
 
     @Override
