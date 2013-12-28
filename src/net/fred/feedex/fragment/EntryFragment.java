@@ -25,6 +25,7 @@ import android.app.LoaderManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -330,7 +331,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                         item.setTitle(R.string.menu_star).setIcon(R.drawable.rating_not_important);
                     }
 
-                    final Uri uri = buildUri(mEntriesIds[mCurrentPagerPos]);
+                    final Uri uri = ContentUris.withAppendedId(mBaseUri, mEntriesIds[mCurrentPagerPos]);
                     new Thread() {
                         @Override
                         public void run() {
@@ -368,7 +369,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                     break;
                 }
                 case R.id.menu_mark_as_unread: {
-                    final Uri uri = buildUri(mEntriesIds[mCurrentPagerPos]);
+                    final Uri uri = ContentUris.withAppendedId(mBaseUri, mEntriesIds[mCurrentPagerPos]);
                     new Thread() {
                         @Override
                         public void run() {
@@ -427,10 +428,6 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
         }
     }
 
-    private Uri buildUri(long entryId) {
-        return mBaseUri.buildUpon().appendPath(String.valueOf(entryId)).build();
-    }
-
     private void refreshUI(Cursor entryCursor) {
         if (entryCursor != null) {
             String feedTitle = entryCursor.isNull(mFeedNamePos) ? entryCursor.getString(mFeedUrlPos) : entryCursor.getString(mFeedNamePos);
@@ -463,7 +460,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
 
             // Mark the article as read
             if (entryCursor.getInt(mIsReadPos) != 1) {
-                final Uri uri = mBaseUri.buildUpon().appendPath(String.valueOf(mEntriesIds[mCurrentPagerPos])).build();
+                final Uri uri = ContentUris.withAppendedId(mBaseUri, mEntriesIds[mCurrentPagerPos]);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

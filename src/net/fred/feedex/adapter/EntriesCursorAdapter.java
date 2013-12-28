@@ -89,8 +89,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     private final Vector<Long> mMarkedAsReadEntries = new Vector<Long>();
     private final Vector<Long> mMarkedAsUnreadEntries = new Vector<Long>();
-    private final Vector<Long> mFavoritedEntries = new Vector<Long>();
-    private final Vector<Long> mUnfavoritedEntries = new Vector<Long>();
+    private final Vector<Long> mFavoriteEntries = new Vector<Long>();
+    private final Vector<Long> mNotFavoriteEntries = new Vector<Long>();
 
     public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo) {
         super(context, R.layout.item_entry_list, cursor, 0);
@@ -116,7 +116,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         holder.titleTextView.setText(cursor.getString(mTitlePos));
 
         final long id = cursor.getLong(mIdPos);
-        final boolean favorite = !mUnfavoritedEntries.contains(id) && (cursor.getInt(mFavoritePos) == 1 || mFavoritedEntries.contains(id));
+        final boolean favorite = !mNotFavoriteEntries.contains(id) && (cursor.getInt(mFavoritePos) == 1 || mFavoriteEntries.contains(id));
 
         holder.starImgView.setImageResource(favorite ? R.drawable.dimmed_rating_important : R.drawable.dimmed_rating_not_important);
         holder.starImgView.setTag(favorite ? Constants.TRUE : Constants.FALSE);
@@ -128,13 +128,13 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 if (newFavorite) {
                     view.setTag(Constants.TRUE);
                     holder.starImgView.setImageResource(R.drawable.dimmed_rating_important);
-                    mFavoritedEntries.add(id);
-                    mUnfavoritedEntries.remove(id);
+                    mFavoriteEntries.add(id);
+                    mNotFavoriteEntries.remove(id);
                 } else {
                     view.setTag(Constants.FALSE);
                     holder.starImgView.setImageResource(R.drawable.dimmed_rating_not_important);
-                    mUnfavoritedEntries.add(id);
-                    mFavoritedEntries.remove(id);
+                    mNotFavoriteEntries.add(id);
+                    mFavoriteEntries.remove(id);
                 }
 
                 ContentValues values = new ContentValues();
@@ -272,8 +272,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     private void reinit(Cursor cursor) {
         mMarkedAsReadEntries.clear();
         mMarkedAsUnreadEntries.clear();
-        mFavoritedEntries.clear();
-        mUnfavoritedEntries.clear();
+        mFavoriteEntries.clear();
+        mNotFavoriteEntries.clear();
 
         if (cursor != null) {
             mTitlePos = cursor.getColumnIndex(EntryColumns.TITLE);
