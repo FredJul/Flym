@@ -20,14 +20,17 @@ package net.fred.feedex.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
+import net.fred.feedex.utils.UiUtils;
 
 public abstract class BaseActivity extends Activity {
 
@@ -109,6 +112,11 @@ public abstract class BaseActivity extends Activity {
     private ViewGroup init() {
         super.setContentView(R.layout.activity_progress);
         mProgressBar = (ProgressBar) findViewById(R.id.activity_bar);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            // Fix a display bug
+            ((FrameLayout.LayoutParams) mProgressBar.getLayoutParams()).setMargins(0, UiUtils.dpToPixel(-4), 0, 0);
+        }
         return (ViewGroup) findViewById(R.id.activity_frame);
     }
 
@@ -143,7 +151,7 @@ public abstract class BaseActivity extends Activity {
     @SuppressLint("InlinedApi")
     public void toggleFullScreen() {
         if (!mIsFullScreen) {
-            if (android.os.Build.VERSION.SDK_INT >= 19) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
@@ -159,7 +167,7 @@ public abstract class BaseActivity extends Activity {
                 }
             }
         } else {
-            if (android.os.Build.VERSION.SDK_INT >= 19) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
             } else {
                 mIsFullScreen = false;
