@@ -136,10 +136,20 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
             mShowFeedInfo = savedInstanceState.getBoolean(STATE_SHOW_FEED_INFO);
 
             mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
-            getLoaderManager().initLoader(LOADER_ID, null, this);
+            //getLoaderManager().initLoader(LOADER_ID, null, this);
         }
 
         PrefUtils.registerOnPrefChangeListener(mPrefListener);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // I don't know why this is needed... The loader seems to not be notified when the article is mark as read
+        if (mUri != null) {
+            getLoaderManager().restartLoader(LOADER_ID, null, this);
+        }
     }
 
     @Override
@@ -163,20 +173,30 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
 
         mSearchView = (SearchView) rootView.findViewById(R.id.searchView);
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mSearchView.getWindowToken(), 0);
-                return false;
-            }
+        if (savedInstanceState != null) {
+            refreshUI(); // To hide/show the search bar
+        }
 
+        mSearchView.post(new Runnable() { // Do this AFTER the text has been restored from saveInstanceState
             @Override
-            public boolean onQueryTextChange(String s) {
-                setData(EntryColumns.SEARCH_URI(s), true);
-                return false;
+            public void run() {
+                mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(mSearchView.getWindowToken(), 0);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        setData(EntryColumns.SEARCH_URI(s), true);
+                        return false;
+                    }
+                });
             }
         });
+
         return rootView;
     }
 
@@ -284,6 +304,10 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         setListAdapter(mEntriesCursorAdapter);
         getLoaderManager().restartLoader(LOADER_ID, null, this);
 
+        refreshUI();
+    }
+
+    private void refreshUI() {
         if (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
             mSearchView.setVisibility(View.VISIBLE);
         } else {
