@@ -720,12 +720,18 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_ENTRIES_FOR_FEED:
             case URI_ENTRIES_FOR_GROUP:
             case URI_ALL_ENTRIES:
-            case URI_ENTRIES:
             case URI_SEARCH:
             case URI_ALL_ENTRIES_ENTRY:
             case URI_ENTRY:
+            case URI_ENTRIES:
             case URI_FAVORITES: {
-                cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null); // To update the drawer menu
+                // Notify everything else (except EntryColumns.CONTENT_URI to not update the
+                // entry WebView when clicking on "favorite" button)
+                cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
+                cr.notifyChange(EntryColumns.ALL_ENTRIES_CONTENT_URI, null);
+                cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
+                cr.notifyChange(FeedColumns.CONTENT_URI, null);
+                cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
                 break;
             }
         }
