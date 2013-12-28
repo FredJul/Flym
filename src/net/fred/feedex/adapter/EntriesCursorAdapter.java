@@ -212,16 +212,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             @Override
             public void run() {
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
-
-                if (cr.update(mUri, FeedData.getReadContentValues(), EntryColumns.WHERE_UNREAD, null) > 0) {
-                    if (!mUri.toString().startsWith(EntryColumns.CONTENT_URI.toString())) {
-                        cr.notifyChange(EntryColumns.CONTENT_URI, null);
-                    }
-                    cr.notifyChange(FeedColumns.CONTENT_URI, null);
-                    cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-                    cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
-                    cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
-                }
+                cr.update(mUri, FeedData.getReadContentValues(), EntryColumns.WHERE_UNREAD, null);
             }
         }.start();
     }

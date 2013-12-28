@@ -74,7 +74,6 @@ import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.FeedsCursorAdapter;
 import net.fred.feedex.parser.OPML;
-import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.view.DragNDropExpandableListView;
 import net.fred.feedex.view.DragNDropListener;
@@ -145,17 +144,7 @@ public class EditFeedsListFragment extends ListFragment {
                                             feedCursor.close();
 
                                             // Now we delete the feed
-                                            if (cr.delete(FeedColumns.CONTENT_URI(feedId), null, null) > 0) {
-                                                cr.notifyChange(EntryColumns.CONTENT_URI, null);
-                                                cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
-                                                cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
-
-                                                if (groupId == null) {
-                                                    cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-                                                } else {
-                                                    cr.notifyChange(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupId), null);
-                                                }
-                                            }
+                                            cr.delete(FeedColumns.CONTENT_URI(feedId), null, null);
                                         }
                                     }.start();
                                 }
@@ -222,10 +211,7 @@ public class EditFeedsListFragment extends ListFragment {
                                                 ContentResolver cr = getActivity().getContentResolver();
                                                 ContentValues values = new ContentValues();
                                                 values.put(FeedColumns.NAME, groupName);
-                                                if (cr.update(FeedColumns.CONTENT_URI(groupId), values, null, null) > 0) {
-                                                    cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-                                                    cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
-                                                }
+                                                cr.update(FeedColumns.CONTENT_URI(groupId), values, null, null);
                                             }
                                         }
                                     }.start();
@@ -246,11 +232,7 @@ public class EditFeedsListFragment extends ListFragment {
                                         @Override
                                         public void run() {
                                             ContentResolver cr = getActivity().getContentResolver();
-                                            if (cr.delete(FeedColumns.GROUPS_CONTENT_URI(groupId), null, null) > 0) {
-                                                cr.notifyChange(EntryColumns.CONTENT_URI, null);
-                                                cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
-                                                cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
-                                            }
+                                            cr.delete(FeedColumns.GROUPS_CONTENT_URI(groupId), null, null);
                                         }
                                     }.start();
                                 }
@@ -394,16 +376,10 @@ public class EditFeedsListFragment extends ListFragment {
         if (fromIsGroup && toIsGroup) {
             values.put(FeedColumns.PRIORITY, packedGroupPosTo + 1);
             cr.update(FeedColumns.CONTENT_URI(mListView.getItemIdAtPosition(flatPosFrom)), values, null, null);
-            cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-            cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
-
         } else if (!fromIsGroup && toIsGroup) {
             values.put(FeedColumns.PRIORITY, packedGroupPosTo + 1);
             values.putNull(FeedColumns.GROUP_ID);
             cr.update(FeedColumns.CONTENT_URI(mListView.getItemIdAtPosition(flatPosFrom)), values, null, null);
-            cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-            cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
-
         } else if ((!fromIsGroup && !toIsGroup) || (fromIsFeedWithoutGroup && !toIsGroup)) {
             int groupPrio = ExpandableListView.getPackedPositionChild(packedPosTo) + 1;
             values.put(FeedColumns.PRIORITY, groupPrio);
@@ -411,8 +387,6 @@ public class EditFeedsListFragment extends ListFragment {
             int flatGroupPosTo = mListView.getFlatListPosition(ExpandableListView.getPackedPositionForGroup(packedGroupPosTo));
             values.put(FeedColumns.GROUP_ID, mListView.getItemIdAtPosition(flatGroupPosTo));
             cr.update(FeedColumns.CONTENT_URI(mListView.getItemIdAtPosition(flatPosFrom)), values, null, null);
-            cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-            cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
         }
     }
 

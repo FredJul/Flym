@@ -708,32 +708,14 @@ public class FeedDataContentProvider extends ContentProvider {
         ContentResolver cr = getContext().getContentResolver();
         cr.notifyChange(uri, null);
 
-        switch (matchCode) {
-            case URI_FEED:
-            case URI_GROUPS:
-            case URI_FEEDS_FOR_GROUPS:
-            case URI_FEEDS:
-            case URI_FAVORITES_ENTRY:
-            case URI_ENTRY_FOR_FEED:
-            case URI_ENTRY_FOR_GROUP:
-            case URI_SEARCH_ENTRY:
-            case URI_ENTRIES_FOR_FEED:
-            case URI_ENTRIES_FOR_GROUP:
-            case URI_ALL_ENTRIES:
-            case URI_SEARCH:
-            case URI_ALL_ENTRIES_ENTRY:
-            case URI_ENTRY:
-            case URI_ENTRIES:
-            case URI_FAVORITES: {
-                // Notify everything else (except EntryColumns.CONTENT_URI to not update the
-                // entry WebView when clicking on "favorite" button)
-                cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
-                cr.notifyChange(EntryColumns.ALL_ENTRIES_CONTENT_URI, null);
-                cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
-                cr.notifyChange(FeedColumns.CONTENT_URI, null);
-                cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
-                break;
-            }
+        if (matchCode != URI_FILTERS && matchCode != URI_FILTERS_FOR_FEED && matchCode != URI_TASKS && matchCode != URI_TASK) {
+            // Notify everything else (except EntryColumns.CONTENT_URI to not update the
+            // entry WebView when clicking on "favorite" button)
+            cr.notifyChange(FeedColumns.GROUPED_FEEDS_CONTENT_URI, null);
+            cr.notifyChange(EntryColumns.ALL_ENTRIES_CONTENT_URI, null);
+            cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
+            cr.notifyChange(FeedColumns.CONTENT_URI, null);
+            cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
         }
     }
 }
