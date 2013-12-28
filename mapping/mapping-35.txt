@@ -11,30 +11,30 @@ android.support.v4.app.ActionBarDrawerToggle -> android.support.v4.app.a:
     int mOpenDrawerContentDescRes -> j
     int mCloseDrawerContentDescRes -> k
     java.lang.Object mSetIndicatorInfo -> l
-    223:233:void syncState() -> a
-    274:277:void onConfigurationChanged(android.content.res.Configuration) -> a
-    289:297:boolean onOptionsItemSelected(android.view.MenuItem) -> a
-    310:317:void onDrawerSlide(android.view.View,float) -> a
-    328:332:void onDrawerOpened(android.view.View) -> a
-    343:347:void onDrawerClosed(android.view.View) -> b
-    358:358:void onDrawerStateChanged(int) -> a
-    361:364:android.graphics.drawable.Drawable getThemeUpIndicator() -> b
-    368:374:void setActionBarUpIndicator(android.graphics.drawable.Drawable,int) -> a
-    377:383:void setActionBarDescription(int) -> b
-    56:56:android.app.Activity access$300(android.support.v4.app.ActionBarDrawerToggle) -> a
+    222:232:void syncState() -> a
+    273:276:void onConfigurationChanged(android.content.res.Configuration) -> a
+    288:296:boolean onOptionsItemSelected(android.view.MenuItem) -> a
+    309:316:void onDrawerSlide(android.view.View,float) -> a
+    327:331:void onDrawerOpened(android.view.View) -> a
+    342:346:void onDrawerClosed(android.view.View) -> b
+    357:357:void onDrawerStateChanged(int) -> a
+    360:363:android.graphics.drawable.Drawable getThemeUpIndicator() -> b
+    367:373:void setActionBarUpIndicator(android.graphics.drawable.Drawable,int) -> a
+    376:382:void setActionBarDescription(int) -> b
+    55:55:android.app.Activity access$300(android.support.v4.app.ActionBarDrawerToggle) -> a
 android.support.v4.app.ActionBarDrawerToggle$1 -> android.support.v4.app.b:
 android.support.v4.app.ActionBarDrawerToggle$ActionBarDrawerToggleImpl -> android.support.v4.app.c:
     android.graphics.drawable.Drawable getThemeUpIndicator(android.app.Activity) -> a
     java.lang.Object setActionBarUpIndicator(java.lang.Object,android.app.Activity,android.graphics.drawable.Drawable,int) -> a
     java.lang.Object setActionBarDescription(java.lang.Object,android.app.Activity,int) -> a
 android.support.v4.app.ActionBarDrawerToggle$ActionBarDrawerToggleImplBase -> android.support.v4.app.d:
-    104:104:android.graphics.drawable.Drawable getThemeUpIndicator(android.app.Activity) -> a
-    111:111:java.lang.Object setActionBarUpIndicator(java.lang.Object,android.app.Activity,android.graphics.drawable.Drawable,int) -> a
-    117:117:java.lang.Object setActionBarDescription(java.lang.Object,android.app.Activity,int) -> a
+    103:103:android.graphics.drawable.Drawable getThemeUpIndicator(android.app.Activity) -> a
+    110:110:java.lang.Object setActionBarUpIndicator(java.lang.Object,android.app.Activity,android.graphics.drawable.Drawable,int) -> a
+    116:116:java.lang.Object setActionBarDescription(java.lang.Object,android.app.Activity,int) -> a
 android.support.v4.app.ActionBarDrawerToggle$ActionBarDrawerToggleImplHC -> android.support.v4.app.e:
-    124:124:android.graphics.drawable.Drawable getThemeUpIndicator(android.app.Activity) -> a
-    130:130:java.lang.Object setActionBarUpIndicator(java.lang.Object,android.app.Activity,android.graphics.drawable.Drawable,int) -> a
-    136:136:java.lang.Object setActionBarDescription(java.lang.Object,android.app.Activity,int) -> a
+    123:123:android.graphics.drawable.Drawable getThemeUpIndicator(android.app.Activity) -> a
+    129:129:java.lang.Object setActionBarUpIndicator(java.lang.Object,android.app.Activity,android.graphics.drawable.Drawable,int) -> a
+    135:135:java.lang.Object setActionBarDescription(java.lang.Object,android.app.Activity,int) -> a
 android.support.v4.app.ActionBarDrawerToggle$Delegate -> android.support.v4.app.f:
     android.graphics.drawable.Drawable getThemeUpIndicator() -> a
     void setActionBarUpIndicator(android.graphics.drawable.Drawable,int) -> a
@@ -47,10 +47,10 @@ android.support.v4.app.ActionBarDrawerToggle$SlideDrawable -> android.support.v4
     float mPosition -> d
     float mOffset -> e
     android.support.v4.app.ActionBarDrawerToggle this$0 -> a
-    408:410:void setPosition(float) -> a
-    413:413:float getPosition() -> a
-    424:426:void setOffset(float) -> b
-    430:448:void draw(android.graphics.Canvas) -> draw
+    401:403:void setPosition(float) -> a
+    406:406:float getPosition() -> a
+    417:419:void setOffset(float) -> b
+    423:441:void draw(android.graphics.Canvas) -> draw
 android.support.v4.app.ActionBarDrawerToggleHoneycomb -> android.support.v4.app.i:
     int[] THEME_ATTRS -> a
     48:65:java.lang.Object setActionBarUpIndicator(java.lang.Object,android.app.Activity,android.graphics.drawable.Drawable,int) -> a
@@ -556,47 +556,30 @@ android.support.v4.content.Loader -> android.support.v4.a.a:
     376:381:java.lang.String toString() -> toString
     393:404:void dump(java.lang.String,java.io.FileDescriptor,java.io.PrintWriter,java.lang.String[]) -> a
 android.support.v4.content.Loader$OnLoadCompleteListener -> android.support.v4.a.b:
-android.support.v4.graphics.drawable.DrawableCompat -> android.support.v4.b.a.a:
-    android.support.v4.graphics.drawable.DrawableCompat$DrawableImpl IMPL -> a
-    118:119:void setAutoMirrored(android.graphics.drawable.Drawable,boolean) -> a
-    133:133:boolean isAutoMirrored(android.graphics.drawable.Drawable) -> a
-android.support.v4.graphics.drawable.DrawableCompat$BaseDrawableImpl -> android.support.v4.b.a.b:
-    45:45:void setAutoMirrored(android.graphics.drawable.Drawable,boolean) -> a
-    49:49:boolean isAutoMirrored(android.graphics.drawable.Drawable) -> a
-android.support.v4.graphics.drawable.DrawableCompat$DrawableImpl -> android.support.v4.b.a.c:
-    void setAutoMirrored(android.graphics.drawable.Drawable,boolean) -> a
-    boolean isAutoMirrored(android.graphics.drawable.Drawable) -> a
-android.support.v4.graphics.drawable.DrawableCompat$HoneycombDrawableImpl -> android.support.v4.b.a.d:
-android.support.v4.graphics.drawable.DrawableCompat$KitKatDrawableImpl -> android.support.v4.b.a.e:
-    69:70:void setAutoMirrored(android.graphics.drawable.Drawable,boolean) -> a
-    74:74:boolean isAutoMirrored(android.graphics.drawable.Drawable) -> a
-android.support.v4.graphics.drawable.DrawableCompatKitKat -> android.support.v4.b.a.f:
-    26:27:void setAutoMirrored(android.graphics.drawable.Drawable,boolean) -> a
-    30:30:boolean isAutoMirrored(android.graphics.drawable.Drawable) -> a
-android.support.v4.os.ParcelableCompat -> android.support.v4.c.a:
+android.support.v4.os.ParcelableCompat -> android.support.v4.b.a:
     36:39:android.os.Parcelable$Creator newCreator(android.support.v4.os.ParcelableCompatCreatorCallbacks) -> a
-android.support.v4.os.ParcelableCompat$CompatCreator -> android.support.v4.c.b:
+android.support.v4.os.ParcelableCompat$CompatCreator -> android.support.v4.b.b:
     android.support.v4.os.ParcelableCompatCreatorCallbacks mCallbacks -> a
     51:51:java.lang.Object createFromParcel(android.os.Parcel) -> createFromParcel
     56:56:java.lang.Object[] newArray(int) -> newArray
-android.support.v4.os.ParcelableCompatCreatorCallbacks -> android.support.v4.c.c:
+android.support.v4.os.ParcelableCompatCreatorCallbacks -> android.support.v4.b.c:
     java.lang.Object createFromParcel(android.os.Parcel,java.lang.ClassLoader) -> a
     java.lang.Object[] newArray(int) -> a
-android.support.v4.os.ParcelableCompatCreatorHoneycombMR2 -> android.support.v4.c.d:
+android.support.v4.os.ParcelableCompatCreatorHoneycombMR2 -> android.support.v4.b.d:
     android.support.v4.os.ParcelableCompatCreatorCallbacks mCallbacks -> a
     36:36:java.lang.Object createFromParcel(android.os.Parcel) -> createFromParcel
     40:40:java.lang.Object createFromParcel(android.os.Parcel,java.lang.ClassLoader) -> createFromParcel
     44:44:java.lang.Object[] newArray(int) -> newArray
-android.support.v4.os.ParcelableCompatCreatorHoneycombMR2Stub -> android.support.v4.c.e:
+android.support.v4.os.ParcelableCompatCreatorHoneycombMR2Stub -> android.support.v4.b.e:
     24:24:android.os.Parcelable$Creator instantiate(android.support.v4.os.ParcelableCompatCreatorCallbacks) -> a
-android.support.v4.util.ArrayMap -> android.support.v4.d.a:
+android.support.v4.util.ArrayMap -> android.support.v4.c.a:
     android.support.v4.util.MapCollections mCollections -> a
     72:120:android.support.v4.util.MapCollections getCollection() -> b
     139:143:void putAll(java.util.Map) -> putAll
     179:179:java.util.Set entrySet() -> entrySet
     191:191:java.util.Set keySet() -> keySet
     203:203:java.util.Collection values() -> values
-android.support.v4.util.ArrayMap$1 -> android.support.v4.d.b:
+android.support.v4.util.ArrayMap$1 -> android.support.v4.c.b:
     android.support.v4.util.ArrayMap this$0 -> a
     76:76:int colGetSize() -> a
     81:81:java.lang.Object colGetEntry(int,int) -> a
@@ -607,7 +590,7 @@ android.support.v4.util.ArrayMap$1 -> android.support.v4.d.b:
     106:106:java.lang.Object colSetValue(int,java.lang.Object) -> a
     111:112:void colRemoveAt(int) -> a
     116:117:void colClear() -> c
-android.support.v4.util.ContainerHelpers -> android.support.v4.d.c:
+android.support.v4.util.ContainerHelpers -> android.support.v4.c.c:
     int[] EMPTY_INTS -> a
     long[] EMPTY_LONGS -> b
     java.lang.Object[] EMPTY_OBJECTS -> c
@@ -615,16 +598,16 @@ android.support.v4.util.ContainerHelpers -> android.support.v4.d.c:
     33:37:int idealByteArraySize(int) -> b
     41:41:boolean equal(java.lang.Object,java.lang.Object) -> a
     46:61:int binarySearch(int[],int,int) -> a
-android.support.v4.util.DebugUtils -> android.support.v4.d.d:
+android.support.v4.util.DebugUtils -> android.support.v4.c.d:
     28:43:void buildShortClassTag(java.lang.Object,java.lang.StringBuilder) -> a
-android.support.v4.util.LogWriter -> android.support.v4.d.e:
+android.support.v4.util.LogWriter -> android.support.v4.c.e:
     java.lang.String mTag -> a
     java.lang.StringBuilder mBuilder -> b
     44:45:void close() -> close
     48:49:void flush() -> flush
     52:61:void write(char[],int,int) -> write
     64:68:void flushBuilder() -> a
-android.support.v4.util.MapCollections -> android.support.v4.d.f:
+android.support.v4.util.MapCollections -> android.support.v4.c.f:
     android.support.v4.util.MapCollections$EntrySet mEntrySet -> b
     android.support.v4.util.MapCollections$KeySet mKeySet -> c
     android.support.v4.util.MapCollections$ValuesCollection mValues -> d
@@ -646,7 +629,7 @@ android.support.v4.util.MapCollections -> android.support.v4.d.f:
     java.lang.Object colSetValue(int,java.lang.Object) -> a
     void colRemoveAt(int) -> a
     void colClear() -> c
-android.support.v4.util.MapCollections$ArrayIterator -> android.support.v4.d.g:
+android.support.v4.util.MapCollections$ArrayIterator -> android.support.v4.c.g:
     int mOffset -> a
     int mSize -> b
     int mIndex -> c
@@ -655,7 +638,7 @@ android.support.v4.util.MapCollections$ArrayIterator -> android.support.v4.d.g:
     48:48:boolean hasNext() -> hasNext
     53:56:java.lang.Object next() -> next
     61:68:void remove() -> remove
-android.support.v4.util.MapCollections$EntrySet -> android.support.v4.d.h:
+android.support.v4.util.MapCollections$EntrySet -> android.support.v4.c.h:
     android.support.v4.util.MapCollections this$0 -> a
     166:166:boolean add(java.util.Map$Entry) -> a
     171:175:boolean addAll(java.util.Collection) -> addAll
@@ -673,7 +656,7 @@ android.support.v4.util.MapCollections$EntrySet -> android.support.v4.d.h:
     249:249:boolean equals(java.lang.Object) -> equals
     254:261:int hashCode() -> hashCode
     163:163:boolean add(java.lang.Object) -> add
-android.support.v4.util.MapCollections$KeySet -> android.support.v4.d.i:
+android.support.v4.util.MapCollections$KeySet -> android.support.v4.c.i:
     android.support.v4.util.MapCollections this$0 -> a
     269:269:boolean add(java.lang.Object) -> add
     274:274:boolean addAll(java.util.Collection) -> addAll
@@ -690,7 +673,7 @@ android.support.v4.util.MapCollections$KeySet -> android.support.v4.d.i:
     334:334:java.lang.Object[] toArray(java.lang.Object[]) -> toArray
     339:339:boolean equals(java.lang.Object) -> equals
     344:349:int hashCode() -> hashCode
-android.support.v4.util.MapCollections$MapIterator -> android.support.v4.d.j:
+android.support.v4.util.MapCollections$MapIterator -> android.support.v4.c.j:
     int mEnd -> a
     int mIndex -> b
     boolean mEntryValid -> c
@@ -705,7 +688,7 @@ android.support.v4.util.MapCollections$MapIterator -> android.support.v4.d.j:
     147:153:int hashCode() -> hashCode
     159:159:java.lang.String toString() -> toString
     71:71:java.lang.Object next() -> next
-android.support.v4.util.MapCollections$ValuesCollection -> android.support.v4.d.k:
+android.support.v4.util.MapCollections$ValuesCollection -> android.support.v4.c.k:
     android.support.v4.util.MapCollections this$0 -> a
     357:357:boolean add(java.lang.Object) -> add
     362:362:boolean addAll(java.util.Collection) -> addAll
@@ -720,7 +703,7 @@ android.support.v4.util.MapCollections$ValuesCollection -> android.support.v4.d.
     440:440:int size() -> size
     445:445:java.lang.Object[] toArray() -> toArray
     450:450:java.lang.Object[] toArray(java.lang.Object[]) -> toArray
-android.support.v4.util.SimpleArrayMap -> android.support.v4.d.l:
+android.support.v4.util.SimpleArrayMap -> android.support.v4.c.l:
     java.lang.Object[] mBaseCache -> b
     int mBaseCacheSize -> c
     java.lang.Object[] mTwiceBaseCache -> d
@@ -749,7 +732,7 @@ android.support.v4.util.SimpleArrayMap -> android.support.v4.d.l:
     522:551:boolean equals(java.lang.Object) -> equals
     559:566:int hashCode() -> hashCode
     578:603:java.lang.String toString() -> toString
-android.support.v4.util.SparseArrayCompat -> android.support.v4.d.m:
+android.support.v4.util.SparseArrayCompat -> android.support.v4.c.m:
     java.lang.Object DELETED -> a
     boolean mGarbage -> b
     int[] mKeys -> c
@@ -977,6 +960,7 @@ android.support.v4.view.PagerAdapter -> android.support.v4.view.ae:
     239:239:android.os.Parcelable saveState() -> b
     250:250:void restoreState(android.os.Parcelable,java.lang.ClassLoader) -> a
     268:268:int getItemPosition(java.lang.Object) -> a
+    276:277:void notifyDataSetChanged() -> c
     285:286:void registerDataSetObserver(android.database.DataSetObserver) -> a
     294:295:void unregisterDataSetObserver(android.database.DataSetObserver) -> b
     318:318:float getPageWidth(int) -> a
@@ -1087,18 +1071,29 @@ android.support.v4.view.ViewCompatJB -> android.support.v4.view.ay:
 android.support.v4.view.ViewCompatJellybeanMr1 -> android.support.v4.view.az:
     36:37:void setLayerPaint(android.view.View,android.graphics.Paint) -> a
     40:40:int getLayoutDirection(android.view.View) -> a
-android.support.v4.view.ViewGroupCompat -> android.support.v4.view.ba:
+android.support.v4.view.ViewConfigurationCompat -> android.support.v4.view.ba:
+    android.support.v4.view.ViewConfigurationCompat$ViewConfigurationVersionImpl IMPL -> a
+    73:73:int getScaledPagingTouchSlop(android.view.ViewConfiguration) -> a
+android.support.v4.view.ViewConfigurationCompat$BaseViewConfigurationVersionImpl -> android.support.v4.view.bb:
+    39:39:int getScaledPagingTouchSlop(android.view.ViewConfiguration) -> a
+android.support.v4.view.ViewConfigurationCompat$FroyoViewConfigurationVersionImpl -> android.support.v4.view.bc:
+    49:49:int getScaledPagingTouchSlop(android.view.ViewConfiguration) -> a
+android.support.v4.view.ViewConfigurationCompat$ViewConfigurationVersionImpl -> android.support.v4.view.bd:
+    int getScaledPagingTouchSlop(android.view.ViewConfiguration) -> a
+android.support.v4.view.ViewConfigurationCompatFroyo -> android.support.v4.view.be:
+    26:26:int getScaledPagingTouchSlop(android.view.ViewConfiguration) -> a
+android.support.v4.view.ViewGroupCompat -> android.support.v4.view.bf:
     android.support.v4.view.ViewGroupCompat$ViewGroupCompatImpl IMPL -> a
     161:162:void setMotionEventSplittingEnabled(android.view.ViewGroup,boolean) -> a
-android.support.v4.view.ViewGroupCompat$ViewGroupCompatHCImpl -> android.support.v4.view.bb:
+android.support.v4.view.ViewGroupCompat$ViewGroupCompatHCImpl -> android.support.v4.view.bg:
     79:80:void setMotionEventSplittingEnabled(android.view.ViewGroup,boolean) -> a
-android.support.v4.view.ViewGroupCompat$ViewGroupCompatIcsImpl -> android.support.v4.view.bc:
-android.support.v4.view.ViewGroupCompat$ViewGroupCompatImpl -> android.support.v4.view.bd:
+android.support.v4.view.ViewGroupCompat$ViewGroupCompatIcsImpl -> android.support.v4.view.bh:
+android.support.v4.view.ViewGroupCompat$ViewGroupCompatImpl -> android.support.v4.view.bi:
     void setMotionEventSplittingEnabled(android.view.ViewGroup,boolean) -> a
-android.support.v4.view.ViewGroupCompat$ViewGroupCompatJellybeanMR2Impl -> android.support.v4.view.be:
-android.support.v4.view.ViewGroupCompat$ViewGroupCompatStubImpl -> android.support.v4.view.bf:
+android.support.v4.view.ViewGroupCompat$ViewGroupCompatJellybeanMR2Impl -> android.support.v4.view.bj:
+android.support.v4.view.ViewGroupCompat$ViewGroupCompatStubImpl -> android.support.v4.view.bk:
     63:63:void setMotionEventSplittingEnabled(android.view.ViewGroup,boolean) -> a
-android.support.v4.view.ViewGroupCompatHC -> android.support.v4.view.bg:
+android.support.v4.view.ViewGroupCompatHC -> android.support.v4.view.bl:
     27:28:void setMotionEventSplittingEnabled(android.view.ViewGroup,boolean) -> a
 android.support.v4.view.ViewPager -> android.support.v4.view.ViewPager:
     int[] LAYOUT_ATTRS -> a
@@ -1159,10 +1154,11 @@ android.support.v4.view.ViewPager -> android.support.v4.view.ViewPager:
     android.support.v4.view.ViewPager$ViewPositionComparator sPositionComparator -> af
     java.lang.Runnable mEndScrollRunnable -> ag
     int mScrollState -> ah
+    354:379:void initViewPager() -> a
     383:385:void onDetachedFromWindow() -> onDetachedFromWindow
     388:400:void setScrollState(int) -> setScrollState
     408:451:void setAdapter(android.support.v4.view.PagerAdapter) -> setAdapter
-    454:462:void removeNonDecorViews() -> f
+    454:462:void removeNonDecorViews() -> g
     470:470:android.support.v4.view.PagerAdapter getAdapter() -> getAdapter
     474:475:void setOnAdapterChangeListener(android.support.v4.view.ViewPager$OnAdapterChangeListener) -> setOnAdapterChangeListener
     478:478:int getClientWidth() -> getClientWidth
@@ -1186,10 +1182,10 @@ android.support.v4.view.ViewPager -> android.support.v4.view.ViewPager:
     766:768:float distanceInfluenceForSnapDuration(float) -> a
     789:827:void smoothScrollTo(int,int,int) -> a
     830:839:android.support.v4.view.ViewPager$ItemInfo addNewItem(int,int) -> a
-    845:911:void dataSetChanged() -> a
-    914:915:void populate() -> b
+    845:911:void dataSetChanged() -> b
+    914:915:void populate() -> c
     918:1103:void populate(int) -> a
-    1106:1119:void sortChildDrawingOrder() -> g
+    1106:1119:void sortChildDrawingOrder() -> h
     1122:1205:void calculatePageOffsets(android.support.v4.view.ViewPager$ItemInfo,int,android.support.v4.view.ViewPager$ItemInfo) -> a
     1261:1267:android.os.Parcelable onSaveInstanceState() -> onSaveInstanceState
     1272:1288:void onRestoreInstanceState(android.os.Parcelable) -> onRestoreInstanceState
@@ -1213,12 +1209,12 @@ android.support.v4.view.ViewPager -> android.support.v4.view.ViewPager:
     1925:2046:boolean onTouchEvent(android.view.MotionEvent) -> onTouchEvent
     2050:2054:void requestParentDisallowInterceptTouchEvent(boolean) -> c
     2057:2100:boolean performDrag(float) -> b
-    2108:2146:android.support.v4.view.ViewPager$ItemInfo infoForCurrentScrollPosition() -> h
+    2108:2146:android.support.v4.view.ViewPager$ItemInfo infoForCurrentScrollPosition() -> i
     2151:2166:int determineTargetPage(int,float,int,int) -> a
     2171:2209:void draw(android.graphics.Canvas) -> draw
     2213:2253:void onDraw(android.graphics.Canvas) -> onDraw
     2384:2396:void onSecondaryPointerUp(android.view.MotionEvent) -> a
-    2399:2406:void endDrag() -> i
+    2399:2406:void endDrag() -> j
     2409:2421:void setScrollingCacheEnabled(boolean) -> setScrollingCacheEnabled
     2424:2435:boolean canScrollHorizontally(int) -> canScrollHorizontally
     2451:2470:boolean canScroll(android.view.View,boolean,int,int,int) -> a
@@ -1226,8 +1222,8 @@ android.support.v4.view.ViewPager -> android.support.v4.view.ViewPager:
     2488:2510:boolean executeKeyEvent(android.view.KeyEvent) -> a
     2514:2576:boolean arrowScroll(int) -> c
     2580:2602:android.graphics.Rect getChildRectInPagerCoordinates(android.graphics.Rect,android.view.View) -> a
-    2606:2610:boolean pageLeft() -> c
-    2614:2618:boolean pageRight() -> d
+    2606:2610:boolean pageLeft() -> d
+    2614:2618:boolean pageRight() -> e
     2626:2663:void addFocusables(java.util.ArrayList,int,int) -> addFocusables
     2673:2682:void addTouchables(java.util.ArrayList) -> addTouchables
     2693:2714:boolean onRequestFocusInDescendants(int,android.graphics.Rect) -> onRequestFocusInDescendants
@@ -1236,35 +1232,47 @@ android.support.v4.view.ViewPager -> android.support.v4.view.ViewPager:
     2747:2747:android.view.ViewGroup$LayoutParams generateLayoutParams(android.view.ViewGroup$LayoutParams) -> generateLayoutParams
     2752:2752:boolean checkLayoutParams(android.view.ViewGroup$LayoutParams) -> checkLayoutParams
     2757:2757:android.view.ViewGroup$LayoutParams generateLayoutParams(android.util.AttributeSet) -> generateLayoutParams
-    84:84:int[] access$400() -> e
-android.support.v4.view.ViewPager$1 -> android.support.v4.view.bh:
+    84:84:void access$000(android.support.v4.view.ViewPager,int) -> a
+    84:84:android.support.v4.view.PagerAdapter access$200(android.support.v4.view.ViewPager) -> a
+    84:84:int access$300(android.support.v4.view.ViewPager) -> b
+    84:84:int[] access$400() -> f
+android.support.v4.view.ViewPager$1 -> android.support.v4.view.bm:
     119:119:int compare(android.support.v4.view.ViewPager$ItemInfo,android.support.v4.view.ViewPager$ItemInfo) -> a
     116:116:int compare(java.lang.Object,java.lang.Object) -> compare
-android.support.v4.view.ViewPager$2 -> android.support.v4.view.bi:
+android.support.v4.view.ViewPager$2 -> android.support.v4.view.bn:
     125:126:float getInterpolation(float) -> getInterpolation
-android.support.v4.view.ViewPager$Decor -> android.support.v4.view.bj:
-android.support.v4.view.ViewPager$ItemInfo -> android.support.v4.view.bk:
+android.support.v4.view.ViewPager$3 -> android.support.v4.view.bo:
+    android.support.v4.view.ViewPager this$0 -> a
+    243:245:void run() -> run
+android.support.v4.view.ViewPager$Decor -> android.support.v4.view.bp:
+android.support.v4.view.ViewPager$ItemInfo -> android.support.v4.view.bq:
     java.lang.Object object -> a
     int position -> b
     boolean scrolling -> c
     float widthFactor -> d
     float offset -> e
-android.support.v4.view.ViewPager$LayoutParams -> android.support.v4.view.bl:
+android.support.v4.view.ViewPager$LayoutParams -> android.support.v4.view.br:
     boolean isDecor -> a
     int gravity -> b
     float widthFactor -> c
     boolean needsMeasure -> d
     int position -> e
     int childIndex -> f
-android.support.v4.view.ViewPager$OnAdapterChangeListener -> android.support.v4.view.bm:
+android.support.v4.view.ViewPager$MyAccessibilityDelegate -> android.support.v4.view.bs:
+    android.support.v4.view.ViewPager this$0 -> b
+    2764:2774:void onInitializeAccessibilityEvent(android.view.View,android.view.accessibility.AccessibilityEvent) -> d
+    2778:2787:void onInitializeAccessibilityNodeInfo(android.view.View,android.support.v4.view.accessibility.AccessibilityNodeInfoCompat) -> a
+    2791:2808:boolean performAccessibilityAction(android.view.View,int,android.os.Bundle) -> a
+    2812:2812:boolean canScroll() -> b
+android.support.v4.view.ViewPager$OnAdapterChangeListener -> android.support.v4.view.bt:
     void onAdapterChanged(android.support.v4.view.PagerAdapter,android.support.v4.view.PagerAdapter) -> a
-android.support.v4.view.ViewPager$OnPageChangeListener -> android.support.v4.view.bn:
+android.support.v4.view.ViewPager$OnPageChangeListener -> android.support.v4.view.bu:
     void onPageScrolled(int,float,int) -> a
     void onPageSelected(int) -> a
     void onPageScrollStateChanged(int) -> b
-android.support.v4.view.ViewPager$PageTransformer -> android.support.v4.view.bo:
+android.support.v4.view.ViewPager$PageTransformer -> android.support.v4.view.bv:
     void transformPage(android.view.View,float) -> a
-android.support.v4.view.ViewPager$PagerObserver -> android.support.v4.view.bp:
+android.support.v4.view.ViewPager$PagerObserver -> android.support.v4.view.bw:
     android.support.v4.view.ViewPager this$0 -> a
     2819:2820:void onChanged() -> onChanged
     2823:2824:void onInvalidated() -> onInvalidated
@@ -1275,12 +1283,12 @@ android.support.v4.view.ViewPager$SavedState -> android.support.v4.view.ViewPage
     android.os.Parcelable$Creator CREATOR -> CREATOR
     1224:1227:void writeToParcel(android.os.Parcel,int) -> writeToParcel
     1231:1231:java.lang.String toString() -> toString
-android.support.v4.view.ViewPager$SavedState$1 -> android.support.v4.view.bq:
+android.support.v4.view.ViewPager$SavedState$1 -> android.support.v4.view.bx:
     1240:1240:android.support.v4.view.ViewPager$SavedState createFromParcel(android.os.Parcel,java.lang.ClassLoader) -> b
     1244:1244:android.support.v4.view.ViewPager$SavedState[] newArray(int) -> b
     1237:1237:java.lang.Object[] newArray(int) -> a
     1237:1237:java.lang.Object createFromParcel(android.os.Parcel,java.lang.ClassLoader) -> a
-android.support.v4.view.ViewPager$ViewPositionComparator -> android.support.v4.view.br:
+android.support.v4.view.ViewPager$ViewPositionComparator -> android.support.v4.view.by:
     2882:2887:int compare(android.view.View,android.view.View) -> a
     2879:2879:int compare(java.lang.Object,java.lang.Object) -> compare
 android.support.v4.view.accessibility.AccessibilityNodeInfoCompat -> android.support.v4.view.a.a:
@@ -1318,6 +1326,7 @@ android.support.v4.view.accessibility.AccessibilityNodeInfoCompat -> android.sup
     1719:1720:void setEnabled(boolean) -> h
     1728:1728:boolean isPassword() -> m
     1752:1752:boolean isScrollable() -> n
+    1767:1768:void setScrollable(boolean) -> i
     1776:1776:java.lang.CharSequence getPackageName() -> o
     1791:1792:void setPackageName(java.lang.CharSequence) -> a
     1800:1800:java.lang.CharSequence getClassName() -> p
@@ -1363,7 +1372,8 @@ android.support.v4.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityN
     619:620:void setLongClickable(java.lang.Object,boolean) -> e
     624:625:void setPackageName(java.lang.Object,java.lang.CharSequence) -> c
     629:630:void setParent(java.lang.Object,android.view.View) -> b
-    644:645:void setSelected(java.lang.Object,boolean) -> f
+    639:640:void setScrollable(java.lang.Object,boolean) -> f
+    644:645:void setSelected(java.lang.Object,boolean) -> g
     649:650:void setSource(java.lang.Object,android.view.View) -> c
     659:660:void recycle(java.lang.Object) -> q
 android.support.v4.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityNodeInfoImpl -> android.support.v4.view.a.c:
@@ -1384,11 +1394,11 @@ android.support.v4.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityN
     boolean isFocused(java.lang.Object) -> l
     void setFocused(java.lang.Object,boolean) -> d
     boolean isVisibleToUser(java.lang.Object) -> r
-    void setVisibleToUser(java.lang.Object,boolean) -> g
+    void setVisibleToUser(java.lang.Object,boolean) -> h
     boolean isAccessibilityFocused(java.lang.Object) -> s
-    void setAccessibilityFocused(java.lang.Object,boolean) -> h
+    void setAccessibilityFocused(java.lang.Object,boolean) -> i
     boolean isSelected(java.lang.Object) -> p
-    void setSelected(java.lang.Object,boolean) -> f
+    void setSelected(java.lang.Object,boolean) -> g
     boolean isClickable(java.lang.Object) -> i
     void setClickable(java.lang.Object,boolean) -> a
     boolean isLongClickable(java.lang.Object) -> m
@@ -1397,6 +1407,7 @@ android.support.v4.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityN
     void setEnabled(java.lang.Object,boolean) -> b
     boolean isPassword(java.lang.Object) -> n
     boolean isScrollable(java.lang.Object) -> o
+    void setScrollable(java.lang.Object,boolean) -> f
     java.lang.CharSequence getPackageName(java.lang.Object) -> e
     void setPackageName(java.lang.Object,java.lang.CharSequence) -> c
     java.lang.CharSequence getClassName(java.lang.Object) -> c
@@ -1408,9 +1419,9 @@ android.support.v4.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityN
     java.lang.String getViewIdResourceName(java.lang.Object) -> t
 android.support.v4.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityNodeInfoJellybeanImpl -> android.support.v4.view.a.d:
     691:691:boolean isVisibleToUser(java.lang.Object) -> r
-    696:697:void setVisibleToUser(java.lang.Object,boolean) -> g
+    696:697:void setVisibleToUser(java.lang.Object,boolean) -> h
     701:701:boolean isAccessibilityFocused(java.lang.Object) -> s
-    706:707:void setAccessibilityFocused(java.lang.Object,boolean) -> h
+    706:707:void setAccessibilityFocused(java.lang.Object,boolean) -> i
 android.support.v4.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityNodeInfoJellybeanMr2Impl -> android.support.v4.view.a.e:
     734:734:java.lang.String getViewIdResourceName(java.lang.Object) -> t
 android.support.v4.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityNodeInfoKitKatImpl -> android.support.v4.view.a.f:
@@ -1445,12 +1456,13 @@ android.support.v4.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityN
     318:318:void setEnabled(java.lang.Object,boolean) -> b
     323:323:void setFocusable(java.lang.Object,boolean) -> c
     328:328:void setFocused(java.lang.Object,boolean) -> d
-    333:333:void setVisibleToUser(java.lang.Object,boolean) -> g
-    338:338:void setAccessibilityFocused(java.lang.Object,boolean) -> h
+    333:333:void setVisibleToUser(java.lang.Object,boolean) -> h
+    338:338:void setAccessibilityFocused(java.lang.Object,boolean) -> i
     343:343:void setLongClickable(java.lang.Object,boolean) -> e
     348:348:void setPackageName(java.lang.Object,java.lang.CharSequence) -> c
     353:353:void setParent(java.lang.Object,android.view.View) -> b
-    368:368:void setSelected(java.lang.Object,boolean) -> f
+    363:363:void setScrollable(java.lang.Object,boolean) -> f
+    368:368:void setSelected(java.lang.Object,boolean) -> g
     373:373:void setSource(java.lang.Object,android.view.View) -> c
     398:398:void recycle(java.lang.Object) -> q
     407:407:java.lang.String getViewIdResourceName(java.lang.Object) -> t
@@ -1486,7 +1498,8 @@ android.support.v4.view.accessibility.AccessibilityNodeInfoCompatIcs -> android.
     185:186:void setLongClickable(java.lang.Object,boolean) -> e
     189:190:void setPackageName(java.lang.Object,java.lang.CharSequence) -> c
     193:194:void setParent(java.lang.Object,android.view.View) -> b
-    205:206:void setSelected(java.lang.Object,boolean) -> f
+    201:202:void setScrollable(java.lang.Object,boolean) -> f
+    205:206:void setSelected(java.lang.Object,boolean) -> g
     209:210:void setSource(java.lang.Object,android.view.View) -> c
     217:218:void recycle(java.lang.Object) -> q
 android.support.v4.view.accessibility.AccessibilityNodeInfoCompatJellyBean -> android.support.v4.view.a.i:
@@ -1549,6 +1562,42 @@ android.support.v4.view.accessibility.AccessibilityNodeProviderCompatKitKat$Acce
     boolean performAction(int,int,android.os.Bundle) -> a
     java.util.List findAccessibilityNodeInfosByText(java.lang.String,int) -> a
     java.lang.Object findFocus(int) -> b
+android.support.v4.view.accessibility.AccessibilityRecordCompat -> android.support.v4.view.a.x:
+    android.support.v4.view.accessibility.AccessibilityRecordCompat$AccessibilityRecordImpl IMPL -> a
+    java.lang.Object mRecord -> b
+    560:560:android.support.v4.view.accessibility.AccessibilityRecordCompat obtain() -> a
+    714:715:void setScrollable(boolean) -> a
+    734:735:void setItemCount(int) -> a
+    780:781:void setFromIndex(int) -> b
+    800:801:void setToIndex(int) -> c
+    1019:1019:int hashCode() -> hashCode
+    1025:1042:boolean equals(java.lang.Object) -> equals
+android.support.v4.view.accessibility.AccessibilityRecordCompat$AccessibilityRecordIcsImpl -> android.support.v4.view.a.y:
+    271:271:java.lang.Object obtain() -> a
+    422:423:void setFromIndex(java.lang.Object,int) -> a
+    432:433:void setItemCount(java.lang.Object,int) -> b
+    462:463:void setScrollable(java.lang.Object,boolean) -> a
+    472:473:void setToIndex(java.lang.Object,int) -> c
+android.support.v4.view.accessibility.AccessibilityRecordCompat$AccessibilityRecordIcsMr1Impl -> android.support.v4.view.a.z:
+android.support.v4.view.accessibility.AccessibilityRecordCompat$AccessibilityRecordImpl -> android.support.v4.view.a.aa:
+    java.lang.Object obtain() -> a
+    void setScrollable(java.lang.Object,boolean) -> a
+    void setItemCount(java.lang.Object,int) -> b
+    void setFromIndex(java.lang.Object,int) -> a
+    void setToIndex(java.lang.Object,int) -> c
+android.support.v4.view.accessibility.AccessibilityRecordCompat$AccessibilityRecordJellyBeanImpl -> android.support.v4.view.a.ab:
+android.support.v4.view.accessibility.AccessibilityRecordCompat$AccessibilityRecordStubImpl -> android.support.v4.view.a.ac:
+    84:84:java.lang.Object obtain() -> a
+    213:213:void setFromIndex(java.lang.Object,int) -> a
+    221:221:void setItemCount(java.lang.Object,int) -> b
+    253:253:void setScrollable(java.lang.Object,boolean) -> a
+    265:265:void setToIndex(java.lang.Object,int) -> c
+android.support.v4.view.accessibility.AccessibilityRecordCompatIcs -> android.support.v4.view.a.ad:
+    31:31:java.lang.Object obtain() -> a
+    151:152:void setFromIndex(java.lang.Object,int) -> a
+    159:160:void setItemCount(java.lang.Object,int) -> b
+    183:184:void setScrollable(java.lang.Object,boolean) -> a
+    191:192:void setToIndex(java.lang.Object,int) -> c
 android.support.v4.widget.DrawerLayout -> android.support.v4.widget.DrawerLayout:
     int[] LAYOUT_ATTRS -> a
     int mMinDrawerMargin -> b
@@ -1688,6 +1737,7 @@ android.support.v4.widget.EdgeEffectCompat -> android.support.v4.widget.g:
     189:189:boolean onRelease() -> c
     218:218:boolean draw(android.graphics.Canvas) -> a
 android.support.v4.widget.EdgeEffectCompat$BaseEdgeEffectImpl -> android.support.v4.widget.h:
+    60:60:java.lang.Object newEdgeEffect(android.content.Context) -> a
     64:64:void setSize(java.lang.Object,int,int) -> a
     67:67:boolean isFinished(java.lang.Object) -> a
     71:71:void finish(java.lang.Object) -> b
@@ -1695,6 +1745,7 @@ android.support.v4.widget.EdgeEffectCompat$BaseEdgeEffectImpl -> android.support
     78:78:boolean onRelease(java.lang.Object) -> c
     86:86:boolean draw(java.lang.Object,android.graphics.Canvas) -> a
 android.support.v4.widget.EdgeEffectCompat$EdgeEffectIcsImpl -> android.support.v4.widget.i:
+    92:92:java.lang.Object newEdgeEffect(android.content.Context) -> a
     96:97:void setSize(java.lang.Object,int,int) -> a
     100:100:boolean isFinished(java.lang.Object) -> a
     104:105:void finish(java.lang.Object) -> b
@@ -1702,6 +1753,7 @@ android.support.v4.widget.EdgeEffectCompat$EdgeEffectIcsImpl -> android.support.
     112:112:boolean onRelease(java.lang.Object) -> c
     120:120:boolean draw(java.lang.Object,android.graphics.Canvas) -> a
 android.support.v4.widget.EdgeEffectCompat$EdgeEffectImpl -> android.support.v4.widget.j:
+    java.lang.Object newEdgeEffect(android.content.Context) -> a
     void setSize(java.lang.Object,int,int) -> a
     boolean isFinished(java.lang.Object) -> a
     void finish(java.lang.Object) -> b
@@ -1709,6 +1761,7 @@ android.support.v4.widget.EdgeEffectCompat$EdgeEffectImpl -> android.support.v4.
     boolean onRelease(java.lang.Object) -> c
     boolean draw(java.lang.Object,android.graphics.Canvas) -> a
 android.support.v4.widget.EdgeEffectCompatIcs -> android.support.v4.widget.k:
+    30:30:java.lang.Object newEdgeEffect(android.content.Context) -> a
     34:35:void setSize(java.lang.Object,int,int) -> a
     38:38:boolean isFinished(java.lang.Object) -> a
     42:43:void finish(java.lang.Object) -> b
@@ -1958,101 +2011,109 @@ net.fred.feedex.MainApplication -> net.fred.feedex.MainApplication:
 net.fred.feedex.activity.BaseActivity -> net.fred.feedex.activity.a:
     android.widget.ProgressBar mProgressBar -> a
     boolean mIsFullScreen -> b
-    40:50:void onResume() -> onResume
-    54:55:void setContentView(android.view.View) -> setContentView
-    59:60:void setContentView(int) -> setContentView
-    64:65:void setContentView(android.view.View,android.view.ViewGroup$LayoutParams) -> setContentView
-    68:70:android.view.ViewGroup init() -> d
-    75:78:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
-    82:87:void onRestoreInstanceState(android.os.Bundle) -> onRestoreInstanceState
-    90:90:android.widget.ProgressBar getProgressBar() -> a
-    94:94:boolean isFullScreen() -> b
-    98:119:void toggleFullScreen() -> c
+    android.view.View mDecorView -> c
+    net.fred.feedex.activity.BaseActivity$OnFullScreenListener mFullScreenListener -> d
+    53:81:void onCreate(android.os.Bundle) -> onCreate
+    85:95:void onResume() -> onResume
+    99:100:void setContentView(android.view.View) -> setContentView
+    104:105:void setContentView(int) -> setContentView
+    109:110:void setContentView(android.view.View,android.view.ViewGroup$LayoutParams) -> setContentView
+    113:120:android.view.ViewGroup init() -> d
+    125:128:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    132:137:void onRestoreInstanceState(android.os.Bundle) -> onRestoreInstanceState
+    140:141:void setOnFullscreenListener(net.fred.feedex.activity.BaseActivity$OnFullScreenListener) -> a
+    144:144:android.widget.ProgressBar getProgressBar() -> a
+    148:148:boolean isFullScreen() -> b
+    153:184:void toggleFullScreen() -> c
+    35:35:boolean access$000(net.fred.feedex.activity.BaseActivity) -> a
+    35:35:boolean access$002(net.fred.feedex.activity.BaseActivity,boolean) -> a
+    35:35:net.fred.feedex.activity.BaseActivity$OnFullScreenListener access$100(net.fred.feedex.activity.BaseActivity) -> b
+net.fred.feedex.activity.BaseActivity$1 -> net.fred.feedex.activity.b:
+    net.fred.feedex.activity.BaseActivity this$0 -> a
+    60:79:void onSystemUiVisibilityChange(int) -> onSystemUiVisibilityChange
+net.fred.feedex.activity.BaseActivity$OnFullScreenListener -> net.fred.feedex.activity.c:
+    void onFullScreenEnabled(boolean) -> a
+    void onFullScreenDisabled() -> a
 net.fred.feedex.activity.EditFeedActivity -> net.fred.feedex.activity.EditFeedActivity:
     java.lang.String[] FEED_PROJECTION -> a
-    android.widget.EditText mNameEditText -> b
-    android.widget.EditText mUrlEditText -> c
-    android.widget.CheckBox mRetrieveFulltextCb -> d
-    android.widget.ListView mFiltersListView -> e
-    java.lang.String mPreviousName -> f
-    net.fred.feedex.adapter.FiltersCursorAdapter mFiltersCursorAdapter -> g
-    android.view.ActionMode$Callback mFilterActionModeCallback -> h
-    112:172:void onCreate(android.os.Bundle) -> onCreate
-    176:211:void onDestroy() -> onDestroy
-    215:221:boolean onMenuItemSelected(int,android.view.MenuItem) -> onMenuItemSelected
-    225:251:void onClickAddFilter(android.view.View) -> onClickAddFilter
-    255:258:android.content.Loader onCreateLoader(int,android.os.Bundle) -> onCreateLoader
-    263:264:void onLoadFinished(android.content.Loader,android.database.Cursor) -> a
-    268:269:void onLoaderReset(android.content.Loader) -> onLoaderReset
-    274:307:void onClickOk(android.view.View) -> onClickOk
-    310:311:void onClickCancel(android.view.View) -> onClickCancel
-    422:508:void onClickSearch(android.view.View) -> onClickSearch
-    1:1:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
-    108:108:net.fred.feedex.adapter.FiltersCursorAdapter access$1(net.fred.feedex.activity.EditFeedActivity) -> a
-    105:105:android.widget.ListView access$2(net.fred.feedex.activity.EditFeedActivity) -> b
-    313:313:android.view.ActionMode$Callback access$3(net.fred.feedex.activity.EditFeedActivity) -> c
-    103:103:android.widget.EditText access$4(net.fred.feedex.activity.EditFeedActivity) -> d
-    103:103:android.widget.EditText access$5(net.fred.feedex.activity.EditFeedActivity) -> e
-net.fred.feedex.activity.EditFeedActivity$1 -> net.fred.feedex.activity.b:
+    android.widget.TabHost mTabHost -> b
+    android.widget.EditText mNameEditText -> c
+    android.widget.EditText mUrlEditText -> d
+    android.widget.CheckBox mRetrieveFulltextCb -> e
+    android.widget.ListView mFiltersListView -> f
+    java.lang.String mPreviousName -> g
+    net.fred.feedex.adapter.FiltersCursorAdapter mFiltersCursorAdapter -> h
+    android.view.ActionMode$Callback mFilterActionModeCallback -> i
+    223:299:void onCreate(android.os.Bundle) -> onCreate
+    303:305:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    309:340:void onDestroy() -> onDestroy
+    344:347:boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
+    352:360:boolean onPrepareOptionsMenu(android.view.Menu) -> onPrepareOptionsMenu
+    365:488:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+    495:526:void onClickOk(android.view.View) -> onClickOk
+    529:530:void onClickCancel(android.view.View) -> onClickCancel
+    534:537:android.content.Loader onCreateLoader(int,android.os.Bundle) -> onCreateLoader
+    542:543:void onLoadFinished(android.content.Loader,android.database.Cursor) -> a
+    547:548:void onLoaderReset(android.content.Loader) -> onLoaderReset
+    95:95:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
+    95:95:net.fred.feedex.adapter.FiltersCursorAdapter access$000(net.fred.feedex.activity.EditFeedActivity) -> a
+    95:95:android.widget.ListView access$100(net.fred.feedex.activity.EditFeedActivity) -> b
+    95:95:android.view.ActionMode$Callback access$200(net.fred.feedex.activity.EditFeedActivity) -> c
+    95:95:android.widget.EditText access$300(net.fred.feedex.activity.EditFeedActivity) -> d
+    95:95:android.widget.EditText access$400(net.fred.feedex.activity.EditFeedActivity) -> e
+net.fred.feedex.activity.EditFeedActivity$1 -> net.fred.feedex.activity.d:
     net.fred.feedex.activity.EditFeedActivity this$0 -> a
-    319:321:boolean onCreateActionMode(android.view.ActionMode,android.view.Menu) -> onCreateActionMode
-    328:328:boolean onPrepareActionMode(android.view.ActionMode,android.view.Menu) -> onPrepareActionMode
-    335:409:boolean onActionItemClicked(android.view.ActionMode,android.view.MenuItem) -> onActionItemClicked
-    416:418:void onDestroyActionMode(android.view.ActionMode) -> onDestroyActionMode
-    313:313:net.fred.feedex.activity.EditFeedActivity access$0(net.fred.feedex.activity.EditFeedActivity$1) -> a
-net.fred.feedex.activity.EditFeedActivity$1$1 -> net.fred.feedex.activity.c:
-    net.fred.feedex.activity.EditFeedActivity$1 this$1 -> a
-    android.widget.EditText val$filterText -> b
-    android.widget.CheckBox val$regexCheckBox -> c
-    android.widget.RadioButton val$applyTitleRadio -> d
-    long val$filterId -> e
-    360:378:void onClick(android.content.DialogInterface,int) -> onClick
-    357:357:net.fred.feedex.activity.EditFeedActivity$1 access$0(net.fred.feedex.activity.EditFeedActivity$1$1) -> a
-net.fred.feedex.activity.EditFeedActivity$1$1$1 -> net.fred.feedex.activity.d:
+    119:121:boolean onCreateActionMode(android.view.ActionMode,android.view.Menu) -> onCreateActionMode
+    128:128:boolean onPrepareActionMode(android.view.ActionMode,android.view.Menu) -> onPrepareActionMode
+    135:209:boolean onActionItemClicked(android.view.ActionMode,android.view.MenuItem) -> onActionItemClicked
+    216:218:void onDestroyActionMode(android.view.ActionMode) -> onDestroyActionMode
+net.fred.feedex.activity.EditFeedActivity$1$1 -> net.fred.feedex.activity.e:
+    android.widget.EditText val$filterText -> a
+    android.widget.CheckBox val$regexCheckBox -> b
+    android.widget.RadioButton val$applyTitleRadio -> c
+    long val$filterId -> d
+    net.fred.feedex.activity.EditFeedActivity$1 this$1 -> e
+    160:178:void onClick(android.content.DialogInterface,int) -> onClick
+net.fred.feedex.activity.EditFeedActivity$1$1$1 -> net.fred.feedex.activity.f:
     net.fred.feedex.activity.EditFeedActivity$1$1 this$2 -> a
-    android.widget.EditText val$filterText -> b
-    android.widget.CheckBox val$regexCheckBox -> c
-    android.widget.RadioButton val$applyTitleRadio -> d
-    long val$filterId -> e
-    363:376:void run() -> run
-net.fred.feedex.activity.EditFeedActivity$1$2 -> net.fred.feedex.activity.e:
-    net.fred.feedex.activity.EditFeedActivity$1 this$1 -> a
-    long val$filterId -> b
-    393:403:void onClick(android.content.DialogInterface,int) -> onClick
-    390:390:net.fred.feedex.activity.EditFeedActivity$1 access$0(net.fred.feedex.activity.EditFeedActivity$1$2) -> a
-net.fred.feedex.activity.EditFeedActivity$1$2$1 -> net.fred.feedex.activity.f:
+    163:176:void run() -> run
+net.fred.feedex.activity.EditFeedActivity$1$2 -> net.fred.feedex.activity.g:
+    long val$filterId -> a
+    net.fred.feedex.activity.EditFeedActivity$1 this$1 -> b
+    193:203:void onClick(android.content.DialogInterface,int) -> onClick
+net.fred.feedex.activity.EditFeedActivity$1$2$1 -> net.fred.feedex.activity.h:
     net.fred.feedex.activity.EditFeedActivity$1$2 this$2 -> a
-    long val$filterId -> b
-    396:401:void run() -> run
-net.fred.feedex.activity.EditFeedActivity$2 -> net.fred.feedex.activity.g:
+    196:201:void run() -> run
+net.fred.feedex.activity.EditFeedActivity$2 -> net.fred.feedex.activity.i:
     net.fred.feedex.activity.EditFeedActivity this$0 -> a
-    147:150:boolean onItemLongClick(android.widget.AdapterView,android.view.View,int,long) -> onItemLongClick
-net.fred.feedex.activity.EditFeedActivity$3 -> net.fred.feedex.activity.h:
+    248:249:void onTabChanged(java.lang.String) -> onTabChanged
+net.fred.feedex.activity.EditFeedActivity$3 -> net.fred.feedex.activity.j:
     net.fred.feedex.activity.EditFeedActivity this$0 -> a
-    android.view.View val$dialogView -> b
-    233:245:void onClick(android.content.DialogInterface,int) -> onClick
-net.fred.feedex.activity.EditFeedActivity$4 -> net.fred.feedex.activity.i:
+    274:277:boolean onItemLongClick(android.widget.AdapterView,android.view.View,int,long) -> onItemLongClick
+net.fred.feedex.activity.EditFeedActivity$4 -> net.fred.feedex.activity.k:
     net.fred.feedex.activity.EditFeedActivity this$0 -> a
-    249:249:void onClick(android.content.DialogInterface,int) -> onClick
-net.fred.feedex.activity.EditFeedActivity$5 -> net.fred.feedex.activity.j:
-    net.fred.feedex.activity.EditFeedActivity this$0 -> a
-    android.widget.EditText val$searchText -> b
-    android.widget.RadioGroup val$radioGroup -> c
-    437:506:void onClick(android.content.DialogInterface,int) -> onClick
-    433:433:net.fred.feedex.activity.EditFeedActivity access$0(net.fred.feedex.activity.EditFeedActivity$5) -> a
-net.fred.feedex.activity.EditFeedActivity$5$1 -> net.fred.feedex.activity.k:
-    net.fred.feedex.activity.EditFeedActivity$5 this$1 -> a
-    java.lang.String val$text -> b
-    android.app.ProgressDialog val$pd -> c
-    457:457:android.content.Loader onCreateLoader(int,android.os.Bundle) -> onCreateLoader
-    463:489:void onLoadFinished(android.content.Loader,java.util.ArrayList) -> a
-    493:493:void onLoaderReset(android.content.Loader) -> onLoaderReset
-    1:1:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
-    453:453:net.fred.feedex.activity.EditFeedActivity$5 access$1(net.fred.feedex.activity.EditFeedActivity$5$1) -> a
-net.fred.feedex.activity.EditFeedActivity$5$1$1 -> net.fred.feedex.activity.l:
-    net.fred.feedex.activity.EditFeedActivity$5$1 this$2 -> a
-    java.util.ArrayList val$data -> b
-    483:485:void onClick(android.content.DialogInterface,int) -> onClick
+    394:394:void onClick(android.content.DialogInterface,int) -> onClick
+net.fred.feedex.activity.EditFeedActivity$5 -> net.fred.feedex.activity.l:
+    android.view.View val$dialogView -> a
+    net.fred.feedex.activity.EditFeedActivity this$0 -> b
+    378:390:void onClick(android.content.DialogInterface,int) -> onClick
+net.fred.feedex.activity.EditFeedActivity$6 -> net.fred.feedex.activity.m:
+    android.widget.EditText val$searchText -> a
+    android.widget.RadioGroup val$radioGroup -> b
+    net.fred.feedex.activity.EditFeedActivity this$0 -> c
+    414:483:void onClick(android.content.DialogInterface,int) -> onClick
+net.fred.feedex.activity.EditFeedActivity$6$1 -> net.fred.feedex.activity.n:
+    java.lang.String val$text -> a
+    android.app.ProgressDialog val$pd -> b
+    net.fred.feedex.activity.EditFeedActivity$6 this$1 -> c
+    434:434:android.content.Loader onCreateLoader(int,android.os.Bundle) -> onCreateLoader
+    440:466:void onLoadFinished(android.content.Loader,java.util.ArrayList) -> a
+    470:470:void onLoaderReset(android.content.Loader) -> onLoaderReset
+    430:430:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
+net.fred.feedex.activity.EditFeedActivity$6$1$1 -> net.fred.feedex.activity.o:
+    java.util.ArrayList val$data -> a
+    net.fred.feedex.activity.EditFeedActivity$6$1 this$2 -> b
+    460:462:void onClick(android.content.DialogInterface,int) -> onClick
 net.fred.feedex.activity.EditFeedsListActivity -> net.fred.feedex.activity.EditFeedsListActivity:
     58:67:void onCreate(android.os.Bundle) -> onCreate
     71:76:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
@@ -2063,17 +2124,17 @@ net.fred.feedex.activity.EntryActivity -> net.fred.feedex.activity.EntryActivity
     67:70:void onNewIntent(android.content.Intent) -> onNewIntent
 net.fred.feedex.activity.GeneralPrefsActivity -> net.fred.feedex.activity.GeneralPrefsActivity:
     62:94:void onCreate(android.os.Bundle) -> onCreate
-    98:103:boolean onMenuItemSelected(int,android.view.MenuItem) -> onMenuItemSelected
-net.fred.feedex.activity.GeneralPrefsActivity$1 -> net.fred.feedex.activity.m:
+    98:103:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+net.fred.feedex.activity.GeneralPrefsActivity$1 -> net.fred.feedex.activity.p:
     net.fred.feedex.activity.GeneralPrefsActivity this$0 -> a
     73:79:boolean onPreferenceChange(android.preference.Preference,java.lang.Object) -> onPreferenceChange
-net.fred.feedex.activity.GeneralPrefsActivity$2 -> net.fred.feedex.activity.n:
+net.fred.feedex.activity.GeneralPrefsActivity$2 -> net.fred.feedex.activity.q:
     net.fred.feedex.activity.GeneralPrefsActivity this$0 -> a
     87:91:boolean onPreferenceChange(android.preference.Preference,java.lang.Object) -> onPreferenceChange
-net.fred.feedex.activity.GetFeedSearchResultsLoader -> net.fred.feedex.activity.o:
+net.fred.feedex.activity.GetFeedSearchResultsLoader -> net.fred.feedex.activity.r:
     java.lang.String mSearchText -> a
-    530:560:java.util.ArrayList loadInBackground() -> a
-    1:1:java.lang.Object loadInBackground() -> loadInBackground
+    570:600:java.util.ArrayList loadInBackground() -> a
+    554:554:java.lang.Object loadInBackground() -> loadInBackground
 net.fred.feedex.activity.HomeActivity -> net.fred.feedex.activity.HomeActivity:
     android.content.SharedPreferences$OnSharedPreferenceChangeListener isRefreshingListener -> a
     net.fred.feedex.fragment.EntriesListFragment mEntriesFragment -> b
@@ -2100,35 +2161,34 @@ net.fred.feedex.activity.HomeActivity -> net.fred.feedex.activity.HomeActivity:
     283:298:void onLoadFinished(android.content.Loader,android.database.Cursor) -> a
     302:303:void onLoaderReset(android.content.Loader) -> onLoaderReset
     306:363:void selectDrawerItem(int) -> a
-    1:1:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
-    305:305:void access$1(net.fred.feedex.activity.HomeActivity,int) -> a
-    74:74:android.support.v4.widget.DrawerLayout access$2(net.fred.feedex.activity.HomeActivity) -> a
-    75:75:android.widget.ListView access$3(net.fred.feedex.activity.HomeActivity) -> b
-    83:83:boolean access$4(net.fred.feedex.activity.HomeActivity) -> c
-    83:83:void access$5(net.fred.feedex.activity.HomeActivity,boolean) -> a
-    85:85:void access$6(net.fred.feedex.activity.HomeActivity,boolean) -> b
-    81:81:int access$7(net.fred.feedex.activity.HomeActivity) -> d
-    153:153:void access$8(net.fred.feedex.activity.HomeActivity) -> e
-net.fred.feedex.activity.HomeActivity$1 -> net.fred.feedex.activity.p:
+    58:58:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
+    58:58:void access$000(net.fred.feedex.activity.HomeActivity,int) -> a
+    58:58:android.widget.ListView access$100(net.fred.feedex.activity.HomeActivity) -> a
+    58:58:android.support.v4.widget.DrawerLayout access$200(net.fred.feedex.activity.HomeActivity) -> b
+    58:58:boolean access$300(net.fred.feedex.activity.HomeActivity) -> c
+    58:58:boolean access$302(net.fred.feedex.activity.HomeActivity,boolean) -> a
+    58:58:boolean access$402(net.fred.feedex.activity.HomeActivity,boolean) -> b
+    58:58:int access$500(net.fred.feedex.activity.HomeActivity) -> d
+    58:58:void access$600(net.fred.feedex.activity.HomeActivity) -> e
+net.fred.feedex.activity.HomeActivity$1 -> net.fred.feedex.activity.s:
     net.fred.feedex.activity.HomeActivity this$0 -> a
     67:70:void onSharedPreferenceChanged(android.content.SharedPreferences,java.lang.String) -> onSharedPreferenceChanged
-net.fred.feedex.activity.HomeActivity$2 -> net.fred.feedex.activity.q:
+net.fred.feedex.activity.HomeActivity$2 -> net.fred.feedex.activity.t:
     net.fred.feedex.activity.HomeActivity this$0 -> a
     104:111:void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
-    101:101:net.fred.feedex.activity.HomeActivity access$0(net.fred.feedex.activity.HomeActivity$2) -> a
-net.fred.feedex.activity.HomeActivity$2$1 -> net.fred.feedex.activity.r:
+net.fred.feedex.activity.HomeActivity$2$1 -> net.fred.feedex.activity.u:
     net.fred.feedex.activity.HomeActivity$2 this$1 -> a
     108:109:void run() -> run
-net.fred.feedex.activity.HomeActivity$3 -> net.fred.feedex.activity.s:
+net.fred.feedex.activity.HomeActivity$3 -> net.fred.feedex.activity.v:
     net.fred.feedex.activity.HomeActivity this$0 -> a
     121:130:void onDrawerStateChanged(int) -> a
-net.fred.feedex.activity.HomeActivity$4 -> net.fred.feedex.activity.t:
+net.fred.feedex.activity.HomeActivity$4 -> net.fred.feedex.activity.w:
     net.fred.feedex.activity.HomeActivity this$0 -> a
     208:209:void run() -> run
-net.fred.feedex.activity.HomeActivity$5 -> net.fred.feedex.activity.u:
+net.fred.feedex.activity.HomeActivity$5 -> net.fred.feedex.activity.x:
     net.fred.feedex.activity.HomeActivity this$0 -> a
     293:295:void run() -> run
-net.fred.feedex.activity.HomeActivity$6 -> net.fred.feedex.activity.v:
+net.fred.feedex.activity.HomeActivity$6 -> net.fred.feedex.activity.y:
     net.fred.feedex.activity.HomeActivity this$0 -> a
     359:360:void run() -> run
 net.fred.feedex.adapter.CursorLoaderExpandableListAdapter -> net.fred.feedex.a.a:
@@ -2162,33 +2222,33 @@ net.fred.feedex.adapter.CursorLoaderExpandableListAdapter -> net.fred.feedex.a.a
     329:329:boolean hasStableIds() -> hasStableIds
     334:336:void onGroupCollapsed(int) -> onGroupCollapsed
     344:344:void notifyDataSetChanged(android.database.Cursor) -> b
-    1:1:java.lang.Object getChild(int,int) -> getChild
-    1:1:java.lang.Object getGroup(int) -> getGroup
-    44:44:android.app.Activity access$2(net.fred.feedex.adapter.CursorLoaderExpandableListAdapter) -> a
-    46:46:android.net.Uri access$3(net.fred.feedex.adapter.CursorLoaderExpandableListAdapter) -> b
-    53:53:void access$4(net.fred.feedex.adapter.CursorLoaderExpandableListAdapter,android.database.Cursor) -> a
-    92:92:void access$5(net.fred.feedex.adapter.CursorLoaderExpandableListAdapter) -> c
-    57:57:android.util.SparseArray access$6(net.fred.feedex.adapter.CursorLoaderExpandableListAdapter) -> d
+    42:42:java.lang.Object getChild(int,int) -> getChild
+    42:42:java.lang.Object getGroup(int) -> getGroup
+    42:42:android.app.Activity access$000(net.fred.feedex.adapter.CursorLoaderExpandableListAdapter) -> a
+    42:42:android.net.Uri access$100(net.fred.feedex.adapter.CursorLoaderExpandableListAdapter) -> b
+    42:42:android.database.Cursor access$202(net.fred.feedex.adapter.CursorLoaderExpandableListAdapter,android.database.Cursor) -> a
+    42:42:void access$300(net.fred.feedex.adapter.CursorLoaderExpandableListAdapter) -> c
+    42:42:android.util.SparseArray access$400(net.fred.feedex.adapter.CursorLoaderExpandableListAdapter) -> d
 net.fred.feedex.adapter.CursorLoaderExpandableListAdapter$1 -> net.fred.feedex.a.b:
     net.fred.feedex.adapter.CursorLoaderExpandableListAdapter this$0 -> a
     62:73:android.content.Loader onCreateLoader(int,android.os.Bundle) -> onCreateLoader
     78:82:void onLoadFinished(android.content.Loader,android.database.Cursor) -> a
     86:89:void onLoaderReset(android.content.Loader) -> onLoaderReset
-    1:1:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
-    59:59:net.fred.feedex.adapter.CursorLoaderExpandableListAdapter access$1(net.fred.feedex.adapter.CursorLoaderExpandableListAdapter$1) -> a
+    59:59:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
 net.fred.feedex.adapter.CursorLoaderExpandableListAdapter$1$1 -> net.fred.feedex.a.c:
     net.fred.feedex.adapter.CursorLoaderExpandableListAdapter$1 this$1 -> a
     66:68:android.database.Cursor loadInBackground() -> loadInBackground
+    62:62:java.lang.Object loadInBackground() -> loadInBackground
 net.fred.feedex.adapter.CursorLoaderExpandableListAdapter$2 -> net.fred.feedex.a.d:
     net.fred.feedex.adapter.CursorLoaderExpandableListAdapter this$0 -> a
     103:114:android.content.Loader onCreateLoader(int,android.os.Bundle) -> onCreateLoader
     119:121:void onLoadFinished(android.content.Loader,android.database.Cursor) -> a
     125:127:void onLoaderReset(android.content.Loader) -> onLoaderReset
-    1:1:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
-    100:100:net.fred.feedex.adapter.CursorLoaderExpandableListAdapter access$1(net.fred.feedex.adapter.CursorLoaderExpandableListAdapter$2) -> a
+    100:100:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
 net.fred.feedex.adapter.CursorLoaderExpandableListAdapter$2$1 -> net.fred.feedex.a.e:
     net.fred.feedex.adapter.CursorLoaderExpandableListAdapter$2 this$1 -> a
     107:109:android.database.Cursor loadInBackground() -> loadInBackground
+    103:103:java.lang.Object loadInBackground() -> loadInBackground
 net.fred.feedex.adapter.DrawerAdapter -> net.fred.feedex.a.f:
     int ITEM_PADDING -> a
     int NORMAL_TEXT_COLOR -> b
@@ -2215,54 +2275,54 @@ net.fred.feedex.adapter.DrawerAdapter$ViewHolder -> net.fred.feedex.a.h:
     android.widget.TextView unreadTxt -> d
     android.view.View separator -> e
 net.fred.feedex.adapter.EntriesCursorAdapter -> net.fred.feedex.a.i:
-    int titleColumnPosition -> a
-    int dateColumn -> b
-    int isReadColumn -> c
-    int favoriteColumn -> d
-    int idColumn -> e
-    int feedIconColumn -> f
-    int feedNameColumn -> g
-    android.net.Uri uri -> h
-    boolean showFeedInfo -> i
-    java.util.Vector markedAsRead -> j
-    java.util.Vector markedAsUnread -> k
-    java.util.Vector favorited -> l
-    java.util.Vector unfavorited -> m
-    113:215:void bindView(android.view.View,android.content.Context,android.database.Cursor) -> bindView
-    218:237:void markAllAsRead() -> a
-    240:253:void markAsRead(long) -> a
-    256:269:void markAsUnread(long) -> b
-    273:275:void changeCursor(android.database.Cursor) -> changeCursor
-    279:280:android.database.Cursor swapCursor(android.database.Cursor) -> swapCursor
-    285:287:void notifyDataSetChanged() -> notifyDataSetChanged
-    291:293:void notifyDataSetInvalidated() -> notifyDataSetInvalidated
-    296:312:void reinit(android.database.Cursor) -> a
-    100:100:java.util.Vector access$0(net.fred.feedex.adapter.EntriesCursorAdapter) -> a
-    101:101:java.util.Vector access$1(net.fred.feedex.adapter.EntriesCursorAdapter) -> b
-    95:95:android.net.Uri access$2(net.fred.feedex.adapter.EntriesCursorAdapter) -> c
-    239:239:void access$3(net.fred.feedex.adapter.EntriesCursorAdapter,long) -> a
-    255:255:void access$4(net.fred.feedex.adapter.EntriesCursorAdapter,long) -> b
+    int mTitlePos -> a
+    int mDatePos -> b
+    int mIsReadPos -> c
+    int mFavoritePos -> d
+    int mIdPos -> e
+    int mFeedIconPos -> f
+    int mFeedNamePos -> g
+    android.net.Uri mUri -> h
+    boolean mShowFeedInfo -> i
+    java.util.Vector mMarkedAsReadEntries -> j
+    java.util.Vector mMarkedAsUnreadEntries -> k
+    java.util.Vector mFavoriteEntries -> l
+    java.util.Vector mNotFavoriteEntries -> m
+    105:205:void bindView(android.view.View,android.content.Context,android.database.Cursor) -> bindView
+    208:218:void markAllAsRead() -> a
+    221:232:void markAsRead(long) -> a
+    235:246:void markAsUnread(long) -> b
+    250:252:void changeCursor(android.database.Cursor) -> changeCursor
+    256:257:android.database.Cursor swapCursor(android.database.Cursor) -> swapCursor
+    262:264:void notifyDataSetChanged() -> notifyDataSetChanged
+    268:270:void notifyDataSetInvalidated() -> notifyDataSetInvalidated
+    273:289:void reinit(android.database.Cursor) -> a
+    76:76:java.util.Vector access$100(net.fred.feedex.adapter.EntriesCursorAdapter) -> a
+    76:76:java.util.Vector access$200(net.fred.feedex.adapter.EntriesCursorAdapter) -> b
+    76:76:android.net.Uri access$300(net.fred.feedex.adapter.EntriesCursorAdapter) -> c
+    76:76:void access$400(net.fred.feedex.adapter.EntriesCursorAdapter,long) -> a
+    76:76:void access$500(net.fred.feedex.adapter.EntriesCursorAdapter,long) -> b
 net.fred.feedex.adapter.EntriesCursorAdapter$1 -> net.fred.feedex.a.j:
-    net.fred.feedex.adapter.EntriesCursorAdapter this$0 -> a
-    net.fred.feedex.adapter.EntriesCursorAdapter$ViewHolder val$holder -> b
-    long val$id -> c
-    134:156:void onClick(android.view.View) -> onClick
-net.fred.feedex.adapter.EntriesCursorAdapter$2 -> net.fred.feedex.a.k:
-    net.fred.feedex.adapter.EntriesCursorAdapter this$0 -> a
+    net.fred.feedex.adapter.EntriesCursorAdapter$ViewHolder val$holder -> a
     long val$id -> b
-    net.fred.feedex.adapter.EntriesCursorAdapter$ViewHolder val$holder -> c
-    204:213:void onCheckedChanged(android.widget.CompoundButton,boolean) -> onCheckedChanged
+    net.fred.feedex.adapter.EntriesCursorAdapter this$0 -> c
+    126:146:void onClick(android.view.View) -> onClick
+net.fred.feedex.adapter.EntriesCursorAdapter$2 -> net.fred.feedex.a.k:
+    long val$id -> a
+    net.fred.feedex.adapter.EntriesCursorAdapter$ViewHolder val$holder -> b
+    net.fred.feedex.adapter.EntriesCursorAdapter this$0 -> c
+    194:203:void onCheckedChanged(android.widget.CompoundButton,boolean) -> onCheckedChanged
 net.fred.feedex.adapter.EntriesCursorAdapter$3 -> net.fred.feedex.a.l:
     net.fred.feedex.adapter.EntriesCursorAdapter this$0 -> a
-    224:235:void run() -> run
+    214:216:void run() -> run
 net.fred.feedex.adapter.EntriesCursorAdapter$4 -> net.fred.feedex.a.m:
-    net.fred.feedex.adapter.EntriesCursorAdapter this$0 -> a
-    long val$id -> b
-    246:251:void run() -> run
+    long val$id -> a
+    net.fred.feedex.adapter.EntriesCursorAdapter this$0 -> b
+    227:230:void run() -> run
 net.fred.feedex.adapter.EntriesCursorAdapter$5 -> net.fred.feedex.a.n:
-    net.fred.feedex.adapter.EntriesCursorAdapter this$0 -> a
-    long val$id -> b
-    262:267:void run() -> run
+    long val$id -> a
+    net.fred.feedex.adapter.EntriesCursorAdapter this$0 -> b
+    241:244:void run() -> run
 net.fred.feedex.adapter.EntriesCursorAdapter$ViewHolder -> net.fred.feedex.a.o:
     android.widget.TextView titleTextView -> a
     android.widget.TextView dateTextView -> b
@@ -2298,131 +2358,120 @@ net.fred.feedex.fragment.EditFeedsListFragment -> net.fred.feedex.fragment.a:
     net.fred.feedex.view.DragNDropExpandableListView mListView -> a
     android.view.ActionMode$Callback mFeedActionModeCallback -> b
     android.view.ActionMode$Callback mGroupActionModeCallback -> c
-    95:97:void onCreate(android.os.Bundle) -> onCreate
-    101:187:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
-    192:218:void moveItem(boolean,boolean,boolean,long,int,int) -> a
-    222:224:void onDestroy() -> onDestroy
-    228:230:void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> onCreateOptionsMenu
-    234:320:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
-    325:352:void onActivityResult(int,int,android.content.Intent) -> onActivityResult
-    355:391:void displayCustomFilePicker() -> a
-    91:91:net.fred.feedex.view.DragNDropExpandableListView access$0(net.fred.feedex.fragment.EditFeedsListFragment) -> a
-    480:480:android.view.ActionMode$Callback access$1(net.fred.feedex.fragment.EditFeedsListFragment) -> b
-    393:393:android.view.ActionMode$Callback access$2(net.fred.feedex.fragment.EditFeedsListFragment) -> c
-    190:190:void access$3(net.fred.feedex.fragment.EditFeedsListFragment,boolean,boolean,boolean,long,int,int) -> a
+    259:261:void onCreate(android.os.Bundle) -> onCreate
+    265:368:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
+    373:391:void moveItem(boolean,boolean,boolean,long,int,int) -> a
+    395:397:void onDestroy() -> onDestroy
+    401:403:void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> onCreateOptionsMenu
+    407:493:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+    498:525:void onActivityResult(int,int,android.content.Intent) -> onActivityResult
+    528:564:void displayCustomFilePicker() -> a
+    86:86:net.fred.feedex.view.DragNDropExpandableListView access$000(net.fred.feedex.fragment.EditFeedsListFragment) -> a
+    86:86:android.view.ActionMode$Callback access$100(net.fred.feedex.fragment.EditFeedsListFragment) -> b
+    86:86:android.view.ActionMode$Callback access$200(net.fred.feedex.fragment.EditFeedsListFragment) -> c
+    86:86:void access$300(net.fred.feedex.fragment.EditFeedsListFragment,boolean,boolean,boolean,long,int,int) -> a
 net.fred.feedex.fragment.EditFeedsListFragment$1 -> net.fred.feedex.fragment.b:
     net.fred.feedex.fragment.EditFeedsListFragment this$0 -> a
-    399:401:boolean onCreateActionMode(android.view.ActionMode,android.view.Menu) -> onCreateActionMode
-    408:408:boolean onPrepareActionMode(android.view.ActionMode,android.view.Menu) -> onPrepareActionMode
-    415:467:boolean onActionItemClicked(android.view.ActionMode,android.view.MenuItem) -> onActionItemClicked
-    474:477:void onDestroyActionMode(android.view.ActionMode) -> onDestroyActionMode
-    393:393:net.fred.feedex.fragment.EditFeedsListFragment access$0(net.fred.feedex.fragment.EditFeedsListFragment$1) -> a
+    98:100:boolean onCreateActionMode(android.view.ActionMode,android.view.Menu) -> onCreateActionMode
+    107:107:boolean onPrepareActionMode(android.view.ActionMode,android.view.Menu) -> onPrepareActionMode
+    114:156:boolean onActionItemClicked(android.view.ActionMode,android.view.MenuItem) -> onActionItemClicked
+    163:166:void onDestroyActionMode(android.view.ActionMode) -> onDestroyActionMode
 net.fred.feedex.fragment.EditFeedsListFragment$1$1 -> net.fred.feedex.fragment.c:
-    net.fred.feedex.fragment.EditFeedsListFragment$1 this$1 -> a
-    long val$feedId -> b
-    433:461:void onClick(android.content.DialogInterface,int) -> onClick
-    430:430:net.fred.feedex.fragment.EditFeedsListFragment$1 access$0(net.fred.feedex.fragment.EditFeedsListFragment$1$1) -> a
+    long val$feedId -> a
+    net.fred.feedex.fragment.EditFeedsListFragment$1 this$1 -> b
+    132:150:void onClick(android.content.DialogInterface,int) -> onClick
 net.fred.feedex.fragment.EditFeedsListFragment$1$1$1 -> net.fred.feedex.fragment.d:
     net.fred.feedex.fragment.EditFeedsListFragment$1$1 this$2 -> a
-    long val$feedId -> b
-    436:459:void run() -> run
-net.fred.feedex.fragment.EditFeedsListFragment$2 -> net.fred.feedex.fragment.e:
+    135:148:void run() -> run
+net.fred.feedex.fragment.EditFeedsListFragment$10 -> net.fred.feedex.fragment.e:
     net.fred.feedex.fragment.EditFeedsListFragment this$0 -> a
-    486:488:boolean onCreateActionMode(android.view.ActionMode,android.view.Menu) -> onCreateActionMode
-    495:495:boolean onPrepareActionMode(android.view.ActionMode,android.view.Menu) -> onPrepareActionMode
-    502:562:boolean onActionItemClicked(android.view.ActionMode,android.view.MenuItem) -> onActionItemClicked
-    569:572:void onDestroyActionMode(android.view.ActionMode) -> onDestroyActionMode
-    480:480:net.fred.feedex.fragment.EditFeedsListFragment access$0(net.fred.feedex.fragment.EditFeedsListFragment$2) -> a
-net.fred.feedex.fragment.EditFeedsListFragment$2$1 -> net.fred.feedex.fragment.f:
-    net.fred.feedex.fragment.EditFeedsListFragment$2 this$1 -> a
-    android.widget.EditText val$input -> b
-    long val$groupId -> c
-    517:532:void onClick(android.content.DialogInterface,int) -> onClick
-    514:514:net.fred.feedex.fragment.EditFeedsListFragment$2 access$0(net.fred.feedex.fragment.EditFeedsListFragment$2$1) -> a
-net.fred.feedex.fragment.EditFeedsListFragment$2$1$1 -> net.fred.feedex.fragment.g:
+    536:536:boolean accept(java.io.File,java.lang.String) -> accept
+net.fred.feedex.fragment.EditFeedsListFragment$11 -> net.fred.feedex.fragment.f:
+    java.lang.String[] val$fileNames -> a
+    net.fred.feedex.fragment.EditFeedsListFragment this$0 -> b
+    542:558:void onClick(android.content.DialogInterface,int) -> onClick
+net.fred.feedex.fragment.EditFeedsListFragment$11$1 -> net.fred.feedex.fragment.g:
+    int val$which -> a
+    net.fred.feedex.fragment.EditFeedsListFragment$11 this$1 -> b
+    546:556:void run() -> run
+net.fred.feedex.fragment.EditFeedsListFragment$11$1$1 -> net.fred.feedex.fragment.h:
+    net.fred.feedex.fragment.EditFeedsListFragment$11$1 this$2 -> a
+    552:553:void run() -> run
+net.fred.feedex.fragment.EditFeedsListFragment$2 -> net.fred.feedex.fragment.i:
+    net.fred.feedex.fragment.EditFeedsListFragment this$0 -> a
+    175:177:boolean onCreateActionMode(android.view.ActionMode,android.view.Menu) -> onCreateActionMode
+    184:184:boolean onPrepareActionMode(android.view.ActionMode,android.view.Menu) -> onPrepareActionMode
+    191:244:boolean onActionItemClicked(android.view.ActionMode,android.view.MenuItem) -> onActionItemClicked
+    251:254:void onDestroyActionMode(android.view.ActionMode) -> onDestroyActionMode
+net.fred.feedex.fragment.EditFeedsListFragment$2$1 -> net.fred.feedex.fragment.j:
+    android.widget.EditText val$input -> a
+    long val$groupId -> b
+    net.fred.feedex.fragment.EditFeedsListFragment$2 this$1 -> c
+    206:218:void onClick(android.content.DialogInterface,int) -> onClick
+net.fred.feedex.fragment.EditFeedsListFragment$2$1$1 -> net.fred.feedex.fragment.k:
     net.fred.feedex.fragment.EditFeedsListFragment$2$1 this$2 -> a
-    android.widget.EditText val$input -> b
-    long val$groupId -> c
-    520:530:void run() -> run
-net.fred.feedex.fragment.EditFeedsListFragment$2$2 -> net.fred.feedex.fragment.h:
-    net.fred.feedex.fragment.EditFeedsListFragment$2 this$1 -> a
-    long val$groupId -> b
-    545:556:void onClick(android.content.DialogInterface,int) -> onClick
-    542:542:net.fred.feedex.fragment.EditFeedsListFragment$2 access$0(net.fred.feedex.fragment.EditFeedsListFragment$2$2) -> a
-net.fred.feedex.fragment.EditFeedsListFragment$2$2$1 -> net.fred.feedex.fragment.i:
+    209:216:void run() -> run
+net.fred.feedex.fragment.EditFeedsListFragment$2$2 -> net.fred.feedex.fragment.l:
+    long val$groupId -> a
+    net.fred.feedex.fragment.EditFeedsListFragment$2 this$1 -> b
+    231:238:void onClick(android.content.DialogInterface,int) -> onClick
+net.fred.feedex.fragment.EditFeedsListFragment$2$2$1 -> net.fred.feedex.fragment.m:
     net.fred.feedex.fragment.EditFeedsListFragment$2$2 this$2 -> a
-    long val$groupId -> b
-    548:554:void run() -> run
-net.fred.feedex.fragment.EditFeedsListFragment$3 -> net.fred.feedex.fragment.j:
+    234:236:void run() -> run
+net.fred.feedex.fragment.EditFeedsListFragment$3 -> net.fred.feedex.fragment.n:
     net.fred.feedex.fragment.EditFeedsListFragment this$0 -> a
-    109:125:boolean onItemLongClick(android.widget.AdapterView,android.view.View,int,long) -> onItemLongClick
-net.fred.feedex.fragment.EditFeedsListFragment$4 -> net.fred.feedex.fragment.k:
+    273:274:boolean onChildClick(android.widget.ExpandableListView,android.view.View,int,int,long) -> onChildClick
+net.fred.feedex.fragment.EditFeedsListFragment$4 -> net.fred.feedex.fragment.o:
+    net.fred.feedex.fragment.EditFeedsListFragment this$0 -> a
+    280:284:boolean onGroupClick(android.widget.ExpandableListView,android.view.View,int,long) -> onGroupClick
+net.fred.feedex.fragment.EditFeedsListFragment$5 -> net.fred.feedex.fragment.p:
+    net.fred.feedex.fragment.EditFeedsListFragment this$0 -> a
+    290:306:boolean onItemLongClick(android.widget.AdapterView,android.view.View,int,long) -> onItemLongClick
+net.fred.feedex.fragment.EditFeedsListFragment$6 -> net.fred.feedex.fragment.q:
     boolean fromHasGroupIndicator -> a
     net.fred.feedex.fragment.EditFeedsListFragment this$0 -> b
-    136:136:void onStopDrag(android.view.View) -> a
-    140:141:void onStartDrag(android.view.View) -> b
-    145:180:void onDrop(int,int) -> a
-    184:184:void onDrag(int,int,android.widget.ListView) -> a
-    131:131:net.fred.feedex.fragment.EditFeedsListFragment access$0(net.fred.feedex.fragment.EditFeedsListFragment$4) -> a
-net.fred.feedex.fragment.EditFeedsListFragment$4$1 -> net.fred.feedex.fragment.l:
-    net.fred.feedex.fragment.EditFeedsListFragment$4 this$1 -> a
-    int val$flatPosTo -> b
-    int val$flatPosFrom -> c
-    163:170:void onClick(android.content.DialogInterface,int) -> onClick
-net.fred.feedex.fragment.EditFeedsListFragment$4$2 -> net.fred.feedex.fragment.m:
-    net.fred.feedex.fragment.EditFeedsListFragment$4 this$1 -> a
-    boolean val$fromIsGroup -> b
-    boolean val$toIsGroup -> c
-    boolean val$fromIsFeedWithoutGroup -> d
-    long val$packedPosTo -> e
-    int val$packedGroupPosTo -> f
-    int val$flatPosFrom -> g
-    174:175:void onClick(android.content.DialogInterface,int) -> onClick
-net.fred.feedex.fragment.EditFeedsListFragment$5 -> net.fred.feedex.fragment.n:
-    net.fred.feedex.fragment.EditFeedsListFragment this$0 -> a
-    android.widget.EditText val$input -> b
-    249:262:void onClick(android.content.DialogInterface,int) -> onClick
-    246:246:net.fred.feedex.fragment.EditFeedsListFragment access$0(net.fred.feedex.fragment.EditFeedsListFragment$5) -> a
-net.fred.feedex.fragment.EditFeedsListFragment$5$1 -> net.fred.feedex.fragment.o:
-    net.fred.feedex.fragment.EditFeedsListFragment$5 this$1 -> a
-    android.widget.EditText val$input -> b
-    252:260:void run() -> run
-net.fred.feedex.fragment.EditFeedsListFragment$6 -> net.fred.feedex.fragment.p:
-    net.fred.feedex.fragment.EditFeedsListFragment this$0 -> a
-    292:311:void run() -> run
-    288:288:net.fred.feedex.fragment.EditFeedsListFragment access$0(net.fred.feedex.fragment.EditFeedsListFragment$6) -> a
-net.fred.feedex.fragment.EditFeedsListFragment$6$1 -> net.fred.feedex.fragment.q:
-    net.fred.feedex.fragment.EditFeedsListFragment$6 this$1 -> a
-    java.lang.String val$filename -> b
-    299:301:void run() -> run
-net.fred.feedex.fragment.EditFeedsListFragment$6$2 -> net.fred.feedex.fragment.r:
-    net.fred.feedex.fragment.EditFeedsListFragment$6 this$1 -> a
-    307:308:void run() -> run
-net.fred.feedex.fragment.EditFeedsListFragment$7 -> net.fred.feedex.fragment.s:
-    net.fred.feedex.fragment.EditFeedsListFragment this$0 -> a
-    android.content.Intent val$data -> b
-    331:344:void run() -> run
-    327:327:net.fred.feedex.fragment.EditFeedsListFragment access$0(net.fred.feedex.fragment.EditFeedsListFragment$7) -> a
-net.fred.feedex.fragment.EditFeedsListFragment$7$1 -> net.fred.feedex.fragment.t:
+    317:317:void onStopDrag(android.view.View) -> a
+    321:322:void onStartDrag(android.view.View) -> b
+    326:361:void onDrop(int,int) -> a
+    365:365:void onDrag(int,int,android.widget.ListView) -> a
+net.fred.feedex.fragment.EditFeedsListFragment$6$1 -> net.fred.feedex.fragment.r:
+    boolean val$fromIsGroup -> a
+    boolean val$toIsGroup -> b
+    boolean val$fromIsFeedWithoutGroup -> c
+    long val$packedPosTo -> d
+    int val$packedGroupPosTo -> e
+    int val$flatPosFrom -> f
+    net.fred.feedex.fragment.EditFeedsListFragment$6 this$1 -> g
+    355:356:void onClick(android.content.DialogInterface,int) -> onClick
+net.fred.feedex.fragment.EditFeedsListFragment$6$2 -> net.fred.feedex.fragment.s:
+    int val$flatPosTo -> a
+    int val$flatPosFrom -> b
+    net.fred.feedex.fragment.EditFeedsListFragment$6 this$1 -> c
+    344:351:void onClick(android.content.DialogInterface,int) -> onClick
+net.fred.feedex.fragment.EditFeedsListFragment$7 -> net.fred.feedex.fragment.t:
+    android.widget.EditText val$input -> a
+    net.fred.feedex.fragment.EditFeedsListFragment this$0 -> b
+    422:435:void onClick(android.content.DialogInterface,int) -> onClick
+net.fred.feedex.fragment.EditFeedsListFragment$7$1 -> net.fred.feedex.fragment.u:
     net.fred.feedex.fragment.EditFeedsListFragment$7 this$1 -> a
-    339:340:void run() -> run
-net.fred.feedex.fragment.EditFeedsListFragment$8 -> net.fred.feedex.fragment.u:
+    425:433:void run() -> run
+net.fred.feedex.fragment.EditFeedsListFragment$8 -> net.fred.feedex.fragment.v:
     net.fred.feedex.fragment.EditFeedsListFragment this$0 -> a
-    363:363:boolean accept(java.io.File,java.lang.String) -> accept
-net.fred.feedex.fragment.EditFeedsListFragment$9 -> net.fred.feedex.fragment.v:
-    net.fred.feedex.fragment.EditFeedsListFragment this$0 -> a
-    java.lang.String[] val$fileNames -> b
-    369:385:void onClick(android.content.DialogInterface,int) -> onClick
-    366:366:net.fred.feedex.fragment.EditFeedsListFragment access$0(net.fred.feedex.fragment.EditFeedsListFragment$9) -> a
-net.fred.feedex.fragment.EditFeedsListFragment$9$1 -> net.fred.feedex.fragment.w:
+    465:484:void run() -> run
+net.fred.feedex.fragment.EditFeedsListFragment$8$1 -> net.fred.feedex.fragment.w:
+    java.lang.String val$filename -> a
+    net.fred.feedex.fragment.EditFeedsListFragment$8 this$1 -> b
+    472:474:void run() -> run
+net.fred.feedex.fragment.EditFeedsListFragment$8$2 -> net.fred.feedex.fragment.x:
+    net.fred.feedex.fragment.EditFeedsListFragment$8 this$1 -> a
+    480:481:void run() -> run
+net.fred.feedex.fragment.EditFeedsListFragment$9 -> net.fred.feedex.fragment.y:
+    android.content.Intent val$data -> a
+    net.fred.feedex.fragment.EditFeedsListFragment this$0 -> b
+    504:517:void run() -> run
+net.fred.feedex.fragment.EditFeedsListFragment$9$1 -> net.fred.feedex.fragment.z:
     net.fred.feedex.fragment.EditFeedsListFragment$9 this$1 -> a
-    java.lang.String[] val$fileNames -> b
-    int val$which -> c
-    373:383:void run() -> run
-    369:369:net.fred.feedex.fragment.EditFeedsListFragment$9 access$0(net.fred.feedex.fragment.EditFeedsListFragment$9$1) -> a
-net.fred.feedex.fragment.EditFeedsListFragment$9$1$1 -> net.fred.feedex.fragment.x:
-    net.fred.feedex.fragment.EditFeedsListFragment$9$1 this$2 -> a
-    379:380:void run() -> run
+    512:513:void run() -> run
 net.fred.feedex.fragment.EntriesListFragment -> net.fred.feedex.fragment.EntriesListFragment:
     android.net.Uri mUri -> a
     boolean mShowFeedInfo -> b
@@ -2430,135 +2479,155 @@ net.fred.feedex.fragment.EntriesListFragment -> net.fred.feedex.fragment.Entries
     android.widget.ListView mListView -> d
     android.widget.SearchView mSearchView -> e
     android.content.SharedPreferences$OnSharedPreferenceChangeListener mPrefListener -> f
-    130:142:void onCreate(android.os.Bundle) -> onCreate
-    146:150:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
-    154:179:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
-    184:186:void onDestroy() -> onDestroy
-    190:191:void onListItemClick(android.widget.ListView,android.view.View,int,long) -> onListItemClick
-    195:214:void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> onCreateOptionsMenu
-    218:267:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
-    271:271:android.net.Uri getUri() -> a
-    275:275:java.lang.String getCurrentSearch() -> b
-    279:291:void setData(android.net.Uri,boolean) -> a
-    295:299:android.content.Loader onCreateLoader(int,android.os.Bundle) -> onCreateLoader
-    304:305:void onLoadFinished(android.content.Loader,android.database.Cursor) -> a
-    309:310:void onLoaderReset(android.content.Loader) -> onLoaderReset
-    1:1:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
-    68:68:android.widget.ListView access$1(net.fred.feedex.fragment.EntriesListFragment) -> a
-    69:69:android.widget.SearchView access$2(net.fred.feedex.fragment.EntriesListFragment) -> b
-net.fred.feedex.fragment.EntriesListFragment$1 -> net.fred.feedex.fragment.y:
+    131:143:void onCreate(android.os.Bundle) -> onCreate
+    147:153:void onResume() -> onResume
+    157:161:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    165:200:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
+    205:207:void onDestroy() -> onDestroy
+    211:212:void onListItemClick(android.widget.ListView,android.view.View,int,long) -> onListItemClick
+    216:235:void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> onCreateOptionsMenu
+    239:288:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+    292:292:android.net.Uri getUri() -> a
+    296:296:java.lang.String getCurrentSearch() -> b
+    300:308:void setData(android.net.Uri,boolean) -> a
+    311:316:void refreshUI() -> c
+    320:324:android.content.Loader onCreateLoader(int,android.os.Bundle) -> onCreateLoader
+    329:330:void onLoadFinished(android.content.Loader,android.database.Cursor) -> a
+    334:335:void onLoaderReset(android.content.Loader) -> onLoaderReset
+    58:58:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
+    58:58:android.widget.ListView access$000(net.fred.feedex.fragment.EntriesListFragment) -> a
+    58:58:android.widget.SearchView access$100(net.fred.feedex.fragment.EntriesListFragment) -> b
+net.fred.feedex.fragment.EntriesListFragment$1 -> net.fred.feedex.fragment.aa:
     net.fred.feedex.fragment.EntriesListFragment this$0 -> a
     74:77:void onSharedPreferenceChanged(android.content.SharedPreferences,java.lang.String) -> onSharedPreferenceChanged
-net.fred.feedex.fragment.EntriesListFragment$2 -> net.fred.feedex.fragment.z:
+net.fred.feedex.fragment.EntriesListFragment$2 -> net.fred.feedex.fragment.ab:
     net.fred.feedex.fragment.EntriesListFragment this$0 -> a
-    168:170:boolean onQueryTextSubmit(java.lang.String) -> onQueryTextSubmit
-    175:176:boolean onQueryTextChange(java.lang.String) -> onQueryTextChange
-net.fred.feedex.fragment.EntriesListFragment$SwipeGestureListener -> net.fred.feedex.fragment.aa:
+    183:197:void run() -> run
+net.fred.feedex.fragment.EntriesListFragment$2$1 -> net.fred.feedex.fragment.ac:
+    net.fred.feedex.fragment.EntriesListFragment$2 this$1 -> a
+    186:188:boolean onQueryTextSubmit(java.lang.String) -> onQueryTextSubmit
+    193:194:boolean onQueryTextChange(java.lang.String) -> onQueryTextChange
+net.fred.feedex.fragment.EntriesListFragment$SwipeGestureListener -> net.fred.feedex.fragment.ad:
     android.view.GestureDetector mGestureDetector -> b
     net.fred.feedex.fragment.EntriesListFragment this$0 -> a
-    93:119:boolean onFling(android.view.MotionEvent,android.view.MotionEvent,float,float) -> onFling
-    124:124:boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
-    80:80:net.fred.feedex.fragment.EntriesListFragment access$0(net.fred.feedex.fragment.EntriesListFragment$SwipeGestureListener) -> a
-net.fred.feedex.fragment.EntriesListFragment$SwipeGestureListener$1 -> net.fred.feedex.fragment.ab:
+    93:120:boolean onFling(android.view.MotionEvent,android.view.MotionEvent,float,float) -> onFling
+    125:125:boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
+net.fred.feedex.fragment.EntriesListFragment$SwipeGestureListener$1 -> net.fred.feedex.fragment.ae:
     net.fred.feedex.fragment.EntriesListFragment$SwipeGestureListener this$1 -> a
-    110:113:void run() -> run
+    111:114:void run() -> run
 net.fred.feedex.fragment.EntryFragment -> net.fred.feedex.fragment.EntryFragment:
-    int mTitlePosition -> a
-    int mDatePosition -> b
-    int mMobilizedHtmlPosition -> c
-    int mAbstractPosition -> d
-    int mLinkPosition -> e
-    int mIsFavoritePosition -> f
-    int mEnclosurePosition -> g
-    int mAuthorPosition -> h
-    long mId -> i
-    long mNextId -> j
-    long mPreviousId -> k
-    long[] mEntriesIds -> l
-    net.fred.feedex.fragment.EntryLoaderResult mLoaderResult -> m
-    android.net.Uri mUri -> n
-    boolean mFavorite -> o
-    boolean mPreferFullText -> p
-    net.fred.feedex.view.EntryView mEntryView -> q
-    java.lang.String mLink -> r
-    java.lang.String mTitle -> s
-    java.lang.String mEnclosure -> t
+    int mTitlePos -> a
+    int mDatePos -> b
+    int mMobilizedHtmlPos -> c
+    int mAbstractPos -> d
+    int mLinkPos -> e
+    int mIsFavoritePos -> f
+    int mIsReadPos -> g
+    int mEnclosurePos -> h
+    int mAuthorPos -> i
+    int mFeedNamePos -> j
+    int mFeedUrlPos -> k
+    int mFeedIconPos -> l
+    int mCurrentPagerPos -> m
+    android.net.Uri mBaseUri -> n
+    long mInitialEntryId -> o
+    long[] mEntriesIds -> p
+    boolean mFavorite -> q
+    boolean mPreferFullText -> r
+    android.support.v4.view.ViewPager mEntryPager -> s
+    net.fred.feedex.fragment.EntryFragment$EntryPagerAdapter mEntryPagerAdapter -> t
     android.view.View mCancelFullscreenBtn -> u
-    android.view.View mBackBtn -> v
-    android.view.View mForwardBtn -> w
-    net.fred.feedex.utils.ThrottledContentObserver mTasksObserver -> x
-    110:113:void onCreate(android.os.Bundle) -> onCreate
-    117:149:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
-    154:158:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
-    162:171:void onResume() -> onResume
-    175:178:void onPause() -> onPause
-    182:190:void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> onCreateOptionsMenu
-    194:246:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
-    258:275:void setData(android.net.Uri) -> a
-    278:290:void registerContentObserver() -> d
-    293:341:void reload(boolean) -> a
-    345:353:void showEnclosure(android.net.Uri,java.lang.String,int,int) -> a
-    356:378:void setupNavigationButton() -> e
-    381:389:void toggleFullScreen() -> f
-    393:394:void onEntrySwitched(long) -> a
-    398:405:void onClickOriginalText() -> a
-    409:454:void onClickFullText() -> b
-    458:468:void onClickEnclosure() -> c
-    472:472:android.content.Loader onCreateLoader(int,android.os.Bundle) -> onCreateLoader
-    477:500:void onLoadFinished(android.content.Loader,net.fred.feedex.fragment.EntryLoaderResult) -> a
-    504:507:void onLoaderReset(android.content.Loader) -> onLoaderReset
-    1:1:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
-    75:75:long access$1(net.fred.feedex.fragment.EntryFragment) -> a
-    82:82:void access$2(net.fred.feedex.fragment.EntryFragment,boolean) -> a
-    380:380:void access$3(net.fred.feedex.fragment.EntryFragment) -> b
-    84:84:net.fred.feedex.view.EntryView access$4(net.fred.feedex.fragment.EntryFragment) -> c
-    81:81:android.net.Uri access$5(net.fred.feedex.fragment.EntryFragment) -> d
-    292:292:void access$6(net.fred.feedex.fragment.EntryFragment,boolean) -> b
-    86:86:java.lang.String access$7(net.fred.feedex.fragment.EntryFragment) -> e
-    343:343:void access$8(net.fred.feedex.fragment.EntryFragment,android.net.Uri,java.lang.String,int,int) -> a
-net.fred.feedex.fragment.EntryFragment$1 -> net.fred.feedex.fragment.ac:
+    209:214:void onCreate(android.os.Bundle) -> onCreate
+    218:261:android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
+    266:273:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
+    277:280:void onAttach(android.app.Activity) -> onAttach
+    284:287:void onDetach() -> onDetach
+    291:299:void onResume() -> onResume
+    303:305:void onPause() -> onPause
+    309:317:void onCreateOptionsMenu(android.view.Menu,android.view.MenuInflater) -> onCreateOptionsMenu
+    321:386:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+    390:429:void setData(android.net.Uri) -> a
+    432:473:void refreshUI(android.database.Cursor) -> a
+    477:485:void showEnclosure(android.net.Uri,java.lang.String,int,int) -> a
+    488:490:void toggleFullScreen() -> e
+    494:501:void onClickOriginalText() -> b
+    505:543:void onClickFullText() -> c
+    547:559:void onClickEnclosure() -> d
+    563:563:android.content.Loader onCreateLoader(int,android.os.Bundle) -> onCreateLoader
+    568:591:void onLoadFinished(android.content.Loader,android.database.Cursor) -> a
+    595:596:void onLoaderReset(android.content.Loader) -> onLoaderReset
+    600:603:void onFullScreenEnabled(boolean) -> a
+    607:608:void onFullScreenDisabled() -> a
+    65:65:void onLoadFinished(android.content.Loader,java.lang.Object) -> onLoadFinished
+    65:65:long[] access$000(net.fred.feedex.fragment.EntryFragment) -> a
+    65:65:int access$100(net.fred.feedex.fragment.EntryFragment) -> b
+    65:65:int access$200(net.fred.feedex.fragment.EntryFragment) -> c
+    65:65:boolean access$300(net.fred.feedex.fragment.EntryFragment) -> d
+    65:65:boolean access$302(net.fred.feedex.fragment.EntryFragment,boolean) -> a
+    65:65:int access$400(net.fred.feedex.fragment.EntryFragment) -> e
+    65:65:int access$500(net.fred.feedex.fragment.EntryFragment) -> f
+    65:65:int access$600(net.fred.feedex.fragment.EntryFragment) -> g
+    65:65:int access$700(net.fred.feedex.fragment.EntryFragment) -> h
+    65:65:int access$800(net.fred.feedex.fragment.EntryFragment) -> i
+    65:65:int access$900(net.fred.feedex.fragment.EntryFragment) -> j
+    65:65:void access$1000(net.fred.feedex.fragment.EntryFragment,android.database.Cursor) -> a
+    65:65:void access$1100(net.fred.feedex.fragment.EntryFragment) -> k
+    65:65:int access$102(net.fred.feedex.fragment.EntryFragment,int) -> a
+    65:65:net.fred.feedex.fragment.EntryFragment$EntryPagerAdapter access$1200(net.fred.feedex.fragment.EntryFragment) -> l
+    65:65:boolean access$1300(net.fred.feedex.fragment.EntryFragment) -> m
+    65:65:void access$1400(net.fred.feedex.fragment.EntryFragment,android.net.Uri,java.lang.String,int,int) -> a
+net.fred.feedex.fragment.EntryFragment$1 -> net.fred.feedex.fragment.af:
     net.fred.feedex.fragment.EntryFragment this$0 -> a
-    92:105:void onChangeThrottled() -> a
-net.fred.feedex.fragment.EntryFragment$10 -> net.fred.feedex.fragment.ad:
+    224:225:void onClick(android.view.View) -> onClick
+net.fred.feedex.fragment.EntryFragment$10 -> net.fred.feedex.fragment.ag:
     net.fred.feedex.fragment.EntryFragment this$0 -> a
-    461:466:void run() -> run
-net.fred.feedex.fragment.EntryFragment$2 -> net.fred.feedex.fragment.ae:
+    550:557:void run() -> run
+net.fred.feedex.fragment.EntryFragment$2 -> net.fred.feedex.fragment.ah:
     net.fred.feedex.fragment.EntryFragment this$0 -> a
-    123:124:void onClick(android.view.View) -> onClick
-net.fred.feedex.fragment.EntryFragment$3 -> net.fred.feedex.fragment.af:
+    245:245:void onPageScrolled(int,float,int) -> a
+    249:254:void onPageSelected(int) -> a
+    258:258:void onPageScrollStateChanged(int) -> b
+net.fred.feedex.fragment.EntryFragment$3 -> net.fred.feedex.fragment.ai:
+    android.net.Uri val$uri -> a
+    net.fred.feedex.fragment.EntryFragment this$0 -> b
+    338:342:void run() -> run
+net.fred.feedex.fragment.EntryFragment$4 -> net.fred.feedex.fragment.aj:
+    android.net.Uri val$uri -> a
+    net.fred.feedex.fragment.EntryFragment this$0 -> b
+    376:378:void run() -> run
+net.fred.feedex.fragment.EntryFragment$5 -> net.fred.feedex.fragment.ak:
+    android.net.Uri val$uri -> a
+    net.fred.feedex.fragment.EntryFragment this$0 -> b
+    467:469:void run() -> run
+net.fred.feedex.fragment.EntryFragment$6 -> net.fred.feedex.fragment.al:
     net.fred.feedex.fragment.EntryFragment this$0 -> a
-    130:131:void onClick(android.view.View) -> onClick
-net.fred.feedex.fragment.EntryFragment$4 -> net.fred.feedex.fragment.ag:
+    497:499:void run() -> run
+net.fred.feedex.fragment.EntryFragment$7 -> net.fred.feedex.fragment.am:
     net.fred.feedex.fragment.EntryFragment this$0 -> a
-    137:138:void onClick(android.view.View) -> onClick
-net.fred.feedex.fragment.EntryFragment$5 -> net.fred.feedex.fragment.ah:
+    515:517:void run() -> run
+net.fred.feedex.fragment.EntryFragment$8 -> net.fred.feedex.fragment.an:
+    net.fred.feedex.activity.BaseActivity val$activity -> a
+    net.fred.feedex.fragment.EntryFragment this$0 -> b
+    530:531:void run() -> run
+net.fred.feedex.fragment.EntryFragment$9 -> net.fred.feedex.fragment.ao:
+    net.fred.feedex.activity.BaseActivity val$activity -> a
+    net.fred.feedex.fragment.EntryFragment this$0 -> b
+    537:538:void run() -> run
+net.fred.feedex.fragment.EntryFragment$EntryPagerAdapter -> net.fred.feedex.fragment.ap:
+    float mScrollPercentage -> b
+    android.util.SparseArray mEntryViews -> c
     net.fred.feedex.fragment.EntryFragment this$0 -> a
-    236:240:void run() -> run
-net.fred.feedex.fragment.EntryFragment$6 -> net.fred.feedex.fragment.ai:
-    net.fred.feedex.fragment.EntryFragment this$0 -> a
-    401:403:void run() -> run
-net.fred.feedex.fragment.EntryFragment$7 -> net.fred.feedex.fragment.aj:
-    net.fred.feedex.fragment.EntryFragment this$0 -> a
-    421:423:void run() -> run
-net.fred.feedex.fragment.EntryFragment$8 -> net.fred.feedex.fragment.ak:
-    net.fred.feedex.fragment.EntryFragment this$0 -> a
-    net.fred.feedex.activity.BaseActivity val$activity -> b
-    440:441:void run() -> run
-net.fred.feedex.fragment.EntryFragment$9 -> net.fred.feedex.fragment.al:
-    net.fred.feedex.fragment.EntryFragment this$0 -> a
-    net.fred.feedex.activity.BaseActivity val$activity -> b
-    448:449:void run() -> run
-net.fred.feedex.fragment.EntryLoader -> net.fred.feedex.fragment.am:
-    android.net.Uri mUri -> a
-    boolean mNeedEntriesIds -> b
-    531:576:net.fred.feedex.fragment.EntryLoaderResult loadInBackground() -> a
-    1:1:java.lang.Object loadInBackground() -> loadInBackground
-net.fred.feedex.fragment.EntryLoaderResult -> net.fred.feedex.fragment.an:
-    android.database.Cursor entryCursor -> a
-    long feedId -> b
-    long[] entriesIds -> c
-    java.lang.String feedTitle -> d
-    byte[] iconBytes -> e
+    97:97:int getCount() -> a
+    102:107:java.lang.Object instantiateItem(android.view.ViewGroup,int) -> a
+    112:115:void destroyItem(android.view.ViewGroup,int,java.lang.Object) -> a
+    119:119:boolean isViewFromObject(android.view.View,java.lang.Object) -> a
+    123:128:float getScrollPercentage() -> d
+    132:133:void setScrollPercentage(float) -> a
+    136:174:void displayEntry(int,android.database.Cursor,boolean) -> a
+    177:181:android.database.Cursor getCursor(int) -> b
+    185:189:void removeCursor(int) -> c
+    192:198:void onResume() -> e
+    201:204:void onPause() -> f
 net.fred.feedex.loader.BaseLoader -> net.fred.feedex.b.a:
     java.lang.Object data -> a
     39:47:void deliverResult(java.lang.Object) -> deliverResult
@@ -2574,18 +2643,19 @@ net.fred.feedex.parser.OPML -> net.fred.feedex.c.a:
     98:107:void importFromFile(java.lang.String) -> a
     110:111:void importFromFile(java.io.InputStream) -> a
     114:199:void exportToFile(java.lang.String) -> b
-net.fred.feedex.parser.OPML$OPMLParser -> net.fred.feedex.c.b:
+net.fred.feedex.parser.OPML$1 -> net.fred.feedex.c.b:
+net.fred.feedex.parser.OPML$OPMLParser -> net.fred.feedex.c.c:
     boolean bodyTagEntered -> a
     boolean feedEntered -> b
     boolean probablyValidElement -> c
     java.lang.String groupId -> d
     java.lang.String feedId -> e
-    220:282:void startElement(java.lang.String,java.lang.String,java.lang.String,org.xml.sax.Attributes) -> startElement
-    286:295:void endElement(java.lang.String,java.lang.String,java.lang.String) -> endElement
-    300:300:void warning(org.xml.sax.SAXParseException) -> warning
-    305:305:void error(org.xml.sax.SAXParseException) -> error
-    309:314:void endDocument() -> endDocument
-net.fred.feedex.parser.RssAtomParser -> net.fred.feedex.c.c:
+    220:275:void startElement(java.lang.String,java.lang.String,java.lang.String,org.xml.sax.Attributes) -> startElement
+    279:288:void endElement(java.lang.String,java.lang.String,java.lang.String) -> endElement
+    293:293:void warning(org.xml.sax.SAXParseException) -> warning
+    298:298:void error(org.xml.sax.SAXParseException) -> error
+    302:307:void endDocument() -> endDocument
+net.fred.feedex.parser.RssAtomParser -> net.fred.feedex.c.d:
     java.lang.String[][] TIMEZONES_REPLACE -> a
     java.text.DateFormat[] PUBDATE_DATE_FORMATS -> b
     java.text.DateFormat[] UPDATE_DATE_FORMATS -> c
@@ -2630,29 +2700,29 @@ net.fred.feedex.parser.RssAtomParser -> net.fred.feedex.c.c:
     net.fred.feedex.parser.RssAtomParser$FeedFilters filters -> P
     java.util.ArrayList inserts -> Q
     java.util.ArrayList entriesImages -> R
-    199:285:void startElement(java.lang.String,java.lang.String,java.lang.String,org.xml.sax.Attributes) -> startElement
-    288:303:void startEnclosure(org.xml.sax.Attributes,java.lang.String) -> a
-    307:320:void characters(char[],int,int) -> characters
-    324:487:void endElement(java.lang.String,java.lang.String,java.lang.String) -> endElement
-    490:490:java.lang.String getFeedLink() -> a
-    494:494:int getNewCount() -> b
-    498:498:boolean isDone() -> c
-    502:502:boolean isCancelled() -> d
-    506:513:void cancel() -> e
-    516:517:void setFetchImages(boolean) -> a
-    520:521:java.util.Date parseUpdateDate(java.lang.String) -> a
-    525:536:java.util.Date parseUpdateDate(java.lang.String,boolean) -> a
-    540:541:java.util.Date parsePubdateDate(java.lang.String) -> b
-    545:556:java.util.Date parsePubdateDate(java.lang.String,boolean) -> b
-    561:573:java.lang.String improveDateString(java.lang.String) -> c
-    577:584:java.lang.String unescapeTitle(java.lang.String) -> d
-    591:591:void warning(org.xml.sax.SAXParseException) -> warning
-    596:596:void error(org.xml.sax.SAXParseException) -> error
-    600:641:void endDocument() -> endDocument
-net.fred.feedex.parser.RssAtomParser$FeedFilters -> net.fred.feedex.c.d:
+    198:284:void startElement(java.lang.String,java.lang.String,java.lang.String,org.xml.sax.Attributes) -> startElement
+    287:302:void startEnclosure(org.xml.sax.Attributes,java.lang.String) -> a
+    306:319:void characters(char[],int,int) -> characters
+    323:486:void endElement(java.lang.String,java.lang.String,java.lang.String) -> endElement
+    489:489:java.lang.String getFeedLink() -> a
+    493:493:int getNewCount() -> b
+    497:497:boolean isDone() -> c
+    501:501:boolean isCancelled() -> d
+    505:512:void cancel() -> e
+    515:516:void setFetchImages(boolean) -> a
+    519:520:java.util.Date parseUpdateDate(java.lang.String) -> a
+    524:535:java.util.Date parseUpdateDate(java.lang.String,boolean) -> a
+    539:540:java.util.Date parsePubdateDate(java.lang.String) -> b
+    544:555:java.util.Date parsePubdateDate(java.lang.String,boolean) -> b
+    560:572:java.lang.String improveDateString(java.lang.String) -> c
+    576:583:java.lang.String unescapeTitle(java.lang.String) -> d
+    590:590:void warning(org.xml.sax.SAXParseException) -> warning
+    595:595:void error(org.xml.sax.SAXParseException) -> error
+    599:636:void endDocument() -> endDocument
+net.fred.feedex.parser.RssAtomParser$FeedFilters -> net.fred.feedex.c.e:
     java.util.ArrayList mFilters -> b
     net.fred.feedex.parser.RssAtomParser this$0 -> a
-    661:682:boolean isEntryFiltered(java.lang.String,java.lang.String) -> a
+    656:677:boolean isEntryFiltered(java.lang.String,java.lang.String) -> a
 net.fred.feedex.provider.DatabaseHelper -> net.fred.feedex.provider.a:
     android.os.Handler mHandler -> a
     80:108:void onCreate(android.database.sqlite.SQLiteDatabase) -> onCreate
@@ -2662,28 +2732,28 @@ net.fred.feedex.provider.DatabaseHelper -> net.fred.feedex.provider.a:
     159:162:void executeCatchedSQL(android.database.sqlite.SQLiteDatabase,java.lang.String) -> a
     165:170:void deleteFileOrDir(java.io.File) -> a
 net.fred.feedex.provider.DatabaseHelper$1 -> net.fred.feedex.provider.b:
-    net.fred.feedex.provider.DatabaseHelper this$0 -> a
-    boolean val$hasBackup -> b
+    boolean val$hasBackup -> a
+    net.fred.feedex.provider.DatabaseHelper this$0 -> b
     91:106:void run() -> run
 net.fred.feedex.provider.DatabaseHelper$1$1 -> net.fred.feedex.provider.c:
     net.fred.feedex.provider.DatabaseHelper$1 this$1 -> a
-    boolean val$hasBackup -> b
     95:104:void run() -> run
 net.fred.feedex.provider.FeedData -> net.fred.feedex.provider.d:
-    230:232:android.content.ContentValues getReadContentValues() -> a
-    236:238:android.content.ContentValues getUnreadContentValues() -> b
+    235:237:android.content.ContentValues getReadContentValues() -> a
+    241:243:android.content.ContentValues getUnreadContentValues() -> b
 net.fred.feedex.provider.FeedData$EntryColumns -> net.fred.feedex.provider.e:
     java.lang.String[][] COLUMNS -> a
     android.net.Uri CONTENT_URI -> b
-    android.net.Uri FAVORITES_CONTENT_URI -> c
-    java.lang.String[] PROJECTION_ID -> d
-    167:167:android.net.Uri ENTRIES_FOR_FEED_CONTENT_URI(java.lang.String) -> a
-    171:171:android.net.Uri ENTRIES_FOR_FEED_CONTENT_URI(long) -> a
-    179:179:android.net.Uri ENTRIES_FOR_GROUP_CONTENT_URI(long) -> b
-    183:183:android.net.Uri CONTENT_URI(java.lang.String) -> b
-    187:187:android.net.Uri CONTENT_URI(long) -> c
-    191:191:android.net.Uri PARENT_URI(java.lang.String) -> c
-    195:195:android.net.Uri SEARCH_URI(java.lang.String) -> d
+    android.net.Uri ALL_ENTRIES_CONTENT_URI -> c
+    android.net.Uri FAVORITES_CONTENT_URI -> d
+    java.lang.String[] PROJECTION_ID -> e
+    168:168:android.net.Uri ENTRIES_FOR_FEED_CONTENT_URI(java.lang.String) -> a
+    172:172:android.net.Uri ENTRIES_FOR_FEED_CONTENT_URI(long) -> a
+    180:180:android.net.Uri ENTRIES_FOR_GROUP_CONTENT_URI(long) -> b
+    184:184:android.net.Uri ALL_ENTRIES_CONTENT_URI(java.lang.String) -> b
+    192:192:android.net.Uri CONTENT_URI(long) -> c
+    196:196:android.net.Uri PARENT_URI(java.lang.String) -> c
+    200:200:android.net.Uri SEARCH_URI(java.lang.String) -> d
 net.fred.feedex.provider.FeedData$FeedColumns -> net.fred.feedex.provider.f:
     java.lang.String[][] COLUMNS -> a
     android.net.Uri CONTENT_URI -> b
@@ -2705,32 +2775,30 @@ net.fred.feedex.provider.FeedData$TaskColumns -> net.fred.feedex.provider.h:
     java.lang.String[][] COLUMNS -> a
     android.net.Uri CONTENT_URI -> b
     java.lang.String[] PROJECTION_ID -> c
-    223:223:android.net.Uri CONTENT_URI(long) -> a
+    228:228:android.net.Uri CONTENT_URI(long) -> a
 net.fred.feedex.provider.FeedDataContentProvider -> net.fred.feedex.provider.FeedDataContentProvider:
     android.content.UriMatcher URI_MATCHER -> a
     net.fred.feedex.provider.DatabaseHelper mDatabaseHelper -> b
     java.lang.String[] MAXPRIORITY -> c
-    126:157:java.lang.String getType(android.net.Uri) -> getType
-    163:165:boolean onCreate() -> onCreate
-    170:268:android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String) -> query
-    277:333:android.net.Uri insert(android.net.Uri,android.content.ContentValues) -> insert
-    339:485:int update(android.net.Uri,android.content.ContentValues,java.lang.String,java.lang.String[]) -> update
-    490:667:int delete(android.net.Uri,java.lang.String,java.lang.String[]) -> delete
-    671:678:java.lang.String getFeedIdFromEntryId(long) -> a
-    682:690:java.lang.String getSearchWhereClause(java.lang.String) -> b
-    695:707:void notifyGroupFromFeedId(java.lang.String) -> a
-    710:734:void notifyAllFromEntryUri(android.net.Uri,boolean) -> a
+    129:162:java.lang.String getType(android.net.Uri) -> getType
+    168:170:boolean onCreate() -> onCreate
+    175:275:android.database.Cursor query(android.net.Uri,java.lang.String[],java.lang.String,java.lang.String[],java.lang.String) -> query
+    284:341:android.net.Uri insert(android.net.Uri,android.content.ContentValues) -> insert
+    347:495:int update(android.net.Uri,android.content.ContentValues,java.lang.String,java.lang.String[]) -> update
+    500:679:int delete(android.net.Uri,java.lang.String,java.lang.String[]) -> delete
+    683:691:java.lang.String getSearchWhereClause(java.lang.String) -> a
+    696:708:void notifyChangeOnAllUris(int,android.net.Uri) -> a
 net.fred.feedex.provider.FeedDataContentProvider$1 -> net.fred.feedex.provider.i:
-    net.fred.feedex.provider.FeedDataContentProvider this$0 -> a
-    java.lang.String val$feedId -> b
-    539:543:void run() -> run
+    java.lang.String val$feedId -> a
+    net.fred.feedex.provider.FeedDataContentProvider this$0 -> b
+    549:553:void run() -> run
 net.fred.feedex.provider.FeedDataContentProvider$2 -> net.fred.feedex.provider.j:
-    net.fred.feedex.provider.FeedDataContentProvider this$0 -> a
-    java.lang.String val$entryId -> b
-    596:597:void run() -> run
+    java.lang.String val$entryId -> a
+    net.fred.feedex.provider.FeedDataContentProvider this$0 -> b
+    606:607:void run() -> run
 net.fred.feedex.provider.FeedDataContentProvider$3 -> net.fred.feedex.provider.k:
     net.fred.feedex.provider.FeedDataContentProvider this$0 -> a
-    624:625:void run() -> run
+    635:636:void run() -> run
 net.fred.feedex.receiver.BootCompletedBroadcastReceiver -> net.fred.feedex.receiver.BootCompletedBroadcastReceiver:
     57:61:void onReceive(android.content.Context,android.content.Intent) -> onReceive
 net.fred.feedex.receiver.ConnectionChangeReceiver -> net.fred.feedex.receiver.ConnectionChangeReceiver:
@@ -2740,24 +2808,24 @@ net.fred.feedex.service.FetcherService -> net.fred.feedex.service.FetcherService
     java.util.regex.Pattern FEED_LINK_PATTERN -> a
     java.util.regex.Pattern IMG_PATTERN -> b
     java.util.regex.Pattern DIV_TAG -> c
-    140:222:void onHandleIntent(android.content.Intent) -> onHandleIntent
-    225:234:long getMobilizingTaskId(long) -> a
-    238:248:void addImagesToDownload(java.lang.String,java.util.Vector) -> a
-    251:258:void addEntriesToMobilize(long[]) -> a
-    261:356:void mobilizeAllEntries() -> a
-    359:398:void downloadAllImages() -> b
-    401:442:int refreshFeeds() -> c
-    446:682:int refreshFeed(java.lang.String) -> a
-    686:742:android.util.Pair improveHtmlContent(java.lang.String,boolean) -> a
-    445:445:int access$0(net.fred.feedex.service.FetcherService,java.lang.String) -> a
+    139:221:void onHandleIntent(android.content.Intent) -> onHandleIntent
+    224:230:boolean hasTasks(long) -> a
+    234:244:void addImagesToDownload(java.lang.String,java.util.Vector) -> a
+    247:254:void addEntriesToMobilize(long[]) -> a
+    257:352:void mobilizeAllEntries() -> a
+    355:395:void downloadAllImages() -> b
+    398:439:int refreshFeeds() -> c
+    443:675:int refreshFeed(java.lang.String) -> a
+    679:735:android.util.Pair improveHtmlContent(java.lang.String,boolean) -> a
+    100:100:int access$000(net.fred.feedex.service.FetcherService,java.lang.String) -> a
 net.fred.feedex.service.FetcherService$1 -> net.fred.feedex.service.a:
     net.fred.feedex.service.FetcherService this$0 -> a
-    408:410:java.lang.Thread newThread(java.lang.Runnable) -> newThread
+    405:407:java.lang.Thread newThread(java.lang.Runnable) -> newThread
 net.fred.feedex.service.FetcherService$2 -> net.fred.feedex.service.b:
-    net.fred.feedex.service.FetcherService this$0 -> a
-    java.lang.String val$feedId -> b
-    420:425:java.lang.Integer call() -> a
-    1:1:java.lang.Object call() -> call
+    java.lang.String val$feedId -> a
+    net.fred.feedex.service.FetcherService this$0 -> b
+    417:422:java.lang.Integer call() -> a
+    414:414:java.lang.Object call() -> call
 net.fred.feedex.service.RefreshService -> net.fred.feedex.service.RefreshService:
     android.content.SharedPreferences$OnSharedPreferenceChangeListener listener -> a
     android.app.AlarmManager alarmManager -> b
@@ -2767,7 +2835,7 @@ net.fred.feedex.service.RefreshService -> net.fred.feedex.service.RefreshService
     96:101:void onCreate() -> onCreate
     104:128:void restartTimer(boolean) -> a
     132:137:void onDestroy() -> onDestroy
-    103:103:void access$0(net.fred.feedex.service.RefreshService,boolean) -> a
+    61:61:void access$000(net.fred.feedex.service.RefreshService,boolean) -> a
 net.fred.feedex.service.RefreshService$1 -> net.fred.feedex.service.c:
     net.fred.feedex.service.RefreshService this$0 -> a
     74:77:void onSharedPreferenceChanged(android.content.SharedPreferences,java.lang.String) -> onSharedPreferenceChanged
@@ -2776,18 +2844,18 @@ net.fred.feedex.service.RefreshService$RefreshAlarmReceiver -> net.fred.feedex.s
 net.fred.feedex.utils.NetworkUtils -> net.fred.feedex.d.a:
     java.io.File IMAGE_FOLDER_FILE -> a
     java.lang.String IMAGE_FOLDER -> b
-    88:103:void downloadImage(long,java.lang.String) -> a
-    106:123:void deleteFeedImagesCache(android.net.Uri,java.lang.String) -> a
-    126:139:byte[] getBytes(java.io.InputStream) -> a
-    144:161:void retrieveFavicon(android.content.Context,java.net.URL,java.lang.String) -> a
-    164:164:java.net.HttpURLConnection setupConnection(java.lang.String) -> a
-    168:168:java.net.HttpURLConnection setupConnection(java.net.URL) -> a
-    172:228:java.net.HttpURLConnection setupConnection(java.net.URL,int) -> a
-    235:240:java.io.InputStream getConnectionInputStream(java.net.HttpURLConnection) -> a
+    87:102:void downloadImage(long,java.lang.String) -> a
+    105:122:void deleteFeedImagesCache(android.net.Uri,java.lang.String) -> a
+    125:138:byte[] getBytes(java.io.InputStream) -> a
+    143:159:void retrieveFavicon(android.content.Context,java.net.URL,java.lang.String) -> a
+    162:162:java.net.HttpURLConnection setupConnection(java.lang.String) -> a
+    166:166:java.net.HttpURLConnection setupConnection(java.net.URL) -> a
+    170:226:java.net.HttpURLConnection setupConnection(java.net.URL,int) -> a
+    233:238:java.io.InputStream getConnectionInputStream(java.net.HttpURLConnection) -> a
 net.fred.feedex.utils.NetworkUtils$PictureFilenameFilter -> net.fred.feedex.d.b:
     java.util.regex.Pattern pattern -> a
-    78:79:void setEntryId(java.lang.String) -> a
-    83:83:boolean accept(java.io.File,java.lang.String) -> accept
+    77:78:void setEntryId(java.lang.String) -> a
+    82:82:boolean accept(java.io.File,java.lang.String) -> accept
 net.fred.feedex.utils.PrefUtils -> net.fred.feedex.d.c:
     62:63:boolean getBoolean(java.lang.String,boolean) -> a
     67:70:void putBoolean(java.lang.String,boolean) -> b
@@ -2806,7 +2874,7 @@ net.fred.feedex.utils.ThrottledContentObserver -> net.fred.feedex.d.d:
     java.lang.Runnable mOnChangeTask -> c
     40:53:void onChange(boolean) -> onChange
     void onChangeThrottled() -> a
-    30:30:void access$0(net.fred.feedex.utils.ThrottledContentObserver,java.lang.Runnable) -> a
+    26:26:java.lang.Runnable access$002(net.fred.feedex.utils.ThrottledContentObserver,java.lang.Runnable) -> a
 net.fred.feedex.utils.ThrottledContentObserver$1 -> net.fred.feedex.d.e:
     net.fred.feedex.utils.ThrottledContentObserver this$0 -> a
     44:46:void run() -> run
@@ -2830,77 +2898,45 @@ net.fred.feedex.view.DragNDropListener -> net.fred.feedex.view.a:
     void onDrag(int,int,android.widget.ListView) -> a
     void onStopDrag(android.view.View) -> a
     void onDrop(int,int) -> a
-net.fred.feedex.view.EntryView -> net.fred.feedex.view.EntryView:
-    android.view.animation.TranslateAnimation SLIDE_IN_RIGHT -> a
-    android.view.animation.TranslateAnimation SLIDE_IN_LEFT -> b
-    android.view.animation.TranslateAnimation SLIDE_OUT_RIGHT -> c
-    android.view.animation.TranslateAnimation SLIDE_OUT_LEFT -> d
-    java.lang.String BACKGROUND_COLOR -> e
-    java.lang.String TEXT_COLOR -> f
-    java.lang.String BUTTON_COLOR -> g
-    java.lang.String CSS -> h
-    java.lang.String BODY_START -> i
-    java.lang.String FONT_SIZE_START -> j
-    java.lang.String BUTTON_END -> k
-    java.lang.String LINK_BUTTON_MIDDLE -> l
-    android.view.ViewGroup$LayoutParams mLayoutParams -> m
-    android.webkit.WebView mWebView -> n
-    android.webkit.WebView mWebView0 -> o
-    long mNextId -> p
-    long mPreviousId -> q
-    float mScrollPercentage -> r
-    android.view.GestureDetector mGestureDetector -> s
-    android.view.View$OnTouchListener mOnTouchListener -> t
-    net.fred.feedex.view.EntryView$OnActionListener mListener -> u
-    net.fred.feedex.view.EntryView$JavaScriptObject mInjectedJSObject -> v
-    99:101:android.view.animation.TranslateAnimation generateAnimation(float,float) -> a
-    196:207:android.os.Parcelable onSaveInstanceState() -> onSaveInstanceState
-    212:217:void onRestoreInstanceState(android.os.Parcelable) -> onRestoreInstanceState
-    220:221:void setListener(net.fred.feedex.view.EntryView$OnActionListener) -> setListener
-    224:226:void reset() -> a
-    229:259:void setHtml(long,long,long,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,long,boolean) -> a
-    262:263:void nextEntry() -> b
-    266:267:void previousEntry() -> c
-    270:315:java.lang.String generateHtmlContent(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,long,boolean) -> a
-    319:341:void switchEntry(long,android.view.animation.Animation,android.view.animation.Animation) -> a
-    346:390:void setupWebview(android.webkit.WebView) -> setupWebview
-    149:149:android.view.GestureDetector access$0(net.fred.feedex.view.EntryView) -> a
-    158:158:net.fred.feedex.view.EntryView$OnActionListener access$1(net.fred.feedex.view.EntryView) -> b
-    145:145:long access$2(net.fred.feedex.view.EntryView) -> c
-    141:141:android.webkit.WebView access$3(net.fred.feedex.view.EntryView) -> d
-    144:144:long access$4(net.fred.feedex.view.EntryView) -> e
-    142:142:android.webkit.WebView access$5(net.fred.feedex.view.EntryView) -> f
-    147:147:float access$6(net.fred.feedex.view.EntryView) -> g
-net.fred.feedex.view.EntryView$1 -> net.fred.feedex.view.b:
+net.fred.feedex.view.EntryView -> net.fred.feedex.view.b:
+    java.lang.String BACKGROUND_COLOR -> a
+    java.lang.String TEXT_COLOR -> b
+    java.lang.String BUTTON_COLOR -> c
+    java.lang.String CSS -> d
+    java.lang.String BODY_START -> e
+    java.lang.String FONT_SIZE_START -> f
+    java.lang.String BUTTON_END -> g
+    java.lang.String LINK_BUTTON_MIDDLE -> h
+    float mScrollPercentage -> i
+    net.fred.feedex.view.EntryView$OnActionListener mListener -> j
+    net.fred.feedex.view.EntryView$JavaScriptObject mInjectedJSObject -> k
+    142:146:android.os.Parcelable onSaveInstanceState() -> onSaveInstanceState
+    151:154:void onRestoreInstanceState(android.os.Parcelable) -> onRestoreInstanceState
+    157:161:float getScrollPercentage() -> getScrollPercentage
+    165:166:void setScrollPercentage(float) -> setScrollPercentage
+    169:170:void setListener(net.fred.feedex.view.EntryView$OnActionListener) -> setListener
+    174:200:void setHtml(long,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,long,boolean) -> a
+    203:248:java.lang.String generateHtmlContent(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,long,boolean) -> a
+    254:299:void setupWebview() -> a
+    69:69:float access$100(net.fred.feedex.view.EntryView) -> a
+    69:69:net.fred.feedex.view.EntryView$OnActionListener access$200(net.fred.feedex.view.EntryView) -> b
+net.fred.feedex.view.EntryView$1 -> net.fred.feedex.view.c:
     net.fred.feedex.view.EntryView this$0 -> a
-    154:154:boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
-net.fred.feedex.view.EntryView$2 -> net.fred.feedex.view.c:
+    270:284:void onPageFinished(android.webkit.WebView,java.lang.String) -> onPageFinished
+    288:296:boolean shouldOverrideUrlLoading(android.webkit.WebView,java.lang.String) -> shouldOverrideUrlLoading
+net.fred.feedex.view.EntryView$1$1 -> net.fred.feedex.view.d:
+    net.fred.feedex.view.EntryView$1 this$1 -> a
+    276:280:void run() -> run
+net.fred.feedex.view.EntryView$JavaScriptObject -> net.fred.feedex.view.e:
     net.fred.feedex.view.EntryView this$0 -> a
-    177:189:boolean onFling(android.view.MotionEvent,android.view.MotionEvent,float,float) -> onFling
-net.fred.feedex.view.EntryView$3 -> net.fred.feedex.view.d:
-    net.fred.feedex.view.EntryView this$0 -> a
-    336:337:void run() -> run
-net.fred.feedex.view.EntryView$4 -> net.fred.feedex.view.e:
-    net.fred.feedex.view.EntryView this$0 -> a
-    android.webkit.WebView val$wv -> b
-    361:375:void onPageFinished(android.webkit.WebView,java.lang.String) -> onPageFinished
-    379:387:boolean shouldOverrideUrlLoading(android.webkit.WebView,java.lang.String) -> shouldOverrideUrlLoading
-    358:358:net.fred.feedex.view.EntryView access$0(net.fred.feedex.view.EntryView$4) -> a
-net.fred.feedex.view.EntryView$4$1 -> net.fred.feedex.view.f:
-    net.fred.feedex.view.EntryView$4 this$1 -> a
-    android.webkit.WebView val$wv -> b
-    367:371:void run() -> run
-net.fred.feedex.view.EntryView$JavaScriptObject -> net.fred.feedex.view.g:
-    net.fred.feedex.view.EntryView this$0 -> a
-    396:396:java.lang.String toString() -> toString
-    401:402:void onClickOriginalText() -> onClickOriginalText
-    406:407:void onClickFullText() -> onClickFullText
-    411:412:void onClickEnclosure() -> onClickEnclosure
-net.fred.feedex.view.EntryView$OnActionListener -> net.fred.feedex.view.h:
-    void onEntrySwitched(long) -> a
-    void onClickOriginalText() -> a
-    void onClickFullText() -> b
-    void onClickEnclosure() -> c
+    305:305:java.lang.String toString() -> toString
+    310:311:void onClickOriginalText() -> onClickOriginalText
+    315:316:void onClickFullText() -> onClickFullText
+    320:321:void onClickEnclosure() -> onClickEnclosure
+net.fred.feedex.view.EntryView$OnActionListener -> net.fred.feedex.view.f:
+    void onClickOriginalText() -> b
+    void onClickFullText() -> c
+    void onClickEnclosure() -> d
 net.fred.feedex.widget.ColorPickerDialogPreference -> net.fred.feedex.widget.ColorPickerDialogPreference:
     android.widget.SeekBar redSeekBar -> a
     android.widget.SeekBar greenSeekBar -> b
@@ -2909,25 +2945,25 @@ net.fred.feedex.widget.ColorPickerDialogPreference -> net.fred.feedex.widget.Col
     int color -> e
     72:122:android.view.View onCreateDialogView() -> onCreateDialogView
     127:131:void onDialogClosed(boolean) -> onDialogClosed
-    58:58:android.widget.SeekBar access$0(net.fred.feedex.widget.ColorPickerDialogPreference) -> a
-    59:59:android.widget.SeekBar access$1(net.fred.feedex.widget.ColorPickerDialogPreference) -> b
-    60:60:android.widget.SeekBar access$2(net.fred.feedex.widget.ColorPickerDialogPreference) -> c
-    61:61:android.widget.SeekBar access$3(net.fred.feedex.widget.ColorPickerDialogPreference) -> d
-    63:63:void access$4(net.fred.feedex.widget.ColorPickerDialogPreference,int) -> a
-    63:63:int access$5(net.fred.feedex.widget.ColorPickerDialogPreference) -> e
+    56:56:android.widget.SeekBar access$000(net.fred.feedex.widget.ColorPickerDialogPreference) -> a
+    56:56:android.widget.SeekBar access$100(net.fred.feedex.widget.ColorPickerDialogPreference) -> b
+    56:56:android.widget.SeekBar access$200(net.fred.feedex.widget.ColorPickerDialogPreference) -> c
+    56:56:android.widget.SeekBar access$300(net.fred.feedex.widget.ColorPickerDialogPreference) -> d
+    56:56:int access$402(net.fred.feedex.widget.ColorPickerDialogPreference,int) -> a
+    56:56:int access$400(net.fred.feedex.widget.ColorPickerDialogPreference) -> e
 net.fred.feedex.widget.ColorPickerDialogPreference$1 -> net.fred.feedex.widget.a:
-    net.fred.feedex.widget.ColorPickerDialogPreference this$0 -> a
-    android.view.View val$view -> b
+    android.view.View val$view -> a
+    net.fred.feedex.widget.ColorPickerDialogPreference this$0 -> b
     95:105:void onProgressChanged(android.widget.SeekBar,int,boolean) -> onProgressChanged
     110:110:void onStartTrackingTouch(android.widget.SeekBar) -> onStartTrackingTouch
     115:115:void onStopTrackingTouch(android.widget.SeekBar) -> onStopTrackingTouch
 net.fred.feedex.widget.WidgetConfigActivity -> net.fred.feedex.widget.WidgetConfigActivity:
     int widgetId -> a
     70:160:void onCreate(android.os.Bundle) -> onCreate
-    64:64:int access$0(net.fred.feedex.widget.WidgetConfigActivity) -> a
+    63:63:int access$000(net.fred.feedex.widget.WidgetConfigActivity) -> a
 net.fred.feedex.widget.WidgetConfigActivity$1 -> net.fred.feedex.widget.b:
-    net.fred.feedex.widget.WidgetConfigActivity this$0 -> a
-    android.preference.PreferenceCategory val$feedsPreferenceCategory -> b
+    android.preference.PreferenceCategory val$feedsPreferenceCategory -> a
+    net.fred.feedex.widget.WidgetConfigActivity this$0 -> b
     111:153:void onClick(android.view.View) -> onClick
 net.fred.feedex.widget.WidgetFeedsFactory -> net.fred.feedex.widget.c:
     android.content.Context mContext -> a
@@ -2935,22 +2971,22 @@ net.fred.feedex.widget.WidgetFeedsFactory -> net.fred.feedex.widget.c:
     int mFontSize -> c
     android.database.Cursor mCursor -> d
     net.fred.feedex.utils.ThrottledContentObserver mContentObserver -> e
-    60:70:void onCreate() -> onCreate
-    74:77:void onDestroy() -> onDestroy
-    81:81:int getCount() -> getCount
-    86:112:android.widget.RemoteViews getViewAt(int) -> getViewAt
-    117:117:android.widget.RemoteViews getLoadingView() -> getLoadingView
-    122:122:int getViewTypeCount() -> getViewTypeCount
-    127:127:long getItemId(int) -> getItemId
-    132:132:boolean hasStableIds() -> hasStableIds
-    137:139:void onDataSetChanged() -> onDataSetChanged
-    142:156:void computeCursor() -> a
-    47:47:android.content.Context access$0(net.fred.feedex.widget.WidgetFeedsFactory) -> a
-    48:48:int access$1(net.fred.feedex.widget.WidgetFeedsFactory) -> b
+    61:71:void onCreate() -> onCreate
+    75:78:void onDestroy() -> onDestroy
+    82:82:int getCount() -> getCount
+    87:113:android.widget.RemoteViews getViewAt(int) -> getViewAt
+    118:118:android.widget.RemoteViews getLoadingView() -> getLoadingView
+    123:123:int getViewTypeCount() -> getViewTypeCount
+    128:128:long getItemId(int) -> getItemId
+    133:133:boolean hasStableIds() -> hasStableIds
+    138:140:void onDataSetChanged() -> onDataSetChanged
+    143:157:void computeCursor() -> a
+    47:47:int access$000(net.fred.feedex.widget.WidgetFeedsFactory) -> a
+    47:47:android.content.Context access$100(net.fred.feedex.widget.WidgetFeedsFactory) -> b
 net.fred.feedex.widget.WidgetFeedsFactory$1 -> net.fred.feedex.widget.d:
     net.fred.feedex.widget.WidgetFeedsFactory this$0 -> a
-    65:66:void onChangeThrottled() -> a
+    66:67:void onChangeThrottled() -> a
 net.fred.feedex.widget.WidgetProvider -> net.fred.feedex.widget.WidgetProvider:
     39:57:void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]) -> onUpdate
 net.fred.feedex.widget.WidgetService -> net.fred.feedex.widget.WidgetService:
-    42:42:android.widget.RemoteViewsService$RemoteViewsFactory onGetViewFactory(android.content.Intent) -> onGetViewFactory
+    43:43:android.widget.RemoteViewsService$RemoteViewsFactory onGetViewFactory(android.content.Intent) -> onGetViewFactory
