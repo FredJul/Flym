@@ -59,7 +59,6 @@ import android.os.Handler;
 import android.text.TextUtils;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.MainApplication;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
@@ -678,17 +677,6 @@ public class FeedDataContentProvider extends ContentProvider {
             notifyChangeOnAllUris(matchCode, uri);
         }
         return count;
-    }
-
-    private static String getFeedIdFromEntryId(long entryId) {
-        ContentResolver cr = MainApplication.getContext().getContentResolver();
-        Cursor c = cr.query(EntryColumns.CONTENT_URI(entryId), new String[]{EntryColumns.FEED_ID}, null, null, null);
-        if (c.moveToFirst()) {
-            return c.getString(0);
-        }
-        c.close();
-
-        return null;
     }
 
     private static String getSearchWhereClause(String uriSearchParam) {
