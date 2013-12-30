@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="never">ei koskaan</string>
+    <string name="update">Päivitetty</string>
+    <string name="colon">:\u00A0</string>
+    <string name="menu_settings">Asetukset</string>
+    <string name="menu_refresh">Päivitä</string>
+    <string name="menu_all_read">Merkitse kaikki luetuiksi</string>
+    <string name="feedex_feeds">FeedEx-syötteet</string>
+    <string name="new_entries">uutta artikkelia</string>
+    <string name="error">Virhe</string>
+    <string name="network_error">Ei verkkoyhteyttä</string>
+    <string name="loading">Lataa…</string>
+    <string name="no_result">Ei tuloksia</string>
+    <string name="drawer_open">Avaa navigointipaneeli</string>
+    <string name="drawer_close">Sulje navigointipaneeli</string>
+    <string name="back_again_to_quit">Paina takaisin-näppäintä vielä kerran lopettaaksesi</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Syötteet</string>
+    <string name="menu_add_feed">Lisää syöte</string>
+    <string name="no_feeds">Ei syötteitä</string>
+    <string name="no_filters">Ei sääntöjä</string>
+    <string name="context_menu_delete">Poista</string>
+    <string name="edit_feed_title">Muokkaa syötettä</string>
+    <string name="new_feed_title">Uusi syöte</string>
+    <string name="context_menu_edit">Muokkaa</string>
+    <string name="menu_add_group">Lisää ryhmä</string>
+    <string name="menu_import">Tuo OPML-tiedosto</string>
+    <string name="menu_export">Vie OPML-tiedosto</string>
+    <string name="error_feed_error">Syötteen verkko-osoitteeseen ei saatu yhteyttä.</string>
+    <string name="error_feed_process">Syötettä ei voitu käsitellä.</string>
+    <string name="error_feed_url_exists">Osoite on jo olemassa.</string>
+    <string name="error_feed_import">Valittua tiedostoa ei voitu tuoda.</string>
+    <string name="error_feed_export">Vienti epäonnistui. Varmista, että SD-kortille voidaan kirjoittaa.
+    </string>
+    <string name="error_external_storage_not_available">Ulkoinen tallenusväline (esim. SD-kortti) ei ole saatavilla.
+    </string>
+    <string name="feed_url">URL-osoite</string>
+    <string name="optional">(ei välttämätön)</string>
+    <string name="website_or_feed">(verkkosivu tai syöte)</string>
+    <string name="tab_feed_title">Syöte</string>
+    <string name="tab_filters_title">Suodatus</string>
+    <string name="feed_title">OTSIKKO</string>
+    <string name="feed_filters">POISTA SÄÄNTÖJEN MUKAISET ARTIKKELIT</string>
+    <string name="filter_add_title">Lisää sääntö</string>
+    <string name="filter_delete_title">Poista sääntö</string>
+    <string name="filter_edit_title">Muokkaa sääntöä</string>
+    <string name="filter_is_regex">on säännöllinen lauseke (regex)</string>
+    <string name="filter_apply_to_title">Sovella otsikkoon</string>
+    <string name="filter_apply_to_content">Sovella sisältöön</string>
+    <string name="feed_search">Etsi syötteitä</string>
+    <string name="feed_search_by_web_search">Etsi syötteitä avainsanojen avulla</string>
+    <string name="feed_search_by_topic">Generoi syöte aiheen mukaan (FAROO-haun avulla)</string>
+    <string name="feed_search_by_youtube">Etsi syöte Youtube-kanavan nimen avulla</string>
+    <string name="select_file">Valitse tiedosto (SD-juuri)</string>
+    <string name="question_delete_feed">Haluatko poistaa tämän syötteen?</string>
+    <string name="question_delete_group">Haluatko poistaa tämän ryhmän ja kaikki siinä olevat syötteet?
+    </string>
+    <string name="question_delete_filter">Haluatko poistaa tämän säännön?</string>
+    <string name="add_group_title">Valitse ryhmän nimi</string>
+    <string name="edit_group_title">Muokkaa ryhmän nimeä</string>
+    <string name="message_exported_to">Viety tiedostoon %s</string>
+    <string name="to_group_title">Syötteen siirtäminen</string>
+    <string name="to_group_message">Voit asettaa tämän syötteen ryhmän sisään tai tasoa ylemmäs. Mitä haluat tehdä?
+    </string>
+    <string name="to_group_above">Ylemmälle tasolle</string>
+    <string name="to_group_into">Ryhmään</string>
+
+    <!-- ENTRIES -->
+    <string name="all">Artikkelit</string>
+    <string name="no_entries">Ei artikkeleita</string>
+    <string name="favorites">Tähdellä merkityt</string>
+    <string name="context_menu_hide_read">Piilota luetut</string>
+    <string name="context_menu_show_read">Näytä luetut</string>
+    <string name="context_menu_share_starred">Jaa tähdellä merkityt</string>
+    <string name="menu_star">Merkitse tähdellä</string>
+    <string name="menu_unstar">Poista tähti</string>
+    <string name="menu_share">Jaa</string>
+    <string name="menu_full_screen">Koko ruutu</string>
+    <string name="menu_copy_clipboard">Kopioi linkki</string>
+    <string name="menu_mark_as_unread">Merkitse lukemattomaksi</string>
+    <string name="share_favorites_title">FeedEx: tähdellä merkityt</string>
+    <string name="copied_clipboard">Linkki kopioitu</string>
+    <string name="get_full_text">Hae koko teksti</string>
+    <string name="original_text">Näytä alkuperäinen teksti</string>
+    <string name="see_enclosure">Avaa liite</string>
+    <string name="see_link">Avaa selaimessa</string>
+    <string name="cant_open_link">Linkin avaamiseen kykenevää sovellusta ei löydy.</string>
+
+    <!-- WIDGET -->
+    <string name="red">Punainen</string>
+    <string name="green">Vihreä</string>
+    <string name="blue">Sininen</string>
+    <string name="transparency">Läpinäkyvyys</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Automaattinen päivitys</string>
+    <string name="settings_refresh_enabled">Automaattinen päivitys päälle</string>
+    <string name="settings_refresh_enabled_description">Syötteiden automaattinen päivitys
+    </string>
+    <string name="settings_refresh_interval">Päivitysväli</string>
+    <string name="settings_refresh_interval_description">Kahden automaattisen päivityksen välinen aika
+    </string>
+    <string name="settings_category_notifications">Ilmoitukset</string>
+    <string name="settings_notifications_enabled">Näytä ilmoitukset</string>
+    <string name="settings_notifications_enabled_description">Näytä ilmoitus kun syötteissä on uusia artikkeleita
+    </string>
+    <string name="settings_notifications_ringtone">Soittoääni</string>
+    <string name="settings_notifications_ringtone_description">Aseta uusista artikkeleista ilmoittava soittoääni
+    </string>
+    <string name="settings_notifications_vibrate">Värinä</string>
+    <string name="settings_notifications_vibrate_description">Aseta uusista artikkeleista ilmoittava värinähälytys
+    </string>
+    <string name="settings_category_content_presentation">Sisällön esittäminen</string>
+    <string name="settings_lighttheme">Vaalea teema</string>
+    <string name="settings_lighttheme_description">Käytä vaaleaa teemaa</string>
+    <string name="settings_keep_time">Artikkelien säilyttämisaika</string>
+    <string name="settings_keep_time_description">Asetettua aikamäärää vanhemmat artikkelit poistetaan
+    </string>
+    <string name="settings_disable_pictures">Kuvat pois päältä</string>
+    <string name="settings_disable_pictures_description">Älä lataa, älä näytä kuvia</string>
+    <string name="settings_fetch_pictures">Lataa kuvat</string>
+    <string name="settings_fetch_pictures_description">Lataa kaikki kuvat ja tallenna ne tähän laitteeseen
+    </string>
+    <string name="settings_font_size">Kirjasintyypin koko</string>
+    <string name="settings_font_size_description">Artikkelitekstin kirjasintyypin koko</string>
+    <string name="settings_refresh_on_open">Päivitä käynnistettäessä</string>
+    <string name="settings_refresh_on_open_description">Päivitä kaikki syötteet sovelluksen käynnistyessä
+    </string>
+    <string name="settings_refresh_wifi_only">Vain wifi-yhteyden kautta</string>
+    <string name="settings_refresh_wifi_only_description">Syötteet päivitetään automaattisesti ainoastaan kun wifi-yhteys on käytettävissä
+    </string>
+    <string name="settings_visible_feeds">Näytettävät syötteet</string>
+    <string name="settings_widget_background">Tausta</string>
+    <string name="settings_widget_background_description">Widgetin taustan väri ja läpinäkyvyys
+    </string>
+    <string name="all_feeds">Kaikki syötteet (myös tulevat)</string>
+    <string name="settings_screen_proxy">Välityspalvelin</string>
+    <string name="settings_category_network">Verkko</string>
+    <string name="settings_proxy_enabled">Päällä</string>
+    <string name="settings_proxy_wifi_only">Vain wifi-yhteyden kautta</string>
+    <string name="settings_proxy_wifi_only_description">Käytä välipalvelinta ainoastaan kun wifi-yhteys on käytettävissä</string>
+    <string name="settings_proxy_host">Palvelin</string>
+    <string name="settings_proxy_port">Portti</string>
+    <string name="settings_proxy_type">Tyyppi</string>
+
+    <string-array name="settings_intervals">
+        <item>1 minuutti</item>
+        <item>5 minuuttia</item>
+        <item>15 minuuttia</item>
+        <item>30 minuuuttia</item>
+        <item>1 tunti</item>
+        <item>2 tuntia</item>
+        <item>6 tuntia</item>
+        <item>12 tuntia</item>
+        <item>1 päivä</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 päivä</item>
+        <item>2 päivää</item>
+        <item>4 päivää</item>
+        <item>1 viikko</item>
+        <item>2 viikkoa</item>
+        <item>1 kuukausi</item>
+        <item>2 kuukautta</item>
+        <item>3 kuukautta</item>
+        <item>Ikuisesti</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Normaali</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+
+</resources>
