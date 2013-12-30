@@ -33,7 +33,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -435,18 +434,9 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
             activity.setTitle(feedTitle);
 
             byte[] iconBytes = entryCursor.getBlob(mFeedIconPos);
-            if (iconBytes != null && iconBytes.length > 0) {
-                int bitmapSizeInDip = UiUtils.dpToPixel(24);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
-                if (bitmap != null) {
-                    if (bitmap.getHeight() != bitmapSizeInDip) {
-                        bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
-                    }
-
-                    activity.getActionBar().setIcon(new BitmapDrawable(getResources(), bitmap));
-                } else {
-                    activity.getActionBar().setIcon(R.drawable.icon);
-                }
+            Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 24);
+            if (bitmap != null) {
+                activity.getActionBar().setIcon(new BitmapDrawable(getResources(), bitmap));
             } else {
                 activity.getActionBar().setIcon(R.drawable.icon);
             }

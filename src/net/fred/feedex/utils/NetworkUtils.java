@@ -22,6 +22,8 @@ package net.fred.feedex.utils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -139,22 +141,35 @@ public class NetworkUtils {
     }
 
     public static void retrieveFavicon(Context context, URL url, String id) {
-        try {
-            HttpURLConnection iconURLConnection = setupConnection(new URL(url.getProtocol() + PROTOCOL_SEPARATOR + url.getHost() + FILE_FAVICON));
+        boolean success = false;
+        HttpURLConnection iconURLConnection = null;
 
-            ContentValues values = new ContentValues();
-            try {
-                byte[] iconBytes = getBytes(getConnectionInputStream(iconURLConnection));
-                values.put(FeedData.FeedColumns.ICON, iconBytes);
-                context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
-            } catch (Exception e) {
-                // no icon found or error
-                values.put(FeedData.FeedColumns.ICON, new byte[0]);
-                context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
-            } finally {
-                iconURLConnection.disconnect();
+        try {
+            iconURLConnection = setupConnection(new URL(url.getProtocol() + PROTOCOL_SEPARATOR + url.getHost() + FILE_FAVICON));
+
+            byte[] iconBytes = getBytes(getConnectionInputStream(iconURLConnection));
+            if (iconBytes != null && iconBytes.length > 0) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
+                if (bitmap != null && bitmap.getWidth() != 0 && bitmap.getHeight() != 0) {
+                    ContentValues values = new ContentValues();
+                    values.put(FeedData.FeedColumns.ICON, iconBytes);
+                    context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+                    success = true;
+                }
+                bitmap.recycle();
             }
         } catch (Throwable ignored) {
+        } finally {
+            if (iconURLConnection != null) {
+                iconURLConnection.disconnect();
+            }
+        }
+
+        if (!success) {
+            // no icon found or error
+            ContentValues values = new ContentValues();
+            values.putNull(FeedData.FeedColumns.ICON);
+            context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
         }
     }
 

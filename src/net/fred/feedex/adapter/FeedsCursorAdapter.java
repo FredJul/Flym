@@ -23,7 +23,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.View;
@@ -57,22 +56,10 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 
         TextView textView = ((TextView) view.findViewById(android.R.id.text1));
         byte[] iconBytes = cursor.getBlob(iconPosition);
-
-        if (iconBytes != null && iconBytes.length > 0) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
-
-            if (bitmap != null && bitmap.getHeight() > 0 && bitmap.getWidth() > 0) {
-                int bitmapSizeInDip = UiUtils.dpToPixel(18);
-
-                if (bitmap.getHeight() != bitmapSizeInDip) {
-                    bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
-                }
-                textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(context.getResources(), bitmap), null, null, null);
-            } else {
-                textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            }
+        Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 18);
+        if (bitmap != null) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(context.getResources(), bitmap), null, null, null);
         } else {
-            view.setTag(null);
             textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }
 

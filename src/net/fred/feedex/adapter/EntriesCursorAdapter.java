@@ -50,7 +50,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.View;
@@ -150,16 +149,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         if (mShowFeedInfo && mFeedIconPos > -1) {
             byte[] iconBytes = cursor.getBlob(mFeedIconPos);
-
-            if (iconBytes != null && iconBytes.length > 0) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
-
-                if (bitmap != null) {
-                    int bitmapSizeInDip = UiUtils.dpToPixel(18);
-                    if (bitmap.getHeight() != bitmapSizeInDip) {
-                        bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
-                    }
-                }
+            Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 18);
+            if (bitmap != null) {
                 holder.dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(context.getResources(), bitmap), null, null, null);
             } else {
                 holder.dateTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);

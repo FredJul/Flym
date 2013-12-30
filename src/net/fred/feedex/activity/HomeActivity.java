@@ -27,7 +27,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -325,16 +324,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     newUri = EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
                 } else {
                     byte[] iconBytes = mDrawerAdapter.getItemIcon(position);
-                    if (iconBytes != null && iconBytes.length > 0) {
-                        int bitmapSizeInDip = UiUtils.dpToPixel(24);
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
-                        if (bitmap != null) {
-                            if (bitmap.getHeight() != bitmapSizeInDip) {
-                                bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
-                            }
-
-                            mIcon = new BitmapDrawable(getResources(), bitmap);
-                        }
+                    Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 24);
+                    if (bitmap != null) {
+                        mIcon = new BitmapDrawable(getResources(), bitmap);
                     }
 
                     newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
