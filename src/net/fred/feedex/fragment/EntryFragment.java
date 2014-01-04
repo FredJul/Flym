@@ -550,7 +550,9 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getActivity(), EntryColumns.CONTENT_URI(mEntriesIds[id]), null, null, null, null);
+        CursorLoader cursorLoader = new CursorLoader(getActivity(), EntryColumns.CONTENT_URI(mEntriesIds[id]), null, null, null, null);
+        cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
+        return cursorLoader;
     }
 
     @Override
