@@ -78,5 +78,5 @@ public final class Constants {
 
     public static final String MIMETYPE_TEXT_PLAIN = "text/plain";
 
-    public static final int UPDATE_THROTTLE_DELAY = 1000;
+    public static final int UPDATE_THROTTLE_DELAY = 500;
 }
