@@ -65,6 +65,7 @@ import net.fred.feedex.R;
 import net.fred.feedex.utils.PrefUtils;
 
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class EntryView extends WebView {
 
@@ -75,6 +76,8 @@ public class EntryView extends WebView {
 
         public void onClickEnclosure();
     }
+
+    private SimpleDateFormat simpleformat =  new SimpleDateFormat("d MMMM y, HH:mm");
 
     private static final String STATE_SCROLL_PERCENTAGE = "STATE_SCROLL_PERCENTAGE";
 
@@ -215,8 +218,7 @@ public class EntryView extends WebView {
         content.append(TITLE_START).append(link).append(TITLE_MIDDLE).append(title).append(TITLE_END).append(SUBTITLE_START);
         Date date = new Date(timestamp);
         Context context = getContext();
-        StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(context).format(date)).append(' ').append(
-                DateFormat.getTimeFormat(context).format(date));
+        StringBuilder dateStringBuilder = new StringBuilder(simpleformat.format(date));
 
         if (author != null && !author.isEmpty()) {
             dateStringBuilder.append(" &mdash; ").append(author);

@@ -19,6 +19,8 @@
 
 package net.fred.feedex.adapter;
 
+import java.text.SimpleDateFormat;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -59,6 +61,8 @@ public class DrawerAdapter extends BaseAdapter {
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
 
     private static final String COLON = MainApplication.getContext().getString(R.string.colon);
+
+    private SimpleDateFormat simpleformat =  new SimpleDateFormat("d MMM HH:mm");
 
     private static final int CACHE_MAX_ENTRIES = 100;
     private final Map<Long, String> mFormattedDateCache = new LinkedHashMap<Long, String>(CACHE_MAX_ENTRIES + 1, .75F, true) {
@@ -149,8 +153,7 @@ public class DrawerAdapter extends BaseAdapter {
                     if (formattedDate == null) {
                         Date date = new Date(timestamp);
 
-                        formattedDate = mContext.getString(R.string.update) + COLON + (timestamp == 0 ? mContext.getString(R.string.never) : new StringBuilder(Constants.DATE_FORMAT.format(date))
-                                .append(' ').append(Constants.TIME_FORMAT.format(date)));
+                        formattedDate = mContext.getString(R.string.update) + COLON + (timestamp == 0 ? mContext.getString(R.string.never) : new StringBuilder(simpleformat.format(date)));
                         mFormattedDateCache.put(timestamp, formattedDate);
                     }
 
