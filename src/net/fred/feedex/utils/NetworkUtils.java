@@ -123,6 +123,16 @@ public class NetworkUtils {
         }
     }
 
+    public static String getBaseUrl(String link) {
+        String baseUrl = link;
+        int index = link.indexOf('/', 8); // this also covers https://
+        if (index > -1) {
+            baseUrl = link.substring(0, index);
+        }
+
+        return baseUrl;
+    }
+
     public static byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 

@@ -60,6 +60,7 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
 import net.fred.feedex.service.FetcherService;
+import net.fred.feedex.utils.HtmlUtils;
 import net.fred.feedex.utils.NetworkUtils;
 import net.fred.feedex.utils.PrefUtils;
 
@@ -187,10 +188,7 @@ public class RssAtomParser extends DefaultHandler {
         NetworkUtils.deleteFeedImagesCache(feedEntriesUri, where);
         MainApplication.getContext().getContentResolver().delete(feedEntriesUri, where, null);
 
-        int index = url.indexOf('/', 8); // this also covers https://
-        if (index > -1) {
-            feedBaseUrl = url.substring(0, index);
-        }
+        feedBaseUrl = NetworkUtils.getBaseUrl(url);
     }
 
     @Override
@@ -376,7 +374,7 @@ public class RssAtomParser extends DefaultHandler {
                 Pair<String, Vector<String>> improvedContent = null;
                 if (description != null) {
                     // Improve the description
-                    improvedContent = FetcherService.improveHtmlContent(description.toString(), fetchImages);
+                    improvedContent = HtmlUtils.improveHtmlContent(description.toString(), feedBaseUrl, fetchImages);
                     entriesImages.add(improvedContent.second);
                     if (improvedContent.first != null) {
                         values.put(EntryColumns.ABSTRACT, improvedContent.first);

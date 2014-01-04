@@ -71,6 +71,7 @@ import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.TaskColumns;
+import net.fred.feedex.utils.HtmlUtils;
 import net.fred.feedex.utils.NetworkUtils;
 import net.fred.feedex.utils.PrefUtils;
 
@@ -83,7 +84,6 @@ import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
@@ -118,16 +118,10 @@ public class FetcherService extends IntentService {
     private static final String HTML_BODY = "<body";
     private static final String ENCODING = "encoding=\"";
     private static final String SERVICENAME = "RssFetcherService";
-    private static final String URL_SPACE = "%20";
     /* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
     private static final Pattern FEED_LINK_PATTERN = Pattern.compile(
             "[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>",
             Pattern.CASE_INSENSITIVE);
-
-    // middle() is group 1; s* is important for non-whitespaces; ' also usable
-    private static final Pattern IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
-
-    private static final Pattern DIV_TAG = Pattern.compile("<div([^>]*>.*)</div>");
 
     public FetcherService() {
         super(SERVICENAME);
@@ -305,7 +299,7 @@ public class FetcherService extends IntentService {
 
                         if (mobilizedHtml != null) {
                             String realHtml = Html.fromHtml(mobilizedHtml, null, null).toString();
-                            Pair<String, Vector<String>> improvedContent = improveHtmlContent(realHtml,
+                            Pair<String, Vector<String>> improvedContent = HtmlUtils.improveHtmlContent(realHtml, NetworkUtils.getBaseUrl(link),
                                     PrefUtils.getBoolean(PrefUtils.FETCH_PICTURES, false));
                             if (improvedContent.first != null) {
                                 ContentValues values = new ContentValues();
@@ -673,65 +667,5 @@ public class FetcherService extends IntentService {
         cursor.close();
 
         return handler != null ? handler.getNewCount() : 0;
-    }
-
-    public static Pair<String, Vector<String>> improveHtmlContent(String content, boolean fetchImages) {
-        if (content != null) {
-            // remove trashes
-            content = content.trim().replaceAll("(?i)<[/]?[ ]?span(.|\n)*?>", "").replaceAll("(?i)<blockquote", "<div")
-                    .replaceAll("(?i)</blockquote", "</div");
-            // remove ads
-            content = content.replaceAll("(?i)<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
-            // remove lazy loading images stuff
-            content = content.replaceAll("(?i)\\s+src=[^>]+\\s+original[-]*src=(\"|')", " src=$1");
-            // remove bad image paths
-            content = content.replaceAll("(?i)\\s+(href|src)=(\"|')//", " $1=$2http://");
-
-            // Remove unmatched div tags
-            content = content.replaceAll("(?i)<div", "<div").replaceAll("(?i)</div>", "</div>");
-            boolean found;
-            do {
-                found = false;
-                Matcher matcher = DIV_TAG.matcher(content);
-                while (matcher.find()) {
-                    String matchedStr = matcher.group(1);
-                    if (!matchedStr.contains("<div")) {
-                        content = content.replace(matcher.group(0), "<__DIV__" + matchedStr + "</__DIV__>");
-                        found = true;
-                    }
-                }
-            } while (found);
-            content = content.replaceAll("<div[^>]*>", "").replaceAll("</div>", "");
-            content = content.replaceAll("<__DIV__", "<div").replaceAll("</__DIV__>", "</div>");
-
-            if (content.length() > 0) {
-                Vector<String> images = null;
-                if (fetchImages) {
-                    images = new Vector<String>(4);
-
-                    Matcher matcher = IMG_PATTERN.matcher(content);
-
-                    while (matcher.find()) {
-                        String match = matcher.group(1).replace(" ", URL_SPACE);
-
-                        images.add(match);
-                        try {
-                            // replace the '%' that may occur while urlencode such that the img-src url (in the abstract text) does reinterpret the
-                            // parameters
-                            content = content.replace(
-                                    match,
-                                    (Constants.FILE_URL + NetworkUtils.IMAGE_FOLDER + Constants.IMAGEID_REPLACEMENT + URLEncoder.encode(
-                                            match.substring(match.lastIndexOf('/') + 1), Constants.UTF8)).replace(NetworkUtils.PERCENT, NetworkUtils.PERCENT_REPLACE));
-                        } catch (UnsupportedEncodingException e) {
-                            // UTF-8 should be supported
-                        }
-                    }
-                }
-
-                return new Pair<String, Vector<String>>(content, images);
-            }
-        }
-
-        return new Pair<String, Vector<String>>(null, null);
     }
 }
