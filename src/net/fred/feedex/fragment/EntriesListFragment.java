@@ -308,7 +308,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
     }
 
     private void refreshUI() {
-        if (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
+        if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
             mSearchView.setVisibility(View.VISIBLE);
         } else {
             mSearchView.setVisibility(View.GONE);
