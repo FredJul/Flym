@@ -678,8 +678,9 @@ public class FetcherService extends IntentService {
     public static Pair<String, Vector<String>> improveHtmlContent(String content, boolean fetchImages) {
         if (content != null) {
             // remove trashes
-            content = content.trim().replaceAll("(?i)<[/]?[ ]?span(.|\n)*?>", "").replaceAll("(?i)<blockquote", "<div")
-                    .replaceAll("(?i)</blockquote", "</div");
+            // content = content.trim().replaceAll("(?i)<[/]?[ ]?span(.|\n)*?>", "").replaceAll("(?i)<blockquote", "<div")
+            //        .replaceAll("(?i)</blockquote", "</div");
+            content = content.trim().replaceAll("(?i)<[/]?[ ]?span(.|\n)*?>", "");
             // remove ads
             content = content.replaceAll("(?i)<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
             // remove lazy loading images stuff

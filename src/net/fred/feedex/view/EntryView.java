@@ -88,31 +88,46 @@ public class EntryView extends WebView {
     private static final String TEXT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";
     private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#ddecf1" : "#475773";
 
-    private static final String CSS = "<head><style type='text/css'>body {max-width: 100%; font-family: sans-serif-light; background-color:"
-            + BACKGROUND_COLOR
-            + "}\n* {max-width: 100%; word-break: break-word}\nimg {height: auto}\npre {white-space: pre-wrap;}</style><meta name='viewport' content='width=device-width'/></head>";
-    private static final String BODY_START = CSS + "<body link='#97ACE5' text='" + TEXT_COLOR + "'>";
-    private static final String FONT_SIZE_START = CSS + BODY_START + "<font size='";
+    private static final String CSS = "<head><style type='text/css'> " 
+            + "body {max-width: 100%; margin: 1em 0.2em 3em 0.2em; font-family: sans-serif-light; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 140%} " 
+            + "* {max-width: 100%; word-break: break-word}"
+            + "h1, h2 {font-weight: normal; line-height: 130%} "
+            + "h1 {font-size: 170%} "
+            + "h2 {font-size: 140%} "
+            + "a {color: #97ACE5}"
+            + "h1 a {color: inherit; text-decoration: none}"
+	    + "img {height: auto} " 
+            + "pre {white-space: pre-wrap;} "
+            + "blockquote {margin: 0.8em 0 0.8em 1.2em; padding: 0} "
+            + "p {margin: 0.8em 0 0.8em 0} "
+            + "p.subtitle {font-size: 80%; border-bottom: 1px solid #33b5e5} "
+            + "ul, ol {margin: 0 0 0.8em 0.6em; padding: 0 0 0 1em} "
+            + "ul li, ol li {margin: 0 0 0.8em 0; padding: 0} "
+            + "div.button-section {padding: 0.1cm 0; margin: 0; text-align: center} "
+            + ".button-section p {margin: 0.8cm 0}"
+            + ".button-section input, .button-section a {font-family: sans-serif-light; font-size: 100%; background-color: " + BUTTON_COLOR + "; color: " + TEXT_COLOR + "; text-decoration: none; border: none; border-radius:0.2cm; padding: 0.3cm} "
+            + "</style><meta name='viewport' content='width=device-width'/></head>";
+
+    private static final String BODY_START = "<body>";
+    private static final String FONT_SIZE_START = "<font size='";
     private static final String FONT_SIZE_MIDDLE = "'>";
-    private static final String BODY_END = "<br/><br/><br/><br/></body>";
-    private static final String FONT_SIZE_END = "</font>" + BODY_END;
-    private static final String TITLE_START = "<p style='margin-top:1cm; margin-bottom:0.6cm'><font size='+2'><a href='";
-    private static final String TITLE_MIDDLE = "' style='text-decoration: none; color:inherit'>";
-    private static final String TITLE_END = "</a></font></p>";
-    private static final String SUBTITLE_START = "<font size='-1'>";
-    private static final String SUBTITLE_END = "</font><div style='width:100%; border:0px; height:1px; margin-top:0.1cm; background:#33b5e5'/><br/><div align='justify'>";
+    private static final String FONT_SIZE_END = "</font>";
+    private static final String BODY_END = "</body>";
+    private static final String TITLE_START = "<h1><a href='";
+    private static final String TITLE_MIDDLE = "'>";
+    private static final String TITLE_END = "</a></h1>";
+    private static final String SUBTITLE_START = "<p class='subtitle'>";
+    private static final String SUBTITLE_END = "</p>";
 
-    private static final String BUTTON_SEPARATION = "</div><br/>";
+    private static final String BUTTON_SECTION_START = "<div class='button-section'>";
+    private static final String BUTTON_SECTION_END = "</div>";
 
-    private static final String BUTTON_START = "<div style='text-align: center'><input type='button' value='";
+    private static final String BUTTON_START = "<p><input type='button' value='";
     private static final String BUTTON_MIDDLE = "' onclick='";
-    private static final String BUTTON_END = "' style='background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
-            + "; text-decoration: none; font-family: sans-serif-light; font-size: 100%; border: none; border-radius:0.2cm; padding: 0.3cm;'/></div>";
-
-    private static final String LINK_BUTTON_START = "<div style='text-align: center; margin-top:0.4cm'><a href='";
-    private static final String LINK_BUTTON_MIDDLE = "' style='background-color:" + BUTTON_COLOR + "; color:" + TEXT_COLOR
-            + "; text-decoration: none; border: none; border-radius:0.2cm; padding: 0.3cm;'>";
-    private static final String LINK_BUTTON_END = "</a></div>";
+    private static final String BUTTON_END = "'/></p>";
+    private static final String LINK_BUTTON_START = "<p><a href='";
+    private static final String LINK_BUTTON_MIDDLE = "'>";
+    private static final String LINK_BUTTON_END = "</a></p>";
 
     private static final String IMAGE_ENCLOSURE = "[@]image/";
 
@@ -205,11 +220,11 @@ public class EntryView extends WebView {
     private String generateHtmlContent(String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
         StringBuilder content = new StringBuilder();
 
+	content.append(CSS).append(BODY_START);
+
         int fontSize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"));
         if (fontSize != 0) {
             content.append(FONT_SIZE_START).append(fontSize > 0 ? "+" : "").append(fontSize).append(FONT_SIZE_MIDDLE);
-        } else {
-            content.append(BODY_START);
         }
 
         if (link == null) {
@@ -223,7 +238,7 @@ public class EntryView extends WebView {
         if (author != null && !author.isEmpty()) {
             dateStringBuilder.append(" &mdash; ").append(author);
         }
-        content.append(dateStringBuilder).append(SUBTITLE_END).append(contentText).append(BUTTON_SEPARATION).append(BUTTON_START);
+        content.append(dateStringBuilder).append(SUBTITLE_END).append(contentText).append(BUTTON_SECTION_START).append(BUTTON_START);
 
         if (!preferFullText) {
             content.append(context.getString(R.string.get_full_text)).append(BUTTON_MIDDLE).append("injectedJSObject.onClickFullText();");
@@ -241,11 +256,13 @@ public class EntryView extends WebView {
             content.append(LINK_BUTTON_START).append(link).append(LINK_BUTTON_MIDDLE).append(context.getString(R.string.see_link)).append(LINK_BUTTON_END);
         }
 
+	content.append(BUTTON_SECTION_END);
+
         if (fontSize != 0) {
             content.append(FONT_SIZE_END);
-        } else {
-            content.append(BODY_END);
         }
+
+	content.append(BODY_END);
 
         return content.toString();
     }
