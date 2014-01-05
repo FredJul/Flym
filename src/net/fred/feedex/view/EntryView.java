@@ -62,6 +62,7 @@ import android.widget.Toast;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
+import net.fred.feedex.utils.HtmlUtils;
 import net.fred.feedex.utils.PrefUtils;
 
 import java.util.Date;
@@ -170,17 +171,14 @@ public class EntryView extends WebView {
     }
 
     public void setHtml(long entryId, String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
-        // loadData does not recognize the encoding without correct html-header
-        boolean localPictures = contentText.contains(Constants.IMAGEID_REPLACEMENT);
-
-        if (localPictures) {
-            contentText = contentText.replace(Constants.IMAGEID_REPLACEMENT, entryId + Constants.IMAGEFILE_IDSEPARATOR);
-        }
-
         if (PrefUtils.getBoolean(PrefUtils.DISABLE_PICTURES, false)) {
             contentText = contentText.replaceAll(HTML_IMG_REGEX, "");
             getSettings().setBlockNetworkImage(true);
         } else {
+            if (PrefUtils.getBoolean(PrefUtils.FETCH_PICTURES, false)) {
+                contentText = HtmlUtils.replaceImageURLs(contentText, entryId);
+            }
+
             if (getSettings().getBlockNetworkImage()) {
                 // setBlockNetwortImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
                 loadData("", TEXT_HTML, Constants.UTF8);

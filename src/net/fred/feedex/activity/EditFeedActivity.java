@@ -320,8 +320,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                 cursor.close();
                 ContentValues values = new ContentValues();
 
-                if (!url.startsWith(Constants.HTTP) && !url.startsWith(Constants.HTTPS)) {
-                    url = Constants.HTTP + url;
+                if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME)) {
+                    url = Constants.HTTP_SCHEME + url;
                 }
                 values.put(FeedColumns.URL, url);
 
@@ -398,7 +398,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
             case R.id.menu_search_feed: {
                 final View dialogView = getLayoutInflater().inflate(R.layout.dialog_search_feed, null);
                 final EditText searchText = (EditText) dialogView.findViewById(R.id.searchText);
-                if (!mUrlEditText.getText().toString().startsWith(Constants.HTTP) && !mUrlEditText.getText().toString().startsWith(Constants.HTTPS)) {
+                if (!mUrlEditText.getText().toString().startsWith(Constants.HTTP_SCHEME) && !mUrlEditText.getText().toString().startsWith(Constants.HTTPS_SCHEME)) {
                     searchText.setText(mUrlEditText.getText());
                 }
                 final RadioGroup radioGroup = (RadioGroup) dialogView.findViewById(R.id.radioGroup);
@@ -495,8 +495,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
         String url = mUrlEditText.getText().toString();
         ContentResolver cr = getContentResolver();
 
-        if (!url.startsWith(Constants.HTTP) && !url.startsWith(Constants.HTTPS)) {
-            url = Constants.HTTP + url;
+        if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME)) {
+            url = Constants.HTTP_SCHEME + url;
         }
 
         Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, FeedColumns.URL + Constants.DB_ARG,

@@ -38,6 +38,7 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -52,6 +53,7 @@ public class NetworkUtils {
 
     public static final File IMAGE_FOLDER_FILE = new File(MainApplication.getContext().getCacheDir(), "images/");
     public static final String IMAGE_FOLDER = IMAGE_FOLDER_FILE.getAbsolutePath() + '/';
+    public static final String ID_SEPARATOR = "__";
 
     public static final String PERCENT = "%";
     // This can be any valid filename character sequence which does not contain '%'
@@ -85,22 +87,43 @@ public class NetworkUtils {
         }
     }
 
-    public static void downloadImage(long entryId, String imgPath) throws IOException {
-        IMAGE_FOLDER_FILE.mkdir(); // create images dir
-
-        InputStream inputStream = new URL(imgPath).openStream();
-        FileOutputStream fos = new FileOutputStream((IMAGE_FOLDER + entryId + Constants.IMAGEFILE_IDSEPARATOR + URLEncoder.encode(
-                imgPath.substring(imgPath.lastIndexOf('/') + 1), Constants.UTF8)).replace(PERCENT, PERCENT_REPLACE));
-
-        byte[] buffer = new byte[4096];
-
-        int n;
-        while ((n = inputStream.read(buffer)) > 0) {
-            fos.write(buffer, 0, n);
+    public static String getDownloadedImagePath(long entryId, String imgUrl) {
+        try {
+            // replace the '%' that may occur while urlencode such that the img-src url (in the abstract text) does reinterpret the
+            // parameters
+            return (IMAGE_FOLDER + entryId + ID_SEPARATOR + URLEncoder.encode(
+                    imgUrl.substring(imgUrl.lastIndexOf('/') + 1), Constants.UTF8)).replace(PERCENT, PERCENT_REPLACE);
+        } catch (UnsupportedEncodingException e) {
+            // UTF-8 should be supported
         }
 
-        fos.close();
-        inputStream.close();
+        return null;
+    }
+
+    public static void downloadImage(long entryId, String imgUrl) throws IOException {
+        String imgPath = getDownloadedImagePath(entryId, imgUrl);
+
+        if (!new File(imgPath).exists()) {
+            try {
+                IMAGE_FOLDER_FILE.mkdir(); // create images dir
+
+                InputStream inputStream = new URL(imgUrl).openStream();
+                FileOutputStream fos = new FileOutputStream(imgPath);
+
+                byte[] buffer = new byte[4096];
+
+                int n;
+                while ((n = inputStream.read(buffer)) > 0) {
+                    fos.write(buffer, 0, n);
+                }
+
+                fos.close();
+                inputStream.close();
+            } catch (IOException e) {
+                new File(imgPath).delete();
+                throw e;
+            }
+        }
     }
 
     public static synchronized void deleteFeedImagesCache(Uri entriesUri, String selection) {
@@ -235,8 +258,8 @@ public class NetworkUtils {
         String location = connection.getHeaderField("Location");
 
         if (location != null
-                && (url.getProtocol().equals(_HTTP) && location.startsWith(Constants.HTTPS) || url.getProtocol().equals(_HTTPS)
-                && location.startsWith(Constants.HTTP))) {
+                && (url.getProtocol().equals(_HTTP) && location.startsWith(Constants.HTTPS_SCHEME) || url.getProtocol().equals(_HTTPS)
+                && location.startsWith(Constants.HTTP_SCHEME))) {
             // if location != null, the system-automatic redirect has failed
             // which indicates a protocol change
 

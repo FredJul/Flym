@@ -58,7 +58,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.SystemClock;
-import android.util.Pair;
 import android.util.Xml;
 
 import net.fred.feedex.Constants;
@@ -86,7 +85,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutorCompletionService;
@@ -101,6 +99,7 @@ public class FetcherService extends IntentService {
 
     public static final String ACTION_REFRESH_FEEDS = "net.fred.feedex.REFRESH";
     public static final String ACTION_MOBILIZE_FEEDS = "net.fred.feedex.MOBILIZE_FEEDS";
+    public static final String ACTION_DOWNLOAD_IMAGES = "net.fred.feedex.DOWNLOAD_IMAGES";
 
     private static final int THREAD_NUMBER = 3;
     private static final int MAX_TASK_ATTEMPT = 3;
@@ -150,7 +149,8 @@ public class FetcherService extends IntentService {
         if (ACTION_MOBILIZE_FEEDS.equals(intent.getAction())) {
             mobilizeAllEntries();
             downloadAllImages();
-
+        } else if (ACTION_DOWNLOAD_IMAGES.equals(intent.getAction())) {
+            downloadAllImages();
         } else { // == Constants.ACTION_REFRESH_FEEDS
             PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);
 
@@ -222,8 +222,8 @@ public class FetcherService extends IntentService {
         return result;
     }
 
-    public static void addImagesToDownload(String entryId, Vector<String> images) {
-        if (images != null) {
+    public static void addImagesToDownload(String entryId, ArrayList<String> images) {
+        if (images != null && !images.isEmpty()) {
             ContentValues[] values = new ContentValues[images.size()];
             for (int i = 0; i < images.size(); i++) {
                 values[i] = new ContentValues();
@@ -284,15 +284,14 @@ public class FetcherService extends IntentService {
                         String mobilizedHtml = new ArticleTextExtractor().extractContent(sb.toString());
 
                         if (mobilizedHtml != null) {
-                            Pair<String, Vector<String>> improvedContent = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link),
-                                    PrefUtils.getBoolean(PrefUtils.FETCH_PICTURES, false));
-                            if (improvedContent.first != null) {
-                                ContentValues values = new ContentValues();
-                                values.put(EntryColumns.MOBILIZED_HTML, improvedContent.first);
-                                if (cr.update(entryUri, values, null, null) > 0) {
-                                    success = true;
-                                    operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
-                                    addImagesToDownload(String.valueOf(entryId), improvedContent.second);
+                            mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link));
+                            ContentValues values = new ContentValues();
+                            values.put(EntryColumns.MOBILIZED_HTML, mobilizedHtml);
+                            if (cr.update(entryUri, values, null, null) > 0) {
+                                success = true;
+                                operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
+                                if (PrefUtils.getBoolean(PrefUtils.FETCH_PICTURES, false)) {
+                                    addImagesToDownload(String.valueOf(entryId), HtmlUtils.getImageURLs(mobilizedHtml));
                                 }
                             }
                         }
@@ -477,7 +476,7 @@ public class FetcherService extends IntentService {
                                             } else {
                                                 url = feedUrl + url;
                                             }
-                                        } else if (!url.startsWith(Constants.HTTP) && !url.startsWith(Constants.HTTPS)) {
+                                        } else if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME)) {
                                             url = feedUrl + '/' + url;
                                         }
                                         values.put(FeedColumns.URL, url);

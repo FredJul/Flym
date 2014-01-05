@@ -45,13 +45,9 @@ public final class Constants {
     public static final String DB_AND = " AND ";
     public static final String DB_OR = " OR ";
 
-    public static final String HTTP = "http://";
-    public static final String HTTPS = "https://";
-
-    public static final String FILE_URL = "file://";
-
-    public static final String IMAGEFILE_IDSEPARATOR = "__";
-    public static final String IMAGEID_REPLACEMENT = "##ID##";
+    public static final String HTTP_SCHEME = "http://";
+    public static final String HTTPS_SCHEME = "https://";
+    public static final String FILE_SCHEME = "file://";
 
     public static final String HTML_LT = "&lt;";
     public static final String HTML_GT = "&gt;";

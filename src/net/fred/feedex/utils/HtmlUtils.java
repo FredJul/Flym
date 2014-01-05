@@ -19,16 +19,19 @@
 
 package net.fred.feedex.utils;
 
-import android.util.Pair;
+import android.content.Context;
+import android.content.Intent;
+import android.text.TextUtils;
 
 import net.fred.feedex.Constants;
+import net.fred.feedex.MainApplication;
+import net.fred.feedex.service.FetcherService;
 
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Vector;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,7 +48,7 @@ public class HtmlUtils {
     private static final Pattern IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
     private static final String URL_SPACE = "%20";
 
-    public static Pair<String, Vector<String>> improveHtmlContent(String content, String baseUri, boolean fetchImages) {
+    public static String improveHtmlContent(String content, String baseUri) {
         if (content != null) {
             // remove lazy loading images stuff
             content = content.replaceAll("(?i)\\s+src=[^>]+\\s+original[-]*src=(\"|')", " src=$1");
@@ -53,35 +56,58 @@ public class HtmlUtils {
             content = Jsoup.clean(content, baseUri, JSOUP_WHITELIST);
             // remove bad image paths
             content = content.replaceAll("(?i)\\s+(href|src)=(\"|')//", " $1=$2http://");
+        }
 
-            if (content.length() > 0) {
-                Vector<String> images = null;
-                if (fetchImages) {
-                    images = new Vector<String>(4);
+        return content;
+    }
 
-                    Matcher matcher = IMG_PATTERN.matcher(content);
+    public static ArrayList<String> getImageURLs(String content) {
+        ArrayList<String> images = new ArrayList<String>();
 
-                    while (matcher.find()) {
-                        String match = matcher.group(1).replace(" ", URL_SPACE);
+        if (!TextUtils.isEmpty(content)) {
+            Matcher matcher = IMG_PATTERN.matcher(content);
 
-                        images.add(match);
-                        try {
-                            // replace the '%' that may occur while urlencode such that the img-src url (in the abstract text) does reinterpret the
-                            // parameters
-                            content = content.replace(
-                                    match,
-                                    (Constants.FILE_URL + NetworkUtils.IMAGE_FOLDER + Constants.IMAGEID_REPLACEMENT + URLEncoder.encode(
-                                            match.substring(match.lastIndexOf('/') + 1), Constants.UTF8)).replace(NetworkUtils.PERCENT, NetworkUtils.PERCENT_REPLACE));
-                        } catch (UnsupportedEncodingException e) {
-                            // UTF-8 should be supported
-                        }
-                    }
-                }
-
-                return new Pair<String, Vector<String>>(content, images);
+            while (matcher.find()) {
+                images.add(matcher.group(1).replace(" ", URL_SPACE));
             }
         }
 
-        return new Pair<String, Vector<String>>(null, null);
+        return images;
+    }
+
+    public static String replaceImageURLs(String content, final long entryId) {
+
+        if (!TextUtils.isEmpty(content)) {
+            Matcher matcher = IMG_PATTERN.matcher(content);
+
+            final ArrayList<String> imagesToDl = new ArrayList<String>();
+
+            while (matcher.find()) {
+                String match = matcher.group(1).replace(" ", URL_SPACE);
+
+                if (!match.startsWith(Constants.FILE_SCHEME)) { // Just for legacy, could be removed later
+                    String imgPath = NetworkUtils.getDownloadedImagePath(entryId, match);
+                    content = content.replace(match, Constants.FILE_SCHEME + imgPath);
+
+                    if (!new File(imgPath).exists()) {
+                        imagesToDl.add(match);
+                    }
+                }
+            }
+
+            // Download the images if needed
+            if (!imagesToDl.isEmpty()) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FetcherService.addImagesToDownload(String.valueOf(entryId), imagesToDl);
+                        Context context = MainApplication.getContext();
+                        context.startService(new Intent(context, FetcherService.class).setAction(FetcherService.ACTION_DOWNLOAD_IMAGES));
+                    }
+                }).start();
+            }
+        }
+
+        return content;
     }
 }

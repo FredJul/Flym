@@ -75,7 +75,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -167,7 +166,7 @@ public class RssAtomParser extends DefaultHandler {
     private final FeedFilters filters;
 
     private final ArrayList<ContentProviderOperation> inserts = new ArrayList<ContentProviderOperation>();
-    private final ArrayList<Vector<String>> entriesImages = new ArrayList<Vector<String>>();
+    private final ArrayList<ArrayList<String>> entriesImages = new ArrayList<ArrayList<String>>();
 
     public RssAtomParser(Date realLastUpdateDate, final String id, String feedName, String url, boolean retrieveFullText) {
         long keepTime = Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l;
@@ -371,18 +370,20 @@ public class RssAtomParser extends DefaultHandler {
                 String improvedTitle = unescapeTitle(title.toString().trim());
                 values.put(EntryColumns.TITLE, improvedTitle);
 
-                Pair<String, Vector<String>> improvedContent = null;
+                String improvedContent = null;
                 if (description != null) {
                     // Improve the description
-                    improvedContent = HtmlUtils.improveHtmlContent(description.toString(), feedBaseUrl, fetchImages);
-                    entriesImages.add(improvedContent.second);
-                    if (improvedContent.first != null) {
-                        values.put(EntryColumns.ABSTRACT, improvedContent.first);
+                    improvedContent = HtmlUtils.improveHtmlContent(description.toString(), feedBaseUrl);
+                    if (fetchImages) {
+                        entriesImages.add(HtmlUtils.getImageURLs(improvedContent));
+                    }
+                    if (improvedContent != null) {
+                        values.put(EntryColumns.ABSTRACT, improvedContent);
                     }
                 }
 
                 // Try to find if the entry is not filtered and need to be processed
-                if (!filters.isEntryFiltered(improvedTitle, improvedContent == null ? null : improvedContent.first)) {
+                if (!filters.isEntryFiltered(improvedTitle, improvedContent)) {
 
                     if (author != null) {
                         values.put(EntryColumns.AUTHOR, author.toString());
@@ -409,7 +410,7 @@ public class RssAtomParser extends DefaultHandler {
 
                     if (entryLink != null && entryLink.length() > 0) {
                         entryLinkString = entryLink.toString().trim();
-                        if (feedBaseUrl != null && !entryLinkString.startsWith(Constants.HTTP) && !entryLinkString.startsWith(Constants.HTTPS)) {
+                        if (feedBaseUrl != null && !entryLinkString.startsWith(Constants.HTTP_SCHEME) && !entryLinkString.startsWith(Constants.HTTPS_SCHEME)) {
                             entryLinkString = feedBaseUrl
                                     + (entryLinkString.startsWith(Constants.SLASH) ? entryLinkString : Constants.SLASH + entryLinkString);
                         }
@@ -602,7 +603,7 @@ public class RssAtomParser extends DefaultHandler {
 
                 if (fetchImages) {
                     for (int i = 0; i < results.length; ++i) {
-                        Vector<String> images = entriesImages.get(i);
+                        ArrayList<String> images = entriesImages.get(i);
                         if (images != null) {
                             FetcherService.addImagesToDownload(results[i].uri.getLastPathSegment(), images);
                         }
