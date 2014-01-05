@@ -58,7 +58,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.SystemClock;
-import android.text.Html;
 import android.util.Pair;
 import android.util.Xml;
 
@@ -71,6 +70,7 @@ import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.TaskColumns;
+import net.fred.feedex.utils.ArticleTextExtractor;
 import net.fred.feedex.utils.HtmlUtils;
 import net.fred.feedex.utils.NetworkUtils;
 import net.fred.feedex.utils.PrefUtils;
@@ -104,8 +104,6 @@ public class FetcherService extends IntentService {
 
     private static final int THREAD_NUMBER = 3;
     private static final int MAX_TASK_ATTEMPT = 3;
-
-    private static final String MOBILIZER_URL = "http://ftr.fivefilters.org/makefulltextfeed.php?url=";
 
     private static final int FETCHMODE_DIRECT = 1;
     private static final int FETCHMODE_REENCODE = 2;
@@ -274,7 +272,7 @@ public class FetcherService extends IntentService {
 
                     try {
                         String link = entryCursor.getString(linkPosition);
-                        connection = NetworkUtils.setupConnection(MOBILIZER_URL + link);
+                        connection = NetworkUtils.setupConnection(link);
                         BufferedReader reader = new BufferedReader(new InputStreamReader(NetworkUtils.getConnectionInputStream(connection)));
 
                         StringBuilder sb = new StringBuilder();
@@ -283,23 +281,10 @@ public class FetcherService extends IntentService {
                             sb.append(line);
                         }
 
-                        String mobilizedHtml = null;
-                        Pattern p = Pattern
-                                .compile("<description>[^<]*</description>.*<description>(.*)&lt;p&gt;&lt;em&gt;This entry passed through the");
-                        Matcher m = p.matcher(sb.toString());
-                        if (m.find()) {
-                            mobilizedHtml = m.toMatchResult().group(1);
-                        } else {
-                            p = Pattern.compile("<description>[^<]*</description>.*<description>(.*)</description>");
-                            m = p.matcher(sb.toString());
-                            if (m.find()) {
-                                mobilizedHtml = m.toMatchResult().group(1);
-                            }
-                        }
+                        String mobilizedHtml = new ArticleTextExtractor().extractContent(sb.toString());
 
                         if (mobilizedHtml != null) {
-                            String realHtml = Html.fromHtml(mobilizedHtml, null, null).toString();
-                            Pair<String, Vector<String>> improvedContent = HtmlUtils.improveHtmlContent(realHtml, NetworkUtils.getBaseUrl(link),
+                            Pair<String, Vector<String>> improvedContent = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link),
                                     PrefUtils.getBoolean(PrefUtils.FETCH_PICTURES, false));
                             if (improvedContent.first != null) {
                                 ContentValues values = new ContentValues();
