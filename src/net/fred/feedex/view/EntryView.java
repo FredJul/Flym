@@ -58,6 +58,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebSettings;
 import android.widget.Toast;
 
 import net.fred.feedex.Constants;
@@ -89,9 +90,9 @@ public class EntryView extends WebView {
     private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#ddecf1" : "#475773";
 
     private static final String CSS = "<head><style type='text/css'> " 
-            + "body {max-width: 100%; margin: 1em 0.2em 3em 0.2em; font-family: sans-serif-light; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 140%} " 
+            + "body {max-width: 100%; margin: 1em 0.2em 3em 0.2em; font-family: sans-serif-light; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 140%; text-align: justify} " 
             + "* {max-width: 100%; word-break: break-word}"
-            + "h1, h2 {font-weight: normal; line-height: 130%} "
+            + "h1, h2 {font-weight: normal; line-height: 130%; text-align: left} "
             + "h1 {font-size: 170%} "
             + "h2 {font-size: 140%} "
             + "a {color: #97ACE5}"
@@ -100,35 +101,31 @@ public class EntryView extends WebView {
             + "pre {white-space: pre-wrap;} "
             + "blockquote {margin: 0.8em 0 0.8em 1.2em; padding: 0} "
             + "p {margin: 0.8em 0 0.8em 0} "
-            + "p.subtitle {font-size: 80%; border-bottom: 1px solid #33b5e5} "
+            + "p.subtitle {font-size: 80%; border-bottom: 1px solid #33b5e5; margin-bottom: 1.2em; text-align: left} "
             + "ul, ol {margin: 0 0 0.8em 0.6em; padding: 0 0 0 1em} "
             + "ul li, ol li {margin: 0 0 0.8em 0; padding: 0} "
-            + "div.button-section {padding: 0.1cm 0; margin: 0; text-align: center} "
-            + ".button-section p {margin: 0.8cm 0}"
+            + "div.button-section {padding: 0.4cm 0; margin: 0; text-align: center} "
+            + ".button-section p {margin: 0 0 0.4cm 0}"
+            + ".button-section p.marginfix {margin: 0.7cm 0 0.7cm 0}"
             + ".button-section input, .button-section a {font-family: sans-serif-light; font-size: 100%; background-color: " + BUTTON_COLOR + "; color: " + TEXT_COLOR + "; text-decoration: none; border: none; border-radius:0.2cm; padding: 0.3cm} "
             + "</style><meta name='viewport' content='width=device-width'/></head>";
 
     private static final String BODY_START = "<body>";
-    private static final String FONT_SIZE_START = "<font size='";
-    private static final String FONT_SIZE_MIDDLE = "'>";
-    private static final String FONT_SIZE_END = "</font>";
     private static final String BODY_END = "</body>";
     private static final String TITLE_START = "<h1><a href='";
     private static final String TITLE_MIDDLE = "'>";
     private static final String TITLE_END = "</a></h1>";
     private static final String SUBTITLE_START = "<p class='subtitle'>";
     private static final String SUBTITLE_END = "</p>";
-
     private static final String BUTTON_SECTION_START = "<div class='button-section'>";
     private static final String BUTTON_SECTION_END = "</div>";
-
     private static final String BUTTON_START = "<p><input type='button' value='";
     private static final String BUTTON_MIDDLE = "' onclick='";
     private static final String BUTTON_END = "'/></p>";
-    private static final String LINK_BUTTON_START = "<p><a href='";
+    // the separate 'marginfix' selector in the following is only needed because the CSS box model treats <input> and <a> elements differently
+    private static final String LINK_BUTTON_START = "<p class='marginfix'><a href='";
     private static final String LINK_BUTTON_MIDDLE = "'>";
     private static final String LINK_BUTTON_END = "</a></p>";
-
     private static final String IMAGE_ENCLOSURE = "[@]image/";
 
     private float mScrollPercentage = 0;
@@ -222,11 +219,6 @@ public class EntryView extends WebView {
 
 	content.append(CSS).append(BODY_START);
 
-        int fontSize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"));
-        if (fontSize != 0) {
-            content.append(FONT_SIZE_START).append(fontSize > 0 ? "+" : "").append(fontSize).append(FONT_SIZE_MIDDLE);
-        }
-
         if (link == null) {
             link = "";
         }
@@ -256,13 +248,7 @@ public class EntryView extends WebView {
             content.append(LINK_BUTTON_START).append(link).append(LINK_BUTTON_MIDDLE).append(context.getString(R.string.see_link)).append(LINK_BUTTON_END);
         }
 
-	content.append(BUTTON_SECTION_END);
-
-        if (fontSize != 0) {
-            content.append(FONT_SIZE_END);
-        }
-
-	content.append(BODY_END);
+	content.append(BUTTON_SECTION_END).append(BODY_END);
 
         return content.toString();
     }
@@ -275,6 +261,12 @@ public class EntryView extends WebView {
 
         // For color
         setBackgroundColor(Color.parseColor(BACKGROUND_COLOR));
+
+	// Text zoom level from preferences
+        int fontSize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"));
+        if (fontSize != 0) {
+	    getSettings().setTextZoom (100 + (fontSize * 8));
+        }
 
         // For javascript
         getSettings().setJavaScriptEnabled(true);
