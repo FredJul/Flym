@@ -90,9 +90,9 @@ public class EntryView extends WebView {
     private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#ddecf1" : "#475773";
 
     private static final String CSS = "<head><style type='text/css'> " 
-            + "body {max-width: 100%; margin: 1em 0.2em 3em 0.2em; font-family: sans-serif-light; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 140%; text-align: justify} " 
+            + "body {max-width: 100%; margin: 1em 0.2em 3em 0.2em; font-family: sans-serif-light; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 140%} " 
             + "* {max-width: 100%; word-break: break-word}"
-            + "h1, h2 {font-weight: normal; line-height: 130%; text-align: left} "
+            + "h1, h2 {font-weight: normal; line-height: 130%} "
             + "h1 {font-size: 170%} "
             + "h2 {font-size: 140%} "
             + "a {color: #97ACE5}"
@@ -101,7 +101,7 @@ public class EntryView extends WebView {
             + "pre {white-space: pre-wrap;} "
             + "blockquote {margin: 0.8em 0 0.8em 1.2em; padding: 0} "
             + "p {margin: 0.8em 0 0.8em 0} "
-            + "p.subtitle {font-size: 80%; border-bottom: 1px solid #33b5e5; margin-bottom: 1.2em; text-align: left} "
+            + "p.subtitle {font-size: 80%; border-bottom: 1px solid #33b5e5; margin-bottom: 1.2em} "
             + "ul, ol {margin: 0 0 0.8em 0.6em; padding: 0 0 0 1em} "
             + "ul li, ol li {margin: 0 0 0.8em 0; padding: 0} "
             + "div.button-section {padding: 0.4cm 0; margin: 0; text-align: center} "
