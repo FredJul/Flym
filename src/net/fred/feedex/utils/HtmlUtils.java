@@ -50,12 +50,16 @@ public class HtmlUtils {
 
     public static String improveHtmlContent(String content, String baseUri) {
         if (content != null) {
+            // remove trashes
+            content = content.replaceAll("(?i)<[/]?[ ]?span(.|\n)*?>", "").replaceAll("(?i)<blockquote", "<div").replaceAll("(?i)</blockquote", "</div");
+            // remove some ads
+            content = content.replaceAll("(?i)<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
             // remove lazy loading images stuff
             content = content.replaceAll("(?i)\\s+src=[^>]+\\s+original[-]*src=(\"|')", " src=$1");
-            // clean by jsoup
-            content = Jsoup.clean(content, baseUri, JSOUP_WHITELIST);
             // remove bad image paths
             content = content.replaceAll("(?i)\\s+(href|src)=(\"|')//", " $1=$2http://");
+            // clean by jsoup
+            content = Jsoup.clean(content, baseUri, JSOUP_WHITELIST);
         }
 
         return content;
