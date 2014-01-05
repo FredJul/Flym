@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 
 public class HtmlUtils {
 
-    private static final Whitelist JSOUP_WHITELIST = Whitelist.basicWithImages().addTags("iframe", "video", "audio", "source", "track")
+    private static final Whitelist JSOUP_WHITELIST = Whitelist.relaxed().addTags("iframe", "video", "audio", "source", "track")
             .addAttributes("iframe", "src", "frameborder", "height", "width")
             .addAttributes("video", "src", "controls", "height", "width", "poster")
             .addAttributes("audio", "src", "controls")
