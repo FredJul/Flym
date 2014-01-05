@@ -216,7 +216,7 @@ public class FeedData {
         public static final String NUMBER_ATTEMPT = "number_attempt";
 
         public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {ENTRY_ID, TYPE_EXTERNAL_ID}, {IMG_URL_TO_DL, TYPE_TEXT},
-                {NUMBER_ATTEMPT, TYPE_INT}};
+                {NUMBER_ATTEMPT, TYPE_INT}, {"UNIQUE", "(" + ENTRY_ID + ", " + IMG_URL_TO_DL + ") ON CONFLICT IGNORE"}};
 
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/tasks");
 

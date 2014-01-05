@@ -51,7 +51,6 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -334,11 +333,12 @@ public class FeedDataContentProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Illegal insert");
         }
+
         if (newId > -1) {
             notifyChangeOnAllUris(matchCode, uri);
             return ContentUris.withAppendedId(uri, newId);
-        } else {
-            throw new SQLException("Could not insert row into " + uri);
+        } else { // This can happen when an insert failed with "ON CONFLICT IGNORE", this is not an error
+            return uri;
         }
     }
 
