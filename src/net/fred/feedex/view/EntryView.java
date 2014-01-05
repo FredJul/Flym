@@ -98,9 +98,9 @@ public class EntryView extends WebView {
     private static final String TITLE_MIDDLE = "' style='text-decoration: none; color:inherit'>";
     private static final String TITLE_END = "</a></font></p>";
     private static final String SUBTITLE_START = "<font size='-1'>";
-    private static final String SUBTITLE_END = "</font><div style='width:100%; border:0px; height:1px; margin-top:0.1cm; background:#33b5e5'/><br/>";
+    private static final String SUBTITLE_END = "</font><div style='width:100%; border:0px; height:1px; margin-top:0.1cm; background:#33b5e5'/><br/><div>";
 
-    private static final String BUTTON_SEPARATION = "<br/>";
+    private static final String BUTTON_SEPARATION = "</div><br/>";
 
     private static final String BUTTON_START = "<div style='text-align: center'><input type='button' value='";
     private static final String BUTTON_MIDDLE = "' onclick='";
