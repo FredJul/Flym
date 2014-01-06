@@ -80,7 +80,7 @@
     <string name="question_delete_group">Haluatko poistaa tämän ryhmän ja kaikki siinä olevat syötteet?
     </string>
     <string name="question_delete_filter">Haluatko poistaa tämän säännön?</string>
-    <string name="add_group_title">Valitse ryhmän nimi</string>
+    <string name="add_group_title">Uusi ryhmä</string>
     <string name="edit_group_title">Muokkaa ryhmän nimeä</string>
     <string name="message_exported_to">Viety tiedostoon %s</string>
     <string name="to_group_title">Syötteen siirtäminen</string>
