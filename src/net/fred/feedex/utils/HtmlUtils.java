@@ -50,8 +50,6 @@ public class HtmlUtils {
 
     public static String improveHtmlContent(String content, String baseUri) {
         if (content != null) {
-            // remove trashes
-            content = content.replaceAll("(?i)<[/]?[ ]?span(.|\n)*?>", "").replaceAll("(?i)<blockquote", "<div").replaceAll("(?i)</blockquote", "</div");
             // remove some ads
             content = content.replaceAll("(?i)<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
             // remove lazy loading images stuff
