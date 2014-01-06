@@ -29,7 +29,7 @@
     <string name="menu_refresh">Uppdatera</string>
     <string name="menu_all_read">Mark som läst</string>
     <string name="feedex_feeds">FeedEx feeds</string>
-    <string name="new_entries">nya poster</string>
+    <string name="new_entries">nya inlägg</string>
     <string name="error">Fel</string>
     <string name="network_error">Nätverket är inte tillgängligt</string>
     <string name="loading">Laddar…</string>
@@ -62,7 +62,7 @@
     <string name="tab_feed_title">Feed</string>
     <string name="tab_filters_title">Filter</string>
     <string name="feed_title">TITEL</string>
-    <string name="feed_filters">FILTRERA BORT MED DESSA REGLER</string>
+    <string name="feed_filters">FILTRERA BORT ENLIGT DESSA REGLER</string>
     <string name="filter_add_title">Lägg till regel</string>
     <string name="filter_delete_title">Radera regel</string>
     <string name="filter_edit_title">Redigera regel</string>
@@ -81,16 +81,16 @@
     <string name="edit_group_title">Redigera gruppens namn</string>
     <string name="message_exported_to">Exporterad till %s.</string>
     <string name="to_group_title">Flytta feed</string>
-    <string name="to_group_message">Du kan flytta denna feed varken till gruppen eller utanför gruppen. Vad vill du göra?</string>
+    <string name="to_group_message">Du kan flytta denna feed varken in till gruppen eller utanför gruppen. Vad vill du göra?</string>
     <string name="to_group_above">Utanför gruppen</string>
-    <string name="to_group_into">Till gruppen</string>
+    <string name="to_group_into">In till gruppen</string>
 
     <!-- ENTRIES -->
-    <string name="all">Poster</string>
+    <string name="all">Inlägg</string>
     <string name="no_entries">Inga poster</string>
     <string name="favorites">Favoriter</string>
-    <string name="context_menu_hide_read">Göm lästa poster</string>
-    <string name="context_menu_show_read">Visa lästa poster</string>
+    <string name="context_menu_hide_read">Göm lästa inlägg</string>
+    <string name="context_menu_show_read">Visa lästa inlägg</string>
     <string name="context_menu_share_starred">Dela favoriter</string>
     <string name="menu_star">Mark som favorit</string>
     <string name="menu_unstar">Avmark som favorit</string>
@@ -115,29 +115,29 @@
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisk uppdatering</string>
     <string name="settings_refresh_enabled">Uppdatera automatiskt</string>
-    <string name="settings_refresh_enabled_description">Kontrollerar den automatiska uppdateringen av alla feeds </string>
+    <string name="settings_refresh_enabled_description">Uppdatera alla feeds automatiskt</string>
     <string name="settings_refresh_interval">Uppdateringsintervall</string>
     <string name="settings_refresh_interval_description">Intervall mellan två automatiska uppdateringar</string>
     <string name="settings_category_notifications">Påminnelser</string>
     <string name="settings_notifications_enabled">Visa påminnelser</string>
-    <string name="settings_notifications_enabled_description">Kontrollerar om påminnelser visas då nytt feed innehåll finns</string>
+    <string name="settings_notifications_enabled_description">Visa påminnelser då nytt feed innehåll finns</string>
     <string name="settings_notifications_ringtone">Ringsignal</string>
-    <string name="settings_notifications_ringtone_description">Välj en ringsignal som spelas när nytt feed innehåll hittas</string>
+    <string name="settings_notifications_ringtone_description">Välj en ringsignal som spelas vid nytt feed innehåll</string>
     <string name="settings_notifications_vibrate">Vibrera</string>
-    <string name="settings_notifications_vibrate_description">Kontrollerar om vibration används vid nytt feed innehåll</string>
+    <string name="settings_notifications_vibrate_description">Vibrera vid nytt feed innehåll</string>
     <string name="settings_category_content_presentation">Innehållspresentation</string>
     <string name="settings_lighttheme">Ljust tema</string>
     <string name="settings_lighttheme_description">Använd det ljusa temat</string>
-    <string name="settings_keep_time">Tid som posterna kommer att behållas</string>
-    <string name="settings_keep_time_description">Poster med äldre datum än det givna kommer att raderas</string>
+    <string name="settings_keep_time">Tid som inläggen behållas</string>
+    <string name="settings_keep_time_description">Inläggen som är äldre än den givna tidslängden raderas</string>
     <string name="settings_disable_pictures">Använd inte bilder</string>
-    <string name="settings_disable_pictures_description">Visa inte / ladda inte ned några bilder</string>
+    <string name="settings_disable_pictures_description">Visa inte, ladda inte ned några bilder</string>
     <string name="settings_fetch_pictures">Ladda ned bilder</string>
     <string name="settings_fetch_pictures_description">Ladda ned alla bilder och lagra dem lokalt</string>
     <string name="settings_font_size">Typsnittsstorlek</string>
-    <string name="settings_font_size_description">Typsnittsstorlek för enstaka poster</string>
+    <string name="settings_font_size_description">Typsnittsstorlek för inläggstext</string>
     <string name="settings_refresh_on_open">Uppdatera feeds vid start</string>
-    <string name="settings_refresh_on_open_description">Uppdaterar alla feeds när applikationen öppnas</string>
+    <string name="settings_refresh_on_open_description">Uppdatera alla feeds när applikationen öppnas</string>
     <string name="settings_refresh_wifi_only">Uppdatera endast över wifi</string>
     <string name="settings_refresh_wifi_only_description">Uppdatera automatisk endast när ett wifi-nätverk är tillgänglig</string>
     <string name="settings_visible_feeds">Synliga feeds</string>
@@ -146,7 +146,7 @@
     <string name="all_feeds">Alla feeds (inkl. kommande)</string>
     <string name="settings_screen_proxy">Proxy</string>
     <string name="settings_category_network">Nätverk</string>
-    <string name="settings_proxy_enabled">Aktiverad</string>
+    <string name="settings_proxy_enabled">Använd proxyserver</string>
     <string name="settings_proxy_wifi_only">Endast wifi</string>
     <string name="settings_proxy_wifi_only_description">Använd proxy endast för wifi</string>
     <string name="settings_proxy_host">Host</string>
