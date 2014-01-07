@@ -70,6 +70,7 @@ import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.utils.UiUtils;
 
 import java.util.Date;
+import java.util.Calendar;
 import java.util.Vector;
 
 import java.text.SimpleDateFormat;
@@ -160,9 +161,12 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         }
 
         Date date = new Date(cursor.getLong(mDatePos));
-	long currentTime = System.currentTimeMillis();
+	Calendar calTimestamp = Calendar.getInstance();
+	calTimestamp.setTimeInMillis(date.getTime());
+	Calendar calCurrent = Calendar.getInstance();
 	String dateFeedString;
-	if (currentTime - date.getTime() < 86400000) {
+	// do not show date if the timestamp is within 6 hours (21600000 ms) OR on the same day
+	if (calCurrent.getTimeInMillis() - date.getTime() < 21600000 || calCurrent.get(Calendar.DAY_OF_MONTH) == calTimestamp.get(Calendar.DAY_OF_MONTH)) {
 	    dateFeedString = Constants.TIME_FORMAT.format(date);
 	} else {
 	    dateFeedString = SHORT_DATE.format(date) + ' ' + Constants.TIME_FORMAT.format(date);
