@@ -72,7 +72,11 @@ import net.fred.feedex.utils.UiUtils;
 import java.util.Date;
 import java.util.Vector;
 
+import java.text.SimpleDateFormat;
+
 public class EntriesCursorAdapter extends ResourceCursorAdapter {
+
+    private static final SimpleDateFormat SHORT_DATE =  new SimpleDateFormat(Constants.DATE_SHORT_FORMAT);
 
     private static class ViewHolder {
         public TextView titleTextView;
@@ -145,8 +149,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             }
         });
 
-        Date date = new Date(cursor.getLong(mDatePos));
-
         if (mShowFeedInfo && mFeedIconPos > -1) {
             byte[] iconBytes = cursor.getBlob(mFeedIconPos);
             Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 18);
@@ -157,16 +159,21 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             }
         }
 
+        Date date = new Date(cursor.getLong(mDatePos));
+	long currentTime = System.currentTimeMillis();
+	String dateFeedString;
+	if (currentTime - date.getTime() < 86400000) {
+	    dateFeedString = Constants.TIME_FORMAT.format(date);
+	} else {
+	    dateFeedString = SHORT_DATE.format(date) + ' ' + Constants.TIME_FORMAT.format(date);
+	}
         if (mShowFeedInfo && mFeedNamePos > -1) {
             String feedName = cursor.getString(mFeedNamePos);
             if (feedName != null) {
-                holder.dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)).append(Constants.COMMA_SPACE).append(feedName));
-            } else {
-                holder.dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)));
-            }
-        } else {
-            holder.dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)));
-        }
+                dateFeedString += Constants.COMMA_SPACE + feedName;
+	    }
+	}
+	holder.dateTextView.setText(dateFeedString);
 
         holder.isReadCb.setOnCheckedChangeListener(null);
         if (mMarkedAsUnreadEntries.contains(id) || (cursor.isNull(mIsReadPos) && !mMarkedAsReadEntries.contains(id))) {

@@ -40,6 +40,9 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import java.text.SimpleDateFormat;
+
+
 public class DrawerAdapter extends BaseAdapter {
 
     private static final int POS_ID = 0;
@@ -59,6 +62,7 @@ public class DrawerAdapter extends BaseAdapter {
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
 
     private static final String COLON = MainApplication.getContext().getString(R.string.colon);
+    private static final SimpleDateFormat SHORT_DATE =  new SimpleDateFormat(Constants.DATE_SHORT_FORMAT);
 
     private static final int CACHE_MAX_ENTRIES = 100;
     private final Map<Long, String> mFormattedDateCache = new LinkedHashMap<Long, String>(CACHE_MAX_ENTRIES + 1, .75F, true) {
@@ -147,10 +151,19 @@ public class DrawerAdapter extends BaseAdapter {
                     // Date formatting is expensive, look at the cache
                     String formattedDate = mFormattedDateCache.get(timestamp);
                     if (formattedDate == null) {
+			long currentTime = System.currentTimeMillis();
                         Date date = new Date(timestamp);
 
-                        formattedDate = mContext.getString(R.string.update) + COLON + (timestamp == 0 ? mContext.getString(R.string.never) : new StringBuilder(Constants.DATE_FORMAT.format(date))
-                                .append(' ').append(Constants.TIME_FORMAT.format(date)));
+                        formattedDate = mContext.getString(R.string.update) + COLON;
+
+			if (timestamp == 0) {
+			    formattedDate += mContext.getString(R.string.never);
+			} else if (currentTime - date.getTime() < 86400000) {
+			    formattedDate += Constants.TIME_FORMAT.format(date);
+			} else {
+                            formattedDate += SHORT_DATE.format(date) + ' ' + Constants.TIME_FORMAT.format(date);
+			}
+
                         mFormattedDateCache.put(timestamp, formattedDate);
                     }
 

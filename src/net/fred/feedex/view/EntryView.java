@@ -217,7 +217,7 @@ public class EntryView extends WebView {
         content.append(TITLE_START).append(link).append(TITLE_MIDDLE).append(title).append(TITLE_END).append(SUBTITLE_START);
         Date date = new Date(timestamp);
         Context context = getContext();
-        StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(context).format(date)).append(' ').append(
+        StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getLongDateFormat(context).format(date)).append(' ').append(
                 DateFormat.getTimeFormat(context).format(date));
 
         if (author != null && !author.isEmpty()) {
