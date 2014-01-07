@@ -29,9 +29,9 @@ public final class Constants {
 
     public static NotificationManager NOTIF_MGR = (NotificationManager) MainApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-    public static final String DATE_SHORT_FORMAT = android.text.format.DateFormat.getBestDateTimePattern(MainApplication.getContext().getResources().getConfiguration().locale, "d MMM");
+    // public static final String DATE_SHORT_FORMAT = android.text.format.DateFormat.getBestDateTimePattern(MainApplication.getContext().getResources().getConfiguration().locale, "d MMM");
     // public static final DateFormat DATE_FORMAT = android.text.format.DateFormat.getDateFormat(MainApplication.getContext());
-    public static final DateFormat TIME_FORMAT = android.text.format.DateFormat.getTimeFormat(MainApplication.getContext());
+    // public static final DateFormat TIME_FORMAT = android.text.format.DateFormat.getTimeFormat(MainApplication.getContext());
 
     public static final String INTENT_FROM_WIDGET = "fromWidget";
 

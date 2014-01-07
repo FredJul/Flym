@@ -69,15 +69,9 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.utils.UiUtils;
 
-import java.util.Date;
-import java.util.Calendar;
 import java.util.Vector;
 
-import java.text.SimpleDateFormat;
-
 public class EntriesCursorAdapter extends ResourceCursorAdapter {
-
-    private static final SimpleDateFormat SHORT_DATE =  new SimpleDateFormat(Constants.DATE_SHORT_FORMAT);
 
     private static class ViewHolder {
         public TextView titleTextView;
@@ -160,24 +154,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             }
         }
 
-        Date date = new Date(cursor.getLong(mDatePos));
-	Calendar calTimestamp = Calendar.getInstance();
-	calTimestamp.setTimeInMillis(date.getTime());
-	Calendar calCurrent = Calendar.getInstance();
-	String dateFeedString;
-	// do not show date if the timestamp is within 6 hours (21600000 ms) OR on the same day
-	if (calCurrent.getTimeInMillis() - date.getTime() < 21600000 || calCurrent.get(Calendar.DAY_OF_MONTH) == calTimestamp.get(Calendar.DAY_OF_MONTH)) {
-	    dateFeedString = Constants.TIME_FORMAT.format(date);
-	} else {
-	    dateFeedString = SHORT_DATE.format(date) + ' ' + Constants.TIME_FORMAT.format(date);
-	}
-        if (mShowFeedInfo && mFeedNamePos > -1) {
-            String feedName = cursor.getString(mFeedNamePos);
-            if (feedName != null) {
-                dateFeedString += Constants.COMMA_SPACE + feedName;
-	    }
-	}
-	holder.dateTextView.setText(dateFeedString);
+	    holder.dateTextView.setText(UiUtils.easyreadDateTimeString(cursor.getLong(mDatePos)));
 
         holder.isReadCb.setOnCheckedChangeListener(null);
         if (mMarkedAsUnreadEntries.contains(id) || (cursor.isNull(mIsReadPos) && !mMarkedAsReadEntries.contains(id))) {

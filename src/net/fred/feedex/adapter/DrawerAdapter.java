@@ -36,13 +36,8 @@ import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.utils.UiUtils;
 
-import java.util.Date;
-import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import java.text.SimpleDateFormat;
-
 
 public class DrawerAdapter extends BaseAdapter {
 
@@ -63,7 +58,6 @@ public class DrawerAdapter extends BaseAdapter {
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
 
     private static final String COLON = MainApplication.getContext().getString(R.string.colon);
-    private static final SimpleDateFormat SHORT_DATE =  new SimpleDateFormat(Constants.DATE_SHORT_FORMAT);
 
     private static final int CACHE_MAX_ENTRIES = 100;
     private final Map<Long, String> mFormattedDateCache = new LinkedHashMap<Long, String>(CACHE_MAX_ENTRIES + 1, .75F, true) {
@@ -152,21 +146,15 @@ public class DrawerAdapter extends BaseAdapter {
                     // Date formatting is expensive, look at the cache
                     String formattedDate = mFormattedDateCache.get(timestamp);
                     if (formattedDate == null) {
-                        Date date = new Date(timestamp);
-			Calendar calTimestamp = Calendar.getInstance();
-			calTimestamp.setTimeInMillis(timestamp);
-			Calendar calCurrent = Calendar.getInstance();
 
                         formattedDate = mContext.getString(R.string.update) + COLON;
 
-			// do not show date if the timestamp is within 6 hours (21600000 ms) OR on the same day
-			if (timestamp == 0) {
-			    formattedDate += mContext.getString(R.string.never);
-			} else if (calCurrent.getTimeInMillis() - timestamp < 21600000 || calCurrent.get(Calendar.DAY_OF_MONTH) == calTimestamp.get(Calendar.DAY_OF_MONTH)) {
-			    formattedDate += Constants.TIME_FORMAT.format(date);
-			} else {
-                            formattedDate += SHORT_DATE.format(date) + ' ' + Constants.TIME_FORMAT.format(date);
-			}
+                        // do not show date if the timestamp is within 6 hours (21600000 ms) OR on the same day
+                        if (timestamp == 0) {
+                            formattedDate += mContext.getString(R.string.never);
+                        } else {
+                            formattedDate += UiUtils.easyreadDateTimeString(timestamp);
+                        }
 
                         mFormattedDateCache.put(timestamp, formattedDate);
                     }
