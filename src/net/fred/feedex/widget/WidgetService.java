@@ -93,6 +93,7 @@ class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
             intent.putExtra(Constants.INTENT_FROM_WIDGET, true);
             row.setOnClickFillInIntent(android.R.id.content, intent);
 
+            row.setImageViewResource(android.R.id.icon, R.drawable.icon);
             if (!mCursor.isNull(2)) {
                 try {
                     byte[] iconBytes = mCursor.getBlob(2);
@@ -102,14 +103,9 @@ class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
 
                         if (bitmap != null) {
                             row.setImageViewBitmap(android.R.id.icon, bitmap);
-                        } else {
-                            row.setImageViewResource(android.R.id.icon, R.drawable.icon);
                         }
-                    } else {
-                        row.setImageViewResource(android.R.id.icon, R.drawable.icon);
                     }
                 } catch (Throwable ignored) {
-                    row.setImageViewResource(android.R.id.icon, R.drawable.icon);
                 }
             }
         }
