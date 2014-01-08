@@ -22,20 +22,29 @@ package net.fred.feedex.utils;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.util.TypedValue;
 
 import net.fred.feedex.MainApplication;
 
 import java.text.DateFormat;
-import java.util.Calendar;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class UiUtils {
 
-    // getBestTimePattern() is only available in API 18 and up (Android 4.3 and better)
-    public static final String DATE_SHORT_STRING = android.text.format.DateFormat.getBestDateTimePattern(MainApplication.getContext().getResources().getConfiguration().locale, "d MMM");
-    public static final SimpleDateFormat DATE_SHORT_FORMAT =  new SimpleDateFormat(DATE_SHORT_STRING);
+    public static DateFormat DATE_SHORT_FORMAT = null;
+
+    static {
+        // getBestTimePattern() is only available in API 18 and up (Android 4.3 and better)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            DATE_SHORT_FORMAT = new SimpleDateFormat(android.text.format.DateFormat.getBestDateTimePattern(MainApplication.getContext().getResources().getConfiguration().locale, "d MMM"));
+        } else {
+            DATE_SHORT_FORMAT = android.text.format.DateFormat.getDateFormat(MainApplication.getContext());
+        }
+    }
+
     public static final DateFormat TIME_FORMAT = android.text.format.DateFormat.getTimeFormat(MainApplication.getContext());
     public static final int SIX_HOURS = 21600000; // six hours in milliseconds
 

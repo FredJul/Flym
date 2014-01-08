@@ -31,7 +31,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.utils.UiUtils;
@@ -149,7 +148,6 @@ public class DrawerAdapter extends BaseAdapter {
 
                         formattedDate = mContext.getString(R.string.update) + COLON;
 
-                        // do not show date if the timestamp is within 6 hours (21600000 ms) OR on the same day
                         if (timestamp == 0) {
                             formattedDate += mContext.getString(R.string.never);
                         } else {
