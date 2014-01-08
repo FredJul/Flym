@@ -69,7 +69,6 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.utils.UiUtils;
 
-import java.util.Date;
 import java.util.Vector;
 
 public class EntriesCursorAdapter extends ResourceCursorAdapter {
@@ -145,8 +144,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             }
         });
 
-        Date date = new Date(cursor.getLong(mDatePos));
-
         if (mShowFeedInfo && mFeedIconPos > -1) {
             byte[] iconBytes = cursor.getBlob(mFeedIconPos);
             Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 18);
@@ -157,16 +154,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             }
         }
 
-        if (mShowFeedInfo && mFeedNamePos > -1) {
-            String feedName = cursor.getString(mFeedNamePos);
-            if (feedName != null) {
-                holder.dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)).append(Constants.COMMA_SPACE).append(feedName));
-            } else {
-                holder.dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)));
-            }
-        } else {
-            holder.dateTextView.setText(new StringBuilder(Constants.DATE_FORMAT.format(date)).append(' ').append(Constants.TIME_FORMAT.format(date)));
-        }
+	    holder.dateTextView.setText(UiUtils.easyreadDateTimeString(cursor.getLong(mDatePos)));
 
         holder.isReadCb.setOnCheckedChangeListener(null);
         if (mMarkedAsUnreadEntries.contains(id) || (cursor.isNull(mIsReadPos) && !mMarkedAsReadEntries.contains(id))) {

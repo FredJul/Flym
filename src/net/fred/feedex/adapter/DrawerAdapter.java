@@ -36,7 +36,6 @@ import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.utils.UiUtils;
 
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -147,10 +146,16 @@ public class DrawerAdapter extends BaseAdapter {
                     // Date formatting is expensive, look at the cache
                     String formattedDate = mFormattedDateCache.get(timestamp);
                     if (formattedDate == null) {
-                        Date date = new Date(timestamp);
 
-                        formattedDate = mContext.getString(R.string.update) + COLON + (timestamp == 0 ? mContext.getString(R.string.never) : new StringBuilder(Constants.DATE_FORMAT.format(date))
-                                .append(' ').append(Constants.TIME_FORMAT.format(date)));
+                        formattedDate = mContext.getString(R.string.update) + COLON;
+
+                        // do not show date if the timestamp is within 6 hours (21600000 ms) OR on the same day
+                        if (timestamp == 0) {
+                            formattedDate += mContext.getString(R.string.never);
+                        } else {
+                            formattedDate += UiUtils.easyreadDateTimeString(timestamp);
+                        }
+
                         mFormattedDateCache.put(timestamp, formattedDate);
                     }
 
