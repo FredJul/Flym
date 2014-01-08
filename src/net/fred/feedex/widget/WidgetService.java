@@ -102,10 +102,14 @@ class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
 
                         if (bitmap != null) {
                             row.setImageViewBitmap(android.R.id.icon, bitmap);
+                        } else {
+                            row.setImageViewResource(android.R.id.icon, R.drawable.icon);
                         }
+                    } else {
+                        row.setImageViewResource(android.R.id.icon, R.drawable.icon);
                     }
-
                 } catch (Throwable ignored) {
+                    row.setImageViewResource(android.R.id.icon, R.drawable.icon);
                 }
             }
         }
