@@ -66,7 +66,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             if (PrefUtils.IS_REFRESHING.equals(key)) {
                 getProgressBar().setVisibility(PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false) ? View.VISIBLE : View.GONE);
             }
-            if (PrefUtils.SHOW_READ_FEEDS.equals(key)) {
+            if (PrefUtils.SHOW_READ.equals(key)) {
                 getLoaderManager().restartLoader(LOADER_ID, null, HomeActivity.this);
             }
         }
@@ -223,7 +223,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.drawer, menu);
 
-            if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ_FEEDS, true)) {
+            if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
                 menu.findItem(R.id.menu_hide_read_main).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
             }
 
@@ -244,11 +244,11 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         switch (item.getItemId()) {
             case R.id.menu_hide_read_main:
-                if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ_FEEDS, true)) {
-                    PrefUtils.putBoolean(PrefUtils.SHOW_READ_FEEDS, true);
+                if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
+                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
                     item.setTitle(R.string.context_menu_hide_read).setIcon(R.drawable.hide_reads);
                 } else {
-                    PrefUtils.putBoolean(PrefUtils.SHOW_READ_FEEDS, false);
+                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
                     item.setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
                 }
                 return true;
@@ -289,7 +289,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                         + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ")",
                 "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)",
                 "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ")"},
-                PrefUtils.getBoolean(PrefUtils.SHOW_READ_FEEDS, true) ? null : "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + "=" + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ") > 0 OR " + FeedColumns.IS_GROUP + "= 1",
+                PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) ? null : "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + "=" + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ") > 0 OR " + FeedColumns.IS_GROUP + "= 1",
                 null, null);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
