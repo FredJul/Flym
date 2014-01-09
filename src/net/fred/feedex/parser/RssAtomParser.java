@@ -51,6 +51,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Pair;
 
 import net.fred.feedex.Constants;
@@ -81,6 +82,7 @@ import java.util.regex.Pattern;
 public class RssAtomParser extends DefaultHandler {
 
     private static final String AND_SHARP = "&#";
+    private static final String HTML_TEXT = "text/html";
     private static final String HTML_TAG_REGEX = "<(.|\n)*?>";
 
     private static final String TAG_RSS = "rss";
@@ -223,24 +225,23 @@ public class RssAtomParser extends DefaultHandler {
             if (TAG_ENCLOSURE.equals(attributes.getValue("", ATTRIBUTE_REL))) {
                 startEnclosure(attributes, attributes.getValue("", ATTRIBUTE_HREF));
             } else {
-                entryLink = new StringBuilder();
+                // Get the link only if we don't have one or if its the good one (html)
+                if (entryLink == null || HTML_TEXT.equals(attributes.getValue("", ATTRIBUTE_TYPE))) {
+                    entryLink = new StringBuilder();
 
-                boolean foundLink = false;
-
-                for (int n = 0, i = attributes.getLength(); n < i; n++) {
-                    if (ATTRIBUTE_HREF.equals(attributes.getLocalName(n))) {
-                        if (attributes.getValue(n) != null) {
-                            entryLink.append(attributes.getValue(n));
-                            foundLink = true;
-                            linkTagEntered = false;
-                        } else {
-                            linkTagEntered = true;
-                        }
-                        break;
+                    boolean foundLink = false;
+                    String href = attributes.getValue("", ATTRIBUTE_HREF);
+                    if (!TextUtils.isEmpty(href)) {
+                        entryLink.append(href);
+                        foundLink = true;
+                        linkTagEntered = false;
+                    } else {
+                        linkTagEntered = true;
                     }
-                }
-                if (!foundLink) {
-                    linkTagEntered = true;
+
+                    if (!foundLink) {
+                        linkTagEntered = true;
+                    }
                 }
             }
         } else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName))
