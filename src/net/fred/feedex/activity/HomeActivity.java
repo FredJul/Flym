@@ -66,6 +66,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             if (PrefUtils.IS_REFRESHING.equals(key)) {
                 getProgressBar().setVisibility(PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false) ? View.VISIBLE : View.GONE);
             }
+            if (PrefUtils.SHOW_READ_FEEDS.equals(key)) {
+                getLoaderManager().restartLoader(LOADER_ID, null, HomeActivity.this);
+            }
         }
     };
 
@@ -211,6 +214,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         boolean isOpened = mDrawerLayout.isDrawerOpen(mDrawerList);
         if (isOpened && !mIsDrawerMoving || !isOpened && mIsDrawerMoving) {
             getActionBar().setTitle(R.string.app_name);
@@ -219,10 +223,13 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.drawer, menu);
 
+            if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ_FEEDS, true)) {
+                menu.findItem(R.id.menu_hide_read_main).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
+            }
+
             mEntriesFragment.setHasOptionsMenu(false);
         } else {
             refreshTitleAndIcon();
-
             mEntriesFragment.setHasOptionsMenu(true);
         }
 
@@ -236,6 +243,15 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         switch (item.getItemId()) {
+            case R.id.menu_hide_read_main:
+                if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ_FEEDS, true)) {
+                    PrefUtils.putBoolean(PrefUtils.SHOW_READ_FEEDS, true);
+                    item.setTitle(R.string.context_menu_hide_read).setIcon(R.drawable.hide_reads);
+                } else {
+                    PrefUtils.putBoolean(PrefUtils.SHOW_READ_FEEDS, false);
+                    item.setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
+                }
+                return true;
             case R.id.menu_edit:
                 startActivity(new Intent(this, EditFeedsListActivity.class));
                 return true;
@@ -272,7 +288,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + "="
                         + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ")",
                 "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)",
-                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ")"}, null, null, null);
+                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ")"},
+                PrefUtils.getBoolean(PrefUtils.SHOW_READ_FEEDS, true) ? null : "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + "=" + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ") > 0 OR " + FeedColumns.IS_GROUP + "= 1",
+                null, null);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
     }
