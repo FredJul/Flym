@@ -289,7 +289,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                         + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ")",
                 "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)",
                 "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ")"},
-                PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) ? null : "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + "=" + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ") > 0 OR " + FeedColumns.IS_GROUP + "= 1",
+                PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) ? null : "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + "=" + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ") > 0"
+                                + " OR (" + FeedColumns.IS_GROUP + "= 1 AND (SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " JOIN " + FeedColumns.TABLE_NAME + " ON " + EntryColumns.TABLE_NAME + "." + EntryColumns.FEED_ID + "=" + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + FeedColumns.GROUP_ID + " = " + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ") > 0)",
                 null, null);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
