@@ -49,6 +49,7 @@ import net.fred.feedex.adapter.DrawerAdapter;
 import net.fred.feedex.fragment.EntriesListFragment;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
+import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.service.RefreshService;
 import net.fred.feedex.utils.PrefUtils;
@@ -67,10 +68,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     private static final String WHERE_UNREAD_ONLY = new StringBuilder("(SELECT COUNT(*) FROM ").append(EntryColumns.TABLE_NAME).append(" WHERE ").append(EntryColumns.IS_READ)
             .append(" IS NULL AND ").append(EntryColumns.FEED_ID).append("=").append(FeedColumns.TABLE_NAME).append('.').append(FeedColumns._ID).append(") > 0")
-            .append(" OR (").append(FeedColumns.IS_GROUP).append("=1 AND (SELECT COUNT(*) FROM ").append(EntryColumns.TABLE_NAME).append(" JOIN ")
-            .append(FeedColumns.TABLE_NAME).append(" ON ").append(EntryColumns.TABLE_NAME).append('.').append(EntryColumns.FEED_ID).append('=').append(FeedColumns.TABLE_NAME)
-            .append('.').append(FeedColumns._ID).append(" WHERE ").append(EntryColumns.IS_READ).append(" IS NULL AND ").append(FeedColumns.GROUP_ID).append('=')
-            .append(FeedColumns.TABLE_NAME).append('.').append(FeedColumns._ID).append(") > 0)").toString();
+            .append(" OR (").append(FeedColumns.IS_GROUP).append("=1 AND (SELECT COUNT(*) FROM ").append(FeedDataContentProvider.ENTRIES_TABLE_WITH_FEED_INFO)
+            .append(" WHERE ").append(EntryColumns.IS_READ).append(" IS NULL AND ").append(FeedColumns.GROUP_ID).append('=').append(FeedColumns.TABLE_NAME).append('.')
+            .append(FeedColumns._ID).append(") > 0)").toString();
 
     private static final int LOADER_ID = 0;
 

@@ -116,9 +116,9 @@ public class FeedDataContentProvider extends ContentProvider {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/search/*/#", URI_SEARCH_ENTRY);
     }
 
-    private static final String FEEDS_TABLE_WITH_GROUP_PRIORITY = FeedColumns.TABLE_NAME + " LEFT JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.PRIORITY +
+    public static final String FEEDS_TABLE_WITH_GROUP_PRIORITY = FeedColumns.TABLE_NAME + " LEFT JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.PRIORITY +
             " AS group_priority FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + FeedColumns.TABLE_NAME + '.' + FeedColumns.GROUP_ID + " = f.joined_feed_id)";
-    private static final String ENTRIES_TABLE_WITH_FEED_INFO = EntryColumns.TABLE_NAME + " JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.NAME + ", " + FeedColumns.URL + ", " +
+    public static final String ENTRIES_TABLE_WITH_FEED_INFO = EntryColumns.TABLE_NAME + " JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.NAME + ", " + FeedColumns.URL + ", " +
             FeedColumns.ICON + ", " + FeedColumns.GROUP_ID + " FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + EntryColumns.TABLE_NAME + '.' + EntryColumns.FEED_ID + " = f.joined_feed_id)";
 
     private DatabaseHelper mDatabaseHelper;
