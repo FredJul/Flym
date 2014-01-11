@@ -283,15 +283,24 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        StringBuilder feedUnread = new StringBuilder("(SELECT COUNT(*) FROM ").append(EntryColumns.TABLE_NAME).append(" WHERE ").append(EntryColumns.IS_READ)
+                .append(" IS NULL AND ").append(EntryColumns.FEED_ID).append("=").append(FeedColumns.TABLE_NAME + ".").append(FeedColumns._ID + ")");
+        StringBuilder allUnread = new StringBuilder("(SELECT COUNT(*) FROM ").append(EntryColumns.TABLE_NAME).append(" WHERE ").append(EntryColumns.IS_READ)
+                .append(" IS NULL)");
+        StringBuilder favoritesNumber = new StringBuilder("(SELECT COUNT(*) FROM ").append(EntryColumns.TABLE_NAME).append(" WHERE ").append(EntryColumns.IS_FAVORITE)
+                .append(Constants.DB_IS_TRUE + ")");
+
+        StringBuilder whereUnreadOnly = new StringBuilder("(SELECT COUNT(*) FROM ").append(EntryColumns.TABLE_NAME).append(" WHERE ").append(EntryColumns.IS_READ)
+                .append(" IS NULL AND ").append(EntryColumns.FEED_ID).append("=").append(FeedColumns.TABLE_NAME).append(".").append(FeedColumns._ID).append(") > 0")
+                .append(" OR (").append(FeedColumns.IS_GROUP).append("= 1 AND (SELECT COUNT(*) FROM ").append(EntryColumns.TABLE_NAME).append(" JOIN ")
+                .append(FeedColumns.TABLE_NAME).append(" ON ").append(EntryColumns.TABLE_NAME).append(".").append(EntryColumns.FEED_ID).append("=").append(FeedColumns.TABLE_NAME)
+                .append(".").append(FeedColumns._ID).append(" WHERE ").append(EntryColumns.IS_READ).append(" IS NULL AND ").append(FeedColumns.GROUP_ID).append(" = ")
+                .append(FeedColumns.TABLE_NAME).append(".").append(FeedColumns._ID).append(") > 0)");
+
         CursorLoader cursorLoader = new CursorLoader(this, FeedColumns.GROUPED_FEEDS_CONTENT_URI, new String[]{FeedColumns._ID, FeedColumns.URL,
                 FeedColumns.NAME, FeedColumns.IS_GROUP, FeedColumns.GROUP_ID, FeedColumns.ICON, FeedColumns.LAST_UPDATE, FeedColumns.ERROR,
-                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + "="
-                        + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ")",
-                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)",
-                "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ")"},
-                PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) ? null : "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + "=" + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ") > 0"
-                                + " OR (" + FeedColumns.IS_GROUP + "= 1 AND (SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " JOIN " + FeedColumns.TABLE_NAME + " ON " + EntryColumns.TABLE_NAME + "." + EntryColumns.FEED_ID + "=" + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + FeedColumns.GROUP_ID + " = " + FeedColumns.TABLE_NAME + "." + FeedColumns._ID + ") > 0)",
-                null, null);
+                feedUnread.toString(), allUnread.toString(), favoritesNumber.toString()},
+                PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) ? null : whereUnreadOnly.toString(), null, null);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
     }
