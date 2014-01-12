@@ -180,10 +180,11 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
             return null;
         }
 
-        public void removeCursor(int pagerPos) {
+        public void setCursor(int pagerPos, Cursor cursor) {
             EntryView view = mEntryViews.get(pagerPos);
             if (view != null) {
-                view.setTag(null);
+                ((Cursor) view.getTag()).close();
+                view.setTag(cursor);
             }
         }
 
@@ -338,6 +339,11 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                             values.put(EntryColumns.IS_FAVORITE, mFavorite ? 1 : 0);
                             ContentResolver cr = MainApplication.getContext().getContentResolver();
                             cr.update(uri, values, null, null);
+
+                            // Update the cursor
+                            Cursor updatedCursor = cr.query(uri, null, null, null, null);
+                            updatedCursor.moveToFirst();
+                            mEntryPagerAdapter.setCursor(mCurrentPagerPos, updatedCursor);
                         }
                     }.start();
                     break;
@@ -456,6 +462,11 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                     public void run() {
                         ContentResolver cr = MainApplication.getContext().getContentResolver();
                         cr.update(uri, FeedData.getReadContentValues(), null, null);
+
+                        // Update the cursor
+                        Cursor updatedCursor = cr.query(uri, null, null, null, null);
+                        updatedCursor.moveToFirst();
+                        mEntryPagerAdapter.setCursor(mCurrentPagerPos, updatedCursor);
                     }
                 }).start();
             }
@@ -584,7 +595,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mEntryPagerAdapter.removeCursor(loader.getId());
+        mEntryPagerAdapter.setCursor(loader.getId(), null);
     }
 
     @Override
