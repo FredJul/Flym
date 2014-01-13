@@ -67,6 +67,7 @@ import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
+import net.fred.feedex.utils.StringUtils;
 import net.fred.feedex.utils.UiUtils;
 
 import java.util.Vector;
@@ -154,7 +155,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             }
         }
 
-	    holder.dateTextView.setText(UiUtils.easyreadDateTimeString(cursor.getLong(mDatePos)));
+        holder.dateTextView.setText(StringUtils.getDateTimeString(cursor.getLong(mDatePos)));
 
         holder.isReadCb.setOnCheckedChangeListener(null);
         if (mMarkedAsUnreadEntries.contains(id) || (cursor.isNull(mIsReadPos) && !mMarkedAsReadEntries.contains(id))) {

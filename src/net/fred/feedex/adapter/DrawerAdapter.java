@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
+import net.fred.feedex.utils.StringUtils;
 import net.fred.feedex.utils.UiUtils;
 
 import java.util.LinkedHashMap;
@@ -151,7 +152,7 @@ public class DrawerAdapter extends BaseAdapter {
                         if (timestamp == 0) {
                             formattedDate += mContext.getString(R.string.never);
                         } else {
-                            formattedDate += UiUtils.easyreadDateTimeString(timestamp);
+                            formattedDate += StringUtils.getDateTimeString(timestamp);
                         }
 
                         mFormattedDateCache.put(timestamp, formattedDate);

@@ -22,31 +22,11 @@ package net.fred.feedex.utils;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.util.TypedValue;
 
 import net.fred.feedex.MainApplication;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 public class UiUtils {
-
-    public static DateFormat DATE_SHORT_FORMAT = null;
-
-    static {
-        // getBestTimePattern() is only available in API 18 and up (Android 4.3 and better)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            DATE_SHORT_FORMAT = new SimpleDateFormat(android.text.format.DateFormat.getBestDateTimePattern(MainApplication.getContext().getResources().getConfiguration().locale, "d MMM"));
-        } else {
-            DATE_SHORT_FORMAT = android.text.format.DateFormat.getDateFormat(MainApplication.getContext());
-        }
-    }
-
-    public static final DateFormat TIME_FORMAT = android.text.format.DateFormat.getTimeFormat(MainApplication.getContext());
-    public static final int SIX_HOURS = 21600000; // six hours in milliseconds
 
     static public void setPreferenceTheme(Activity a) {
         if (!PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
@@ -74,24 +54,5 @@ public class UiUtils {
         }
 
         return null;
-    }
-
-    static public String easyreadDateTimeString(long timestamp) {
-
-        String outString;
-
-        Date date = new Date(timestamp);
-        Calendar calTimestamp = Calendar.getInstance();
-        calTimestamp.setTimeInMillis(timestamp);
-        Calendar calCurrent = Calendar.getInstance();
-
-        if (calCurrent.getTimeInMillis() - timestamp < SIX_HOURS || calCurrent.get(Calendar.DAY_OF_MONTH) == calTimestamp.get(Calendar.DAY_OF_MONTH)) {
-            outString = TIME_FORMAT.format(date);
-        } else {
-            outString = DATE_SHORT_FORMAT.format(date) + ' ' + TIME_FORMAT.format(date);
-        }
-
-        return outString;
-
     }
 }

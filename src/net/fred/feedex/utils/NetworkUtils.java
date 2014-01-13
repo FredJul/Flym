@@ -38,13 +38,11 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.ProxySelector;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -54,10 +52,6 @@ public class NetworkUtils {
     public static final File IMAGE_FOLDER_FILE = new File(MainApplication.getContext().getCacheDir(), "images/");
     public static final String IMAGE_FOLDER = IMAGE_FOLDER_FILE.getAbsolutePath() + '/';
     public static final String ID_SEPARATOR = "__";
-
-    public static final String PERCENT = "%";
-    // This can be any valid filename character sequence which does not contain '%'
-    public static final String PERCENT_REPLACE = "____";
 
     private static final String GZIP = "gzip";
     private static final String FILE_FAVICON = "/favicon.ico";
@@ -88,16 +82,7 @@ public class NetworkUtils {
     }
 
     public static String getDownloadedImagePath(long entryId, String imgUrl) {
-        try {
-            // replace the '%' that may occur while urlencode such that the img-src url (in the abstract text) does reinterpret the
-            // parameters
-            return (IMAGE_FOLDER + entryId + ID_SEPARATOR + URLEncoder.encode(
-                    imgUrl.substring(imgUrl.lastIndexOf('/') + 1), Constants.UTF8)).replace(PERCENT, PERCENT_REPLACE);
-        } catch (UnsupportedEncodingException e) {
-            // UTF-8 should be supported
-        }
-
-        return null;
+        return IMAGE_FOLDER + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
     }
 
     public static void downloadImage(long entryId, String imgUrl) throws IOException {
