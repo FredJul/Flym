@@ -102,7 +102,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
             mEntryViews.put(position, view);
             container.addView(view);
             view.setListener(EntryFragment.this);
-            getLoaderManager().initLoader(position, null, EntryFragment.this);
+            getLoaderManager().restartLoader(position, null, EntryFragment.this);
             return view;
         }
 
@@ -180,11 +180,15 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
             return null;
         }
 
-        public void setCursor(int pagerPos, Cursor cursor) {
+        public void setUpdatedCursor(int pagerPos, Cursor newCursor) {
             EntryView view = mEntryViews.get(pagerPos);
             if (view != null) {
-                ((Cursor) view.getTag()).close();
-                view.setTag(cursor);
+                Cursor previousUpdatedOne = (Cursor) view.getTag(R.id.updated_cursor);
+                if (previousUpdatedOne != null) {
+                    previousUpdatedOne.close();
+                }
+                view.setTag(newCursor);
+                view.setTag(R.id.updated_cursor, newCursor);
             }
         }
 
@@ -343,7 +347,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                             // Update the cursor
                             Cursor updatedCursor = cr.query(uri, null, null, null, null);
                             updatedCursor.moveToFirst();
-                            mEntryPagerAdapter.setCursor(mCurrentPagerPos, updatedCursor);
+                            mEntryPagerAdapter.setUpdatedCursor(mCurrentPagerPos, updatedCursor);
                         }
                     }.start();
                     break;
@@ -466,7 +470,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                         // Update the cursor
                         Cursor updatedCursor = cr.query(uri, null, null, null, null);
                         updatedCursor.moveToFirst();
-                        mEntryPagerAdapter.setCursor(mCurrentPagerPos, updatedCursor);
+                        mEntryPagerAdapter.setUpdatedCursor(mCurrentPagerPos, updatedCursor);
                     }
                 }).start();
             }
@@ -595,7 +599,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mEntryPagerAdapter.setCursor(loader.getId(), null);
+        mEntryPagerAdapter.setUpdatedCursor(loader.getId(), null);
     }
 
     @Override
