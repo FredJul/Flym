@@ -31,8 +31,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
+import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.utils.StringUtils;
 import net.fred.feedex.utils.UiUtils;
 
@@ -40,6 +42,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DrawerAdapter extends BaseAdapter {
+
+    private static final String ALL_UNREAD_NUMBER = new StringBuilder("(SELECT COUNT(*) FROM ").append(EntryColumns.TABLE_NAME).append(" WHERE ").append(EntryColumns.IS_READ)
+            .append(" IS NULL)").toString();
+    private static final String FAVORITES_NUMBER = new StringBuilder("(SELECT COUNT(*) FROM ").append(EntryColumns.TABLE_NAME).append(" WHERE ").append(EntryColumns.IS_FAVORITE)
+            .append(Constants.DB_IS_TRUE).append(')').toString();
 
     private static final int POS_ID = 0;
     private static final int POS_URL = 1;
@@ -50,8 +57,6 @@ public class DrawerAdapter extends BaseAdapter {
     private static final int POS_LAST_UPDATE = 6;
     private static final int POS_ERROR = 7;
     private static final int POS_UNREAD = 8;
-    private static final int POS_ALL_UNREAD = 9;
-    private static final int POS_FAVORITES_UNREAD = 10;
 
     private static final int ITEM_PADDING = UiUtils.dpToPixel(20);
     private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
@@ -71,6 +76,7 @@ public class DrawerAdapter extends BaseAdapter {
 
     private final Context mContext;
     private Cursor mFeedsCursor;
+    private int mAllUnreadNumber, mFavoritesNumber;
 
     private static class ViewHolder {
         public ImageView iconView;
@@ -83,10 +89,14 @@ public class DrawerAdapter extends BaseAdapter {
     public DrawerAdapter(Context context, Cursor feedCursor) {
         mContext = context;
         mFeedsCursor = feedCursor;
+
+        updateNumbers();
     }
 
     public void setCursor(Cursor feedCursor) {
         mFeedsCursor = feedCursor;
+
+        updateNumbers();
         notifyDataSetChanged();
     }
 
@@ -121,11 +131,9 @@ public class DrawerAdapter extends BaseAdapter {
             holder.titleTxt.setText(position == 0 ? R.string.all : R.string.favorites);
             holder.iconView.setImageResource(position == 0 ? R.drawable.ic_statusbar_rss : R.drawable.dimmed_rating_important);
 
-            if (mFeedsCursor != null && mFeedsCursor.moveToFirst()) {
-                int unread = mFeedsCursor.getInt(position == 0 ? POS_ALL_UNREAD : POS_FAVORITES_UNREAD);
-                if (unread != 0) {
-                    holder.unreadTxt.setText(String.valueOf(unread));
-                }
+            int unread = position == 0 ? mAllUnreadNumber : mFavoritesNumber;
+            if (unread != 0) {
+                holder.unreadTxt.setText(String.valueOf(unread));
             }
         } else if (position == 2) {
             holder.titleTxt.setText(android.R.string.search_go);
@@ -229,5 +237,19 @@ public class DrawerAdapter extends BaseAdapter {
         }
 
         return false;
+    }
+
+    private void updateNumbers() {
+        mAllUnreadNumber = mFavoritesNumber = 0;
+
+        // Gets the numbers of entries (should be in a thread, but it's way easier like this and it shouldn't be so slow)
+        Cursor numbers = mContext.getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{ALL_UNREAD_NUMBER, FAVORITES_NUMBER}, null, null, null);
+        if (numbers != null) {
+            if (numbers.moveToFirst()) {
+                mAllUnreadNumber = numbers.getInt(0);
+                mFavoritesNumber = numbers.getInt(1);
+            }
+            numbers.close();
+        }
     }
 }
