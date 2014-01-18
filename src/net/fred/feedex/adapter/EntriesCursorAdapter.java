@@ -158,7 +158,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         if (mShowFeedInfo && mFeedNamePos > -1) {
             String feedName = cursor.getString(mFeedNamePos);
             if (feedName != null) {
-                holder.dateTextView.setText(new StringBuilder(StringUtils.getDateTimeString(cursor.getLong(mDatePos))).append(Constants.COMMA_SPACE).append(feedName));
+                holder.dateTextView.setText(new StringBuilder(feedName).append(Constants.COMMA_SPACE).append(StringUtils.getDateTimeString(cursor.getLong(mDatePos))));
             } else {
                 holder.dateTextView.setText(StringUtils.getDateTimeString(cursor.getLong(mDatePos)));
             }
