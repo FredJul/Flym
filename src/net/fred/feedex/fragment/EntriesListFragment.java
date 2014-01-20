@@ -50,6 +50,7 @@ import android.widget.SearchView;
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.EntriesCursorAdapter;
+import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
@@ -317,9 +318,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        boolean alwaysShowRead = EntryColumns.FAVORITES_CONTENT_URI.equals(mUri) || (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH);
-        CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, (PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)
-                || alwaysShowRead) ? null : EntryColumns.WHERE_UNREAD, null, EntryColumns.DATE + Constants.DB_DESC);
+        CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, FeedData.shouldShowReadEntries(mUri) ? null : EntryColumns.WHERE_UNREAD,
+                null, EntryColumns.DATE + Constants.DB_DESC);
         cursorLoader.setUpdateThrottle(150);
         return cursorLoader;
     }

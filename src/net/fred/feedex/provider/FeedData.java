@@ -50,6 +50,7 @@ import android.provider.BaseColumns;
 import android.text.TextUtils;
 
 import net.fred.feedex.Constants;
+import net.fred.feedex.utils.PrefUtils;
 
 public class FeedData {
     public static final String CONTENT = "content://";
@@ -246,5 +247,10 @@ public class FeedData {
         ContentValues values = new ContentValues();
         values.putNull(EntryColumns.IS_READ);
         return values;
+    }
+
+    public static boolean shouldShowReadEntries(Uri uri) {
+        boolean alwaysShowRead = EntryColumns.FAVORITES_CONTENT_URI.equals(uri) || (FeedDataContentProvider.URI_MATCHER.match(uri) == FeedDataContentProvider.URI_SEARCH);
+        return alwaysShowRead || PrefUtils.getBoolean(PrefUtils.SHOW_READ, true);
     }
 }

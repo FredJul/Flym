@@ -57,7 +57,6 @@ import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.service.FetcherService;
-import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 import net.fred.feedex.view.EntryView;
 
@@ -407,7 +406,8 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
 
         if (mBaseUri != null) {
             Bundle b = getActivity().getIntent().getExtras();
-            String whereClause = PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) || EntryColumns.FAVORITES_CONTENT_URI.equals(mBaseUri) ||
+
+            String whereClause = FeedData.shouldShowReadEntries(mBaseUri) ||
                     (b != null && b.getBoolean(Constants.INTENT_FROM_WIDGET, false)) ? null : EntryColumns.WHERE_UNREAD;
 
             // Load the entriesIds list. Should be in a loader... but I was too lazy to do so
