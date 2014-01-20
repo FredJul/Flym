@@ -398,9 +398,9 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
         mCurrentPagerPos = -1;
 
         mBaseUri = FeedData.EntryColumns.PARENT_URI(uri.getPath());
-        if (uri != null) {
+        try {
             mInitialEntryId = Long.parseLong(uri.getLastPathSegment());
-        } else {
+        } catch (Exception unused) {
             mInitialEntryId = -1;
         }
 
