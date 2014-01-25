@@ -27,6 +27,7 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.text.Html;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
@@ -51,6 +52,7 @@ public class NetworkUtils {
 
     public static final File IMAGE_FOLDER_FILE = new File(MainApplication.getContext().getCacheDir(), "images/");
     public static final String IMAGE_FOLDER = IMAGE_FOLDER_FILE.getAbsolutePath() + '/';
+    public static final String TEMP_PREFIX = "TEMP__";
     public static final String ID_SEPARATOR = "__";
 
     private static final String GZIP = "gzip";
@@ -85,28 +87,43 @@ public class NetworkUtils {
         return IMAGE_FOLDER + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
     }
 
-    public static void downloadImage(long entryId, String imgUrl) throws IOException {
-        String imgPath = getDownloadedImagePath(entryId, imgUrl);
+    public static String getTempDownloadedImagePath(long entryId, String imgUrl) {
+        return IMAGE_FOLDER + TEMP_PREFIX + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
+    }
 
-        if (!new File(imgPath).exists()) {
+    public static void downloadImage(long entryId, String imgUrl) throws IOException {
+        String tempImgPath = getTempDownloadedImagePath(entryId, imgUrl);
+        String finalImgPath = getDownloadedImagePath(entryId, imgUrl);
+
+        if (!new File(tempImgPath).exists() && !new File(finalImgPath).exists()) {
+            HttpURLConnection imgURLConnection = null;
             try {
                 IMAGE_FOLDER_FILE.mkdir(); // create images dir
 
-                InputStream inputStream = new URL(imgUrl).openStream();
-                FileOutputStream fos = new FileOutputStream(imgPath);
+                // Compute the real URL (without "&eacute;", ...)
+                String realUrl = Html.fromHtml(imgUrl).toString();
+                imgURLConnection = setupConnection(realUrl);
 
-                byte[] buffer = new byte[4096];
+                FileOutputStream fileOutput = new FileOutputStream(tempImgPath);
+                InputStream inputStream = imgURLConnection.getInputStream();
 
-                int n;
-                while ((n = inputStream.read(buffer)) > 0) {
-                    fos.write(buffer, 0, n);
+                byte[] buffer = new byte[2048];
+                int bufferLength;
+                while ((bufferLength = inputStream.read(buffer)) > 0) {
+                    fileOutput.write(buffer, 0, bufferLength);
                 }
-
-                fos.close();
+                fileOutput.flush();
+                fileOutput.close();
                 inputStream.close();
+
+                new File(tempImgPath).renameTo(new File(finalImgPath));
             } catch (IOException e) {
-                new File(imgPath).delete();
+                new File(tempImgPath).delete();
                 throw e;
+            } finally {
+                if (imgURLConnection != null) {
+                    imgURLConnection.disconnect();
+                }
             }
         }
     }
@@ -232,12 +249,12 @@ public class NetworkUtils {
 
         connection.setDoInput(true);
         connection.setDoOutput(false);
-        connection.setRequestProperty("User-agent", "Mozilla AppleWebKit Chrome Safari"); // some feeds need this to work properly
+        connection.setRequestProperty("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari"); // some feeds need this to work properly
         connection.setConnectTimeout(30000);
         connection.setReadTimeout(30000);
         connection.setUseCaches(false);
 
-        connection.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+        connection.setRequestProperty("accept", "*/*");
         connection.connect();
 
         String location = connection.getHeaderField("Location");
