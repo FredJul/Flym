@@ -7,9 +7,8 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -179,33 +178,10 @@ public class ArticleTextExtractor {
                 if ("h1;h2;h3;h4;h5;h6".contains(subEl.tagName())) {
                     weight += 20;
                     // headerEls.add(subEl);
-                } else if ("table;li;td;th".contains(subEl.tagName())) {
-                    addScore(subEl, -30);
                 }
-
-                if ("p".contains(subEl.tagName()))
-                    addScore(subEl, 30);
             }
         }
         return weight;
-    }
-
-    public void addScore(Element el, int score) {
-        int old = getScore(el);
-        setScore(el, score + old);
-    }
-
-    public int getScore(Element el) {
-        int old = 0;
-        try {
-            old = Integer.parseInt(el.attr("gravityScore"));
-        } catch (Exception ex) {
-        }
-        return old;
-    }
-
-    public void setScore(Element el, int score) {
-        el.attr("gravityScore", Integer.toString(score));
     }
 
     private int calcWeightForChild(Element child, String ownText) {
@@ -219,7 +195,6 @@ public class ArticleTextExtractor {
         else
             val = (int) Math.round(ownText.length() / 25.0);
 
-        addScore(child, val);
         return val;
     }
 
@@ -285,16 +260,13 @@ public class ArticleTextExtractor {
      * @return a set of all important nodes
      */
     public Collection<Element> getNodes(Document doc) {
-        Map<Element, Object> nodes = new LinkedHashMap<Element, Object>(64);
-        int score = 100;
+        Collection<Element> nodes = new HashSet<Element>(64);
         for (Element el : doc.select("body").select("*")) {
             if (NODES.matcher(el.tagName()).matches()) {
-                nodes.put(el, null);
-                setScore(el, score);
-                score = score / 2;
+                nodes.add(el);
             }
         }
-        return nodes.keySet();
+        return nodes;
     }
 
     public static int count(String str, String substring) {
