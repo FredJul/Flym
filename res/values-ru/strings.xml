@@ -153,6 +153,8 @@
     </string>
     <string name="settings_font_size">Размер текста</string>
     <string name="settings_font_size_description">Размер текста новостей</string>
+    <string name="settings_display_oldest_first">Entries order</string>
+    <string name="settings_display_oldest_first_description">Display oldest entries first</string>
     <string name="settings_refresh_on_open">Обновлять при запуске</string>
     <string name="settings_refresh_on_open_description">Обновлять все ленты пии запуске приложения
     </string>

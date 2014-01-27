@@ -159,6 +159,8 @@
     </string>
     <string name="settings_font_size">Textgröße</string>
     <string name="settings_font_size_description">Textgröße für Inhalte</string>
+    <string name="settings_display_oldest_first">Entries order</string>
+    <string name="settings_display_oldest_first_description">Display oldest entries first</string>
     <string name="settings_refresh_on_open">Feeds beim Öffnen aktualisieren</string>
     <string name="settings_refresh_on_open_description">Aktualisiert alle Feeds beim Öffnen der
         Anwendung

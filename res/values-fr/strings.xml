@@ -159,6 +159,8 @@
     </string>
     <string name="settings_font_size">Taille du texte</string>
     <string name="settings_font_size_description">Taille du texte du contenu des articles</string>
+    <string name="settings_display_oldest_first">Ordre des articles</string>
+    <string name="settings_display_oldest_first_description">Affiche les plus vieux en premier</string>
     <string name="settings_refresh_on_open">Mise à jour des flux à l\'ouverture</string>
     <string name="settings_refresh_on_open_description">Met à jour tous les flux à l\'ouverture de
         l\'application

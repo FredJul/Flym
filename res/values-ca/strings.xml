@@ -156,6 +156,8 @@
     <string name="settings_font_size">Mida del text</string>
     <string name="settings_font_size_description">Sel·lecciona la mida del text de les entrades.
     </string>
+    <string name="settings_display_oldest_first">Entries order</string>
+    <string name="settings_display_oldest_first_description">Display oldest entries first</string>
     <string name="settings_refresh_on_open">Actualitza els canals a l\'inici</string>
     <string name="settings_refresh_on_open_description">Descarregarà nous continguts dels canals a
         l\'inici de l\'aplicació.

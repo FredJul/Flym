@@ -101,6 +101,14 @@
             android:key="pictures.fetch"
             android:summary="@string/settings_fetch_pictures_description"
             android:title="@string/settings_fetch_pictures" />
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="display_oldest_first"
+            android:summary="@string/settings_display_oldest_first_description"
+            android:title="@string/settings_display_oldest_first" />
     </PreferenceCategory>
 
     <PreferenceCategory

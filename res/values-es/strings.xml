@@ -154,6 +154,8 @@
     <string name="settings_font_size">Tamaño del texto</string>
     <string name="settings_font_size_description">Selecciona el tamaño del texto de las entradas.
     </string>
+    <string name="settings_display_oldest_first">Entries order</string>
+    <string name="settings_display_oldest_first_description">Display oldest entries first</string>
     <string name="settings_refresh_on_open">Actualizar las fuentes al inicio</string>
     <string name="settings_refresh_on_open_description">Actualiza las fuentes al iniciar la
         aplicación.

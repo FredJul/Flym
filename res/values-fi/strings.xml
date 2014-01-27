@@ -147,6 +147,8 @@
     </string>
     <string name="settings_font_size">Kirjasintyypin koko</string>
     <string name="settings_font_size_description">Artikkelitekstin kirjasintyypin koko</string>
+    <string name="settings_display_oldest_first">Entries order</string>
+    <string name="settings_display_oldest_first_description">Display oldest entries first</string>
     <string name="settings_refresh_on_open">Päivitä käynnistettäessä</string>
     <string name="settings_refresh_on_open_description">Päivitä kaikki syötteet sovelluksen käynnistyessä
     </string>

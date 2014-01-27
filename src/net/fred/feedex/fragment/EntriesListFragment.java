@@ -318,8 +318,9 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String entriesOrder = PrefUtils.getBoolean(PrefUtils.DISPLAY_OLDEST_FIRST, false) ? Constants.DB_ASC : Constants.DB_DESC;
         CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, FeedData.shouldShowReadEntries(mUri) ? null : EntryColumns.WHERE_UNREAD,
-                null, EntryColumns.DATE + Constants.DB_DESC);
+                null, EntryColumns.DATE + entriesOrder);
         cursorLoader.setUpdateThrottle(150);
         return cursorLoader;
     }

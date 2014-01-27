@@ -36,6 +36,7 @@ public final class Constants {
     public static final String DB_IS_NULL = " IS NULL";
     public static final String DB_IS_NOT_NULL = " IS NOT NULL";
     public static final String DB_DESC = " DESC";
+    public static final String DB_ASC = " ASC";
     public static final String DB_ARG = "=?";
     public static final String DB_AND = " AND ";
     public static final String DB_OR = " OR ";
