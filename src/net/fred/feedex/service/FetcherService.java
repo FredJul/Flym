@@ -273,15 +273,8 @@ public class FetcherService extends IntentService {
                     try {
                         String link = entryCursor.getString(linkPosition);
                         connection = NetworkUtils.setupConnection(link);
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(NetworkUtils.getConnectionInputStream(connection)));
 
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            sb.append(line);
-                        }
-
-                        String mobilizedHtml = new ArticleTextExtractor().extractContent(sb.toString());
+                        String mobilizedHtml = ArticleTextExtractor.extractContent(NetworkUtils.getConnectionInputStream(connection));
 
                         if (mobilizedHtml != null) {
                             mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link));
