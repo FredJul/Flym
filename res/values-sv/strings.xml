@@ -136,8 +136,8 @@
     <string name="settings_fetch_pictures_description">Ladda ned alla bilder och lagra dem lokalt</string>
     <string name="settings_font_size">Typsnittsstorlek</string>
     <string name="settings_font_size_description">Typsnittsstorlek för inläggstext</string>
-    <string name="settings_display_oldest_first">Entries order</string>
-    <string name="settings_display_oldest_first_description">Display oldest entries first</string>
+    <string name="settings_display_oldest_first">Ordning på inlägg</string>
+    <string name="settings_display_oldest_first_description">Visa äldsta inläggen först</string>
     <string name="settings_refresh_on_open">Uppdatera feeds vid start</string>
     <string name="settings_refresh_on_open_description">Uppdatera alla feeds när applikationen öppnas</string>
     <string name="settings_refresh_wifi_only">Uppdatera endast över wifi</string>
