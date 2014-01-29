@@ -34,8 +34,8 @@
     <string name="network_error">Nessuna connessione disponibile</string>
     <string name="loading">Caricamento in corso…</string>
     <string name="no_result">Nessun risultato</string>
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_open">Apri pannello di navigazione</string>
+    <string name="drawer_close">Chiudi pannello di navigazione</string>
     <string name="back_again_to_quit">Premere indietro un\'altra volta per uscire</string>
 
     <!-- FEEDS -->
@@ -157,8 +157,8 @@
     <string name="settings_font_size">Dimensione testo</string>
     <string name="settings_font_size_description">Dimensione del testo dei contenuti degli articoli
     </string>
-    <string name="settings_display_oldest_first">Entries order</string>
-    <string name="settings_display_oldest_first_description">Display oldest entries first</string>
+    <string name="settings_display_oldest_first">Ordinamento articoli</string>
+    <string name="settings_display_oldest_first_description">Mostra gli articoli più vecchi prima</string>
     <string name="settings_refresh_on_open">Aggiorna feed all\'apertura</string>
     <string name="settings_refresh_on_open_description">Aggiorna tutti i feed all\'apertura
         dell\'applicazione
