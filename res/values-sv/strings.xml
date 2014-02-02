@@ -105,6 +105,10 @@
     <string name="see_enclosure">Visa bifogad mediafil</string>
     <string name="see_link">Öppna i webläsare</string>
     <string name="cant_open_link">Inget lämpligt program hittades för denna länk</string>
+    <string name="open_enclosure">Öppna bifogad fil</string>
+    <string name="file">Fil</string>
+    <string name="download_and_save">Ladda ned och spara</string>
+    <string name="open_link">Öppna länk</string>
 
     <!-- WIDGET -->
     <string name="red">Röd</string>

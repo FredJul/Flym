@@ -22,6 +22,10 @@ package net.fred.feedex.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.os.Environment;
+import android.content.DialogInterface;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
@@ -552,13 +556,37 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                String enclosure = mEntryPagerAdapter.getCursor(mCurrentPagerPos).getString(mEnclosurePos);
+                final String enclosure = mEntryPagerAdapter.getCursor(mCurrentPagerPos).getString(mEnclosurePos);
 
                 final int position1 = enclosure.indexOf(Constants.ENCLOSURE_SEPARATOR);
                 final int position2 = enclosure.indexOf(Constants.ENCLOSURE_SEPARATOR, position1 + 3);
 
-                Uri uri = Uri.parse(enclosure.substring(0, position1));
-                showEnclosure(uri, enclosure, position1, position2);
+                final Uri uri = Uri.parse(enclosure.substring(0, position1));
+                final String filename = uri.getLastPathSegment();
+
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.open_enclosure)
+                        .setMessage(getString(R.string.file) + ": " + filename)
+                        .setPositiveButton(R.string.open_link, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                showEnclosure(uri, enclosure, position1, position2);
+                            }
+                        }).setNegativeButton(R.string.download_and_save, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    DownloadManager.Request r = new DownloadManager.Request(uri);
+                                    r.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
+                                    r.allowScanningByMediaScanner();
+                                    r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                                    DownloadManager dm = (DownloadManager) MainApplication.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+                                    dm.enqueue(r);
+                                } catch (Exception e) {
+                                    Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        }).show();
             }
         });
     }

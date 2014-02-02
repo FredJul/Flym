@@ -113,6 +113,10 @@
     <string name="see_enclosure">Voir le fichier joint</string>
     <string name="see_link">Ouvrir dans le navigateur</string>
     <string name="cant_open_link">Aucune application trouvée pour ce lien</string>
+    <string name="open_enclosure">Open enclosure</string>
+    <string name="file">File</string>
+    <string name="download_and_save">Download and save</string>
+    <string name="open_link">Open link</string>
 
     <!-- WIDGET -->
     <string name="red">Rouge</string>
