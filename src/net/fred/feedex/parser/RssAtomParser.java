@@ -52,7 +52,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Pair;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
@@ -636,41 +635,62 @@ public class RssAtomParser extends DefaultHandler {
     }
 
     private class FeedFilters {
-        private final ArrayList<Pair<String, Pair<Boolean, Boolean>>> mFilters = new ArrayList<Pair<String, Pair<Boolean, Boolean>>>();
+
+        private class Rule {
+            public String filterText;
+            public boolean isRegex;
+            public boolean isAppliedToTitle;
+            public boolean isAcceptRule;
+        }
+
+        private final ArrayList<Rule> mFilters = new ArrayList<Rule>();
+        private boolean rejectEntriesByDefault = false;
 
         public FeedFilters(String feedId) {
             ContentResolver cr = MainApplication.getContext().getContentResolver();
             Cursor c = cr.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), new String[]{FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
-                    FilterColumns.IS_APPLIED_TO_TITLE}, null, null, null);
+                    FilterColumns.IS_APPLIED_TO_TITLE, FilterColumns.IS_ACCEPT_RULE}, null, null, null);
             while (c.moveToNext()) {
-                String filterText = c.getString(0);
-                boolean isRegex = c.getInt(1) == 1;
-                boolean isAppliedToTitle = c.getInt(2) == 1;
-
-                mFilters.add(new Pair<String, Pair<Boolean, Boolean>>(filterText, new Pair<Boolean, Boolean>(isRegex, isAppliedToTitle)));
+                Rule r = new Rule();
+                r.filterText = c.getString(0);
+                r.isRegex = c.getInt(1) == 1;
+                r.isAppliedToTitle = c.getInt(2) == 1;
+                r.isAcceptRule = c.getInt(3) == 1;
+                mFilters.add(r);
             }
             c.close();
+
         }
 
         public boolean isEntryFiltered(String title, String content) {
+
             boolean isFiltered = false;
 
-            for (Pair<String, Pair<Boolean, Boolean>> filter : mFilters) {
-                String filterText = filter.first;
-                boolean isRegex = filter.second.first;
-                boolean isAppliedToTitle = filter.second.second;
+            for (Rule r : mFilters) {
 
-                if (isRegex) {
-                    Pattern p = Pattern.compile(filterText);
-                    if (isAppliedToTitle) {
+                boolean isMatch = false;
+                if (r.isRegex) {
+                    Pattern p = Pattern.compile(r.filterText);
+                    if (r.isAppliedToTitle) {
                         Matcher m = p.matcher(title);
-                        isFiltered = m.find();
+                        isMatch = m.find();
                     } else if (content != null) {
                         Matcher m = p.matcher(content);
-                        isFiltered = m.find();
+                        isMatch = m.find();
                     }
-                } else if ((isAppliedToTitle && title.contains(filterText)) || (!isAppliedToTitle && content != null && content.contains(filterText))) {
+                } else if ((r.isAppliedToTitle && title.contains(r.filterText)) || (!r.isAppliedToTitle && content != null && content.contains(r.filterText))) {
+                    isMatch = true;
+                }
+
+                if (r.isAcceptRule) {
+                    if (isMatch) {
+                        // accept rules override reject rules, the rest of the rules must be ignored
+                        isFiltered = false;
+                        break;
+                    }
+                } else if (isMatch) {
                     isFiltered = true;
+                    // no break, there might be an accept rule later
                 }
             }
 

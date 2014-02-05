@@ -72,6 +72,8 @@
     <string name="filter_is_regex">es una expresión regular</string>
     <string name="filter_apply_to_title">Aplicar al título</string>
     <string name="filter_apply_to_content">Aplicar al contenido</string>
+    <string name="accept">ACCEPT</string>
+    <string name="reject">REJECT</string>
     <string name="feed_search">Buscar fuentes</string>
     <string name="feed_search_by_web_search">Buscar fuentes por palabra clave</string>
     <string name="feed_search_by_topic">Buscar fuentes según género (con Faroo)</string>

@@ -73,6 +73,8 @@
     <string name="filter_is_regex">est une expression régulière</string>
     <string name="filter_apply_to_title">Appliquer au titre</string>
     <string name="filter_apply_to_content">Appliquer au contenu</string>
+    <string name="accept">ACCEPT</string>
+    <string name="reject">REJECT</string>
     <string name="feed_search">Recherche de flux</string>
     <string name="feed_search_by_web_search">Recherche flux par mot-clé</string>
     <string name="feed_search_by_topic">Génère flux par sujet (via Faroo)</string>

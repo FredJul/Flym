@@ -74,6 +74,8 @@
     <string name="filter_is_regex">ist ein regulärer Ausdruck</string>
     <string name="filter_apply_to_title">Auf den Titel anwenden</string>
     <string name="filter_apply_to_content">Auf den Inhalt anwenden</string>
+    <string name="accept">ACCEPT</string>
+    <string name="reject">REJECT</string>
     <string name="feed_search">Feed-Suche</string>
     <string name="feed_search_by_web_search">Finde einen Feed anhand von Stichpunkten</string>
     <string name="feed_search_by_topic">Erstelle einen Feed nach Themen (via Faroo)</string>

@@ -73,6 +73,8 @@
     <string name="filter_is_regex">és una expresió regular</string>
     <string name="filter_apply_to_title">Aplica al títol</string>
     <string name="filter_apply_to_content">Aplica al contingut</string>
+    <string name="accept">ACCEPT</string>
+    <string name="reject">REJECT</string>
     <string name="feed_search">Cerca canals</string>
     <string name="feed_search_by_web_search">Cerca canals per paraula clau</string>
     <string name="feed_search_by_topic">Genera canals per tema (via Faroo)</string>
