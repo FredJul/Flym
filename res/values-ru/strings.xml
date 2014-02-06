@@ -73,6 +73,8 @@
     <string name="filter_is_regex">это регулярное выражение</string>
     <string name="filter_apply_to_title">Применить к заголовкам</string>
     <string name="filter_apply_to_content">Применить к содержанию</string>
+    <string name="accept">ACCEPT</string>
+    <string name="reject">REJECT</string>
     <string name="feed_search">Поиск лент</string>
     <string name="feed_search_by_web_search">Искать ленты по ключевым словам</string>
     <string name="feed_search_by_topic">Создать ленту по заголовку (через Faroo)</string>
@@ -113,6 +115,10 @@
     <string name="see_enclosure">Показать вложение</string>
     <string name="see_link">Открыть в браузере</string>
     <string name="cant_open_link">Не найдено приложений для открытия этой ссылки</string>
+    <string name="open_enclosure">Open enclosure</string>
+    <string name="file">File</string>
+    <string name="download_and_save">Download and save</string>
+    <string name="open_link">Open link</string>
 
     <!-- WIDGET -->
     <string name="red">Красный</string>

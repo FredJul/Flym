@@ -62,13 +62,15 @@
     <string name="tab_feed_title">Feed</string>
     <string name="tab_filters_title">Filter</string>
     <string name="feed_title">TITEL</string>
-    <string name="feed_filters">FILTRERA BORT ENLIGT DESSA REGLER</string>
+    <string name="feed_filters">FILTRERINGSREGLER</string>
     <string name="filter_add_title">Lägg till regel</string>
     <string name="filter_delete_title">Radera regel</string>
     <string name="filter_edit_title">Redigera regel</string>
     <string name="filter_is_regex">är ett reguljärt uttryck (regex)</string>
     <string name="filter_apply_to_title">Tillämpa på titeln</string>
     <string name="filter_apply_to_content">Tillämpa på texten</string>
+    <string name="accept">ACCEPTERA</string>
+    <string name="reject">AVFÄRDA</string>
     <string name="feed_search">Sök efter feed</string>
     <string name="feed_search_by_web_search">Sök på webben med nyckelord</string>
     <string name="feed_search_by_topic">Skapa feed utifrån en sökning (via FAROO)</string>
@@ -105,6 +107,10 @@
     <string name="see_enclosure">Visa bifogad mediafil</string>
     <string name="see_link">Öppna i webläsare</string>
     <string name="cant_open_link">Inget lämpligt program hittades för denna länk</string>
+    <string name="open_enclosure">Öppna bifogad fil</string>
+    <string name="file">Fil</string>
+    <string name="download_and_save">Ladda ned och spara</string>
+    <string name="open_link">Öppna länk</string>
 
     <!-- WIDGET -->
     <string name="red">Röd</string>

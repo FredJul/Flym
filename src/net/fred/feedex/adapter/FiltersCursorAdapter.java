@@ -32,19 +32,21 @@ public class FiltersCursorAdapter extends ResourceCursorAdapter {
 
     private int filterTextColumnPosition;
     private int isAppliedToTitleColumnPosition;
+    private int isAcceptRulePosition;
 
     private int mSelectedFilter = -1;
 
     public FiltersCursorAdapter(Context context, Cursor cursor) {
-        super(context, android.R.layout.simple_list_item_2, cursor, 0);
+        super(context, R.layout.item_rule_list, cursor, 0);
 
         reinit(cursor);
     }
 
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
-        TextView filterTextTextView = (TextView) view.findViewById(android.R.id.text1);
-        TextView isAppliedToTitleTextView = (TextView) view.findViewById(android.R.id.text2);
+        TextView isAcceptRuleTextView = (TextView) view.findViewById(android.R.id.text1);
+        TextView filterTextTextView = (TextView) view.findViewById(android.R.id.text2);
+        TextView isAppliedToTitleTextView = (TextView) view.findViewById(R.id.text3);
 
         if (cursor.getPosition() == mSelectedFilter) {
             view.setBackgroundResource(android.R.color.holo_blue_dark);
@@ -52,6 +54,9 @@ public class FiltersCursorAdapter extends ResourceCursorAdapter {
             view.setBackgroundResource(android.R.color.transparent);
         }
 
+        isAcceptRuleTextView.setText(cursor.getInt(isAcceptRulePosition) == 1 ? R.string.accept : R.string.reject);
+        // setTextColor does not work here for some reason
+        //isAcceptRuleTextView.setTextColor(cursor.getInt(isAcceptRulePosition) == 1 ? android.R.color.holo_green_dark : android.R.color.holo_red_dark);
         filterTextTextView.setText(cursor.getString(filterTextColumnPosition));
         isAppliedToTitleTextView.setText(cursor.getInt(isAppliedToTitleColumnPosition) == 1 ? R.string.filter_apply_to_title : R.string.filter_apply_to_content);
     }
@@ -84,6 +89,7 @@ public class FiltersCursorAdapter extends ResourceCursorAdapter {
         if (cursor != null) {
             filterTextColumnPosition = cursor.getColumnIndex(FilterColumns.FILTER_TEXT);
             isAppliedToTitleColumnPosition = cursor.getColumnIndex(FilterColumns.IS_APPLIED_TO_TITLE);
+            isAcceptRulePosition = cursor.getColumnIndex(FilterColumns.IS_ACCEPT_RULE);
         }
     }
 

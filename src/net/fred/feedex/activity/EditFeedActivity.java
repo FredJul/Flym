@@ -141,6 +141,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                         final CheckBox regexCheckBox = (CheckBox) dialogView.findViewById(R.id.regexCheckBox);
                         final RadioButton applyTitleRadio = (RadioButton) dialogView.findViewById(R.id.applyTitleRadio);
                         final RadioButton applyContentRadio = (RadioButton) dialogView.findViewById(R.id.applyContentRadio);
+                        final RadioButton acceptRadio = (RadioButton) dialogView.findViewById(R.id.acceptRadio);
+                        final RadioButton rejectRadio = (RadioButton) dialogView.findViewById(R.id.rejectRadio);
 
                         filterText.setText(c.getString(c.getColumnIndex(FilterColumns.FILTER_TEXT)));
                         regexCheckBox.setChecked(c.getInt(c.getColumnIndex(FilterColumns.IS_REGEX)) == 1);
@@ -148,6 +150,11 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                             applyTitleRadio.setChecked(true);
                         } else {
                             applyContentRadio.setChecked(true);
+                        }
+                        if (c.getInt(c.getColumnIndex(FilterColumns.IS_ACCEPT_RULE)) == 1) {
+                            acceptRadio.setChecked(true);
+                        } else {
+                            rejectRadio.setChecked(true);
                         }
 
                         final long filterId = mFiltersCursorAdapter.getItemId(mFiltersCursorAdapter.getSelectedFilter());
@@ -167,6 +174,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                                                     values.put(FilterColumns.FILTER_TEXT, filter);
                                                     values.put(FilterColumns.IS_REGEX, regexCheckBox.isChecked());
                                                     values.put(FilterColumns.IS_APPLIED_TO_TITLE, applyTitleRadio.isChecked());
+                                                    values.put(FilterColumns.IS_ACCEPT_RULE, acceptRadio.isChecked());
                                                     if (cr.update(FilterColumns.CONTENT_URI, values, FilterColumns._ID + '=' + filterId, null) > 0) {
                                                         cr.notifyChange(
                                                                 FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
@@ -383,6 +391,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                                     values.put(FilterColumns.FILTER_TEXT, filterText);
                                     values.put(FilterColumns.IS_REGEX, ((CheckBox) dialogView.findViewById(R.id.regexCheckBox)).isChecked());
                                     values.put(FilterColumns.IS_APPLIED_TO_TITLE, ((RadioButton) dialogView.findViewById(R.id.applyTitleRadio)).isChecked());
+                                    values.put(FilterColumns.IS_ACCEPT_RULE, ((RadioButton) dialogView.findViewById(R.id.acceptRadio)).isChecked());
 
                                     ContentResolver cr = getContentResolver();
                                     cr.insert(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), values);
@@ -532,7 +541,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader cursorLoader = new CursorLoader(this, FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
-                null, null, null, null);
+                null, null, null, FilterColumns.IS_ACCEPT_RULE + Constants.DB_DESC);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
     }

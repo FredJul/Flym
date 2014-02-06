@@ -64,13 +64,15 @@
     <string name="tab_feed_title">Syöte</string>
     <string name="tab_filters_title">Suodatus</string>
     <string name="feed_title">OTSIKKO</string>
-    <string name="feed_filters">POISTA SÄÄNTÖJEN MUKAISET ARTIKKELIT</string>
+    <string name="feed_filters">SUODATTIMEN SÄÄNNÖT</string>
     <string name="filter_add_title">Lisää sääntö</string>
     <string name="filter_delete_title">Poista sääntö</string>
     <string name="filter_edit_title">Muokkaa sääntöä</string>
     <string name="filter_is_regex">on säännöllinen lauseke (regex)</string>
     <string name="filter_apply_to_title">Sovella otsikkoon</string>
     <string name="filter_apply_to_content">Sovella sisältöön</string>
+    <string name="accept">HYVÄKSY</string>
+    <string name="reject">HYLKÄÄ</string>
     <string name="feed_search">Etsi syötteitä</string>
     <string name="feed_search_by_web_search">Etsi syötteitä avainsanojen avulla</string>
     <string name="feed_search_by_topic">Generoi syöte aiheen mukaan (FAROO-haun avulla)</string>
@@ -109,6 +111,10 @@
     <string name="see_enclosure">Avaa liite</string>
     <string name="see_link">Avaa selaimessa</string>
     <string name="cant_open_link">Linkin avaamiseen kykenevää sovellusta ei löydy.</string>
+    <string name="open_enclosure">Avaa liite</string>
+    <string name="file">Tiedosto</string>
+    <string name="download_and_save">Lataa ja tallenna</string>
+    <string name="open_link">Avaa linkki</string>
 
     <!-- WIDGET -->
     <string name="red">Punainen</string>
