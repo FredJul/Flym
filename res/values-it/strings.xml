@@ -66,15 +66,15 @@
     <string name="tab_feed_title">Feed</string>
     <string name="tab_filters_title">Filtri</string>
     <string name="feed_title">TITOLO</string>
-    <string name="feed_filters">FILTRO ESCLUSIONI</string>
+    <string name="feed_filters">REGOLE FILTRO</string>
     <string name="filter_add_title">Aggiungi filtro</string>
     <string name="filter_delete_title">Elimina filtro</string>
     <string name="filter_edit_title">Modifica filtro</string>
     <string name="filter_is_regex">è un\'espressione regolare</string>
     <string name="filter_apply_to_title">Applica al titolo</string>
     <string name="filter_apply_to_content">Applica al contenuto</string>
-    <string name="accept">ACCEPT</string>
-    <string name="reject">REJECT</string>
+    <string name="accept">ACCETTA</string>
+    <string name="reject">BLOCCA</string>
     <string name="feed_search">Ricerca feed</string>
     <string name="feed_search_by_web_search">Trova feed per parola chiave</string>
     <string name="feed_search_by_topic">Genera feed per soggetto (via Faroo)</string>
@@ -113,10 +113,10 @@
     <string name="see_enclosure">Vedi allegati</string>
     <string name="see_link">Vedi nel browser</string>
     <string name="cant_open_link">Nessuna applicazione trovata per questo link</string>
-    <string name="open_enclosure">Open enclosure</string>
+    <string name="open_enclosure">Apri allegato</string>
     <string name="file">File</string>
-    <string name="download_and_save">Download and save</string>
-    <string name="open_link">Open link</string>
+    <string name="download_and_save">Scarica e salva</string>
+    <string name="open_link">Apri link</string>
 
     <!-- WIDGET -->
     <string name="red">Rosso</string>
