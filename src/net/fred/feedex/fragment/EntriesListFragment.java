@@ -236,6 +236,10 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
             if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
                 menu.findItem(R.id.menu_hide_read).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
             }
+
+            if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
+                menu.findItem(R.id.menu_edit).setTitle(R.string.edit_feed_title);
+            }
         }
 
         super.onCreateOptionsMenu(menu, inflater);

@@ -6,7 +6,11 @@
     <PreferenceScreen
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:title="About FeedEx">
+            android:title="@string/about_feedex">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="net.fred.feedex"
+                android:targetClass="net.fred.feedex.activity.AboutActivity"/>
     </PreferenceScreen>
 
     <PreferenceCategory

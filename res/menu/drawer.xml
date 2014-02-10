@@ -19,7 +19,7 @@
         android:id="@+id/menu_edit_main"
         android:icon="@drawable/content_edit"
         android:showAsAction="ifRoom"
-        android:title="@string/context_menu_edit"
+        android:title="@string/menu_edit_feeds"
         tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/menu_settings_main"
