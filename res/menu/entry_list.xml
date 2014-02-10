@@ -17,12 +17,25 @@
     <item
         android:id="@+id/menu_all_read"
         android:icon="@drawable/read_all"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="@string/menu_all_read"
         tools:ignore="AlwaysShowAction"/>
     <item
+        android:id="@+id/menu_edit"
+        android:icon="@drawable/content_edit"
+        android:showAsAction="ifRoom"
+        android:title="@string/context_menu_edit"
+        tools:ignore="AlwaysShowAction"/>
+    <item
+        android:id="@+id/menu_settings_main"
+        android:icon="@drawable/action_settings"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_settings"
+        tools:ignore="AlwaysShowAction" />
+    <item
         android:id="@+id/menu_share_starred"
         android:icon="@drawable/social_share"
+        android:showAsAction="always"
         android:title="@string/context_menu_share_starred"/>
 
 </menu>
