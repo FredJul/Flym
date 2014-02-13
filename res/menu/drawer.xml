@@ -3,12 +3,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/menu_edit"
-        android:icon="@drawable/content_edit"
-        android:showAsAction="always"
-        android:title="@string/context_menu_edit"
-        tools:ignore="AlwaysShowAction" />
-    <item
         android:id="@+id/menu_hide_read_main"
         android:icon="@drawable/hide_reads"
         android:showAsAction="always"
@@ -22,9 +16,15 @@
         android:title="@string/menu_refresh"
         tools:ignore="AlwaysShowAction" />
     <item
+        android:id="@+id/menu_edit_main"
+        android:icon="@drawable/content_edit"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_edit_feeds"
+        tools:ignore="AlwaysShowAction" />
+    <item
         android:id="@+id/menu_settings_main"
         android:icon="@drawable/action_settings"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="@string/menu_settings"
         tools:ignore="AlwaysShowAction" />
 </menu>

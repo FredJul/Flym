@@ -39,6 +39,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.AboutActivity"
+            android:label="@string/about_feedex"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activity.EditFeedsListActivity"
             android:label="@string/feeds"
             android:launchMode="singleTask" />

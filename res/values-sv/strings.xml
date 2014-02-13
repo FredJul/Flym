@@ -22,6 +22,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="about_feedex">Om FeedEx</string>
     <string name="never">aldrig</string>
     <string name="update">Uppdaterad</string>
     <string name="colon">:\u00A0</string>
@@ -45,6 +46,7 @@
     <string name="no_filters">Inga regler</string>
     <string name="context_menu_delete">Radera</string>
     <string name="edit_feed_title">Redigera feed</string>
+    <string name="menu_edit_feeds">Redigera feed</string>
     <string name="new_feed_title">Ny feed</string>
     <string name="context_menu_edit">Redigera</string>
     <string name="menu_add_group">Lägg till grupp</string>

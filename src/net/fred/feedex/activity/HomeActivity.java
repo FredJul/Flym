@@ -261,7 +261,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     item.setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
                 }
                 return true;
-            case R.id.menu_edit:
+            case R.id.menu_edit_main:
                 startActivity(new Intent(this, EditFeedsListActivity.class));
                 return true;
             case R.id.menu_refresh_main:

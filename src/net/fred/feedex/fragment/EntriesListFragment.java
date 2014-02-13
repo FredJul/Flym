@@ -49,9 +49,11 @@ import android.widget.SearchView;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
+import net.fred.feedex.activity.EditFeedsListActivity;
 import net.fred.feedex.adapter.EntriesCursorAdapter;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
+import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
@@ -221,14 +223,22 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
             menu.findItem(R.id.menu_hide_read).setVisible(false);
             menu.findItem(R.id.menu_refresh).setVisible(false);
+            menu.findItem(R.id.menu_edit).setVisible(false);
+            menu.findItem(R.id.menu_settings_main).setVisible(false);
         } else if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
             menu.findItem(R.id.menu_hide_read).setVisible(false);
             menu.findItem(R.id.menu_share_starred).setVisible(false);
+            menu.findItem(R.id.menu_edit).setVisible(false);
+            menu.findItem(R.id.menu_settings_main).setVisible(false);
         } else {
             menu.findItem(R.id.menu_share_starred).setVisible(false);
 
             if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
                 menu.findItem(R.id.menu_hide_read).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
+            }
+
+            if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
+                menu.findItem(R.id.menu_edit).setTitle(R.string.edit_feed_title);
             }
         }
 
@@ -282,6 +292,14 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                 } else {
                     PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
                     item.setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
+                }
+                return true;
+            }
+            case R.id.menu_edit: {
+                if (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
+                    startActivity(new Intent(Intent.ACTION_EDIT).setData(FeedColumns.CONTENT_URI(mUri.getPathSegments().get(1))));
+                } else {
+                    startActivity(new Intent(getActivity(), EditFeedsListActivity.class));
                 }
                 return true;
             }

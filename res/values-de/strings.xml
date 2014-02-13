@@ -23,6 +23,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="about_feedex">About FeedEx</string>
     <string name="never">nie</string>
     <string name="update">aktualisiert</string>
     <string name="colon">:\u00A0</string>
@@ -46,6 +47,7 @@
     <string name="no_filters">Keine Filter</string>
     <string name="context_menu_delete">Löschen</string>
     <string name="edit_feed_title">Feed bearbeiten</string>
+    <string name="menu_edit_feeds">Edit feeds</string>
     <string name="new_feed_title">Neuer Feed</string>
     <string name="context_menu_edit">Bearbeiten</string>
     <string name="menu_add_group">Gruppe erstellen</string>

@@ -22,6 +22,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="about_feedex">About FeedEx</string>
     <string name="never">никогда</string>
     <string name="update">Обновление</string>
     <string name="colon">:\u00A0</string>
@@ -45,6 +46,7 @@
     <string name="no_filters">Нет фильтров</string>
     <string name="context_menu_delete">Удалить</string>
     <string name="edit_feed_title">Редактировать ленту</string>
+    <string name="menu_edit_feeds">Edit feeds</string>
     <string name="new_feed_title">Новая лента</string>
     <string name="context_menu_edit">Редактировать</string>
     <string name="menu_add_group">Добавить группу</string>
