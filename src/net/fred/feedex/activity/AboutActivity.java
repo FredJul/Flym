@@ -1,11 +1,10 @@
 package net.fred.feedex.activity;
 
-import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.widget.TextView;
 
 import net.fred.feedex.R;
@@ -34,12 +33,12 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
-	    switch (menuItem.getItemId()) {
-        case android.R.id.home:
-            startActivity(new Intent(this, GeneralPrefsActivity.class));
-            return true;
-	    }
-    return (super.onOptionsItemSelected(menuItem));
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return (super.onOptionsItemSelected(menuItem));
     }
 
 }

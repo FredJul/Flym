@@ -97,10 +97,7 @@ public class GeneralPrefsActivity extends PreferenceActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // Doing simply finish() here will make the ActionBar home/up button send the
-                // user endlessly between AboutActivity and GeneralPrefsActivity,
-                // hence no finish(), go home instead
-                startActivity(new Intent(this, HomeActivity.class));
+                finish();
                 return true;
         }
         return true;
