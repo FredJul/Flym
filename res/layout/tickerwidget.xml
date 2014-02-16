@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/feed_ticker_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true" />
+
+    <ImageView
+        android:id="@id/icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/icon"
+        android:layout_above="@+id/feed_ticker"
+        android:layout_toLeftOf="@+id/feed_ticker" />
+
+    <TextView
+        android:id="@+id/feed_ticker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:shadowColor="@android:color/background_dark"
+        android:shadowRadius="10"
+        android:shadowDx="3"
+        android:shadowDy="3"
+        android:text="0"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="3dp" />
+
+</RelativeLayout>

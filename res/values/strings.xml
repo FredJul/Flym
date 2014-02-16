@@ -127,6 +127,7 @@
     <string name="green">Green</string>
     <string name="blue">Blue</string>
     <string name="transparency">Transparency</string>
+    <string name="feedex_ticker">FeedEx unread count</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automated refresh</string>
