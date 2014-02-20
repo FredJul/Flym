@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/feed_ticker"
+        android:layout_alignLeft="@+id/feed_ticker"
+        android:layout_alignBottom="@+id/feed_ticker"
+        android:layout_alignRight="@+id/feed_ticker"
+        android:src="@drawable/red_circle" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/icon"
+        android:layout_above="@+id/feed_ticker"
+        android:layout_toLeftOf="@+id/feed_ticker" />
+
+    <TextView
+        android:id="@+id/feed_ticker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:text="0"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:textColor="@android:color/white"
+        android:ellipsize="none"
+        android:enabled="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:singleLine="false"
+        android:minWidth="30sp"
+        android:padding="3dp"
+        android:minHeight="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/feed_ticker_tap_area"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

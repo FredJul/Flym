@@ -1,5 +1,5 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialLayout="@layout/tickerwidget"
+    android:initialLayout="@layout/ticker_widget"
     android:label="@string/feedex_ticker"
     android:minHeight="60dp"
     android:minWidth="60dp"
