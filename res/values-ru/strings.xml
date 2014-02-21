@@ -113,6 +113,8 @@
     <string name="share_favorites_title">FeedEx: избранные новости</string>
     <string name="copied_clipboard">Ссылка скопирована</string>
     <string name="get_full_text">Загрузить весь текст</string>
+    <string name="get_webpage">Загрузить веб-страницу для чтения в автономном режиме</string>
+    <string name="get_desktop_webpage">Загрузить полную версию веб-страницы</string>
     <string name="original_text">Показать оригинальный текст</string>
     <string name="see_enclosure">Показать вложение</string>
     <string name="see_link">Открыть в браузере</string>
@@ -127,6 +129,7 @@
     <string name="green">Зеленый</string>
     <string name="blue">Синий</string>
     <string name="transparency">Прозрачный</string>
+    <string name="feedex_ticker">Количество непрочитанных статей</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Автоматическое обновление</string>

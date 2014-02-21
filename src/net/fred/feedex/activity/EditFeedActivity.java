@@ -65,6 +65,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.CompoundButton;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -100,11 +102,14 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
     static final String FEED_SEARCH_URL = "url";
     static final String FEED_SEARCH_DESC = "contentSnippet";
 
-    private static final String[] FEED_PROJECTION = new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT};
+    private static final String[] FEED_PROJECTION = new String[] { FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT,
+                                                                   FeedColumns.RETRIEVE_WEBPAGE, FeedColumns.RETRIEVE_DESKTOP_WEBPAGE };
 
     private TabHost mTabHost;
     private EditText mNameEditText, mUrlEditText;
     private CheckBox mRetrieveFulltextCb;
+    private CheckBox mRetrieveWebpageCb;
+    private CheckBox mRetrieveDesktopWebpageCb;
     private ListView mFiltersListView;
     private String mPreviousName;
 
@@ -242,9 +247,41 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
         mNameEditText = (EditText) findViewById(R.id.feed_title);
         mUrlEditText = (EditText) findViewById(R.id.feed_url);
         mRetrieveFulltextCb = (CheckBox) findViewById(R.id.retrieve_fulltext);
+        mRetrieveWebpageCb = (CheckBox) findViewById(R.id.retrieve_webpage);
+        mRetrieveDesktopWebpageCb = (CheckBox) findViewById(R.id.retrieve_desktop_webpage);
         mFiltersListView = (ListView) findViewById(android.R.id.list);
         View tabWidget = findViewById(android.R.id.tabs);
         View buttonLayout = findViewById(R.id.button_layout);
+
+        // TODO: radio buttons instead of checkboxes
+        mRetrieveFulltextCb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mRetrieveWebpageCb.setChecked(false);
+                    mRetrieveDesktopWebpageCb.setChecked(false);
+                }
+            }
+        });
+        mRetrieveWebpageCb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mRetrieveFulltextCb.setChecked(false);
+                    mRetrieveDesktopWebpageCb.setChecked(false);
+                }
+            }
+        });
+        mRetrieveDesktopWebpageCb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mRetrieveFulltextCb.setChecked(false);
+                    mRetrieveWebpageCb.setChecked(false);
+                }
+            }
+        });
+
 
         mTabHost.setup();
         mTabHost.addTab(mTabHost.newTabSpec("feedTab").setIndicator(getString(R.string.tab_feed_title)).setContent(R.id.feed_tab));
@@ -296,6 +333,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                     mNameEditText.setText(mPreviousName);
                     mUrlEditText.setText(cursor.getString(1));
                     mRetrieveFulltextCb.setChecked(cursor.getInt(2) == 1);
+                    mRetrieveWebpageCb.setChecked(cursor.getInt(3) == 1);
+                    mRetrieveDesktopWebpageCb.setChecked(cursor.getInt(4) == 1);
                     cursor.close();
                 } else {
                     cursor.close();
@@ -337,6 +376,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 
                 values.put(FeedColumns.NAME, name.trim().length() > 0 ? name : null);
                 values.put(FeedColumns.RETRIEVE_FULLTEXT, mRetrieveFulltextCb.isChecked() ? 1 : null);
+                values.put(FeedColumns.RETRIEVE_WEBPAGE, mRetrieveWebpageCb.isChecked() ? 1 : null);
+                values.put(FeedColumns.RETRIEVE_DESKTOP_WEBPAGE, mRetrieveDesktopWebpageCb.isChecked() ? 1 : null);
                 values.put(FeedColumns.FETCH_MODE, 0);
                 values.putNull(FeedColumns.ERROR);
 
@@ -527,6 +568,8 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                 values.put(FeedColumns.NAME, name);
             }
             values.put(FeedColumns.RETRIEVE_FULLTEXT, mRetrieveFulltextCb.isChecked() ? 1 : null);
+            values.put(FeedColumns.RETRIEVE_WEBPAGE, mRetrieveWebpageCb.isChecked() ? 1 : null);
+            values.put(FeedColumns.RETRIEVE_DESKTOP_WEBPAGE, mRetrieveDesktopWebpageCb.isChecked() ? 1 : null);
             cr.insert(FeedColumns.CONTENT_URI, values);
         }
 

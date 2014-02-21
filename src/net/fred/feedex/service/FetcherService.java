@@ -643,6 +643,8 @@ public class FetcherService extends IntentService {
 
         cursor.close();
 
+        WgetDownloader.download(MainApplication.getContext(), feedId);
+
         return handler != null ? handler.getNewCount() : 0;
     }
 }

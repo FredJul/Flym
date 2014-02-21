@@ -27,5 +27,11 @@
     <item
         android:id="@+id/menu_mark_as_unread"
         android:title="@string/menu_mark_as_unread"/>
+    <item
+        android:id="@+id/menu_open_in_browser"
+        android:title="@string/see_link"/>
+    <item
+        android:id="@+id/menu_show_original_text"
+        android:title="@string/original_text"/>
 
 </menu>

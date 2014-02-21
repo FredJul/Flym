@@ -113,6 +113,8 @@
     <string name="share_favorites_title">FeedEx: starred entries</string>
     <string name="copied_clipboard">Link copied</string>
     <string name="get_full_text">Retrieve the full text</string>
+    <string name="get_webpage">Download webpage for offline reading</string>
+    <string name="get_desktop_webpage">Download desktop version of webpage</string>
     <string name="original_text">Show original text</string>
     <string name="see_enclosure">See enclosure</string>
     <string name="see_link">See in browser</string>

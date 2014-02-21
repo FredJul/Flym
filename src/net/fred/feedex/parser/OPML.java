@@ -73,7 +73,7 @@ public class OPML {
     public static final String BACKUP_OPML = Environment.getExternalStorageDirectory() + "/FeedEx_auto_backup.opml";
 
     private static final String[] FEEDS_PROJECTION = new String[]{FeedColumns._ID, FeedColumns.IS_GROUP, FeedColumns.NAME, FeedColumns.URL,
-            FeedColumns.RETRIEVE_FULLTEXT};
+            FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.RETRIEVE_WEBPAGE, FeedColumns.RETRIEVE_DESKTOP_WEBPAGE};
     private static final String[] FILTERS_PROJECTION = new String[]{FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
             FilterColumns.IS_APPLIED_TO_TITLE};
 
@@ -82,6 +82,8 @@ public class OPML {
     private static final String OUTLINE_TITLE = "\t<outline title='";
     private static final String OUTLINE_XMLURL = "' type='rss' xmlUrl='";
     private static final String OUTLINE_RETRIEVE_FULLTEXT = "' retrieveFullText='";
+    private static final String OUTLINE_DOWNLOAD_WEBPAGE = "' downloadWebpage='";
+    private static final String OUTLINE_DOWNLOAD_DESKTOP_WEBPAGE = "' downloadDesktopWebpage='";
     private static final String OUTLINE_INLINE_CLOSING = "'/>\n";
     private static final String OUTLINE_NORMAL_CLOSING = "'>\n";
     private static final String OUTLINE_END = "\t</outline>\n";
@@ -137,7 +139,11 @@ public class OPML {
                     builder.append(OUTLINE_XMLURL);
                     builder.append(TextUtils.htmlEncode(cursorChildren.getString(3)));
                     builder.append(OUTLINE_RETRIEVE_FULLTEXT);
-                    builder.append(cursorChildren.getInt(4) == 1 ? Constants.TRUE : "false");
+                    builder.append(cursorChildren.getInt(4) == 1 ? Constants.TRUE : Constants.FALSE);
+                    builder.append(OUTLINE_DOWNLOAD_WEBPAGE);
+                    builder.append(cursorChildren.getInt(5) == 1 ? Constants.TRUE : Constants.FALSE);
+                    builder.append(OUTLINE_DOWNLOAD_DESKTOP_WEBPAGE);
+                    builder.append(cursorChildren.getInt(6) == 1 ? Constants.TRUE : Constants.FALSE);
 
                     Cursor cursorFilters = MainApplication.getContext().getContentResolver()
                             .query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(cursorChildren.getString(0)), FILTERS_PROJECTION, null, null, null);
@@ -148,9 +154,9 @@ public class OPML {
                             builder.append(FILTER_TEXT);
                             builder.append(TextUtils.htmlEncode(cursorFilters.getString(0)));
                             builder.append(FILTER_IS_REGEX);
-                            builder.append(cursorFilters.getInt(1) == 1 ? Constants.TRUE : "false");
+                            builder.append(cursorFilters.getInt(1) == 1 ? Constants.TRUE : Constants.FALSE);
                             builder.append(FILTER_IS_APPLIED_TO_TITLE);
-                            builder.append(cursorFilters.getInt(2) == 1 ? Constants.TRUE : "false");
+                            builder.append(cursorFilters.getInt(2) == 1 ? Constants.TRUE : Constants.FALSE);
                             builder.append(FILTER_CLOSING);
                         }
                         builder.append("\t");
@@ -167,7 +173,11 @@ public class OPML {
                 builder.append(OUTLINE_XMLURL);
                 builder.append(TextUtils.htmlEncode(cursor.getString(3)));
                 builder.append(OUTLINE_RETRIEVE_FULLTEXT);
-                builder.append(cursor.getInt(4) == 1 ? Constants.TRUE : "false");
+                builder.append(cursor.getInt(4) == 1 ? Constants.TRUE : Constants.FALSE);
+                builder.append(OUTLINE_DOWNLOAD_WEBPAGE);
+                builder.append(cursor.getInt(5) == 1 ? Constants.TRUE : Constants.FALSE);
+                builder.append(OUTLINE_DOWNLOAD_DESKTOP_WEBPAGE);
+                builder.append(cursor.getInt(6) == 1 ? Constants.TRUE : Constants.FALSE);
                 Cursor cursorFilters = MainApplication.getContext().getContentResolver()
                         .query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(cursor.getString(0)), FILTERS_PROJECTION, null, null, null);
                 if (cursorFilters.getCount() != 0) {
@@ -176,9 +186,9 @@ public class OPML {
                         builder.append(FILTER_TEXT);
                         builder.append(TextUtils.htmlEncode(cursorFilters.getString(0)));
                         builder.append(FILTER_IS_REGEX);
-                        builder.append(cursorFilters.getInt(1) == 1 ? Constants.TRUE : "false");
+                        builder.append(cursorFilters.getInt(1) == 1 ? Constants.TRUE : Constants.FALSE);
                         builder.append(FILTER_IS_APPLIED_TO_TITLE);
-                        builder.append(cursorFilters.getInt(2) == 1 ? Constants.TRUE : "false");
+                        builder.append(cursorFilters.getInt(2) == 1 ? Constants.TRUE : Constants.FALSE);
                         builder.append(FILTER_CLOSING);
                     }
                     builder.append(OUTLINE_END);
@@ -204,6 +214,8 @@ public class OPML {
         private static final String ATTRIBUTE_TITLE = "title";
         private static final String ATTRIBUTE_XMLURL = "xmlUrl";
         private static final String ATTRIBUTE_RETRIEVE_FULLTEXT = "retrieveFullText";
+        private static final String ATTRIBUTE_DOWNLOAD_WEBPAGE = "downloadWebpage";
+        private static final String ATTRIBUTE_DOWNLOAD_DESKTOP_WEBPAGE = "downloadDesktopWebpage";
         private static final String TAG_FILTER = "filter";
         private static final String ATTRIBUTE_TEXT = "text";
         private static final String ATTRIBUTE_IS_REGEX = "isRegex";
@@ -252,6 +264,8 @@ public class OPML {
                         values.put(FeedColumns.GROUP_ID, groupId);
                     }
                     values.put(FeedColumns.RETRIEVE_FULLTEXT, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_RETRIEVE_FULLTEXT)));
+                    values.put(FeedColumns.RETRIEVE_WEBPAGE, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_DOWNLOAD_WEBPAGE)));
+                    values.put(FeedColumns.RETRIEVE_DESKTOP_WEBPAGE, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_DOWNLOAD_DESKTOP_WEBPAGE)));
 
                     Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, FeedColumns.URL + Constants.DB_ARG,
                             new String[]{url}, null);
