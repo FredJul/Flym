@@ -30,8 +30,6 @@
     <string name="menu_refresh">Обновить</string>
     <string name="menu_all_read">Пометить все как прочитанное</string>
     <string name="feedex_feeds">FeedEx корма</string>
-    <string name="new_entries">новые записи</string>
-    <string name="new_entry">new entry</string>
     <string name="error">Ошибка</string>
     <string name="network_error">Нет подключения к сети</string>
     <string name="loading">Загрузка…</string>
@@ -184,6 +182,11 @@
     <string name="settings_proxy_host">Адрес сервера</string>
     <string name="settings_proxy_port">Порт</string>
     <string name="settings_proxy_type">Тип соединения</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">One new entry</item>
+        <item quantity="other">%d new entries</item>
+    </plurals>
 
     <string-array name="settings_intervals">
         <item>1 минута</item>

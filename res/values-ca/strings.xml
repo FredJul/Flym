@@ -30,8 +30,6 @@
     <string name="menu_refresh">Refresca</string>
     <string name="menu_all_read">Marca\'ls tots com a llegits</string>
     <string name="feedex_feeds">Canals de FeedEx</string>
-    <string name="new_entries">noves entrades</string>
-    <string name="new_entry">new entry</string>
     <string name="error">Error</string>
     <string name="network_error">No hi ha connectivitat</string>
     <string name="loading">S\'està carregant.</string>
@@ -189,6 +187,11 @@
     <string name="settings_proxy_host">Màquina</string>
     <string name="settings_proxy_port">Port</string>
     <string name="settings_proxy_type">Tipus</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">One new entry</item>
+        <item quantity="other">%d new entries</item>
+    </plurals>
 
     <string-array name="settings_intervals">
         <item>1 minut</item>
