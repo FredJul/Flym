@@ -30,7 +30,6 @@
     <string name="menu_refresh">Päivitä</string>
     <string name="menu_all_read">Merkitse kaikki luetuiksi</string>
     <string name="feedex_feeds">FeedEx-syötteet</string>
-    <string name="new_entries">uutta artikkelia</string>
     <string name="error">Virhe</string>
     <string name="network_error">Ei verkkoyhteyttä</string>
     <string name="loading">Lataa…</string>
@@ -176,6 +175,11 @@
     <string name="settings_proxy_host">Palvelin</string>
     <string name="settings_proxy_port">Portti</string>
     <string name="settings_proxy_type">Tyyppi</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Yksi uusi artikkeli</item>
+        <item quantity="other">%d uutta artikkelia</item>
+    </plurals>
 
     <string-array name="settings_intervals">
         <item>1 minuutti</item>

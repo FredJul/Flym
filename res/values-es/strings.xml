@@ -30,7 +30,6 @@
     <string name="menu_refresh">Actualizar</string>
     <string name="menu_all_read">Marcar todo como leído</string>
     <string name="feedex_feeds">Fuentes de FeedEx</string>
-    <string name="new_entries">entradas nuevas</string>
     <string name="error">Error</string>
     <string name="network_error">No se ha configurado la red</string>
     <string name="loading">Cargando…</string>
@@ -188,6 +187,11 @@
     <string name="settings_proxy_host">Máquina</string>
     <string name="settings_proxy_port">Puerto</string>
     <string name="settings_proxy_type">Tipo</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">One new entry</item>
+        <item quantity="other">%d new entries</item>
+    </plurals>
 
     <string-array name="settings_intervals">
         <item>1 minuto</item>

@@ -30,7 +30,6 @@
     <string name="menu_refresh">Refresh</string>
     <string name="menu_all_read">Mark all as read</string>
     <string name="feedex_feeds">FeedEx feeds</string>
-    <string name="new_entries">new entries</string>
     <string name="error">Error</string>
     <string name="network_error">The network is not set up</string>
     <string name="loading">Loading…</string>
@@ -187,6 +186,11 @@
     <string name="settings_proxy_host">Host</string>
     <string name="settings_proxy_port">Port</string>
     <string name="settings_proxy_type">Type</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">One new entry</item>
+        <item quantity="other">%d new entries</item>
+    </plurals>
 
     <string-array name="settings_intervals">
         <item>1 minute</item>
