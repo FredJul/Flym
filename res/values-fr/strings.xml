@@ -31,6 +31,7 @@
     <string name="menu_all_read">Marquer tout comme lu</string>
     <string name="feedex_feeds">Flux FeedEx</string>
     <string name="new_entries">nouveaux articles</string>
+    <string name="new_entry">new entry</string>
     <string name="error">Erreur</string>
     <string name="network_error">Pas de connexion disponible</string>
     <string name="loading">Chargement en cours…</string>

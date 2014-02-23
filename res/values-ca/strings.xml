@@ -31,6 +31,7 @@
     <string name="menu_all_read">Marca\'ls tots com a llegits</string>
     <string name="feedex_feeds">Canals de FeedEx</string>
     <string name="new_entries">noves entrades</string>
+    <string name="new_entry">new entry</string>
     <string name="error">Error</string>
     <string name="network_error">No hi ha connectivitat</string>
     <string name="loading">S\'està carregant.</string>

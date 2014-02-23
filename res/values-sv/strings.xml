@@ -31,6 +31,7 @@
     <string name="menu_all_read">Mark som läst</string>
     <string name="feedex_feeds">FeedEx feeds</string>
     <string name="new_entries">nya inlägg</string>
+    <string name="new_entry">nytt inlägg</string>
     <string name="error">Fel</string>
     <string name="network_error">Nätverket är inte tillgängligt</string>
     <string name="loading">Laddar…</string>

@@ -32,6 +32,7 @@
     <string name="menu_all_read">Alle als gelesen markieren</string>
     <string name="feedex_feeds">FeedEx-Feeds</string>
     <string name="new_entries">neue Einträge</string>
+    <string name="new_entry">new entry</string>
     <string name="error">Fehler</string>
     <string name="network_error">Kein Internet</string>
     <string name="loading">Laden…</string>

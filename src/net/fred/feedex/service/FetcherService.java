@@ -171,7 +171,7 @@ public class FetcherService extends IntentService {
                     cursor.close();
 
                     if (newCount > 0) {
-                        String text = String.valueOf(newCount) + ' ' + getString(R.string.new_entries);
+                        String text = String.valueOf(newCount) + ' ' + getString((newCount == 1) ? R.string.new_entry : R.string.new_entries);
 
                         Intent notificationIntent = new Intent(FetcherService.this, HomeActivity.class);
                         PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent,

@@ -31,6 +31,7 @@
     <string name="menu_all_read">Merkitse kaikki luetuiksi</string>
     <string name="feedex_feeds">FeedEx-syötteet</string>
     <string name="new_entries">uutta artikkelia</string>
+    <string name="new_entry">uusi artikkeli</string>
     <string name="error">Virhe</string>
     <string name="network_error">Ei verkkoyhteyttä</string>
     <string name="loading">Lataa…</string>
