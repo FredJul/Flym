@@ -189,8 +189,8 @@
     <string name="settings_proxy_type">Tipo</string>
 
     <plurals name="number_of_new_entries">
-        <item quantity="one">One new entry</item>
-        <item quantity="other">%d new entries</item>
+        <item quantity="one">Un nuovo articolo</item>
+        <item quantity="other">%d nuovi articoli</item>
     </plurals>
 
     <string-array name="settings_intervals">
