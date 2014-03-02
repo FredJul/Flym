@@ -4,6 +4,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -29,6 +30,9 @@ public class AboutActivity extends BaseActivity {
         }
         TextView titleView = (TextView) findViewById(R.id.about_title);
         titleView.setText(title);
+
+        TextView contentView = (TextView) findViewById(R.id.about_content);
+        contentView.setText(Html.fromHtml(getString(R.string.about_us_content)));
     }
 
     @Override
