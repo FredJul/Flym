@@ -34,11 +34,6 @@ import net.fred.feedex.provider.FeedData;
 
 public class TickerWidgetProvider extends AppWidgetProvider {
 
-    private static final String ALL_UNREAD_NUMBER = new StringBuilder("(SELECT COUNT(*) FROM ")
-            .append(FeedData.EntryColumns.TABLE_NAME).append(" WHERE ")
-            .append(FeedData.EntryColumns.IS_READ).append(" IS NULL)").toString();
-
-
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         RemoteViews widget = createWidgetView(context);
@@ -57,7 +52,7 @@ public class TickerWidgetProvider extends AppWidgetProvider {
         RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.ticker_widget);
         widget.setOnClickPendingIntent(R.id.feed_ticker_tap_area, PendingIntent.getActivity(context, 0, new Intent(context, HomeActivity.class), 0));
 
-        Cursor unread = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[]{ALL_UNREAD_NUMBER}, null, null, null);
+        Cursor unread = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[]{FeedData.ALL_UNREAD_NUMBER}, null, null, null);
         if (unread != null) {
             if (unread.moveToFirst()) {
                 widget.setTextViewText(R.id.feed_ticker, String.valueOf(unread.getInt(0)));

@@ -31,9 +31,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
+import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.utils.StringUtils;
 import net.fred.feedex.utils.UiUtils;
@@ -42,11 +42,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DrawerAdapter extends BaseAdapter {
-
-    private static final String ALL_UNREAD_NUMBER = new StringBuilder("(SELECT COUNT(*) FROM ").append(EntryColumns.TABLE_NAME).append(" WHERE ").append(EntryColumns.IS_READ)
-            .append(" IS NULL)").toString();
-    private static final String FAVORITES_NUMBER = new StringBuilder("(SELECT COUNT(*) FROM ").append(EntryColumns.TABLE_NAME).append(" WHERE ").append(EntryColumns.IS_FAVORITE)
-            .append(Constants.DB_IS_TRUE).append(')').toString();
 
     private static final int POS_ID = 0;
     private static final int POS_URL = 1;
@@ -243,7 +238,7 @@ public class DrawerAdapter extends BaseAdapter {
         mAllUnreadNumber = mFavoritesNumber = 0;
 
         // Gets the numbers of entries (should be in a thread, but it's way easier like this and it shouldn't be so slow)
-        Cursor numbers = mContext.getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{ALL_UNREAD_NUMBER, FAVORITES_NUMBER}, null, null, null);
+        Cursor numbers = mContext.getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{FeedData.ALL_UNREAD_NUMBER, FeedData.FAVORITES_NUMBER}, null, null, null);
         if (numbers != null) {
             if (numbers.moveToFirst()) {
                 mAllUnreadNumber = numbers.getInt(0);

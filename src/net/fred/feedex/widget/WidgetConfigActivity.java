@@ -83,7 +83,7 @@ public class WidgetConfigActivity extends PreferenceActivity {
 
         final PreferenceCategory feedsPreferenceCategory = (PreferenceCategory) findPreference("widget.visiblefeeds");
 
-        Cursor cursor = this.getContentResolver().query(FeedColumns.CONTENT_URI, new String[]{FeedColumns._ID, NAME_COLUMN}, null, null, null);
+        Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI, new String[]{FeedColumns._ID, NAME_COLUMN}, null, null, null);
 
         if (cursor.moveToFirst()) {
             int[] ids = new int[cursor.getCount() + 1];
