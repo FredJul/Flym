@@ -164,7 +164,6 @@
     <string name="settings_proxy_type">종류</string>
 
     <plurals name="number_of_new_entries">
-        <item quantity="one">새 항목 1개</item>
         <item quantity="other">새 항목 %d개</item>
     </plurals>
 

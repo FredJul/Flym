@@ -7,8 +7,7 @@
         android:icon="@drawable/hide_reads"
         android:showAsAction="always"
         android:title="@string/context_menu_hide_read"
-        tools:ignore="AlwaysShowAction"/>
-        />
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/menu_refresh_main"
         android:icon="@drawable/refresh"
