@@ -58,6 +58,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.SystemClock;
+import android.text.Html;
+import android.text.TextUtils;
 import android.util.Xml;
 
 import net.fred.feedex.Constants;
@@ -268,14 +270,26 @@ public class FetcherService extends IntentService {
 
             if (entryCursor.moveToFirst()) {
                 if (entryCursor.isNull(entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML))) { // If we didn't already mobilized it
-                    int linkPosition = entryCursor.getColumnIndex(EntryColumns.LINK);
+                    int linkPos = entryCursor.getColumnIndex(EntryColumns.LINK);
+                    int abstractHtmlPos = entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
                     HttpURLConnection connection = null;
 
                     try {
-                        String link = entryCursor.getString(linkPosition);
+                        String link = entryCursor.getString(linkPos);
+
+                        // Try to find a text indicator for better content extraction
+                        String contentIndicator = null;
+                        String text = entryCursor.getString(abstractHtmlPos);
+                        if (!TextUtils.isEmpty(text)) {
+                            text = Html.fromHtml(text).toString();
+                            if (text.length() > 43) {
+                                contentIndicator = text.substring(0, 40);
+                            }
+                        }
+
                         connection = NetworkUtils.setupConnection(link);
 
-                        String mobilizedHtml = ArticleTextExtractor.extractContent(NetworkUtils.getConnectionInputStream(connection));
+                        String mobilizedHtml = ArticleTextExtractor.extractContent(NetworkUtils.getConnectionInputStream(connection), contentIndicator);
 
                         if (mobilizedHtml != null) {
                             mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link));
@@ -577,7 +591,8 @@ public class FetcherService extends IntentService {
                         if (start > -1) {
                             Xml.parse(
                                     new StringReader(new String(ouputStream.toByteArray(),
-                                            xmlText.substring(start + 10, xmlText.indexOf('"', start + 11)))), handler);
+                                            xmlText.substring(start + 10, xmlText.indexOf('"', start + 11)))), handler
+                            );
                         } else {
                             // use content type
                             if (contentType != null) {

@@ -44,13 +44,14 @@ public class ArticleTextExtractor {
     /**
      * @param input extracts article text from given html string. wasn't tested
      *             with improper HTML, although jSoup should be able to handle minor stuff.
+     * @param contentIndicator a text which should be included into the extracted content, or null
      * @returns extracted article, all HTML tags stripped
      */
-    public static String extractContent(InputStream input) throws Exception {
-        return extractContent(Jsoup.parse(input, null, ""));
+    public static String extractContent(InputStream input, String contentIndicator) throws Exception {
+        return extractContent(Jsoup.parse(input, null, ""), contentIndicator);
     }
 
-    public static String extractContent(Document doc) throws Exception {
+    public static String extractContent(Document doc, String contentIndicator) throws Exception {
         if (doc == null)
             throw new NullPointerException("missing document");
 
@@ -62,7 +63,7 @@ public class ArticleTextExtractor {
         int maxWeight = 0;
         Element bestMatchElement = null;
         for (Element entry : nodes) {
-            int currentWeight = getWeight(entry);
+            int currentWeight = getWeight(entry, contentIndicator);
             if (currentWeight > maxWeight) {
                 maxWeight = currentWeight;
                 bestMatchElement = entry;
@@ -85,17 +86,18 @@ public class ArticleTextExtractor {
      * child nodes
      *
      * @param e Element to weight, along with child nodes
+     * @param contentIndicator a text which should be included into the extracted content, or null
      */
-    protected static int getWeight(Element e) {
+    protected static int getWeight(Element e, String contentIndicator) {
         int weight = calcWeight(e);
         weight += (int) Math.round(e.ownText().length() / 100.0 * 10);
-        weight += weightChildNodes(e);
+        weight += weightChildNodes(e, contentIndicator);
         return weight;
     }
 
     /**
      * Weights a child nodes of given Element. During tests some difficulties
-     * were met. For instanance, not every single document has nested paragraph
+     * were met. For instance, not every single document has nested paragraph
      * tags inside of the major article tag. Sometimes people are adding one
      * more nesting level. So, we're adding 4 points for every 100 symbols
      * contained in tag nested inside of the current weighted element, but only
@@ -104,8 +106,9 @@ public class ArticleTextExtractor {
      * increasing probability of the correct extraction.
      *
      * @param rootEl Element, who's child nodes will be weighted
+     * @param contentIndicator a text which should be included into the extracted content, or null
      */
-    protected static int weightChildNodes(Element rootEl) {
+    protected static int weightChildNodes(Element rootEl, String contentIndicator) {
         int weight = 0;
         Element caption = null;
         List<Element> pEls = new ArrayList<Element>(5);
@@ -114,6 +117,10 @@ public class ArticleTextExtractor {
             int ownTextLength = ownText.length();
             if (ownTextLength < 20)
                 continue;
+
+            if (contentIndicator != null && ownText.contains(contentIndicator)) {
+                weight += 200; // We certainly found the item
+            }
 
             if (ownTextLength > 200)
                 weight += Math.max(50, ownTextLength / 10);
