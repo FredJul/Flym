@@ -124,6 +124,8 @@ public class EntryView extends WebView {
 
     private OnActionListener mListener;
 
+    private boolean mButtonsShown;
+
     private final JavaScriptObject mInjectedJSObject = new JavaScriptObject();
 
     public EntryView(Context context) {
@@ -171,8 +173,14 @@ public class EntryView extends WebView {
         // } catch (MalformedURLException ignored) {
         // }
 
-        // do not put 'null' to the base url...
-        loadDataWithBaseURL("", generateHtmlContent(title, link, contentText, enclosure, author, timestamp, preferFullText), TEXT_HTML, Constants.UTF8, null);
+        if (contentText.startsWith(Constants.FILE_SCHEME)) {
+            mButtonsShown = false;
+            loadUrl(contentText);
+        } else {
+            mButtonsShown = true;
+            // do not put 'null' to the base url...
+            loadDataWithBaseURL("", generateHtmlContent(title, link, contentText, enclosure, author, timestamp, preferFullText), TEXT_HTML, Constants.UTF8, null);
+        }
     }
 
     private String generateHtmlContent(String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
@@ -250,6 +258,10 @@ public class EntryView extends WebView {
                 return true;
             }
         });
+    }
+
+    public boolean getButtonsShown() {
+        return mButtonsShown;
     }
 
     private class JavaScriptObject {

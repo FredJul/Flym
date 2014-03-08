@@ -104,6 +104,8 @@
     <string name="share_favorites_title">FeedEx: favoriter</string>
     <string name="copied_clipboard">Länk kopierad</string>
     <string name="get_full_text">Hämta hela texten</string>
+    <string name="get_webpage">Download webpage for offline reading</string>
+    <string name="get_desktop_webpage">Download desktop version of webpage</string>
     <string name="original_text">Visa originaltexten</string>
     <string name="see_enclosure">Visa bifogad mediafil</string>
     <string name="see_link">Öppna i webläsare</string>
@@ -118,6 +120,7 @@
     <string name="green">Grön</string>
     <string name="blue">Blå</string>
     <string name="transparency">Transparens</string>
+    <string name="feedex_ticker">FeedEx unread count</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisk uppdatering</string>

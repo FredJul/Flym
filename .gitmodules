@@ -1,0 +1,3 @@
+[submodule "wget-android"]
+	path = wget-android
+	url = https://github.com/pelya/wget-android.git

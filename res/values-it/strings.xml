@@ -110,6 +110,8 @@
     <string name="share_favorites_title">FeedEx: articoli preferiti</string>
     <string name="copied_clipboard">Link copiato</string>
     <string name="get_full_text">Recupera il testo completo</string>
+    <string name="get_webpage">Download webpage for offline reading</string>
+    <string name="get_desktop_webpage">Download desktop version of webpage</string>
     <string name="original_text">Mostra testo originale</string>
     <string name="see_enclosure">Vedi allegati</string>
     <string name="see_link">Vedi nel browser</string>
@@ -124,6 +126,7 @@
     <string name="green">Verde</string>
     <string name="blue">Blu</string>
     <string name="transparency">Trasparenza</string>
+    <string name="feedex_ticker">FeedEx unread count</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Aggiornamento automatico</string>

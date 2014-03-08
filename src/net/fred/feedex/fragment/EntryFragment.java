@@ -175,6 +175,13 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
             }
         }
 
+        public boolean getButtonsShown(int pagerPos) {
+            EntryView view = mEntryViews.get(pagerPos);
+            if (view != null)
+                return view.getButtonsShown();
+            return true;
+        }
+
         public void onResume() {
             if (mEntriesIds != null) {
                 EntryView view = mEntryViews.get(mCurrentPagerPos);
@@ -302,6 +309,18 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        if (mEntryPagerAdapter.getButtonsShown(mCurrentPagerPos)) {
+            menu.findItem(R.id.menu_open_in_browser).setVisible(false);
+            menu.findItem(R.id.menu_show_original_text).setVisible(false);
+        } else {
+            menu.findItem(R.id.menu_open_in_browser).setVisible(true);
+            menu.findItem(R.id.menu_show_original_text).setVisible(true);
+        }
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mEntriesIds != null) {
             Activity activity = getActivity();
@@ -369,6 +388,16 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                         }
                     }.start();
                     activity.finish();
+                    break;
+                }
+                case R.id.menu_open_in_browser: {
+                    Cursor cursor = mEntryPagerAdapter.getCursor(mCurrentPagerPos);
+                    String link = cursor.getString(mLinkPos);
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
+                    break;
+                }
+                case R.id.menu_show_original_text: {
+                    onClickOriginalText();
                     break;
                 }
             }

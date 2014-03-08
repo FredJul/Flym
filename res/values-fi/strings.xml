@@ -108,6 +108,8 @@
     <string name="share_favorites_title">FeedEx: tähdellä merkityt</string>
     <string name="copied_clipboard">Linkki kopioitu</string>
     <string name="get_full_text">Hae koko teksti</string>
+    <string name="get_webpage">Download webpage for offline reading</string>
+    <string name="get_desktop_webpage">Download desktop version of webpage</string>
     <string name="original_text">Näytä alkuperäinen teksti</string>
     <string name="see_enclosure">Avaa liite</string>
     <string name="see_link">Avaa selaimessa</string>
@@ -122,6 +124,7 @@
     <string name="green">Vihreä</string>
     <string name="blue">Sininen</string>
     <string name="transparency">Läpinäkyvyys</string>
+    <string name="feedex_ticker">FeedEx unread count</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automaattinen päivitys</string>

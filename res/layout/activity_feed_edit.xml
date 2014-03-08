@@ -76,10 +76,28 @@
                         android:id="@+id/retrieve_fulltext"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentLeft="true"
                         android:layout_below="@+id/feed_url"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
                         android:text="@string/get_full_text" />
+
+                    <CheckBox
+                        android:id="@+id/retrieve_webpage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_below="@+id/retrieve_fulltext"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/get_webpage" />
+
+                    <CheckBox
+                        android:id="@+id/retrieve_desktop_webpage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_below="@+id/retrieve_webpage"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/get_desktop_webpage" />
                 </RelativeLayout>
 
                 <RelativeLayout
