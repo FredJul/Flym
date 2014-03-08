@@ -50,8 +50,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.webkit.JavascriptInterface;
@@ -76,8 +74,6 @@ public class EntryView extends WebView {
 
         public void onClickEnclosure();
     }
-
-    private static final String STATE_SCROLL_PERCENTAGE = "STATE_SCROLL_PERCENTAGE";
 
     private static final String TEXT_HTML = "text/html";
     private static final String HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>";
@@ -126,8 +122,6 @@ public class EntryView extends WebView {
     private static final String LINK_BUTTON_END = "</a></p>";
     private static final String IMAGE_ENCLOSURE = "[@]image/";
 
-    private float mScrollPercentage = 0;
-
     private OnActionListener mListener;
 
     private final JavaScriptObject mInjectedJSObject = new JavaScriptObject();
@@ -148,34 +142,6 @@ public class EntryView extends WebView {
         super(context, attrs, defStyle);
 
         setupWebview();
-    }
-
-    @Override
-    protected Parcelable onSaveInstanceState() {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("superInstanceState", super.onSaveInstanceState());
-        bundle.putFloat(STATE_SCROLL_PERCENTAGE, getScrollPercentage());
-
-        return bundle;
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Parcelable state) {
-        Bundle bundle = (Bundle) state;
-        mScrollPercentage = bundle.getFloat(STATE_SCROLL_PERCENTAGE);
-        super.onRestoreInstanceState(bundle.getParcelable("superInstanceState"));
-    }
-
-    public float getScrollPercentage() {
-        float positionTopView = getTop();
-        float contentHeight = getContentHeight();
-        float currentScrollPosition = getScrollY();
-
-        return (currentScrollPosition - positionTopView) / contentHeight;
-    }
-
-    public void setScrollPercentage(float scrollPercentage) {
-        mScrollPercentage = scrollPercentage;
     }
 
     public void setListener(OnActionListener listener) {
@@ -271,24 +237,6 @@ public class EntryView extends WebView {
         setWebChromeClient(new WebChromeClient());
 
         setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-
-                if (mScrollPercentage != 0) {
-                    view.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            float webviewSize = getContentHeight() - getTop();
-                            float positionInWV = webviewSize * mScrollPercentage;
-                            int positionY = Math.round(getTop() + positionInWV);
-                            scrollTo(0, positionY);
-                        }
-                        // Delay the scrollTo to make it work
-                    }, 150);
-                }
-            }
-
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Context context = getContext();
