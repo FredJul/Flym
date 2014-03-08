@@ -67,7 +67,7 @@ public class ArticleTextExtractor {
             if (currentWeight > maxWeight) {
                 maxWeight = currentWeight;
                 bestMatchElement = entry;
-                if (maxWeight > 200)
+                if (maxWeight > 300)
                     break;
             }
         }
@@ -119,7 +119,7 @@ public class ArticleTextExtractor {
                 continue;
 
             if (contentIndicator != null && ownText.contains(contentIndicator)) {
-                weight += 200; // We certainly found the item
+                weight += 100; // We certainly found the item
             }
 
             if (ownTextLength > 200)
