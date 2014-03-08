@@ -51,7 +51,7 @@ public class ArticleTextExtractor {
         return extractContent(Jsoup.parse(input, null, ""), contentIndicator);
     }
 
-    public static String extractContent(Document doc, String contentIndicator) throws Exception {
+    public static String extractContent(Document doc, String contentIndicator) {
         if (doc == null)
             throw new NullPointerException("missing document");
 
@@ -128,7 +128,7 @@ public class ArticleTextExtractor {
             if (child.tagName().equals("h1") || child.tagName().equals("h2")) {
                 weight += 30;
             } else if (child.tagName().equals("div") || child.tagName().equals("p")) {
-                weight += calcWeightForChild(child, ownText);
+                weight += calcWeightForChild(ownText);
                 if (child.tagName().equals("p") && ownTextLength > 50)
                     pEls.add(child);
 
@@ -152,7 +152,7 @@ public class ArticleTextExtractor {
         return weight;
     }
 
-    private static int calcWeightForChild(Element child, String ownText) {
+    private static int calcWeightForChild(String ownText) {
         int c = count(ownText, "&quot;");
         c += count(ownText, "&lt;");
         c += count(ownText, "&gt;");

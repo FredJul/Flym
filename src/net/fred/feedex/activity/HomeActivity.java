@@ -59,13 +59,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
 
-    private static final String FEED_UNREAD_NUMBER = new StringBuilder("(SELECT COUNT(*) FROM ").append(EntryColumns.TABLE_NAME).append(" WHERE ").append(EntryColumns.IS_READ)
-            .append(" IS NULL AND ").append(EntryColumns.FEED_ID).append('=').append(FeedColumns.TABLE_NAME).append('.').append(FeedColumns._ID).append(')').toString();
+    private static final String FEED_UNREAD_NUMBER = "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + '=' + FeedColumns.TABLE_NAME + '.' + FeedColumns._ID + ')';
 
-    private static final String WHERE_UNREAD_ONLY = new StringBuilder("(SELECT COUNT(*) FROM ").append(EntryColumns.TABLE_NAME).append(" WHERE ").append(EntryColumns.IS_READ)
-            .append(" IS NULL AND ").append(EntryColumns.FEED_ID).append("=").append(FeedColumns.TABLE_NAME).append('.').append(FeedColumns._ID).append(") > 0").append(" OR (")
-            .append(FeedColumns.IS_GROUP).append("=1 AND (SELECT COUNT(*) FROM ").append(FeedData.ENTRIES_TABLE_WITH_FEED_INFO).append(" WHERE ").append(EntryColumns.IS_READ)
-            .append(" IS NULL AND ").append(FeedColumns.GROUP_ID).append('=').append(FeedColumns.TABLE_NAME).append('.').append(FeedColumns._ID).append(") > 0)").toString();
+    private static final String WHERE_UNREAD_ONLY = "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + "=" + FeedColumns.TABLE_NAME + '.' + FeedColumns._ID + ") > 0" + " OR (" + FeedColumns.IS_GROUP + "=1 AND (SELECT COUNT(*) FROM " + FeedData.ENTRIES_TABLE_WITH_FEED_INFO + " WHERE " + EntryColumns.IS_READ + " IS NULL AND " + FeedColumns.GROUP_ID + '=' + FeedColumns.TABLE_NAME + '.' + FeedColumns._ID + ") > 0)";
 
     private static final int LOADER_ID = 0;
 
@@ -294,7 +290,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         CursorLoader cursorLoader = new CursorLoader(this, FeedColumns.GROUPED_FEEDS_CONTENT_URI, new String[]{FeedColumns._ID, FeedColumns.URL, FeedColumns.NAME,
                 FeedColumns.IS_GROUP, FeedColumns.GROUP_ID, FeedColumns.ICON, FeedColumns.LAST_UPDATE, FeedColumns.ERROR, FEED_UNREAD_NUMBER},
-                PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) ? "" : WHERE_UNREAD_ONLY, null, null);
+                PrefUtils.getBoolean(PrefUtils.SHOW_READ, true) ? "" : WHERE_UNREAD_ONLY, null, null
+        );
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
     }

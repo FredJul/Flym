@@ -85,7 +85,7 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
         static final int SWIPE_MAX_OFF_PATH = 150;
         static final int SWIPE_THRESHOLD_VELOCITY = 150;
 
-        private GestureDetector mGestureDetector;
+        private final GestureDetector mGestureDetector;
 
         public SwipeGestureListener(Context context) {
             mGestureDetector = new GestureDetector(context, this);
@@ -261,7 +261,8 @@ public class EntriesListFragment extends ListFragment implements LoaderManager.L
                     }
                     startActivity(Intent.createChooser(
                             new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_favorites_title))
-                                    .putExtra(Intent.EXTRA_TEXT, starredList).setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)));
+                                    .putExtra(Intent.EXTRA_TEXT, starredList).setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)
+                    ));
                 }
                 return true;
             }

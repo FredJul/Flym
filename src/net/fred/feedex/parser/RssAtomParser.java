@@ -154,7 +154,7 @@ public class RssAtomParser extends DefaultHandler {
     private int newCount = 0;
     private final String feedName;
     private String feedTitle;
-    private String feedBaseUrl;
+    private final String feedBaseUrl;
     private boolean done = false;
     private final Date keepDateBorder;
     private boolean fetchImages = false;
@@ -644,7 +644,6 @@ public class RssAtomParser extends DefaultHandler {
         }
 
         private final ArrayList<Rule> mFilters = new ArrayList<Rule>();
-        private boolean rejectEntriesByDefault = false;
 
         public FeedFilters(String feedId) {
             ContentResolver cr = MainApplication.getContext().getContentResolver();

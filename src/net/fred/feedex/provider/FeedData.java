@@ -71,10 +71,8 @@ public class FeedData {
     public static final String ENTRIES_TABLE_WITH_FEED_INFO = EntryColumns.TABLE_NAME + " JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.NAME + ", " + FeedColumns.URL + ", " +
             FeedColumns.ICON + ", " + FeedColumns.GROUP_ID + " FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + EntryColumns.TABLE_NAME + '.' + EntryColumns.FEED_ID + " = f.joined_feed_id)";
 
-    public static final String ALL_UNREAD_NUMBER = new StringBuilder("(SELECT COUNT(*) FROM ").append(FeedData.EntryColumns.TABLE_NAME).append(" WHERE ").append(FeedData.EntryColumns.IS_READ)
-            .append(" IS NULL)").toString();
-    public static final String FAVORITES_NUMBER = new StringBuilder("(SELECT COUNT(*) FROM ").append(FeedData.EntryColumns.TABLE_NAME).append(" WHERE ").append(FeedData.EntryColumns.IS_FAVORITE)
-            .append(Constants.DB_IS_TRUE).append(')').toString();
+    public static final String ALL_UNREAD_NUMBER = "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)";
+    public static final String FAVORITES_NUMBER = "(SELECT COUNT(*) FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ')';
 
     public static class FeedColumns implements BaseColumns {
         public static final String TABLE_NAME = "feeds";

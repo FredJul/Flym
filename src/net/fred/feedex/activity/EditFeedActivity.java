@@ -106,7 +106,6 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
     private EditText mNameEditText, mUrlEditText;
     private CheckBox mRetrieveFulltextCb;
     private ListView mFiltersListView;
-    private String mPreviousName;
 
     private FiltersCursorAdapter mFiltersCursorAdapter;
 
@@ -292,8 +291,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
                 Cursor cursor = getContentResolver().query(intent.getData(), FEED_PROJECTION, null, null, null);
 
                 if (cursor.moveToNext()) {
-                    mPreviousName = cursor.getString(0);
-                    mNameEditText.setText(mPreviousName);
+                    mNameEditText.setText(cursor.getString(0));
                     mUrlEditText.setText(cursor.getString(1));
                     mRetrieveFulltextCb.setChecked(cursor.getInt(2) == 1);
                     cursor.close();

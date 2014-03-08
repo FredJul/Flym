@@ -679,9 +679,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
         if (!uriSearchParam.isEmpty()) {
             uriSearchParam = DatabaseUtils.sqlEscapeString("%" + Uri.decode(uriSearchParam) + "%");
-            return new StringBuilder(EntryColumns.TITLE).append(" LIKE ").append(uriSearchParam).append(Constants.DB_OR)
-                    .append(EntryColumns.ABSTRACT).append(" LIKE ").append(uriSearchParam).append(Constants.DB_OR)
-                    .append(EntryColumns.MOBILIZED_HTML).append(" LIKE ").append(uriSearchParam).toString();
+            return EntryColumns.TITLE + " LIKE " + uriSearchParam + Constants.DB_OR + EntryColumns.ABSTRACT + " LIKE " + uriSearchParam + Constants.DB_OR + EntryColumns.MOBILIZED_HTML + " LIKE " + uriSearchParam;
         } else {
             return "1 = 2"; // to have 0 result with an empty search
         }

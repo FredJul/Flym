@@ -33,7 +33,7 @@ import java.util.Date;
 
 public class StringUtils {
 
-    public static DateFormat DATE_SHORT_FORMAT = null;
+    public static final DateFormat DATE_SHORT_FORMAT = null;
 
     static {
         // getBestTimePattern() is only available in API 18 and up (Android 4.3 and better)

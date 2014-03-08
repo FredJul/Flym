@@ -25,7 +25,7 @@ import android.content.Context;
 
 public final class Constants {
 
-    public static NotificationManager NOTIF_MGR = (NotificationManager) MainApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+    public static final NotificationManager NOTIF_MGR = (NotificationManager) MainApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
     public static final String INTENT_FROM_WIDGET = "fromWidget";
 

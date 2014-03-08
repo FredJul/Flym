@@ -61,8 +61,6 @@ public class DrawerAdapter extends BaseAdapter {
 
     private static final int CACHE_MAX_ENTRIES = 100;
     private final Map<Long, String> mFormattedDateCache = new LinkedHashMap<Long, String>(CACHE_MAX_ENTRIES + 1, .75F, true) {
-        private static final long serialVersionUID = -3678524849080041298L;
-
         @Override
         public boolean removeEldestEntry(Map.Entry<Long, String> eldest) {
             return size() > CACHE_MAX_ENTRIES;

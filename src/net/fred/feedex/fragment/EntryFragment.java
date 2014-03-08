@@ -88,7 +88,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
 
     private class EntryPagerAdapter extends PagerAdapter {
 
-        private SparseArray<EntryView> mEntryViews = new SparseArray<EntryView>();
+        private final SparseArray<EntryView> mEntryViews = new SparseArray<EntryView>();
 
         public EntryPagerAdapter() {
         }
@@ -111,13 +111,13 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             getLoaderManager().destroyLoader(position);
-            ((ViewPager) container).removeView((View) object);
+            container.removeView((View) object);
             mEntryViews.delete(position);
         }
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return view == ((View) object);
+            return view == object;
         }
 
         public void displayEntry(int pagerPos, Cursor newCursor, boolean forceUpdate) {
