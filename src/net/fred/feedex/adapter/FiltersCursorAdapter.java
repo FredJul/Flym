@@ -54,9 +54,10 @@ public class FiltersCursorAdapter extends ResourceCursorAdapter {
             view.setBackgroundResource(android.R.color.transparent);
         }
 
-        isAcceptRuleTextView.setText(cursor.getInt(isAcceptRulePosition) == 1 ? R.string.accept : R.string.reject);
-        // setTextColor does not work here for some reason
-        //isAcceptRuleTextView.setTextColor(cursor.getInt(isAcceptRulePosition) == 1 ? android.R.color.holo_green_dark : android.R.color.holo_red_dark);
+        boolean isAcceptRule = cursor.getInt(isAcceptRulePosition) == 1;
+        isAcceptRuleTextView.setText(isAcceptRule ? R.string.accept : R.string.reject);
+        isAcceptRuleTextView.setTextColor(isAcceptRule ? context.getResources().getColor(android.R.color.holo_green_dark) :
+                context.getResources().getColor(android.R.color.holo_red_dark));
         filterTextTextView.setText(cursor.getString(filterTextColumnPosition));
         isAppliedToTitleTextView.setText(cursor.getInt(isAppliedToTitleColumnPosition) == 1 ? R.string.filter_apply_to_title : R.string.filter_apply_to_content);
     }
