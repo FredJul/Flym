@@ -38,6 +38,8 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -55,6 +57,10 @@ public class NetworkUtils {
 
     private static final String FILE_FAVICON = "/favicon.ico";
     private static final String PROTOCOL_SEPARATOR = "://";
+
+    private static final CookieManager COOKIE_MANAGER = new CookieManager() {{
+        CookieHandler.setDefault(this);
+    }};
 
     private static class PictureFilenameFilter implements FilenameFilter {
         private static final String REGEX = "__[^\\.]*\\.[A-Za-z]*";
@@ -246,6 +252,8 @@ public class NetworkUtils {
         connection.setUseCaches(false);
         connection.setInstanceFollowRedirects(true);
         connection.setRequestProperty("accept", "*/*");
+
+        COOKIE_MANAGER.getCookieStore().removeAll(); // Cookie is important for some sites, but we clean them each times
         connection.connect();
 
         return connection;
