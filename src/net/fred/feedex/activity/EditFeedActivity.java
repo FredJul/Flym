@@ -576,7 +576,7 @@ class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, St
         try {
             HttpURLConnection conn = NetworkUtils.setupConnection("https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=" + mSearchText);
             try {
-                String jsonStr = new String(NetworkUtils.getBytes(NetworkUtils.getConnectionInputStream(conn)));
+                String jsonStr = new String(NetworkUtils.getBytes(conn.getInputStream()));
 
                 // Parse results
                 final ArrayList<HashMap<String, String>> results = new ArrayList<HashMap<String, String>>();

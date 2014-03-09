@@ -29,7 +29,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.text.Html;
 
-import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.provider.FeedData;
 
@@ -46,7 +45,6 @@ import java.net.ProxySelector;
 import java.net.URL;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.zip.GZIPInputStream;
 
 public class NetworkUtils {
 
@@ -55,11 +53,8 @@ public class NetworkUtils {
     public static final String TEMP_PREFIX = "TEMP__";
     public static final String ID_SEPARATOR = "__";
 
-    private static final String GZIP = "gzip";
     private static final String FILE_FAVICON = "/favicon.ico";
     private static final String PROTOCOL_SEPARATOR = "://";
-    private static final String _HTTP = "http";
-    private static final String _HTTPS = "https";
 
     private static class PictureFilenameFilter implements FilenameFilter {
         private static final String REGEX = "__[^\\.]*\\.[A-Za-z]*";
@@ -182,7 +177,7 @@ public class NetworkUtils {
         try {
             iconURLConnection = setupConnection(new URL(url.getProtocol() + PROTOCOL_SEPARATOR + url.getHost() + FILE_FAVICON));
 
-            byte[] iconBytes = getBytes(getConnectionInputStream(iconURLConnection));
+            byte[] iconBytes = getBytes(iconURLConnection.getInputStream());
             if (iconBytes != null && iconBytes.length > 0) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
                 if (bitmap != null && bitmap.getWidth() != 0 && bitmap.getHeight() != 0) {
@@ -213,10 +208,6 @@ public class NetworkUtils {
     }
 
     public static HttpURLConnection setupConnection(URL url) throws IOException {
-        return setupConnection(url, 0);
-    }
-
-    public static HttpURLConnection setupConnection(URL url, int cycle) throws IOException {
         Proxy proxy = null;
 
         ConnectivityManager connectivityManager = (ConnectivityManager) MainApplication.getContext()
@@ -253,39 +244,10 @@ public class NetworkUtils {
         connection.setConnectTimeout(30000);
         connection.setReadTimeout(30000);
         connection.setUseCaches(false);
-
+        connection.setInstanceFollowRedirects(true);
         connection.setRequestProperty("accept", "*/*");
         connection.connect();
 
-        String location = connection.getHeaderField("Location");
-
-        if (location != null
-                && (url.getProtocol().equals(_HTTP) && location.startsWith(Constants.HTTPS_SCHEME) || url.getProtocol().equals(_HTTPS)
-                && location.startsWith(Constants.HTTP_SCHEME))) {
-            // if location != null, the system-automatic redirect has failed
-            // which indicates a protocol change
-
-            connection.disconnect();
-
-            if (cycle < 5) {
-                return setupConnection(new URL(location), cycle + 1);
-            } else {
-                throw new IOException("Too many redirects.");
-            }
-        }
         return connection;
-    }
-
-    /**
-     * This is a small wrapper for getting the properly encoded inputstream if is is gzip compressed and not properly recognized.
-     */
-    public static InputStream getConnectionInputStream(HttpURLConnection connection) throws IOException {
-        InputStream inputStream = connection.getInputStream();
-
-        if (GZIP.equals(connection.getContentEncoding()) && !(inputStream instanceof GZIPInputStream)) {
-            return new GZIPInputStream(inputStream);
-        } else {
-            return inputStream;
-        }
     }
 }

@@ -289,7 +289,7 @@ public class FetcherService extends IntentService {
 
                         connection = NetworkUtils.setupConnection(link);
 
-                        String mobilizedHtml = ArticleTextExtractor.extractContent(NetworkUtils.getConnectionInputStream(connection), contentIndicator);
+                        String mobilizedHtml = ArticleTextExtractor.extractContent(connection.getInputStream(), contentIndicator);
 
                         if (mobilizedHtml != null) {
                             mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link));
@@ -457,7 +457,7 @@ public class FetcherService extends IntentService {
 
                 if (fetchMode == 0) {
                     if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(NetworkUtils.getConnectionInputStream(connection)));
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
                         String line;
                         int posStart = -1;
@@ -524,7 +524,7 @@ public class FetcherService extends IntentService {
                         }
 
                     } else {
-                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(NetworkUtils.getConnectionInputStream(connection)));
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
                         char[] chars = new char[20];
 
@@ -563,19 +563,19 @@ public class FetcherService extends IntentService {
 
                             int index2 = contentType.indexOf(';', index);
 
-                            InputStream inputStream = NetworkUtils.getConnectionInputStream(connection);
+                            InputStream inputStream = connection.getInputStream();
                             Xml.parse(inputStream,
                                     Xml.findEncodingByName(index2 > -1 ? contentType.substring(index + 8, index2) : contentType.substring(index + 8)),
                                     handler);
                         } else {
-                            InputStreamReader reader = new InputStreamReader(NetworkUtils.getConnectionInputStream(connection));
+                            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
                             Xml.parse(reader, handler);
                         }
                         break;
                     }
                     case FETCHMODE_REENCODE: {
                         ByteArrayOutputStream ouputStream = new ByteArrayOutputStream();
-                        InputStream inputStream = NetworkUtils.getConnectionInputStream(connection);
+                        InputStream inputStream = connection.getInputStream();
 
                         byte[] byteBuffer = new byte[4096];
 
