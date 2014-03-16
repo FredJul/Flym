@@ -75,7 +75,6 @@ import net.fred.feedex.utils.ArticleTextExtractor;
 import net.fred.feedex.utils.HtmlUtils;
 import net.fred.feedex.utils.NetworkUtils;
 import net.fred.feedex.utils.PrefUtils;
-import net.fred.feedex.widget.TickerWidgetProvider;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -421,8 +420,6 @@ public class FetcherService extends IntentService {
         }
 
         executor.shutdownNow(); // To purge all threads
-
-        TickerWidgetProvider.updateWidget(this);
 
         return globalResult;
     }

@@ -5,7 +5,7 @@
     android:versionCode="39"
     android:versionName="1.5.3">
 
-<uses-sdk
+    <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="19" />
 
@@ -53,17 +53,17 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".activity.EntryActivity"
-            android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize">
-        <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTask">
+            <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.feedex.entry" />
             </intent-filter>
         </activity>
-        <activity 
+        <activity
             android:name=".activity.GeneralPrefsActivity"
-            android:label="@string/menu_settings"/>
+            android:label="@string/menu_settings" />
         <activity android:name=".widget.WidgetConfigActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -110,6 +110,8 @@
         <service
             android:name=".widget.WidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <service android:name=".widget.TickerWidgetService" />
 
         <receiver android:name=".receiver.BootCompletedBroadcastReceiver">
             <intent-filter>

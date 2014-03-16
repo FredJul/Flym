@@ -63,7 +63,6 @@ import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.UiUtils;
 import net.fred.feedex.view.EntryView;
-import net.fred.feedex.widget.TickerWidgetProvider;
 
 public class EntryFragment extends Fragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<Cursor>, EntryView.OnActionListener {
 
@@ -340,7 +339,8 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                         String title = cursor.getString(mTitlePos);
                         startActivity(Intent.createChooser(
                                 new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, link)
-                                        .setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)));
+                                        .setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)
+                        ));
                     }
                     break;
                 }
@@ -365,7 +365,6 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                         public void run() {
                             ContentResolver cr = MainApplication.getContext().getContentResolver();
                             cr.update(uri, FeedData.getUnreadContentValues(), null, null);
-                            TickerWidgetProvider.updateWidget(MainApplication.getContext());
                         }
                     }.start();
                     activity.finish();
@@ -454,8 +453,6 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                         Cursor updatedCursor = cr.query(uri, null, null, null, null);
                         updatedCursor.moveToFirst();
                         mEntryPagerAdapter.setUpdatedCursor(mCurrentPagerPos, updatedCursor);
-
-                        TickerWidgetProvider.updateWidget(MainApplication.getContext());
                     }
                 }).start();
             }
@@ -554,20 +551,20 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                                 showEnclosure(uri, enclosure, position1, position2);
                             }
                         }).setNegativeButton(R.string.download_and_save, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    DownloadManager.Request r = new DownloadManager.Request(uri);
-                                    r.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
-                                    r.allowScanningByMediaScanner();
-                                    r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                                    DownloadManager dm = (DownloadManager) MainApplication.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
-                                    dm.enqueue(r);
-                                } catch (Exception e) {
-                                    Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        }).show();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            DownloadManager.Request r = new DownloadManager.Request(uri);
+                            r.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
+                            r.allowScanningByMediaScanner();
+                            r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                            DownloadManager dm = (DownloadManager) MainApplication.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+                            dm.enqueue(r);
+                        } catch (Exception e) {
+                            Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }).show();
             }
         });
     }

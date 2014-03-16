@@ -19,47 +19,18 @@
 
 package net.fred.feedex.widget;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.widget.RemoteViews;
-
-import net.fred.feedex.R;
-import net.fred.feedex.activity.HomeActivity;
-import net.fred.feedex.provider.FeedData;
 
 public class TickerWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        RemoteViews widget = createWidgetView(context);
-        for (int appWidgetId : appWidgetIds) {
-            appWidgetManager.updateAppWidget(appWidgetId, widget);
-        }
+        Intent svcIntent = new Intent(context, TickerWidgetService.class);
+        context.startService(svcIntent);
+
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-    }
-
-    public static void updateWidget(Context context) {
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        appWidgetManager.updateAppWidget(new ComponentName(context.getPackageName(), TickerWidgetProvider.class.getName()), createWidgetView(context));
-    }
-
-    static RemoteViews createWidgetView(Context context) {
-        RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.ticker_widget);
-        widget.setOnClickPendingIntent(R.id.feed_ticker_tap_area, PendingIntent.getActivity(context, 0, new Intent(context, HomeActivity.class), 0));
-
-        Cursor unread = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[]{FeedData.ALL_UNREAD_NUMBER}, null, null, null);
-        if (unread != null) {
-            if (unread.moveToFirst()) {
-                widget.setTextViewText(R.id.feed_ticker, String.valueOf(unread.getInt(0)));
-            }
-            unread.close();
-        }
-
-        return widget;
     }
 }

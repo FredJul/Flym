@@ -69,7 +69,6 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.utils.StringUtils;
 import net.fred.feedex.utils.UiUtils;
-import net.fred.feedex.widget.TickerWidgetProvider;
 
 import java.util.Vector;
 
@@ -203,7 +202,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             public void run() {
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
                 cr.update(mUri, FeedData.getReadContentValues(), EntryColumns.WHERE_UNREAD, null);
-                TickerWidgetProvider.updateWidget(MainApplication.getContext());
             }
         }.start();
     }
@@ -218,7 +216,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
                 Uri entryUri = ContentUris.withAppendedId(mUri, id);
                 cr.update(entryUri, FeedData.getReadContentValues(), null, null);
-                TickerWidgetProvider.updateWidget(MainApplication.getContext());
             }
         }.start();
     }
@@ -233,7 +230,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
                 Uri entryUri = ContentUris.withAppendedId(mUri, id);
                 cr.update(entryUri, FeedData.getUnreadContentValues(), null, null);
-                TickerWidgetProvider.updateWidget(MainApplication.getContext());
             }
         }.start();
     }
