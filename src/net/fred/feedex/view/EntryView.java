@@ -226,7 +226,7 @@ public class EntryView extends WebView {
         // Text zoom level from preferences
         int fontSize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"));
         if (fontSize != 0) {
-            getSettings().setTextZoom(100 + (fontSize * 8));
+            getSettings().setTextZoom(100 + (fontSize * 20));
         }
 
         // For javascript
