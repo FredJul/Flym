@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Handler;
 import android.os.IBinder;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import net.fred.feedex.R;
@@ -65,7 +66,16 @@ public class TickerWidgetService extends Service {
         Cursor unread = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[]{FeedData.ALL_UNREAD_NUMBER}, null, null, null);
         if (unread != null) {
             if (unread.moveToFirst()) {
-                widget.setTextViewText(R.id.feed_ticker, String.valueOf(unread.getInt(0)));
+                int unread_count = unread.getInt(0);
+                if (unread_count > 0) {
+                    widget.setTextViewText(R.id.feed_ticker, String.valueOf(unread_count));
+                    widget.setViewVisibility(R.id.feed_ticker, View.VISIBLE);
+                    widget.setViewVisibility(R.id.feed_ticker_circle, View.VISIBLE);
+                }
+                else {
+                    widget.setViewVisibility(R.id.feed_ticker, View.INVISIBLE);
+                    widget.setViewVisibility(R.id.feed_ticker_circle, View.INVISIBLE);
+                }
             }
             unread.close();
         }

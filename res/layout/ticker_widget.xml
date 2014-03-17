@@ -11,6 +11,7 @@
         android:src="@drawable/icon" />
 
     <ImageView
+        android:id="@+id/feed_ticker_circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/feed_ticker"
