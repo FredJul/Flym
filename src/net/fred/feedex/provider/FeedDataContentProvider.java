@@ -64,6 +64,8 @@ import net.fred.feedex.provider.FeedData.FilterColumns;
 import net.fred.feedex.provider.FeedData.TaskColumns;
 import net.fred.feedex.utils.NetworkUtils;
 
+import java.util.Date;
+
 public class FeedDataContentProvider extends ContentProvider {
 
     public static final int URI_GROUPED_FEEDS = 1;
@@ -115,6 +117,8 @@ public class FeedDataContentProvider extends ContentProvider {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/search/*", URI_SEARCH);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/search/*/#", URI_SEARCH_ENTRY);
     }
+
+    private final String[] MAX_PRIORITY = new String[]{"MAX(" + FeedColumns.PRIORITY + ")"};
 
     private DatabaseHelper mDatabaseHelper;
 
@@ -269,8 +273,6 @@ public class FeedDataContentProvider extends ContentProvider {
         return cursor;
     }
 
-    private final String[] MAXPRIORITY = new String[]{"MAX(" + FeedColumns.PRIORITY + ")"};
-
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         long newId;
@@ -285,9 +287,9 @@ public class FeedDataContentProvider extends ContentProvider {
                 Cursor cursor;
                 if (values.containsKey(FeedColumns.GROUP_ID)) {
                     String groupId = values.getAsString(FeedColumns.GROUP_ID);
-                    cursor = query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupId), MAXPRIORITY, null, null, null);
+                    cursor = query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupId), MAX_PRIORITY, null, null, null);
                 } else {
-                    cursor = query(FeedColumns.GROUPS_CONTENT_URI, MAXPRIORITY, null, null, null);
+                    cursor = query(FeedColumns.GROUPS_CONTENT_URI, MAX_PRIORITY, null, null, null);
                 }
 
                 if (cursor.moveToFirst()) { // normally this is always the case with MAX()
@@ -313,11 +315,7 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             case URI_ENTRIES_FOR_FEED: {
                 values.put(EntryColumns.FEED_ID, uri.getPathSegments().get(1));
-                newId = database.insert(EntryColumns.TABLE_NAME, null, values);
-                break;
-            }
-            case URI_ALL_ENTRIES:
-            case URI_ENTRIES: {
+                values.put(EntryColumns.FETCH_DATE, new Date().getTime());
                 newId = database.insert(EntryColumns.TABLE_NAME, null, values);
                 break;
             }

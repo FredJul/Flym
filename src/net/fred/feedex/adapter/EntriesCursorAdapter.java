@@ -193,7 +193,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         });
     }
 
-    public void markAllAsRead() {
+    public void markAllAsRead(final long untilDate) {
         mMarkedAsReadEntries.clear();
         mMarkedAsUnreadEntries.clear();
 
@@ -201,7 +201,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             @Override
             public void run() {
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
-                cr.update(mUri, FeedData.getReadContentValues(), EntryColumns.WHERE_UNREAD, null);
+                String where = EntryColumns.WHERE_UNREAD + Constants.DB_AND + '(' + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + untilDate + ')';
+                cr.update(mUri, FeedData.getReadContentValues(), where, null);
             }
         }.start();
     }

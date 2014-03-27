@@ -110,7 +110,6 @@ public class FetcherService extends IntentService {
     private static final int FETCHMODE_REENCODE = 2;
 
     private static final String CHARSET = "charset=";
-    private static final String COUNT = "COUNT(*)";
     private static final String CONTENT_TYPE_TEXT_HTML = "text/html";
     private static final String HREF = "href=\"";
 
@@ -165,7 +164,7 @@ public class FetcherService extends IntentService {
 
             if (newCount > 0) {
                 if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
-                    Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{COUNT}, EntryColumns.WHERE_UNREAD, null, null);
+                    Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{Constants.DB_COUNT}, EntryColumns.WHERE_UNREAD, null, null);
 
                     cursor.moveToFirst();
                     newCount = cursor.getInt(0); // The number has possibly changed
