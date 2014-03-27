@@ -22,7 +22,7 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_feedex">About FeedEx</string>
+    <string name="about_feedex">A propos de FeedEx</string>
     <string name="never">jamais</string>
     <string name="update">Mise à jour</string>
     <string name="colon">\u00A0:\u00A0</string>
@@ -34,8 +34,8 @@
     <string name="network_error">Pas de connexion disponible</string>
     <string name="loading">Chargement en cours…</string>
     <string name="no_result">Aucun résultat</string>
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_open">Ouvrir menu de navigation</string>
+    <string name="drawer_close">Fermer menu de navigation</string>
     <string name="back_again_to_quit">Appuyez de nouveau sur retour pour quitter</string>
 
     <!-- FEEDS -->
@@ -116,10 +116,10 @@
     <string name="see_enclosure">Voir le fichier joint</string>
     <string name="see_link">Ouvrir dans le navigateur</string>
     <string name="cant_open_link">Aucune application trouvée pour ce lien</string>
-    <string name="open_enclosure">Open enclosure</string>
-    <string name="file">File</string>
-    <string name="download_and_save">Download and save</string>
-    <string name="open_link">Open link</string>
+    <string name="open_enclosure">Ouvrir piève jointe</string>
+    <string name="file">Fichier</string>
+    <string name="download_and_save">Télécharger et sauvegarder</string>
+    <string name="open_link">Ouvrir le lien</string>
 
     <!-- WIDGET -->
     <string name="red">Rouge</string>
@@ -193,8 +193,8 @@
     <string name="settings_proxy_type">Type</string>
 
     <plurals name="number_of_new_entries">
-        <item quantity="one">One new entry</item>
-        <item quantity="other">%d new entries</item>
+        <item quantity="one">Un nouveau article</item>
+        <item quantity="other">%d nouveaux articles</item>
     </plurals>
 
     <string-array name="settings_intervals">
