@@ -241,6 +241,7 @@ public class EntriesListFragment extends ListFragment {
                 refreshUI();
                 if (mUri != null) {
                     getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+                    getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mNewEntriesNumberLoader);
                 }
             }
         });
@@ -396,9 +397,12 @@ public class EntriesListFragment extends ListFragment {
 
         mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
         setListAdapter(mEntriesCursorAdapter);
-        getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-        getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mNewEntriesNumberLoader);
 
+        mListDisplayDate = new Date().getTime();
+        if (mUri != null) {
+            getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+            getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mNewEntriesNumberLoader);
+        }
         refreshUI();
     }
 
