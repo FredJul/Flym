@@ -79,20 +79,13 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
     private Button mRefreshListBtn;
 
-    private final SharedPreferences.OnSharedPreferenceChangeListener mIsRefreshingListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (PrefUtils.IS_REFRESHING.equals(key)) {
-                refreshSwipeProgress();
-            }
-        }
-    };
-
     private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (PrefUtils.SHOW_READ.equals(key)) {
                 getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+            } else if (PrefUtils.IS_REFRESHING.equals(key)) {
+                refreshSwipeProgress();
             }
         }
     };
@@ -204,15 +197,13 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
             //getLoaderManager().initLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
         }
-
-        PrefUtils.registerOnPrefChangeListener(mPrefListener);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         refreshSwipeProgress();
-        PrefUtils.registerOnPrefChangeListener(mIsRefreshingListener);
+        PrefUtils.registerOnPrefChangeListener(mPrefListener);
 
         // I don't know why this is needed... The loader seems to not be notified when the article is mark as read
         if (mUri != null) {
@@ -281,7 +272,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
     @Override
     public void onPause() {
-        PrefUtils.unregisterOnPrefChangeListener(mIsRefreshingListener);
+        PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
         super.onPause();
     }
 
@@ -292,12 +283,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         outState.putLong(STATE_LIST_DISPLAY_DATE, mListDisplayDate);
 
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onDestroy() {
-        PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
-        super.onDestroy();
     }
 
     @Override
