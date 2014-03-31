@@ -22,9 +22,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import net.fred.feedex.Constants;
@@ -37,35 +35,16 @@ public abstract class BaseActivity extends Activity {
         public void onFullScreenDisabled();
     }
 
-    public interface OnRefreshListener extends SwipeRefreshLayout.OnRefreshListener {
-        public boolean canChildScrollUp();
-    }
-
     private static final String STATE_IS_FULLSCREEN = "STATE_IS_FULLSCREEN";
 
     private boolean mIsFullScreen;
     private View mDecorView;
 
     private OnFullScreenListener mOnFullScreenListener;
-    private OnRefreshListener mOnRefreshListener;
-
-    private SwipeRefreshLayout mRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRefreshLayout = new SwipeRefreshLayout(this) {
-            @Override
-            public boolean canChildScrollUp() {
-                if (mOnRefreshListener != null) {
-                    return mOnRefreshListener.canChildScrollUp();
-                }
-
-                return true;
-            }
-        };
-        super.setContentView(mRefreshLayout);
-
         mDecorView = getWindow().getDecorView();
         mDecorView.setOnSystemUiVisibilityChangeListener
                 (new View.OnSystemUiVisibilityChangeListener() {
@@ -92,76 +71,6 @@ public abstract class BaseActivity extends Activity {
                         }
                     }
                 });
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
-        View v = getLayoutInflater().inflate(layoutResID, mRefreshLayout, false);
-        setContentView(v);
-    }
-
-    @Override
-    public void setContentView(View view) {
-        setContentView(view, view.getLayoutParams());
-    }
-
-    @Override
-    public void setContentView(View view, ViewGroup.LayoutParams params) {
-        mRefreshLayout.addView(view, params);
-        initSwipeOptions();
-    }
-
-    public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
-        mOnRefreshListener = onRefreshListener;
-        mRefreshLayout.setOnRefreshListener(onRefreshListener);
-    }
-
-    private void initSwipeOptions() {
-        setAppearance();
-        disableSwipe();
-    }
-
-    private void setAppearance() {
-        mRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
-                android.R.color.holo_blue_dark,
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_blue_dark);
-    }
-
-    /**
-     * It shows the SwipeRefreshLayout progress
-     */
-    public void showSwipeProgress() {
-        mRefreshLayout.setRefreshing(true);
-    }
-
-    /**
-     * It shows the SwipeRefreshLayout progress
-     */
-    public void hideSwipeProgress() {
-        mRefreshLayout.setRefreshing(false);
-    }
-
-    /**
-     * Enables swipe gesture
-     */
-    public void enableSwipe() {
-        mRefreshLayout.setEnabled(true);
-    }
-
-    /**
-     * Disables swipe gesture. It prevents manual gestures but keeps the option tu show
-     * refreshing programatically.
-     */
-    public void disableSwipe() {
-        mRefreshLayout.setEnabled(false);
-    }
-
-    /**
-     * Get the refreshing status
-     */
-    public boolean isRefreshing() {
-        return mRefreshLayout.isRefreshing();
     }
 
     @Override

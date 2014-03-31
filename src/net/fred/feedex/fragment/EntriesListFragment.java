@@ -19,8 +19,6 @@
 
 package net.fred.feedex.fragment;
 
-import android.app.Activity;
-import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.Context;
@@ -51,7 +49,6 @@ import android.widget.SearchView;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
-import net.fred.feedex.activity.BaseActivity;
 import net.fred.feedex.activity.EditFeedsListActivity;
 import net.fred.feedex.adapter.EntriesCursorAdapter;
 import net.fred.feedex.provider.FeedData;
@@ -63,7 +60,7 @@ import net.fred.feedex.utils.PrefUtils;
 
 import java.util.Date;
 
-public class EntriesListFragment extends ListFragment implements BaseActivity.OnRefreshListener {
+public class EntriesListFragment extends SwipeRefreshListFragment {
 
     private static final String STATE_URI = "STATE_URI";
     private static final String STATE_SHOW_FEED_INFO = "STATE_SHOW_FEED_INFO";
@@ -81,6 +78,15 @@ public class EntriesListFragment extends ListFragment implements BaseActivity.On
     private int mNewEntriesNumber;
 
     private Button mRefreshListBtn;
+
+    private final SharedPreferences.OnSharedPreferenceChangeListener mIsRefreshingListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (PrefUtils.IS_REFRESHING.equals(key)) {
+                refreshSwipeProgress();
+            }
+        }
+    };
 
     private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
         @Override
@@ -205,6 +211,8 @@ public class EntriesListFragment extends ListFragment implements BaseActivity.On
     @Override
     public void onResume() {
         super.onResume();
+        refreshSwipeProgress();
+        PrefUtils.registerOnPrefChangeListener(mIsRefreshingListener);
 
         // I don't know why this is needed... The loader seems to not be notified when the article is mark as read
         if (mUri != null) {
@@ -213,17 +221,8 @@ public class EntriesListFragment extends ListFragment implements BaseActivity.On
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(STATE_URI, mUri);
-        outState.putBoolean(STATE_SHOW_FEED_INFO, mShowFeedInfo);
-        outState.putLong(STATE_LIST_DISPLAY_DATE, mListDisplayDate);
-
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_entry_list, container, false);
+    public View inflateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_entry_list, container, true);
 
         if (mEntriesCursorAdapter != null) {
             setListAdapter(mEntriesCursorAdapter);
@@ -232,9 +231,6 @@ public class EntriesListFragment extends ListFragment implements BaseActivity.On
         mListView = (ListView) rootView.findViewById(android.R.id.list);
         mListView.setFastScrollEnabled(true);
         mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
-
-        // HACK to be able to know when we are on the top of the list (for the swipe refresh)
-        mListView.addHeaderView(new View(rootView.getContext()));
 
         mRefreshListBtn = (Button) rootView.findViewById(R.id.refreshListBtn);
         mRefreshListBtn.setOnClickListener(new View.OnClickListener() {
@@ -284,28 +280,24 @@ public class EntriesListFragment extends ListFragment implements BaseActivity.On
     }
 
     @Override
+    public void onPause() {
+        PrefUtils.unregisterOnPrefChangeListener(mIsRefreshingListener);
+        super.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(STATE_URI, mUri);
+        outState.putBoolean(STATE_SHOW_FEED_INFO, mShowFeedInfo);
+        outState.putLong(STATE_LIST_DISPLAY_DATE, mListDisplayDate);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onDestroy() {
         PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
         super.onDestroy();
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        ((BaseActivity) activity).setOnRefreshListener(this);
-    }
-
-    @Override
-    public void onDetach() {
-        ((BaseActivity) getActivity()).setOnRefreshListener(null);
-        super.onDetach();
-    }
-
-    @Override
-    public boolean canChildScrollUp() {
-        // Thanks to the HeaderView hack, this allow to know when we are on the top of the list
-        return mListView.getFirstVisiblePosition() != 0;
     }
 
     @Override
@@ -446,11 +438,25 @@ public class EntriesListFragment extends ListFragment implements BaseActivity.On
             mSearchView.setVisibility(View.GONE);
         }
 
+        if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) != FeedDataContentProvider.URI_FAVORITES) {
+            enableSwipe();
+        } else {
+            disableSwipe();
+        }
+
         if (mNewEntriesNumber > 0) {
             mRefreshListBtn.setText(getResources().getQuantityString(R.plurals.number_of_new_entries, mNewEntriesNumber, mNewEntriesNumber));
             mRefreshListBtn.setVisibility(View.VISIBLE);
         } else {
             mRefreshListBtn.setVisibility(View.GONE);
+        }
+    }
+
+    private void refreshSwipeProgress() {
+        if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+            showSwipeProgress();
+        } else {
+            hideSwipeProgress();
         }
     }
 }

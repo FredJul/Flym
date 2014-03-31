@@ -22,7 +22,6 @@ package net.fred.feedex.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
-import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -65,7 +64,7 @@ import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 import net.fred.feedex.view.EntryView;
 
-public class EntryFragment extends Fragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<Cursor>, EntryView.OnActionListener {
+public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<Cursor>, EntryView.OnActionListener {
 
     private static final String STATE_BASE_URI = "STATE_BASE_URI";
     private static final String STATE_CURRENT_PAGER_POS = "STATE_CURRENT_PAGER_POS";
@@ -201,8 +200,8 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_entry, container, false);
+    public View inflateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_entry, container, true);
 
         mCancelFullscreenBtn = rootView.findViewById(R.id.cancelFullscreenBtn);
         mCancelFullscreenBtn.setOnClickListener(new View.OnClickListener() {
@@ -243,6 +242,8 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
             public void onPageScrollStateChanged(int i) {
             }
         });
+
+        disableSwipe();
 
         return rootView;
     }
@@ -440,9 +441,9 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
 
             // Listen the mobilizing task
             if (FetcherService.hasTasks(mEntriesIds[mCurrentPagerPos])) {
-                activity.showSwipeProgress();
+                showSwipeProgress();
             } else {
-                activity.hideSwipeProgress();
+                hideSwipeProgress();
             }
 
             // Mark the article as read
@@ -496,7 +497,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
     public void onClickFullText() {
         final BaseActivity activity = (BaseActivity) getActivity();
 
-        if (!activity.isRefreshing()) {
+        if (!isRefreshing()) {
             Cursor cursor = mEntryPagerAdapter.getCursor(mCurrentPagerPos);
             final boolean alreadyMobilized = !cursor.isNull(mMobilizedHtmlPos);
 
@@ -519,7 +520,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            activity.showSwipeProgress();
+                            showSwipeProgress();
                         }
                     });
                 } else {
@@ -623,6 +624,11 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
     @Override
     public void onFullScreenDisabled() {
         mCancelFullscreenBtn.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onRefresh() {
+        // Nothing to do
     }
 }
 
