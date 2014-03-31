@@ -74,7 +74,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (PrefUtils.IS_REFRESHING.equals(key)) {
-                getProgressBar().setVisibility(PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false) ? View.VISIBLE : View.GONE);
+                refreshUpdateDisplay();
             }
             if (PrefUtils.SHOW_READ.equals(key)) {
                 getLoaderManager().restartLoader(LOADER_ID, null, HomeActivity.this);
@@ -102,6 +102,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_home);
+
+        enableSwipe();
 
         mEntriesFragment = (EntriesListFragment) getFragmentManager().findFragmentById(R.id.entries_list_fragment);
 
@@ -195,7 +197,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     protected void onResume() {
         super.onResume();
-        getProgressBar().setVisibility(PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false) ? View.VISIBLE : View.GONE);
+        refreshUpdateDisplay();
         PrefUtils.registerOnPrefChangeListener(isRefreshingListener);
     }
 
@@ -323,6 +325,14 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mDrawerAdapter.setCursor(null);
+    }
+
+    private void refreshUpdateDisplay() {
+        if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+            showSwipeProgress();
+        } else {
+            hideSwipeProgress();
+        }
     }
 
     private void selectDrawerItem(int position) {

@@ -439,8 +439,11 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
             activity.invalidateOptionsMenu();
 
             // Listen the mobilizing task
-            boolean isRefreshing = FetcherService.hasTasks(mEntriesIds[mCurrentPagerPos]);
-            activity.getProgressBar().setVisibility(isRefreshing ? View.VISIBLE : View.GONE);
+            if (FetcherService.hasTasks(mEntriesIds[mCurrentPagerPos])) {
+                activity.showSwipeProgress();
+            } else {
+                activity.hideSwipeProgress();
+            }
 
             // Mark the article as read
             if (entryCursor.getInt(mIsReadPos) != 1) {
@@ -493,7 +496,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
     public void onClickFullText() {
         final BaseActivity activity = (BaseActivity) getActivity();
 
-        if (activity.getProgressBar().getVisibility() != View.VISIBLE) {
+        if (!activity.isRefreshing()) {
             Cursor cursor = mEntryPagerAdapter.getCursor(mCurrentPagerPos);
             final boolean alreadyMobilized = !cursor.isNull(mMobilizedHtmlPos);
 
@@ -516,7 +519,7 @@ public class EntryFragment extends Fragment implements BaseActivity.OnFullScreen
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            activity.getProgressBar().setVisibility(View.VISIBLE);
+                            activity.showSwipeProgress();
                         }
                     });
                 } else {

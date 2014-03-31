@@ -22,15 +22,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
-import net.fred.feedex.utils.UiUtils;
 
 public abstract class BaseActivity extends Activity {
 
@@ -42,15 +40,18 @@ public abstract class BaseActivity extends Activity {
 
     private static final String STATE_IS_FULLSCREEN = "STATE_IS_FULLSCREEN";
 
-    private ProgressBar mProgressBar;
     private boolean mIsFullScreen;
     private View mDecorView;
 
     private OnFullScreenListener mFullScreenListener;
 
+    private SwipeRefreshLayout mRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.setContentView(R.layout.activity_swipe_refresh);
+        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
 
         mDecorView = getWindow().getDecorView();
         mDecorView.setOnSystemUiVisibilityChangeListener
@@ -81,6 +82,75 @@ public abstract class BaseActivity extends Activity {
     }
 
     @Override
+    public void setContentView(int layoutResID) {
+        View v = getLayoutInflater().inflate(layoutResID, mRefreshLayout, false);
+        setContentView(v);
+    }
+
+    @Override
+    public void setContentView(View view) {
+        setContentView(view, view.getLayoutParams());
+    }
+
+    @Override
+    public void setContentView(View view, ViewGroup.LayoutParams params) {
+        mRefreshLayout.addView(view, params);
+        initSwipeOptions();
+    }
+
+    public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener onRefreshListener) {
+        mRefreshLayout.setOnRefreshListener(onRefreshListener);
+    }
+
+    private void initSwipeOptions() {
+        setAppearance();
+        disableSwipe();
+    }
+
+    private void setAppearance() {
+        mRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_blue_dark,
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_blue_dark);
+    }
+
+    /**
+     * It shows the SwipeRefreshLayout progress
+     */
+    public void showSwipeProgress() {
+        mRefreshLayout.setRefreshing(true);
+    }
+
+    /**
+     * It shows the SwipeRefreshLayout progress
+     */
+    public void hideSwipeProgress() {
+        mRefreshLayout.setRefreshing(false);
+    }
+
+    /**
+     * Enables swipe gesture
+     */
+    public void enableSwipe() {
+        mRefreshLayout.setEnabled(true);
+    }
+
+    /**
+     * Disables swipe gesture. It prevents manual gestures but keeps the option tu show
+     * refreshing programatically.
+     */
+    public void disableSwipe() {
+        mRefreshLayout.setEnabled(false);
+    }
+
+    /**
+     * Get the refreshing status
+     */
+    public boolean isRefreshing() {
+        return mRefreshLayout.isRefreshing();
+    }
+
+    @Override
     protected void onResume() {
         if (Constants.NOTIF_MGR != null) {
             Constants.NOTIF_MGR.cancel(0);
@@ -92,32 +162,6 @@ public abstract class BaseActivity extends Activity {
         }
 
         super.onResume();
-    }
-
-    @Override
-    public void setContentView(View view) {
-        init().addView(view);
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
-        getLayoutInflater().inflate(layoutResID, init(), true);
-    }
-
-    @Override
-    public void setContentView(View view, ViewGroup.LayoutParams params) {
-        init().addView(view, params);
-    }
-
-    private ViewGroup init() {
-        super.setContentView(R.layout.activity_progress);
-        mProgressBar = (ProgressBar) findViewById(R.id.activity_bar);
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            // Fix a display bug
-            ((FrameLayout.LayoutParams) mProgressBar.getLayoutParams()).setMargins(0, UiUtils.dpToPixel(-4), 0, 0);
-        }
-        return (ViewGroup) findViewById(R.id.activity_frame);
     }
 
     @Override
@@ -138,10 +182,6 @@ public abstract class BaseActivity extends Activity {
 
     public void setOnFullscreenListener(OnFullScreenListener listener) {
         mFullScreenListener = listener;
-    }
-
-    public ProgressBar getProgressBar() {
-        return mProgressBar;
     }
 
     public boolean isFullScreen() {

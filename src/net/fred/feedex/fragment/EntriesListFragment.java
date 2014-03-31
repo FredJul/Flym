@@ -19,6 +19,7 @@
 
 package net.fred.feedex.fragment;
 
+import android.app.Activity;
 import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.ContentUris;
@@ -31,6 +32,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
@@ -50,6 +52,7 @@ import android.widget.SearchView;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
+import net.fred.feedex.activity.BaseActivity;
 import net.fred.feedex.activity.EditFeedsListActivity;
 import net.fred.feedex.adapter.EntriesCursorAdapter;
 import net.fred.feedex.provider.FeedData;
@@ -61,7 +64,7 @@ import net.fred.feedex.utils.PrefUtils;
 
 import java.util.Date;
 
-public class EntriesListFragment extends ListFragment {
+public class EntriesListFragment extends ListFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final String STATE_URI = "STATE_URI";
     private static final String STATE_SHOW_FEED_INFO = "STATE_SHOW_FEED_INFO";
@@ -285,6 +288,24 @@ public class EntriesListFragment extends ListFragment {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        ((BaseActivity) activity).setOnRefreshListener(this);
+    }
+
+    @Override
+    public void onDetach() {
+        ((BaseActivity) getActivity()).setOnRefreshListener(null);
+        super.onDetach();
+    }
+
+    @Override
+    public void onRefresh() {
+        startRefresh();
+    }
+
+    @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, id)));
     }
@@ -342,14 +363,7 @@ public class EntriesListFragment extends ListFragment {
                 return true;
             }
             case R.id.menu_refresh: {
-                if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-                    if (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
-                        getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FEED_ID,
-                                mUri.getPathSegments().get(1)));
-                    } else {
-                        getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
-                    }
-                }
+                startRefresh();
                 return true;
             }
             case R.id.menu_all_read: {
@@ -381,6 +395,17 @@ public class EntriesListFragment extends ListFragment {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startRefresh() {
+        if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+            if (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
+                getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FEED_ID,
+                        mUri.getPathSegments().get(1)));
+            } else {
+                getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
+            }
+        }
     }
 
     public Uri getUri() {
