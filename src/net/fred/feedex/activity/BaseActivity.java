@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.R;
 
 public abstract class BaseActivity extends Activity {
 
@@ -38,20 +37,34 @@ public abstract class BaseActivity extends Activity {
         public void onFullScreenDisabled();
     }
 
+    public interface OnRefreshListener extends SwipeRefreshLayout.OnRefreshListener {
+        public boolean canChildScrollUp();
+    }
+
     private static final String STATE_IS_FULLSCREEN = "STATE_IS_FULLSCREEN";
 
     private boolean mIsFullScreen;
     private View mDecorView;
 
-    private OnFullScreenListener mFullScreenListener;
+    private OnFullScreenListener mOnFullScreenListener;
+    private OnRefreshListener mOnRefreshListener;
 
     private SwipeRefreshLayout mRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.setContentView(R.layout.activity_swipe_refresh);
-        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        mRefreshLayout = new SwipeRefreshLayout(this) {
+            @Override
+            public boolean canChildScrollUp() {
+                if (mOnRefreshListener != null) {
+                    return mOnRefreshListener.canChildScrollUp();
+                }
+
+                return true;
+            }
+        };
+        super.setContentView(mRefreshLayout);
 
         mDecorView = getWindow().getDecorView();
         mDecorView.setOnSystemUiVisibilityChangeListener
@@ -64,16 +77,16 @@ public abstract class BaseActivity extends Activity {
                                 toggleFullScreen();
                                 mIsFullScreen = false;
 
-                                if (mFullScreenListener != null) {
-                                    mFullScreenListener.onFullScreenDisabled();
+                                if (mOnFullScreenListener != null) {
+                                    mOnFullScreenListener.onFullScreenDisabled();
                                 }
                             }
                         } else { // We are now in fullscreen mode
                             if (!mIsFullScreen) { // It was not-fullscreen, we need to change it
                                 mIsFullScreen = true;
 
-                                if (mFullScreenListener != null) {
-                                    mFullScreenListener.onFullScreenEnabled(android.os.Build.VERSION.SDK_INT >= 19);
+                                if (mOnFullScreenListener != null) {
+                                    mOnFullScreenListener.onFullScreenEnabled(android.os.Build.VERSION.SDK_INT >= 19);
                                 }
                             }
                         }
@@ -98,7 +111,8 @@ public abstract class BaseActivity extends Activity {
         initSwipeOptions();
     }
 
-    public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener onRefreshListener) {
+    public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
+        mOnRefreshListener = onRefreshListener;
         mRefreshLayout.setOnRefreshListener(onRefreshListener);
     }
 
@@ -181,7 +195,7 @@ public abstract class BaseActivity extends Activity {
     }
 
     public void setOnFullscreenListener(OnFullScreenListener listener) {
-        mFullScreenListener = listener;
+        mOnFullScreenListener = listener;
     }
 
     public boolean isFullScreen() {
@@ -202,8 +216,8 @@ public abstract class BaseActivity extends Activity {
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
-                if (mFullScreenListener != null) {
-                    mFullScreenListener.onFullScreenEnabled(false);
+                if (mOnFullScreenListener != null) {
+                    mOnFullScreenListener.onFullScreenEnabled(false);
                 }
             }
         } else {
@@ -216,8 +230,8 @@ public abstract class BaseActivity extends Activity {
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-                if (mFullScreenListener != null) {
-                    mFullScreenListener.onFullScreenDisabled();
+                if (mOnFullScreenListener != null) {
+                    mOnFullScreenListener.onFullScreenDisabled();
                 }
             }
         }

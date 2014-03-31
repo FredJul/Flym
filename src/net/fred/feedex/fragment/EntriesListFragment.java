@@ -32,7 +32,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
@@ -64,7 +63,7 @@ import net.fred.feedex.utils.PrefUtils;
 
 import java.util.Date;
 
-public class EntriesListFragment extends ListFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class EntriesListFragment extends ListFragment implements BaseActivity.OnRefreshListener {
 
     private static final String STATE_URI = "STATE_URI";
     private static final String STATE_SHOW_FEED_INFO = "STATE_SHOW_FEED_INFO";
@@ -234,6 +233,9 @@ public class EntriesListFragment extends ListFragment implements SwipeRefreshLay
         mListView.setFastScrollEnabled(true);
         mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
 
+        // HACK to be able to know when we are on the top of the list (for the swipe refresh)
+        mListView.addHeaderView(new View(rootView.getContext()));
+
         mRefreshListBtn = (Button) rootView.findViewById(R.id.refreshListBtn);
         mRefreshListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,6 +300,12 @@ public class EntriesListFragment extends ListFragment implements SwipeRefreshLay
     public void onDetach() {
         ((BaseActivity) getActivity()).setOnRefreshListener(null);
         super.onDetach();
+    }
+
+    @Override
+    public boolean canChildScrollUp() {
+        // Thanks to the HeaderView hack, this allow to know when we are on the top of the list
+        return mListView.getFirstVisiblePosition() != 0;
     }
 
     @Override
