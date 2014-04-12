@@ -561,7 +561,7 @@ public class RssAtomParser extends DefaultHandler {
             dateStr = dateStr.substring(coma + 2);
         }
 
-        dateStr = dateStr.replace("T", " ").replace("Z", "").replaceAll("  ", " ").trim(); // fix useless char
+        dateStr = dateStr.replaceAll("([0-9])T([0-9])", "$1 $2").replaceAll("Z$", "").replaceAll("  ", " ").trim(); // fix useless char
 
         // Replace bad timezones
         for (String[] timezoneReplace : TIMEZONES_REPLACE) {
