@@ -50,8 +50,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.os.Handler;
 
-import net.fred.feedex.MainApplication;
-import net.fred.feedex.R;
 import net.fred.feedex.parser.OPML;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
@@ -95,9 +93,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
                             if (hasBackup) {
                                 // Perform an automated import of the backup
                                 OPML.importFromFile(OPML.BACKUP_OPML);
-                            } else {
-                                // No database and no backup, automatically add the default feeds
-                                OPML.importFromFile(MainApplication.getContext().getResources().openRawResource(R.raw.default_feeds));
                             }
                         } catch (Exception ignored) {
                         }

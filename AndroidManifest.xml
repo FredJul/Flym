@@ -5,7 +5,7 @@
     android:versionCode="40"
     android:versionName="1.5.4">
 
-<uses-sdk
+    <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="19" />
 
@@ -39,14 +39,13 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.AddGoogleNewsActivity"
+            android:label="@string/google_news_title"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".activity.AboutActivity"
             android:label="@string/about_feedex"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.EditFeedsListActivity"
             android:label="@string/feeds"
@@ -56,14 +55,15 @@
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask">
             <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.feedex.entry" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.GeneralPrefsActivity"
-            android:label="@string/menu_settings" />
+            android:label="@string/menu_settings"
+            android:launchMode="singleTask" />
         <activity android:name=".widget.WidgetConfigActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

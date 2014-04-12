@@ -24,6 +24,7 @@
 
     <!-- GENERAL -->
     <string name="about_feedex">피덱스 정보</string>
+    <string name="welcome_title">Welcome to FeedEx. Would you like to add one feed?</string>
     <string name="never">하지 않음</string>
     <string name="update">업데이트</string>
     <string name="colon">:\u00A0</string>
@@ -88,6 +89,17 @@
     <string name="to_group_message">피드를 그룹 안에 넣을 수도 있고 위에 놓을 수도 있습니다. 어떻게 하시겠습니까?</string>
     <string name="to_group_above">그룹 위</string>
     <string name="to_group_into">그룹 안</string>
+    <string name="add_custom_feed">Add a custom feed or search for one</string>
+    <string name="google_news_title">Google News topics</string>
+    <string name="google_news_indicator">Select one or several topics to add. Some of them may not be provided by Google for your language.</string>
+    <string name="google_news_top_stories">Top Stories</string>
+    <string name="google_news_world">World</string>
+    <string name="google_news_business">Business</string>
+    <string name="google_news_technology">Technology</string>
+    <string name="google_news_entertainment">Entertainment</string>
+    <string name="google_news_sports">Sports</string>
+    <string name="google_news_science">Science</string>
+    <string name="google_news_health">Health</string>
 
     <!-- ENTRIES -->
     <string name="all">항목</string>

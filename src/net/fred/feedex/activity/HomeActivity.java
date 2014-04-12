@@ -19,8 +19,10 @@
 
 package net.fred.feedex.activity;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
@@ -371,6 +373,19 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     mDrawerLayout.openDrawer(mDrawerList);
                 }
             }, 500);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.welcome_title)
+                    .setItems(new CharSequence[]{getString(R.string.google_news_title), getString(R.string.add_custom_feed)}, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (which == 1) {
+                                startActivity(new Intent(Intent.ACTION_INSERT).setData(FeedColumns.CONTENT_URI));
+                            } else {
+                                startActivity(new Intent(HomeActivity.this, AddGoogleNewsActivity.class));
+                            }
+                        }
+                    });
+            builder.show();
         }
     }
 }

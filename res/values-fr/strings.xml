@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2012-2014 Frederic Julian
  Copyright (c) 2010-2012 Stefan Handschuh
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,6 +24,7 @@
 
     <!-- GENERAL -->
     <string name="about_feedex">A propos de FeedEx</string>
+    <string name="welcome_title">Welcome to FeedEx. Would you like to add one feed?</string>
     <string name="never">jamais</string>
     <string name="update">Mise à jour</string>
     <string name="colon">\u00A0:\u00A0</string>
@@ -95,6 +97,17 @@
     </string>
     <string name="to_group_above">Au-dessus du groupe</string>
     <string name="to_group_into">Dans le groupe</string>
+    <string name="add_custom_feed">Ajoute un flux manuellement ou en rechercher</string>
+    <string name="google_news_title">Thèmes Google Actualités</string>
+    <string name="google_news_indicator">Sélectionner un ou plusieurs thème à ajouter. Certains peuvent ne pas être fournis par Google pour votre langue.</string>
+    <string name="google_news_top_stories">À la une</string>
+    <string name="google_news_world">International</string>
+    <string name="google_news_business">Économie</string>
+    <string name="google_news_technology">High-Tech</string>
+    <string name="google_news_entertainment">Culture</string>
+    <string name="google_news_sports">Sport</string>
+    <string name="google_news_science">Science</string>
+    <string name="google_news_health">Santé</string>
 
     <!-- ENTRIES -->
     <string name="all">Articles</string>

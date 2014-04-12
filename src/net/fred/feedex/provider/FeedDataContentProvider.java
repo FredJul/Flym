@@ -48,6 +48,7 @@ import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -56,8 +57,10 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import net.fred.feedex.Constants;
+import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
@@ -676,6 +679,34 @@ public class FeedDataContentProvider extends ContentProvider {
             notifyChangeOnAllUris(matchCode, uri);
         }
         return count;
+    }
+
+    public static void addFeed(Context context, String url, String name, boolean retrieveFullText) {
+        ContentResolver cr = context.getContentResolver();
+
+        if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME)) {
+            url = Constants.HTTP_SCHEME + url;
+        }
+
+        Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, FeedColumns.URL + Constants.DB_ARG,
+                new String[]{url}, null);
+
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            Toast.makeText(context, R.string.error_feed_url_exists, Toast.LENGTH_SHORT).show();
+        } else {
+            cursor.close();
+            ContentValues values = new ContentValues();
+
+            values.put(FeedColumns.URL, url);
+            values.putNull(FeedColumns.ERROR);
+
+            if (name.trim().length() > 0) {
+                values.put(FeedColumns.NAME, name);
+            }
+            values.put(FeedColumns.RETRIEVE_FULLTEXT, retrieveFullText ? 1 : null);
+            cr.insert(FeedColumns.CONTENT_URI, values);
+        }
     }
 
     private static String getSearchWhereClause(String uriSearchParam) {

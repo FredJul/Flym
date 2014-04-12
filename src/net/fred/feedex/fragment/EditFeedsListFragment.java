@@ -72,6 +72,7 @@ import android.widget.Toast;
 
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
+import net.fred.feedex.activity.AddGoogleNewsActivity;
 import net.fred.feedex.adapter.FeedsCursorAdapter;
 import net.fred.feedex.parser.OPML;
 import net.fred.feedex.provider.FeedData.FeedColumns;
@@ -406,7 +407,18 @@ public class EditFeedsListFragment extends ListFragment {
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_add_feed: {
-                startActivity(new Intent(Intent.ACTION_INSERT).setData(FeedColumns.CONTENT_URI));
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.menu_add_feed)
+                        .setItems(new CharSequence[]{getString(R.string.add_custom_feed), getString(R.string.google_news_title)}, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which == 0) {
+                                    startActivity(new Intent(Intent.ACTION_INSERT).setData(FeedColumns.CONTENT_URI));
+                                } else {
+                                    startActivity(new Intent(getActivity(), AddGoogleNewsActivity.class));
+                                }
+                            }
+                        });
+                builder.show();
                 return true;
             }
             case R.id.menu_add_group: {
