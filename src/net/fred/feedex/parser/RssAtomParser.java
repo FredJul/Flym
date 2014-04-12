@@ -590,7 +590,12 @@ public class RssAtomParser extends DefaultHandler {
 
     @Override
     public void error(SAXParseException e) throws SAXException {
-        // ignore small errors
+        // ignore errors
+    }
+
+    @Override
+    public void fatalError(SAXParseException e) throws SAXException {
+        // ignore errors
     }
 
     @Override
