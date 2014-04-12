@@ -29,31 +29,9 @@
                     android:layout_height="fill_parent">
 
                     <TextView
-                        android:id="@+id/name_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/feed_title"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/feed_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/name_textview"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="5dp"
-                        android:hint="@string/optional"
-                        android:singleLine="true" />
-
-                    <TextView
                         android:id="@+id/url_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/feed_title"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="20dp"
                         android:text="@string/feed_url"
@@ -72,12 +50,34 @@
                         android:inputType="textUri"
                         android:singleLine="true" />
 
+                    <TextView
+                        android:id="@+id/name_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@id/feed_url"
+                        android:text="@string/feed_title"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/feed_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/name_textview"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="5dp"
+                        android:hint="@string/optional"
+                        android:singleLine="true" />
+
                     <CheckBox
                         android:id="@+id/retrieve_fulltext"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_below="@+id/feed_url"
+                        android:layout_below="@+id/feed_title"
                         android:layout_marginRight="10dp"
                         android:text="@string/get_full_text" />
                 </RelativeLayout>
