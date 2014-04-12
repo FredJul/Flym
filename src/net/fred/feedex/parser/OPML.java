@@ -75,7 +75,7 @@ public class OPML {
     private static final String[] FEEDS_PROJECTION = new String[]{FeedColumns._ID, FeedColumns.IS_GROUP, FeedColumns.NAME, FeedColumns.URL,
             FeedColumns.RETRIEVE_FULLTEXT};
     private static final String[] FILTERS_PROJECTION = new String[]{FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
-            FilterColumns.IS_APPLIED_TO_TITLE};
+            FilterColumns.IS_APPLIED_TO_TITLE, FilterColumns.IS_ACCEPT_RULE};
 
     private static final String START = "<?xml version='1.0' encoding='utf-8'?>\n<opml version='1.1'>\n<head>\n<title>FeedEx export</title>\n<dateCreated>";
     private static final String AFTER_DATE = "</dateCreated>\n</head>\n<body>\n";
@@ -88,6 +88,7 @@ public class OPML {
     private static final String FILTER_TEXT = "\t\t<filter text='";
     private static final String FILTER_IS_REGEX = "' isRegex='";
     private static final String FILTER_IS_APPLIED_TO_TITLE = "' isAppliedToTitle='";
+    private static final String FILTER_IS_ACCEPT_RULE = "' isAcceptRule='";
     private static final String FILTER_CLOSING = "'/>\n";
     private static final String CLOSING = "</body>\n</opml>\n";
 
@@ -151,6 +152,8 @@ public class OPML {
                             builder.append(cursorFilters.getInt(1) == 1 ? Constants.TRUE : "false");
                             builder.append(FILTER_IS_APPLIED_TO_TITLE);
                             builder.append(cursorFilters.getInt(2) == 1 ? Constants.TRUE : "false");
+                            builder.append(FILTER_IS_ACCEPT_RULE);
+                            builder.append(cursorFilters.getInt(3) == 1 ? Constants.TRUE : "false");
                             builder.append(FILTER_CLOSING);
                         }
                         builder.append("\t");
@@ -179,6 +182,8 @@ public class OPML {
                         builder.append(cursorFilters.getInt(1) == 1 ? Constants.TRUE : "false");
                         builder.append(FILTER_IS_APPLIED_TO_TITLE);
                         builder.append(cursorFilters.getInt(2) == 1 ? Constants.TRUE : "false");
+                        builder.append(FILTER_IS_ACCEPT_RULE);
+                        builder.append(cursorFilters.getInt(3) == 1 ? Constants.TRUE : "false");
                         builder.append(FILTER_CLOSING);
                     }
                     builder.append(OUTLINE_END);
@@ -208,6 +213,7 @@ public class OPML {
         private static final String ATTRIBUTE_TEXT = "text";
         private static final String ATTRIBUTE_IS_REGEX = "isRegex";
         private static final String ATTRIBUTE_IS_APPLIED_TO_TITLE = "isAppliedToTitle";
+        private static final String ATTRIBUTE_IS_ACCEPT_RULE = "isAcceptRule";
 
         private boolean bodyTagEntered = false;
         private boolean feedEntered = false;
@@ -267,6 +273,7 @@ public class OPML {
                     values.put(FilterColumns.FILTER_TEXT, attributes.getValue("", ATTRIBUTE_TEXT));
                     values.put(FilterColumns.IS_REGEX, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_REGEX)));
                     values.put(FilterColumns.IS_APPLIED_TO_TITLE, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_APPLIED_TO_TITLE)));
+                    values.put(FilterColumns.IS_ACCEPT_RULE, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_ACCEPT_RULE)));
 
                     ContentResolver cr = MainApplication.getContext().getContentResolver();
                     cr.insert(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), values);
