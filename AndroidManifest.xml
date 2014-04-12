@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.fred.feedex"
     android:installLocation="auto"
-    android:versionCode="40"
-    android:versionName="1.5.4">
+    android:versionCode="41"
+    android:versionName="1.6.0">
 
-    <uses-sdk
+<uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="19" />
 
