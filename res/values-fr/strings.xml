@@ -23,12 +23,12 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_feedex">A propos de FeedEx</string>
-    <string name="welcome_title">Welcome to FeedEx. Would you like to add one feed?</string>
+    <string name="about_feedex">À propos de FeedEx</string>
+    <string name="welcome_title">Bienvenue sur FeedEx. Voulez vous ajouter un flux ?</string>
     <string name="never">jamais</string>
     <string name="update">Mise à jour</string>
     <string name="colon">\u00A0:\u00A0</string>
-    <string name="menu_settings">Réglages</string>
+    <string name="menu_settings">Paramètres</string>
     <string name="menu_refresh">Actualiser</string>
     <string name="menu_all_read">Marquer tout comme lu</string>
     <string name="feedex_feeds">Flux FeedEx</string>
@@ -47,7 +47,7 @@
     <string name="no_filters">Pas de filtres</string>
     <string name="context_menu_delete">Supprimer</string>
     <string name="edit_feed_title">Éditer le flux</string>
-    <string name="menu_edit_feeds">Edit feeds</string>
+    <string name="menu_edit_feeds">Éditer les flux</string>
     <string name="new_feed_title">Nouveau flux</string>
     <string name="context_menu_edit">Éditer</string>
     <string name="menu_add_group">Ajouter un groupe</string>
@@ -79,9 +79,9 @@
     <string name="accept">ACCEPT</string>
     <string name="reject">REJECT</string>
     <string name="feed_search">Recherche de flux</string>
-    <string name="feed_search_by_web_search">Recherche flux par mot-clé</string>
+    <string name="feed_search_by_web_search">Recherche de flux par mot-clé</string>
     <string name="feed_search_by_topic">Génère flux par sujet (via Faroo)</string>
-    <string name="feed_search_by_youtube">Recherche flux par nom de chaîne Youtube</string>
+    <string name="feed_search_by_youtube">Recherche de flux par nom de chaîne Youtube</string>
     <string name="select_file">Sélectionner le fichier (racine SD)</string>
     <string name="question_delete_feed">Voulez-vous vraiment supprimer ce flux\u00A0?</string>
     <string name="question_delete_group">Voulez-vous vraiment supprimer ce groupe et tout ses
@@ -98,8 +98,8 @@
     <string name="to_group_above">Au-dessus du groupe</string>
     <string name="to_group_into">Dans le groupe</string>
     <string name="add_custom_feed">Ajoute un flux manuellement ou en rechercher</string>
-    <string name="google_news_title">Thèmes Google Actualités</string>
-    <string name="google_news_indicator">Sélectionner un ou plusieurs thème à ajouter. Certains peuvent ne pas être fournis par Google pour votre langue.</string>
+    <string name="google_news_title">Sujets Google Actualités</string>
+    <string name="google_news_indicator">Sélectionner un ou plusieurs thèmes à ajouter. Certains peuvent ne pas être fournis par Google pour votre langue.</string>
     <string name="google_news_top_stories">À la une</string>
     <string name="google_news_world">International</string>
     <string name="google_news_business">Économie</string>
@@ -127,7 +127,7 @@
     <string name="get_full_text">Récupérer le texte complet</string>
     <string name="original_text">Affiche le texte original</string>
     <string name="see_enclosure">Voir le fichier joint</string>
-    <string name="see_link">Ouvrir dans le navigateur</string>
+    <string name="see_link">Ouvrir dans le navigateur web</string>
     <string name="cant_open_link">Aucune application trouvée pour ce lien</string>
     <string name="open_enclosure">Ouvrir piève jointe</string>
     <string name="file">Fichier</string>
@@ -185,7 +185,7 @@
     <string name="settings_refresh_on_open_description">Met à jour tous les flux à l\'ouverture de
         l\'application
     </string>
-    <string name="settings_refresh_wifi_only">Mise à jour en Wifi uniquement</string>
+    <string name="settings_refresh_wifi_only">Mise à jour en WiFi uniquement</string>
     <string name="settings_refresh_wifi_only_description">La mise à jour auto ne se fera que si le
         Wifi est activé
     </string>
@@ -198,8 +198,8 @@
     <string name="settings_screen_proxy">Proxy</string>
     <string name="settings_category_network">Réseau</string>
     <string name="settings_proxy_enabled">Activé</string>
-    <string name="settings_proxy_wifi_only">Wifi seulement</string>
-    <string name="settings_proxy_wifi_only_description">Utilise le proxy pour le wifi seulement
+    <string name="settings_proxy_wifi_only">WiFi seulement</string>
+    <string name="settings_proxy_wifi_only_description">Utilise le proxy pour le WiFi seulement
     </string>
     <string name="settings_proxy_host">Hôte</string>
     <string name="settings_proxy_port">Port</string>
