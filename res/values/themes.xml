@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<style name="Theme.Light" parent="android:Theme.Holo.Light.DarkActionBar">
+	<item name="card">@drawable/bg_card_light</item>
+	<item name="backColor">@color/back_Color_li</item>
+</style>
+	
+<style name="Theme.Dark" parent="android:Theme.Holo">
+    <item name="android:actionBarStyle">@style/DarkActionBar</item>
+	<item name="card">@drawable/bg_card_dark</item>
+	<item name="backColor">@color/back_Color_dr</item>
+		
+</style>
+	
+<style name="DarkActionBar" parent="@android:style/Widget.Holo.ActionBar.Solid" />
+
+</resources>
