@@ -91,7 +91,6 @@ public class HtmlUtils {
                 if (new File(imgPath).exists()) {
                     content = content.replace(match, Constants.FILE_SCHEME + imgPath);
                 } else if (needDownloadPictures) {
-                    content = content.replace(match, Constants.FILE_SCHEME + imgPath);
                     imagesToDl.add(match);
                 }
             }

@@ -213,9 +213,9 @@ public class FetcherService extends IntentService {
         }
     }
 
-    public static boolean hasTasks(long entryId) {
+    public static boolean hasMobilizationTask(long entryId) {
         Cursor cursor = MainApplication.getContext().getContentResolver().query(TaskColumns.CONTENT_URI, TaskColumns.PROJECTION_ID,
-                TaskColumns.ENTRY_ID + '=' + entryId, null, null);
+                TaskColumns.ENTRY_ID + '=' + entryId + Constants.DB_AND + TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
 
         boolean result = cursor.getCount() > 0;
         cursor.close();
