@@ -169,14 +169,7 @@
     <string name="settings_keep_time_description">Les articles plus anciens que le délai indiqué
         seront effacés
     </string>
-    <string name="settings_disable_pictures">Désactiver les images</string>
-    <string name="settings_disable_pictures_description">Ne jamais afficher et télécharger les
-        images
-    </string>
-    <string name="settings_fetch_pictures">Télécharger les images</string>
-    <string name="settings_fetch_pictures_description">Télécharge toutes les images et les stocke
-        localement
-    </string>
+    <string name="settings_fetch_picture_mode">Mode de chargement des images</string>
     <string name="settings_font_size">Taille du texte</string>
     <string name="settings_font_size_description">Taille du texte du contenu des articles</string>
     <string name="settings_display_oldest_first">Ordre des articles</string>
@@ -239,6 +232,11 @@
         <item>+1</item>
         <item>+2</item>
         <item>+3</item>
+    </string-array>
+    <string-array name="settings_fetch_picture_modes">
+        <item>Ne jamais afficher les images</item>
+        <item>Précharger les images en Wi-Fi uniquement</item>
+        <item>Toujours précharger les images</item>
     </string-array>
 
 </resources>

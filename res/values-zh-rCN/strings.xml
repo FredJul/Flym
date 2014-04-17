@@ -158,12 +158,8 @@
 	<string name="settings_keep_time">消息保存时间</string>
 	<string name="settings_keep_time_description">老消息最长保存时间
 	</string>
-	<string name="settings_disable_pictures">无图模式</string>
-	<string name="settings_disable_pictures_description">不显示和加载图片</string>
-	<string name="settings_fetch_pictures">下载图片</string>
-	<string name="settings_fetch_pictures_description">下载所有图片到本地，无网络的时候，也可以浏览。
-	</string>
-	<string name="settings_font_size">文字大小</string>
+    <string name="settings_fetch_picture_mode">Fetch picture mode</string>
+    <string name="settings_font_size">文字大小</string>
 	<string name="settings_font_size_description">消息内容的文字大小</string>
 	<string name="settings_display_oldest_first">消息排序</string>
 	<string name="settings_display_oldest_first_description">旧消息在前</string>
@@ -222,5 +218,10 @@
 		<item>+2</item>
 		<item>+3</item>
 	</string-array>
+    <string-array name="settings_fetch_picture_modes">
+        <item>Never display pictures</item>
+        <item>Preload pictures in Wi-Fi only</item>
+        <item>Always preload pictures</item>
+    </string-array>
 
 </resources>

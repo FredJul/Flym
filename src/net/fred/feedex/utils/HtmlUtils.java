@@ -80,20 +80,19 @@ public class HtmlUtils {
     public static String replaceImageURLs(String content, final long entryId) {
 
         if (!TextUtils.isEmpty(content)) {
-            Matcher matcher = IMG_PATTERN.matcher(content);
-
+            boolean needDownloadPictures = NetworkUtils.needDownloadPictures();
             final ArrayList<String> imagesToDl = new ArrayList<String>();
 
+            Matcher matcher = IMG_PATTERN.matcher(content);
             while (matcher.find()) {
                 String match = matcher.group(1).replace(" ", URL_SPACE);
 
-                if (!match.startsWith(Constants.FILE_SCHEME)) { // Just for legacy, could be removed later
-                    String imgPath = NetworkUtils.getDownloadedImagePath(entryId, match);
+                String imgPath = NetworkUtils.getDownloadedImagePath(entryId, match);
+                if (new File(imgPath).exists()) {
                     content = content.replace(match, Constants.FILE_SCHEME + imgPath);
-
-                    if (!new File(imgPath).exists()) {
-                        imagesToDl.add(match);
-                    }
+                } else if (needDownloadPictures) {
+                    content = content.replace(match, Constants.FILE_SCHEME + imgPath);
+                    imagesToDl.add(match);
                 }
             }
 

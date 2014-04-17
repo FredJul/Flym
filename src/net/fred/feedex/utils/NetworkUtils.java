@@ -29,6 +29,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.text.Html;
 
+import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.provider.FeedData;
 
@@ -149,6 +150,23 @@ public class NetworkUtils {
         }
     }
 
+    public static boolean needDownloadPictures() {
+        String fetchPictureMode = PrefUtils.getString(PrefUtils.FETCH_PICTURE_MODE, Constants.FETCH_PICTURE_MODE_WIFI_ONLY_PRELOAD);
+
+        boolean downloadPictures = false;
+        if (Constants.FETCH_PICTURE_MODE_ALWAYS_PRELOAD.equals(fetchPictureMode)) {
+            downloadPictures = true;
+        } else {
+            ConnectivityManager cm = (ConnectivityManager) MainApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo ni = cm.getActiveNetworkInfo();
+            if (ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI) {
+                downloadPictures = true;
+            }
+        }
+
+        return downloadPictures;
+    }
+
     public static String getBaseUrl(String link) {
         String baseUrl = link;
         int index = link.indexOf('/', 8); // this also covers https://
@@ -224,7 +242,8 @@ public class NetworkUtils {
             try {
                 proxy = new Proxy("0".equals(PrefUtils.getString(PrefUtils.PROXY_TYPE, "0")) ? Proxy.Type.HTTP : Proxy.Type.SOCKS,
                         new InetSocketAddress(PrefUtils.getString(PrefUtils.PROXY_HOST, ""), Integer.parseInt(PrefUtils.getString(
-                                PrefUtils.PROXY_PORT, "8080"))));
+                                PrefUtils.PROXY_PORT, "8080")))
+                );
             } catch (Exception e) {
                 proxy = null;
             }

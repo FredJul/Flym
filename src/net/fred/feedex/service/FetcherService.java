@@ -296,7 +296,7 @@ public class FetcherService extends IntentService {
                             if (cr.update(entryUri, values, null, null) > 0) {
                                 success = true;
                                 operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
-                                if (PrefUtils.getBoolean(PrefUtils.FETCH_PICTURES, false)) {
+                                if (NetworkUtils.needDownloadPictures()) {
                                     addImagesToDownload(String.valueOf(entryId), HtmlUtils.getImageURLs(mobilizedHtml));
                                 }
                             }
@@ -449,7 +449,7 @@ public class FetcherService extends IntentService {
 
                 handler = new RssAtomParser(new Date(cursor.getLong(realLastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl,
                         cursor.getInt(retrieveFullscreenPosition) == 1);
-                handler.setFetchImages(PrefUtils.getBoolean(PrefUtils.FETCH_PICTURES, false));
+                handler.setFetchImages(NetworkUtils.needDownloadPictures());
 
                 if (fetchMode == 0) {
                     if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {

@@ -159,11 +159,7 @@
     <string name="settings_keep_time">Artikkelien säilyttämisaika</string>
     <string name="settings_keep_time_description">Asetettua aikamäärää vanhemmat artikkelit poistetaan
     </string>
-    <string name="settings_disable_pictures">Kuvat pois päältä</string>
-    <string name="settings_disable_pictures_description">Älä lataa, älä näytä kuvia</string>
-    <string name="settings_fetch_pictures">Lataa kuvat</string>
-    <string name="settings_fetch_pictures_description">Lataa kaikki kuvat ja tallenna ne tähän laitteeseen
-    </string>
+    <string name="settings_fetch_picture_mode">Fetch picture mode</string>
     <string name="settings_font_size">Kirjasintyypin koko</string>
     <string name="settings_font_size_description">Artikkelitekstin kirjasintyypin koko</string>
     <string name="settings_display_oldest_first">Artikkelien järjestys</string>
@@ -222,6 +218,11 @@
         <item>+1</item>
         <item>+2</item>
         <item>+3</item>
+    </string-array>
+    <string-array name="settings_fetch_picture_modes">
+        <item>Never display pictures</item>
+        <item>Preload pictures in Wi-Fi only</item>
+        <item>Always preload pictures</item>
     </string-array>
 
 </resources>
