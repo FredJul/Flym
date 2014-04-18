@@ -119,6 +119,14 @@
             android:key="display_oldest_first"
             android:summary="@string/settings_display_oldest_first_description"
             android:title="@string/settings_display_oldest_first" />
+                
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="display_entries_fullscreen"
+            android:summary="@string/settings_display_entries_fullscreen_description"
+            android:title="@string/settings_display_entries_fullscreen" />
     </PreferenceCategory>
 
     <PreferenceCategory
