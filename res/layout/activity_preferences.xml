@@ -4,13 +4,14 @@
     android:layout_height="wrap_content">
 
     <PreferenceScreen
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:title="@string/about_feedex">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:targetPackage="net.fred.feedex"
-                android:targetClass="net.fred.feedex.activity.AboutActivity"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/about_feedex">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="net.fred.feedex"
+            android:targetClass="net.fred.feedex.activity.AboutActivity" />
     </PreferenceScreen>
 
     <PreferenceCategory
@@ -94,23 +95,16 @@
             android:summary="@string/settings_font_size_description"
             android:title="@string/settings_font_size" />
 
-        <CheckBoxPreference
+        <net.fred.feedex.view.AutoSummaryListPreference
+            android:name="@string/settings_fetch_picture_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="false"
-            android:disableDependentsState="true"
-            android:key="pictures.disable"
-            android:summary="@string/settings_disable_pictures_description"
-            android:title="@string/settings_disable_pictures" />
-
-        <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="false"
-            android:dependency="pictures.disable"
-            android:key="pictures.fetch"
-            android:summary="@string/settings_fetch_pictures_description"
-            android:title="@string/settings_fetch_pictures" />
+            android:defaultValue="WIFI_ONLY_PRELOAD"
+            android:entries="@array/settings_fetch_picture_modes"
+            android:entryValues="@array/settings_fetch_picture_modes_values"
+            android:inputType="text"
+            android:key="fetch_picture_mode"
+            android:title="@string/settings_fetch_picture_mode" />
 
         <CheckBoxPreference
             android:layout_width="wrap_content"

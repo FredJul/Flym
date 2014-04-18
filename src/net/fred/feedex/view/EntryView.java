@@ -153,13 +153,11 @@ public class EntryView extends WebView {
     }
 
     public void setHtml(long entryId, String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
-        if (PrefUtils.getBoolean(PrefUtils.DISABLE_PICTURES, false)) {
+        if (Constants.FETCH_PICTURE_MODE_NEVER_DISPLAYED.equals(PrefUtils.getString(PrefUtils.FETCH_PICTURE_MODE, Constants.FETCH_PICTURE_MODE_WIFI_ONLY_PRELOAD))) {
             contentText = contentText.replaceAll(HTML_IMG_REGEX, "");
             getSettings().setBlockNetworkImage(true);
         } else {
-            if (PrefUtils.getBoolean(PrefUtils.FETCH_PICTURES, false)) {
-                contentText = HtmlUtils.replaceImageURLs(contentText, entryId);
-            }
+            contentText = HtmlUtils.replaceImageURLs(contentText, entryId);
 
             if (getSettings().getBlockNetworkImage()) {
                 // setBlockNetwortImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards

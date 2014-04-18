@@ -166,10 +166,7 @@
     <string name="settings_keep_time_description">Las entradas que superen el timepo de retención
         serán eliminadas.
     </string>
-    <string name="settings_disable_pictures">Deshabilitar las imágenes</string>
-    <string name="settings_disable_pictures_description">No mostrar imágenes</string>
-    <string name="settings_fetch_pictures">Descargar imágenes</string>
-    <string name="settings_fetch_pictures_description">Descarga las imágenes localmente.</string>
+    <string name="settings_fetch_picture_mode">Fetch picture mode</string>
     <string name="settings_font_size">Tamaño del texto</string>
     <string name="settings_font_size_description">Selecciona el tamaño del texto de las entradas.
     </string>
@@ -234,6 +231,11 @@
         <item>+1</item>
         <item>+2</item>
         <item>+3</item>
+    </string-array>
+    <string-array name="settings_fetch_picture_modes">
+        <item>Never display pictures</item>
+        <item>Preload pictures in Wi-Fi only</item>
+        <item>Always preload pictures</item>
     </string-array>
 
 </resources>

@@ -150,10 +150,7 @@
     <string name="settings_lighttheme_description">밝은 테마를 사용</string>
     <string name="settings_keep_time">항목을 저장할 시간</string>
     <string name="settings_keep_time_description">지정한 시간보다 오래 된 항목을 삭제</string>
-    <string name="settings_disable_pictures">그림 사용 않음</string>
-    <string name="settings_disable_pictures_description">그림을 표시하거나 읽어들이지 않음</string>
-    <string name="settings_fetch_pictures">그림 다운로드</string>
-    <string name="settings_fetch_pictures_description">모든 그림을 다운로드하고 로컬에 저장</string>
+    <string name="settings_fetch_picture_mode">Fetch picture mode</string>
     <string name="settings_font_size">글자 크기</string>
     <string name="settings_font_size_description">항목의 내용 표시에 사용할 글자 크기</string>
     <string name="settings_display_oldest_first">항목 순서</string>
@@ -208,6 +205,11 @@
         <item>+1</item>
         <item>+2</item>
         <item>+3</item>
+    </string-array>
+    <string-array name="settings_fetch_picture_modes">
+        <item>Never display pictures</item>
+        <item>Preload pictures in Wi-Fi only</item>
+        <item>Always preload pictures</item>
     </string-array>
 
 </resources>

@@ -213,9 +213,9 @@ public class FetcherService extends IntentService {
         }
     }
 
-    public static boolean hasTasks(long entryId) {
+    public static boolean hasMobilizationTask(long entryId) {
         Cursor cursor = MainApplication.getContext().getContentResolver().query(TaskColumns.CONTENT_URI, TaskColumns.PROJECTION_ID,
-                TaskColumns.ENTRY_ID + '=' + entryId, null, null);
+                TaskColumns.ENTRY_ID + '=' + entryId + Constants.DB_AND + TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
 
         boolean result = cursor.getCount() > 0;
         cursor.close();
@@ -296,7 +296,7 @@ public class FetcherService extends IntentService {
                             if (cr.update(entryUri, values, null, null) > 0) {
                                 success = true;
                                 operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
-                                if (PrefUtils.getBoolean(PrefUtils.FETCH_PICTURES, false)) {
+                                if (NetworkUtils.needDownloadPictures()) {
                                     addImagesToDownload(String.valueOf(entryId), HtmlUtils.getImageURLs(mobilizedHtml));
                                 }
                             }
@@ -449,7 +449,7 @@ public class FetcherService extends IntentService {
 
                 handler = new RssAtomParser(new Date(cursor.getLong(realLastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl,
                         cursor.getInt(retrieveFullscreenPosition) == 1);
-                handler.setFetchImages(PrefUtils.getBoolean(PrefUtils.FETCH_PICTURES, false));
+                handler.setFetchImages(NetworkUtils.needDownloadPictures());
 
                 if (fetchMode == 0) {
                     if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {

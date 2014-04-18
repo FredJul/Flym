@@ -165,13 +165,8 @@
     <string name="settings_keep_time_description">Les entrades més antigues que aquest paràmetre
         seran eliminades.
     </string>
-    <string name="settings_disable_pictures">Desactiva imatges</string>
-    <string name="settings_disable_pictures_description">No es carregaran ni mostraran imatges.
-    </string>
-    <string name="settings_fetch_pictures">Descarrega imatges</string>
-    <string name="settings_fetch_pictures_description">Descarrega les imatges i les emmagatzema
-        localment.
-    </string>
+
+    <string name="settings_fetch_picture_mode">Fetch picture mode</string>
     <string name="settings_font_size">Mida del text</string>
     <string name="settings_font_size_description">Sel·lecciona la mida del text de les entrades.
     </string>
@@ -234,6 +229,11 @@
         <item>+1</item>
         <item>+2</item>
         <item>+3</item>
+    </string-array>
+    <string-array name="settings_fetch_picture_modes">
+        <item>Never display pictures</item>
+        <item>Preload pictures in Wi-Fi only</item>
+        <item>Always preload pictures</item>
     </string-array>
 
 </resources>

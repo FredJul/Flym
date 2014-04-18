@@ -41,8 +41,7 @@ public class PrefUtils {
     public static final String NOTIFICATIONS_VIBRATE = "notifications.vibrate";
 
     public static final String LIGHT_THEME = "lighttheme";
-    public static final String FETCH_PICTURES = "pictures.fetch";
-    public static final String DISABLE_PICTURES = "pictures.disable";
+    public static final String FETCH_PICTURE_MODE = "fetch_picture_mode";
     public static final String DISPLAY_OLDEST_FIRST = "display_oldest_first";
 
     public static final String PROXY_ENABLED = "proxy.enabled";

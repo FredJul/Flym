@@ -165,14 +165,7 @@
     <string name="settings_keep_time_description">Indica per quanto tempo gli articoli saranno
         conservati
     </string>
-    <string name="settings_disable_pictures">Disabilita immagini</string>
-    <string name="settings_disable_pictures_description">Le immagini non saranno scaricate e
-        visualizzate
-    </string>
-    <string name="settings_fetch_pictures">Scarica immagini</string>
-    <string name="settings_fetch_pictures_description">Scarica tutte le immagini e conservale
-        localmente
-    </string>
+    <string name="settings_fetch_picture_mode">Fetch picture mode</string>
     <string name="settings_font_size">Dimensione testo</string>
     <string name="settings_font_size_description">Dimensione del testo dei contenuti degli articoli
     </string>
@@ -234,6 +227,11 @@
         <item>+1</item>
         <item>+2</item>
         <item>+3</item>
+    </string-array>
+    <string-array name="settings_fetch_picture_modes">
+        <item>Never display pictures</item>
+        <item>Preload pictures in Wi-Fi only</item>
+        <item>Always preload pictures</item>
     </string-array>
 
 </resources>
