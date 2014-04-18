@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
 import net.fred.feedex.fragment.EntryFragment;
+import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 
 public class EntryActivity extends BaseActivity {
@@ -36,6 +37,9 @@ public class EntryActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
+        
+        if (PrefUtils.getBoolean(PrefUtils.DISPLAY_ENTRIES_FULLSCREEN, false))
+        	toggleFullScreen();
 
         setContentView(R.layout.activity_entry);
 
