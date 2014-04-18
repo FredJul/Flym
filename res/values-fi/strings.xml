@@ -159,7 +159,7 @@
     <string name="settings_keep_time">Artikkelien säilyttämisaika</string>
     <string name="settings_keep_time_description">Asetettua aikamäärää vanhemmat artikkelit poistetaan
     </string>
-    <string name="settings_fetch_picture_mode">Kuvien lataaminen</string>
+    <string name="settings_fetch_picture_mode">Lataa kuvat automaattisesti</string>
     <string name="settings_font_size">Kirjasintyypin koko</string>
     <string name="settings_font_size_description">Artikkelitekstin kirjasintyypin koko</string>
     <string name="settings_display_oldest_first">Artikkelien järjestys</string>
@@ -167,8 +167,8 @@
     <string name="settings_refresh_on_open">Päivitä käynnistettäessä</string>
     <string name="settings_refresh_on_open_description">Päivitä kaikki syötteet sovelluksen käynnistyessä
     </string>
-    <string name="settings_refresh_wifi_only">Vain Wi-Fi-yhteyden kautta</string>
-    <string name="settings_refresh_wifi_only_description">Syötteet päivitetään automaattisesti ainoastaan kun Wi-Fi-yhteys on käytettävissä
+    <string name="settings_refresh_wifi_only">Vain Wi-Fi -yhteyden kautta</string>
+    <string name="settings_refresh_wifi_only_description">Syötteet päivitetään automaattisesti ainoastaan kun Wi-Fi -yhteys on käytettävissä
     </string>
     <string name="settings_visible_feeds">Näytettävät syötteet</string>
     <string name="settings_widget_background">Tausta</string>
@@ -178,8 +178,8 @@
     <string name="settings_screen_proxy">Välityspalvelin</string>
     <string name="settings_category_network">Verkko</string>
     <string name="settings_proxy_enabled">Päällä</string>
-    <string name="settings_proxy_wifi_only">Vain Wi-Fi-yhteyden kautta</string>
-    <string name="settings_proxy_wifi_only_description">Käytä välipalvelinta ainoastaan kun Wi-Fi-yhteys on käytettävissä</string>
+    <string name="settings_proxy_wifi_only">Vain Wi-Fi -yhteyden kautta</string>
+    <string name="settings_proxy_wifi_only_description">Käytä välipalvelinta ainoastaan kun Wi-Fi -yhteys on käytettävissä</string>
     <string name="settings_proxy_host">Palvelin</string>
     <string name="settings_proxy_port">Portti</string>
     <string name="settings_proxy_type">Tyyppi</string>
@@ -220,9 +220,9 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_fetch_picture_modes">
-        <item>Älä koskaan lataa kuvia</item>
-        <item>Lataa kuvat vain Wi-Fi -yhteyden kautta</item>
-        <item>Lataa kuvat aina</item>
+        <item>Ei koskaan</item>
+        <item>Vain Wi-Fi -yhteyden kautta</item>
+        <item>Aina</item>
     </string-array>
 
 </resources>

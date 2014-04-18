@@ -149,7 +149,7 @@
     <string name="settings_lighttheme_description">Använd det ljusa temat</string>
     <string name="settings_keep_time">Tid som inläggen behållas</string>
     <string name="settings_keep_time_description">Inläggen som är äldre än den givna tidslängden raderas</string>
-    <string name="settings_fetch_picture_mode">Nedladdning av bilder</string>
+    <string name="settings_fetch_picture_mode">Ladda ned bilder automatiskt</string>
     <string name="settings_font_size">Typsnittsstorlek</string>
     <string name="settings_font_size_description">Typsnittsstorlek för inläggstext</string>
     <string name="settings_display_oldest_first">Ordning på inlägg</string>
@@ -207,9 +207,9 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_fetch_picture_modes">
-        <item>Aldrig ladda ned bilder</item>
-        <item>Ladda ned bilder endast via Wi-Fi</item>
-        <item>Alltid ladda ned bilder</item>
+        <item>Aldrig</item>
+        <item>Endast via Wi-Fi</item>
+        <item>Alltid</item>
     </string-array>
 
 </resources>
