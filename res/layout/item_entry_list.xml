@@ -1,63 +1,55 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="5dp"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp">
+    android:background="?card">
 
-    <RelativeLayout
+    <CheckBox
+        android:id="@android:id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+
+    <ImageView
+        android:id="@android:id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?card">
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@android:id/icon"
+        android:layout_toRightOf="@android:id/checkbox"
+        android:orientation="vertical">
 
-        <CheckBox
-            android:id="@android:id/checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:focusable="false"
-            android:focusableInTouchMode="false" />
-
-        <ImageView
-            android:id="@android:id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
-
-        <LinearLayout
+        <TextView
+            android:id="@android:id/text1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@android:id/icon"
-            android:layout_toRightOf="@android:id/checkbox"
-            android:orientation="vertical">
+            android:drawablePadding="3dp"
+            android:ellipsize="end"
+            android:gravity="top"
+            android:maxLines="4"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textIsSelectable="false" />
 
-            <TextView
-                android:id="@android:id/text1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawablePadding="3dp"
-                android:ellipsize="end"
-                android:gravity="top"
-                android:maxLines="4"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textIsSelectable="false" />
+        <TextView
+            android:id="@android:id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:drawablePadding="3dp"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textIsSelectable="false" />
 
-            <TextView
-                android:id="@android:id/text2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0.7"
-                android:drawablePadding="3dp"
-                android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textIsSelectable="false" />
+    </LinearLayout>
 
-        </LinearLayout>
-
-    </RelativeLayout>
-</FrameLayout>
+</RelativeLayout>
