@@ -146,8 +146,6 @@
     <string name="settings_refresh_enabled_description">Enable the automatic refresh of feeds
     </string>
     <string name="settings_refresh_interval">Refresh interval</string>
-    <string name="settings_refresh_interval_description">Interval between two automated refreshes
-    </string>
     <string name="settings_category_notifications">Notifications</string>
     <string name="settings_notifications_enabled">Enable notifications</string>
     <string name="settings_notifications_enabled_description">Enable notifications in case of new
@@ -164,12 +162,8 @@
     <string name="settings_lighttheme">Light theme</string>
     <string name="settings_lighttheme_description">Use the light theme</string>
     <string name="settings_keep_time">Time that the entries will be kept</string>
-    <string name="settings_keep_time_description">The entries that are older than the given date
-        will be deleted
-    </string>
     <string name="settings_fetch_picture_mode">Fetch picture mode</string>
     <string name="settings_font_size">Text size</string>
-    <string name="settings_font_size_description">Text size for entries content display</string>
     <string name="settings_display_oldest_first">Entries order</string>
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>
     <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>

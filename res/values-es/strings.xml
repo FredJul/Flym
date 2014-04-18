@@ -143,9 +143,6 @@
         las fuentes.
     </string>
     <string name="settings_refresh_interval">Intervalo entre actualizaciones</string>
-    <string name="settings_refresh_interval_description">Define el tiempo que transcurre entre dos
-        actualizaciones automáticas.
-    </string>
     <string name="settings_category_notifications">Notificaciones</string>
     <string name="settings_notifications_enabled">Habilitar notificaciones</string>
     <string name="settings_notifications_enabled_description">Habilita las notificaciones de nuevas
@@ -163,13 +160,8 @@
     <string name="settings_lighttheme">Tema claro</string>
     <string name="settings_lighttheme_description">Usar el tema claro</string>
     <string name="settings_keep_time">Tiempo de retención de las entradas</string>
-    <string name="settings_keep_time_description">Las entradas que superen el timepo de retención
-        serán eliminadas.
-    </string>
     <string name="settings_fetch_picture_mode">Fetch picture mode</string>
     <string name="settings_font_size">Tamaño del texto</string>
-    <string name="settings_font_size_description">Selecciona el tamaño del texto de las entradas.
-    </string>
     <string name="settings_display_oldest_first">Entries order</string>
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>
     <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>

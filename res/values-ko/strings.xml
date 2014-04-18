@@ -137,7 +137,6 @@
     <string name="settings_refresh_enabled">자동 새로 고침 사용</string>
     <string name="settings_refresh_enabled_description">피드 자동 새로 고침 기능을 사용</string>
     <string name="settings_refresh_interval">새로 고침 간격</string>
-    <string name="settings_refresh_interval_description">자동 새로 고침 사이의 간격</string>
     <string name="settings_category_notifications">알림</string>
     <string name="settings_notifications_enabled">알림 사용</string>
     <string name="settings_notifications_enabled_description">새 항목에 대한 알림을 사용</string>
@@ -149,10 +148,8 @@
     <string name="settings_lighttheme">밝은 테마</string>
     <string name="settings_lighttheme_description">밝은 테마를 사용</string>
     <string name="settings_keep_time">항목을 저장할 시간</string>
-    <string name="settings_keep_time_description">지정한 시간보다 오래 된 항목을 삭제</string>
     <string name="settings_fetch_picture_mode">Fetch picture mode</string>
     <string name="settings_font_size">글자 크기</string>
-    <string name="settings_font_size_description">항목의 내용 표시에 사용할 글자 크기</string>
     <string name="settings_display_oldest_first">항목 순서</string>
     <string name="settings_display_oldest_first_description">오래된 항목을 먼저 표시</string>
     <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>

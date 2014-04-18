@@ -145,8 +145,6 @@
     <string name="settings_refresh_enabled_description">Включить автоматическое обновление лент
     </string>
     <string name="settings_refresh_interval">Интервал обновления</string>
-    <string name="settings_refresh_interval_description">Интервал между автоматическим обновлением
-    </string>
     <string name="settings_category_notifications">Уведомления</string>
     <string name="settings_notifications_enabled">Включить уведомления</string>
     <string name="settings_notifications_enabled_description">Включить уведомления о новых записях
@@ -160,11 +158,8 @@
     <string name="settings_lighttheme">Светлая тема</string>
     <string name="settings_lighttheme_description">Использовать светлую тему</string>
     <string name="settings_keep_time">Время хранения новостей</string>
-    <string name="settings_keep_time_description">Новости старше установленной даты будут удалены
-    </string>
     <string name="settings_fetch_picture_mode">Fetch picture mode</string>
     <string name="settings_font_size">Размер текста</string>
-    <string name="settings_font_size_description">Размер текста новостей</string>
     <string name="settings_display_oldest_first">Entries order</string>
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>
     <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>

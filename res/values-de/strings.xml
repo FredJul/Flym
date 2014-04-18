@@ -137,7 +137,6 @@
     <string name="settings_refresh_enabled">Automatisches Aktualisieren</string>
     <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren aller Feeds</string>
     <string name="settings_refresh_interval">Aktualisierungsintervall</string>
-    <string name="settings_refresh_interval_description">Intervall zwischen zwei automatischen Aktualisierungen</string>
     <string name="settings_category_notifications">Benachrichtigungen</string>
     <string name="settings_notifications_enabled">Benachrichtigungen aktivieren</string>
     <string name="settings_notifications_enabled_description">Aktiviert Benachrichtigungen bei neuen Einträgen</string>
@@ -149,10 +148,8 @@
     <string name="settings_lighttheme">Helles Thema</string>
     <string name="settings_lighttheme_description">Helles Thema nutzen</string>
     <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
-    <string name="settings_keep_time_description">Einträge, die älter sind, als ausgewählt, werden gelöscht</string>
     <string name="settings_fetch_picture_mode">Bilder</string>
     <string name="settings_font_size">Textgröße</string>
-    <string name="settings_font_size_description">Textgröße für Inhalte</string>
     <string name="settings_display_oldest_first">Anzeigereihenfolge</string>
     <string name="settings_display_oldest_first_description">Zeige älteste Einträge zuerst</string>
     <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>

@@ -27,8 +27,7 @@
             android:summary="@string/settings_refresh_enabled_description"
             android:title="@string/settings_refresh_enabled" />
 
-        <ListPreference
-            android:name="@string/settings_refresh_interval"
+        <net.fred.feedex.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="1800000"
@@ -37,7 +36,6 @@
             android:entryValues="@array/settings_interval_values"
             android:inputType="number"
             android:key="refresh.interval"
-            android:summary="@string/settings_refresh_interval_description"
             android:title="@string/settings_refresh_interval" />
 
         <CheckBoxPreference
@@ -71,8 +69,7 @@
             android:summary="@string/settings_lighttheme_description"
             android:title="@string/settings_lighttheme" />
 
-        <ListPreference
-            android:name="@string/settings_keep_time"
+        <net.fred.feedex.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="4"
@@ -80,11 +77,9 @@
             android:entryValues="@array/settings_keep_time_values"
             android:inputType="number"
             android:key="keeptime"
-            android:summary="@string/settings_keep_time_description"
             android:title="@string/settings_keep_time" />
 
-        <ListPreference
-            android:name="@string/settings_font_size"
+        <net.fred.feedex.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="0"
@@ -92,11 +87,9 @@
             android:entryValues="@array/settings_font_size_values"
             android:inputType="number"
             android:key="fontsize"
-            android:summary="@string/settings_font_size_description"
             android:title="@string/settings_font_size" />
 
         <net.fred.feedex.view.AutoSummaryListPreference
-            android:name="@string/settings_fetch_picture_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="WIFI_ONLY_PRELOAD"
@@ -194,7 +187,6 @@
                 android:title="@string/settings_proxy_port" />
 
             <ListPreference
-                android:name="@string/settings_proxy_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:defaultValue="0"
