@@ -143,8 +143,6 @@
     <string name="settings_refresh_enabled_description">Attiva l\'aggiornamento automatico dei feed
     </string>
     <string name="settings_refresh_interval">Intervallo</string>
-    <string name="settings_refresh_interval_description">Intervallo tra due aggiornamenti automatici
-    </string>
     <string name="settings_category_notifications">Notifiche</string>
     <string name="settings_notifications_enabled">Attiva notifiche</string>
     <string name="settings_notifications_enabled_description">Attiva le notifiche all\'arrivo di nuovi
@@ -162,13 +160,8 @@
     <string name="settings_lighttheme">Tema chiaro</string>
     <string name="settings_lighttheme_description">Utilizza il tema chiaro</string>
     <string name="settings_keep_time">Tempo di archiviazione</string>
-    <string name="settings_keep_time_description">Indica per quanto tempo gli articoli saranno
-        conservati
-    </string>
     <string name="settings_fetch_picture_mode">Fetch picture mode</string>
     <string name="settings_font_size">Dimensione testo</string>
-    <string name="settings_font_size_description">Dimensione del testo dei contenuti degli articoli
-    </string>
     <string name="settings_display_oldest_first">Ordinamento articoli</string>
     <string name="settings_display_oldest_first_description">Mostra gli articoli più vecchi prima</string>
     <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>

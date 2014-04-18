@@ -141,8 +141,6 @@
     <string name="settings_refresh_enabled_description">Syötteiden automaattinen päivitys
     </string>
     <string name="settings_refresh_interval">Päivitysväli</string>
-    <string name="settings_refresh_interval_description">Kahden automaattisen päivityksen välinen aika
-    </string>
     <string name="settings_category_notifications">Ilmoitukset</string>
     <string name="settings_notifications_enabled">Näytä ilmoitukset</string>
     <string name="settings_notifications_enabled_description">Näytä ilmoitus kun syötteissä on uusia artikkeleita
@@ -157,11 +155,8 @@
     <string name="settings_lighttheme">Vaalea teema</string>
     <string name="settings_lighttheme_description">Käytä vaaleaa teemaa</string>
     <string name="settings_keep_time">Artikkelien säilyttämisaika</string>
-    <string name="settings_keep_time_description">Asetettua aikamäärää vanhemmat artikkelit poistetaan
-    </string>
     <string name="settings_fetch_picture_mode">Lataa kuvat automaattisesti</string>
     <string name="settings_font_size">Kirjasintyypin koko</string>
-    <string name="settings_font_size_description">Artikkelitekstin kirjasintyypin koko</string>
     <string name="settings_display_oldest_first">Artikkelien järjestys</string>
     <string name="settings_display_oldest_first_description">Näytä vanhimmat artikkelit ensin</string>
     <string name="settings_display_entries_fullscreen">Automaattinen kokoruututila</string>

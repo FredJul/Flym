@@ -136,7 +136,6 @@
     <string name="settings_refresh_enabled">Uppdatera automatiskt</string>
     <string name="settings_refresh_enabled_description">Uppdatera alla feeds automatiskt</string>
     <string name="settings_refresh_interval">Uppdateringsintervall</string>
-    <string name="settings_refresh_interval_description">Intervall mellan två automatiska uppdateringar</string>
     <string name="settings_category_notifications">Påminnelser</string>
     <string name="settings_notifications_enabled">Visa påminnelser</string>
     <string name="settings_notifications_enabled_description">Visa påminnelser då nytt feed innehåll finns</string>
@@ -148,10 +147,8 @@
     <string name="settings_lighttheme">Ljust tema</string>
     <string name="settings_lighttheme_description">Använd det ljusa temat</string>
     <string name="settings_keep_time">Tid som inläggen behållas</string>
-    <string name="settings_keep_time_description">Inläggen som är äldre än den givna tidslängden raderas</string>
     <string name="settings_fetch_picture_mode">Ladda ned bilder automatiskt</string>
     <string name="settings_font_size">Typsnittsstorlek</string>
-    <string name="settings_font_size_description">Typsnittsstorlek för inläggstext</string>
     <string name="settings_display_oldest_first">Ordning på inlägg</string>
     <string name="settings_display_oldest_first_description">Visa äldsta inläggen först</string>
     <string name="settings_display_entries_fullscreen">Automatisk helskärm</string>

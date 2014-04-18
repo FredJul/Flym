@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<color name="back_Color_dr">#000</color>
+<color name="card_color_light">#ffffffff</color>
+<color name="card_shadow_color_light">#ccc</color>
+<color name="card_color_dark">#ff202020</color>
+<color name="card_shadow_color_dark">#ff01070d</color>
+<color name="back_Color_li">#e5e5e5</color>
+</resources>
