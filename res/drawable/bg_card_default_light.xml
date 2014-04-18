@@ -3,13 +3,13 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:dither="true" android:shape="rectangle">
-            <corners android:radius="2.0dip" />
+            <corners android:radius="3.0dip" />
             <solid android:color="@color/card_shadow_color_light" />
         </shape>
     </item>
     <item android:bottom="2.0dip">
         <shape android:dither="true" android:shape="rectangle">
-            <corners android:radius="2.0dip" />
+            <corners android:radius="3.0dip" />
             <solid android:color="@color/card_color_light" />
             <padding android:left="5.0dip" android:top="8.0dip" android:right="5.0dip" android:bottom="8.0dip" />
         </shape>

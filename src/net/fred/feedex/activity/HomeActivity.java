@@ -95,8 +95,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     private boolean mCanQuit = false;
 
-	private int drawerIcon;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
@@ -127,12 +125,12 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
+
+        int drawerIcon = R.drawable.ic_drawer_light;
         if (!PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
         	drawerIcon = R.drawable.ic_drawer_dark;
         }
-        else {
-        	drawerIcon = R.drawable.ic_drawer_light;
-        }
+
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, drawerIcon, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerStateChanged(int newState) {
