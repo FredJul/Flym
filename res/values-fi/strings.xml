@@ -164,6 +164,8 @@
     <string name="settings_font_size_description">Artikkelitekstin kirjasintyypin koko</string>
     <string name="settings_display_oldest_first">Artikkelien järjestys</string>
     <string name="settings_display_oldest_first_description">Näytä vanhimmat artikkelit ensin</string>
+    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
+    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
     <string name="settings_refresh_on_open">Päivitä käynnistettäessä</string>
     <string name="settings_refresh_on_open_description">Päivitä kaikki syötteet sovelluksen käynnistyessä
     </string>

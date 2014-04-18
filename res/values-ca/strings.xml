@@ -172,6 +172,8 @@
     </string>
     <string name="settings_display_oldest_first">Entries order</string>
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>
+    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
+    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
     <string name="settings_refresh_on_open">Actualitza els canals a l\'inici</string>
     <string name="settings_refresh_on_open_description">Descarregarà nous continguts dels canals a
         l\'inici de l\'aplicació.
@@ -235,5 +237,6 @@
         <item>Preload pictures in Wi-Fi only</item>
         <item>Always preload pictures</item>
     </string-array>
+    firs
 
 </resources>

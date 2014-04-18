@@ -171,6 +171,8 @@
     </string>
     <string name="settings_display_oldest_first">Ordinamento articoli</string>
     <string name="settings_display_oldest_first_description">Mostra gli articoli più vecchi prima</string>
+    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
+    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
     <string name="settings_refresh_on_open">Aggiorna feed all\'apertura</string>
     <string name="settings_refresh_on_open_description">Aggiorna tutti i feed all\'apertura
         dell\'applicazione

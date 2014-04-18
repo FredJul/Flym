@@ -163,7 +163,9 @@
 	<string name="settings_font_size_description">消息内容的文字大小</string>
 	<string name="settings_display_oldest_first">消息排序</string>
 	<string name="settings_display_oldest_first_description">旧消息在前</string>
-	<string name="settings_refresh_on_open">自动刷新</string>
+    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
+    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
+    <string name="settings_refresh_on_open">自动刷新</string>
 	<string name="settings_refresh_on_open_description">当程序开启时，自动刷新所有订阅(建议选择)
 	</string>
 	<string name="settings_refresh_wifi_only">wifi环境才自动刷新</string>
