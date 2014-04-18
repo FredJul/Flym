@@ -154,8 +154,8 @@
     <string name="settings_font_size_description">Typsnittsstorlek för inläggstext</string>
     <string name="settings_display_oldest_first">Ordning på inlägg</string>
     <string name="settings_display_oldest_first_description">Visa äldsta inläggen först</string>
-    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
-    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
+    <string name="settings_display_entries_fullscreen">Automatisk helskärm</string>
+    <string name="settings_display_entries_fullscreen_description">Visa inlägg automatiskt i helskärm</string>
     <string name="settings_refresh_on_open">Uppdatera feeds vid start</string>
     <string name="settings_refresh_on_open_description">Uppdatera alla feeds när applikationen öppnas</string>
     <string name="settings_refresh_wifi_only">Uppdatera endast via Wi-Fi</string>
