@@ -23,7 +23,7 @@
 
     <!-- GENERAL -->
     <string name="about_feedex">Tietoja FeedExista</string>
-    <string name="welcome_title">Welcome to FeedEx. Would you like to add one feed?</string>
+    <string name="welcome_title">Tervetuloa FeedEx:iin. Haluaisitko lisätä syötteen?</string>
     <string name="never">ei koskaan</string>
     <string name="update">Päivitetty</string>
     <string name="colon">:\u00A0</string>
@@ -75,10 +75,10 @@
     <string name="filter_apply_to_content">Sovella sisältöön</string>
     <string name="accept">HYVÄKSY</string>
     <string name="reject">HYLKÄÄ</string>
-    <string name="feed_search">Etsi syötteitä</string>
-    <string name="feed_search_by_web_search">Etsi syötteitä avainsanojen avulla</string>
+    <string name="feed_search">Hae syötteitä</string>
+    <string name="feed_search_by_web_search">Hae syötteitä avainsanojen avulla</string>
     <string name="feed_search_by_topic">Generoi syöte aiheen mukaan (FAROO-haun avulla)</string>
-    <string name="feed_search_by_youtube">Etsi syöte Youtube-kanavan nimen avulla</string>
+    <string name="feed_search_by_youtube">Hae syöte Youtube-kanavan nimen avulla</string>
     <string name="select_file">Valitse tiedosto (SD-juuri)</string>
     <string name="question_delete_feed">Haluatko poistaa tämän syötteen?</string>
     <string name="question_delete_group">Haluatko poistaa tämän ryhmän ja kaikki siinä olevat syötteet?
@@ -92,17 +92,17 @@
     </string>
     <string name="to_group_above">Ylemmälle tasolle</string>
     <string name="to_group_into">Ryhmään</string>
-    <string name="add_custom_feed">Add a custom feed or search for one</string>
-    <string name="google_news_title">Google News topics</string>
-    <string name="google_news_indicator">Select one or several topics to add. Some of them may not be provided by Google for your language.</string>
-    <string name="google_news_top_stories">Top Stories</string>
-    <string name="google_news_world">World</string>
-    <string name="google_news_business">Business</string>
-    <string name="google_news_technology">Technology</string>
-    <string name="google_news_entertainment">Entertainment</string>
-    <string name="google_news_sports">Sports</string>
-    <string name="google_news_science">Science</string>
-    <string name="google_news_health">Health</string>
+    <string name="add_custom_feed">Lisää tai hae syöte</string>
+    <string name="google_news_title">Google News -aiheet</string>
+    <string name="google_news_indicator">Valitse yksi tai useampi aihe. Kaikki aiheet eivät välttämättä ole saatavilla suomeksi.</string>
+    <string name="google_news_top_stories">Etusivun uutiset</string>
+    <string name="google_news_world">Ulkomaat</string>
+    <string name="google_news_business">Talous</string>
+    <string name="google_news_technology">Tekniikka</string>
+    <string name="google_news_entertainment">Viihde</string>
+    <string name="google_news_sports">Urheilu</string>
+    <string name="google_news_science">Tiede</string>
+    <string name="google_news_health">Terveys</string>
 
     <!-- ENTRIES -->
     <string name="all">Artikkelit</string>
@@ -159,7 +159,7 @@
     <string name="settings_keep_time">Artikkelien säilyttämisaika</string>
     <string name="settings_keep_time_description">Asetettua aikamäärää vanhemmat artikkelit poistetaan
     </string>
-    <string name="settings_fetch_picture_mode">Fetch picture mode</string>
+    <string name="settings_fetch_picture_mode">Kuvien lataaminen</string>
     <string name="settings_font_size">Kirjasintyypin koko</string>
     <string name="settings_font_size_description">Artikkelitekstin kirjasintyypin koko</string>
     <string name="settings_display_oldest_first">Artikkelien järjestys</string>
@@ -220,9 +220,9 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_fetch_picture_modes">
-        <item>Never display pictures</item>
-        <item>Preload pictures in Wi-Fi only</item>
-        <item>Always preload pictures</item>
+        <item>Älä koskaan lataa kuvia</item>
+        <item>Lataa kuvat vain Wi-Fi -yhteyden kautta</item>
+        <item>Lataa kuvat aina</item>
     </string-array>
 
 </resources>
