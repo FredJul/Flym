@@ -167,8 +167,8 @@
     <string name="settings_refresh_on_open">Päivitä käynnistettäessä</string>
     <string name="settings_refresh_on_open_description">Päivitä kaikki syötteet sovelluksen käynnistyessä
     </string>
-    <string name="settings_refresh_wifi_only">Vain wifi-yhteyden kautta</string>
-    <string name="settings_refresh_wifi_only_description">Syötteet päivitetään automaattisesti ainoastaan kun wifi-yhteys on käytettävissä
+    <string name="settings_refresh_wifi_only">Vain Wi-Fi-yhteyden kautta</string>
+    <string name="settings_refresh_wifi_only_description">Syötteet päivitetään automaattisesti ainoastaan kun Wi-Fi-yhteys on käytettävissä
     </string>
     <string name="settings_visible_feeds">Näytettävät syötteet</string>
     <string name="settings_widget_background">Tausta</string>
@@ -178,8 +178,8 @@
     <string name="settings_screen_proxy">Välityspalvelin</string>
     <string name="settings_category_network">Verkko</string>
     <string name="settings_proxy_enabled">Päällä</string>
-    <string name="settings_proxy_wifi_only">Vain wifi-yhteyden kautta</string>
-    <string name="settings_proxy_wifi_only_description">Käytä välipalvelinta ainoastaan kun wifi-yhteys on käytettävissä</string>
+    <string name="settings_proxy_wifi_only">Vain Wi-Fi-yhteyden kautta</string>
+    <string name="settings_proxy_wifi_only_description">Käytä välipalvelinta ainoastaan kun Wi-Fi-yhteys on käytettävissä</string>
     <string name="settings_proxy_host">Palvelin</string>
     <string name="settings_proxy_port">Portti</string>
     <string name="settings_proxy_type">Tyyppi</string>

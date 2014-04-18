@@ -156,8 +156,8 @@
     <string name="settings_display_oldest_first_description">Visa äldsta inläggen först</string>
     <string name="settings_refresh_on_open">Uppdatera feeds vid start</string>
     <string name="settings_refresh_on_open_description">Uppdatera alla feeds när applikationen öppnas</string>
-    <string name="settings_refresh_wifi_only">Uppdatera endast över wifi</string>
-    <string name="settings_refresh_wifi_only_description">Uppdatera automatisk endast när ett wifi-nätverk är tillgänglig</string>
+    <string name="settings_refresh_wifi_only">Uppdatera endast via Wi-Fi</string>
+    <string name="settings_refresh_wifi_only_description">Uppdatera automatisk endast när ett Wi-Fi-nätverk är tillgänglig</string>
     <string name="settings_visible_feeds">Synliga feeds</string>
     <string name="settings_widget_background">Bakgrund</string>
     <string name="settings_widget_background_description">Färg och transparens för widgetens bakgrund</string>
@@ -165,8 +165,8 @@
     <string name="settings_screen_proxy">Proxy</string>
     <string name="settings_category_network">Nätverk</string>
     <string name="settings_proxy_enabled">Använd proxyserver</string>
-    <string name="settings_proxy_wifi_only">Endast wifi</string>
-    <string name="settings_proxy_wifi_only_description">Använd proxy endast för wifi</string>
+    <string name="settings_proxy_wifi_only">Endast Wi-Fi</string>
+    <string name="settings_proxy_wifi_only_description">Använd proxy endast för Wi-Fi</string>
     <string name="settings_proxy_host">Host</string>
     <string name="settings_proxy_port">Port</string>
     <string name="settings_proxy_type">Type</string>
@@ -208,7 +208,7 @@
     </string-array>
     <string-array name="settings_fetch_picture_modes">
         <item>Aldrig ladda ned bilder</item>
-        <item>Ladda ned bilder endast över Wi-Fi</item>
+        <item>Ladda ned bilder endast via Wi-Fi</item>
         <item>Alltid ladda ned bilder</item>
     </string-array>
 
