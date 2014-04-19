@@ -85,6 +85,7 @@ public class EntryView extends WebView {
     private static final String TEXT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";
     private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#ddecf1" : "#476773";
     private static final String SUBTITLE_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#666666" : "#8c8c8c";
+    private static final String SUBTITLE_BORDER_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "solid #ddd" : "solid #303030";
 
     private static final String CSS = "<head><style type='text/css'> "
             + "body {max-width: 100%; margin: 1.2em 0.3cm 0.3cm 0.2cm; font-family: sans-serif-light; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 140%} "
@@ -98,7 +99,7 @@ public class EntryView extends WebView {
             + "pre {white-space: pre-wrap;} "
             + "blockquote {margin: 0.8em 0 0.8em 1.2em; padding: 0} "
             + "p {margin: 0.8em 0 0.8em 0} "
-            + "p.subtitle {color: " + SUBTITLE_COLOR + "} "
+            + "p.subtitle {color: " + SUBTITLE_COLOR + "; border-top:1px " + SUBTITLE_BORDER_COLOR + "; border-bottom:1px " + SUBTITLE_BORDER_COLOR + "; padding-top:2px; padding-bottom:2px; font-weight:800 } "
             + "ul, ol {margin: 0 0 0.8em 0.6em; padding: 0 0 0 1em} "
             + "ul li, ol li {margin: 0 0 0.8em 0; padding: 0} "
             + "div.button-section {padding: 0.4cm 0; margin: 0; text-align: center} "
