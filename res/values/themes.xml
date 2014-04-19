@@ -7,6 +7,7 @@
 
     <style name="Theme.Dark" parent="android:Theme.Holo">
         <item name="card">@drawable/bg_card_dark</item>
+        <item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar.Solid</item>
     </style>
 
 </resources>
