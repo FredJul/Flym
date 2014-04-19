@@ -73,7 +73,7 @@ public final class Constants {
 
     public static final int UPDATE_THROTTLE_DELAY = 500;
 
-    public static final String FETCH_PICTURE_MODE_NEVER_DISPLAYED = "NEVER_DISPLAYED";
+    public static final String FETCH_PICTURE_MODE_NEVER_PRELOAD = "NEVER_PRELOAD";
     public static final String FETCH_PICTURE_MODE_WIFI_ONLY_PRELOAD = "WIFI_ONLY_PRELOAD";
     public static final String FETCH_PICTURE_MODE_ALWAYS_PRELOAD = "ALWAYS_PRELOAD";
 }

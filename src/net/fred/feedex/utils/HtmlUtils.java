@@ -80,7 +80,6 @@ public class HtmlUtils {
     public static String replaceImageURLs(String content, final long entryId) {
 
         if (!TextUtils.isEmpty(content)) {
-            boolean needDownloadPictures = NetworkUtils.needDownloadPictures();
             final ArrayList<String> imagesToDl = new ArrayList<String>();
 
             Matcher matcher = IMG_PATTERN.matcher(content);
@@ -90,7 +89,7 @@ public class HtmlUtils {
                 String imgPath = NetworkUtils.getDownloadedImagePath(entryId, match);
                 if (new File(imgPath).exists()) {
                     content = content.replace(match, Constants.FILE_SCHEME + imgPath);
-                } else if (needDownloadPictures) {
+                } else {
                     imagesToDl.add(match);
                 }
             }

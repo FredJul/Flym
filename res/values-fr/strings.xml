@@ -163,6 +163,8 @@
     <string name="settings_lighttheme">Thème clair</string>
     <string name="settings_lighttheme_description">Utiliser le thème clair</string>
     <string name="settings_keep_time">Délai de conservation des flux</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
     <string name="settings_fetch_picture_mode">Mode de chargement des images</string>
     <string name="settings_font_size">Taille du texte</string>
     <string name="settings_display_oldest_first">Ordre des articles</string>

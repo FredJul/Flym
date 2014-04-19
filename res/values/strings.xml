@@ -162,7 +162,9 @@
     <string name="settings_lighttheme">Light theme</string>
     <string name="settings_lighttheme_description">Use the light theme</string>
     <string name="settings_keep_time">Time that the entries will be kept</string>
-    <string name="settings_fetch_picture_mode">Load images automatically</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_fetch_picture_mode">Preload images</string>
     <string name="settings_font_size">Text size</string>
     <string name="settings_display_oldest_first">Entries order</string>
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>

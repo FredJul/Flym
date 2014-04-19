@@ -155,7 +155,9 @@
     <string name="settings_lighttheme">Vaalea teema</string>
     <string name="settings_lighttheme_description">Käytä vaaleaa teemaa</string>
     <string name="settings_keep_time">Artikkelien säilyttämisaika</string>
-    <string name="settings_fetch_picture_mode">Lataa kuvat automaattisesti</string>
+    <string name="settings_display_images">Näytä kuvat</string>
+    <string name="settings_display_images_description">Näytä kuvat artikkeleissa</string>
+    <string name="settings_fetch_picture_mode">Esilataa kuvat</string>
     <string name="settings_font_size">Kirjasintyypin koko</string>
     <string name="settings_display_oldest_first">Artikkelien järjestys</string>
     <string name="settings_display_oldest_first_description">Näytä vanhimmat artikkelit ensin</string>
