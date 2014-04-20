@@ -137,8 +137,8 @@
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automaattinen päivitys</string>
-    <string name="settings_refresh_enabled">Automaattinen päivitys päälle</string>
-    <string name="settings_refresh_enabled_description">Syötteiden automaattinen päivitys
+    <string name="settings_refresh_enabled">Päivitä automaattisesti</string>
+    <string name="settings_refresh_enabled_description">Päivitä kaikki syötteet automaattisesti
     </string>
     <string name="settings_refresh_interval">Päivitysväli</string>
     <string name="settings_category_notifications">Ilmoitukset</string>
@@ -159,7 +159,7 @@
     <string name="settings_display_images_description">Näytä kuvat artikkeleissa</string>
     <string name="settings_fetch_picture_mode">Esilataa kuvat</string>
     <string name="settings_font_size">Kirjasintyypin koko</string>
-    <string name="settings_display_oldest_first">Artikkelien järjestys</string>
+    <string name="settings_display_oldest_first">Näytä vanhimmat ensin</string>
     <string name="settings_display_oldest_first_description">Näytä vanhimmat artikkelit ensin</string>
     <string name="settings_display_entries_fullscreen">Automaattinen kokoruututila</string>
     <string name="settings_display_entries_fullscreen_description">Näytä artikkelit automaattisesti kokoruututilassa</string>
