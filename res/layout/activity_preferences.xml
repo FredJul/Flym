@@ -66,8 +66,8 @@
             android:defaultValue="true"
             android:disableDependentsState="true"
             android:key="lighttheme"
-            android:summary="@string/settings_lighttheme_description"
-            android:title="@string/settings_lighttheme" />
+            android:summary="@string/settings_light_theme_description"
+            android:title="@string/settings_light_theme" />
 
         <net.fred.feedex.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
@@ -101,12 +101,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="WIFI_ONLY_PRELOAD"
-            android:entries="@array/settings_fetch_picture_modes"
-            android:entryValues="@array/settings_fetch_picture_modes_values"
+            android:entries="@array/settings_preload_image_modes"
+            android:entryValues="@array/settings_preload_image_modes_values"
             android:inputType="text"
             android:dependency="display_images"
-            android:key="fetch_picture_mode"
-            android:title="@string/settings_fetch_picture_mode" />
+            android:key="preload_image_mode"
+            android:title="@string/settings_preload_image_mode" />
 
         <CheckBoxPreference
             android:layout_width="wrap_content"

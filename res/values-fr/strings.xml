@@ -160,12 +160,12 @@
         articles
     </string>
     <string name="settings_category_content_presentation">Présentation des flux</string>
-    <string name="settings_lighttheme">Thème clair</string>
-    <string name="settings_lighttheme_description">Utiliser le thème clair</string>
+    <string name="settings_light_theme">Thème clair</string>
+    <string name="settings_light_theme_description">Utiliser le thème clair</string>
     <string name="settings_keep_time">Délai de conservation des flux</string>
     <string name="settings_display_images">Display images</string>
     <string name="settings_display_images_description">Display images in entries</string>
-    <string name="settings_fetch_picture_mode">Mode de chargement des images</string>
+    <string name="settings_preload_image_mode">Préchargement des images</string>
     <string name="settings_font_size">Taille du texte</string>
     <string name="settings_display_oldest_first">Ordre des articles</string>
     <string name="settings_display_oldest_first_description">Affiche les plus vieux en premier</string>
@@ -230,10 +230,10 @@
         <item>+2</item>
         <item>+3</item>
     </string-array>
-    <string-array name="settings_fetch_picture_modes">
-        <item>Ne jamais afficher les images</item>
-        <item>Précharger les images en Wi-Fi uniquement</item>
-        <item>Toujours précharger les images</item>
+    <string-array name="settings_preload_image_modes">
+        <item>Jamais</item>
+        <item>En Wi-Fi uniquement</item>
+        <item>Toujours</item>
     </string-array>
 
 </resources>

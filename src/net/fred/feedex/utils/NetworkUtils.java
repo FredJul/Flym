@@ -151,13 +151,13 @@ public class NetworkUtils {
     }
 
     public static boolean needDownloadPictures() {
-        String fetchPictureMode = PrefUtils.getString(PrefUtils.FETCH_PICTURE_MODE, Constants.FETCH_PICTURE_MODE_WIFI_ONLY_PRELOAD);
+        String fetchPictureMode = PrefUtils.getString(PrefUtils.PRELOAD_IMAGE_MODE, Constants.FETCH_PICTURE_MODE_WIFI_ONLY_PRELOAD);
 
         boolean downloadPictures = false;
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
             if (Constants.FETCH_PICTURE_MODE_ALWAYS_PRELOAD.equals(fetchPictureMode)) {
                 downloadPictures = true;
-            } else {
+            } else if (Constants.FETCH_PICTURE_MODE_WIFI_ONLY_PRELOAD.equals(fetchPictureMode)) {
                 ConnectivityManager cm = (ConnectivityManager) MainApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo ni = cm.getActiveNetworkInfo();
                 if (ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI) {

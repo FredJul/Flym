@@ -157,12 +157,12 @@
         nuevas entradas.
     </string>
     <string name="settings_category_content_presentation">Modo de presentación</string>
-    <string name="settings_lighttheme">Tema claro</string>
-    <string name="settings_lighttheme_description">Usar el tema claro</string>
+    <string name="settings_light_theme">Tema claro</string>
+    <string name="settings_light_theme_description">Usar el tema claro</string>
     <string name="settings_keep_time">Tiempo de retención de las entradas</string>
     <string name="settings_display_images">Display images</string>
     <string name="settings_display_images_description">Display images in entries</string>
-    <string name="settings_fetch_picture_mode">Preload images</string>
+    <string name="settings_preload_image_mode">Preload images</string>
     <string name="settings_font_size">Tamaño del texto</string>
     <string name="settings_display_oldest_first">Entries order</string>
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>

@@ -157,12 +157,12 @@
         nuovi articoli
     </string>
     <string name="settings_category_content_presentation">Aspetto e contenuti</string>
-    <string name="settings_lighttheme">Tema chiaro</string>
-    <string name="settings_lighttheme_description">Utilizza il tema chiaro</string>
+    <string name="settings_light_theme">Tema chiaro</string>
+    <string name="settings_light_theme_description">Utilizza il tema chiaro</string>
     <string name="settings_keep_time">Tempo di archiviazione</string>
     <string name="settings_display_images">Display images</string>
     <string name="settings_display_images_description">Display images in entries</string>
-    <string name="settings_fetch_picture_mode">Preload images</string>
+    <string name="settings_preload_image_mode">Preload images</string>
     <string name="settings_font_size">Dimensione testo</string>
     <string name="settings_display_oldest_first">Ordinamento articoli</string>
     <string name="settings_display_oldest_first_description">Mostra gli articoli più vecchi prima</string>
@@ -225,8 +225,8 @@
         <item>+2</item>
         <item>+3</item>
     </string-array>
-    <string-array name="settings_fetch_picture_modes">
-        <item>Never</item>
+    <string-array name="settings_preload_image_modes">
+    <item>Never</item>
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>

@@ -155,12 +155,12 @@
     <string name="settings_notifications_vibrate_description">Включить вибрацию при новых записях
     </string>
     <string name="settings_category_content_presentation">Представление содержания</string>
-    <string name="settings_lighttheme">Светлая тема</string>
-    <string name="settings_lighttheme_description">Использовать светлую тему</string>
+    <string name="settings_light_theme">Светлая тема</string>
+    <string name="settings_light_theme_description">Использовать светлую тему</string>
     <string name="settings_keep_time">Время хранения новостей</string>
     <string name="settings_display_images">Display images</string>
     <string name="settings_display_images_description">Display images in entries</string>
-    <string name="settings_fetch_picture_mode">Preload images</string>
+    <string name="settings_preload_image_mode">Preload images</string>
     <string name="settings_font_size">Размер текста</string>
     <string name="settings_display_oldest_first">Entries order</string>
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>
@@ -224,8 +224,8 @@
         <item>+2</item>
         <item>+3</item>
     </string-array>
-    <string-array name="settings_fetch_picture_modes">
-        <item>Never</item>
+    <string-array name="settings_preload_image_modes">
+    <item>Never</item>
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>

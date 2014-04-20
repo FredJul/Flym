@@ -145,12 +145,12 @@
     <string name="settings_notifications_vibrate">진동</string>
     <string name="settings_notifications_vibrate_description">새 항목이 있을 때 진동 사용</string>
     <string name="settings_category_content_presentation">내용 표시</string>
-    <string name="settings_lighttheme">밝은 테마</string>
-    <string name="settings_lighttheme_description">밝은 테마를 사용</string>
+    <string name="settings_light_theme">밝은 테마</string>
+    <string name="settings_light_theme_description">밝은 테마를 사용</string>
     <string name="settings_keep_time">항목을 저장할 시간</string>
     <string name="settings_display_images">Display images</string>
     <string name="settings_display_images_description">Display images in entries</string>
-    <string name="settings_fetch_picture_mode">Preload images</string>
+    <string name="settings_preload_image_mode">Preload images</string>
     <string name="settings_font_size">글자 크기</string>
     <string name="settings_display_oldest_first">항목 순서</string>
     <string name="settings_display_oldest_first_description">오래된 항목을 먼저 표시</string>
@@ -207,8 +207,8 @@
         <item>+2</item>
         <item>+3</item>
     </string-array>
-    <string-array name="settings_fetch_picture_modes">
-        <item>Never</item>
+    <string-array name="settings_preload_image_modes">
+    <item>Never</item>
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>

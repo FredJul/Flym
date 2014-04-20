@@ -151,12 +151,12 @@
 	<string name="settings_notifications_vibrate_description">当有新的消息时，震动提醒
 	</string>
     <string name="settings_category_content_presentation">内容介绍</string>
-    <string name="settings_lighttheme">高亮主题</string>
-    <string name="settings_lighttheme_description">使用『高亮主题』</string>
+    <string name="settings_light_theme">高亮主题</string>
+    <string name="settings_light_theme_description">使用『高亮主题』</string>
     <string name="settings_keep_time">消息保存时间</string>
     <string name="settings_display_images">Display images</string>
     <string name="settings_display_images_description">Display images in entries</string>
-    <string name="settings_fetch_picture_mode">Preload images</string>
+    <string name="settings_preload_image_mode">Preload images</string>
     <string name="settings_font_size">文字大小</string>
     <string name="settings_display_oldest_first">消息排序</string>
     <string name="settings_display_oldest_first_description">旧消息在前</string>
@@ -217,8 +217,8 @@
         <item>+2</item>
         <item>+3</item>
     </string-array>
-    <string-array name="settings_fetch_picture_modes">
-        <item>Never</item>
+    <string-array name="settings_preload_image_modes">
+    <item>Never</item>
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>
