@@ -89,6 +89,14 @@
             android:key="fontsize"
             android:title="@string/settings_font_size" />
 
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="display_images"
+            android:summary="@string/settings_display_images_description"
+            android:title="@string/settings_display_images" />
+
         <net.fred.feedex.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,6 +104,7 @@
             android:entries="@array/settings_fetch_picture_modes"
             android:entryValues="@array/settings_fetch_picture_modes_values"
             android:inputType="text"
+            android:dependency="display_images"
             android:key="fetch_picture_mode"
             android:title="@string/settings_fetch_picture_mode" />
 

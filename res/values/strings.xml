@@ -162,7 +162,9 @@
     <string name="settings_lighttheme">Light theme</string>
     <string name="settings_lighttheme_description">Use the light theme</string>
     <string name="settings_keep_time">Time that the entries will be kept</string>
-    <string name="settings_fetch_picture_mode">Fetch picture mode</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_fetch_picture_mode">Preload images</string>
     <string name="settings_font_size">Text size</string>
     <string name="settings_display_oldest_first">Entries order</string>
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>
@@ -172,9 +174,8 @@
     <string name="settings_refresh_on_open_description">Refreshes all feeds after opening the
         application
     </string>
-    <string name="settings_refresh_wifi_only">Refresh only with Wifi</string>
-    <string name="settings_refresh_wifi_only_description">Automatic refresh will be done if when the
-        wifi is enabled
+    <string name="settings_refresh_wifi_only">Refresh only over Wi-Fi</string>
+    <string name="settings_refresh_wifi_only_description">Automatic refresh will only be done if Wi-Fi connection is available
     </string>
     <string name="settings_visible_feeds">Visible feeds</string>
     <string name="settings_widget_background">Background</string>
@@ -185,8 +186,8 @@
     <string name="settings_screen_proxy">Proxy</string>
     <string name="settings_category_network">Network</string>
     <string name="settings_proxy_enabled">Enabled</string>
-    <string name="settings_proxy_wifi_only">Wifi only</string>
-    <string name="settings_proxy_wifi_only_description">Use Proxy only for wifi</string>
+    <string name="settings_proxy_wifi_only">Wi-Fi only</string>
+    <string name="settings_proxy_wifi_only_description">Use Proxy only for Wi-Fi</string>
     <string name="settings_proxy_host">Host</string>
     <string name="settings_proxy_port">Port</string>
     <string name="settings_proxy_type">Type</string>
@@ -227,9 +228,9 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_fetch_picture_modes">
-        <item>Never display pictures</item>
-        <item>Preload pictures in Wi-Fi only</item>
-        <item>Always preload pictures</item>
+        <item>Never</item>
+        <item>Only over Wi-Fi</item>
+        <item>Always</item>
     </string-array>
 
 </resources>

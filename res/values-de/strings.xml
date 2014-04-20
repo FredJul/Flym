@@ -148,6 +148,8 @@
     <string name="settings_lighttheme">Helles Thema</string>
     <string name="settings_lighttheme_description">Helles Thema nutzen</string>
     <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
     <string name="settings_fetch_picture_mode">Bilder</string>
     <string name="settings_font_size">Textgröße</string>
     <string name="settings_display_oldest_first">Anzeigereihenfolge</string>

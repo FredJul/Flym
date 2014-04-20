@@ -160,7 +160,9 @@
     <string name="settings_lighttheme">Tema claro</string>
     <string name="settings_lighttheme_description">Usar el tema claro</string>
     <string name="settings_keep_time">Tiempo de retención de las entradas</string>
-    <string name="settings_fetch_picture_mode">Fetch picture mode</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_fetch_picture_mode">Preload images</string>
     <string name="settings_font_size">Tamaño del texto</string>
     <string name="settings_display_oldest_first">Entries order</string>
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>
@@ -227,9 +229,9 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_fetch_picture_modes">
-        <item>Never display pictures</item>
-        <item>Preload pictures in Wi-Fi only</item>
-        <item>Always preload pictures</item>
+        <item>Never</item>
+        <item>Only over Wi-Fi</item>
+        <item>Always</item>
     </string-array>
 
 </resources>
