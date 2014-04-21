@@ -13,7 +13,9 @@
     • madx666<br/>
     • Mikko Huhtala<br/>
     • RyDroid<br/>
-    • Sergii Pylypenko<br/><br/>
+    • Sergii Pylypenko<br/>
+    • Shapochkin Mihail<br/>
+    • Suyash Bhatt<br/><br/>
 
     <b>Translators</b><br/>
     • Benjamin Schütte<br/>
@@ -65,8 +67,8 @@
         <item>HTTP</item>
         <item>SOCKS</item>
     </string-array>
-    <string-array name="settings_fetch_picture_modes_values" translatable="false">
-        <item>NEVER_DISPLAYED</item>
+    <string-array name="settings_preload_image_modes_values" translatable="false">
+    <item>NEVER_DISPLAYED</item>
         <item>WIFI_ONLY_PRELOAD</item>
         <item>ALWAYS_PRELOAD</item>
     </string-array>

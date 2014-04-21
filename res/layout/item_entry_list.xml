@@ -1,9 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="7dip"
-    android:paddingTop="5dip"
-    android:background="?android:attr/activatedBackgroundIndicator">
+    android:background="?card">
 
     <CheckBox
         android:id="@android:id/checkbox"
@@ -11,7 +9,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="5dip"
         android:focusable="false"
         android:focusableInTouchMode="false" />
 
@@ -20,17 +17,16 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="5dip" />
+        android:layout_centerVertical="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="5dip"
-        android:layout_marginRight="5dip"
-        android:layout_toRightOf="@android:id/checkbox"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_toLeftOf="@android:id/icon"
+        android:layout_toRightOf="@android:id/checkbox"
         android:orientation="vertical">
 
         <TextView
@@ -40,7 +36,7 @@
             android:drawablePadding="3dp"
             android:ellipsize="end"
             android:gravity="top"
-            android:maxLines="3"
+            android:maxLines="4"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textIsSelectable="false" />
 

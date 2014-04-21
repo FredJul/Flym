@@ -35,11 +35,11 @@ import net.fred.feedex.utils.UiUtils;
 
 public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 
-    private int isGroupPosition = -1;
-    private int namePosition = -1;
-    private int idPosition = -1;
-    private int linkPosition = -1;
-    private int iconPosition = -1;
+    private int mIsGroupPos = -1;
+    private int mNamePos = -1;
+    private int mIdPos = -1;
+    private int mLinkPos = -1;
+    private int mIconPos = -1;
 
     public FeedsCursorAdapter(Activity activity, Uri groupUri) {
         super(activity, groupUri, R.layout.item_feed_list, R.layout.item_feed_list);
@@ -55,29 +55,31 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
         view.findViewById(R.id.indicator).setVisibility(View.INVISIBLE);
 
         TextView textView = ((TextView) view.findViewById(android.R.id.text1));
-        byte[] iconBytes = cursor.getBlob(iconPosition);
-        Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 18);
+
+        final long feedId = cursor.getLong(mIdPos);
+        Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, cursor, mIconPos);
+
         if (bitmap != null) {
             textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(context.getResources(), bitmap), null, null, null);
         } else {
             textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }
 
-        textView.setText((cursor.isNull(namePosition) ? cursor.getString(linkPosition) : cursor.getString(namePosition)));
+        textView.setText((cursor.isNull(mNamePos) ? cursor.getString(mLinkPos) : cursor.getString(mNamePos)));
     }
 
     @Override
     protected void bindGroupView(View view, Context context, Cursor cursor, boolean isExpanded) {
         ImageView indicatorImage = (ImageView) view.findViewById(R.id.indicator);
 
-        if (cursor.getInt(isGroupPosition) == 1) {
+        if (cursor.getInt(mIsGroupPos) == 1) {
             indicatorImage.setVisibility(View.VISIBLE);
 
             TextView textView = ((TextView) view.findViewById(android.R.id.text1));
             textView.setEnabled(true);
-            textView.setText(cursor.getString(namePosition));
+            textView.setText(cursor.getString(mNamePos));
             textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            textView.setText(cursor.getString(namePosition));
+            textView.setText(cursor.getString(mNamePos));
 
             if (isExpanded)
                 indicatorImage.setImageResource(R.drawable.group_expanded);
@@ -91,7 +93,7 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 
     @Override
     protected Uri getChildrenUri(Cursor groupCursor) {
-        return FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupCursor.getLong(idPosition));
+        return FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupCursor.getLong(mIdPos));
     }
 
     @Override
@@ -112,12 +114,12 @@ public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
     }
 
     private synchronized void getCursorPositions(Cursor cursor) {
-        if (cursor != null && isGroupPosition == -1) {
-            isGroupPosition = cursor.getColumnIndex(FeedColumns.IS_GROUP);
-            namePosition = cursor.getColumnIndex(FeedColumns.NAME);
-            idPosition = cursor.getColumnIndex(FeedColumns._ID);
-            linkPosition = cursor.getColumnIndex(FeedColumns.URL);
-            iconPosition = cursor.getColumnIndex(FeedColumns.ICON);
+        if (cursor != null && mIsGroupPos == -1) {
+            mIsGroupPos = cursor.getColumnIndex(FeedColumns.IS_GROUP);
+            mNamePos = cursor.getColumnIndex(FeedColumns.NAME);
+            mIdPos = cursor.getColumnIndex(FeedColumns._ID);
+            mLinkPos = cursor.getColumnIndex(FeedColumns.URL);
+            mIconPos = cursor.getColumnIndex(FeedColumns.ICON);
         }
     }
 }

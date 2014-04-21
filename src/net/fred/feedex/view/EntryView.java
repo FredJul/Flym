@@ -83,8 +83,9 @@ public class EntryView extends WebView {
 
     private static final String BACKGROUND_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#f6f6f6" : "#181b1f";
     private static final String TEXT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";
-    private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#ddecf1" : "#476773";
+    private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#52A7DF" : "#1A5A81";
     private static final String SUBTITLE_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#666666" : "#8c8c8c";
+    private static final String SUBTITLE_BORDER_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "solid #ddd" : "solid #303030";
 
     private static final String CSS = "<head><style type='text/css'> "
             + "body {max-width: 100%; margin: 1.2em 0.3cm 0.3cm 0.2cm; font-family: sans-serif-light; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 140%} "
@@ -98,13 +99,13 @@ public class EntryView extends WebView {
             + "pre {white-space: pre-wrap;} "
             + "blockquote {margin: 0.8em 0 0.8em 1.2em; padding: 0} "
             + "p {margin: 0.8em 0 0.8em 0} "
-            + "p.subtitle {color: " + SUBTITLE_COLOR + "} "
+            + "p.subtitle {color: " + SUBTITLE_COLOR + "; border-top:1px " + SUBTITLE_BORDER_COLOR + "; border-bottom:1px " + SUBTITLE_BORDER_COLOR + "; padding-top:2px; padding-bottom:2px; font-weight:800 } "
             + "ul, ol {margin: 0 0 0.8em 0.6em; padding: 0 0 0 1em} "
             + "ul li, ol li {margin: 0 0 0.8em 0; padding: 0} "
             + "div.button-section {padding: 0.4cm 0; margin: 0; text-align: center} "
             + ".button-section p {margin: 0.1cm 0 0.2cm 0}"
             + ".button-section p.marginfix {margin: 0.5cm 0 0.5cm 0}"
-            + ".button-section input, .button-section a {font-family: sans-serif-light; font-size: 100%; background-color: " + BUTTON_COLOR + "; color: " + TEXT_COLOR + "; text-decoration: none; border: none; border-radius:0.2cm; padding: 0.3cm} "
+            + ".button-section input, .button-section a {font-family: sans-serif-light; font-size: 100%; color: #FFFFFF; background-color: " + BUTTON_COLOR + "; text-decoration: none; border: none; border-radius:0.2cm; padding: 0.3cm} "
             + "</style><meta name='viewport' content='width=device-width'/></head>";
 
     private static final String BODY_START = "<body>";
@@ -152,18 +153,18 @@ public class EntryView extends WebView {
     }
 
     public void setHtml(long entryId, String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
-        if (Constants.FETCH_PICTURE_MODE_NEVER_DISPLAYED.equals(PrefUtils.getString(PrefUtils.FETCH_PICTURE_MODE, Constants.FETCH_PICTURE_MODE_WIFI_ONLY_PRELOAD))) {
-            contentText = contentText.replaceAll(HTML_IMG_REGEX, "");
-            getSettings().setBlockNetworkImage(true);
-        } else {
+        if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
             contentText = HtmlUtils.replaceImageURLs(contentText, entryId);
-
             if (getSettings().getBlockNetworkImage()) {
                 // setBlockNetwortImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
                 loadData("", TEXT_HTML, Constants.UTF8);
                 getSettings().setBlockNetworkImage(false);
             }
+        } else {
+            contentText = contentText.replaceAll(HTML_IMG_REGEX, "");
+            getSettings().setBlockNetworkImage(true);
         }
+
 
         // String baseUrl = "";
         // try {

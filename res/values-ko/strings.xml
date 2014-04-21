@@ -137,7 +137,6 @@
     <string name="settings_refresh_enabled">자동 새로 고침 사용</string>
     <string name="settings_refresh_enabled_description">피드 자동 새로 고침 기능을 사용</string>
     <string name="settings_refresh_interval">새로 고침 간격</string>
-    <string name="settings_refresh_interval_description">자동 새로 고침 사이의 간격</string>
     <string name="settings_category_notifications">알림</string>
     <string name="settings_notifications_enabled">알림 사용</string>
     <string name="settings_notifications_enabled_description">새 항목에 대한 알림을 사용</string>
@@ -146,15 +145,17 @@
     <string name="settings_notifications_vibrate">진동</string>
     <string name="settings_notifications_vibrate_description">새 항목이 있을 때 진동 사용</string>
     <string name="settings_category_content_presentation">내용 표시</string>
-    <string name="settings_lighttheme">밝은 테마</string>
-    <string name="settings_lighttheme_description">밝은 테마를 사용</string>
+    <string name="settings_light_theme">밝은 테마</string>
+    <string name="settings_light_theme_description">밝은 테마를 사용</string>
     <string name="settings_keep_time">항목을 저장할 시간</string>
-    <string name="settings_keep_time_description">지정한 시간보다 오래 된 항목을 삭제</string>
-    <string name="settings_fetch_picture_mode">Fetch picture mode</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_preload_image_mode">Preload images</string>
     <string name="settings_font_size">글자 크기</string>
-    <string name="settings_font_size_description">항목의 내용 표시에 사용할 글자 크기</string>
     <string name="settings_display_oldest_first">항목 순서</string>
     <string name="settings_display_oldest_first_description">오래된 항목을 먼저 표시</string>
+    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
+    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
     <string name="settings_refresh_on_open">열면 피드 새로 고침</string>
     <string name="settings_refresh_on_open_description">프로그램을 열면 모든 피드 새로 고침</string>
     <string name="settings_refresh_wifi_only">Wi-Fi에서만 새로 고침</string>
@@ -206,10 +207,10 @@
         <item>+2</item>
         <item>+3</item>
     </string-array>
-    <string-array name="settings_fetch_picture_modes">
-        <item>Never display pictures</item>
-        <item>Preload pictures in Wi-Fi only</item>
-        <item>Always preload pictures</item>
+    <string-array name="settings_preload_image_modes">
+    <item>Never</item>
+        <item>Only over Wi-Fi</item>
+        <item>Always</item>
     </string-array>
 
 </resources>

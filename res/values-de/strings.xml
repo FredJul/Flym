@@ -137,7 +137,6 @@
     <string name="settings_refresh_enabled">Automatisches Aktualisieren</string>
     <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren aller Feeds</string>
     <string name="settings_refresh_interval">Aktualisierungsintervall</string>
-    <string name="settings_refresh_interval_description">Intervall zwischen zwei automatischen Aktualisierungen</string>
     <string name="settings_category_notifications">Benachrichtigungen</string>
     <string name="settings_notifications_enabled">Benachrichtigungen aktivieren</string>
     <string name="settings_notifications_enabled_description">Aktiviert Benachrichtigungen bei neuen Einträgen</string>
@@ -146,15 +145,17 @@
     <string name="settings_notifications_vibrate">Vibrieren</string>
     <string name="settings_notifications_vibrate_description">Aktiviert Vibration bei neuen Einträgen</string>
     <string name="settings_category_content_presentation">Anzeige der Inhalte</string>
-    <string name="settings_lighttheme">Helles Thema</string>
-    <string name="settings_lighttheme_description">Helles Thema nutzen</string>
+    <string name="settings_light_theme">Helles Thema</string>
+    <string name="settings_light_theme_description">Helles Thema nutzen</string>
     <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
-    <string name="settings_keep_time_description">Einträge, die älter sind, als ausgewählt, werden gelöscht</string>
-    <string name="settings_fetch_picture_mode">Bilder</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_preload_image_mode">Preload images</string>
     <string name="settings_font_size">Textgröße</string>
-    <string name="settings_font_size_description">Textgröße für Inhalte</string>
     <string name="settings_display_oldest_first">Anzeigereihenfolge</string>
     <string name="settings_display_oldest_first_description">Zeige älteste Einträge zuerst</string>
+    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
+    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
     <string name="settings_refresh_on_open">Feeds beim Öffnen aktualisieren</string>
     <string name="settings_refresh_on_open_description">Aktualisiert alle Feeds beim Öffnen der Anwendung</string>
     <string name="settings_refresh_wifi_only">Nur über WLAN aktualisieren</string>
@@ -207,10 +208,10 @@
         <item>+2</item>
         <item>+3</item>
     </string-array>
-    <string-array name="settings_fetch_picture_modes">
-        <item>Keine Bilder anzeigen</item>
-        <item>Bilder nur über WLAN herunterladen</item>
-        <item>Bilder immer herunterladen</item>
+    <string-array name="settings_preload_image_modes">
+        <item>Never</item>
+        <item>Only over Wi-Fi</item>
+        <item>Always</item>
     </string-array>
 
 </resources>

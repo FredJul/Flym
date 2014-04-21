@@ -146,8 +146,6 @@
     <string name="settings_refresh_enabled_description">Enable the automatic refresh of feeds
     </string>
     <string name="settings_refresh_interval">Refresh interval</string>
-    <string name="settings_refresh_interval_description">Interval between two automated refreshes
-    </string>
     <string name="settings_category_notifications">Notifications</string>
     <string name="settings_notifications_enabled">Enable notifications</string>
     <string name="settings_notifications_enabled_description">Enable notifications in case of new
@@ -161,24 +159,23 @@
     <string name="settings_notifications_vibrate_description">Enable the vibration on new entries
     </string>
     <string name="settings_category_content_presentation">Content presentation</string>
-    <string name="settings_lighttheme">Light theme</string>
-    <string name="settings_lighttheme_description">Use the light theme</string>
+    <string name="settings_light_theme">Light theme</string>
+    <string name="settings_light_theme_description">Use the light theme</string>
     <string name="settings_keep_time">Time that the entries will be kept</string>
-    <string name="settings_keep_time_description">The entries that are older than the given date
-        will be deleted
-    </string>
-    <string name="settings_fetch_picture_mode">Fetch picture mode</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_preload_image_mode">Preload images</string>
     <string name="settings_font_size">Text size</string>
-    <string name="settings_font_size_description">Text size for entries content display</string>
     <string name="settings_display_oldest_first">Entries order</string>
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>
+    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
+    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
     <string name="settings_refresh_on_open">Refresh feeds on open</string>
     <string name="settings_refresh_on_open_description">Refreshes all feeds after opening the
         application
     </string>
-    <string name="settings_refresh_wifi_only">Refresh only with Wifi</string>
-    <string name="settings_refresh_wifi_only_description">Automatic refresh will be done if when the
-        wifi is enabled
+    <string name="settings_refresh_wifi_only">Refresh only over Wi-Fi</string>
+    <string name="settings_refresh_wifi_only_description">Automatic refresh will only be done if Wi-Fi connection is available
     </string>
     <string name="settings_visible_feeds">Visible feeds</string>
     <string name="settings_widget_background">Background</string>
@@ -189,8 +186,8 @@
     <string name="settings_screen_proxy">Proxy</string>
     <string name="settings_category_network">Network</string>
     <string name="settings_proxy_enabled">Enabled</string>
-    <string name="settings_proxy_wifi_only">Wifi only</string>
-    <string name="settings_proxy_wifi_only_description">Use Proxy only for wifi</string>
+    <string name="settings_proxy_wifi_only">Wi-Fi only</string>
+    <string name="settings_proxy_wifi_only_description">Use Proxy only for Wi-Fi</string>
     <string name="settings_proxy_host">Host</string>
     <string name="settings_proxy_port">Port</string>
     <string name="settings_proxy_type">Type</string>
@@ -230,10 +227,10 @@
         <item>+2</item>
         <item>+3</item>
     </string-array>
-    <string-array name="settings_fetch_picture_modes">
-        <item>Never display pictures</item>
-        <item>Preload pictures in Wi-Fi only</item>
-        <item>Always preload pictures</item>
+    <string-array name="settings_preload_image_modes">
+    <item>Never</item>
+        <item>Only over Wi-Fi</item>
+        <item>Always</item>
     </string-array>
 
 </resources>

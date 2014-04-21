@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Light" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="card">@drawable/bg_card_light</item>
+        <item name="android:actionBarStyle">@style/LightActionBar</item>
+    </style>
+
+    <style name="Theme.Dark" parent="android:Theme.Holo">
+        <item name="card">@drawable/bg_card_dark</item>
+        <item name="android:actionBarStyle">@style/DarkActionBar</item>
+    </style>
+
+    <style name="LightActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/light_action_bar_blue</item>
+    </style>
+
+    <style name="DarkActionBar" parent="@android:style/Widget.Holo.ActionBar.Solid">
+        <item name="android:background">@color/dark_action_bar_blue</item>
+    </style>
+</resources>

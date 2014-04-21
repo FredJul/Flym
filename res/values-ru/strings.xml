@@ -145,8 +145,6 @@
     <string name="settings_refresh_enabled_description">Включить автоматическое обновление лент
     </string>
     <string name="settings_refresh_interval">Интервал обновления</string>
-    <string name="settings_refresh_interval_description">Интервал между автоматическим обновлением
-    </string>
     <string name="settings_category_notifications">Уведомления</string>
     <string name="settings_notifications_enabled">Включить уведомления</string>
     <string name="settings_notifications_enabled_description">Включить уведомления о новых записях
@@ -157,16 +155,17 @@
     <string name="settings_notifications_vibrate_description">Включить вибрацию при новых записях
     </string>
     <string name="settings_category_content_presentation">Представление содержания</string>
-    <string name="settings_lighttheme">Светлая тема</string>
-    <string name="settings_lighttheme_description">Использовать светлую тему</string>
+    <string name="settings_light_theme">Светлая тема</string>
+    <string name="settings_light_theme_description">Использовать светлую тему</string>
     <string name="settings_keep_time">Время хранения новостей</string>
-    <string name="settings_keep_time_description">Новости старше установленной даты будут удалены
-    </string>
-    <string name="settings_fetch_picture_mode">Fetch picture mode</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_preload_image_mode">Preload images</string>
     <string name="settings_font_size">Размер текста</string>
-    <string name="settings_font_size_description">Размер текста новостей</string>
     <string name="settings_display_oldest_first">Entries order</string>
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>
+    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
+    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
     <string name="settings_refresh_on_open">Обновлять при запуске</string>
     <string name="settings_refresh_on_open_description">Обновлять все ленты пии запуске приложения
     </string>
@@ -225,10 +224,10 @@
         <item>+2</item>
         <item>+3</item>
     </string-array>
-    <string-array name="settings_fetch_picture_modes">
-        <item>Never display pictures</item>
-        <item>Preload pictures in Wi-Fi only</item>
-        <item>Always preload pictures</item>
+    <string-array name="settings_preload_image_modes">
+    <item>Never</item>
+        <item>Only over Wi-Fi</item>
+        <item>Always</item>
     </string-array>
 
 </resources>

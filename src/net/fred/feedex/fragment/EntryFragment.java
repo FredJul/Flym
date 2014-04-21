@@ -440,7 +440,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
             activity.invalidateOptionsMenu();
 
             // Listen the mobilizing task
-            if (FetcherService.hasTasks(mEntriesIds[mCurrentPagerPos])) {
+            if (FetcherService.hasMobilizationTask(mEntriesIds[mCurrentPagerPos])) {
                 showSwipeProgress();
             } else {
                 hideSwipeProgress();

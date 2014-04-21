@@ -27,8 +27,7 @@
             android:summary="@string/settings_refresh_enabled_description"
             android:title="@string/settings_refresh_enabled" />
 
-        <ListPreference
-            android:name="@string/settings_refresh_interval"
+        <net.fred.feedex.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="1800000"
@@ -37,7 +36,6 @@
             android:entryValues="@array/settings_interval_values"
             android:inputType="number"
             android:key="refresh.interval"
-            android:summary="@string/settings_refresh_interval_description"
             android:title="@string/settings_refresh_interval" />
 
         <CheckBoxPreference
@@ -68,11 +66,10 @@
             android:defaultValue="true"
             android:disableDependentsState="true"
             android:key="lighttheme"
-            android:summary="@string/settings_lighttheme_description"
-            android:title="@string/settings_lighttheme" />
+            android:summary="@string/settings_light_theme_description"
+            android:title="@string/settings_light_theme" />
 
-        <ListPreference
-            android:name="@string/settings_keep_time"
+        <net.fred.feedex.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="4"
@@ -80,11 +77,9 @@
             android:entryValues="@array/settings_keep_time_values"
             android:inputType="number"
             android:key="keeptime"
-            android:summary="@string/settings_keep_time_description"
             android:title="@string/settings_keep_time" />
 
-        <ListPreference
-            android:name="@string/settings_font_size"
+        <net.fred.feedex.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="0"
@@ -92,19 +87,26 @@
             android:entryValues="@array/settings_font_size_values"
             android:inputType="number"
             android:key="fontsize"
-            android:summary="@string/settings_font_size_description"
             android:title="@string/settings_font_size" />
 
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="display_images"
+            android:summary="@string/settings_display_images_description"
+            android:title="@string/settings_display_images" />
+
         <net.fred.feedex.view.AutoSummaryListPreference
-            android:name="@string/settings_fetch_picture_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="WIFI_ONLY_PRELOAD"
-            android:entries="@array/settings_fetch_picture_modes"
-            android:entryValues="@array/settings_fetch_picture_modes_values"
+            android:entries="@array/settings_preload_image_modes"
+            android:entryValues="@array/settings_preload_image_modes_values"
             android:inputType="text"
-            android:key="fetch_picture_mode"
-            android:title="@string/settings_fetch_picture_mode" />
+            android:dependency="display_images"
+            android:key="preload_image_mode"
+            android:title="@string/settings_preload_image_mode" />
 
         <CheckBoxPreference
             android:layout_width="wrap_content"
@@ -113,6 +115,14 @@
             android:key="display_oldest_first"
             android:summary="@string/settings_display_oldest_first_description"
             android:title="@string/settings_display_oldest_first" />
+                
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="display_entries_fullscreen"
+            android:summary="@string/settings_display_entries_fullscreen_description"
+            android:title="@string/settings_display_entries_fullscreen" />
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -186,7 +196,6 @@
                 android:title="@string/settings_proxy_port" />
 
             <ListPreference
-                android:name="@string/settings_proxy_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:defaultValue="0"

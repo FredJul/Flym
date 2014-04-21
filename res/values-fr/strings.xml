@@ -146,9 +146,6 @@
     <string name="settings_refresh_enabled_description">Active la mise à jour automatique des flux
     </string>
     <string name="settings_refresh_interval">Intervalle de mise à jour</string>
-    <string name="settings_refresh_interval_description">Intervalle entre 2 mises à jour
-        automatique
-    </string>
     <string name="settings_category_notifications">Notifications</string>
     <string name="settings_notifications_enabled">Activer les notifications</string>
     <string name="settings_notifications_enabled_description">Active les notifications en cas de
@@ -163,17 +160,17 @@
         articles
     </string>
     <string name="settings_category_content_presentation">Présentation des flux</string>
-    <string name="settings_lighttheme">Thème clair</string>
-    <string name="settings_lighttheme_description">Utiliser le thème clair</string>
+    <string name="settings_light_theme">Thème clair</string>
+    <string name="settings_light_theme_description">Utiliser le thème clair</string>
     <string name="settings_keep_time">Délai de conservation des flux</string>
-    <string name="settings_keep_time_description">Les articles plus anciens que le délai indiqué
-        seront effacés
-    </string>
-    <string name="settings_fetch_picture_mode">Mode de chargement des images</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_preload_image_mode">Préchargement des images</string>
     <string name="settings_font_size">Taille du texte</string>
-    <string name="settings_font_size_description">Taille du texte du contenu des articles</string>
     <string name="settings_display_oldest_first">Ordre des articles</string>
     <string name="settings_display_oldest_first_description">Affiche les plus vieux en premier</string>
+    <string name="settings_display_entries_fullscreen">Plein écran auto</string>
+    <string name="settings_display_entries_fullscreen_description">Affiche automatiquement les articles en plein écran</string>
     <string name="settings_refresh_on_open">Mise à jour des flux à l\'ouverture</string>
     <string name="settings_refresh_on_open_description">Met à jour tous les flux à l\'ouverture de
         l\'application
@@ -233,10 +230,10 @@
         <item>+2</item>
         <item>+3</item>
     </string-array>
-    <string-array name="settings_fetch_picture_modes">
-        <item>Ne jamais afficher les images</item>
-        <item>Précharger les images en Wi-Fi uniquement</item>
-        <item>Toujours précharger les images</item>
+    <string-array name="settings_preload_image_modes">
+        <item>Jamais</item>
+        <item>En Wi-Fi uniquement</item>
+        <item>Toujours</item>
     </string-array>
 
 </resources>
