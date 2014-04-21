@@ -83,7 +83,7 @@ public class EntryView extends WebView {
 
     private static final String BACKGROUND_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#f6f6f6" : "#181b1f";
     private static final String TEXT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";
-    private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#ddecf1" : "#476773";
+    private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#52A7DF" : "#1A5A81";
     private static final String SUBTITLE_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#666666" : "#8c8c8c";
     private static final String SUBTITLE_BORDER_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "solid #ddd" : "solid #303030";
 
@@ -105,7 +105,7 @@ public class EntryView extends WebView {
             + "div.button-section {padding: 0.4cm 0; margin: 0; text-align: center} "
             + ".button-section p {margin: 0.1cm 0 0.2cm 0}"
             + ".button-section p.marginfix {margin: 0.5cm 0 0.5cm 0}"
-            + ".button-section input, .button-section a {font-family: sans-serif-light; font-size: 100%; background-color: " + BUTTON_COLOR + "; color: " + TEXT_COLOR + "; text-decoration: none; border: none; border-radius:0.2cm; padding: 0.3cm} "
+            + ".button-section input, .button-section a {font-family: sans-serif-light; font-size: 100%; color: #FFFFFF; background-color: " + BUTTON_COLOR + "; text-decoration: none; border: none; border-radius:0.2cm; padding: 0.3cm} "
             + "</style><meta name='viewport' content='width=device-width'/></head>";
 
     private static final String BODY_START = "<body>";
