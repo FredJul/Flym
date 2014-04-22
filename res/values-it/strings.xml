@@ -160,9 +160,9 @@
     <string name="settings_light_theme">Tema chiaro</string>
     <string name="settings_light_theme_description">Utilizza il tema chiaro</string>
     <string name="settings_keep_time">Tempo di archiviazione</string>
-    <string name="settings_display_images">Display images</string>
-    <string name="settings_display_images_description">Display images in entries</string>
-    <string name="settings_preload_image_mode">Preload images</string>
+    <string name="settings_display_images">Mostra immagini</string>
+    <string name="settings_display_images_description">Mostra le immagini degli articoli</string>
+    <string name="settings_preload_image_mode">Scarica le immagini in anticipo</string>
     <string name="settings_font_size">Dimensione testo</string>
     <string name="settings_display_oldest_first">Ordinamento articoli</string>
     <string name="settings_display_oldest_first_description">Mostra gli articoli più vecchi prima</string>
@@ -226,9 +226,9 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_preload_image_modes">
-    <item>Never</item>
-        <item>Only over Wi-Fi</item>
-        <item>Always</item>
+        <item>Mai</item>
+        <item>Solo con Wi-Fi</item>
+        <item>Sempre</item>
     </string-array>
 
 </resources>
