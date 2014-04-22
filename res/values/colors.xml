@@ -2,4 +2,6 @@
 <resources>
     <color name="light_action_bar_blue">#247ab0</color>
     <color name="dark_action_bar_blue">#175073</color>
+    <color name="light_entry_list_background">#e5e5e5</color>
+    <color name="dark_entry_list_background">#000000</color>
 </resources>

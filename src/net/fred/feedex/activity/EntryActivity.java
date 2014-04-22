@@ -37,9 +37,10 @@ public class EntryActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
-        
-        if (PrefUtils.getBoolean(PrefUtils.DISPLAY_ENTRIES_FULLSCREEN, false))
-        	toggleFullScreen();
+
+        if (PrefUtils.getBoolean(PrefUtils.DISPLAY_ENTRIES_FULLSCREEN, false)) {
+            toggleFullScreen();
+        }
 
         setContentView(R.layout.activity_entry);
 
