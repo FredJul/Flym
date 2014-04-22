@@ -356,7 +356,6 @@ public class FetcherService extends IntentService {
 
                 // If we are here, everything is OK
                 operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
-                cr.notifyChange(EntryColumns.CONTENT_URI(entryId), null); // To refresh the view
             } catch (Exception e) {
                 if (nbAttempt + 1 > MAX_TASK_ATTEMPT) {
                     operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
