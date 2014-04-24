@@ -228,8 +228,8 @@
         <item>+2</item>
         <item>+3</item>
     </string-array>
-    <string-array name="settings_fetch_picture_modes">
-        <item>Never</item>
+    <string-array name="settings_preload_image_modes">
+    <item>Never</item>
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>

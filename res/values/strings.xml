@@ -228,7 +228,7 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_preload_image_modes">
-    <item>Never</item>
+        <item>Never</item>
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>
