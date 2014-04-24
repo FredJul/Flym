@@ -76,6 +76,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private SearchView mSearchView;
     private long mListDisplayDate = new Date().getTime();
     private int mNewEntriesNumber, mOldUnreadEntriesNumber = -1;
+    private boolean mAutoRefreshDisplayDate = false;
 
     private Button mRefreshListBtn;
 
@@ -128,7 +129,15 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             mNewEntriesNumber = data.getInt(0);
             mOldUnreadEntriesNumber = data.getInt(1);
 
-            refreshUI();
+            if (mAutoRefreshDisplayDate && mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
+                mListDisplayDate = new Date().getTime();
+                getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+                getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+            } else {
+                refreshUI();
+            }
+
+            mAutoRefreshDisplayDate = false;
         }
 
         @Override
@@ -200,8 +209,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         refreshSwipeProgress();
         PrefUtils.registerOnPrefChangeListener(mPrefListener);
 
@@ -209,6 +218,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             // If the list is empty when we are going back here, try with the last display date
             if (mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
                 mListDisplayDate = new Date().getTime();
+            } else {
+                mAutoRefreshDisplayDate = true; // We will try to update the list after if necessary
             }
 
             getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
@@ -272,9 +283,9 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
         PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
-        super.onPause();
+        super.onStop();
     }
 
     @Override
