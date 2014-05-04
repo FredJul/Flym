@@ -39,6 +39,7 @@ public class PrefUtils {
     public static final String NOTIFICATIONS_ENABLED = "notifications.enabled";
     public static final String NOTIFICATIONS_RINGTONE = "notifications.ringtone";
     public static final String NOTIFICATIONS_VIBRATE = "notifications.vibrate";
+    public static final String NOTIFICATIONS_LIGHT = "notifications.light";
 
     public static final String LIGHT_THEME = "lighttheme";
     public static final String DISPLAY_IMAGES = "display_images";

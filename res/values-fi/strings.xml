@@ -151,6 +151,8 @@
     <string name="settings_notifications_vibrate">Värinä</string>
     <string name="settings_notifications_vibrate_description">Aseta uusista artikkeleista ilmoittava värinähälytys
     </string>
+    <string name="settings_notifications_light">Merkkivalo</string>
+    <string name="settings_notifications_light_description">Ilmoita merkkivalolla uusista artikkeleista</string>
     <string name="settings_category_content_presentation">Sisällön esittäminen</string>
     <string name="settings_light_theme">Vaalea teema</string>
     <string name="settings_light_theme_description">Käytä vaaleaa teemaa</string>

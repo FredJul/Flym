@@ -186,7 +186,7 @@ public class FetcherService extends IntentService {
                                 .setAutoCancel(true) //
                                 .setContentTitle(getString(R.string.feedex_feeds)) //
                                 .setContentText(text) //
-                                .setLights(0xffffffff, 300, 1000);
+                                .setLights(0xffffffff, 0, 0);
 
                         if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_VIBRATE, false)) {
                             notifBuilder.setVibrate(new long[]{0, 1000});
@@ -195,6 +195,10 @@ public class FetcherService extends IntentService {
                         String ringtone = PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, null);
                         if (ringtone != null && ringtone.length() > 0) {
                             notifBuilder.setSound(Uri.parse(ringtone));
+                        }
+
+                        if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_LIGHT, false)) {
+                            notifBuilder.setLights(0xffffffff, 300, 1000);
                         }
 
                         if (Constants.NOTIF_MGR != null) {

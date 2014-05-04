@@ -154,6 +154,16 @@
             android:key="notifications.vibrate"
             android:summary="@string/settings_notifications_vibrate_description"
             android:title="@string/settings_notifications_vibrate" />
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:dependency="notifications.enabled"
+            android:key="notifications.light"
+            android:summary="@string/settings_notifications_light_description"
+            android:title="@string/settings_notifications_light" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
