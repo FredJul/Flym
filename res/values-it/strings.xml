@@ -157,7 +157,7 @@
         nuovi articoli
     </string>
     <string name="settings_notifications_light">LED</string>
-    <string name="settings_notifications_light_description">Accendi il LED di notifica all'arrivo di nuovi articoli</string>
+    <string name="settings_notifications_light_description">Accendi il LED di notifica all\'arrivo di nuovi articoli</string>
     <string name="settings_category_content_presentation">Aspetto e contenuti</string>
     <string name="settings_light_theme">Tema chiaro</string>
     <string name="settings_light_theme_description">Utilizza il tema chiaro</string>
