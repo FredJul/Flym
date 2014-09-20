@@ -15,6 +15,12 @@
         android:id="@+id/refreshListBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_refresh_list_button_selector"
+        android:textColor="@android:color/white"
         android:visibility="gone" />
 
     <FrameLayout
@@ -25,18 +31,18 @@
             android:id="@android:id/empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/no_entries"
+            android:clickable="true"
             android:gravity="center"
-            android:clickable="true" />
+            android:text="@string/no_entries" />
 
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="fill"
-            android:listSelector="@android:color/transparent"
             android:divider="@null"
             android:dividerHeight="0dp"
-            android:drawSelectorOnTop="false" />
+            android:drawSelectorOnTop="false"
+            android:listSelector="@android:color/transparent" />
     </FrameLayout>
 </LinearLayout>
