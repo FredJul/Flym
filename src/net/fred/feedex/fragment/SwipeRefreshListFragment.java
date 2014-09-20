@@ -36,10 +36,7 @@ public abstract class SwipeRefreshListFragment extends ListFragment implements S
         mRefreshLayout = new SwipeRefreshLayout(inflater.getContext()) {
             @Override
             public boolean canChildScrollUp() {
-                if (mListView != null) {
-                    return mListView.getFirstVisiblePosition() != 0;
-                }
-                return false;
+                return mListView != null && mListView.getFirstVisiblePosition() != 0;
             }
         };
         inflateView(inflater, mRefreshLayout, savedInstanceState);

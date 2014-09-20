@@ -70,14 +70,6 @@ public class DrawerAdapter extends BaseAdapter {
     private Cursor mFeedsCursor;
     private int mAllUnreadNumber, mFavoritesNumber;
 
-    private static class ViewHolder {
-        public ImageView iconView;
-        public TextView titleTxt;
-        public TextView stateTxt;
-        public TextView unreadTxt;
-        public View separator;
-    }
-
     public DrawerAdapter(Context context, Cursor feedCursor) {
         mContext = context;
         mFeedsCursor = feedCursor;
@@ -225,11 +217,8 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public boolean isItemAGroup(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
-            return mFeedsCursor.getInt(POS_IS_GROUP) == 1;
-        }
+        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3) && mFeedsCursor.getInt(POS_IS_GROUP) == 1;
 
-        return false;
     }
 
     private void updateNumbers() {
@@ -244,5 +233,13 @@ public class DrawerAdapter extends BaseAdapter {
             }
             numbers.close();
         }
+    }
+
+    private static class ViewHolder {
+        public ImageView iconView;
+        public TextView titleTxt;
+        public TextView stateTxt;
+        public TextView unreadTxt;
+        public View separator;
     }
 }

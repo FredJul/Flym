@@ -69,7 +69,7 @@ public class PrefUtils {
     public static void putBoolean(String key, boolean value) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit();
         editor.putBoolean(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static int getInt(String key, int defValue) {
@@ -80,7 +80,7 @@ public class PrefUtils {
     public static void putInt(String key, int value) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit();
         editor.putInt(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static long getLong(String key, long defValue) {
@@ -91,7 +91,7 @@ public class PrefUtils {
     public static void putLong(String key, long value) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit();
         editor.putLong(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getString(String key, String defValue) {
@@ -102,13 +102,13 @@ public class PrefUtils {
     public static void putString(String key, String value) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit();
         editor.putString(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static void remove(String key) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit();
         editor.remove(key);
-        editor.commit();
+        editor.apply();
     }
 
     public static void registerOnPrefChangeListener(OnSharedPreferenceChangeListener listener) {

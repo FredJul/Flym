@@ -75,23 +75,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private ListView mListView;
     private SearchView mSearchView;
     private long mListDisplayDate = new Date().getTime();
-    private int mNewEntriesNumber, mOldUnreadEntriesNumber = -1;
-    private boolean mAutoRefreshDisplayDate = false;
-
-    private Button mRefreshListBtn;
-
-    private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (PrefUtils.SHOW_READ.equals(key)) {
-                getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-            } else if (PrefUtils.IS_REFRESHING.equals(key)) {
-                refreshSwipeProgress();
-            }
-        }
-    };
-
-    private LoaderManager.LoaderCallbacks<Cursor> mEntriesLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
+    private final LoaderManager.LoaderCallbacks<Cursor> mEntriesLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             String entriesOrder = PrefUtils.getBoolean(PrefUtils.DISPLAY_OLDEST_FIRST, false) ? Constants.DB_ASC : Constants.DB_DESC;
@@ -114,8 +98,35 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             mEntriesCursorAdapter.swapCursor(null);
         }
     };
+    private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (PrefUtils.SHOW_READ.equals(key)) {
+                getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+            } else if (PrefUtils.IS_REFRESHING.equals(key)) {
+                refreshSwipeProgress();
+            }
+        }
+    };
+    private int mNewEntriesNumber, mOldUnreadEntriesNumber = -1;
+    private boolean mAutoRefreshDisplayDate = false;
+    private Button mRefreshListBtn;
 
-    private LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mUri = savedInstanceState.getParcelable(STATE_URI);
+            mShowFeedInfo = savedInstanceState.getBoolean(STATE_SHOW_FEED_INFO);
+            mListDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE);
+
+            mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
+        }
+    }
+
+    private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
@@ -144,69 +155,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onLoaderReset(Loader<Cursor> loader) {
         }
     };
-
-    private class SwipeGestureListener extends SimpleOnGestureListener implements OnTouchListener {
-        static final int SWIPE_MIN_DISTANCE = 120;
-        static final int SWIPE_MAX_OFF_PATH = 150;
-        static final int SWIPE_THRESHOLD_VELOCITY = 150;
-
-        private final GestureDetector mGestureDetector;
-
-        public SwipeGestureListener(Context context) {
-            mGestureDetector = new GestureDetector(context, this);
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if (mListView != null && e1 != null && e2 != null && Math.abs(e1.getY() - e2.getY()) <= SWIPE_MAX_OFF_PATH && Math.abs(velocityX) >= SWIPE_THRESHOLD_VELOCITY) {
-                int position = mListView.pointToPosition(Math.round(e2.getX()), Math.round(e2.getY()));
-                View view = mListView.getChildAt(position - mListView.getFirstVisiblePosition());
-
-                if (view != null) {
-                    // Just click on views, the adapter will do the real stuff
-                    if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
-                        CheckBox cb = (CheckBox) view.findViewById(android.R.id.checkbox);
-                        cb.setChecked(!cb.isChecked());
-                    } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
-                        ImageView star = (ImageView) view.findViewById(android.R.id.icon);
-                        star.callOnClick();
-                    }
-
-                    // Just simulate a CANCEL event to remove the item highlighting
-                    mListView.post(new Runnable() { // In a post to avoid a crash on 4.0.x
-                        @Override
-                        public void run() {
-                            MotionEvent motionEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
-                            mListView.dispatchTouchEvent(motionEvent);
-                            motionEvent.recycle();
-                        }
-                    });
-                    return true;
-                }
-            }
-
-            return super.onFling(e1, e2, velocityX, velocityY);
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            return mGestureDetector.onTouchEvent(event);
-        }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-        super.onCreate(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            mUri = savedInstanceState.getParcelable(STATE_URI);
-            mShowFeedInfo = savedInstanceState.getBoolean(STATE_SHOW_FEED_INFO);
-            mListDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE);
-
-            mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
-        }
-    }
 
     @Override
     public void onStart() {
@@ -456,4 +404,55 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             hideSwipeProgress();
         }
     }
+
+    private class SwipeGestureListener extends SimpleOnGestureListener implements OnTouchListener {
+        static final int SWIPE_MIN_DISTANCE = 120;
+        static final int SWIPE_MAX_OFF_PATH = 150;
+        static final int SWIPE_THRESHOLD_VELOCITY = 150;
+
+        private final GestureDetector mGestureDetector;
+
+        public SwipeGestureListener(Context context) {
+            mGestureDetector = new GestureDetector(context, this);
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if (mListView != null && e1 != null && e2 != null && Math.abs(e1.getY() - e2.getY()) <= SWIPE_MAX_OFF_PATH && Math.abs(velocityX) >= SWIPE_THRESHOLD_VELOCITY) {
+                int position = mListView.pointToPosition(Math.round(e2.getX()), Math.round(e2.getY()));
+                View view = mListView.getChildAt(position - mListView.getFirstVisiblePosition());
+
+                if (view != null) {
+                    // Just click on views, the adapter will do the real stuff
+                    if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
+                        CheckBox cb = (CheckBox) view.findViewById(android.R.id.checkbox);
+                        cb.setChecked(!cb.isChecked());
+                    } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
+                        ImageView star = (ImageView) view.findViewById(android.R.id.icon);
+                        star.callOnClick();
+                    }
+
+                    // Just simulate a CANCEL event to remove the item highlighting
+                    mListView.post(new Runnable() { // In a post to avoid a crash on 4.0.x
+                        @Override
+                        public void run() {
+                            MotionEvent motionEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
+                            mListView.dispatchTouchEvent(motionEvent);
+                            motionEvent.recycle();
+                        }
+                    });
+                    return true;
+                }
+            }
+
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return mGestureDetector.onTouchEvent(event);
+        }
+    }
+
+
 }
