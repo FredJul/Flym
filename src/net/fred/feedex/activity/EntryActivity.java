@@ -39,7 +39,7 @@ public class EntryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_ENTRIES_FULLSCREEN, false)) {
-            toggleFullScreen();
+            setImmersiveFullScreen(true);
         }
 
         setContentView(R.layout.activity_entry);

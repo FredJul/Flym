@@ -85,111 +85,6 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
 
     private View mCancelFullscreenBtn;
 
-    private class EntryPagerAdapter extends PagerAdapter {
-
-        private final SparseArray<EntryView> mEntryViews = new SparseArray<EntryView>();
-
-        public EntryPagerAdapter() {
-        }
-
-        @Override
-        public int getCount() {
-            return mEntriesIds != null ? mEntriesIds.length : 0;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            EntryView view = new EntryView(getActivity());
-            mEntryViews.put(position, view);
-            container.addView(view);
-            view.setListener(EntryFragment.this);
-            getLoaderManager().restartLoader(position, null, EntryFragment.this);
-            return view;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            getLoaderManager().destroyLoader(position);
-            container.removeView((View) object);
-            mEntryViews.delete(position);
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        public void displayEntry(int pagerPos, Cursor newCursor, boolean forceUpdate) {
-            EntryView view = mEntryViews.get(pagerPos);
-            if (view != null) {
-                if (newCursor == null) {
-                    newCursor = (Cursor) view.getTag(); // get the old one
-                }
-
-                if (newCursor != null && newCursor.moveToFirst()) {
-                    String contentText = newCursor.getString(mMobilizedHtmlPos);
-                    if (contentText == null || (forceUpdate && !mPreferFullText)) {
-                        mPreferFullText = false;
-                        contentText = newCursor.getString(mAbstractPos);
-                    } else {
-                        mPreferFullText = true;
-                    }
-                    if (contentText == null) {
-                        contentText = "";
-                    }
-
-                    String author = newCursor.getString(mAuthorPos);
-                    long timestamp = newCursor.getLong(mDatePos);
-                    String link = newCursor.getString(mLinkPos);
-                    String title = newCursor.getString(mTitlePos);
-                    String enclosure = newCursor.getString(mEnclosurePos);
-
-                    view.setHtml(mEntriesIds[pagerPos], title, link, contentText, enclosure, author, timestamp, mPreferFullText);
-                    view.setTag(newCursor);
-
-                    if (pagerPos == mCurrentPagerPos) {
-                        refreshUI(newCursor);
-                    }
-                }
-            }
-        }
-
-        public Cursor getCursor(int pagerPos) {
-            EntryView view = mEntryViews.get(pagerPos);
-            if (view != null) {
-                return (Cursor) view.getTag();
-            }
-            return null;
-        }
-
-        public void setUpdatedCursor(int pagerPos, Cursor newCursor) {
-            EntryView view = mEntryViews.get(pagerPos);
-            if (view != null) {
-                Cursor previousUpdatedOne = (Cursor) view.getTag(R.id.updated_cursor);
-                if (previousUpdatedOne != null) {
-                    previousUpdatedOne.close();
-                }
-                view.setTag(newCursor);
-                view.setTag(R.id.updated_cursor, newCursor);
-            }
-        }
-
-        public void onResume() {
-            if (mEntriesIds != null) {
-                EntryView view = mEntryViews.get(mCurrentPagerPos);
-                if (view != null) {
-                    view.onResume();
-                }
-            }
-        }
-
-        public void onPause() {
-            for (int i = 0; i < mEntryViews.size(); i++) {
-                mEntryViews.valueAt(i).onPause();
-            }
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -207,7 +102,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
         mCancelFullscreenBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleFullScreen();
+                setImmersiveFullScreen(false);
             }
         });
 
@@ -347,7 +242,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                     break;
                 }
                 case R.id.menu_full_screen: {
-                    toggleFullScreen();
+                    setImmersiveFullScreen(true);
                     break;
                 }
                 case R.id.menu_copy_clipboard: {
@@ -477,9 +372,9 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
         }
     }
 
-    private void toggleFullScreen() {
+    private void setImmersiveFullScreen(boolean fullScreen) {
         BaseActivity activity = (BaseActivity) getActivity();
-        activity.toggleFullScreen();
+        activity.setImmersiveFullScreen(fullScreen);
     }
 
     @Override
@@ -576,6 +471,18 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
     }
 
     @Override
+    public void onStartVideoFullScreen() {
+        BaseActivity activity = (BaseActivity) getActivity();
+        activity.setNormalFullScreen(true);
+    }
+
+    @Override
+    public void onEndVideoFullScreen() {
+        BaseActivity activity = (BaseActivity) getActivity();
+        activity.setNormalFullScreen(false);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader cursorLoader = new CursorLoader(getActivity(), EntryColumns.CONTENT_URI(mEntriesIds[id]), null, null, null, null);
         cursorLoader.setUpdateThrottle(1000);
@@ -615,8 +522,8 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
     }
 
     @Override
-    public void onFullScreenEnabled(boolean isImmersive) {
-        if (!isImmersive) {
+    public void onFullScreenEnabled(boolean isImmersive, boolean isImmersiveFallback) {
+        if (!isImmersive && isImmersiveFallback) {
             mCancelFullscreenBtn.setVisibility(View.VISIBLE);
         }
     }
@@ -629,6 +536,111 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
     @Override
     public void onRefresh() {
         // Nothing to do
+    }
+
+    private class EntryPagerAdapter extends PagerAdapter {
+
+        private final SparseArray<EntryView> mEntryViews = new SparseArray<EntryView>();
+
+        public EntryPagerAdapter() {
+        }
+
+        @Override
+        public int getCount() {
+            return mEntriesIds != null ? mEntriesIds.length : 0;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            EntryView view = new EntryView(getActivity());
+            mEntryViews.put(position, view);
+            container.addView(view);
+            view.setListener(EntryFragment.this);
+            getLoaderManager().restartLoader(position, null, EntryFragment.this);
+            return view;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            getLoaderManager().destroyLoader(position);
+            container.removeView((View) object);
+            mEntryViews.delete(position);
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        public void displayEntry(int pagerPos, Cursor newCursor, boolean forceUpdate) {
+            EntryView view = mEntryViews.get(pagerPos);
+            if (view != null) {
+                if (newCursor == null) {
+                    newCursor = (Cursor) view.getTag(); // get the old one
+                }
+
+                if (newCursor != null && newCursor.moveToFirst()) {
+                    String contentText = newCursor.getString(mMobilizedHtmlPos);
+                    if (contentText == null || (forceUpdate && !mPreferFullText)) {
+                        mPreferFullText = false;
+                        contentText = newCursor.getString(mAbstractPos);
+                    } else {
+                        mPreferFullText = true;
+                    }
+                    if (contentText == null) {
+                        contentText = "";
+                    }
+
+                    String author = newCursor.getString(mAuthorPos);
+                    long timestamp = newCursor.getLong(mDatePos);
+                    String link = newCursor.getString(mLinkPos);
+                    String title = newCursor.getString(mTitlePos);
+                    String enclosure = newCursor.getString(mEnclosurePos);
+
+                    view.setHtml(mEntriesIds[pagerPos], title, link, contentText, enclosure, author, timestamp, mPreferFullText);
+                    view.setTag(newCursor);
+
+                    if (pagerPos == mCurrentPagerPos) {
+                        refreshUI(newCursor);
+                    }
+                }
+            }
+        }
+
+        public Cursor getCursor(int pagerPos) {
+            EntryView view = mEntryViews.get(pagerPos);
+            if (view != null) {
+                return (Cursor) view.getTag();
+            }
+            return null;
+        }
+
+        public void setUpdatedCursor(int pagerPos, Cursor newCursor) {
+            EntryView view = mEntryViews.get(pagerPos);
+            if (view != null) {
+                Cursor previousUpdatedOne = (Cursor) view.getTag(R.id.updated_cursor);
+                if (previousUpdatedOne != null) {
+                    previousUpdatedOne.close();
+                }
+                view.setTag(newCursor);
+                view.setTag(R.id.updated_cursor, newCursor);
+            }
+        }
+
+        public void onResume() {
+            if (mEntriesIds != null) {
+                EntryView view = mEntryViews.get(mCurrentPagerPos);
+                if (view != null) {
+                    view.onResume();
+                }
+            }
+        }
+
+        public void onPause() {
+            for (int i = 0; i < mEntryViews.size(); i++) {
+                mEntryViews.valueAt(i).onPause();
+            }
+        }
     }
 }
 
