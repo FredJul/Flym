@@ -116,6 +116,7 @@ public class EntryView extends FrameLayout {
     private static final String LINK_BUTTON_MIDDLE = "'>";
     private static final String LINK_BUTTON_END = "</a></p>";
     private static final String IMAGE_ENCLOSURE = "[@]image/";
+
     private final JavaScriptObject mInjectedJSObject = new JavaScriptObject();
     private OnActionListener mListener;
     private WebView mWebView;

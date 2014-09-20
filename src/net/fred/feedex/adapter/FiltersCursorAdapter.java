@@ -30,9 +30,9 @@ import net.fred.feedex.provider.FeedData.FilterColumns;
 
 public class FiltersCursorAdapter extends ResourceCursorAdapter {
 
-    private int filterTextColumnPosition;
-    private int isAppliedToTitleColumnPosition;
-    private int isAcceptRulePosition;
+    private int mFilterTextColumnPosition;
+    private int mIsAppliedToTitleColumnPosition;
+    private int mIsAcceptRulePosition;
 
     private int mSelectedFilter = -1;
 
@@ -54,12 +54,12 @@ public class FiltersCursorAdapter extends ResourceCursorAdapter {
             view.setBackgroundResource(android.R.color.transparent);
         }
 
-        boolean isAcceptRule = cursor.getInt(isAcceptRulePosition) == 1;
+        boolean isAcceptRule = cursor.getInt(mIsAcceptRulePosition) == 1;
         isAcceptRuleTextView.setText(isAcceptRule ? R.string.accept : R.string.reject);
         isAcceptRuleTextView.setTextColor(isAcceptRule ? context.getResources().getColor(android.R.color.holo_green_dark) :
                 context.getResources().getColor(android.R.color.holo_red_dark));
-        filterTextTextView.setText(cursor.getString(filterTextColumnPosition));
-        isAppliedToTitleTextView.setText(cursor.getInt(isAppliedToTitleColumnPosition) == 1 ? R.string.filter_apply_to_title : R.string.filter_apply_to_content);
+        filterTextTextView.setText(cursor.getString(mFilterTextColumnPosition));
+        isAppliedToTitleTextView.setText(cursor.getInt(mIsAppliedToTitleColumnPosition) == 1 ? R.string.filter_apply_to_title : R.string.filter_apply_to_content);
     }
 
     @Override
@@ -88,17 +88,17 @@ public class FiltersCursorAdapter extends ResourceCursorAdapter {
 
     private void reinit(Cursor cursor) {
         if (cursor != null) {
-            filterTextColumnPosition = cursor.getColumnIndex(FilterColumns.FILTER_TEXT);
-            isAppliedToTitleColumnPosition = cursor.getColumnIndex(FilterColumns.IS_APPLIED_TO_TITLE);
-            isAcceptRulePosition = cursor.getColumnIndex(FilterColumns.IS_ACCEPT_RULE);
+            mFilterTextColumnPosition = cursor.getColumnIndex(FilterColumns.FILTER_TEXT);
+            mIsAppliedToTitleColumnPosition = cursor.getColumnIndex(FilterColumns.IS_APPLIED_TO_TITLE);
+            mIsAcceptRulePosition = cursor.getColumnIndex(FilterColumns.IS_ACCEPT_RULE);
         }
-    }
-
-    public void setSelectedFilter(int filterPos) {
-        mSelectedFilter = filterPos;
     }
 
     public int getSelectedFilter() {
         return mSelectedFilter;
+    }
+
+    public void setSelectedFilter(int filterPos) {
+        mSelectedFilter = filterPos;
     }
 }

@@ -60,15 +60,7 @@ import net.fred.feedex.utils.PrefUtils;
 
 public class RefreshService extends Service {
     public static final String SIXTY_MINUTES = "3600000";
-
-    public static class RefreshAlarmReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            context.startService(new Intent(context, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
-        }
-    }
-
-    private final OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
+    private final OnSharedPreferenceChangeListener mListener = new OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (PrefUtils.REFRESH_INTERVAL.equals(key)) {
@@ -76,9 +68,8 @@ public class RefreshService extends Service {
             }
         }
     };
-
-    private AlarmManager alarmManager;
-    private PendingIntent timerIntent;
+    private AlarmManager mAlarmManager;
+    private PendingIntent mTimerIntent;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -95,16 +86,16 @@ public class RefreshService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        PrefUtils.registerOnPrefChangeListener(listener);
+        mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        PrefUtils.registerOnPrefChangeListener(mListener);
         restartTimer(true);
     }
 
     private void restartTimer(boolean created) {
-        if (timerIntent == null) {
-            timerIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, RefreshAlarmReceiver.class), 0);
+        if (mTimerIntent == null) {
+            mTimerIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, RefreshAlarmReceiver.class), 0);
         } else {
-            alarmManager.cancel(timerIntent);
+            mAlarmManager.cancel(mTimerIntent);
         }
 
         int time = 3600000;
@@ -124,15 +115,22 @@ public class RefreshService extends Service {
             }
         }
 
-        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, initialRefreshTime, time, timerIntent);
+        mAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, initialRefreshTime, time, mTimerIntent);
     }
 
     @Override
     public void onDestroy() {
-        if (timerIntent != null) {
-            alarmManager.cancel(timerIntent);
+        if (mTimerIntent != null) {
+            mAlarmManager.cancel(mTimerIntent);
         }
-        PrefUtils.unregisterOnPrefChangeListener(listener);
+        PrefUtils.unregisterOnPrefChangeListener(mListener);
         super.onDestroy();
+    }
+
+    public static class RefreshAlarmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            context.startService(new Intent(context, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
+        }
     }
 }

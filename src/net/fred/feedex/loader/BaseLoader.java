@@ -28,7 +28,7 @@ import android.content.Context;
  * @author Alexander Blom (me@alexanderblom.se)
  */
 public abstract class BaseLoader<D> extends AsyncTaskLoader<D> {
-    private D data;
+    private D mData;
 
     public BaseLoader(Context context) {
         super(context);
@@ -41,18 +41,18 @@ public abstract class BaseLoader<D> extends AsyncTaskLoader<D> {
             return;
         }
 
-        this.data = data;
+        mData = data;
 
         super.deliverResult(data);
     }
 
     @Override
     protected void onStartLoading() {
-        if (data != null) {
-            deliverResult(data);
+        if (mData != null) {
+            deliverResult(mData);
         }
 
-        if (takeContentChanged() || data == null) {
+        if (takeContentChanged() || mData == null) {
             forceLoad();
         }
     }
@@ -70,6 +70,6 @@ public abstract class BaseLoader<D> extends AsyncTaskLoader<D> {
         // Ensure the loader is stopped
         onStopLoading();
 
-        data = null;
+        mData = null;
     }
 }

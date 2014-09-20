@@ -61,9 +61,10 @@ import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.utils.PrefUtils;
 
 public class WidgetConfigActivity extends PreferenceActivity {
-    private int widgetId;
 
     private static final String NAME_COLUMN = "ifnull(" + FeedColumns.NAME + ',' + FeedColumns.URL + ") as title";
+
+    private int mWidgetId;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -73,9 +74,9 @@ public class WidgetConfigActivity extends PreferenceActivity {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            mWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
-        if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+        if (mWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
         }
         addPreferencesFromResource(R.layout.widget_preferences);
@@ -126,36 +127,36 @@ public class WidgetConfigActivity extends PreferenceActivity {
                     }
 
                     String feedIds = builder.toString();
-                    PrefUtils.putString(widgetId + ".feeds", feedIds);
+                    PrefUtils.putString(mWidgetId + ".feeds", feedIds);
 
                     int color = PrefUtils.getInt("widget.background", WidgetProvider.STANDARD_BACKGROUND);
-                    PrefUtils.putInt(widgetId + ".background", color);
+                    PrefUtils.putInt(mWidgetId + ".background", color);
 
                     int fontSize = Integer.parseInt(PrefUtils.getString("widget.fontsize", "0"));
                     if (fontSize != 0) {
-                        PrefUtils.putInt(widgetId + ".fontsize", fontSize);
+                        PrefUtils.putInt(mWidgetId + ".fontsize", fontSize);
                     } else {
-                        PrefUtils.remove(widgetId + ".fontsize");
+                        PrefUtils.remove(mWidgetId + ".fontsize");
                     }
 
                     // Now we need to update the widget
                     Intent intent = new Intent(WidgetConfigActivity.this, WidgetProvider.class);
                     intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[]{widgetId});
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[]{mWidgetId});
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(WidgetConfigActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     try {
                         pendingIntent.send();
                     } catch (CanceledException ignored) {
                     }
 
-                    setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
+                    setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mWidgetId));
                     finish();
                 }
             });
         } else {
             // no feeds found --> use all feeds, no dialog needed
             cursor.close();
-            setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
+            setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mWidgetId));
         }
     }
 

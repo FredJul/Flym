@@ -63,28 +63,6 @@ public class NetworkUtils {
         CookieHandler.setDefault(this);
     }};
 
-    private static class PictureFilenameFilter implements FilenameFilter {
-        private static final String REGEX = "__[^\\.]*\\.[A-Za-z]*";
-
-        private Pattern pattern;
-
-        public PictureFilenameFilter(String entryId) {
-            setEntryId(entryId);
-        }
-
-        public PictureFilenameFilter() {
-        }
-
-        public void setEntryId(String entryId) {
-            pattern = Pattern.compile(entryId + REGEX);
-        }
-
-        @Override
-        public boolean accept(File dir, String filename) {
-            return pattern.matcher(filename).find();
-        }
-    }
-
     public static String getDownloadedImagePath(long entryId, String imgUrl) {
         return IMAGE_FOLDER + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
     }
@@ -277,5 +255,27 @@ public class NetworkUtils {
         connection.connect();
 
         return connection;
+    }
+
+    private static class PictureFilenameFilter implements FilenameFilter {
+        private static final String REGEX = "__[^\\.]*\\.[A-Za-z]*";
+
+        private Pattern mPattern;
+
+        public PictureFilenameFilter(String entryId) {
+            setEntryId(entryId);
+        }
+
+        public PictureFilenameFilter() {
+        }
+
+        public void setEntryId(String entryId) {
+            mPattern = Pattern.compile(entryId + REGEX);
+        }
+
+        @Override
+        public boolean accept(File dir, String filename) {
+            return mPattern.matcher(filename).find();
+        }
     }
 }

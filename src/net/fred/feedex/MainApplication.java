@@ -26,17 +26,17 @@ import net.fred.feedex.utils.PrefUtils;
 
 public class MainApplication extends Application {
 
-    private static Context context;
+    private static Context mContext;
+
+    public static Context getContext() {
+        return mContext;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        context = getApplicationContext();
+        mContext = getApplicationContext();
 
         PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false); // init
-    }
-
-    public static Context getContext() {
-        return context;
     }
 }

@@ -31,7 +31,7 @@ import net.fred.feedex.R;
 
 public class UiUtils {
 
-    static private final LongSparseArray<Bitmap> sFaviconCache = new LongSparseArray<Bitmap>();
+    static private final LongSparseArray<Bitmap> FAVICON_CACHE = new LongSparseArray<Bitmap>();
 
     static public void setPreferenceTheme(Activity a) {
         if (!PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
@@ -44,12 +44,12 @@ public class UiUtils {
     }
 
     static public Bitmap getFaviconBitmap(long feedId, Cursor cursor, int iconCursorPos) {
-        Bitmap bitmap = UiUtils.sFaviconCache.get(feedId);
+        Bitmap bitmap = UiUtils.FAVICON_CACHE.get(feedId);
         if (bitmap == null) {
             byte[] iconBytes = cursor.getBlob(iconCursorPos);
             if (iconBytes != null && iconBytes.length > 0) {
                 bitmap = UiUtils.getScaledBitmap(iconBytes, 18);
-                UiUtils.sFaviconCache.put(feedId, bitmap);
+                UiUtils.FAVICON_CACHE.put(feedId, bitmap);
             }
         }
         return bitmap;

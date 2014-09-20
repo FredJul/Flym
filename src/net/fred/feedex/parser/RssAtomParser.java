@@ -123,259 +123,266 @@ public class RssAtomParser extends DefaultHandler {
             new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ssZ", Locale.US), new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSz", Locale.US),
             new SimpleDateFormat("yyyy-MM-dd", Locale.US)};
 
-    private final Date realLastUpdateDate;
-    private long newRealLastUpdate;
-
-    private final String id;
-
-    private boolean entryTagEntered = false;
-    private boolean titleTagEntered = false;
-    private boolean updatedTagEntered = false;
-    private boolean linkTagEntered = false;
-    private boolean descriptionTagEntered = false;
-    private boolean pubDateTagEntered = false;
-    private boolean publishedTagEntered = false;
-    private boolean dateTagEntered = false;
-    private boolean lastBuildDateTagEntered = false;
-    private boolean guidTagEntered = false;
-    private boolean authorTagEntered = false;
-
-    private StringBuilder title;
-    private StringBuilder dateStringBuilder;
-    private String feedLink;
-    private Date entryDate;
-    private Date entryUpdateDate;
-    private Date previousEntryDate;
-    private Date previousEntryUpdateDate;
-    private StringBuilder entryLink;
-    private StringBuilder description;
-    private StringBuilder enclosure;
-    private final Uri feedEntriesUri;
-    private int newCount = 0;
-    private final String feedName;
-    private String feedTitle;
-    private final String feedBaseUrl;
-    private boolean done = false;
-    private final Date keepDateBorder;
-    private boolean fetchImages = false;
-    private boolean retrieveFullText = false;
-    private boolean cancelled = false;
-    private long now = System.currentTimeMillis();
-    private StringBuilder guid;
-    private StringBuilder author, tmpAuthor;
-
-    private final FeedFilters filters;
-
-    private final ArrayList<ContentProviderOperation> inserts = new ArrayList<ContentProviderOperation>();
-    private final ArrayList<ArrayList<String>> entriesImages = new ArrayList<ArrayList<String>>();
+    private final Date mRealLastUpdateDate;
+    private final String mId;
+    private final Uri mFeedEntriesUri;
+    private final String mFeedName;
+    private final String mFeedBaseUrl;
+    private final Date mKeepDateBorder;
+    private final FeedFilters mFilters;
+    private final ArrayList<ContentProviderOperation> mInserts = new ArrayList<ContentProviderOperation>();
+    private final ArrayList<ArrayList<String>> mEntriesImages = new ArrayList<ArrayList<String>>();
+    private long mNewRealLastUpdate;
+    private boolean mEntryTagEntered = false;
+    private boolean mTitleTagEntered = false;
+    private boolean mUpdatedTagEntered = false;
+    private boolean mLinkTagEntered = false;
+    private boolean mDescriptionTagEntered = false;
+    private boolean mPubDateTagEntered = false;
+    private boolean mPublishedTagEntered = false;
+    private boolean mDateTagEntered = false;
+    private boolean mLastBuildDateTagEntered = false;
+    private boolean mGuidTagEntered = false;
+    private boolean mAuthorTagEntered = false;
+    private StringBuilder mTitle;
+    private StringBuilder mDateStringBuilder;
+    private String mFeedLink;
+    private Date mEntryDate;
+    private Date mEntryUpdateDate;
+    private Date mPreviousEntryDate;
+    private Date mPreviousEntryUpdateDate;
+    private StringBuilder mEntryLink;
+    private StringBuilder mDescription;
+    private StringBuilder mEnclosure;
+    private int mNewCount = 0;
+    private String mFeedTitle;
+    private boolean mDone = false;
+    private boolean mFetchImages = false;
+    private boolean mRetrieveFullText = false;
+    private boolean mCancelled = false;
+    private long mNow = System.currentTimeMillis();
+    private StringBuilder mGuid;
+    private StringBuilder mAuthor, mTmpAuthor;
 
     public RssAtomParser(Date realLastUpdateDate, final String id, String feedName, String url, boolean retrieveFullText) {
         long keepTime = Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l;
         long keepDateBorderTime = keepTime > 0 ? System.currentTimeMillis() - keepTime : 0;
 
-        keepDateBorder = new Date(keepDateBorderTime);
-        this.realLastUpdateDate = realLastUpdateDate;
-        newRealLastUpdate = realLastUpdateDate.getTime();
-        this.id = id;
-        this.feedName = feedName;
-        feedEntriesUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(id);
-        this.retrieveFullText = retrieveFullText;
+        mKeepDateBorder = new Date(keepDateBorderTime);
+        mRealLastUpdateDate = realLastUpdateDate;
+        mNewRealLastUpdate = realLastUpdateDate.getTime();
+        mId = id;
+        mFeedName = feedName;
+        mFeedEntriesUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(id);
+        mRetrieveFullText = retrieveFullText;
 
-        filters = new FeedFilters(id);
+        mFilters = new FeedFilters(id);
 
         // Remove old stuffs
         final String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
-        NetworkUtils.deleteFeedImagesCache(feedEntriesUri, where);
-        MainApplication.getContext().getContentResolver().delete(feedEntriesUri, where, null);
+        NetworkUtils.deleteFeedImagesCache(mFeedEntriesUri, where);
+        MainApplication.getContext().getContentResolver().delete(mFeedEntriesUri, where, null);
 
-        feedBaseUrl = NetworkUtils.getBaseUrl(url);
+        mFeedBaseUrl = NetworkUtils.getBaseUrl(url);
+    }
+
+    private static String unescapeTitle(String title) {
+        String result = title.replace(Constants.AMP_SG, Constants.AMP).replaceAll(HTML_TAG_REGEX, "").replace(Constants.HTML_LT, Constants.LT)
+                .replace(Constants.HTML_GT, Constants.GT).replace(Constants.HTML_QUOT, Constants.QUOT)
+                .replace(Constants.HTML_APOSTROPHE, Constants.APOSTROPHE);
+
+        if (result.contains(AND_SHARP)) {
+            return Html.fromHtml(result, null, null).toString();
+        } else {
+            return result;
+        }
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if (TAG_UPDATED.equals(localName)) {
-            updatedTagEntered = true;
-            dateStringBuilder = new StringBuilder();
+            mUpdatedTagEntered = true;
+            mDateStringBuilder = new StringBuilder();
         } else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
-            entryTagEntered = true;
-            description = null;
-            entryLink = null;
+            mEntryTagEntered = true;
+            mDescription = null;
+            mEntryLink = null;
 
             // Save the previous (if no date are found for this entry)
-            previousEntryDate = entryDate;
-            previousEntryUpdateDate = entryUpdateDate;
-            entryDate = null;
-            entryUpdateDate = null;
+            mPreviousEntryDate = mEntryDate;
+            mPreviousEntryUpdateDate = mEntryUpdateDate;
+            mEntryDate = null;
+            mEntryUpdateDate = null;
 
             // This is the retrieved feed title
-            if (feedTitle == null && title != null && title.length() > 0) {
-                feedTitle = title.toString();
+            if (mFeedTitle == null && mTitle != null && mTitle.length() > 0) {
+                mFeedTitle = mTitle.toString();
             }
-            title = null;
+            mTitle = null;
         } else if (TAG_TITLE.equals(localName)) {
-            if (title == null) {
-                titleTagEntered = true;
-                title = new StringBuilder();
+            if (mTitle == null) {
+                mTitleTagEntered = true;
+                mTitle = new StringBuilder();
             }
         } else if (TAG_LINK.equals(localName)) {
-            if (authorTagEntered) {
+            if (mAuthorTagEntered) {
                 return;
             }
             if (TAG_ENCLOSURE.equals(attributes.getValue("", ATTRIBUTE_REL))) {
                 startEnclosure(attributes, attributes.getValue("", ATTRIBUTE_HREF));
             } else {
                 // Get the link only if we don't have one or if its the good one (html)
-                if (entryLink == null || HTML_TEXT.equals(attributes.getValue("", ATTRIBUTE_TYPE))) {
-                    entryLink = new StringBuilder();
+                if (mEntryLink == null || HTML_TEXT.equals(attributes.getValue("", ATTRIBUTE_TYPE))) {
+                    mEntryLink = new StringBuilder();
 
                     boolean foundLink = false;
                     String href = attributes.getValue("", ATTRIBUTE_HREF);
                     if (!TextUtils.isEmpty(href)) {
-                        entryLink.append(href);
+                        mEntryLink.append(href);
                         foundLink = true;
-                        linkTagEntered = false;
+                        mLinkTagEntered = false;
                     } else {
-                        linkTagEntered = true;
+                        mLinkTagEntered = true;
                     }
 
                     if (!foundLink) {
-                        linkTagEntered = true;
+                        mLinkTagEntered = true;
                     }
                 }
             }
         } else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName))
                 || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName))) {
-            descriptionTagEntered = true;
-            description = new StringBuilder();
+            mDescriptionTagEntered = true;
+            mDescription = new StringBuilder();
         } else if (TAG_SUMMARY.equals(localName)) {
-            if (description == null) {
-                descriptionTagEntered = true;
-                description = new StringBuilder();
+            if (mDescription == null) {
+                mDescriptionTagEntered = true;
+                mDescription = new StringBuilder();
             }
         } else if (TAG_PUBDATE.equals(localName)) {
-            pubDateTagEntered = true;
-            dateStringBuilder = new StringBuilder();
+            mPubDateTagEntered = true;
+            mDateStringBuilder = new StringBuilder();
         } else if (TAG_PUBLISHED.equals(localName)) {
-            publishedTagEntered = true;
-            dateStringBuilder = new StringBuilder();
+            mPublishedTagEntered = true;
+            mDateStringBuilder = new StringBuilder();
         } else if (TAG_DATE.equals(localName)) {
-            dateTagEntered = true;
-            dateStringBuilder = new StringBuilder();
+            mDateTagEntered = true;
+            mDateStringBuilder = new StringBuilder();
         } else if (TAG_LAST_BUILD_DATE.equals(localName)) {
-            lastBuildDateTagEntered = true;
-            dateStringBuilder = new StringBuilder();
+            mLastBuildDateTagEntered = true;
+            mDateStringBuilder = new StringBuilder();
         } else if (TAG_ENCODED_CONTENT.equals(localName)) {
-            descriptionTagEntered = true;
-            description = new StringBuilder();
+            mDescriptionTagEntered = true;
+            mDescription = new StringBuilder();
         } else if (TAG_ENCLOSURE.equals(localName)) {
             startEnclosure(attributes, attributes.getValue("", ATTRIBUTE_URL));
         } else if (TAG_GUID.equals(localName)) {
-            guidTagEntered = true;
-            guid = new StringBuilder();
+            mGuidTagEntered = true;
+            mGuid = new StringBuilder();
         } else if (TAG_NAME.equals(localName) || TAG_AUTHOR.equals(localName) || TAG_CREATOR.equals(localName)) {
-            authorTagEntered = true;
-            if (tmpAuthor == null) {
-                tmpAuthor = new StringBuilder();
+            mAuthorTagEntered = true;
+            if (mTmpAuthor == null) {
+                mTmpAuthor = new StringBuilder();
             }
         }
     }
 
     private void startEnclosure(Attributes attributes, String url) {
-        if (enclosure == null && url != null) { // fetch the first enclosure only
-            enclosure = new StringBuilder(url);
-            enclosure.append(Constants.ENCLOSURE_SEPARATOR);
+        if (mEnclosure == null && url != null) { // fetch the first enclosure only
+            mEnclosure = new StringBuilder(url);
+            mEnclosure.append(Constants.ENCLOSURE_SEPARATOR);
 
             String value = attributes.getValue("", ATTRIBUTE_TYPE);
 
             if (value != null) {
-                enclosure.append(value);
+                mEnclosure.append(value);
             }
-            enclosure.append(Constants.ENCLOSURE_SEPARATOR);
+            mEnclosure.append(Constants.ENCLOSURE_SEPARATOR);
             value = attributes.getValue("", ATTRIBUTE_LENGTH);
             if (value != null) {
-                enclosure.append(value);
+                mEnclosure.append(value);
             }
         }
     }
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
-        if (titleTagEntered) {
-            title.append(ch, start, length);
-        } else if (linkTagEntered) {
-            entryLink.append(ch, start, length);
-        } else if (descriptionTagEntered) {
-            description.append(ch, start, length);
-        } else if (updatedTagEntered || pubDateTagEntered || publishedTagEntered || dateTagEntered || lastBuildDateTagEntered) {
-            dateStringBuilder.append(ch, start, length);
-        } else if (guidTagEntered) {
-            guid.append(ch, start, length);
-        } else if (authorTagEntered) {
-            tmpAuthor.append(ch, start, length);
+        if (mTitleTagEntered) {
+            mTitle.append(ch, start, length);
+        } else if (mLinkTagEntered) {
+            mEntryLink.append(ch, start, length);
+        } else if (mDescriptionTagEntered) {
+            mDescription.append(ch, start, length);
+        } else if (mUpdatedTagEntered || mPubDateTagEntered || mPublishedTagEntered || mDateTagEntered || mLastBuildDateTagEntered) {
+            mDateStringBuilder.append(ch, start, length);
+        } else if (mGuidTagEntered) {
+            mGuid.append(ch, start, length);
+        } else if (mAuthorTagEntered) {
+            mTmpAuthor.append(ch, start, length);
         }
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if (TAG_TITLE.equals(localName)) {
-            titleTagEntered = false;
+            mTitleTagEntered = false;
         } else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName)) || TAG_SUMMARY.equals(localName)
                 || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName)) || TAG_ENCODED_CONTENT.equals(localName)) {
-            descriptionTagEntered = false;
+            mDescriptionTagEntered = false;
         } else if (TAG_LINK.equals(localName)) {
-            linkTagEntered = false;
+            mLinkTagEntered = false;
 
-            if (feedLink == null && !entryTagEntered && TAG_LINK.equals(qName)) { // Skip <atom10:link> tags
-                feedLink = entryLink.toString();
+            if (mFeedLink == null && !mEntryTagEntered && TAG_LINK.equals(qName)) { // Skip <atom10:link> tags
+                mFeedLink = mEntryLink.toString();
             }
         } else if (TAG_UPDATED.equals(localName)) {
-            entryUpdateDate = parseUpdateDate(dateStringBuilder.toString());
-            updatedTagEntered = false;
+            mEntryUpdateDate = parseUpdateDate(mDateStringBuilder.toString());
+            mUpdatedTagEntered = false;
         } else if (TAG_PUBDATE.equals(localName)) {
-            entryDate = parsePubdateDate(dateStringBuilder.toString());
-            pubDateTagEntered = false;
+            mEntryDate = parsePubdateDate(mDateStringBuilder.toString());
+            mPubDateTagEntered = false;
         } else if (TAG_PUBLISHED.equals(localName)) {
-            entryDate = parsePubdateDate(dateStringBuilder.toString());
-            publishedTagEntered = false;
+            mEntryDate = parsePubdateDate(mDateStringBuilder.toString());
+            mPublishedTagEntered = false;
         } else if (TAG_LAST_BUILD_DATE.equals(localName)) {
-            entryDate = parsePubdateDate(dateStringBuilder.toString());
-            lastBuildDateTagEntered = false;
+            mEntryDate = parsePubdateDate(mDateStringBuilder.toString());
+            mLastBuildDateTagEntered = false;
         } else if (TAG_DATE.equals(localName)) {
-            entryDate = parseUpdateDate(dateStringBuilder.toString());
-            dateTagEntered = false;
+            mEntryDate = parseUpdateDate(mDateStringBuilder.toString());
+            mDateTagEntered = false;
         } else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
-            entryTagEntered = false;
+            mEntryTagEntered = false;
 
             boolean updateOnly = false;
-            // Old entryDate but recent update date => we need to not insert it!
-            if (entryUpdateDate != null && entryDate != null && (entryDate.before(realLastUpdateDate) || entryDate.before(keepDateBorder))) {
+            // Old mEntryDate but recent update date => we need to not insert it!
+            if (mEntryUpdateDate != null && mEntryDate != null && (mEntryDate.before(mRealLastUpdateDate) || mEntryDate.before(mKeepDateBorder))) {
                 updateOnly = true;
-                if (entryUpdateDate.after(entryDate)) {
-                    entryDate = entryUpdateDate;
+                if (mEntryUpdateDate.after(mEntryDate)) {
+                    mEntryDate = mEntryUpdateDate;
                 }
-            } else if (entryDate == null && entryUpdateDate != null) { // only one updateDate, copy it into entryDate
-                entryDate = entryUpdateDate;
-            } else if (entryDate == null && entryUpdateDate == null) { // nothing, we need to retrieve the previous date
-                entryDate = previousEntryDate;
-                entryUpdateDate = previousEntryUpdateDate;
+            } else if (mEntryDate == null && mEntryUpdateDate != null) { // only one updateDate, copy it into mEntryDate
+                mEntryDate = mEntryUpdateDate;
+            } else if (mEntryDate == null && mEntryUpdateDate == null) { // nothing, we need to retrieve the previous date
+                mEntryDate = mPreviousEntryDate;
+                mEntryUpdateDate = mPreviousEntryUpdateDate;
             }
 
-            if (title != null && (entryDate == null || (entryDate.after(realLastUpdateDate) && entryDate.after(keepDateBorder)))) {
+            if (mTitle != null && (mEntryDate == null || (mEntryDate.after(mRealLastUpdateDate) && mEntryDate.after(mKeepDateBorder)))) {
                 ContentValues values = new ContentValues();
 
-                if (entryDate != null && entryDate.getTime() > newRealLastUpdate) {
-                    newRealLastUpdate = entryDate.getTime();
+                if (mEntryDate != null && mEntryDate.getTime() > mNewRealLastUpdate) {
+                    mNewRealLastUpdate = mEntryDate.getTime();
                 }
 
-                String improvedTitle = unescapeTitle(title.toString().trim());
+                String improvedTitle = unescapeTitle(mTitle.toString().trim());
                 values.put(EntryColumns.TITLE, improvedTitle);
 
                 String improvedContent = null;
-                if (description != null) {
+                if (mDescription != null) {
                     // Improve the description
-                    improvedContent = HtmlUtils.improveHtmlContent(description.toString(), feedBaseUrl);
-                    if (fetchImages) {
-                        entriesImages.add(HtmlUtils.getImageURLs(improvedContent));
+                    improvedContent = HtmlUtils.improveHtmlContent(mDescription.toString(), mFeedBaseUrl);
+                    if (mFetchImages) {
+                        mEntriesImages.add(HtmlUtils.getImageURLs(improvedContent));
                     }
                     if (improvedContent != null) {
                         values.put(EntryColumns.ABSTRACT, improvedContent);
@@ -383,35 +390,35 @@ public class RssAtomParser extends DefaultHandler {
                 }
 
                 // Try to find if the entry is not filtered and need to be processed
-                if (!filters.isEntryFiltered(improvedTitle, improvedContent)) {
+                if (!mFilters.isEntryFiltered(improvedTitle, improvedContent)) {
 
-                    if (author != null) {
-                        values.put(EntryColumns.AUTHOR, author.toString());
+                    if (mAuthor != null) {
+                        values.put(EntryColumns.AUTHOR, mAuthor.toString());
                     }
 
                     String enclosureString = null;
                     StringBuilder existanceStringBuilder = new StringBuilder(EntryColumns.LINK).append(Constants.DB_ARG);
 
-                    if (enclosure != null && enclosure.length() > 0) {
-                        enclosureString = enclosure.toString();
+                    if (mEnclosure != null && mEnclosure.length() > 0) {
+                        enclosureString = mEnclosure.toString();
                         values.put(EntryColumns.ENCLOSURE, enclosureString);
                         existanceStringBuilder.append(Constants.DB_AND).append(EntryColumns.ENCLOSURE).append(Constants.DB_ARG);
                     }
 
                     String guidString = null;
 
-                    if (guid != null && guid.length() > 0) {
-                        guidString = guid.toString();
+                    if (mGuid != null && mGuid.length() > 0) {
+                        guidString = mGuid.toString();
                         values.put(EntryColumns.GUID, guidString);
                         existanceStringBuilder.append(Constants.DB_AND).append(EntryColumns.GUID).append(Constants.DB_ARG);
                     }
 
                     String entryLinkString = ""; // don't set this to null as we need *some* value
 
-                    if (entryLink != null && entryLink.length() > 0) {
-                        entryLinkString = entryLink.toString().trim();
-                        if (feedBaseUrl != null && !entryLinkString.startsWith(Constants.HTTP_SCHEME) && !entryLinkString.startsWith(Constants.HTTPS_SCHEME)) {
-                            entryLinkString = feedBaseUrl
+                    if (mEntryLink != null && mEntryLink.length() > 0) {
+                        entryLinkString = mEntryLink.toString().trim();
+                        if (mFeedBaseUrl != null && !entryLinkString.startsWith(Constants.HTTP_SCHEME) && !entryLinkString.startsWith(Constants.HTTPS_SCHEME)) {
+                            entryLinkString = mFeedBaseUrl
                                     + (entryLinkString.startsWith(Constants.SLASH) ? entryLinkString : Constants.SLASH + entryLinkString);
                         }
                     }
@@ -423,87 +430,87 @@ public class RssAtomParser extends DefaultHandler {
                     // First, try to update the feed
                     ContentResolver cr = MainApplication.getContext().getContentResolver();
                     boolean isUpdated = (!entryLinkString.isEmpty() || guidString != null)
-                            && cr.update(feedEntriesUri, values, existanceStringBuilder.toString(), existanceValues) != 0;
+                            && cr.update(mFeedEntriesUri, values, existanceStringBuilder.toString(), existanceValues) != 0;
 
                     // Insert it only if necessary
                     if (!isUpdated && !updateOnly) {
                         // We put the date only for new entry (no need to change the past, you may already read it)
-                        if (entryDate != null) {
-                            values.put(EntryColumns.DATE, entryDate.getTime());
+                        if (mEntryDate != null) {
+                            values.put(EntryColumns.DATE, mEntryDate.getTime());
                         } else {
-                            values.put(EntryColumns.DATE, now--); // -1 to keep the good entries order
+                            values.put(EntryColumns.DATE, mNow--); // -1 to keep the good entries order
                         }
 
                         values.put(EntryColumns.LINK, entryLinkString);
 
                         // We cannot update, we need to insert it
-                        inserts.add(ContentProviderOperation.newInsert(feedEntriesUri).withValues(values).build());
+                        mInserts.add(ContentProviderOperation.newInsert(mFeedEntriesUri).withValues(values).build());
 
-                        newCount++;
+                        mNewCount++;
                     }
 
                     // No date, but we managed to update an entry => we already parsed the following entries and don't need to continue
-                    if (isUpdated && entryDate == null) {
+                    if (isUpdated && mEntryDate == null) {
                         cancel();
                     }
                 }
             } else {
                 cancel();
             }
-            description = null;
-            title = null;
-            enclosure = null;
-            guid = null;
-            author = null;
+            mDescription = null;
+            mTitle = null;
+            mEnclosure = null;
+            mGuid = null;
+            mAuthor = null;
         } else if (TAG_RSS.equals(localName) || TAG_RDF.equals(localName) || TAG_FEED.equals(localName)) {
-            done = true;
+            mDone = true;
         } else if (TAG_GUID.equals(localName)) {
-            guidTagEntered = false;
+            mGuidTagEntered = false;
         } else if (TAG_NAME.equals(localName) || TAG_AUTHOR.equals(localName) || TAG_CREATOR.equals(localName)) {
-            authorTagEntered = false;
+            mAuthorTagEntered = false;
 
-            if (tmpAuthor != null && tmpAuthor.indexOf("@") == -1) { // no email
-                if (author == null) {
-                    author = new StringBuilder(tmpAuthor);
+            if (mTmpAuthor != null && mTmpAuthor.indexOf("@") == -1) { // no email
+                if (mAuthor == null) {
+                    mAuthor = new StringBuilder(mTmpAuthor);
                 } else { // this indicates multiple authors
                     boolean found = false;
-                    for (String previousAuthor : author.toString().split(",")) {
-                        if (previousAuthor.equals(tmpAuthor.toString())) {
+                    for (String previousAuthor : mAuthor.toString().split(",")) {
+                        if (previousAuthor.equals(mTmpAuthor.toString())) {
                             found = true;
                             break;
                         }
                     }
                     if (!found) {
-                        author.append(Constants.COMMA_SPACE);
-                        author.append(tmpAuthor);
+                        mAuthor.append(Constants.COMMA_SPACE);
+                        mAuthor.append(mTmpAuthor);
                     }
                 }
             }
 
-            tmpAuthor = null;
+            mTmpAuthor = null;
         }
     }
 
     public String getFeedLink() {
-        return feedLink;
+        return mFeedLink;
     }
 
     public int getNewCount() {
-        return newCount;
+        return mNewCount;
     }
 
     public boolean isDone() {
-        return done;
+        return mDone;
     }
 
     public boolean isCancelled() {
-        return cancelled;
+        return mCancelled;
     }
 
     private void cancel() throws SAXException {
-        if (!cancelled) {
-            cancelled = true;
-            done = true;
+        if (!mCancelled) {
+            mCancelled = true;
+            mDone = true;
             endDocument();
 
             throw new SAXException("Finished");
@@ -511,7 +518,7 @@ public class RssAtomParser extends DefaultHandler {
     }
 
     public void setFetchImages(boolean fetchImages) {
-        this.fetchImages = fetchImages;
+        this.mFetchImages = fetchImages;
     }
 
     private Date parseUpdateDate(String dateStr) {
@@ -523,7 +530,7 @@ public class RssAtomParser extends DefaultHandler {
         for (DateFormat format : UPDATE_DATE_FORMATS) {
             try {
                 Date result = format.parse(dateStr);
-                return (result.getTime() > now ? new Date(now) : result);
+                return (result.getTime() > mNow ? new Date(mNow) : result);
             } catch (ParseException ignored) {
             } // just do nothing
         }
@@ -543,7 +550,7 @@ public class RssAtomParser extends DefaultHandler {
         for (DateFormat format : PUBDATE_DATE_FORMATS) {
             try {
                 Date result = format.parse(dateStr);
-                return (result.getTime() > now ? new Date(now) : result);
+                return (result.getTime() > mNow ? new Date(mNow) : result);
             } catch (ParseException ignored) {
             } // just do nothing
         }
@@ -571,18 +578,6 @@ public class RssAtomParser extends DefaultHandler {
         return dateStr;
     }
 
-    private static String unescapeTitle(String title) {
-        String result = title.replace(Constants.AMP_SG, Constants.AMP).replaceAll(HTML_TAG_REGEX, "").replace(Constants.HTML_LT, Constants.LT)
-                .replace(Constants.HTML_GT, Constants.GT).replace(Constants.HTML_QUOT, Constants.QUOT)
-                .replace(Constants.HTML_APOSTROPHE, Constants.APOSTROPHE);
-
-        if (result.contains(AND_SHARP)) {
-            return Html.fromHtml(result, null, null).toString();
-        } else {
-            return result;
-        }
-    }
-
     @Override
     public void warning(SAXParseException e) throws SAXException {
         // ignore warnings
@@ -603,19 +598,19 @@ public class RssAtomParser extends DefaultHandler {
         ContentResolver cr = MainApplication.getContext().getContentResolver();
 
         try {
-            if (!inserts.isEmpty()) {
-                ContentProviderResult[] results = cr.applyBatch(FeedData.AUTHORITY, inserts);
+            if (!mInserts.isEmpty()) {
+                ContentProviderResult[] results = cr.applyBatch(FeedData.AUTHORITY, mInserts);
 
-                if (fetchImages) {
+                if (mFetchImages) {
                     for (int i = 0; i < results.length; ++i) {
-                        ArrayList<String> images = entriesImages.get(i);
+                        ArrayList<String> images = mEntriesImages.get(i);
                         if (images != null) {
                             FetcherService.addImagesToDownload(results[i].uri.getLastPathSegment(), images);
                         }
                     }
                 }
 
-                if (retrieveFullText) {
+                if (mRetrieveFullText) {
                     long[] entriesId = new long[results.length];
                     for (int i = 0; i < results.length; i++) {
                         entriesId[i] = Long.valueOf(results[i].uri.getLastPathSegment());
@@ -628,25 +623,18 @@ public class RssAtomParser extends DefaultHandler {
         }
 
         ContentValues values = new ContentValues();
-        if (feedName == null && feedTitle != null) {
-            values.put(FeedColumns.NAME, feedTitle.trim());
+        if (mFeedName == null && mFeedTitle != null) {
+            values.put(FeedColumns.NAME, mFeedTitle.trim());
         }
         values.putNull(FeedColumns.ERROR);
         values.put(FeedColumns.LAST_UPDATE, System.currentTimeMillis() - 3000); // by precaution to not miss some feeds
-        values.put(FeedData.FeedColumns.REAL_LAST_UPDATE, newRealLastUpdate);
-        cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
+        values.put(FeedData.FeedColumns.REAL_LAST_UPDATE, mNewRealLastUpdate);
+        cr.update(FeedColumns.CONTENT_URI(mId), values, null, null);
 
         super.endDocument();
     }
 
     private class FeedFilters {
-
-        private class Rule {
-            public String filterText;
-            public boolean isRegex;
-            public boolean isAppliedToTitle;
-            public boolean isAcceptRule;
-        }
 
         private final ArrayList<Rule> mFilters = new ArrayList<Rule>();
 
@@ -699,6 +687,13 @@ public class RssAtomParser extends DefaultHandler {
             }
 
             return isFiltered;
+        }
+
+        private class Rule {
+            public String filterText;
+            public boolean isRegex;
+            public boolean isAppliedToTitle;
+            public boolean isAcceptRule;
         }
     }
 }

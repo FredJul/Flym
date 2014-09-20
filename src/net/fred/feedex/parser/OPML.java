@@ -92,27 +92,27 @@ public class OPML {
     private static final String FILTER_CLOSING = "'/>\n";
     private static final String CLOSING = "</body>\n</opml>\n";
 
-    private static final OPMLParser parser = new OPMLParser();
-    private static boolean autoBackupEnabled = true;
+    private static final OPMLParser mParser = new OPMLParser();
+    private static boolean mAutoBackupEnabled = true;
 
     public static void importFromFile(String filename) throws IOException, SAXException {
         if (BACKUP_OPML.equals(filename)) {
-            autoBackupEnabled = false;  // Do not write the auto backup file while reading it...
+            mAutoBackupEnabled = false;  // Do not write the auto backup file while reading it...
         }
 
         try {
-            Xml.parse(new InputStreamReader(new FileInputStream(filename)), parser);
+            Xml.parse(new InputStreamReader(new FileInputStream(filename)), mParser);
         } finally {
-            autoBackupEnabled = true;
+            mAutoBackupEnabled = true;
         }
     }
 
     public static void importFromFile(InputStream input) throws IOException, SAXException {
-        Xml.parse(new InputStreamReader(input), parser);
+        Xml.parse(new InputStreamReader(input), mParser);
     }
 
     public static void exportToFile(String filename) throws IOException {
-        if (BACKUP_OPML.equals(filename) && !autoBackupEnabled) {
+        if (BACKUP_OPML.equals(filename) && !mAutoBackupEnabled) {
             return;
         }
 
@@ -215,18 +215,18 @@ public class OPML {
         private static final String ATTRIBUTE_IS_APPLIED_TO_TITLE = "isAppliedToTitle";
         private static final String ATTRIBUTE_IS_ACCEPT_RULE = "isAcceptRule";
 
-        private boolean bodyTagEntered = false;
-        private boolean feedEntered = false;
-        private boolean probablyValidElement = false;
-        private String groupId = null;
-        private String feedId = null;
+        private boolean mBodyTagEntered = false;
+        private boolean mFeedEntered = false;
+        private boolean mProbablyValidElement = false;
+        private String mGroupId = null;
+        private String mFeedId = null;
 
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-            if (!bodyTagEntered) {
+            if (!mBodyTagEntered) {
                 if (TAG_BODY.equals(localName)) {
-                    bodyTagEntered = true;
-                    probablyValidElement = true;
+                    mBodyTagEntered = true;
+                    mProbablyValidElement = true;
                 }
             } else if (TAG_OUTLINE.equals(localName)) {
                 String url = attributes.getValue("", ATTRIBUTE_XMLURL);
@@ -243,32 +243,32 @@ public class OPML {
                         Cursor cursor = cr.query(FeedColumns.GROUPS_CONTENT_URI, null, FeedColumns.NAME + Constants.DB_ARG, new String[]{title}, null);
 
                         if (!cursor.moveToFirst()) {
-                            groupId = cr.insert(FeedColumns.GROUPS_CONTENT_URI, values).getLastPathSegment();
+                            mGroupId = cr.insert(FeedColumns.GROUPS_CONTENT_URI, values).getLastPathSegment();
                         }
                         cursor.close();
                     }
 
                 } else { // Url => this is a feed
-                    feedEntered = true;
+                    mFeedEntered = true;
                     ContentValues values = new ContentValues();
 
                     values.put(FeedColumns.URL, url);
                     values.put(FeedColumns.NAME, title != null && title.length() > 0 ? title : null);
-                    if (groupId != null) {
-                        values.put(FeedColumns.GROUP_ID, groupId);
+                    if (mGroupId != null) {
+                        values.put(FeedColumns.GROUP_ID, mGroupId);
                     }
                     values.put(FeedColumns.RETRIEVE_FULLTEXT, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_RETRIEVE_FULLTEXT)));
 
                     Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, FeedColumns.URL + Constants.DB_ARG,
                             new String[]{url}, null);
-                    feedId = null;
+                    mFeedId = null;
                     if (!cursor.moveToFirst()) {
-                        feedId = cr.insert(FeedColumns.CONTENT_URI, values).getLastPathSegment();
+                        mFeedId = cr.insert(FeedColumns.CONTENT_URI, values).getLastPathSegment();
                     }
                     cursor.close();
                 }
             } else if (TAG_FILTER.equals(localName)) {
-                if (feedEntered && feedId != null) {
+                if (mFeedEntered && mFeedId != null) {
                     ContentValues values = new ContentValues();
                     values.put(FilterColumns.FILTER_TEXT, attributes.getValue("", ATTRIBUTE_TEXT));
                     values.put(FilterColumns.IS_REGEX, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_REGEX)));
@@ -276,20 +276,20 @@ public class OPML {
                     values.put(FilterColumns.IS_ACCEPT_RULE, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_ACCEPT_RULE)));
 
                     ContentResolver cr = MainApplication.getContext().getContentResolver();
-                    cr.insert(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), values);
+                    cr.insert(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(mFeedId), values);
                 }
             }
         }
 
         @Override
         public void endElement(String uri, String localName, String qName) throws SAXException {
-            if (bodyTagEntered && TAG_BODY.equals(localName)) {
-                bodyTagEntered = false;
+            if (mBodyTagEntered && TAG_BODY.equals(localName)) {
+                mBodyTagEntered = false;
             } else if (TAG_OUTLINE.equals(localName)) {
-                if (feedEntered) {
-                    feedEntered = false;
+                if (mFeedEntered) {
+                    mFeedEntered = false;
                 } else {
-                    groupId = null;
+                    mGroupId = null;
                 }
             }
         }
@@ -306,7 +306,7 @@ public class OPML {
 
         @Override
         public void endDocument() throws SAXException {
-            if (!probablyValidElement) {
+            if (!mProbablyValidElement) {
                 throw new SAXException();
             } else {
                 super.endDocument();

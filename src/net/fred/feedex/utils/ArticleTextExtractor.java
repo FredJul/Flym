@@ -42,8 +42,8 @@ public class ArticleTextExtractor {
             Pattern.compile("hidden|display: ?none|font-size: ?small");
 
     /**
-     * @param input extracts article text from given html string. wasn't tested
-     *             with improper HTML, although jSoup should be able to handle minor stuff.
+     * @param input            extracts article text from given html string. wasn't tested
+     *                         with improper HTML, although jSoup should be able to handle minor stuff.
      * @param contentIndicator a text which should be included into the extracted content, or null
      * @returns extracted article, all HTML tags stripped
      */
@@ -85,10 +85,10 @@ public class ArticleTextExtractor {
      * names, ids or class names will be used in HTML, major role is played by
      * child nodes
      *
-     * @param e Element to weight, along with child nodes
+     * @param e                Element to weight, along with child nodes
      * @param contentIndicator a text which should be included into the extracted content, or null
      */
-    protected static int getWeight(Element e, String contentIndicator) {
+    private static int getWeight(Element e, String contentIndicator) {
         int weight = calcWeight(e);
         weight += (int) Math.round(e.ownText().length() / 100.0 * 10);
         weight += weightChildNodes(e, contentIndicator);
@@ -105,10 +105,10 @@ public class ArticleTextExtractor {
      * more chances to extract the element that has less nested levels,
      * increasing probability of the correct extraction.
      *
-     * @param rootEl Element, who's child nodes will be weighted
+     * @param rootEl           Element, who's child nodes will be weighted
      * @param contentIndicator a text which should be included into the extracted content, or null
      */
-    protected static int weightChildNodes(Element rootEl, String contentIndicator) {
+    private static int weightChildNodes(Element rootEl, String contentIndicator) {
         int weight = 0;
         Element caption = null;
         List<Element> pEls = new ArrayList<Element>(5);
@@ -200,7 +200,7 @@ public class ArticleTextExtractor {
      * @param doc document to prepare. Passed as reference, and changed inside
      *            of function
      */
-    protected static void prepareDocument(Document doc) {
+    private static void prepareDocument(Document doc) {
         // stripUnlikelyCandidates(doc);
         removeScriptsAndStyles(doc);
     }
@@ -244,7 +244,7 @@ public class ArticleTextExtractor {
     /**
      * @return a set of all important nodes
      */
-    public static Collection<Element> getNodes(Document doc) {
+    private static Collection<Element> getNodes(Document doc) {
         Collection<Element> nodes = new HashSet<Element>(64);
         for (Element el : doc.select("body").select("*")) {
             if (NODES.matcher(el.tagName()).matches()) {
@@ -254,7 +254,7 @@ public class ArticleTextExtractor {
         return nodes;
     }
 
-    public static int count(String str, String substring) {
+    private static int count(String str, String substring) {
         int c = 0;
         int index1 = str.indexOf(substring);
         if (index1 >= 0) {
