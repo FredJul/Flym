@@ -42,24 +42,10 @@ import net.fred.feedex.Constants;
 public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableListAdapter {
     private static final String URI_ARG = "uri";
     private final Activity mActivity;
-    private final LoaderManager mLoaderMgr;
-    private final Uri mGroupUri;
-
-    private final int mCollapsedGroupLayout;
-    private final int mExpandedGroupLayout;
-    private final int mChildLayout;
-    private final LayoutInflater mInflater;
-
-    private Cursor mGroupCursor;
-    /**
-     * The map of a group position to the group's children cursor
-     */
-    private final SparseArray<Pair<Cursor, Boolean>> mChildrenCursors = new SparseArray<Pair<Cursor, Boolean>>();
-
-    private final LoaderManager.LoaderCallbacks<Cursor> mGroupLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
+    private final LoaderManager.LoaderCallbacks<Cursor> mChildrenLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            CursorLoader cursorLoader = new CursorLoader(mActivity, mGroupUri, null, null, null, null) {
+            CursorLoader cursorLoader = new CursorLoader(mActivity, (Uri) args.getParcelable(URI_ARG), null, null, null, null) {
 
                 @Override
                 public Cursor loadInBackground() {
@@ -75,20 +61,27 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            mGroupCursor = data;
-            setAllChildrenCursorsAsObsolete();
+            mChildrenCursors.put(loader.getId() - 1, new Pair<Cursor, Boolean>(data, false));
             notifyDataSetChanged();
-            notifyDataSetChanged(data);
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
-            mGroupCursor = null;
-            setAllChildrenCursorsAsObsolete();
+            mChildrenCursors.delete(loader.getId() - 1);
             notifyDataSetInvalidated();
         }
     };
-
+    private final LoaderManager mLoaderMgr;
+    private final Uri mGroupUri;
+    private final int mCollapsedGroupLayout;
+    private final int mExpandedGroupLayout;
+    private final int mChildLayout;
+    private final LayoutInflater mInflater;
+    /**
+     * The map of a group position to the group's children cursor
+     */
+    private final SparseArray<Pair<Cursor, Boolean>> mChildrenCursors = new SparseArray<Pair<Cursor, Boolean>>();
+    private Cursor mGroupCursor;
     private final LoaderManager.LoaderCallbacks<Cursor> mGroupLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -142,36 +135,6 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 
         mLoaderMgr.restartLoader(0, null, mGroupLoaderCallback);
     }
-
-    private final LoaderManager.LoaderCallbacks<Cursor> mChildrenLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
-        @Override
-        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            CursorLoader cursorLoader = new CursorLoader(mActivity, (Uri) args.getParcelable(URI_ARG), null, null, null, null) {
-
-                @Override
-                public Cursor loadInBackground() {
-                    Cursor c = super.loadInBackground();
-                    onCursorLoaded(mActivity, c);
-                    return c;
-                }
-
-            };
-            cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
-            return cursorLoader;
-        }
-
-        @Override
-        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            mChildrenCursors.put(loader.getId() - 1, new Pair<Cursor, Boolean>(data, false));
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public void onLoaderReset(Loader<Cursor> loader) {
-            mChildrenCursors.delete(loader.getId() - 1);
-            notifyDataSetInvalidated();
-        }
-    };
 
     /**
      * Constructor.
