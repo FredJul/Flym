@@ -104,14 +104,21 @@ public class RefreshService extends Service {
         } catch (Exception ignored) {
         }
 
-        long initialRefreshTime = SystemClock.elapsedRealtime() + 10000;
+        long elapsedRealTime = SystemClock.elapsedRealtime();
+        long initialRefreshTime = elapsedRealTime + 10000;
 
         if (created) {
             long lastRefresh = PrefUtils.getLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
 
+            // If the system rebooted, we need to reset the last value
+            if (elapsedRealTime < lastRefresh) {
+                lastRefresh = 0;
+                PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
+            }
+
             if (lastRefresh > 0) {
                 // this indicates a service restart by the system
-                initialRefreshTime = Math.max(SystemClock.elapsedRealtime() + 10000, lastRefresh + time);
+                initialRefreshTime = Math.max(initialRefreshTime, lastRefresh + time);
             }
         }
 

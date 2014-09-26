@@ -49,7 +49,15 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
                 }
 
                 long lastRefresh = PrefUtils.getLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
-                if (SystemClock.elapsedRealtime() - lastRefresh > time) {
+                long elapsedRealTime = SystemClock.elapsedRealtime();
+
+                // If the system rebooted, we need to reset the last value
+                if (elapsedRealTime < lastRefresh) {
+                    lastRefresh = 0;
+                    PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
+                }
+
+                if (lastRefresh == 0 || elapsedRealTime - lastRefresh > time) {
                     context.startService(new Intent(context, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
                 }
             }
