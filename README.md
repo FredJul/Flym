@@ -1,4 +1,4 @@
-FeedEx News Reader
+Flym News Reader
 ==================
 
 Light and modern Android feed reader, based on Sparse rss.
