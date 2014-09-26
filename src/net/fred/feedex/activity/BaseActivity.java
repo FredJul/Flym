@@ -76,11 +76,6 @@ public abstract class BaseActivity extends Activity {
             Constants.NOTIF_MGR.cancel(0);
         }
 
-        if (mIsImmersiveFullScreen && getActionBar().isShowing()) { // This is needed for the immersive mode
-            mIsImmersiveFullScreen = false;
-            setImmersiveFullScreen(true);
-        }
-
         super.onResume();
     }
 
