@@ -24,15 +24,15 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_feedex">O aplikaci FeedEx</string>
-    <string name="welcome_title">Vítejte v aplikaci FeedEx. Chcete přidat nový zdroj?</string>
+    <string name="about_flym">O aplikaci Flym</string>
+    <string name="welcome_title">Vítejte v aplikaci Flym. Chcete přidat nový zdroj?</string>
     <string name="never">nikdy</string>
     <string name="update">aktualizováno</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Nastavení</string>
     <string name="menu_refresh">Obnovit</string>
     <string name="menu_all_read">Označit vše jako přečtené</string>
-    <string name="feedex_feeds">FeedEx zdroje</string>
+    <string name="flym_feeds">Flym zdroje</string>
     <string name="error">Chyba</string>
     <string name="network_error">Síť není nastavena</string>
     <string name="loading">Načítám…</string>
@@ -115,7 +115,7 @@
     <string name="menu_full_screen">Na celou obrazovku</string>
     <string name="menu_copy_clipboard">Kopírovat link</string>
     <string name="menu_mark_as_unread">Označit jako nepřečtené</string>
-    <string name="share_favorites_title">FeedEx: označené články</string>
+    <string name="share_favorites_title">Flym: označené články</string>
     <string name="copied_clipboard">Link zkopírován</string>
     <string name="get_full_text">Stáhnout celý text</string>
     <string name="original_text">Zobrazit originální text</string>

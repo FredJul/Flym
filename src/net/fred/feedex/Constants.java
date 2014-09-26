@@ -1,5 +1,5 @@
 /**
- * FeedEx
+ * Flym
  *
  * Copyright (c) 2012-2013 Frederic Julian
  * Copyright (c) 2010-2012 Stefan Handschuh

@@ -22,15 +22,15 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_feedex">About FeedEx</string>
-    <string name="welcome_title">Welcome to FeedEx. Would you like to add one feed?</string>
+    <string name="about_flym">About Flym</string>
+    <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
     <string name="never">nunca</string>
     <string name="update">Actualizar</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Configuración</string>
     <string name="menu_refresh">Actualizar</string>
     <string name="menu_all_read">Marcar todo como leído</string>
-    <string name="feedex_feeds">Fuentes de FeedEx</string>
+    <string name="flym_feeds">Fuentes de Flym</string>
     <string name="error">Error</string>
     <string name="network_error">No se ha configurado la red</string>
     <string name="loading">Cargando…</string>
@@ -118,7 +118,7 @@
     <string name="menu_full_screen">Pantalla completa</string>
     <string name="menu_copy_clipboard">Copiar enlace</string>
     <string name="menu_mark_as_unread">Marcar como no leído</string>
-    <string name="share_favorites_title">FeedEx: Entradas destacadas</string>
+    <string name="share_favorites_title">Flym: Entradas destacadas</string>
     <string name="copied_clipboard">Enlace copiado</string>
     <string name="get_full_text">Descargar el texto completo</string>
     <string name="original_text">Mostrar el texto original</string>
@@ -231,7 +231,7 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_preload_image_modes">
-    <item>Never</item>
+        <item>Never</item>
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>

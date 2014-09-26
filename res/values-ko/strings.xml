@@ -23,15 +23,15 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_feedex">피덱스 정보</string>
-    <string name="welcome_title">Welcome to FeedEx. Would you like to add one feed?</string>
+    <string name="about_flym">피덱스 정보</string>
+    <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
     <string name="never">하지 않음</string>
     <string name="update">업데이트</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">설정</string>
     <string name="menu_refresh">새로 고침</string>
     <string name="menu_all_read">모두 읽은 것으로 표시</string>
-    <string name="feedex_feeds">피덱스 피드</string>
+    <string name="flym_feeds">피덱스 피드</string>
     <string name="error">오류</string>
     <string name="network_error">네트워크가 준비되지 않았습니다</string>
     <string name="loading">읽어들이는 중…</string>
@@ -210,7 +210,7 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_preload_image_modes">
-    <item>Never</item>
+        <item>Never</item>
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>

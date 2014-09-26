@@ -1,5 +1,5 @@
 /**
- * FeedEx
+ * Flym
  *
  * Copyright (c) 2012-2013 Frederic Julian
  *
@@ -74,22 +74,13 @@ import java.util.Vector;
 
 public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
-    private static class ViewHolder {
-        public TextView titleTextView;
-        public TextView dateTextView;
-        public ImageView starImgView;
-        public CheckBox isReadCb;
-    }
-
-    private int mTitlePos, mDatePos, mIsReadPos, mFavoritePos, mIdPos, mFeedIdPos, mFeedIconPos, mFeedNamePos;
-
     private final Uri mUri;
     private final boolean mShowFeedInfo;
-
     private final Vector<Long> mMarkedAsReadEntries = new Vector<Long>();
     private final Vector<Long> mMarkedAsUnreadEntries = new Vector<Long>();
     private final Vector<Long> mFavoriteEntries = new Vector<Long>();
     private final Vector<Long> mNotFavoriteEntries = new Vector<Long>();
+    private int mTitlePos, mDatePos, mIsReadPos, mFavoritePos, mIdPos, mFeedIdPos, mFeedIconPos, mFeedNamePos;
 
     public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo) {
         super(context, R.layout.item_entry_list, cursor, 0);
@@ -278,5 +269,12 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
             }
         }
+    }
+
+    private static class ViewHolder {
+        public TextView titleTextView;
+        public TextView dateTextView;
+        public ImageView starImgView;
+        public CheckBox isReadCb;
     }
 }

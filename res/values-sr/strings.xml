@@ -23,7 +23,7 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_feedex">О Фидексу</string>
+    <string name="about_flym">О Фидексу</string>
     <string name="welcome_title">Добро дошли у Фидекс. Желите ли да додате довод?</string>
     <string name="never">никад</string>
     <string name="update">Ажурирај</string>
@@ -31,7 +31,7 @@
     <string name="menu_settings">Поставке</string>
     <string name="menu_refresh">Освежи</string>
     <string name="menu_all_read">Означи све прочитаним</string>
-    <string name="feedex_feeds">Фидексови доводи</string>
+    <string name="flym_feeds">Фидексови доводи</string>
     <string name="error">Грешка</string>
     <string name="network_error">Мрежа није постављена</string>
     <string name="loading">Учитавам…</string>

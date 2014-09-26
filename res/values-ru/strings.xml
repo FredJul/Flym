@@ -22,15 +22,15 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_feedex">Про FeedEx</string>
-    <string name="welcome_title">Welcome to FeedEx. Would you like to add one feed?</string>
+    <string name="about_flym">Про Flym</string>
+    <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
     <string name="never">никогда</string>
     <string name="update">Обновление</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Настройки</string>
     <string name="menu_refresh">Обновить</string>
     <string name="menu_all_read">Пометить все как прочитанное</string>
-    <string name="feedex_feeds">FeedEx ленты</string>
+    <string name="flym_feeds">Flym ленты</string>
     <string name="error">Ошибка</string>
     <string name="network_error">Нет подключения к сети</string>
     <string name="loading">Загрузка…</string>
@@ -121,7 +121,7 @@
     <string name="menu_full_screen">Полный экран</string>
     <string name="menu_copy_clipboard">Скопировать ссылку</string>
     <string name="menu_mark_as_unread">Пометить как непрочитанное</string>
-    <string name="share_favorites_title">FeedEx: избранные новости</string>
+    <string name="share_favorites_title">Flym: избранные новости</string>
     <string name="copied_clipboard">Ссылка скопирована</string>
     <string name="get_full_text">Загрузить весь текст</string>
     <string name="original_text">Показать оригинальный текст</string>
@@ -227,7 +227,7 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_preload_image_modes">
-    <item>Never</item>
+        <item>Never</item>
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>

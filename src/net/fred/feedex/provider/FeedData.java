@@ -1,5 +1,5 @@
 /**
- * FeedEx
+ * Flym
  *
  * Copyright (c) 2012-2013 Frederic Julian
  *
@@ -56,9 +56,13 @@ public class FeedData {
     public static final String CONTENT = "content://";
     public static final String AUTHORITY = "net.fred.feedex.provider.FeedData";
     public static final String CONTENT_AUTHORITY = CONTENT + AUTHORITY;
-
+    public static final String FEEDS_TABLE_WITH_GROUP_PRIORITY = FeedColumns.TABLE_NAME + " LEFT JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.PRIORITY +
+            " AS group_priority FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + FeedColumns.TABLE_NAME + '.' + FeedColumns.GROUP_ID + " = f.joined_feed_id)";
+    public static final String ENTRIES_TABLE_WITH_FEED_INFO = EntryColumns.TABLE_NAME + " JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.NAME + ", " + FeedColumns.URL + ", " +
+            FeedColumns.ICON + ", " + FeedColumns.GROUP_ID + " FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + EntryColumns.TABLE_NAME + '.' + EntryColumns.FEED_ID + " = f.joined_feed_id)";
+    public static final String ALL_UNREAD_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)";
+    public static final String FAVORITES_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ')';
     static final String TYPE_PRIMARY_KEY = "INTEGER PRIMARY KEY AUTOINCREMENT";
-
     static final String TYPE_EXTERNAL_ID = "INTEGER(7)";
     static final String TYPE_TEXT = "TEXT";
     static final String TYPE_TEXT_UNIQUE = "TEXT UNIQUE";
@@ -66,13 +70,22 @@ public class FeedData {
     static final String TYPE_INT = "INT";
     static final String TYPE_BOOLEAN = "INTEGER(1)";
 
-    public static final String FEEDS_TABLE_WITH_GROUP_PRIORITY = FeedColumns.TABLE_NAME + " LEFT JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.PRIORITY +
-            " AS group_priority FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + FeedColumns.TABLE_NAME + '.' + FeedColumns.GROUP_ID + " = f.joined_feed_id)";
-    public static final String ENTRIES_TABLE_WITH_FEED_INFO = EntryColumns.TABLE_NAME + " JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.NAME + ", " + FeedColumns.URL + ", " +
-            FeedColumns.ICON + ", " + FeedColumns.GROUP_ID + " FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + EntryColumns.TABLE_NAME + '.' + EntryColumns.FEED_ID + " = f.joined_feed_id)";
+    public static ContentValues getReadContentValues() {
+        ContentValues values = new ContentValues();
+        values.put(EntryColumns.IS_READ, true);
+        return values;
+    }
 
-    public static final String ALL_UNREAD_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)";
-    public static final String FAVORITES_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ')';
+    public static ContentValues getUnreadContentValues() {
+        ContentValues values = new ContentValues();
+        values.putNull(EntryColumns.IS_READ);
+        return values;
+    }
+
+    public static boolean shouldShowReadEntries(Uri uri) {
+        boolean alwaysShowRead = EntryColumns.FAVORITES_CONTENT_URI.equals(uri) || (FeedDataContentProvider.URI_MATCHER.match(uri) == FeedDataContentProvider.URI_SEARCH);
+        return alwaysShowRead || PrefUtils.getBoolean(PrefUtils.SHOW_READ, true);
+    }
 
     public static class FeedColumns implements BaseColumns {
         public static final String TABLE_NAME = "feeds";
@@ -88,13 +101,13 @@ public class FeedData {
         public static final String ERROR = "error";
         public static final String PRIORITY = "priority";
         public static final String FETCH_MODE = "fetchmode";
-
+        public static final String[] PROJECTION_ID = new String[]{FeedColumns._ID};
         public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {URL, TYPE_TEXT_UNIQUE}, {NAME, TYPE_TEXT}, {IS_GROUP, TYPE_BOOLEAN},
                 {GROUP_ID, TYPE_EXTERNAL_ID}, {LAST_UPDATE, TYPE_DATE_TIME}, {REAL_LAST_UPDATE, TYPE_DATE_TIME}, {RETRIEVE_FULLTEXT, TYPE_BOOLEAN},
                 {ICON, "BLOB"}, {ERROR, TYPE_TEXT}, {PRIORITY, TYPE_INT}, {FETCH_MODE, TYPE_INT}};
-
+        public static final String[] PROJECTION_GROUP_ID = new String[]{FeedColumns.GROUP_ID};
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/feeds");
-
+        public static final String[] PROJECTION_PRIORITY = new String[]{FeedColumns.PRIORITY};
         public static final Uri GROUPED_FEEDS_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/grouped_feeds");
 
         public static Uri CONTENT_URI(String feedId) {
@@ -105,11 +118,11 @@ public class FeedData {
             return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId);
         }
 
-        public static final Uri GROUPS_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/groups");
-
         public static Uri GROUPS_CONTENT_URI(String groupId) {
             return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId);
         }
+
+        public static final Uri GROUPS_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/groups");
 
         public static Uri GROUPS_CONTENT_URI(long groupId) {
             return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId);
@@ -123,9 +136,7 @@ public class FeedData {
             return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/feeds");
         }
 
-        public static final String[] PROJECTION_ID = new String[]{FeedColumns._ID};
-        public static final String[] PROJECTION_GROUP_ID = new String[]{FeedColumns.GROUP_ID};
-        public static final String[] PROJECTION_PRIORITY = new String[]{FeedColumns.PRIORITY};
+
     }
 
     public static class FilterColumns implements BaseColumns {
@@ -137,18 +148,20 @@ public class FeedData {
         public static final String IS_APPLIED_TO_TITLE = "isappliedtotitle";
         public static final String IS_ACCEPT_RULE = "isacceptrule";
 
-        public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {FEED_ID, TYPE_EXTERNAL_ID}, {FILTER_TEXT, TYPE_TEXT},
-                {IS_REGEX, TYPE_BOOLEAN}, {IS_APPLIED_TO_TITLE, TYPE_BOOLEAN}, {IS_ACCEPT_RULE, TYPE_BOOLEAN}};
-
-        public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/filters");
-
         public static Uri FILTERS_FOR_FEED_CONTENT_URI(String feedId) {
             return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/filters");
         }
 
+        public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {FEED_ID, TYPE_EXTERNAL_ID}, {FILTER_TEXT, TYPE_TEXT},
+                {IS_REGEX, TYPE_BOOLEAN}, {IS_APPLIED_TO_TITLE, TYPE_BOOLEAN}, {IS_ACCEPT_RULE, TYPE_BOOLEAN}};
+
         public static Uri FILTERS_FOR_FEED_CONTENT_URI(long feedId) {
             return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/filters");
         }
+
+        public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/filters");
+
+
     }
 
     public static class EntryColumns implements BaseColumns {
@@ -166,13 +179,15 @@ public class FeedData {
         public static final String ENCLOSURE = "enclosure";
         public static final String GUID = "guid";
         public static final String AUTHOR = "author";
-
+        public static final String[] PROJECTION_ID = new String[]{EntryColumns._ID};
         public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {FEED_ID, TYPE_EXTERNAL_ID}, {TITLE, TYPE_TEXT},
                 {ABSTRACT, TYPE_TEXT}, {MOBILIZED_HTML, TYPE_TEXT}, {DATE, TYPE_DATE_TIME}, {FETCH_DATE, TYPE_DATE_TIME}, {IS_READ, TYPE_BOOLEAN}, {LINK, TYPE_TEXT},
                 {IS_FAVORITE, TYPE_BOOLEAN}, {ENCLOSURE, TYPE_TEXT}, {GUID, TYPE_TEXT}, {AUTHOR, TYPE_TEXT}};
-
+        public static final String WHERE_READ = EntryColumns.IS_READ + Constants.DB_IS_TRUE;
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/entries");
+        public static final String WHERE_UNREAD = "(" + EntryColumns.IS_READ + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_READ + Constants.DB_IS_FALSE + ')';
         public static final Uri ALL_ENTRIES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/all_entries");
+        public static final String WHERE_NOT_FAVORITE = "(" + EntryColumns.IS_FAVORITE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_FAVORITE + Constants.DB_IS_FALSE + ')';
         public static final Uri FAVORITES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/favorites");
 
         public static Uri ENTRIES_FOR_FEED_CONTENT_URI(String feedId) {
@@ -211,12 +226,7 @@ public class FeedData {
             return Uri.parse(CONTENT_AUTHORITY + "/entries/search/" + (TextUtils.isEmpty(search) ? " " : Uri.encode(search))); // The space is mandatory here with empty search
         }
 
-        public static final String[] PROJECTION_ID = new String[]{EntryColumns._ID};
 
-        public static final String WHERE_READ = EntryColumns.IS_READ + Constants.DB_IS_TRUE;
-        public static final String WHERE_UNREAD = "(" + EntryColumns.IS_READ + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_READ + Constants.DB_IS_FALSE + ')';
-
-        public static final String WHERE_NOT_FAVORITE = "(" + EntryColumns.IS_FAVORITE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_FAVORITE + Constants.DB_IS_FALSE + ')';
     }
 
     public static class TaskColumns implements BaseColumns {
@@ -225,37 +235,20 @@ public class FeedData {
         public static final String ENTRY_ID = "entryid";
         public static final String IMG_URL_TO_DL = "imgurl_to_dl";
         public static final String NUMBER_ATTEMPT = "number_attempt";
-
+        public static final String[] PROJECTION_ID = new String[]{EntryColumns._ID};
         public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {ENTRY_ID, TYPE_EXTERNAL_ID}, {IMG_URL_TO_DL, TYPE_TEXT},
                 {NUMBER_ATTEMPT, TYPE_INT}, {"UNIQUE", "(" + ENTRY_ID + ", " + IMG_URL_TO_DL + ") ON CONFLICT IGNORE"}};
-
-        public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/tasks");
 
         public static Uri CONTENT_URI(String taskId) {
             return Uri.parse(CONTENT_AUTHORITY + "/tasks/" + taskId);
         }
 
+        public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/tasks");
+
         public static Uri CONTENT_URI(long taskId) {
             return Uri.parse(CONTENT_AUTHORITY + "/tasks/" + taskId);
         }
 
-        public static final String[] PROJECTION_ID = new String[]{EntryColumns._ID};
-    }
 
-    public static ContentValues getReadContentValues() {
-        ContentValues values = new ContentValues();
-        values.put(EntryColumns.IS_READ, true);
-        return values;
-    }
-
-    public static ContentValues getUnreadContentValues() {
-        ContentValues values = new ContentValues();
-        values.putNull(EntryColumns.IS_READ);
-        return values;
-    }
-
-    public static boolean shouldShowReadEntries(Uri uri) {
-        boolean alwaysShowRead = EntryColumns.FAVORITES_CONTENT_URI.equals(uri) || (FeedDataContentProvider.URI_MATCHER.match(uri) == FeedDataContentProvider.URI_SEARCH);
-        return alwaysShowRead || PrefUtils.getBoolean(PrefUtils.SHOW_READ, true);
     }
 }

@@ -1,5 +1,5 @@
 /**
- * FeedEx
+ * Flym
  *
  * Copyright (c) 2012-2013 Frederic Julian
  *
@@ -126,6 +126,39 @@ public class FetcherService extends IntentService {
         HttpURLConnection.setFollowRedirects(true);
     }
 
+    public static boolean hasMobilizationTask(long entryId) {
+        Cursor cursor = MainApplication.getContext().getContentResolver().query(TaskColumns.CONTENT_URI, TaskColumns.PROJECTION_ID,
+                TaskColumns.ENTRY_ID + '=' + entryId + Constants.DB_AND + TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
+
+        boolean result = cursor.getCount() > 0;
+        cursor.close();
+
+        return result;
+    }
+
+    public static void addImagesToDownload(String entryId, ArrayList<String> images) {
+        if (images != null && !images.isEmpty()) {
+            ContentValues[] values = new ContentValues[images.size()];
+            for (int i = 0; i < images.size(); i++) {
+                values[i] = new ContentValues();
+                values[i].put(TaskColumns.ENTRY_ID, entryId);
+                values[i].put(TaskColumns.IMG_URL_TO_DL, images.get(i));
+            }
+
+            MainApplication.getContext().getContentResolver().bulkInsert(TaskColumns.CONTENT_URI, values);
+        }
+    }
+
+    public static void addEntriesToMobilize(long[] entriesId) {
+        ContentValues[] values = new ContentValues[entriesId.length];
+        for (int i = 0; i < entriesId.length; i++) {
+            values[i] = new ContentValues();
+            values[i].put(TaskColumns.ENTRY_ID, entriesId[i]);
+        }
+
+        MainApplication.getContext().getContentResolver().bulkInsert(TaskColumns.CONTENT_URI, values);
+    }
+
     @Override
     public void onHandleIntent(Intent intent) {
         if (intent == null) { // No intent, we quit
@@ -184,7 +217,7 @@ public class FetcherService extends IntentService {
                                 .setTicker(text) //
                                 .setWhen(System.currentTimeMillis()) //
                                 .setAutoCancel(true) //
-                                .setContentTitle(getString(R.string.feedex_feeds)) //
+                                .setContentTitle(getString(R.string.flym_feeds)) //
                                 .setContentText(text) //
                                 .setLights(0xffffffff, 0, 0);
 
@@ -215,39 +248,6 @@ public class FetcherService extends IntentService {
 
             PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false);
         }
-    }
-
-    public static boolean hasMobilizationTask(long entryId) {
-        Cursor cursor = MainApplication.getContext().getContentResolver().query(TaskColumns.CONTENT_URI, TaskColumns.PROJECTION_ID,
-                TaskColumns.ENTRY_ID + '=' + entryId + Constants.DB_AND + TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
-
-        boolean result = cursor.getCount() > 0;
-        cursor.close();
-
-        return result;
-    }
-
-    public static void addImagesToDownload(String entryId, ArrayList<String> images) {
-        if (images != null && !images.isEmpty()) {
-            ContentValues[] values = new ContentValues[images.size()];
-            for (int i = 0; i < images.size(); i++) {
-                values[i] = new ContentValues();
-                values[i].put(TaskColumns.ENTRY_ID, entryId);
-                values[i].put(TaskColumns.IMG_URL_TO_DL, images.get(i));
-            }
-
-            MainApplication.getContext().getContentResolver().bulkInsert(TaskColumns.CONTENT_URI, values);
-        }
-    }
-
-    public static void addEntriesToMobilize(long[] entriesId) {
-        ContentValues[] values = new ContentValues[entriesId.length];
-        for (int i = 0; i < entriesId.length; i++) {
-            values[i] = new ContentValues();
-            values[i].put(TaskColumns.ENTRY_ID, entriesId[i]);
-        }
-
-        MainApplication.getContext().getContentResolver().bulkInsert(TaskColumns.CONTENT_URI, values);
     }
 
     private void mobilizeAllEntries() {

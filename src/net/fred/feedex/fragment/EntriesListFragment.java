@@ -1,5 +1,5 @@
 /**
- * FeedEx
+ * Flym
  *
  * Copyright (c) 2012-2013 Frederic Julian
  *
@@ -126,6 +126,25 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        refreshSwipeProgress();
+        PrefUtils.registerOnPrefChangeListener(mPrefListener);
+
+        if (mUri != null) {
+            // If the list is empty when we are going back here, try with the last display date
+            if (mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
+                mListDisplayDate = new Date().getTime();
+            } else {
+                mAutoRefreshDisplayDate = true; // We will try to update the list after if necessary
+            }
+
+            getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+            getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+        }
+    }
+
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -155,25 +174,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onLoaderReset(Loader<Cursor> loader) {
         }
     };
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        refreshSwipeProgress();
-        PrefUtils.registerOnPrefChangeListener(mPrefListener);
-
-        if (mUri != null) {
-            // If the list is empty when we are going back here, try with the last display date
-            if (mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
-                mListDisplayDate = new Date().getTime();
-            } else {
-                mAutoRefreshDisplayDate = true; // We will try to update the list after if necessary
-            }
-
-            getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-            getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
-        }
-    }
 
     @Override
     public View inflateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

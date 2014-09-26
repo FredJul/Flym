@@ -22,15 +22,15 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_feedex">关于feedex</string>
-    <string name="welcome_title">Welcome to FeedEx. Would you like to add one feed?</string>
+    <string name="about_flym">关于Flym</string>
+    <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
     <string name="never">没有更新</string>
     <string name="update">更新</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">设置</string>
     <string name="menu_refresh">刷新</string>
     <string name="menu_all_read">标记全部为已读</string>
-    <string name="feedex_feeds">feedex</string>
+    <string name="flym_feeds">feedex</string>
     <string name="error">错误</string>
     <string name="network_error">网络不可用</string>
     <string name="loading">加载中…</string>
@@ -220,7 +220,7 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_preload_image_modes">
-    <item>Never</item>
+        <item>Never</item>
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>

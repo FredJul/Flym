@@ -1,5 +1,5 @@
 /**
- * FeedEx
+ * Flym
  *
  * Copyright (c) 2012-2013 Frederic Julian
  *
@@ -45,8 +45,8 @@ public class WidgetService extends RemoteViewsService {
 }
 
 class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
-    private Context mContext = null;
     private final int mAppWidgetId, mFontSize;
+    private Context mContext = null;
     private Cursor mCursor;
     private ThrottledContentObserver mContentObserver;
 

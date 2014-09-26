@@ -22,15 +22,15 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_feedex">A proposito di FeedEx</string>
-    <string name="welcome_title">Benvenuto in FeedEx. Vorresti aggiungere un feed?</string>
+    <string name="about_flym">A proposito di Flym</string>
+    <string name="welcome_title">Benvenuto in Flym. Vorresti aggiungere un feed?</string>
     <string name="never">mai</string>
     <string name="update">Aggiornamento</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Impostazioni</string>
     <string name="menu_refresh">Aggiorna</string>
     <string name="menu_all_read">Segna tutti come letti</string>
-    <string name="feedex_feeds">Feed di FeedEx</string>
+    <string name="flym_feeds">Feed di Flym</string>
     <string name="error">Errore</string>
     <string name="network_error">Nessuna connessione disponibile</string>
     <string name="loading">Caricamento in corso…</string>
@@ -119,7 +119,7 @@
     <string name="menu_full_screen">A tutto schermo</string>
     <string name="menu_copy_clipboard">Copia il link</string>
     <string name="menu_mark_as_unread">Segna come non letto</string>
-    <string name="share_favorites_title">FeedEx: articoli preferiti</string>
+    <string name="share_favorites_title">Flym: articoli preferiti</string>
     <string name="copied_clipboard">Link copiato</string>
     <string name="get_full_text">Recupera il testo completo</string>
     <string name="original_text">Mostra testo originale</string>

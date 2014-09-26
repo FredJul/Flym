@@ -5,7 +5,7 @@
     android:versionCode="43"
     android:versionName="1.6.2">
 
-<uses-sdk
+    <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="19" />
 
@@ -44,7 +44,7 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".activity.AboutActivity"
-            android:label="@string/about_feedex"
+            android:label="@string/about_flym"
             android:launchMode="singleTask" />
         <activity
             android:name=".activity.EditFeedsListActivity"

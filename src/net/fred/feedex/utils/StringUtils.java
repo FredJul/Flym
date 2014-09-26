@@ -1,5 +1,5 @@
 /**
- * FeedEx
+ * Flym
  *
  * Copyright (c) 2012-2013 Frederic Julian
  *
@@ -33,6 +33,8 @@ import java.util.Date;
 
 public class StringUtils {
 
+    public static final DateFormat TIME_FORMAT = android.text.format.DateFormat.getTimeFormat(MainApplication.getContext());
+    public static final int SIX_HOURS = 21600000; // six hours in milliseconds
     public static DateFormat DATE_SHORT_FORMAT = null;
 
     static {
@@ -43,9 +45,6 @@ public class StringUtils {
             DATE_SHORT_FORMAT = android.text.format.DateFormat.getDateFormat(MainApplication.getContext());
         }
     }
-
-    public static final DateFormat TIME_FORMAT = android.text.format.DateFormat.getTimeFormat(MainApplication.getContext());
-    public static final int SIX_HOURS = 21600000; // six hours in milliseconds
 
     static public String getDateTimeString(long timestamp) {
         String outString;

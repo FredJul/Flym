@@ -1,5 +1,5 @@
 /**
- * FeedEx
+ * Flym
  *
  * Copyright (c) 2012-2013 Frederic Julian
  *
@@ -87,9 +87,6 @@ import java.util.regex.Pattern;
 public class EditFeedsListFragment extends ListFragment {
 
     private static final int REQUEST_PICK_OPML_FILE = 1;
-
-    private DragNDropExpandableListView mListView;
-
     private final ActionMode.Callback mFeedActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -166,7 +163,6 @@ public class EditFeedsListFragment extends ListFragment {
             }
         }
     };
-
     private final ActionMode.Callback mGroupActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -254,6 +250,7 @@ public class EditFeedsListFragment extends ListFragment {
             }
         }
     };
+    private DragNDropExpandableListView mListView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -474,7 +471,7 @@ public class EditFeedsListFragment extends ListFragment {
                         @Override
                         public void run() {
                             try {
-                                final String filename = Environment.getExternalStorageDirectory().toString() + "/FeedEx_"
+                                final String filename = Environment.getExternalStorageDirectory().toString() + "/Flym_"
                                         + System.currentTimeMillis() + ".opml";
 
                                 OPML.exportToFile(filename);

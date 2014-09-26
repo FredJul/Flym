@@ -1,5 +1,5 @@
 /**
- * FeedEx
+ * Flym
  *
  * Copyright (c) 2012-2013 Frederic Julian
  *
@@ -89,12 +89,58 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
         }
     };
 
-    private void setAllChildrenCursorsAsObsolete() {
-        int key;
-        for (int i = 0; i < mChildrenCursors.size(); i++) {
-            key = mChildrenCursors.keyAt(i);
-            mChildrenCursors.put(key, new Pair<Cursor, Boolean>(mChildrenCursors.get(key).first, true));
+    private final LoaderManager.LoaderCallbacks<Cursor> mGroupLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            CursorLoader cursorLoader = new CursorLoader(mActivity, mGroupUri, null, null, null, null) {
+
+                @Override
+                public Cursor loadInBackground() {
+                    Cursor c = super.loadInBackground();
+                    onCursorLoaded(mActivity, c);
+                    return c;
+                }
+
+            };
+            cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
+            return cursorLoader;
         }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            mGroupCursor = data;
+            setAllChildrenCursorsAsObsolete();
+            notifyDataSetChanged();
+            notifyDataSetChanged(data);
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+            mGroupCursor = null;
+            setAllChildrenCursorsAsObsolete();
+            notifyDataSetInvalidated();
+        }
+    };
+
+    /**
+     * Constructor.
+     *
+     * @param collapsedGroupLayout resource identifier of a layout file that defines the views for collapsed groups.
+     * @param expandedGroupLayout  resource identifier of a layout file that defines the views for expanded groups.
+     * @param childLayout          resource identifier of a layout file that defines the views for all children but the last..
+     */
+    public CursorLoaderExpandableListAdapter(Activity activity, Uri groupUri, int collapsedGroupLayout, int expandedGroupLayout, int childLayout) {
+        mActivity = activity;
+        mLoaderMgr = activity.getLoaderManager();
+        mGroupUri = groupUri;
+
+        mCollapsedGroupLayout = collapsedGroupLayout;
+        mExpandedGroupLayout = expandedGroupLayout;
+        mChildLayout = childLayout;
+
+        mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        mLoaderMgr.restartLoader(0, null, mGroupLoaderCallback);
     }
 
     private final LoaderManager.LoaderCallbacks<Cursor> mChildrenLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
@@ -130,32 +176,19 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
     /**
      * Constructor.
      *
-     * @param collapsedGroupLayout resource identifier of a layout file that defines the views for collapsed groups.
-     * @param expandedGroupLayout  resource identifier of a layout file that defines the views for expanded groups.
-     * @param childLayout          resource identifier of a layout file that defines the views for all children but the last..
-     */
-    public CursorLoaderExpandableListAdapter(Activity activity, Uri groupUri, int collapsedGroupLayout, int expandedGroupLayout, int childLayout) {
-        mActivity = activity;
-        mLoaderMgr = activity.getLoaderManager();
-        mGroupUri = groupUri;
-
-        mCollapsedGroupLayout = collapsedGroupLayout;
-        mExpandedGroupLayout = expandedGroupLayout;
-        mChildLayout = childLayout;
-
-        mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        mLoaderMgr.restartLoader(0, null, mGroupLoaderCallback);
-    }
-
-    /**
-     * Constructor.
-     *
      * @param groupLayout resource identifier of a layout file that defines the views for all groups.
      * @param childLayout resource identifier of a layout file that defines the views for all children.
      */
     public CursorLoaderExpandableListAdapter(Activity activity, Uri groupUri, int groupLayout, int childLayout) {
         this(activity, groupUri, groupLayout, groupLayout, childLayout);
+    }
+
+    private void setAllChildrenCursorsAsObsolete() {
+        int key;
+        for (int i = 0; i < mChildrenCursors.size(); i++) {
+            key = mChildrenCursors.keyAt(i);
+            mChildrenCursors.put(key, new Pair<Cursor, Boolean>(mChildrenCursors.get(key).first, true));
+        }
     }
 
     /**

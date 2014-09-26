@@ -1,5 +1,5 @@
 /**
- * FeedEx
+ * Flym
  *
  * Copyright (c) 2012-2013 Frederic Julian
  *
@@ -44,9 +44,9 @@ public class AboutActivity extends BaseActivity {
         PackageManager manager = this.getPackageManager();
         try {
             PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
-            title = "FeedEx version " + info.versionName;
+            title = "Flym version " + info.versionName;
         } catch (NameNotFoundException unused) {
-            title = "FeedEx";
+            title = "Flym";
         }
         TextView titleView = (TextView) findViewById(R.id.about_title);
         titleView.setText(title);
