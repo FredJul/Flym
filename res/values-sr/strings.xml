@@ -23,15 +23,15 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">О Фидексу</string>
-    <string name="welcome_title">Добро дошли у Фидекс. Желите ли да додате довод?</string>
+    <string name="about_flym">О Флиму</string>
+    <string name="welcome_title">Добро дошли у Флим. Желите ли да додате довод?</string>
     <string name="never">никад</string>
     <string name="update">Ажурирај</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Поставке</string>
     <string name="menu_refresh">Освежи</string>
     <string name="menu_all_read">Означи све прочитаним</string>
-    <string name="flym_feeds">Фидексови доводи</string>
+    <string name="flym_feeds">Флимови доводи</string>
     <string name="error">Грешка</string>
     <string name="network_error">Мрежа није постављена</string>
     <string name="loading">Учитавам…</string>
@@ -114,7 +114,7 @@
     <string name="menu_full_screen">Цео екран</string>
     <string name="menu_copy_clipboard">Копирај везу</string>
     <string name="menu_mark_as_unread">Означи као ново</string>
-    <string name="share_favorites_title">Фидекс: омиљено</string>
+    <string name="share_favorites_title">Флим: омиљено</string>
     <string name="copied_clipboard">Веза копирана</string>
     <string name="get_full_text">Добави цео текст</string>
     <string name="original_text">Прикажи оригиналан текст</string>
