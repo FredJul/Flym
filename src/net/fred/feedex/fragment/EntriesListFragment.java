@@ -145,36 +145,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         }
     }
 
-    private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
-        @Override
-        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
-            cursorLoader.setUpdateThrottle(150);
-            return cursorLoader;
-        }
-
-        @Override
-        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            data.moveToFirst();
-            mNewEntriesNumber = data.getInt(0);
-            mOldUnreadEntriesNumber = data.getInt(1);
-
-            if (mAutoRefreshDisplayDate && mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
-                mListDisplayDate = new Date().getTime();
-                getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-                getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
-            } else {
-                refreshUI();
-            }
-
-            mAutoRefreshDisplayDate = false;
-        }
-
-        @Override
-        public void onLoaderReset(Loader<Cursor> loader) {
-        }
-    };
-
     @Override
     public View inflateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_entry_list, container, true);
@@ -229,6 +199,36 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         return rootView;
     }
+
+    private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
+            cursorLoader.setUpdateThrottle(150);
+            return cursorLoader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            data.moveToFirst();
+            mNewEntriesNumber = data.getInt(0);
+            mOldUnreadEntriesNumber = data.getInt(1);
+
+            if (mAutoRefreshDisplayDate && mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
+                mListDisplayDate = new Date().getTime();
+                getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+                getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+            } else {
+                refreshUI();
+            }
+
+            mAutoRefreshDisplayDate = false;
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+        }
+    };
 
     @Override
     public void onStop() {
@@ -290,20 +290,22 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_share_starred: {
-                String starredList = "";
-                Cursor cursor = mEntriesCursorAdapter.getCursor();
-                if (cursor != null && !cursor.isClosed()) {
-                    int titlePos = cursor.getColumnIndex(EntryColumns.TITLE);
-                    int linkPos = cursor.getColumnIndex(EntryColumns.LINK);
-                    if (cursor.moveToFirst()) {
-                        do {
-                            starredList += cursor.getString(titlePos) + "\n" + cursor.getString(linkPos) + "\n\n";
-                        } while (cursor.moveToNext());
+                if (mEntriesCursorAdapter != null) {
+                    String starredList = "";
+                    Cursor cursor = mEntriesCursorAdapter.getCursor();
+                    if (cursor != null && !cursor.isClosed()) {
+                        int titlePos = cursor.getColumnIndex(EntryColumns.TITLE);
+                        int linkPos = cursor.getColumnIndex(EntryColumns.LINK);
+                        if (cursor.moveToFirst()) {
+                            do {
+                                starredList += cursor.getString(titlePos) + "\n" + cursor.getString(linkPos) + "\n\n";
+                            } while (cursor.moveToNext());
+                        }
+                        startActivity(Intent.createChooser(
+                                new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_favorites_title))
+                                        .putExtra(Intent.EXTRA_TEXT, starredList).setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)
+                        ));
                     }
-                    startActivity(Intent.createChooser(
-                            new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_favorites_title))
-                                    .putExtra(Intent.EXTRA_TEXT, starredList).setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)
-                    ));
                 }
                 return true;
             }
@@ -312,11 +314,13 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 return true;
             }
             case R.id.menu_all_read: {
-                mEntriesCursorAdapter.markAllAsRead(mListDisplayDate);
+                if (mEntriesCursorAdapter != null) {
+                    mEntriesCursorAdapter.markAllAsRead(mListDisplayDate);
 
-                // If we are on "all items" uri, we can remove the notification here
-                if (EntryColumns.CONTENT_URI.equals(mUri) && Constants.NOTIF_MGR != null) {
-                    Constants.NOTIF_MGR.cancel(0);
+                    // If we are on "all items" uri, we can remove the notification here
+                    if (EntryColumns.CONTENT_URI.equals(mUri) && Constants.NOTIF_MGR != null) {
+                        Constants.NOTIF_MGR.cancel(0);
+                    }
                 }
                 return true;
             }
@@ -453,6 +457,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             return mGestureDetector.onTouchEvent(event);
         }
     }
+
+
 
 
 }
