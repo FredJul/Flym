@@ -269,7 +269,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 
             buttonLayout.setVisibility(View.GONE);
 
-            mFiltersCursorAdapter = new FiltersCursorAdapter(this, null);
+            mFiltersCursorAdapter = new FiltersCursorAdapter(this, Constants.EMPTY_CURSOR);
             mFiltersListView.setAdapter(mFiltersCursorAdapter);
             mFiltersListView.setOnItemLongClickListener(new OnItemLongClickListener() {
                 @Override
@@ -520,7 +520,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mFiltersCursorAdapter.swapCursor(null);
+        mFiltersCursorAdapter.swapCursor(Constants.EMPTY_CURSOR);
     }
 }
 

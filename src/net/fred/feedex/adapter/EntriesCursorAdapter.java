@@ -257,7 +257,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         mFavoriteEntries.clear();
         mNotFavoriteEntries.clear();
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             mTitlePos = cursor.getColumnIndex(EntryColumns.TITLE);
             mDatePos = cursor.getColumnIndex(EntryColumns.DATE);
             mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);

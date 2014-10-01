@@ -87,7 +87,7 @@ public class FiltersCursorAdapter extends ResourceCursorAdapter {
     }
 
     private void reinit(Cursor cursor) {
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             mFilterTextColumnPosition = cursor.getColumnIndex(FilterColumns.FILTER_TEXT);
             mIsAppliedToTitleColumnPosition = cursor.getColumnIndex(FilterColumns.IS_APPLIED_TO_TITLE);
             mIsAcceptRulePosition = cursor.getColumnIndex(FilterColumns.IS_ACCEPT_RULE);

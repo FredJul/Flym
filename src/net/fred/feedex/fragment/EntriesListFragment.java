@@ -95,7 +95,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
-            mEntriesCursorAdapter.swapCursor(null);
+            mEntriesCursorAdapter.swapCursor(Constants.EMPTY_CURSOR);
         }
     };
     private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
@@ -122,7 +122,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             mShowFeedInfo = savedInstanceState.getBoolean(STATE_SHOW_FEED_INFO);
             mListDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE);
 
-            mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
+            mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, Constants.EMPTY_CURSOR, mShowFeedInfo);
         }
     }
 
@@ -200,6 +200,12 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         return rootView;
     }
 
+    @Override
+    public void onStop() {
+        PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
+        super.onStop();
+    }
+
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -229,12 +235,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onLoaderReset(Loader<Cursor> loader) {
         }
     };
-
-    @Override
-    public void onStop() {
-        PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
-        super.onStop();
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -369,7 +369,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         mUri = uri;
         mShowFeedInfo = showFeedInfo;
 
-        mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, null, mShowFeedInfo);
+        mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, Constants.EMPTY_CURSOR, mShowFeedInfo);
         setListAdapter(mEntriesCursorAdapter);
 
         mListDisplayDate = new Date().getTime();

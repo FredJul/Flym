@@ -22,6 +22,8 @@ package net.fred.feedex;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.database.MatrixCursor;
+import android.provider.BaseColumns;
 
 public final class Constants {
 
@@ -76,4 +78,6 @@ public final class Constants {
     public static final String FETCH_PICTURE_MODE_NEVER_PRELOAD = "NEVER_PRELOAD";
     public static final String FETCH_PICTURE_MODE_WIFI_ONLY_PRELOAD = "WIFI_ONLY_PRELOAD";
     public static final String FETCH_PICTURE_MODE_ALWAYS_PRELOAD = "ALWAYS_PRELOAD";
+
+    public static final MatrixCursor EMPTY_CURSOR = new MatrixCursor(new String[]{BaseColumns._ID});
 }
