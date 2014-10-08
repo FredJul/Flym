@@ -146,7 +146,7 @@
     <string name="settings_notifications_enabled_description">Näytä ilmoitus kun syötteissä on uusia artikkeleita
     </string>
     <string name="settings_notifications_ringtone">Soittoääni</string>
-    <string name="settings_notifications_ringtone_description">Aseta uusista artikkeleista ilmoittava soittoääni
+    <string name="settings_notifications_ringtone_none">Ei mitään
     </string>
     <string name="settings_notifications_vibrate">Värinä</string>
     <string name="settings_notifications_vibrate_description">Aseta uusista artikkeleista ilmoittava värinähälytys

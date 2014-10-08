@@ -149,9 +149,7 @@
         entradas.
     </string>
     <string name="settings_notifications_ringtone">Tono</string>
-    <string name="settings_notifications_ringtone_description">Selecciona el tono que anunciará las
-        nuevas entradas.
-    </string>
+    <string name="settings_notifications_ringtone_none"> </string>
     <string name="settings_notifications_vibrate">Vibración</string>
     <string name="settings_notifications_vibrate_description">Hará vibrar el terminal al recibir
         nuevas entradas.

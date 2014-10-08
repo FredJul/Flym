@@ -152,8 +152,7 @@
         badaude
     </string>
     <string name="settings_notifications_ringtone">Dei-tonua</string>
-    <string name="settings_notifications_ringtone_description">Hautatu sarrera berriak daudenean joko den 
-        dei-tonua
+    <string name="settings_notifications_ringtone_none">
     </string>
     <string name="settings_notifications_vibrate">Dardaratu</string>
     <string name="settings_notifications_vibrate_description">Gaitu dardara sarrera berriak daudenean

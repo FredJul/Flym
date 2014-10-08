@@ -45,6 +45,9 @@
 package net.fred.feedex.activity;
 
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -59,6 +62,7 @@ import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 
 public class GeneralPrefsActivity extends PreferenceActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
@@ -67,6 +71,8 @@ public class GeneralPrefsActivity extends PreferenceActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         addPreferencesFromResource(R.layout.activity_preferences);
+
+        setRingtoneSummary();
 
         Preference preference = findPreference(PrefUtils.REFRESH_ENABLED);
         preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -88,7 +94,7 @@ public class GeneralPrefsActivity extends PreferenceActivity {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 PrefUtils.putBoolean(PrefUtils.LIGHT_THEME, Boolean.TRUE.equals(newValue));
 
-                PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit().commit(); // to be sure all prefs are writen
+                PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit().commit(); // to be sure all prefs are written
 
                 android.os.Process.killProcess(android.os.Process.myPid()); // Restart the app
 
@@ -107,4 +113,32 @@ public class GeneralPrefsActivity extends PreferenceActivity {
         }
         return true;
     }
+
+    @Override
+    protected void onResume() {
+
+        // The ringtone summary text should be updated using
+        // OnSharedPreferenceChangeListener(), but I can't get it to work.
+        // Updating in onResume is a very simple hack that seems to work, but is inefficient.
+
+        setRingtoneSummary();
+        super.onResume();
+
+    }
+
+    private boolean setRingtoneSummary() {
+
+        Preference ringtone_preference = findPreference(PrefUtils.NOTIFICATIONS_RINGTONE);
+        Uri ringtoneUri = Uri.parse(PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, ""));
+        if (ringtoneUri.toString().equals("")) {
+            ringtone_preference.setSummary(R.string.settings_notifications_ringtone_none);
+        } else {
+            Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneUri);
+            ringtone_preference.setSummary(ringtone.getTitle(getApplicationContext()));
+        }
+
+        return true;
+    }
+
+
 }

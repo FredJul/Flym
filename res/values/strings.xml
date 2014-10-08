@@ -152,8 +152,7 @@
         entries
     </string>
     <string name="settings_notifications_ringtone">Ringtone</string>
-    <string name="settings_notifications_ringtone_description">Select a ringtone that will be played
-        on new entries
+    <string name="settings_notifications_ringtone_none">None
     </string>
     <string name="settings_notifications_vibrate">Vibrate</string>
     <string name="settings_notifications_vibrate_description">Enable the vibration on new entries

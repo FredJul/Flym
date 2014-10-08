@@ -142,7 +142,7 @@
     <string name="settings_notifications_enabled">Povolit oznámení</string>
     <string name="settings_notifications_enabled_description">Povolí oznámení v případě nových článků</string>
     <string name="settings_notifications_ringtone">Tón oznámení</string>
-    <string name="settings_notifications_ringtone_description">Vybrat zvuk tónu oznámení při přijetí nových článků</string>
+    <string name="settings_notifications_ringtone_none"></string>
     <string name="settings_notifications_vibrate">Vibrovat</string>
     <string name="settings_notifications_vibrate_description">Povolit vibrace při přijetí nových článků</string>
     <string name="settings_notifications_light">LED oznámení</string>

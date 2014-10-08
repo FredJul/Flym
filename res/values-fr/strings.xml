@@ -152,8 +152,7 @@
         nouveaux articles
     </string>
     <string name="settings_notifications_ringtone">Sonnerie</string>
-    <string name="settings_notifications_ringtone_description">Choisir une sonnerie annonçant les
-        nouveaux articles
+    <string name="settings_notifications_ringtone_none">
     </string>
     <string name="settings_notifications_vibrate">Vibrer</string>
     <string name="settings_notifications_vibrate_description">Active la vibration pour les nouveaux

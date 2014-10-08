@@ -141,7 +141,7 @@
     <string name="settings_notifications_enabled">Benachrichtigungen aktivieren</string>
     <string name="settings_notifications_enabled_description">Aktiviert Benachrichtigungen bei neuen Einträgen</string>
     <string name="settings_notifications_ringtone">Ton</string>
-    <string name="settings_notifications_ringtone_description">Wähle einen Klingelton, der bei neuen Einträgen abgespielt wird</string>
+    <string name="settings_notifications_ringtone_none"></string>
     <string name="settings_notifications_vibrate">Vibration</string>
     <string name="settings_notifications_vibrate_description">Aktiviert Vibration bei neuen Einträgen</string>
     <string name="settings_notifications_light">Licht</string>

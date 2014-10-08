@@ -140,7 +140,7 @@
     <string name="settings_notifications_enabled">Visa påminnelser</string>
     <string name="settings_notifications_enabled_description">Visa påminnelser då nytt feed innehåll finns</string>
     <string name="settings_notifications_ringtone">Ringsignal</string>
-    <string name="settings_notifications_ringtone_description">Välj en ringsignal som spelas vid nytt feed innehåll</string>
+    <string name="settings_notifications_ringtone_none">Ingen</string>
     <string name="settings_notifications_vibrate">Vibrera</string>
     <string name="settings_notifications_vibrate_description">Vibrera vid nytt feed innehåll</string>
     <string name="settings_notifications_light">Ljus</string>

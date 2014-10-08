@@ -149,9 +149,7 @@
         articoli
     </string>
     <string name="settings_notifications_ringtone">Suoneria</string>
-    <string name="settings_notifications_ringtone_description">Seleziona una suoneria che sarà
-        utilizzata all\'arrivo di nuovi articoli
-    </string>
+    <string name="settings_notifications_ringtone_none"></string>
     <string name="settings_notifications_vibrate">Vibrazione</string>
     <string name="settings_notifications_vibrate_description">Attiva la vibrazione all\'arrivo di
         nuovi articoli

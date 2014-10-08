@@ -148,8 +148,7 @@
     <string name="settings_notifications_enabled">Activa les notificacions</string>
     <string name="settings_notifications_enabled_description">Notifica les noves entrades.</string>
     <string name="settings_notifications_ringtone">So</string>
-    <string name="settings_notifications_ringtone_description">Sel·lecciona el so que es reproduirà
-        al mostrar la notificació.
+    <string name="settings_notifications_ringtone_none">
     </string>
     <string name="settings_notifications_vibrate">Vibra</string>
     <string name="settings_notifications_vibrate_description">Vibra el terminal al mostrar la
