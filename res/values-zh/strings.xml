@@ -145,8 +145,7 @@
 	<string name="settings_notifications_enabled_description">启用的新消息通知 
 	</string>
     <string name="settings_notifications_ringtone">铃声</string>
-	<string name="settings_notifications_ringtone_none">
-	</string>
+    <string name="settings_notifications_ringtone_none">None</string>
     <string name="settings_notifications_vibrate">震动提醒</string>
 	<string name="settings_notifications_vibrate_description">当有新的消息时，震动提醒
 	</string>

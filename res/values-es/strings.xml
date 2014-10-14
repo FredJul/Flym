@@ -149,7 +149,7 @@
         entradas.
     </string>
     <string name="settings_notifications_ringtone">Tono</string>
-    <string name="settings_notifications_ringtone_none"> </string>
+    <string name="settings_notifications_ringtone_none">None</string>
     <string name="settings_notifications_vibrate">Vibración</string>
     <string name="settings_notifications_vibrate_description">Hará vibrar el terminal al recibir
         nuevas entradas.

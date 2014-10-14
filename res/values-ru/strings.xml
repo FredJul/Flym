@@ -150,7 +150,7 @@
     <string name="settings_notifications_enabled_description">Включить уведомления о новых записях
     </string>
     <string name="settings_notifications_ringtone">Звук</string>
-    <string name="settings_notifications_ringtone_none"></string>
+    <string name="settings_notifications_ringtone_none">None</string>
     <string name="settings_notifications_vibrate">Вибрация</string>
     <string name="settings_notifications_vibrate_description">Включить вибрацию при новых записях
     </string>

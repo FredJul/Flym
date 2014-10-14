@@ -141,7 +141,7 @@
     <string name="settings_notifications_enabled">Омогући</string>
     <string name="settings_notifications_enabled_description">Омогући обавештења о новим уносима</string>
     <string name="settings_notifications_ringtone">Звук</string>
-    <string name="settings_notifications_ringtone_none"></string>
+    <string name="settings_notifications_ringtone_none">None</string>
     <string name="settings_notifications_vibrate">Вибрирај</string>
     <string name="settings_notifications_vibrate_description">Омогући вибрацију по новим уносима</string>
     <string name="settings_notifications_light">Светло</string>

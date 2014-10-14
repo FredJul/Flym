@@ -141,7 +141,7 @@
     <string name="settings_notifications_enabled">알림 사용</string>
     <string name="settings_notifications_enabled_description">새 항목에 대한 알림을 사용</string>
     <string name="settings_notifications_ringtone">벨소리</string>
-    <string name="settings_notifications_ringtone_none"></string>
+    <string name="settings_notifications_ringtone_none">None</string>
     <string name="settings_notifications_vibrate">진동</string>
     <string name="settings_notifications_vibrate_description">새 항목이 있을 때 진동 사용</string>
     <string name="settings_notifications_light">Light</string>
