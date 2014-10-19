@@ -142,7 +142,7 @@
     <string name="settings_notifications_enabled">Povolit oznámení</string>
     <string name="settings_notifications_enabled_description">Povolí oznámení v případě nových článků</string>
     <string name="settings_notifications_ringtone">Tón oznámení</string>
-    <string name="settings_notifications_ringtone_none">None</string>
+    <string name="settings_notifications_ringtone_none">Žádný</string>
     <string name="settings_notifications_vibrate">Vibrovat</string>
     <string name="settings_notifications_vibrate_description">Povolit vibrace při přijetí nových článků</string>
     <string name="settings_notifications_light">LED oznámení</string>
@@ -178,7 +178,7 @@
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Jeden nový článek</item>
-        <item quantity="few">%d nových článků</item>
+        <item quantity="few">%d nové články</item>
         <item quantity="other">%d nových článků</item>
     </plurals>
 
