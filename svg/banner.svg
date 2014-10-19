@@ -16,9 +16,9 @@
    version="1.1"
    inkscape:version="0.48.5 r10040"
    sodipodi:docname="banner.svg"
-   inkscape:export-filename="/home/moa/FeedEx/res/drawable-xhdpi/icon.png"
-   inkscape:export-xdpi="67.5"
-   inkscape:export-ydpi="67.5">
+   inkscape:export-filename="/home/moa/FeedEx/svg/banner.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs4">
     <linearGradient
@@ -2939,7 +2939,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -2957,7 +2957,7 @@
        y="-31.158798"
        transform="translate(0,552.36218)" />
     <g
-       transform="matrix(0.72275665,0,0,-0.66644149,-9.1771863,1079.7553)"
+       transform="matrix(0.72275665,0,0,-0.66644149,-81.177186,1079.7553)"
        id="g3284">
       <g
          transform="matrix(1.1185012,0,0,1.10367,-37.359419,-25.399882)"
@@ -3290,7 +3290,7 @@
        xml:space="preserve"
        id="flowRoot3894"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       transform="matrix(1.0073431,0,0,1.1461432,-7.543432,571.96346)"><flowRegion
+       transform="matrix(1.0073431,0,0,1.1461432,-109.54343,571.96346)"><flowRegion
          id="flowRegion3896"><rect
            id="rect3898"
            width="553.98932"
@@ -3298,5 +3298,5 @@
            x="597.80768"
            y="74.335884" /></flowRegion><flowPara
          id="flowPara3900"
-         style="font-size:72px;font-style:normal;font-variant:normal;font-stretch:normal;fill:#1a1a1a;font-family:Roboto;-inkscape-font-specification:Roboto Semi-Light;font-weight:380">Light, modern and ads-free News Reader</flowPara></flowRoot>  </g>
+         style="font-size:72px;font-style:normal;font-variant:normal;font-stretch:normal;fill:#1a1a1a;font-family:Roboto;-inkscape-font-specification:Roboto Semi-Light">Light, modern and ads-free News Reader</flowPara></flowRoot>  </g>
 </svg>
