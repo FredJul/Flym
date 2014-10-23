@@ -306,7 +306,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             default:
-                throw new IllegalArgumentException("Illegal query. Match code=" + matchCode);
+                throw new IllegalArgumentException("Illegal query. Match code=" + matchCode + "; uri=" + uri);
         }
 
         SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
@@ -368,7 +368,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             default:
-                throw new IllegalArgumentException("Illegal insert. Match code=" + matchCode);
+                throw new IllegalArgumentException("Illegal insert. Match code=" + matchCode + "; uri=" + uri);
         }
 
         if (newId > -1) {
@@ -510,7 +510,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             default:
-                throw new IllegalArgumentException("Illegal update. Match code=" + matchCode);
+                throw new IllegalArgumentException("Illegal update. Match code=" + matchCode + "; uri=" + uri);
         }
 
         if (!TextUtils.isEmpty(selection)) {
@@ -699,7 +699,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             default:
-                throw new IllegalArgumentException("Illegal delete. Match code=" + matchCode);
+                throw new IllegalArgumentException("Illegal delete. Match code=" + matchCode + "; uri=" + uri);
         }
 
         if (!TextUtils.isEmpty(selection)) {
