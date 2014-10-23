@@ -119,13 +119,17 @@ public class GeneralPrefsActivity extends ActionBarActivity {
 
 //        Preference ringtone_preference = findPreference(PrefUtils.NOTIFICATIONS_RINGTONE);
 //        Uri ringtoneUri = Uri.parse(PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, ""));
-//        if (ringtoneUri.toString().equals("")) {
+//        if (ringtoneUri == null || TextUtils.isEmpty(ringtoneUri.toString()) {
 //            ringtone_preference.setSummary(R.string.settings_notifications_ringtone_none);
 //        } else {
 //            Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneUri);
-//            ringtone_preference.setSummary(ringtone.getTitle(getApplicationContext()));
+//            if (ringtone == null) {
+//                ringtone_preference.setSummary(R.string.settings_notifications_ringtone_none);
+//            } else {
+//                ringtone_preference.setSummary(ringtone.getTitle(getApplicationContext()));
+//            }
 //        }
-//
+
         return true;
     }
 
