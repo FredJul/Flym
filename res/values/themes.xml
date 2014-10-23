@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Light" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="Theme.Light" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="card">@drawable/bg_card_light</item>
-        <item name="android:actionBarStyle">@style/LightActionBar</item>
+        <!-- customize the color palette -->
+        <item name="colorPrimary">@color/light_action_bar_blue</item>
+        <item name="colorPrimaryDark">@color/dark_action_bar_blue</item>
+        <item name="colorAccent">@color/light_entry_list_background</item>
     </style>
 
-    <style name="Theme.Dark" parent="android:Theme.Holo">
+    <style name="Theme.Dark" parent="Theme.AppCompat">
         <item name="card">@drawable/bg_card_dark</item>
-        <item name="android:actionBarStyle">@style/DarkActionBar</item>
-    </style>
-
-    <style name="LightActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/light_action_bar_blue</item>
-    </style>
-
-    <style name="DarkActionBar" parent="@android:style/Widget.Holo.ActionBar.Solid">
-        <item name="android:background">@color/dark_action_bar_blue</item>
+        <!-- customize the color palette -->
+        <item name="colorPrimary">@color/dark_action_bar_blue</item>
+        <item name="colorPrimaryDark">@color/dark_action_bar_blue</item>
+        <item name="colorAccent">@color/light_entry_list_background</item>
     </style>
 </resources>

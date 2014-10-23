@@ -38,7 +38,7 @@ public class AboutActivity extends BaseActivity {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String title;
         PackageManager manager = this.getPackageManager();

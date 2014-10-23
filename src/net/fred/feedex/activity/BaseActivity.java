@@ -19,15 +19,15 @@
 package net.fred.feedex.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.WindowManager;
 
 import net.fred.feedex.Constants;
 
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends ActionBarActivity {
 
     private static final String STATE_IS_NORMAL_FULLSCREEN = "STATE_IS_NORMAL_FULLSCREEN";
     private static final String STATE_IS_IMMERSIVE_FULLSCREEN = "STATE_IS_IMMERSIVE_FULLSCREEN";
@@ -141,7 +141,7 @@ public abstract class BaseActivity extends Activity {
         if (fullScreen) {
             mIsNormalFullScreen = true;
 
-            getActionBar().hide();
+            getSupportActionBar().hide();
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
@@ -151,7 +151,7 @@ public abstract class BaseActivity extends Activity {
         } else {
             mIsNormalFullScreen = false;
 
-            getActionBar().show();
+            getSupportActionBar().show();
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 

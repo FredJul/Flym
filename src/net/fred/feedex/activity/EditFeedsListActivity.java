@@ -20,21 +20,21 @@
 
 package net.fred.feedex.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
 import net.fred.feedex.fragment.EditFeedsListFragment;
 import net.fred.feedex.utils.UiUtils;
 
-public class EditFeedsListActivity extends Activity {
+public class EditFeedsListActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             EditFeedsListFragment fragment = new EditFeedsListFragment();

@@ -44,64 +44,53 @@
 
 package net.fred.feedex.activity;
 
-import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
-import net.fred.feedex.MainApplication;
-import net.fred.feedex.R;
-import net.fred.feedex.service.RefreshService;
-import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 
-public class GeneralPrefsActivity extends PreferenceActivity {
+public class GeneralPrefsActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        addPreferencesFromResource(R.layout.activity_preferences);
-
-        setRingtoneSummary();
-
-        Preference preference = findPreference(PrefUtils.REFRESH_ENABLED);
-        preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (Boolean.TRUE.equals(newValue)) {
-                    startService(new Intent(GeneralPrefsActivity.this, RefreshService.class));
-                } else {
-                    PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
-                    stopService(new Intent(GeneralPrefsActivity.this, RefreshService.class));
-                }
-                return true;
-            }
-        });
-
-        preference = findPreference(PrefUtils.LIGHT_THEME);
-        preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                PrefUtils.putBoolean(PrefUtils.LIGHT_THEME, Boolean.TRUE.equals(newValue));
-
-                PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit().commit(); // to be sure all prefs are written
-
-                android.os.Process.killProcess(android.os.Process.myPid()); // Restart the app
-
-                // this return statement will never be reached
-                return true;
-            }
-        });
+//        addPreferencesFromResource(R.layout.activity_preferences);
+//
+//        setRingtoneSummary();
+//
+//        Preference preference = findPreference(PrefUtils.REFRESH_ENABLED);
+//        preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+//            @Override
+//            public boolean onPreferenceChange(Preference preference, Object newValue) {
+//                if (Boolean.TRUE.equals(newValue)) {
+//                    startService(new Intent(GeneralPrefsActivity.this, RefreshService.class));
+//                } else {
+//                    PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
+//                    stopService(new Intent(GeneralPrefsActivity.this, RefreshService.class));
+//                }
+//                return true;
+//            }
+//        });
+//
+//        preference = findPreference(PrefUtils.LIGHT_THEME);
+//        preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+//            @Override
+//            public boolean onPreferenceChange(Preference preference, Object newValue) {
+//                PrefUtils.putBoolean(PrefUtils.LIGHT_THEME, Boolean.TRUE.equals(newValue));
+//
+//                PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit().commit(); // to be sure all prefs are written
+//
+//                android.os.Process.killProcess(android.os.Process.myPid()); // Restart the app
+//
+//                // this return statement will never be reached
+//                return true;
+//            }
+//        });
     }
 
     @Override
@@ -128,15 +117,15 @@ public class GeneralPrefsActivity extends PreferenceActivity {
 
     private boolean setRingtoneSummary() {
 
-        Preference ringtone_preference = findPreference(PrefUtils.NOTIFICATIONS_RINGTONE);
-        Uri ringtoneUri = Uri.parse(PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, ""));
-        if (ringtoneUri.toString().equals("")) {
-            ringtone_preference.setSummary(R.string.settings_notifications_ringtone_none);
-        } else {
-            Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneUri);
-            ringtone_preference.setSummary(ringtone.getTitle(getApplicationContext()));
-        }
-
+//        Preference ringtone_preference = findPreference(PrefUtils.NOTIFICATIONS_RINGTONE);
+//        Uri ringtoneUri = Uri.parse(PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, ""));
+//        if (ringtoneUri.toString().equals("")) {
+//            ringtone_preference.setSummary(R.string.settings_notifications_ringtone_none);
+//        } else {
+//            Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneUri);
+//            ringtone_preference.setSummary(ringtone.getTitle(getApplicationContext()));
+//        }
+//
         return true;
     }
 

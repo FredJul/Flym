@@ -49,7 +49,7 @@ public class EntryActivity extends BaseActivity {
             mEntryFragment.setData(getIntent().getData());
         }
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

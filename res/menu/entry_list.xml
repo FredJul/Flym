@@ -1,41 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <item
         android:id="@+id/menu_hide_read"
         android:icon="@drawable/hide_reads"
-        android:showAsAction="always"
         android:title="@string/context_menu_hide_read"
-        tools:ignore="AlwaysShowAction"/>
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/menu_refresh"
         android:icon="@drawable/refresh"
-        android:showAsAction="always"
         android:title="@string/menu_refresh"
-        tools:ignore="AlwaysShowAction"/>
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/menu_all_read"
         android:icon="@drawable/read_all"
-        android:showAsAction="ifRoom"
         android:title="@string/menu_all_read"
-        tools:ignore="AlwaysShowAction"/>
+        app:showAsAction="ifRoom"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/menu_edit"
         android:icon="@drawable/content_edit"
-        android:showAsAction="ifRoom"
         android:title="@string/menu_edit_feeds"
-        tools:ignore="AlwaysShowAction"/>
+        app:showAsAction="ifRoom"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/menu_settings_main"
         android:icon="@drawable/action_settings"
-        android:showAsAction="ifRoom"
         android:title="@string/menu_settings"
+        app:showAsAction="ifRoom"
         tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/menu_share_starred"
         android:icon="@drawable/social_share"
-        android:showAsAction="always"
-        android:title="@string/context_menu_share_starred"/>
+        android:title="@string/context_menu_share_starred"
+        app:showAsAction="always" />
 
 </menu>

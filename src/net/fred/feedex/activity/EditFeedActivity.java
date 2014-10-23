@@ -45,7 +45,6 @@
 package net.fred.feedex.activity;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -57,6 +56,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -93,7 +93,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class EditFeedActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class EditFeedActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     static final String FEED_SEARCH_TITLE = "title";
     static final String FEED_SEARCH_URL = "url";
@@ -226,7 +226,7 @@ public class EditFeedActivity extends ListActivity implements LoaderManager.Load
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.activity_feed_edit);
         setResult(RESULT_CANCELED);

@@ -33,9 +33,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -129,10 +129,10 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         });
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerStateChanged(int newState) {
                 if (mIsDrawerMoving && newState == DrawerLayout.STATE_IDLE) {
@@ -168,24 +168,24 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     private void refreshTitleAndIcon() {
-        getActionBar().setTitle(mTitle);
+        getSupportActionBar().setTitle(mTitle);
         switch (mCurrentDrawerPos) {
             case 0:
-                getActionBar().setTitle(R.string.all);
-                getActionBar().setIcon(R.drawable.ic_statusbar_rss);
+                getSupportActionBar().setTitle(R.string.all);
+                getSupportActionBar().setIcon(R.drawable.ic_statusbar_rss);
                 break;
             case 1:
-                getActionBar().setTitle(R.string.favorites);
-                getActionBar().setIcon(R.drawable.dimmed_rating_important);
+                getSupportActionBar().setTitle(R.string.favorites);
+                getSupportActionBar().setIcon(R.drawable.dimmed_rating_important);
                 break;
             case 2:
-                getActionBar().setTitle(android.R.string.search_go);
-                getActionBar().setIcon(R.drawable.action_search);
+                getSupportActionBar().setTitle(android.R.string.search_go);
+                getSupportActionBar().setIcon(R.drawable.action_search);
                 break;
             default:
-                getActionBar().setTitle(mTitle);
+                getSupportActionBar().setTitle(mTitle);
                 if (mIcon != null) {
-                    getActionBar().setIcon(mIcon);
+                    getSupportActionBar().setIcon(mIcon);
                 }
                 break;
         }
@@ -231,8 +231,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         boolean isOpened = mDrawerLayout.isDrawerOpen(mDrawerList);
         if (isOpened && !mIsDrawerMoving || !isOpened && mIsDrawerMoving) {
-            getActionBar().setTitle(R.string.app_name);
-            getActionBar().setIcon(R.drawable.icon);
+            getSupportActionBar().setTitle(R.string.app_name);
+            getSupportActionBar().setIcon(R.drawable.icon);
 
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.drawer, menu);

@@ -20,8 +20,8 @@
 
 package net.fred.feedex.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -32,7 +32,7 @@ import net.fred.feedex.utils.UiUtils;
 
 import java.util.Locale;
 
-public class AddGoogleNewsActivity extends Activity {
+public class AddGoogleNewsActivity extends ActionBarActivity {
 
     private static final int[] TOPIC_NAME = new int[]{R.string.google_news_top_stories, R.string.google_news_world, R.string.google_news_business,
             R.string.google_news_technology, R.string.google_news_entertainment, R.string.google_news_sports, R.string.google_news_science, R.string.google_news_health};
@@ -47,7 +47,7 @@ public class AddGoogleNewsActivity extends Activity {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setResult(RESULT_CANCELED);
 

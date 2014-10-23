@@ -10,11 +10,14 @@ apply plugin: 'com.android.application'
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
+    compile 'com.android.support:appcompat-v7:+'
+    compile 'com.android.support:cardview-v7:+'
+    compile 'com.android.support:recyclerview-v7:+'
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "21.0.1"
+    compileSdkVersion 21
+    buildToolsVersion "21.0.2"
 
     sourceSets {
         main {
