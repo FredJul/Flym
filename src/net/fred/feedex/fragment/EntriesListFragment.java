@@ -206,6 +206,15 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         super.onStop();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(STATE_URI, mUri);
+        outState.putBoolean(STATE_SHOW_FEED_INFO, mShowFeedInfo);
+        outState.putLong(STATE_LIST_DISPLAY_DATE, mListDisplayDate);
+
+        super.onSaveInstanceState(outState);
+    }
+
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -235,15 +244,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onLoaderReset(Loader<Cursor> loader) {
         }
     };
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(STATE_URI, mUri);
-        outState.putBoolean(STATE_SHOW_FEED_INFO, mShowFeedInfo);
-        outState.putLong(STATE_LIST_DISPLAY_DATE, mListDisplayDate);
-
-        super.onSaveInstanceState(outState);
-    }
 
     @Override
     public void onRefresh() {
@@ -318,7 +318,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                     mEntriesCursorAdapter.markAllAsRead(mListDisplayDate);
 
                     // If we are on "all items" uri, we can remove the notification here
-                    if (EntryColumns.CONTENT_URI.equals(mUri) && Constants.NOTIF_MGR != null) {
+                    if (mUri != null && EntryColumns.CONTENT_URI.equals(mUri) && Constants.NOTIF_MGR != null) {
                         Constants.NOTIF_MGR.cancel(0);
                     }
                 }
@@ -335,7 +335,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 return true;
             }
             case R.id.menu_edit: {
-                if (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
+                if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
                     startActivity(new Intent(Intent.ACTION_EDIT).setData(FeedColumns.CONTENT_URI(mUri.getPathSegments().get(1))));
                 } else {
                     startActivity(new Intent(getActivity(), EditFeedsListActivity.class));
@@ -348,7 +348,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
     private void startRefresh() {
         if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            if (FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
+            if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
                 getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FEED_ID,
                         mUri.getPathSegments().get(1)));
             } else {
@@ -457,6 +457,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             return mGestureDetector.onTouchEvent(event);
         }
     }
+
+
 
 
 
