@@ -48,6 +48,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
+import net.fred.feedex.fragment.GeneralPrefsFragment;
 import net.fred.feedex.utils.UiUtils;
 
 public class GeneralPrefsActivity extends ActionBarActivity {
@@ -59,38 +60,10 @@ public class GeneralPrefsActivity extends ActionBarActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        addPreferencesFromResource(R.layout.activity_preferences);
-//
-//        setRingtoneSummary();
-//
-//        Preference preference = findPreference(PrefUtils.REFRESH_ENABLED);
-//        preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-//            @Override
-//            public boolean onPreferenceChange(Preference preference, Object newValue) {
-//                if (Boolean.TRUE.equals(newValue)) {
-//                    startService(new Intent(GeneralPrefsActivity.this, RefreshService.class));
-//                } else {
-//                    PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
-//                    stopService(new Intent(GeneralPrefsActivity.this, RefreshService.class));
-//                }
-//                return true;
-//            }
-//        });
-//
-//        preference = findPreference(PrefUtils.LIGHT_THEME);
-//        preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-//            @Override
-//            public boolean onPreferenceChange(Preference preference, Object newValue) {
-//                PrefUtils.putBoolean(PrefUtils.LIGHT_THEME, Boolean.TRUE.equals(newValue));
-//
-//                PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit().commit(); // to be sure all prefs are written
-//
-//                android.os.Process.killProcess(android.os.Process.myPid()); // Restart the app
-//
-//                // this return statement will never be reached
-//                return true;
-//            }
-//        });
+        // Display the fragment as the main content.
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction().replace(android.R.id.content, new GeneralPrefsFragment()).commit();
+        }
     }
 
     @Override
@@ -102,36 +75,4 @@ public class GeneralPrefsActivity extends ActionBarActivity {
         }
         return true;
     }
-
-    @Override
-    protected void onResume() {
-
-        // The ringtone summary text should be updated using
-        // OnSharedPreferenceChangeListener(), but I can't get it to work.
-        // Updating in onResume is a very simple hack that seems to work, but is inefficient.
-
-        setRingtoneSummary();
-        super.onResume();
-
-    }
-
-    private boolean setRingtoneSummary() {
-
-//        Preference ringtone_preference = findPreference(PrefUtils.NOTIFICATIONS_RINGTONE);
-//        Uri ringtoneUri = Uri.parse(PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, ""));
-//        if (ringtoneUri == null || TextUtils.isEmpty(ringtoneUri.toString()) {
-//            ringtone_preference.setSummary(R.string.settings_notifications_ringtone_none);
-//        } else {
-//            Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneUri);
-//            if (ringtone == null) {
-//                ringtone_preference.setSummary(R.string.settings_notifications_ringtone_none);
-//            } else {
-//                ringtone_preference.setSummary(ringtone.getTitle(getApplicationContext()));
-//            }
-//        }
-
-        return true;
-    }
-
-
 }
