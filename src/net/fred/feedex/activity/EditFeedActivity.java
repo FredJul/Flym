@@ -57,8 +57,8 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.text.Html;
-import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -274,7 +274,7 @@ public class EditFeedActivity extends ActionBarActivity implements LoaderManager
             mFiltersListView.setOnItemLongClickListener(new OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    startActionMode(mFilterActionModeCallback);
+                    startSupportActionMode(mFilterActionModeCallback);
                     mFiltersCursorAdapter.setSelectedFilter(position);
                     mFiltersListView.invalidateViews();
                     return true;

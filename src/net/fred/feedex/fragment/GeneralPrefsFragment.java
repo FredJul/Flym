@@ -66,7 +66,7 @@ public class GeneralPrefsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addPreferencesFromResource(R.layout.activity_preferences);
+        addPreferencesFromResource(R.xml.general_preferences);
 
         setRingtoneSummary();
 
@@ -105,18 +105,16 @@ public class GeneralPrefsFragment extends PreferenceFragment {
 
     @Override
     public void onResume() {
-
         // The ringtone summary text should be updated using
         // OnSharedPreferenceChangeListener(), but I can't get it to work.
         // Updating in onResume is a very simple hack that seems to work, but is inefficient.
-
         setRingtoneSummary();
+
         super.onResume();
 
     }
 
-    private boolean setRingtoneSummary() {
-
+    private void setRingtoneSummary() {
         Preference ringtone_preference = findPreference(PrefUtils.NOTIFICATIONS_RINGTONE);
         Uri ringtoneUri = Uri.parse(PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, ""));
         if (ringtoneUri == null || TextUtils.isEmpty(ringtoneUri.toString())) {
@@ -129,9 +127,5 @@ public class GeneralPrefsFragment extends PreferenceFragment {
                 ringtone_preference.setSummary(ringtone.getTitle(MainApplication.getContext()));
             }
         }
-
-        return true;
     }
-
-
 }

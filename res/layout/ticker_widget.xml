@@ -34,7 +34,6 @@
         android:minWidth="30sp"
         android:padding="3dp"
         android:singleLine="false"
-        android:text="0"
         android:textAppearance="@android:style/TextAppearance.Medium"
         android:textColor="@android:color/white"
         android:textStyle="bold" />

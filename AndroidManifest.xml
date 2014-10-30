@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.fred.feedex"
-    android:installLocation="auto"
-    android:versionCode="46"
-    android:versionName="1.6.5">
-
-<uses-sdk
-        android:minSdkVersion="15"
-        android:targetSdkVersion="19" />
+    android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <permission
+        android:name="net.fred.feedex.provider.WRITE_PERMISSION"
+        android:protectionLevel="signature" />
 
     <application
         android:name=".MainApplication"
@@ -27,7 +25,8 @@
         <provider
             android:name=".provider.FeedDataContentProvider"
             android:authorities="net.fred.feedex.provider.FeedData"
-            android:exported="true" />
+            android:exported="true"
+            android:writePermission="net.fred.feedex.provider.WRITE_PERMISSION" />
 
         <activity
             android:name=".activity.HomeActivity"

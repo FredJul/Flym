@@ -206,7 +206,7 @@ public class EntryView extends WebView {
         return content.toString();
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     private void init(Context context, AttributeSet attrs, int defStyle) {
         // For scrolling
         setHorizontalScrollBarEnabled(false);

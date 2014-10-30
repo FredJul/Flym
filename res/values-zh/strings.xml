@@ -184,7 +184,6 @@
     <string name="settings_proxy_type">类型</string>
 
     <plurals name="number_of_new_entries">
-        <item quantity="one">一条新消息</item>
         <item quantity="other">%d 条新消息</item>
     </plurals>
 

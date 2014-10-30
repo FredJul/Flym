@@ -26,3 +26,4 @@ local.properties
 .settings/
 build
 *.iml
+*.log
