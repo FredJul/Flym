@@ -68,6 +68,9 @@ public abstract class BaseActivity extends ActionBarActivity {
                         }
                     });
         }
+        if (android.os.Build.VERSION.SDK_INT >= 21) { // Lollipop
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS); // Tweak to allow setting status bar color
+        }
     }
 
     @Override
