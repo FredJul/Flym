@@ -21,13 +21,12 @@
 package net.fred.feedex.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
 import net.fred.feedex.fragment.EditFeedsListFragment;
 import net.fred.feedex.utils.UiUtils;
 
-public class EditFeedsListActivity extends ActionBarActivity {
+public class EditFeedsListActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

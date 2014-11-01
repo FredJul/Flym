@@ -56,7 +56,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.text.Html;
 import android.view.Menu;
@@ -93,7 +92,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class EditFeedActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class EditFeedActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     static final String FEED_SEARCH_TITLE = "title";
     static final String FEED_SEARCH_URL = "url";

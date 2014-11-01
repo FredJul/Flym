@@ -45,13 +45,12 @@
 package net.fred.feedex.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
 import net.fred.feedex.fragment.GeneralPrefsFragment;
 import net.fred.feedex.utils.UiUtils;
 
-public class GeneralPrefsActivity extends ActionBarActivity {
+public class GeneralPrefsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
