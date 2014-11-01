@@ -6,7 +6,7 @@
         <!-- customize the color palette -->
         <item name="colorPrimary">@color/light_action_bar_blue</item>
         <item name="colorPrimaryDark">@color/dark_action_bar_blue</item>
-        <item name="colorAccent">@color/light_entry_list_background</item>
+        <item name="colorAccent">@color/light_action_bar_blue</item>
     </style>
 
     <style name="Theme.Dark" parent="Theme.AppCompat">
@@ -14,6 +14,6 @@
         <!-- customize the color palette -->
         <item name="colorPrimary">@color/dark_action_bar_blue</item>
         <item name="colorPrimaryDark">@color/dark_action_bar_blue</item>
-        <item name="colorAccent">@color/light_entry_list_background</item>
+        <item name="colorAccent">@color/dark_action_bar_blue</item>
     </style>
 </resources>
