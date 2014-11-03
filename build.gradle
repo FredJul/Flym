@@ -17,7 +17,7 @@ dependencies {
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.2"
+    buildToolsVersion "21.1"
 
     defaultConfig {
         versionCode 46
@@ -50,22 +50,22 @@ android {
         release.setRoot('build-types/release')
     }
 
-//    signingConfigs {
-//        release {
-//            storeFile file("X")
-//            storePassword 'X'
-//            keyAlias 'X'
-//            keyPassword 'X'
-//        }
-//    }
-//
-//    buildTypes {
-//        release {
-//            signingConfig signingConfigs.release
-//
-//            runProguard true
-//            proguardFile getDefaultProguardFile('proguard-android.txt')
-//            proguardFile 'proguard-project.txt'
-//        }
-//    }
+    signingConfigs {
+        release {
+            storeFile file(KEYSTORE_PATH)
+            storePassword KEYSTORE_PASSWORD
+            keyAlias KEY_ALIAS
+            keyPassword KEY_PASSWORD
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+
+            runProguard true
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+            proguardFile 'proguard-project.txt'
+        }
+    }
 }

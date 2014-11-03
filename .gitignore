@@ -17,8 +17,9 @@ bin/
 gen/
 proguard/
 
-# Local configuration file (sdk path, etc)
+# Local configuration file (sdk path, keystore, etc)
 local.properties
+gradle.properties
 
 # IDE project files
 .idea/
