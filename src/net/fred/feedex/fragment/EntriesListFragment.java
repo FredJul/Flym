@@ -42,8 +42,6 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -220,6 +218,11 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         startRefresh();
     }
 
+    @Override
+    public void onListItemClick(ListView listView, View view, int position, long id) {
+        startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, id)));
+    }
+
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -249,11 +252,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onLoaderReset(Loader<Cursor> loader) {
         }
     };
-
-    @Override
-    public void onListItemClick(ListView listView, View view, int position, long id) {
-        startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, id)));
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -423,17 +421,16 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             if (mListView != null && e1 != null && e2 != null && Math.abs(e1.getY() - e2.getY()) <= SWIPE_MAX_OFF_PATH && Math.abs(velocityX) >= SWIPE_THRESHOLD_VELOCITY) {
+                long id = mListView.pointToRowId(Math.round(e2.getX()), Math.round(e2.getY()));
                 int position = mListView.pointToPosition(Math.round(e2.getX()), Math.round(e2.getY()));
                 View view = mListView.getChildAt(position - mListView.getFirstVisiblePosition());
 
                 if (view != null) {
                     // Just click on views, the adapter will do the real stuff
                     if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
-                        CheckBox cb = (CheckBox) view.findViewById(android.R.id.checkbox);
-                        cb.setChecked(!cb.isChecked());
+                        mEntriesCursorAdapter.toggleReadState(id, view);
                     } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
-                        ImageView star = (ImageView) view.findViewById(android.R.id.icon);
-                        star.callOnClick();
+                        mEntriesCursorAdapter.toggleFavoriteState(id, view);
                     }
 
                     // Just simulate a CANCEL event to remove the item highlighting
@@ -457,6 +454,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             return mGestureDetector.onTouchEvent(event);
         }
     }
+
+
 
 
 }

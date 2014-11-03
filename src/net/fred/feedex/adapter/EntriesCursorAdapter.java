@@ -53,10 +53,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
@@ -70,17 +66,11 @@ import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.utils.StringUtils;
 import net.fred.feedex.utils.UiUtils;
 
-import java.util.Vector;
-
 public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     private final Uri mUri;
     private final boolean mShowFeedInfo;
-    private final Vector<Long> mMarkedAsReadEntries = new Vector<Long>();
-    private final Vector<Long> mMarkedAsUnreadEntries = new Vector<Long>();
-    private final Vector<Long> mFavoriteEntries = new Vector<Long>();
-    private final Vector<Long> mNotFavoriteEntries = new Vector<Long>();
-    private int mTitlePos, mDatePos, mIsReadPos, mFavoritePos, mIdPos, mFeedIdPos, mFeedIconPos, mFeedNamePos;
+    private int mTitlePos, mDatePos, mIsReadPos, mFavoritePos, mFeedIdPos, mFeedIconPos, mFeedNamePos;
 
     public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo) {
         super(context, R.layout.item_entry_list, cursor, 0);
@@ -97,7 +87,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.titleTextView = (TextView) view.findViewById(android.R.id.text1);
             holder.dateTextView = (TextView) view.findViewById(android.R.id.text2);
             holder.starImgView = (ImageView) view.findViewById(android.R.id.icon);
-            holder.isReadCb = (CheckBox) view.findViewById(android.R.id.checkbox);
             view.setTag(holder);
         }
 
@@ -105,36 +94,9 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         holder.titleTextView.setText(cursor.getString(mTitlePos));
 
-        final long id = cursor.getLong(mIdPos);
-        final boolean favorite = !mNotFavoriteEntries.contains(id) && (cursor.getInt(mFavoritePos) == 1 || mFavoriteEntries.contains(id));
+        holder.isFavorite = cursor.getInt(mFavoritePos) == 1;
 
-        holder.starImgView.setImageResource(favorite ? R.drawable.dimmed_rating_important : R.drawable.dimmed_rating_not_important);
-        holder.starImgView.setTag(favorite ? Constants.TRUE : Constants.FALSE);
-        holder.starImgView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean newFavorite = !Constants.TRUE.equals(view.getTag());
-
-                if (newFavorite) {
-                    view.setTag(Constants.TRUE);
-                    holder.starImgView.setImageResource(R.drawable.dimmed_rating_important);
-                    mFavoriteEntries.add(id);
-                    mNotFavoriteEntries.remove(id);
-                } else {
-                    view.setTag(Constants.FALSE);
-                    holder.starImgView.setImageResource(R.drawable.dimmed_rating_not_important);
-                    mNotFavoriteEntries.add(id);
-                    mFavoriteEntries.remove(id);
-                }
-
-                ContentValues values = new ContentValues();
-                values.put(EntryColumns.IS_FAVORITE, newFavorite ? 1 : 0);
-
-                ContentResolver cr = MainApplication.getContext().getContentResolver();
-                Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                cr.update(entryUri, values, null, null);
-            }
-        });
+        holder.starImgView.setVisibility(holder.isFavorite ? View.VISIBLE : View.INVISIBLE);
 
         if (mShowFeedInfo && mFeedIconPos > -1) {
             final long feedId = cursor.getLong(mFeedIdPos);
@@ -158,71 +120,71 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.dateTextView.setText(StringUtils.getDateTimeString(cursor.getLong(mDatePos)));
         }
 
-        holder.isReadCb.setOnCheckedChangeListener(null);
-        if (mMarkedAsUnreadEntries.contains(id) || (cursor.isNull(mIsReadPos) && !mMarkedAsReadEntries.contains(id))) {
+        if (cursor.isNull(mIsReadPos)) {
             holder.titleTextView.setEnabled(true);
             holder.dateTextView.setEnabled(true);
-            holder.isReadCb.setChecked(false);
+            holder.isRead = false;
         } else {
             holder.titleTextView.setEnabled(false);
             holder.dateTextView.setEnabled(false);
-            holder.isReadCb.setChecked(true);
+            holder.isRead = true;
+        }
+    }
+
+    public void toggleReadState(final long id, View view) {
+        final ViewHolder holder = (ViewHolder) view.getTag();
+
+        holder.isRead = !holder.isRead;
+
+        if (holder.isRead) {
+            holder.titleTextView.setEnabled(false);
+            holder.dateTextView.setEnabled(false);
+        } else {
+            holder.titleTextView.setEnabled(true);
+            holder.dateTextView.setEnabled(true);
         }
 
-        holder.isReadCb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        new Thread() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    markAsRead(id);
-                    holder.titleTextView.setEnabled(false);
-                    holder.dateTextView.setEnabled(false);
-                } else {
-                    markAsUnread(id);
-                    holder.titleTextView.setEnabled(true);
-                    holder.dateTextView.setEnabled(true);
-                }
+            public void run() {
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                Uri entryUri = ContentUris.withAppendedId(mUri, id);
+                cr.update(entryUri, holder.isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
             }
-        });
+        }.start();
+    }
+
+    public void toggleFavoriteState(final long id, View view) {
+        final ViewHolder holder = (ViewHolder) view.getTag();
+
+        holder.isFavorite = !holder.isFavorite;
+
+        if (holder.isFavorite) {
+            holder.starImgView.setVisibility(View.VISIBLE);
+        } else {
+            holder.starImgView.setVisibility(View.INVISIBLE);
+        }
+
+        new Thread() {
+            @Override
+            public void run() {
+                ContentValues values = new ContentValues();
+                values.put(EntryColumns.IS_FAVORITE, holder.isFavorite ? 1 : 0);
+
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                Uri entryUri = ContentUris.withAppendedId(mUri, id);
+                cr.update(entryUri, values, null, null);
+            }
+        }.start();
     }
 
     public void markAllAsRead(final long untilDate) {
-        mMarkedAsReadEntries.clear();
-        mMarkedAsUnreadEntries.clear();
-
         new Thread() {
             @Override
             public void run() {
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
                 String where = EntryColumns.WHERE_UNREAD + Constants.DB_AND + '(' + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + untilDate + ')';
                 cr.update(mUri, FeedData.getReadContentValues(), where, null);
-            }
-        }.start();
-    }
-
-    private void markAsRead(final long id) {
-        mMarkedAsReadEntries.add(id);
-        mMarkedAsUnreadEntries.remove(id);
-
-        new Thread() {
-            @Override
-            public void run() {
-                ContentResolver cr = MainApplication.getContext().getContentResolver();
-                Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                cr.update(entryUri, FeedData.getReadContentValues(), null, null);
-            }
-        }.start();
-    }
-
-    private void markAsUnread(final long id) {
-        mMarkedAsUnreadEntries.add(id);
-        mMarkedAsReadEntries.remove(id);
-
-        new Thread() {
-            @Override
-            public void run() {
-                ContentResolver cr = MainApplication.getContext().getContentResolver();
-                Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                cr.update(entryUri, FeedData.getUnreadContentValues(), null, null);
             }
         }.start();
     }
@@ -252,17 +214,11 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     }
 
     private void reinit(Cursor cursor) {
-        mMarkedAsReadEntries.clear();
-        mMarkedAsUnreadEntries.clear();
-        mFavoriteEntries.clear();
-        mNotFavoriteEntries.clear();
-
         if (cursor != null && cursor.getCount() > 0) {
             mTitlePos = cursor.getColumnIndex(EntryColumns.TITLE);
             mDatePos = cursor.getColumnIndex(EntryColumns.DATE);
             mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
             mFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
-            mIdPos = cursor.getColumnIndex(EntryColumns._ID);
             if (mShowFeedInfo) {
                 mFeedIdPos = cursor.getColumnIndex(EntryColumns.FEED_ID);
                 mFeedIconPos = cursor.getColumnIndex(FeedColumns.ICON);
@@ -275,6 +231,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         public TextView titleTextView;
         public TextView dateTextView;
         public ImageView starImgView;
-        public CheckBox isReadCb;
+        public boolean isRead, isFavorite;
     }
 }

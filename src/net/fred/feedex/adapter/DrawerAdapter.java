@@ -113,7 +113,7 @@ public class DrawerAdapter extends BaseAdapter {
 
         if (position == 0 || position == 1) {
             holder.titleTxt.setText(position == 0 ? R.string.all : R.string.favorites);
-            holder.iconView.setImageResource(position == 0 ? R.drawable.ic_statusbar_rss : R.drawable.dimmed_rating_important);
+            holder.iconView.setImageResource(position == 0 ? R.drawable.ic_statusbar_rss : R.drawable.rating_important);
 
             int unread = position == 0 ? mAllUnreadNumber : mFavoritesNumber;
             if (unread != 0) {
