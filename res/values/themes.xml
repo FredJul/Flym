@@ -2,18 +2,20 @@
 <resources>
 
     <style name="Theme.Light" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="card">@drawable/bg_card_light</item>
         <!-- customize the color palette -->
         <item name="colorPrimary">@color/light_action_bar_blue</item>
         <item name="colorPrimaryDark">@color/dark_action_bar_blue</item>
         <item name="colorAccent">@color/light_action_bar_blue</item>
+        <!-- app attr -->
+        <item name="card_color">@android:color/white</item>
     </style>
 
     <style name="Theme.Dark" parent="Theme.AppCompat">
-        <item name="card">@drawable/bg_card_dark</item>
         <!-- customize the color palette -->
         <item name="colorPrimary">@color/dark_action_bar_blue</item>
         <item name="colorPrimaryDark">@color/dark_action_bar_blue</item>
         <item name="colorAccent">@color/dark_action_bar_blue</item>
+        <!-- app attr -->
+        <item name="card_color">@color/dark_card_background</item>
     </style>
 </resources>

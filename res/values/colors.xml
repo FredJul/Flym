@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="dark_card_background">#1c1c1c</color>
     <color name="light_action_bar_blue">#247ab0</color>
     <color name="dark_action_bar_blue">#175073</color>
     <color name="light_entry_list_background">#e5e5e5</color>

@@ -215,6 +215,11 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onRefresh() {
+        startRefresh();
+    }
+
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -244,11 +249,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onLoaderReset(Loader<Cursor> loader) {
         }
     };
-
-    @Override
-    public void onRefresh() {
-        startRefresh();
-    }
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
@@ -457,10 +457,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             return mGestureDetector.onTouchEvent(event);
         }
     }
-
-
-
-
 
 
 }
