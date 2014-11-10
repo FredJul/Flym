@@ -98,12 +98,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        if (PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
-            getWindow().setBackgroundDrawableResource(R.color.light_entry_list_background);
-        } else {
-            getWindow().setBackgroundDrawableResource(R.color.dark_entry_list_background);
-        }
-
         setContentView(R.layout.activity_home);
 
         mEntriesFragment = (EntriesListFragment) getFragmentManager().findFragmentById(R.id.entries_list_fragment);

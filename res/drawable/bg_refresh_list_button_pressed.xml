@@ -9,6 +9,6 @@
         android:right="10dp"
         android:top="10dp" />
 
-    <solid android:color="@color/dark_action_bar_blue" />
+    <solid android:color="?attr/colorPrimaryDark" />
 
 </shape>

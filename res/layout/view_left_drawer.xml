@@ -5,7 +5,7 @@
     android:layout_width="290dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:background="#222"
+    android:background="@color/dark_background"
     android:orientation="vertical"
     tools:showIn="@layout/activity_home">
 
@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="onClickHideRead"
+            android:onClick="0"
             android:src="@drawable/hide_reads" />
 
         <ImageButton
