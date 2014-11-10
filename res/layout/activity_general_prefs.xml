@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/entry_fragment"
-        class="net.fred.feedex.fragment.EntryFragment"
+        class="net.fred.feedex.fragment.GeneralPrefsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -57,6 +57,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -225,9 +226,12 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_feed_edit);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setContentView(R.layout.activity_feed_edit);
         setResult(RESULT_CANCELED);
 
         Intent intent = getIntent();

@@ -46,7 +46,6 @@
     <string name="no_filters">No hay filtros</string>
     <string name="context_menu_delete">Eliminar</string>
     <string name="edit_feed_title">Modificar fuente</string>
-    <string name="menu_edit_feeds">Edit feeds</string>
     <string name="new_feed_title">Nueva fuente</string>
     <string name="context_menu_edit">Editar</string>
     <string name="menu_add_group">Añadir grupo</string>

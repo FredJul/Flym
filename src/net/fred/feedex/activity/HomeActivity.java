@@ -36,16 +36,15 @@ import android.os.Handler;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.Menu;
-import android.view.MenuInflater;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.DrawerAdapter;
 import net.fred.feedex.fragment.EntriesListFragment;
@@ -83,6 +82,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     private EntriesListFragment mEntriesFragment;
     private DrawerLayout mDrawerLayout;
+    private View mLeftDrawer;
     private ListView mDrawerList;
     private DrawerAdapter mDrawerAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -90,8 +90,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     private CharSequence mTitle;
     private BitmapDrawable mIcon;
     private int mCurrentDrawerPos;
-
-    private boolean mIsDrawerMoving = false;
 
     private boolean mCanQuit = false;
 
@@ -113,7 +111,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         mTitle = getTitle();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mLeftDrawer = findViewById(R.id.left_drawer);
+        mDrawerList = (ListView) findViewById(R.id.drawer_list);
         mDrawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mDrawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
@@ -122,30 +121,19 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 mDrawerLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mDrawerLayout.closeDrawer(mDrawerList);
+                        mDrawerLayout.closeDrawer(mLeftDrawer);
                     }
                 }, 50);
             }
         });
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
-            @Override
-            public void onDrawerStateChanged(int newState) {
-                if (mIsDrawerMoving && newState == DrawerLayout.STATE_IDLE) {
-                    mIsDrawerMoving = false;
-                    invalidateOptionsMenu();
-                } else if (!mIsDrawerMoving) {
-                    mIsDrawerMoving = true;
-                    invalidateOptionsMenu();
-                }
-
-                super.onDrawerStateChanged(newState);
-            }
-        };
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState != null) {
@@ -164,30 +152,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
                 startService(new Intent(HomeActivity.this, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
             }
-        }
-    }
-
-    private void refreshTitleAndIcon() {
-        getSupportActionBar().setTitle(mTitle);
-        switch (mCurrentDrawerPos) {
-            case 0:
-                getSupportActionBar().setTitle(R.string.all);
-                getSupportActionBar().setIcon(R.drawable.ic_statusbar_rss);
-                break;
-            case 1:
-                getSupportActionBar().setTitle(R.string.favorites);
-                getSupportActionBar().setIcon(R.drawable.dimmed_rating_important);
-                break;
-            case 2:
-                getSupportActionBar().setTitle(android.R.string.search_go);
-                getSupportActionBar().setIcon(R.drawable.action_search);
-                break;
-            default:
-                getSupportActionBar().setTitle(mTitle);
-                if (mIcon != null) {
-                    getSupportActionBar().setIcon(mIcon);
-                }
-                break;
         }
     }
 
@@ -227,59 +191,33 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        boolean isOpened = mDrawerLayout.isDrawerOpen(mDrawerList);
-        if (isOpened && !mIsDrawerMoving || !isOpened && mIsDrawerMoving) {
-            getSupportActionBar().setTitle(R.string.app_name);
-            getSupportActionBar().setIcon(R.drawable.icon);
-
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.drawer, menu);
-
-            if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
-                menu.findItem(R.id.menu_hide_read_main).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
-            }
-
-            mEntriesFragment.setHasOptionsMenu(false);
-        } else {
-            refreshTitleAndIcon();
-            mEntriesFragment.setHasOptionsMenu(true);
-        }
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
-        switch (item.getItemId()) {
-            case R.id.menu_hide_read_main:
-                if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
-                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
-                    item.setTitle(R.string.context_menu_hide_read).setIcon(R.drawable.hide_reads);
-                } else {
-                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
-                    item.setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
-                }
-                return true;
-            case R.id.menu_edit_main:
-                startActivity(new Intent(this, EditFeedsListActivity.class));
-                return true;
-            case R.id.menu_refresh_main:
-                if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-                    MainApplication.getContext().startService(new Intent(MainApplication.getContext(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
-                }
-                return true;
-            case R.id.menu_settings_main:
-                startActivity(new Intent(this, GeneralPrefsActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void onClickHideRead(View view) {
+        ImageButton btn = (ImageButton) view;
+        if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
+            PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
+            btn.setImageResource(R.drawable.hide_reads);
+        } else {
+            PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
+            btn.setImageResource(R.drawable.view_reads);
         }
+
+        invalidateOptionsMenu();
+    }
+
+    public void onClickEditFeeds(View view) {
+        startActivity(new Intent(this, EditFeedsListActivity.class));
+    }
+
+    public void onClickSettings(View view) {
+        startActivity(new Intent(this, GeneralPrefsActivity.class));
     }
 
     @Override
@@ -318,7 +256,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 @Override
                 public void run() {
                     selectDrawerItem(mCurrentDrawerPos);
-                    refreshTitleAndIcon();
                 }
             });
         }
@@ -376,7 +313,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             mDrawerLayout.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mDrawerLayout.openDrawer(mDrawerList);
+                    mDrawerLayout.openDrawer(mLeftDrawer);
                 }
             }, 500);
 
@@ -393,5 +330,32 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     });
             builder.show();
         }
+
+        // Set title & icon
+        switch (mCurrentDrawerPos) {
+            case 0:
+                getSupportActionBar().setTitle(R.string.all);
+                getSupportActionBar().setIcon(R.drawable.ic_statusbar_rss);
+                break;
+            case 1:
+                getSupportActionBar().setTitle(R.string.favorites);
+                getSupportActionBar().setIcon(R.drawable.rating_important);
+                break;
+            case 2:
+                getSupportActionBar().setTitle(android.R.string.search_go);
+                getSupportActionBar().setIcon(R.drawable.action_search);
+                break;
+            default:
+                getSupportActionBar().setTitle(mTitle);
+                if (mIcon != null) {
+                    getSupportActionBar().setIcon(mIcon);
+                } else {
+                    getSupportActionBar().setIcon(null);
+                }
+                break;
+        }
+
+        // Put the good menu
+        invalidateOptionsMenu();
     }
 }

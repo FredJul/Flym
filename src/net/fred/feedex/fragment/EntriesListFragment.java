@@ -43,15 +43,14 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
-import net.fred.feedex.activity.EditFeedsListActivity;
 import net.fred.feedex.adapter.EntriesCursorAdapter;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
-import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
@@ -232,57 +231,19 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
             menu.findItem(R.id.menu_hide_read).setVisible(false);
             menu.findItem(R.id.menu_refresh).setVisible(false);
-            menu.findItem(R.id.menu_edit).setVisible(false);
-            menu.findItem(R.id.menu_settings_main).setVisible(false);
         } else if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
             menu.findItem(R.id.menu_hide_read).setVisible(false);
             menu.findItem(R.id.menu_share_starred).setVisible(false);
-            menu.findItem(R.id.menu_edit).setVisible(false);
-            menu.findItem(R.id.menu_settings_main).setVisible(false);
         } else {
             menu.findItem(R.id.menu_share_starred).setVisible(false);
 
             if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
                 menu.findItem(R.id.menu_hide_read).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
             }
-
-            if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
-                menu.findItem(R.id.menu_edit).setTitle(R.string.edit_feed_title);
-            }
         }
 
         super.onCreateOptionsMenu(menu, inflater);
     }
-
-    private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
-        @Override
-        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
-            cursorLoader.setUpdateThrottle(150);
-            return cursorLoader;
-        }
-
-        @Override
-        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            data.moveToFirst();
-            mNewEntriesNumber = data.getInt(0);
-            mOldUnreadEntriesNumber = data.getInt(1);
-
-            if (mAutoRefreshDisplayDate && mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
-                mListDisplayDate = new Date().getTime();
-                getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-                getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
-            } else {
-                refreshUI();
-            }
-
-            mAutoRefreshDisplayDate = false;
-        }
-
-        @Override
-        public void onLoaderReset(Loader<Cursor> loader) {
-        }
-    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -323,26 +284,51 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 return true;
             }
             case R.id.menu_hide_read: {
+                ImageButton drawerBtn = (ImageButton) getActivity().findViewById(R.id.drawer_hide_read_button);
                 if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
                     PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
                     item.setTitle(R.string.context_menu_hide_read).setIcon(R.drawable.hide_reads);
+                    drawerBtn.setImageResource(R.drawable.hide_reads);
                 } else {
                     PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
                     item.setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
-                }
-                return true;
-            }
-            case R.id.menu_edit: {
-                if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
-                    startActivity(new Intent(Intent.ACTION_EDIT).setData(FeedColumns.CONTENT_URI(mUri.getPathSegments().get(1))));
-                } else {
-                    startActivity(new Intent(getActivity(), EditFeedsListActivity.class));
+                    drawerBtn.setImageResource(R.drawable.view_reads);
                 }
                 return true;
             }
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
+            cursorLoader.setUpdateThrottle(150);
+            return cursorLoader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            data.moveToFirst();
+            mNewEntriesNumber = data.getInt(0);
+            mOldUnreadEntriesNumber = data.getInt(1);
+
+            if (mAutoRefreshDisplayDate && mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
+                mListDisplayDate = new Date().getTime();
+                getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+                getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+            } else {
+                refreshUI();
+            }
+
+            mAutoRefreshDisplayDate = false;
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+        }
+    };
 
     private void startRefresh() {
         if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
@@ -454,10 +440,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             return mGestureDetector.onTouchEvent(event);
         }
     }
-
-
-
-
 
 
 }

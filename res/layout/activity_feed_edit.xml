@@ -2,11 +2,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+
+    <android.support.v7.widget.Toolbar xmlns:support="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        support:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <TabHost
         android:id="@+id/tabHost"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/button_layout">
+        android:layout_above="@+id/button_layout"
+        android:layout_below="@+id/toolbar">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -54,9 +64,9 @@
                         android:id="@+id/name_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/feed_url"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="20dp"
-                        android:layout_below="@id/feed_url"
                         android:text="@string/feed_title"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textStyle="bold" />

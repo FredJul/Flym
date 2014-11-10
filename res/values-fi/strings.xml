@@ -46,7 +46,6 @@
     <string name="no_filters">Ei sääntöjä</string>
     <string name="context_menu_delete">Poista</string>
     <string name="edit_feed_title">Muokkaa syötettä</string>
-    <string name="menu_edit_feeds">Muokkaa syötteitä</string>
     <string name="new_feed_title">Uusi syöte</string>
     <string name="context_menu_edit">Muokkaa</string>
     <string name="menu_add_group">Lisää ryhmä</string>

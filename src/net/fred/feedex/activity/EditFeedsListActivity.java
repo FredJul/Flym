@@ -21,9 +21,10 @@
 package net.fred.feedex.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import net.fred.feedex.fragment.EditFeedsListFragment;
+import net.fred.feedex.R;
 import net.fred.feedex.utils.UiUtils;
 
 public class EditFeedsListActivity extends BaseActivity {
@@ -33,12 +34,11 @@ public class EditFeedsListActivity extends BaseActivity {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_edit_feeds);
 
-        if (savedInstanceState == null) {
-            EditFeedsListFragment fragment = new EditFeedsListFragment();
-            getFragmentManager().beginTransaction().add(android.R.id.content, fragment, fragment.getClass().getName()).commit();
-        }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

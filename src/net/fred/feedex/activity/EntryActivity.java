@@ -21,6 +21,7 @@ package net.fred.feedex.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import net.fred.feedex.Constants;
@@ -49,6 +50,8 @@ public class EntryActivity extends BaseActivity {
             mEntryFragment.setData(getIntent().getData());
         }
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

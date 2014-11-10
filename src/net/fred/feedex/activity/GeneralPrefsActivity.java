@@ -45,9 +45,10 @@
 package net.fred.feedex.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import net.fred.feedex.fragment.GeneralPrefsFragment;
+import net.fred.feedex.R;
 import net.fred.feedex.utils.UiUtils;
 
 public class GeneralPrefsActivity extends BaseActivity {
@@ -57,12 +58,11 @@ public class GeneralPrefsActivity extends BaseActivity {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_general_prefs);
 
-        // Display the fragment as the main content.
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction().replace(android.R.id.content, new GeneralPrefsFragment()).commit();
-        }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

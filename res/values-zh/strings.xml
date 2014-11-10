@@ -46,7 +46,6 @@
     <string name="no_filters">没有规则</string>
     <string name="context_menu_delete">删除</string>
     <string name="edit_feed_title">编辑订阅</string>
-    <string name="menu_edit_feeds">管理订阅</string>
     <string name="new_feed_title">新的订阅</string>
     <string name="context_menu_edit">编辑</string>
     <string name="menu_add_group">添加分组</string>

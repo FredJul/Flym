@@ -47,7 +47,6 @@
     <string name="no_filters">Pas de filtres</string>
     <string name="context_menu_delete">Supprimer</string>
     <string name="edit_feed_title">Éditer le flux</string>
-    <string name="menu_edit_feeds">Éditer les flux</string>
     <string name="new_feed_title">Nouveau flux</string>
     <string name="context_menu_edit">Éditer</string>
     <string name="menu_add_group">Ajouter un groupe</string>

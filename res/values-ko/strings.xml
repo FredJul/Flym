@@ -47,7 +47,6 @@
     <string name="no_filters">규칙 없음</string>
     <string name="context_menu_delete">삭제</string>
     <string name="edit_feed_title">피드 편집</string>
-    <string name="menu_edit_feeds">피드 편집</string>
     <string name="new_feed_title">새 피드</string>
     <string name="context_menu_edit">편집</string>
     <string name="menu_add_group">그룹 추가</string>

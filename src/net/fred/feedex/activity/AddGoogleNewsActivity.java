@@ -21,6 +21,7 @@
 package net.fred.feedex.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -46,11 +47,13 @@ public class AddGoogleNewsActivity extends BaseActivity {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.activity_add_google_news);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

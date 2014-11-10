@@ -19,19 +19,7 @@
         android:id="@+id/menu_all_read"
         android:icon="@drawable/read_all"
         android:title="@string/menu_all_read"
-        app:showAsAction="ifRoom"
-        tools:ignore="AlwaysShowAction" />
-    <item
-        android:id="@+id/menu_edit"
-        android:icon="@drawable/content_edit"
-        android:title="@string/menu_edit_feeds"
-        app:showAsAction="ifRoom"
-        tools:ignore="AlwaysShowAction" />
-    <item
-        android:id="@+id/menu_settings_main"
-        android:icon="@drawable/action_settings"
-        android:title="@string/menu_settings"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/menu_share_starred"

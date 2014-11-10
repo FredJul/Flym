@@ -47,7 +47,6 @@
     <string name="no_filters">Нема правила</string>
     <string name="context_menu_delete">Обриши</string>
     <string name="edit_feed_title">Уређивање довода</string>
-    <string name="menu_edit_feeds">Уреди доводе</string>
     <string name="new_feed_title">Нови довод</string>
     <string name="context_menu_edit">Уреди</string>
     <string name="menu_add_group">Додај групу</string>

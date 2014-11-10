@@ -5,41 +5,48 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar xmlns:support="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        support:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/about_icon"
-        android:src="@drawable/icon"
-        android:layout_marginTop="20dip"
-        android:layout_marginBottom="5dip"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/about_title"
-        android:layout_marginTop="5dip"
-        android:layout_marginBottom="5dip"
-        android:layout_gravity="center_horizontal"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dip"
-        android:layout_marginBottom="5dip"
-        android:text="@string/about_us_copyright"
-        android:layout_gravity="center_horizontal"/>
-
-    <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="20dip"
+        android:src="@drawable/icon" />
+
+    <TextView
+        android:id="@+id/about_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip"
+        android:text="@string/about_us_copyright" />
+
+    <TextView
         android:id="@+id/about_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dip"
         android:layout_marginLeft="15dip"
         android:layout_marginRight="15dip"
         android:layout_marginTop="15dip"
-        android:layout_marginBottom="15dip"
-        android:lineSpacingMultiplier="1.3"
-        android:autoLink="web" />
+        android:autoLink="web"
+        android:lineSpacingMultiplier="1.3" />
 
 </LinearLayout>
 
