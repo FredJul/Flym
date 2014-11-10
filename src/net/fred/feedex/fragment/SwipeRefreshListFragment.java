@@ -20,11 +20,12 @@ package net.fred.feedex.fragment;
 
 import android.app.ListFragment;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import net.fred.feedex.view.SwipeRefreshLayout;
 
 public abstract class SwipeRefreshListFragment extends ListFragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -56,7 +57,7 @@ public abstract class SwipeRefreshListFragment extends ListFragment implements S
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+        mRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
                 android.R.color.holo_blue_dark,
                 android.R.color.holo_blue_bright,
                 android.R.color.holo_blue_dark);
