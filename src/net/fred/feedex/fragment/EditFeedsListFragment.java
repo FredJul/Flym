@@ -54,8 +54,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.util.Pair;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -285,22 +286,25 @@ public class EditFeedsListFragment extends ListFragment {
         mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String title = ((TextView) view.findViewById(android.R.id.text1)).getText().toString();
-                Matcher m = Pattern.compile("(.*) \\([0-9]+\\)$").matcher(title);
-                if (m.matches()) {
-                    title = m.group(1);
-                }
+                ActionBarActivity activity = (ActionBarActivity) getActivity();
+                if (activity != null) {
+                    String title = ((TextView) view.findViewById(android.R.id.text1)).getText().toString();
+                    Matcher m = Pattern.compile("(.*) \\([0-9]+\\)$").matcher(title);
+                    if (m.matches()) {
+                        title = m.group(1);
+                    }
 
-                long feedId = mListView.getItemIdAtPosition(position);
-                ActionMode actionMode;
-                if (view.findViewById(R.id.indicator).getVisibility() == View.VISIBLE) { // This is a group
-                    actionMode = getActivity().startActionMode(mGroupActionModeCallback);
-                } else { // This is a feed
-                    actionMode = getActivity().startActionMode(mFeedActionModeCallback);
-                }
-                actionMode.setTag(new Pair<Long, String>(feedId, title));
+                    long feedId = mListView.getItemIdAtPosition(position);
+                    ActionMode actionMode;
+                    if (view.findViewById(R.id.indicator).getVisibility() == View.VISIBLE) { // This is a group
+                        actionMode = activity.startSupportActionMode(mGroupActionModeCallback);
+                    } else { // This is a feed
+                        actionMode = activity.startSupportActionMode(mFeedActionModeCallback);
+                    }
+                    actionMode.setTag(new Pair<Long, String>(feedId, title));
 
-                mListView.setItemChecked(position, true);
+                    mListView.setItemChecked(position, true);
+                }
                 return true;
             }
         });
