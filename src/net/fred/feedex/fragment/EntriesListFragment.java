@@ -300,6 +300,19 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private void startRefresh() {
+        if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+            if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
+                getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FEED_ID,
+                        mUri.getPathSegments().get(1)));
+            } else {
+                getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
+            }
+        }
+
+        refreshSwipeProgress();
+    }
+
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -329,17 +342,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onLoaderReset(Loader<Cursor> loader) {
         }
     };
-
-    private void startRefresh() {
-        if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
-                getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FEED_ID,
-                        mUri.getPathSegments().get(1)));
-            } else {
-                getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
-            }
-        }
-    }
 
     public Uri getUri() {
         return mUri;
@@ -440,6 +442,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             return mGestureDetector.onTouchEvent(event);
         }
     }
+
+
 
 
 }
