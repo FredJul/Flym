@@ -9,6 +9,4 @@
     tools:showIn="@layout/activity_home">
 
     <include layout="@layout/view_drawer_content" />
-
-    <include layout="@layout/view_hide_read_button" />
 </FrameLayout>

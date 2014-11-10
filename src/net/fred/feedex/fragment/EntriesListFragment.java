@@ -43,8 +43,9 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
+
+import com.melnykov.fab.FloatingActionButton;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
@@ -54,6 +55,7 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
+import net.fred.feedex.utils.UiUtils;
 
 import java.util.Date;
 
@@ -71,6 +73,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private EntriesCursorAdapter mEntriesCursorAdapter;
     private ListView mListView;
     private SearchView mSearchView;
+    private FloatingActionButton mHideReadButton;
     private long mListDisplayDate = new Date().getTime();
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
@@ -100,6 +103,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (PrefUtils.SHOW_READ.equals(key)) {
                 getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+                UiUtils.updateHideReadButton(mHideReadButton);
             } else if (PrefUtils.IS_REFRESHING.equals(key)) {
                 refreshSwipeProgress();
             }
@@ -153,6 +157,10 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         mListView = (ListView) rootView.findViewById(android.R.id.list);
         mListView.setFastScrollEnabled(true);
         mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
+
+        mHideReadButton = (FloatingActionButton) rootView.findViewById(R.id.hide_read_button);
+        mHideReadButton.attachToListView(mListView);
+        UiUtils.updateHideReadButton(mHideReadButton);
 
         mRefreshListBtn = (Button) rootView.findViewById(R.id.refreshListBtn);
         mRefreshListBtn.setOnClickListener(new View.OnClickListener() {
@@ -217,6 +225,14 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         startRefresh();
     }
 
+    public void onClickHideRead(View view) {
+        if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
+            PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
+        } else {
+            PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
+        }
+    }
+
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, id)));
@@ -229,17 +245,9 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         inflater.inflate(R.menu.entry_list, menu);
 
         if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
-            menu.findItem(R.id.menu_hide_read).setVisible(false);
             menu.findItem(R.id.menu_refresh).setVisible(false);
-        } else if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
-            menu.findItem(R.id.menu_hide_read).setVisible(false);
-            menu.findItem(R.id.menu_share_starred).setVisible(false);
         } else {
             menu.findItem(R.id.menu_share_starred).setVisible(false);
-
-            if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
-                menu.findItem(R.id.menu_hide_read).setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
-            }
         }
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -283,19 +291,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 }
                 return true;
             }
-            case R.id.menu_hide_read: {
-                ImageButton drawerBtn = (ImageButton) getActivity().findViewById(R.id.drawer_hide_read_button);
-                if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
-                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
-                    item.setTitle(R.string.context_menu_hide_read).setIcon(R.drawable.hide_reads);
-                    drawerBtn.setImageResource(R.drawable.hide_reads);
-                } else {
-                    PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
-                    item.setTitle(R.string.context_menu_show_read).setIcon(R.drawable.view_reads);
-                    drawerBtn.setImageResource(R.drawable.view_reads);
-                }
-                return true;
-            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -311,6 +306,10 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         }
 
         refreshSwipeProgress();
+    }
+
+    public Uri getUri() {
+        return mUri;
     }
 
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
@@ -342,10 +341,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onLoaderReset(Loader<Cursor> loader) {
         }
     };
-
-    public Uri getUri() {
-        return mUri;
-    }
 
     public String getCurrentSearch() {
         return mSearchView == null ? null : mSearchView.getQuery().toString();
@@ -442,6 +437,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             return mGestureDetector.onTouchEvent(event);
         }
     }
+
+
 
 
 

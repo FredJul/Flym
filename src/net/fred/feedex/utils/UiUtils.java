@@ -26,6 +26,8 @@ import android.graphics.BitmapFactory;
 import android.support.v4.util.LongSparseArray;
 import android.util.TypedValue;
 
+import com.melnykov.fab.FloatingActionButton;
+
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 
@@ -71,5 +73,15 @@ public class UiUtils {
         }
 
         return null;
+    }
+
+    static public void updateHideReadButton(FloatingActionButton drawerHideReadButton) {
+        if (drawerHideReadButton != null) {
+            if (PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
+                drawerHideReadButton.setImageResource(R.drawable.hide_reads);
+            } else {
+                drawerHideReadButton.setImageResource(R.drawable.view_reads);
+            }
+        }
     }
 }

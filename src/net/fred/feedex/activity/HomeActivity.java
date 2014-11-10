@@ -40,9 +40,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.melnykov.fab.FloatingActionButton;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
@@ -70,23 +71,27 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             ") > 0)";
 
     private static final int LOADER_ID = 0;
-
-    private final SharedPreferences.OnSharedPreferenceChangeListener mShowReadListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (PrefUtils.SHOW_READ.equals(key)) {
-                getLoaderManager().restartLoader(LOADER_ID, null, HomeActivity.this);
-            }
-        }
-    };
-
     private EntriesListFragment mEntriesFragment;
     private DrawerLayout mDrawerLayout;
     private View mLeftDrawer;
     private ListView mDrawerList;
     private DrawerAdapter mDrawerAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
+    private FloatingActionButton mDrawerHideReadButton;
+    private final SharedPreferences.OnSharedPreferenceChangeListener mShowReadListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (PrefUtils.SHOW_READ.equals(key)) {
+                getLoaderManager().restartLoader(LOADER_ID, null, HomeActivity.this);
 
+                if (mDrawerHideReadButton != null) {
+                    mDrawerHideReadButton.attachToListView(mDrawerList);
+
+                    UiUtils.updateHideReadButton(mDrawerHideReadButton);
+                }
+            }
+        }
+    };
     private CharSequence mTitle;
     private BitmapDrawable mIcon;
     private int mCurrentDrawerPos;
@@ -132,6 +137,12 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
             mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close);
             mDrawerLayout.setDrawerListener(mDrawerToggle);
+        }
+
+        mDrawerHideReadButton = (FloatingActionButton) mLeftDrawer.findViewById(R.id.hide_read_button);
+        if (mDrawerHideReadButton != null) {
+            UiUtils.updateHideReadButton(mDrawerHideReadButton);
+            mDrawerHideReadButton.attachToListView(mDrawerList);
         }
 
         if (savedInstanceState != null) {
@@ -198,16 +209,11 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     public void onClickHideRead(View view) {
-        ImageButton btn = (ImageButton) view;
         if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
             PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
-            btn.setImageResource(R.drawable.hide_reads);
         } else {
             PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
-            btn.setImageResource(R.drawable.view_reads);
         }
-
-        invalidateOptionsMenu();
     }
 
     public void onClickEditFeeds(View view) {
