@@ -1,11 +1,20 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:+'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:+'
     }
 }
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 
 dependencies {
@@ -20,10 +29,10 @@ android {
     buildToolsVersion "21.1.1"
 
     defaultConfig {
-        versionCode 46
-        versionName "1.6.5"
         minSdkVersion 15
         targetSdkVersion 21
+        versionCode 46
+        versionName "1.6.5"
     }
 
     sourceSets {
