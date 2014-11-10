@@ -2,14 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
-    <android.support.v7.widget.Toolbar xmlns:support="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        support:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <include layout="@layout/view_toolbar" />
 
     <TabHost
         android:id="@+id/tabHost"
