@@ -329,7 +329,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
             if (bitmap != null) {
                 activity.getSupportActionBar().setIcon(new BitmapDrawable(getResources(), bitmap));
             } else {
-                activity.getSupportActionBar().setIcon(R.drawable.icon);
+                activity.getSupportActionBar().setIcon(null);
             }
 
             mFavorite = entryCursor.getInt(mIsFavoritePos) == 1;
