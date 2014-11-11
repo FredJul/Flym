@@ -31,8 +31,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 46
-        versionName "1.6.5"
+        versionCode 47
+        versionName "1.7.0"
     }
 
     sourceSets {
@@ -72,7 +72,8 @@ android {
         release {
             signingConfig signingConfigs.release
 
-            runProguard true
+            minifyEnabled true
+            shrinkResources true
             proguardFile getDefaultProguardFile('proguard-android.txt')
             proguardFile 'proguard-project.txt'
         }
