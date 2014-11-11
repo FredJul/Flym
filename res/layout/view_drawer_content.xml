@@ -25,6 +25,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="onClickSearch"
+            android:src="@drawable/action_search" />
+
+        <ImageButton
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="onClickSettings"
             android:src="@drawable/action_settings" />
     </LinearLayout>

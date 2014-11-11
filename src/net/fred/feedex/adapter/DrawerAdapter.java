@@ -119,10 +119,8 @@ public class DrawerAdapter extends BaseAdapter {
             if (unread != 0) {
                 holder.unreadTxt.setText(String.valueOf(unread));
             }
-        } else if (position == 2) {
-            holder.titleTxt.setText(android.R.string.search_go);
-            holder.iconView.setImageResource(R.drawable.action_search);
-        } else if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        }
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
             holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
 
             if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
@@ -181,7 +179,7 @@ public class DrawerAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         if (mFeedsCursor != null) {
-            return mFeedsCursor.getCount() + 3;
+            return mFeedsCursor.getCount() + 2;
         }
         return 0;
     }
@@ -193,7 +191,7 @@ public class DrawerAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
             return mFeedsCursor.getLong(POS_ID);
         }
 
@@ -201,7 +199,7 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public byte[] getItemIcon(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
             return mFeedsCursor.getBlob(POS_ICON);
         }
 
@@ -209,7 +207,7 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public String getItemName(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
             return mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME);
         }
 
@@ -217,7 +215,7 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public boolean isItemAGroup(int position) {
-        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3) && mFeedsCursor.getInt(POS_IS_GROUP) == 1;
+        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2) && mFeedsCursor.getInt(POS_IS_GROUP) == 1;
 
     }
 

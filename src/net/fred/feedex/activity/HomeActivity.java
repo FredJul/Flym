@@ -71,6 +71,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             ") > 0)";
 
     private static final int LOADER_ID = 0;
+    private static final int SEARCH_DRAWER_POSITION = -1;
+
     private EntriesListFragment mEntriesFragment;
     private DrawerLayout mDrawerLayout;
     private View mLeftDrawer;
@@ -218,6 +220,18 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         startActivity(new Intent(this, EditFeedsListActivity.class));
     }
 
+    public void onClickSearch(View view) {
+        selectDrawerItem(SEARCH_DRAWER_POSITION);
+        if (mDrawerLayout != null) {
+            mDrawerLayout.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mDrawerLayout.closeDrawer(mLeftDrawer);
+                }
+            }, 50);
+        }
+    }
+
     public void onClickSettings(View view) {
         startActivity(new Intent(this, GeneralPrefsActivity.class));
     }
@@ -280,14 +294,14 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         boolean showFeedInfo = true;
 
         switch (position) {
+            case SEARCH_DRAWER_POSITION:
+                newUri = EntryColumns.SEARCH_URI(mEntriesFragment.getCurrentSearch());
+                break;
             case 0:
                 newUri = EntryColumns.ALL_ENTRIES_CONTENT_URI;
                 break;
             case 1:
                 newUri = EntryColumns.FAVORITES_CONTENT_URI;
-                break;
-            case 2:
-                newUri = EntryColumns.SEARCH_URI(mEntriesFragment.getCurrentSearch());
                 break;
             default:
                 long feedOrGroupId = mDrawerAdapter.getItemId(position);
@@ -341,6 +355,10 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         // Set title & icon
         switch (mCurrentDrawerPos) {
+            case SEARCH_DRAWER_POSITION:
+                getSupportActionBar().setTitle(android.R.string.search_go);
+                getSupportActionBar().setIcon(R.drawable.action_search);
+                break;
             case 0:
                 getSupportActionBar().setTitle(R.string.all);
                 getSupportActionBar().setIcon(R.drawable.ic_statusbar_rss);
@@ -348,10 +366,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             case 1:
                 getSupportActionBar().setTitle(R.string.favorites);
                 getSupportActionBar().setIcon(R.drawable.rating_important);
-                break;
-            case 2:
-                getSupportActionBar().setTitle(android.R.string.search_go);
-                getSupportActionBar().setIcon(R.drawable.action_search);
                 break;
             default:
                 getSupportActionBar().setTitle(mTitle);
