@@ -20,11 +20,15 @@
 package net.fred.feedex.utils;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.LongSparseArray;
 import android.util.TypedValue;
+import android.view.View;
+import android.widget.ListView;
 
 import com.melnykov.fab.FloatingActionButton;
 
@@ -78,10 +82,23 @@ public class UiUtils {
     static public void updateHideReadButton(FloatingActionButton drawerHideReadButton) {
         if (drawerHideReadButton != null) {
             if (PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
-                drawerHideReadButton.setImageResource(R.drawable.hide_reads);
+                drawerHideReadButton.setColorNormalResId(getAttrResource(drawerHideReadButton.getContext(), R.attr.colorPrimary, R.color.light_theme_color_primary));
             } else {
-                drawerHideReadButton.setImageResource(R.drawable.view_reads);
+                drawerHideReadButton.setColorNormalResId(R.color.floating_action_button_disabled);
             }
         }
+    }
+
+    static public void addEmptyFooterView(ListView listView, int dp) {
+        View view = new View(listView.getContext());
+        view.setMinimumHeight(dpToPixel(dp));
+        listView.addFooterView(view);
+    }
+
+    static public int getAttrResource(Context context, int attrId, int defValue) {
+        TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{attrId});
+        int result = a.getResourceId(0, defValue);
+        a.recycle();
+        return result;
     }
 }

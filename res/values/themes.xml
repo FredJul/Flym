@@ -8,7 +8,7 @@
         <item name="colorPrimaryDark">@color/light_theme_color_primary_dark</item>
         <item name="colorAccent">@color/light_theme_color_primary</item>
         <!-- app attr -->
-        <item name="card_color">@android:color/white</item>
+        <item name="card_color">@color/cardview_light_background</item>
     </style>
 
     <style name="Theme.Dark" parent="Theme.AppCompat">
@@ -18,6 +18,6 @@
         <item name="colorPrimaryDark">@color/dark_theme_color_primary_dark</item>
         <item name="colorAccent">@color/dark_theme_color_primary</item>
         <!-- app attr -->
-        <item name="card_color">@color/dark_background</item>
+        <item name="card_color">@color/cardview_dark_background</item>
     </style>
 </resources>

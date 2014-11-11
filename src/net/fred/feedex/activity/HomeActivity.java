@@ -85,8 +85,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 getLoaderManager().restartLoader(LOADER_ID, null, HomeActivity.this);
 
                 if (mDrawerHideReadButton != null) {
-                    mDrawerHideReadButton.attachToListView(mDrawerList);
-
                     UiUtils.updateHideReadButton(mDrawerHideReadButton);
                 }
             }
@@ -142,7 +140,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         mDrawerHideReadButton = (FloatingActionButton) mLeftDrawer.findViewById(R.id.hide_read_button);
         if (mDrawerHideReadButton != null) {
             UiUtils.updateHideReadButton(mDrawerHideReadButton);
-            mDrawerHideReadButton.attachToListView(mDrawerList);
+            UiUtils.addEmptyFooterView(mDrawerList, 100);
         }
 
         if (savedInstanceState != null) {

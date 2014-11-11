@@ -159,7 +159,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
 
         mHideReadButton = (FloatingActionButton) rootView.findViewById(R.id.hide_read_button);
-        mHideReadButton.attachToListView(mListView);
+        UiUtils.addEmptyFooterView(mListView, 100);
         UiUtils.updateHideReadButton(mHideReadButton);
 
         mRefreshListBtn = (Button) rootView.findViewById(R.id.refreshListBtn);
@@ -312,6 +312,10 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         return mUri;
     }
 
+    public String getCurrentSearch() {
+        return mSearchView == null ? null : mSearchView.getQuery().toString();
+    }
+
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -341,10 +345,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onLoaderReset(Loader<Cursor> loader) {
         }
     };
-
-    public String getCurrentSearch() {
-        return mSearchView == null ? null : mSearchView.getQuery().toString();
-    }
 
     public void setData(Uri uri, boolean showFeedInfo) {
         mUri = uri;
@@ -437,6 +437,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             return mGestureDetector.onTouchEvent(event);
         }
     }
+
+
 
 
 
