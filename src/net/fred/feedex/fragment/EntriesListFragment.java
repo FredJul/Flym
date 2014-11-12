@@ -202,6 +202,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             }
         });
 
+        disableSwipe();
+
         return rootView;
     }
 
@@ -316,6 +318,21 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         return mSearchView == null ? null : mSearchView.getQuery().toString();
     }
 
+    public void setData(Uri uri, boolean showFeedInfo) {
+        mUri = uri;
+        mShowFeedInfo = showFeedInfo;
+
+        mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, Constants.EMPTY_CURSOR, mShowFeedInfo);
+        setListAdapter(mEntriesCursorAdapter);
+
+        mListDisplayDate = new Date().getTime();
+        if (mUri != null) {
+            getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+            getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+        }
+        refreshUI();
+    }
+
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -346,32 +363,11 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         }
     };
 
-    public void setData(Uri uri, boolean showFeedInfo) {
-        mUri = uri;
-        mShowFeedInfo = showFeedInfo;
-
-        mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, Constants.EMPTY_CURSOR, mShowFeedInfo);
-        setListAdapter(mEntriesCursorAdapter);
-
-        mListDisplayDate = new Date().getTime();
-        if (mUri != null) {
-            getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-            getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
-        }
-        refreshUI();
-    }
-
     private void refreshUI() {
         if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
             mSearchView.setVisibility(View.VISIBLE);
         } else {
             mSearchView.setVisibility(View.GONE);
-        }
-
-        if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) != FeedDataContentProvider.URI_FAVORITES) {
-            enableSwipe();
-        } else {
-            disableSwipe();
         }
 
         if (mNewEntriesNumber > 0) {
@@ -437,6 +433,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             return mGestureDetector.onTouchEvent(event);
         }
     }
+
+
 
 
 
