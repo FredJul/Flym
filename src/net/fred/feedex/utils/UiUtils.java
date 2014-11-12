@@ -92,6 +92,7 @@ public class UiUtils {
     static public void addEmptyFooterView(ListView listView, int dp) {
         View view = new View(listView.getContext());
         view.setMinimumHeight(dpToPixel(dp));
+        view.setClickable(true);
         listView.addFooterView(view);
     }
 
