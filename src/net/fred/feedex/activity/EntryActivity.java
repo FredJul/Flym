@@ -39,10 +39,6 @@ public class EntryActivity extends BaseActivity {
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        if (PrefUtils.getBoolean(PrefUtils.DISPLAY_ENTRIES_FULLSCREEN, false)) {
-            setImmersiveFullScreen(true);
-        }
-
         setContentView(R.layout.activity_entry);
 
         mEntryFragment = (EntryFragment) getFragmentManager().findFragmentById(R.id.entry_fragment);
@@ -53,6 +49,10 @@ public class EntryActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (PrefUtils.getBoolean(PrefUtils.DISPLAY_ENTRIES_FULLSCREEN, false)) {
+            setImmersiveFullScreen(true);
+        }
     }
 
     @Override
