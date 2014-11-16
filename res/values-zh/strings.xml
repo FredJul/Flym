@@ -85,7 +85,7 @@
     <string name="message_exported_to">已导出到 %s。</string>
     <string name="to_group_title">移动订阅</string>
     <string name="to_group_message">你能移动这个订阅到这个组里面或者上面。你想做什么？</string>
-    <string name="to_group_above">移动到分组顶部</string>
+    <string name="to_group_above">移动到分组上面</string>
     <string name="to_group_into">添加到分组</string>
     <string name="add_custom_feed">添加一个定制源，或者寻找一个</string>
     <string name="google_news_title">Google新闻话题</string>
