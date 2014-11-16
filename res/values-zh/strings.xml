@@ -35,8 +35,8 @@
     <string name="network_error">网络不可用</string>
     <string name="loading">加载中…</string>
     <string name="no_result">没有结果</string>
-    <string name="drawer_open">打开抽屉导航</string>
-    <string name="drawer_close">打开抽屉导航</string>
+    <string name="drawer_open">打开导航抽屉</string>
+    <string name="drawer_close">关闭导航抽屉</string>
     <string name="back_again_to_quit">再按一次退出</string>
 
     <!-- FEEDS -->
