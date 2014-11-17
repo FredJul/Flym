@@ -23,21 +23,21 @@
 
     <!-- GENERAL -->
     <string name="about_flym">关于Flym</string>
-    <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
-    <string name="never">没有更新</string>
+    <string name="welcome_title">欢迎使用Flym。需要添加一个源吗？</string>
+    <string name="never">从未</string>
     <string name="update">更新</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">设置</string>
     <string name="menu_refresh">刷新</string>
     <string name="menu_all_read">标记全部为已读</string>
-    <string name="flym_feeds">feedex</string>
+    <string name="flym_feeds">Flym源</string>
     <string name="error">错误</string>
     <string name="network_error">网络不可用</string>
     <string name="loading">加载中…</string>
     <string name="no_result">没有结果</string>
-    <string name="drawer_open">打开抽屉导航</string>
-    <string name="drawer_close">打开抽屉导航</string>
-    <string name="back_again_to_quit">在按一次退出</string>
+    <string name="drawer_open">打开导航抽屉</string>
+    <string name="drawer_close">关闭导航抽屉</string>
+    <string name="back_again_to_quit">再按一次退出</string>
 
     <!-- FEEDS -->
     <string name="feeds">订阅</string>
@@ -56,11 +56,10 @@
     <string name="error_feed_url_exists">这个订阅地址不存在</string>
     <string name="error_feed_import">您选择的文件无法导入。</string>
     <string name="error_feed_export">导出失败，请确定你的SD卡可以读写。</string>
-	<string name="error_external_storage_not_available">sd卡无法使用。
-	</string>
+    <string name="error_external_storage_not_available">外置存储（如SD卡）不可用。</string>
     <string name="feed_url">频道地址</string>
-    <string name="optional">(可选)</string>
-    <string name="website_or_feed">(rss地址)</string>
+    <string name="optional">（可选）</string>
+    <string name="website_or_feed">（网站或源）</string>
     <string name="tab_feed_title">订阅</string>
     <string name="tab_filters_title">过滤器</string>
     <string name="feed_title">标题</string>
@@ -75,32 +74,30 @@
     <string name="reject">排除</string>
     <string name="feed_search">搜索订阅</string>
     <string name="feed_search_by_web_search">根据关键词搜索订阅</string>
-    <string name="feed_search_by_topic">基于主题生成订阅via Faroo)</string>
+    <string name="feed_search_by_topic">基于话题生成订阅（通过Faroo）</string>
     <string name="feed_search_by_youtube">根据Youtube频道名搜索订阅</string>
-    <string name="select_file">选择文件(SD卡目录)</string>
+    <string name="select_file">选择文件（SD卡目录）</string>
     <string name="question_delete_feed">你确定要删除这个订阅</string>
-	<string name="question_delete_group">你确定要删除这个分组和其中所有的订阅？
-	</string>
+    <string name="question_delete_group">你确定要删除这个分组和其中所有的订阅？</string>
     <string name="question_delete_filter">你确定删除这个过滤器</string>
     <string name="add_group_title">选择分组名</string>
     <string name="edit_group_title">重命名分组</string>
-    <string name="message_exported_to">移动到 %s.</string>
+    <string name="message_exported_to">已导出到 %s。</string>
     <string name="to_group_title">移动订阅</string>
-	<string name="to_group_message">你能移动这个订阅到这个组里面， 或者你想做其它？
-	</string>
-    <string name="to_group_above">移动到分组顶部</string>
+    <string name="to_group_message">你能移动这个订阅到这个组里面或者上面。你想做什么？</string>
+    <string name="to_group_above">移动到分组上面</string>
     <string name="to_group_into">添加到分组</string>
-    <string name="add_custom_feed">Add a custom feed or search for one</string>
-    <string name="google_news_title">Google News topics</string>
-    <string name="google_news_indicator">Select one or several topics to add. Some of them may not be provided by Google for your language.</string>
-    <string name="google_news_top_stories">Top Stories</string>
-    <string name="google_news_world">World</string>
-    <string name="google_news_business">Business</string>
-    <string name="google_news_technology">Technology</string>
-    <string name="google_news_entertainment">Entertainment</string>
-    <string name="google_news_sports">Sports</string>
-    <string name="google_news_science">Science</string>
-    <string name="google_news_health">Health</string>
+    <string name="add_custom_feed">添加一个定制源，或者寻找一个</string>
+    <string name="google_news_title">Google新闻话题</string>
+    <string name="google_news_indicator">选择一个或多个话题。列表中部分可能不被Google向您的语言提供。</string>
+    <string name="google_news_top_stories">热门报道</string>
+    <string name="google_news_world">世界</string>
+    <string name="google_news_business">财经</string>
+    <string name="google_news_technology">科技</string>
+    <string name="google_news_entertainment">娱乐</string>
+    <string name="google_news_sports">体育</string>
+    <string name="google_news_science">科学</string>
+    <string name="google_news_health">健康</string>
 
     <!-- ENTRIES -->
     <string name="all">全部订阅</string>
@@ -117,9 +114,9 @@
     <string name="menu_mark_as_unread">保持未读</string>
     <string name="share_favorites_title">这条消息加星</string>
     <string name="copied_clipboard">链接复制成功</string>
-    <string name="get_full_text">打开原始地址(无法显示全文时选择)</string>
+    <string name="get_full_text">接收全文</string>
     <string name="original_text">显示原始文本</string>
-    <string name="see_enclosure">See enclosure</string>
+    <string name="see_enclosure">显示附件</string>
     <string name="see_link">浏览器打开</string>
     <string name="cant_open_link">没有应用可以打开这个链接</string>
     <string name="open_enclosure">打开附件</string>
@@ -136,48 +133,42 @@
     <!-- SETTINGS -->
     <string name="settings_category_refresh">自动刷新</string>
     <string name="settings_refresh_enabled">开启自动刷新</string>
-	<string name="settings_refresh_enabled_description">开启自动刷新
-	</string>
+    <string name="settings_refresh_enabled_description">开启自动刷新</string>
     <string name="settings_refresh_interval">刷新间隔</string>
     <string name="settings_category_notifications">通知</string>
     <string name="settings_notifications_enabled">启用通知</string>
-	<string name="settings_notifications_enabled_description">启用的新消息通知 
-	</string>
+    <string name="settings_notifications_enabled_description">启用的新消息通知 </string>
     <string name="settings_notifications_ringtone">铃声</string>
-    <string name="settings_notifications_ringtone_none">None</string>
+    <string name="settings_notifications_ringtone_none">无</string>
     <string name="settings_notifications_vibrate">震动提醒</string>
-	<string name="settings_notifications_vibrate_description">当有新的消息时，震动提醒
-	</string>
-    <string name="settings_notifications_light">Light</string>
-    <string name="settings_notifications_light_description">Enable notification light on new entries</string>
+    <string name="settings_notifications_vibrate_description">当有新的消息时，震动提醒</string>
+    <string name="settings_notifications_light">LED</string>
+    <string name="settings_notifications_light_description">当有新的消息时，点亮通知灯</string>
     <string name="settings_category_content_presentation">内容介绍</string>
     <string name="settings_light_theme">高亮主题</string>
     <string name="settings_light_theme_description">使用『高亮主题』</string>
     <string name="settings_keep_time">消息保存时间</string>
-    <string name="settings_display_images">Display images</string>
-    <string name="settings_display_images_description">Display images in entries</string>
-    <string name="settings_preload_image_mode">Preload images</string>
+    <string name="settings_display_images">显示图片</string>
+    <string name="settings_display_images_description">在消息中显示图片</string>
+    <string name="settings_preload_image_mode">预先加载图片</string>
     <string name="settings_font_size">文字大小</string>
     <string name="settings_display_oldest_first">消息排序</string>
     <string name="settings_display_oldest_first_description">旧消息在前</string>
-    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
-    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
+    <string name="settings_display_entries_fullscreen">自动全屏显示</string>
+    <string name="settings_display_entries_fullscreen_description">自动在全屏显示消息</string>
     <string name="settings_refresh_on_open">自动刷新</string>
-	<string name="settings_refresh_on_open_description">当程序开启时，自动刷新所有订阅(建议选择)
-	</string>
-    <string name="settings_refresh_wifi_only">wifi环境才自动刷新</string>
-	<string name="settings_refresh_wifi_only_description">自动刷新仅在wifi环境启用(建议选择)
-	</string>
-    <string name="settings_visible_feeds">Visible feeds</string>
+    <string name="settings_refresh_on_open_description">当程序开启时，自动刷新所有订阅</string>
+    <string name="settings_refresh_wifi_only">Wi-Fi环境才自动刷新</string>
+    <string name="settings_refresh_wifi_only_description">自动刷新仅在Wi-Fi环境启用</string>
+    <string name="settings_visible_feeds">可见源</string>
     <string name="settings_widget_background">背景色</string>
-	<string name="settings_widget_background_description">挂件的颜色和透明度
-	</string>
-    <string name="all_feeds">全部订阅 (incl. future)</string>
+    <string name="settings_widget_background_description">挂件的颜色和透明度</string>
+    <string name="all_feeds">全部订阅（包括未来的）</string>
     <string name="settings_screen_proxy">代理</string>
     <string name="settings_category_network">网络</string>
     <string name="settings_proxy_enabled">启用</string>
-    <string name="settings_proxy_wifi_only">只是Wifi</string>
-    <string name="settings_proxy_wifi_only_description">只是在wifi环境使用代理</string>
+    <string name="settings_proxy_wifi_only">仅限Wi-Fi</string>
+    <string name="settings_proxy_wifi_only_description">仅限在Wi-Fi环境使用代理</string>
     <string name="settings_proxy_host">主机地址</string>
     <string name="settings_proxy_port">端口</string>
     <string name="settings_proxy_type">类型</string>
@@ -217,9 +208,9 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_preload_image_modes">
-        <item>Never</item>
-        <item>Only over Wi-Fi</item>
-        <item>Always</item>
+        <item>从不</item>
+        <item>仅限Wi-Fi</item>
+        <item>总是</item>
     </string-array>
 
 </resources>

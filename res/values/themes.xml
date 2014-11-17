@@ -16,7 +16,7 @@
         <!-- customize the color palette -->
         <item name="colorPrimary">@color/dark_theme_color_primary</item>
         <item name="colorPrimaryDark">@color/dark_theme_color_primary_dark</item>
-        <item name="colorAccent">@color/dark_theme_color_primary</item>
+        <item name="colorAccent">@color/light_theme_color_primary</item>
         <!-- app attr -->
         <item name="card_color">@color/cardview_dark_background</item>
     </style>
