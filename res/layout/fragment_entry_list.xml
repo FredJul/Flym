@@ -40,9 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="fill"
-            android:divider="@null"
-            android:dividerHeight="0dp"
             android:drawSelectorOnTop="false"
+            android:footerDividersEnabled="false"
             android:listSelector="@android:color/transparent" />
 
         <include layout="@layout/view_hide_read_button" />

@@ -159,7 +159,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
 
         mHideReadButton = (FloatingActionButton) rootView.findViewById(R.id.hide_read_button);
-        UiUtils.addEmptyFooterView(mListView, 100);
+        UiUtils.addEmptyFooterView(mListView, 90);
         UiUtils.updateHideReadButton(mHideReadButton);
 
         mRefreshListBtn = (Button) rootView.findViewById(R.id.refreshListBtn);
@@ -350,6 +350,14 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         }
     }
 
+    private void refreshSwipeProgress() {
+        if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+            showSwipeProgress();
+        } else {
+            hideSwipeProgress();
+        }
+    }
+
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -379,14 +387,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onLoaderReset(Loader<Cursor> loader) {
         }
     };
-
-    private void refreshSwipeProgress() {
-        if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            showSwipeProgress();
-        } else {
-            hideSwipeProgress();
-        }
-    }
 
     private class SwipeGestureListener extends SimpleOnGestureListener implements OnTouchListener {
         static final int SWIPE_MIN_DISTANCE = 120;
@@ -435,6 +435,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             return mGestureDetector.onTouchEvent(event);
         }
     }
+
+
 
 
 
