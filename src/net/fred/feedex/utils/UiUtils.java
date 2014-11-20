@@ -27,8 +27,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.LongSparseArray;
 import android.util.TypedValue;
-import android.view.View;
-import android.widget.ListView;
 
 import com.melnykov.fab.FloatingActionButton;
 
@@ -87,13 +85,6 @@ public class UiUtils {
                 drawerHideReadButton.setColorNormalResId(R.color.floating_action_button_disabled);
             }
         }
-    }
-
-    static public void addEmptyFooterView(ListView listView, int dp) {
-        View view = new View(listView.getContext());
-        view.setMinimumHeight(dpToPixel(dp));
-        view.setClickable(true);
-        listView.addFooterView(view);
     }
 
     static public int getAttrResource(Context context, int attrId, int defValue) {
