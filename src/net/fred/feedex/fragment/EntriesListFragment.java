@@ -237,7 +237,9 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
-        startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, id)));
+        if (id >= 0) { // should not happen, but I had a crash with this on PlayStore...
+            startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, id)));
+        }
     }
 
     @Override
@@ -333,6 +335,21 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         refreshUI();
     }
 
+    private void refreshUI() {
+        if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
+            mSearchView.setVisibility(View.VISIBLE);
+        } else {
+            mSearchView.setVisibility(View.GONE);
+        }
+
+        if (mNewEntriesNumber > 0) {
+            mRefreshListBtn.setText(getResources().getQuantityString(R.plurals.number_of_new_entries, mNewEntriesNumber, mNewEntriesNumber));
+            mRefreshListBtn.setVisibility(View.VISIBLE);
+        } else {
+            mRefreshListBtn.setVisibility(View.GONE);
+        }
+    }
+
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -362,21 +379,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onLoaderReset(Loader<Cursor> loader) {
         }
     };
-
-    private void refreshUI() {
-        if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
-            mSearchView.setVisibility(View.VISIBLE);
-        } else {
-            mSearchView.setVisibility(View.GONE);
-        }
-
-        if (mNewEntriesNumber > 0) {
-            mRefreshListBtn.setText(getResources().getQuantityString(R.plurals.number_of_new_entries, mNewEntriesNumber, mNewEntriesNumber));
-            mRefreshListBtn.setVisibility(View.VISIBLE);
-        } else {
-            mRefreshListBtn.setVisibility(View.GONE);
-        }
-    }
 
     private void refreshSwipeProgress() {
         if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
@@ -433,6 +435,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             return mGestureDetector.onTouchEvent(event);
         }
     }
+
+
 
 
 

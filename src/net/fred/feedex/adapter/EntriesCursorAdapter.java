@@ -134,48 +134,52 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     public void toggleReadState(final long id, View view) {
         final ViewHolder holder = (ViewHolder) view.getTag();
 
-        holder.isRead = !holder.isRead;
+        if (holder != null) { // should not happen, but I had a crash with this on PlayStore...
+            holder.isRead = !holder.isRead;
 
-        if (holder.isRead) {
-            holder.titleTextView.setEnabled(false);
-            holder.dateTextView.setEnabled(false);
-        } else {
-            holder.titleTextView.setEnabled(true);
-            holder.dateTextView.setEnabled(true);
-        }
-
-        new Thread() {
-            @Override
-            public void run() {
-                ContentResolver cr = MainApplication.getContext().getContentResolver();
-                Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                cr.update(entryUri, holder.isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
+            if (holder.isRead) {
+                holder.titleTextView.setEnabled(false);
+                holder.dateTextView.setEnabled(false);
+            } else {
+                holder.titleTextView.setEnabled(true);
+                holder.dateTextView.setEnabled(true);
             }
-        }.start();
+
+            new Thread() {
+                @Override
+                public void run() {
+                    ContentResolver cr = MainApplication.getContext().getContentResolver();
+                    Uri entryUri = ContentUris.withAppendedId(mUri, id);
+                    cr.update(entryUri, holder.isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
+                }
+            }.start();
+        }
     }
 
     public void toggleFavoriteState(final long id, View view) {
         final ViewHolder holder = (ViewHolder) view.getTag();
 
-        holder.isFavorite = !holder.isFavorite;
+        if (holder != null) { // should not happen, but I had a crash with this on PlayStore...
+            holder.isFavorite = !holder.isFavorite;
 
-        if (holder.isFavorite) {
-            holder.starImgView.setVisibility(View.VISIBLE);
-        } else {
-            holder.starImgView.setVisibility(View.INVISIBLE);
-        }
-
-        new Thread() {
-            @Override
-            public void run() {
-                ContentValues values = new ContentValues();
-                values.put(EntryColumns.IS_FAVORITE, holder.isFavorite ? 1 : 0);
-
-                ContentResolver cr = MainApplication.getContext().getContentResolver();
-                Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                cr.update(entryUri, values, null, null);
+            if (holder.isFavorite) {
+                holder.starImgView.setVisibility(View.VISIBLE);
+            } else {
+                holder.starImgView.setVisibility(View.INVISIBLE);
             }
-        }.start();
+
+            new Thread() {
+                @Override
+                public void run() {
+                    ContentValues values = new ContentValues();
+                    values.put(EntryColumns.IS_FAVORITE, holder.isFavorite ? 1 : 0);
+
+                    ContentResolver cr = MainApplication.getContext().getContentResolver();
+                    Uri entryUri = ContentUris.withAppendedId(mUri, id);
+                    cr.update(entryUri, values, null, null);
+                }
+            }.start();
+        }
     }
 
     public void markAllAsRead(final long untilDate) {
