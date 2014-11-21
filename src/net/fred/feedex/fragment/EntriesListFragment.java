@@ -161,13 +161,13 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
 
         mHideReadButton = (FloatingActionButton) rootView.findViewById(R.id.hide_read_button);
-        TextView footer = new TextView(mListView.getContext());
+        TextView footer = new TextView(container.getContext());
         footer.setMinimumHeight(UiUtils.dpToPixel(90));
         int footerPadding = UiUtils.dpToPixel(15);
         footer.setPadding(footerPadding, footerPadding, UiUtils.dpToPixel(90), footerPadding);
         footer.setClickable(true);
-        footer.setGravity(Gravity.CENTER);
-        footer.setText("Tip: slide left to read the entry and slide right to favorite it");
+        footer.setGravity(Gravity.CENTER_VERTICAL);
+        footer.setText(container.getContext().getString(R.string.tip_sentence));
         footer.setEnabled(false);
         mListView.addFooterView(footer);
         UiUtils.updateHideReadButton(mHideReadButton);
@@ -445,20 +445,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public void onLoaderReset(Loader<Cursor> loader) {
         }
     };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

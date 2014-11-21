@@ -123,6 +123,7 @@
     <string name="file">文件</string>
     <string name="download_and_save">下载并保存</string>
     <string name="open_link">打开链接</string>
+    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
 
     <!-- WIDGET -->
     <string name="red">红色</string>

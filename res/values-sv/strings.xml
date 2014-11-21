@@ -123,6 +123,7 @@
     <string name="file">Fil</string>
     <string name="download_and_save">Ladda ned och spara</string>
     <string name="open_link">Öppna länk</string>
+    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
 
     <!-- WIDGET -->
     <string name="red">Röd</string>

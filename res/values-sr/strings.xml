@@ -124,6 +124,7 @@
     <string name="file">Фајл</string>
     <string name="download_and_save">Преузми и сачувај</string>
     <string name="open_link">Отвори везу</string>
+    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
 
     <!-- WIDGET -->
     <string name="red">Црвена</string>

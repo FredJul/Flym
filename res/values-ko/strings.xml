@@ -124,6 +124,7 @@
     <string name="file">파일</string>
     <string name="download_and_save">다운로드 및 저장</string>
     <string name="open_link">링크 열기</string>
+    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
 
     <!-- WIDGET -->
     <string name="red">빨강</string>

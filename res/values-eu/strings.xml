@@ -132,6 +132,7 @@
     <string name="file">Fitxategia</string>
     <string name="download_and_save">Deskargatu eta gorde</string>
     <string name="open_link">Esteka ireki</string>
+    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
 
     <!-- WIDGET -->
     <string name="red">Gorria</string>

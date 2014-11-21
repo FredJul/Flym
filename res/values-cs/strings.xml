@@ -125,6 +125,7 @@
     <string name="file">Soubor</string>
     <string name="download_and_save">Stáhnout a uložit</string>
     <string name="open_link">Otevřít odkaz</string>
+    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
 
     <!-- WIDGET -->
     <string name="red">Červená</string>
