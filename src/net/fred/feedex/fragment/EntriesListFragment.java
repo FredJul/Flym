@@ -33,7 +33,6 @@ import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -160,18 +159,29 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         mListView.setFastScrollEnabled(true);
         mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
 
-        mHideReadButton = (FloatingActionButton) rootView.findViewById(R.id.hide_read_button);
-        TextView footer = new TextView(container.getContext());
-        footer.setMinimumHeight(UiUtils.dpToPixel(90));
-        int footerPadding = UiUtils.dpToPixel(15);
-        footer.setPadding(footerPadding, footerPadding, UiUtils.dpToPixel(90), footerPadding);
-        footer.setClickable(true);
-        footer.setGravity(Gravity.CENTER_VERTICAL);
-        footer.setText(container.getContext().getString(R.string.tip_sentence));
-        footer.setEnabled(false);
-        mListView.addFooterView(footer);
+        if (PrefUtils.getBoolean(PrefUtils.DISPLAY_TIP, true)) {
+            final TextView header = new TextView(mListView.getContext());
+            header.setMinimumHeight(UiUtils.dpToPixel(70));
+            int footerPadding = UiUtils.dpToPixel(10);
+            header.setPadding(footerPadding, footerPadding, footerPadding, footerPadding);
+            header.setText(R.string.tip_sentence);
+            header.setCompoundDrawablePadding(UiUtils.dpToPixel(5));
+            header.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_about, 0, R.drawable.ic_action_cancel, 0);
+            header.setClickable(true);
+            header.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListView.removeHeaderView(header);
+                    PrefUtils.putBoolean(PrefUtils.DISPLAY_TIP, false);
+                }
+            });
+            mListView.addHeaderView(header);
+        }
+
+        UiUtils.addEmptyFooterView(mListView, 90);
         UiUtils.updateHideReadButton(mHideReadButton);
 
+        mHideReadButton = (FloatingActionButton) rootView.findViewById(R.id.hide_read_button);
         mRefreshListBtn = (Button) rootView.findViewById(R.id.refreshListBtn);
         mRefreshListBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -28,6 +28,7 @@ import net.fred.feedex.MainApplication;
 public class PrefUtils {
 
     public static final String FIRST_OPEN = "FIRST_OPEN";
+    public static final String DISPLAY_TIP = "DISPLAY_TIP";
 
     public static final String IS_REFRESHING = "IS_REFRESHING";
 
