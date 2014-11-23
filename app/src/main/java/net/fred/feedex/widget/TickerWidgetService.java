@@ -71,8 +71,7 @@ public class TickerWidgetService extends Service {
                     widget.setTextViewText(R.id.feed_ticker, String.valueOf(unread_count));
                     widget.setViewVisibility(R.id.feed_ticker, View.VISIBLE);
                     widget.setViewVisibility(R.id.feed_ticker_circle, View.VISIBLE);
-                }
-                else {
+                } else {
                     widget.setViewVisibility(R.id.feed_ticker, View.INVISIBLE);
                     widget.setViewVisibility(R.id.feed_ticker_circle, View.INVISIBLE);
                 }

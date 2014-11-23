@@ -16,8 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="fill"
-        android:drawSelectorOnTop="false"
         android:choiceMode="singleChoice"
+        android:drawSelectorOnTop="false"
         android:groupIndicator="@android:color/transparent" />
 
 </FrameLayout>
