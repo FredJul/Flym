@@ -397,12 +397,12 @@ public class RssAtomParser extends DefaultHandler {
                     }
 
                     String enclosureString = null;
-                    StringBuilder existanceStringBuilder = new StringBuilder(EntryColumns.LINK).append(Constants.DB_ARG);
+                    StringBuilder existenceStringBuilder = new StringBuilder(EntryColumns.LINK).append(Constants.DB_ARG);
 
                     if (mEnclosure != null && mEnclosure.length() > 0) {
                         enclosureString = mEnclosure.toString();
                         values.put(EntryColumns.ENCLOSURE, enclosureString);
-                        existanceStringBuilder.append(Constants.DB_AND).append(EntryColumns.ENCLOSURE).append(Constants.DB_ARG);
+                        existenceStringBuilder.append(Constants.DB_AND).append(EntryColumns.ENCLOSURE).append(Constants.DB_ARG);
                     }
 
                     String guidString = null;
@@ -410,7 +410,7 @@ public class RssAtomParser extends DefaultHandler {
                     if (mGuid != null && mGuid.length() > 0) {
                         guidString = mGuid.toString();
                         values.put(EntryColumns.GUID, guidString);
-                        existanceStringBuilder.append(Constants.DB_AND).append(EntryColumns.GUID).append(Constants.DB_ARG);
+                        existenceStringBuilder.append(Constants.DB_AND).append(EntryColumns.GUID).append(Constants.DB_ARG);
                     }
 
                     String entryLinkString = ""; // don't set this to null as we need *some* value
@@ -423,14 +423,14 @@ public class RssAtomParser extends DefaultHandler {
                         }
                     }
 
-                    String[] existanceValues = enclosureString != null ? (guidString != null ? new String[]{entryLinkString, enclosureString,
+                    String[] existenceValues = enclosureString != null ? (guidString != null ? new String[]{entryLinkString, enclosureString,
                             guidString} : new String[]{entryLinkString, enclosureString}) : (guidString != null ? new String[]{entryLinkString,
                             guidString} : new String[]{entryLinkString});
 
                     // First, try to update the feed
                     ContentResolver cr = MainApplication.getContext().getContentResolver();
                     boolean isUpdated = (!entryLinkString.isEmpty() || guidString != null)
-                            && cr.update(mFeedEntriesUri, values, existanceStringBuilder.toString(), existanceValues) != 0;
+                            && cr.update(mFeedEntriesUri, values, existenceStringBuilder.toString(), existenceValues) != 0;
 
                     // Insert it only if necessary
                     if (!isUpdated && !updateOnly) {
