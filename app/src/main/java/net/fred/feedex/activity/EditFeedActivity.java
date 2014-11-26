@@ -339,7 +339,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
 
                     cr.update(getIntent().getData(), values, null, null);
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             } finally {
                 if (cursor != null) {
                     cursor.close();

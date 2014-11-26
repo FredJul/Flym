@@ -115,14 +115,14 @@ public class FetcherService extends IntentService {
 
     private static final String HTML_BODY = "<body";
     private static final String ENCODING = "encoding=\"";
-    private static final String SERVICENAME = "RssFetcherService";
+
     /* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
     private static final Pattern FEED_LINK_PATTERN = Pattern.compile(
             "[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>",
             Pattern.CASE_INSENSITIVE);
 
     public FetcherService() {
-        super(SERVICENAME);
+        super(FetcherService.class.getSimpleName());
         HttpURLConnection.setFollowRedirects(true);
     }
 
