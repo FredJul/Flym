@@ -232,13 +232,15 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                 }
                 case R.id.menu_share: {
                     Cursor cursor = mEntryPagerAdapter.getCursor(mCurrentPagerPos);
-                    String link = cursor.getString(mLinkPos);
-                    if (link != null) {
-                        String title = cursor.getString(mTitlePos);
-                        startActivity(Intent.createChooser(
-                                new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, link)
-                                        .setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)
-                        ));
+                    if (cursor != null) {
+                        String link = cursor.getString(mLinkPos);
+                        if (link != null) {
+                            String title = cursor.getString(mTitlePos);
+                            startActivity(Intent.createChooser(
+                                    new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, link)
+                                            .setType(Constants.MIMETYPE_TEXT_PLAIN), getString(R.string.menu_share)
+                            ));
+                        }
                     }
                     break;
                 }
