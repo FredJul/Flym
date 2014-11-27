@@ -220,7 +220,7 @@
         <item>1 mois</item>
         <item>2 mois</item>
         <item>3 mois</item>
-        <item>Jamais</item>
+        <item>Toujours</item>
     </string-array>
     <string-array name="settings_font_sizes">
         <item>-2</item>

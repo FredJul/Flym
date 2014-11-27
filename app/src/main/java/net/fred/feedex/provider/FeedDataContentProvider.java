@@ -383,7 +383,7 @@ public class FeedDataContentProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int matchCode = URI_MATCHER.match(uri);
 
-        String table = null;
+        String table;
 
         StringBuilder where = new StringBuilder();
 
@@ -538,7 +538,7 @@ public class FeedDataContentProvider extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         int matchCode = URI_MATCHER.match(uri);
 
-        String table = null;
+        String table;
 
         StringBuilder where = new StringBuilder();
 
@@ -588,7 +588,6 @@ public class FeedDataContentProvider extends ContentProvider {
                         Uri entriesUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedId);
                         delete(entriesUri, null, null);
                         delete(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), null, null);
-                        NetworkUtils.deleteFeedImagesCache(entriesUri, null);
                     }
                 }.start();
 
@@ -610,11 +609,6 @@ public class FeedDataContentProvider extends ContentProvider {
                             + groupWhere + Constants.DB_AND + priorityWhere);
                 }
                 priorityCursor.close();
-                break;
-            }
-            case URI_GROUPS:
-            case URI_FEEDS: {
-                table = FeedColumns.TABLE_NAME;
                 break;
             }
             case URI_FEEDS_FOR_GROUPS: {
@@ -674,7 +668,6 @@ public class FeedDataContentProvider extends ContentProvider {
                         delete(TaskColumns.CONTENT_URI, null, null);
                     }
                 }.start();
-
                 break;
             }
             case URI_FAVORITES_ENTRY:
@@ -709,12 +702,19 @@ public class FeedDataContentProvider extends ContentProvider {
             where.append(selection);
         }
 
+        // If it's an entry deletion, delete associated cache files
+        // Need to be done before the real entry deletion
+        if (EntryColumns.TABLE_NAME.equals(table)) {
+            NetworkUtils.deleteEntriesImagesCache(uri, where.toString(), selectionArgs);
+        }
+
         int count = database.delete(table, where.toString(), selectionArgs);
 
-        if (FeedColumns.TABLE_NAME.equals(table)) {
-            mDatabaseHelper.exportToOPML();
-        }
         if (count > 0) {
+            if (FeedColumns.TABLE_NAME.equals(table)) {
+                mDatabaseHelper.exportToOPML();
+            }
+
             notifyChangeOnAllUris(matchCode, uri);
         }
         return count;

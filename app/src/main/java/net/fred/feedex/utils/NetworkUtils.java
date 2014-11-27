@@ -108,11 +108,11 @@ public class NetworkUtils {
         }
     }
 
-    public static synchronized void deleteFeedImagesCache(Uri entriesUri, String selection) {
+    public static synchronized void deleteEntriesImagesCache(Uri entriesUri, String selection, String[] selectionArgs) {
         if (IMAGE_FOLDER_FILE.exists()) {
             PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
 
-            Cursor cursor = MainApplication.getContext().getContentResolver().query(entriesUri, FeedData.EntryColumns.PROJECTION_ID, selection, null, null);
+            Cursor cursor = MainApplication.getContext().getContentResolver().query(entriesUri, FeedData.EntryColumns.PROJECTION_ID, selection, selectionArgs, null);
 
             while (cursor.moveToNext()) {
                 filenameFilter.setEntryId(cursor.getString(0));

@@ -62,7 +62,6 @@ import net.fred.feedex.provider.FeedData.FilterColumns;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.HtmlUtils;
 import net.fred.feedex.utils.NetworkUtils;
-import net.fred.feedex.utils.PrefUtils;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -164,10 +163,7 @@ public class RssAtomParser extends DefaultHandler {
     private StringBuilder mGuid;
     private StringBuilder mAuthor, mTmpAuthor;
 
-    public RssAtomParser(Date realLastUpdateDate, final String id, String feedName, String url, boolean retrieveFullText) {
-        long keepTime = Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l;
-        long keepDateBorderTime = keepTime > 0 ? System.currentTimeMillis() - keepTime : 0;
-
+    public RssAtomParser(Date realLastUpdateDate, long keepDateBorderTime, final String id, String feedName, String url, boolean retrieveFullText) {
         mKeepDateBorder = new Date(keepDateBorderTime);
         mRealLastUpdateDate = realLastUpdateDate;
         mNewRealLastUpdate = realLastUpdateDate.getTime();
@@ -177,11 +173,6 @@ public class RssAtomParser extends DefaultHandler {
         mRetrieveFullText = retrieveFullText;
 
         mFilters = new FeedFilters(id);
-
-        // Remove old stuffs
-        final String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
-        NetworkUtils.deleteFeedImagesCache(mFeedEntriesUri, where);
-        MainApplication.getContext().getContentResolver().delete(mFeedEntriesUri, where, null);
 
         mFeedBaseUrl = NetworkUtils.getBaseUrl(url);
     }

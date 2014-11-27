@@ -192,8 +192,13 @@ public class FetcherService extends IntentService {
                 PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, SystemClock.elapsedRealtime());
             }
 
+            long keepTime = Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l;
+            long keepDateBorderTime = keepTime > 0 ? System.currentTimeMillis() - keepTime : 0;
+
+            deleteOldEntries(keepDateBorderTime);
+
             String feedId = intent.getStringExtra(Constants.FEED_ID);
-            int newCount = (feedId == null ? refreshFeeds() : refreshFeed(feedId));
+            int newCount = (feedId == null ? refreshFeeds(keepDateBorderTime) : refreshFeed(feedId, keepDateBorderTime));
 
             if (newCount > 0) {
                 if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
@@ -381,7 +386,15 @@ public class FetcherService extends IntentService {
         }
     }
 
-    private int refreshFeeds() {
+    private void deleteOldEntries(long keepDateBorderTime) {
+        if (keepDateBorderTime > 0) {
+            String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
+            // Delete the entries, the cache files will be deleted by the content provider
+            MainApplication.getContext().getContentResolver().delete(EntryColumns.CONTENT_URI, where, null);
+        }
+    }
+
+    private int refreshFeeds(final long keepDateBorderTime) {
         ContentResolver cr = getContentResolver();
         final Cursor cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
         int nbFeed = cursor.getCount();
@@ -403,7 +416,7 @@ public class FetcherService extends IntentService {
                 public Integer call() {
                     int result = 0;
                     try {
-                        result = refreshFeed(feedId);
+                        result = refreshFeed(feedId, keepDateBorderTime);
                     } catch (Exception ignored) {
                     }
                     return result;
@@ -426,7 +439,7 @@ public class FetcherService extends IntentService {
         return globalResult;
     }
 
-    private int refreshFeed(String feedId) {
+    private int refreshFeed(String feedId, long keepDateBorderTime) {
         RssAtomParser handler = null;
 
         ContentResolver cr = getContentResolver();
@@ -450,7 +463,7 @@ public class FetcherService extends IntentService {
                 String contentType = connection.getContentType();
                 int fetchMode = cursor.getInt(fetchmodePosition);
 
-                handler = new RssAtomParser(new Date(cursor.getLong(realLastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl,
+                handler = new RssAtomParser(new Date(cursor.getLong(realLastUpdatePosition)), keepDateBorderTime, id, cursor.getString(titlePosition), feedUrl,
                         cursor.getInt(retrieveFullscreenPosition) == 1);
                 handler.setFetchImages(NetworkUtils.needDownloadPictures());
 
@@ -515,7 +528,7 @@ public class FetcherService extends IntentService {
                             try {
                                 Xml.findEncodingByName(index2 > -1 ? contentType.substring(index + 8, index2) : contentType.substring(index + 8));
                                 fetchMode = FETCHMODE_DIRECT;
-                            } catch (UnsupportedEncodingException usee) {
+                            } catch (UnsupportedEncodingException ignored) {
                                 fetchMode = FETCHMODE_REENCODE;
                             }
                         } else {
@@ -540,7 +553,7 @@ public class FetcherService extends IntentService {
                             try {
                                 Xml.findEncodingByName(xmlDescription.substring(start + 10, xmlDescription.indexOf('"', start + 11)));
                                 fetchMode = FETCHMODE_DIRECT;
-                            } catch (UnsupportedEncodingException usee) {
+                            } catch (UnsupportedEncodingException ignored) {
                                 fetchMode = FETCHMODE_REENCODE;
                             }
                         } else {
