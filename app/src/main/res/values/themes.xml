@@ -3,6 +3,7 @@
 
     <style name="Theme.Light" parent="Theme.AppCompat.Light">
         <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
         <!-- customize the color palette -->
         <item name="colorPrimary">@color/light_theme_color_primary</item>
         <item name="colorPrimaryDark">@color/light_theme_color_primary_dark</item>
@@ -11,6 +12,7 @@
 
     <style name="Theme.Dark" parent="Theme.AppCompat">
         <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
         <!-- customize the color palette -->
         <item name="colorPrimary">@color/dark_theme_color_primary</item>
         <item name="colorPrimaryDark">@color/dark_theme_color_primary_dark</item>
