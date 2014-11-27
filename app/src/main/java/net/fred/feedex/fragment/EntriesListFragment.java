@@ -157,7 +157,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         mListView = (ListView) rootView.findViewById(android.R.id.list);
         mListView.setFastScrollEnabled(true);
-        mListView.setOnTouchListener(new SwipeGestureListener(getActivity()));
+        mListView.setOnTouchListener(new SwipeGestureListener(mListView.getContext()));
 
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_TIP, true)) {
             final TextView header = new TextView(mListView.getContext());
@@ -179,9 +179,17 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         }
 
         UiUtils.addEmptyFooterView(mListView, 90);
-        UiUtils.updateHideReadButton(mHideReadButton);
 
         mHideReadButton = (FloatingActionButton) rootView.findViewById(R.id.hide_read_button);
+        mHideReadButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                UiUtils.displayHideReadButtonAction(mListView.getContext());
+                return true;
+            }
+        });
+        UiUtils.updateHideReadButton(mHideReadButton);
+
         mRefreshListBtn = (Button) rootView.findViewById(R.id.refreshListBtn);
         mRefreshListBtn.setOnClickListener(new View.OnClickListener() {
             @Override

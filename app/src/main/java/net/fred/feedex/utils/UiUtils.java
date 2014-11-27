@@ -29,6 +29,7 @@ import android.support.v4.util.LongSparseArray;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
 
@@ -86,6 +87,14 @@ public class UiUtils {
             } else {
                 drawerHideReadButton.setColorNormalResId(R.color.floating_action_button_disabled);
             }
+        }
+    }
+
+    static public void displayHideReadButtonAction(Context context) {
+        if (PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
+            Toast.makeText(context, R.string.context_menu_hide_read, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, R.string.context_menu_show_read, Toast.LENGTH_SHORT).show();
         }
     }
 

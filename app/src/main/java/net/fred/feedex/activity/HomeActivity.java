@@ -141,6 +141,13 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         mDrawerHideReadButton = (FloatingActionButton) mLeftDrawer.findViewById(R.id.hide_read_button);
         if (mDrawerHideReadButton != null) {
+            mDrawerHideReadButton.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    UiUtils.displayHideReadButtonAction(HomeActivity.this);
+                    return true;
+                }
+            });
             UiUtils.updateHideReadButton(mDrawerHideReadButton);
             UiUtils.addEmptyFooterView(mDrawerList, 90);
         }
