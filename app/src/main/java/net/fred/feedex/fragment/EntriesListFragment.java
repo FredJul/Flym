@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -165,6 +166,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             int footerPadding = UiUtils.dpToPixel(10);
             header.setPadding(footerPadding, footerPadding, footerPadding, footerPadding);
             header.setText(R.string.tip_sentence);
+            header.setGravity(Gravity.CENTER_VERTICAL);
             header.setCompoundDrawablePadding(UiUtils.dpToPixel(5));
             header.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_about, 0, R.drawable.ic_action_cancel, 0);
             header.setClickable(true);
