@@ -106,12 +106,12 @@
     <string name="context_menu_hide_read">Göm lästa inlägg</string>
     <string name="context_menu_show_read">Visa lästa inlägg</string>
     <string name="context_menu_share_starred">Dela favoriter</string>
-    <string name="menu_star">Mark som favorit</string>
-    <string name="menu_unstar">Avmark som favorit</string>
+    <string name="menu_star">Markera som favorit</string>
+    <string name="menu_unstar">Avmarkera som favorit</string>
     <string name="menu_share">Dela</string>
     <string name="menu_full_screen">Helskärm</string>
     <string name="menu_copy_clipboard">Kopiera länk</string>
-    <string name="menu_mark_as_unread">Mark som oläst</string>
+    <string name="menu_mark_as_unread">Markera som oläst</string>
     <string name="share_favorites_title">Flym: favoriter</string>
     <string name="copied_clipboard">Länk kopierad</string>
     <string name="get_full_text">Hämta hela texten</string>
@@ -123,7 +123,7 @@
     <string name="file">Fil</string>
     <string name="download_and_save">Ladda ned och spara</string>
     <string name="open_link">Öppna länk</string>
-    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+    <string name="tip_sentence">Tips: svepa åt vänster för att markera som läst, svepa åt höger för att markera som favorit.</string>
 
     <!-- WIDGET -->
     <string name="red">Röd</string>
