@@ -113,6 +113,34 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     };
     private int mNewEntriesNumber, mOldUnreadEntriesNumber = -1;
     private boolean mAutoRefreshDisplayDate = false;
+    private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
+            cursorLoader.setUpdateThrottle(150);
+            return cursorLoader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            data.moveToFirst();
+            mNewEntriesNumber = data.getInt(0);
+            mOldUnreadEntriesNumber = data.getInt(1);
+
+            if (mAutoRefreshDisplayDate && mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
+                mListDisplayDate = new Date().getTime();
+                restartLoaders();
+            } else {
+                refreshUI();
+            }
+
+            mAutoRefreshDisplayDate = false;
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+        }
+    };
     private Button mRefreshListBtn;
 
     @Override
@@ -143,8 +171,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 mAutoRefreshDisplayDate = true; // We will try to update the list after if necessary
             }
 
-            getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-            getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+            restartLoaders();
         }
     }
 
@@ -201,8 +228,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
                 refreshUI();
                 if (mUri != null) {
-                    getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-                    getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+                    restartLoaders();
                 }
             }
         });
@@ -359,10 +385,15 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         mListDisplayDate = new Date().getTime();
         if (mUri != null) {
-            getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-            getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+            restartLoaders();
         }
         refreshUI();
+    }
+
+    private void restartLoaders() {
+        LoaderManager loaderManager = getLoaderManager();
+        loaderManager.restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+        loaderManager.restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
     }
 
     private void refreshUI() {
@@ -435,36 +466,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             return mGestureDetector.onTouchEvent(event);
         }
     }
-
-    private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
-        @Override
-        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
-            cursorLoader.setUpdateThrottle(150);
-            return cursorLoader;
-        }
-
-        @Override
-        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            data.moveToFirst();
-            mNewEntriesNumber = data.getInt(0);
-            mOldUnreadEntriesNumber = data.getInt(1);
-
-            if (mAutoRefreshDisplayDate && mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
-                mListDisplayDate = new Date().getTime();
-                getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-                getLoaderManager().restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
-            } else {
-                refreshUI();
-            }
-
-            mAutoRefreshDisplayDate = false;
-        }
-
-        @Override
-        public void onLoaderReset(Loader<Cursor> loader) {
-        }
-    };
 
 
 }
