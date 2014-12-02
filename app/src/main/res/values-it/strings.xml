@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
- Copyright (c) 2010-2012 Stefan Handschuh
+ Copyright (c) 2013-2014 Danilo Treffiletti
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -129,7 +129,7 @@
     <string name="file">File</string>
     <string name="download_and_save">Scarica e salva</string>
     <string name="open_link">Apri link</string>
-    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+    <string name="tip_sentence">Suggerimento: fai scorrere a sinistra per segnare come letto e a destra per segnare come preferito</string>
 
     <!-- WIDGET -->
     <string name="red">Rosso</string>
