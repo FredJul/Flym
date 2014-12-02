@@ -39,7 +39,7 @@
     <string name="no_result">Žádný výsledek</string>
     <string name="drawer_open">Otevřít navigační lištu</string>
     <string name="drawer_close">Zavřít navigační lištu</string>
-    <string name="back_again_to_quit">Zmáčkni ještě jednou tlačítko zpět pro ukončení</string>
+    <string name="back_again_to_quit">Opakovaný stisk tlačítka zpět ukončí aplikaci</string>
 
     <!-- FEEDS -->
     <string name="feeds">Zdroje</string>
@@ -57,8 +57,12 @@
     <string name="error_feed_process">Zdroj nelze zpracovat.</string>
     <string name="error_feed_url_exists">Adresa již existuje.</string>
     <string name="error_feed_import">Vybraný soubor nemohl být importován.</string>
-    <string name="error_feed_export">Export selhal. Ujistěte se, že se na připojenou SD kartu dá zapisovat.</string>
-    <string name="error_external_storage_not_available">Externí úložný prostor (např. SD karta) není dostupný.</string>
+    <string name="error_feed_export">Export selhal. Ujistěte se, že se na připojenou SD kartu
+        dá zapisovat.
+    </string>
+    <string name="error_external_storage_not_available">Externí úložný prostor (např. SD karta) není
+        dostupný.
+    </string>
     <string name="feed_url">URL adresa</string>
     <string name="optional">(nepovinné)</string>
     <string name="website_or_feed">(webová stránka nebo zdroj)</string>
@@ -80,13 +84,17 @@
     <string name="feed_search_by_youtube">Vyhledat zdroj podle jména Youtube kanálu</string>
     <string name="select_file">Vybrat soubor (SD-kořen)</string>
     <string name="question_delete_feed">Opravdu smazat tento zdroj?</string>
-    <string name="question_delete_group">Opravdu chcete smazat tuto skupinu a všechny její zdroje?</string>
+    <string name="question_delete_group">Opravdu chcete smazat tuto skupinu a všechny její
+        zdroje?
+    </string>
     <string name="question_delete_filter">Opravdu chcete smazat tento filtr?</string>
     <string name="add_group_title">Vybrat jméno skupiny</string>
     <string name="edit_group_title">Upravit jméno skupiny</string>
     <string name="message_exported_to">Exportovat do %s.</string>
     <string name="to_group_title">Akce přesunu zdroje</string>
-    <string name="to_group_message">Můžete tento zdroj posunout do a nebo nad tuto skupinu. Co chcete udělat?</string>
+    <string name="to_group_message">Můžete tento zdroj posunout do a nebo nad tuto skupinu. Co
+        chcete udělat?
+    </string>
     <string name="to_group_above">Nad skupinu</string>
     <string name="to_group_into">Do skupiny</string>
     <string name="add_custom_feed">Přidat vlastní zdroj nebo nový vyhledat</string>
@@ -112,7 +120,7 @@
     <string name="menu_unstar">Odznačit</string>
     <string name="menu_share">Sdílet</string>
     <string name="menu_full_screen">Na celou obrazovku</string>
-    <string name="menu_copy_clipboard">Kopírovat link</string>
+    <string name="menu_copy_clipboard">Kopírovat odkaz</string>
     <string name="menu_mark_as_unread">Označit jako nepřečtené</string>
     <string name="share_favorites_title">Flym: označené články</string>
     <string name="copied_clipboard">Link zkopírován</string>
@@ -125,7 +133,7 @@
     <string name="file">Soubor</string>
     <string name="download_and_save">Stáhnout a uložit</string>
     <string name="open_link">Otevřít odkaz</string>
-    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+    <string name="tip_sentence">Tip: posunutím doleva označit jako přečtené a posunutím doprava jako oblíbené</string>
 
     <!-- WIDGET -->
     <string name="red">Červená</string>
@@ -136,15 +144,19 @@
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatické načítání</string>
     <string name="settings_refresh_enabled">Povolit automatické načítání</string>
-    <string name="settings_refresh_enabled_description">Povolí automatické načítání zdrojů</string>
+    <string name="settings_refresh_enabled_description">Povolí automatické načítání zdrojů
+    </string>
     <string name="settings_refresh_interval">Interval načítání</string>
     <string name="settings_category_notifications">Oznámení</string>
     <string name="settings_notifications_enabled">Povolit oznámení</string>
-    <string name="settings_notifications_enabled_description">Povolí oznámení v případě nových článků</string>
+    <string name="settings_notifications_enabled_description">Povolí oznámení v případě nových
+        článků
+    </string>
     <string name="settings_notifications_ringtone">Tón oznámení</string>
     <string name="settings_notifications_ringtone_none">Žádný</string>
     <string name="settings_notifications_vibrate">Vibrovat</string>
-    <string name="settings_notifications_vibrate_description">Povolit vibrace při přijetí nových článků</string>
+    <string name="settings_notifications_vibrate_description">Povolit vibrace při přijetí nových článků
+    </string>
     <string name="settings_notifications_light">LED oznámení</string>
     <string name="settings_notifications_light_description">Povolit oznamování blikáním při přijetí nových článků</string>
     <string name="settings_category_content_presentation">Prezentace obsahu</string>
@@ -160,12 +172,17 @@
     <string name="settings_display_entries_fullscreen">Články na celou obrazovku</string>
     <string name="settings_display_entries_fullscreen_description">Automaticky zobrazovat články na celou obrazovku</string>
     <string name="settings_refresh_on_open">Načítat články při otevření</string>
-    <string name="settings_refresh_on_open_description">Obnoví zdroje a načte články při otevření aplikace</string>
+    <string name="settings_refresh_on_open_description">Obnoví zdroje a načte články při otevření
+        aplikace
+    </string>
     <string name="settings_refresh_wifi_only">Obnovovat pouze přes Wi-Fi</string>
-    <string name="settings_refresh_wifi_only_description">Automatické obnovení bude spuštěno pouze při dostupném Wi-Fi připojení</string>
+    <string name="settings_refresh_wifi_only_description">Automatické obnovení bude spuštěno pouze při dostupném Wi-Fi připojení
+    </string>
     <string name="settings_visible_feeds">Viditelné zdroje</string>
     <string name="settings_widget_background">Pozadí</string>
-    <string name="settings_widget_background_description">Barva a průhlednost pozadí widgetu</string>
+    <string name="settings_widget_background_description">Barva a průhlednost pozadí
+        widgetu
+    </string>
     <string name="all_feeds">Všechny zdroje (včetně budoucích)</string>
     <string name="settings_screen_proxy">Proxy</string>
     <string name="settings_category_network">Síť</string>
