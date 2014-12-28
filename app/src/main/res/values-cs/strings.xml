@@ -175,6 +175,8 @@
     <string name="settings_refresh_on_open_description">Obnoví zdroje a načte články při otevření
         aplikace
     </string>
+    <string name="settings_use_external_image_cache">External image storage</string>
+    <string name="settings_use_external_image_cache_description">Uses the external cache (e.g. SD card) for storing images/media.</string>
     <string name="settings_refresh_wifi_only">Obnovovat pouze přes Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Automatické obnovení bude spuštěno pouze při dostupném Wi-Fi připojení
     </string>

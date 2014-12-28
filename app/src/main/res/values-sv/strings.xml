@@ -159,6 +159,8 @@
     <string name="settings_display_entries_fullscreen_description">Visa inlägg automatiskt i helskärm</string>
     <string name="settings_refresh_on_open">Uppdatera feeds vid start</string>
     <string name="settings_refresh_on_open_description">Uppdatera alla feeds när applikationen öppnas</string>
+    <string name="settings_use_external_image_cache">External image storage</string>
+    <string name="settings_use_external_image_cache_description">Uses the external cache (e.g. SD card) for storing images/media.</string>
     <string name="settings_refresh_wifi_only">Uppdatera endast via Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Uppdatera automatisk endast när ett Wi-Fi-nätverk är tillgänglig</string>
     <string name="settings_visible_feeds">Synliga feeds</string>

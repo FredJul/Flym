@@ -172,6 +172,8 @@
     <string name="settings_refresh_on_open_description">Aggiorna tutti i feed all\'apertura
         dell\'applicazione
     </string>
+    <string name="settings_use_external_image_cache">External image storage</string>
+    <string name="settings_use_external_image_cache_description">Uses the external cache (e.g. SD card) for storing images/media.</string>
     <string name="settings_refresh_wifi_only">Aggiorna solo in WiFi</string>
     <string name="settings_refresh_wifi_only_description">L\'aggiornamento automatico viene eseguito
         solo quando si è connessi ad una rete WiFi

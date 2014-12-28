@@ -172,6 +172,8 @@
     <string name="settings_refresh_on_open_description">Actualiza las fuentes al iniciar la
         aplicación.
     </string>
+    <string name="settings_use_external_image_cache">External image storage</string>
+    <string name="settings_use_external_image_cache_description">Uses the external cache (e.g. SD card) for storing images/media.</string>
     <string name="settings_refresh_wifi_only">Actualizar solo en Wi-Fi.</string>
     <string name="settings_refresh_wifi_only_description">Solo se actualizarán las entradas cuando
         se esté conectado a una red Wi-Fi.

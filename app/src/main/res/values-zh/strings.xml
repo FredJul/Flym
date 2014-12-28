@@ -159,6 +159,8 @@
     <string name="settings_display_entries_fullscreen_description">自动在全屏显示消息</string>
     <string name="settings_refresh_on_open">自动刷新</string>
     <string name="settings_refresh_on_open_description">当程序开启时，自动刷新所有订阅</string>
+    <string name="settings_use_external_image_cache">External image storage</string>
+    <string name="settings_use_external_image_cache_description">Uses the external cache (e.g. SD card) for storing images/media.</string>
     <string name="settings_refresh_wifi_only">Wi-Fi环境才自动刷新</string>
     <string name="settings_refresh_wifi_only_description">自动刷新仅在Wi-Fi环境启用</string>
     <string name="settings_visible_feeds">可见源</string>

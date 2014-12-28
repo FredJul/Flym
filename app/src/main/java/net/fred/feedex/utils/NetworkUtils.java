@@ -51,7 +51,8 @@ import java.util.regex.Pattern;
 
 public class NetworkUtils {
 
-    public static final File IMAGE_FOLDER_FILE = new File(MainApplication.getContext().getCacheDir(), "images/");
+    //public static File IMAGE_FOLDER_FILE = new File(MainApplication.getContext().getCacheDir(), "images/");
+    public static File IMAGE_FOLDER_FILE = getPrefsCacheDir();
     public static final String IMAGE_FOLDER = IMAGE_FOLDER_FILE.getAbsolutePath() + '/';
     public static final String TEMP_PREFIX = "TEMP__";
     public static final String ID_SEPARATOR = "__";
@@ -63,11 +64,25 @@ public class NetworkUtils {
         CookieHandler.setDefault(this);
     }};
 
+    private static File getPrefsCacheDir(){
+    	if(PrefUtils.getBoolean("use_external_image_cache",false)){
+    		if(MainApplication.getContext().getExternalCacheDir()==null){
+    			return new File(MainApplication.getContext().getCacheDir(), "images/");
+    		}else{
+    			return new File(MainApplication.getContext().getExternalCacheDir(), "images/");
+    		}
+    	}else{
+        	return new File(MainApplication.getContext().getCacheDir(), "images/");
+    	}
+    }
+    
     public static String getDownloadedImagePath(long entryId, String imgUrl) {
+    	IMAGE_FOLDER_FILE = getPrefsCacheDir();
         return IMAGE_FOLDER + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
     }
 
     public static String getTempDownloadedImagePath(long entryId, String imgUrl) {
+    	IMAGE_FOLDER_FILE = getPrefsCacheDir();
         return IMAGE_FOLDER + TEMP_PREFIX + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
     }
 
@@ -109,6 +124,7 @@ public class NetworkUtils {
     }
 
     public static synchronized void deleteEntriesImagesCache(Uri entriesUri, String selection, String[] selectionArgs) {
+    	IMAGE_FOLDER_FILE = getPrefsCacheDir();
         if (IMAGE_FOLDER_FILE.exists()) {
             PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
 
@@ -130,7 +146,7 @@ public class NetworkUtils {
 
     public static boolean needDownloadPictures() {
         String fetchPictureMode = PrefUtils.getString(PrefUtils.PRELOAD_IMAGE_MODE, Constants.FETCH_PICTURE_MODE_WIFI_ONLY_PRELOAD);
-
+        IMAGE_FOLDER_FILE = getPrefsCacheDir();
         boolean downloadPictures = false;
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
             if (Constants.FETCH_PICTURE_MODE_ALWAYS_PRELOAD.equals(fetchPictureMode)) {

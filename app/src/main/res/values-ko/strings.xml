@@ -160,6 +160,8 @@
     <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
     <string name="settings_refresh_on_open">열면 피드 새로 고침</string>
     <string name="settings_refresh_on_open_description">프로그램을 열면 모든 피드 새로 고침</string>
+    <string name="settings_use_external_image_cache">External image storage</string>
+    <string name="settings_use_external_image_cache_description">Uses the external cache (e.g. SD card) for storing images/media.</string>
     <string name="settings_refresh_wifi_only">Wi-Fi에서만 새로 고침</string>
     <string name="settings_refresh_wifi_only_description">Wi-Fi를 사용할 때만 자동으로 새로 고침</string>
     <string name="settings_visible_feeds">피드 모양</string>

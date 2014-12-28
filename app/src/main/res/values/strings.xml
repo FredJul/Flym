@@ -170,6 +170,8 @@
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>
     <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
     <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
+    <string name="settings_use_external_image_cache">External image storage</string>
+    <string name="settings_use_external_image_cache_description">Uses the external cache (e.g. SD card) for storing images/media.</string>
     <string name="settings_refresh_on_open">Refresh feeds on open</string>
     <string name="settings_refresh_on_open_description">Refreshes all feeds after opening the
         application
