@@ -5,3 +5,6 @@
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
 }
+
+# for picasso
+-dontwarn com.squareup.okhttp.**

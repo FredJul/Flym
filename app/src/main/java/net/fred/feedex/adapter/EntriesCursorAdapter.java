@@ -57,6 +57,8 @@ import android.widget.ImageView;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
@@ -70,7 +72,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     private final Uri mUri;
     private final boolean mShowFeedInfo;
-    private int mTitlePos, mDatePos, mIsReadPos, mFavoritePos, mFeedIdPos, mFeedIconPos, mFeedNamePos;
+    private int mTitlePos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mFeedIdPos, mFeedIconPos, mFeedNamePos;
 
     public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo) {
         super(context, R.layout.item_entry_list, cursor, 0);
@@ -86,11 +88,22 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             ViewHolder holder = new ViewHolder();
             holder.titleTextView = (TextView) view.findViewById(android.R.id.text1);
             holder.dateTextView = (TextView) view.findViewById(android.R.id.text2);
-            holder.starImgView = (ImageView) view.findViewById(android.R.id.icon);
+            holder.mainImgView = (ImageView) view.findViewById(R.id.main_icon);
+            holder.starImgView = (ImageView) view.findViewById(R.id.favorite_icon);
             view.setTag(R.id.holder, holder);
         }
 
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
+
+        String mainImgUrl = cursor.getString(mMainImgPos);
+        if (mainImgUrl != null) {
+            holder.mainImgView.setVisibility(View.VISIBLE);
+            Picasso.with(context).load(mainImgUrl).into(holder.mainImgView);
+        } else {
+            Picasso.with(context).cancelRequest(holder.mainImgView);
+            holder.mainImgView.setImageDrawable(null);
+            holder.mainImgView.setVisibility(View.GONE);
+        }
 
         holder.titleTextView.setText(cursor.getString(mTitlePos));
 
@@ -220,6 +233,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     private void reinit(Cursor cursor) {
         if (cursor != null && cursor.getCount() > 0) {
             mTitlePos = cursor.getColumnIndex(EntryColumns.TITLE);
+            mMainImgPos = cursor.getColumnIndex(EntryColumns.IMAGE_URL);
             mDatePos = cursor.getColumnIndex(EntryColumns.DATE);
             mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
             mFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
@@ -234,6 +248,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     private static class ViewHolder {
         public TextView titleTextView;
         public TextView dateTextView;
+        public ImageView mainImgView;
         public ImageView starImgView;
         public boolean isRead, isFavorite;
     }

@@ -41,4 +41,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:+'
     compile 'com.melnykov:floatingactionbutton:+'
     compile 'org.jsoup:jsoup:+'
+    compile 'com.squareup.picasso:picasso:+'
 }

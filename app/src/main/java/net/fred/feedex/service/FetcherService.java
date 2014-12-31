@@ -294,6 +294,7 @@ public class FetcherService extends IntentService {
                 if (entryCursor.isNull(entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML))) { // If we didn't already mobilized it
                     int linkPos = entryCursor.getColumnIndex(EntryColumns.LINK);
                     int abstractHtmlPos = entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
+                    int imageUrlPos = entryCursor.getColumnIndex(EntryColumns.IMAGE_URL);
                     HttpURLConnection connection = null;
 
                     try {
@@ -317,11 +318,28 @@ public class FetcherService extends IntentService {
                             mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link));
                             ContentValues values = new ContentValues();
                             values.put(EntryColumns.MOBILIZED_HTML, mobilizedHtml);
+
+                            ArrayList<String> imgUrlsToDownload = null;
+                            if (NetworkUtils.needDownloadPictures()) {
+                                imgUrlsToDownload = HtmlUtils.getImageURLs(mobilizedHtml);
+                            }
+
+                            String mainImgUrl;
+                            if (imgUrlsToDownload != null) {
+                                mainImgUrl = imgUrlsToDownload.isEmpty() ? null : imgUrlsToDownload.get(0);
+                            } else {
+                                mainImgUrl = HtmlUtils.getMainImageURL(mobilizedHtml);
+                            }
+
+                            if (mainImgUrl != null) {
+                                values.put(EntryColumns.IMAGE_URL, mainImgUrl);
+                            }
+
                             if (cr.update(entryUri, values, null, null) > 0) {
                                 success = true;
                                 operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
-                                if (NetworkUtils.needDownloadPictures()) {
-                                    addImagesToDownload(String.valueOf(entryId), HtmlUtils.getImageURLs(mobilizedHtml));
+                                if (imgUrlsToDownload != null && !imgUrlsToDownload.isEmpty()) {
+                                    addImagesToDownload(String.valueOf(entryId), imgUrlsToDownload);
                                 }
                             }
                         }
