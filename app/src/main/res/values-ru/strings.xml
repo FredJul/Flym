@@ -171,6 +171,8 @@
     <string name="settings_refresh_on_open">Обновлять при запуске</string>
     <string name="settings_refresh_on_open_description">Обновлять все ленты пии запуске приложения
     </string>
+    <string name="settings_use_external_image_cache">External image storage</string>
+    <string name="settings_use_external_image_cache_description">Uses the external cache (e.g. SD card) for storing images/media.</string>
     <string name="settings_refresh_wifi_only">Обновлять только по WiFi</string>
     <string name="settings_refresh_wifi_only_description">Автоматическое обновление будет
         выполняться только при включенном WiFi

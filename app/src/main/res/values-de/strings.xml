@@ -160,6 +160,8 @@
     <string name="settings_display_entries_fullscreen_description">Einträge automatisch im Vollbild anzeigen</string>
     <string name="settings_refresh_on_open">Feeds beim Öffnen aktualisieren</string>
     <string name="settings_refresh_on_open_description">Aktualisiert alle Feeds beim Öffnen der Anwendung</string>
+    <string name="settings_use_external_image_cache">Externer Bildspeicher</string>
+    <string name="settings_use_external_image_cache_description">Bilder/Medien auf dem externen Speicher (z.B. SD Karte) ablegen.</string>
     <string name="settings_refresh_wifi_only">Nur über WLAN aktualisieren</string>
     <string name="settings_refresh_wifi_only_description">Die automatische Aktualisierung wird nur bei aktiver WLAN-Verbindung durchgeführt</string>
     <string name="settings_visible_feeds">Sichtbare Feeds</string>

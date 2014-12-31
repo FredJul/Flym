@@ -123,7 +123,14 @@
             android:key="display_entries_fullscreen"
             android:summary="@string/settings_display_entries_fullscreen_description"
             android:title="@string/settings_display_entries_fullscreen" />
-    </PreferenceCategory>
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="use_external_image_cache"
+            android:summary="@string/settings_use_external_image_cache_description"
+            android:title="@string/settings_use_external_image_cache" />
+        </PreferenceCategory>
 
     <PreferenceCategory
         android:layout_width="wrap_content"

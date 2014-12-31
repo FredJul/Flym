@@ -171,7 +171,9 @@
     <string name="settings_refresh_on_open_description">Descarregarà nous continguts dels canals a
         l\'inici de l\'aplicació.
     </string>
-    <string name="settings_refresh_wifi_only">Actualitza els canals només en Wi-Fi</string>
+    <string name="settings_use_external_image_cache">External image storage</string>
+    <string name="settings_use_external_image_cache_description">Uses the external cache (e.g. SD card) for storing images/media.</string>
+        <string name="settings_refresh_wifi_only">Actualitza els canals només en Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Només es descarregaran nous continguts
         dins d\'una connexió Wi-Fi.
     </string>

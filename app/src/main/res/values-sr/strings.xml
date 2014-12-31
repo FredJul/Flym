@@ -160,6 +160,8 @@
     <string name="settings_display_entries_fullscreen_description">Аутоматски прикажи уносе преко целог екрана</string>
     <string name="settings_refresh_on_open">Освежи доводе по покретању</string>
     <string name="settings_refresh_on_open_description">Освежи доводе по отварању апликације</string>
+    <string name="settings_use_external_image_cache">External image storage</string>
+    <string name="settings_use_external_image_cache_description">Uses the external cache (e.g. SD card) for storing images/media.</string>
     <string name="settings_refresh_wifi_only">Само преко бежичне везе</string>
     <string name="settings_refresh_wifi_only_description">Аутоматско освежавање само ако је доступна бежична веза</string>
     <string name="settings_visible_feeds">Видљиви доводи</string>

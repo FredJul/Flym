@@ -173,6 +173,8 @@
     <string name="settings_refresh_on_open">Irekitzerakoan jarioak freskatu</string>
     <string name="settings_refresh_on_open_description">Aplikazioa irekitzerakoan jario guztiak freskatzen
         ditu
+    <string name="settings_use_external_image_cache">External image storage</string>
+    <string name="settings_use_external_image_cache_description">Uses the external cache (e.g. SD card) for storing images/media.</string>
     </string>
     <string name="settings_refresh_wifi_only">Freskatu soilik Wi-Fipean</string>
     <string name="settings_refresh_wifi_only_description">Freskatze automatikoa soilik Wi-Fi konexioa eskuragarri badago egingo da

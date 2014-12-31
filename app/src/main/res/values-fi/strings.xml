@@ -168,6 +168,8 @@
     <string name="settings_refresh_on_open">Päivitä käynnistettäessä</string>
     <string name="settings_refresh_on_open_description">Päivitä kaikki syötteet sovelluksen käynnistyessä
     </string>
+    <string name="settings_use_external_image_cache">External image storage</string>
+    <string name="settings_use_external_image_cache_description">Uses the external cache (e.g. SD card) for storing images/media.</string>
     <string name="settings_refresh_wifi_only">Vain Wi-Fi -yhteyden kautta</string>
     <string name="settings_refresh_wifi_only_description">Syötteet päivitetään automaattisesti ainoastaan kun Wi-Fi -yhteys on käytettävissä
     </string>
