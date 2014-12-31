@@ -430,7 +430,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(activity, R.string.network_error, Toast.LENGTH_LONG).show();
+                            Toast.makeText(activity, R.string.network_error, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

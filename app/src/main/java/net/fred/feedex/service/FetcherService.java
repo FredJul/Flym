@@ -57,10 +57,12 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Xml;
+import android.widget.Toast;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
@@ -121,9 +123,12 @@ public class FetcherService extends IntentService {
             "[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>",
             Pattern.CASE_INSENSITIVE);
 
+    private final Handler mHandler;
+
     public FetcherService() {
         super(FetcherService.class.getSimpleName());
         HttpURLConnection.setFollowRedirects(true);
+        mHandler = new Handler();
     }
 
     public static boolean hasMobilizationTask(long entryId) {
@@ -165,14 +170,24 @@ public class FetcherService extends IntentService {
             return;
         }
 
+        boolean isFromAutoRefresh = intent.getBooleanExtra(Constants.FROM_AUTO_REFRESH, false);
+
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         // Connectivity issue, we quit
         if (networkInfo == null || networkInfo.getState() != NetworkInfo.State.CONNECTED) {
+            if (ACTION_REFRESH_FEEDS.equals(intent.getAction()) && !isFromAutoRefresh) {
+                // Display a toast in that case
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(FetcherService.this, R.string.network_error, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
             return;
         }
 
-        boolean isFromAutoRefresh = intent.getBooleanExtra(Constants.FROM_AUTO_REFRESH, false);
         boolean skipFetch = isFromAutoRefresh && PrefUtils.getBoolean(PrefUtils.REFRESH_WIFI_ONLY, false)
                 && networkInfo.getType() != ConnectivityManager.TYPE_WIFI;
         // We need to skip the fetching process, so we quit
