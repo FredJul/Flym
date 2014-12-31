@@ -87,10 +87,10 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.titleTextView = (TextView) view.findViewById(android.R.id.text1);
             holder.dateTextView = (TextView) view.findViewById(android.R.id.text2);
             holder.starImgView = (ImageView) view.findViewById(android.R.id.icon);
-            view.setTag(holder);
+            view.setTag(R.id.holder, holder);
         }
 
-        final ViewHolder holder = (ViewHolder) view.getTag();
+        final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
 
         holder.titleTextView.setText(cursor.getString(mTitlePos));
 

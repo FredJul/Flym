@@ -85,9 +85,8 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item_drawer_list, parent, false);
 
             ViewHolder holder = new ViewHolder();
@@ -96,10 +95,10 @@ public class DrawerAdapter extends BaseAdapter {
             holder.stateTxt = (TextView) convertView.findViewById(android.R.id.text2);
             holder.unreadTxt = (TextView) convertView.findViewById(R.id.unread_count);
             holder.separator = convertView.findViewById(R.id.separator);
-            convertView.setTag(holder);
+            convertView.setTag(R.id.holder, holder);
         }
 
-        ViewHolder holder = (ViewHolder) convertView.getTag();
+        ViewHolder holder = (ViewHolder) convertView.getTag(R.id.holder);
 
         // default init
         holder.iconView.setImageDrawable(null);
