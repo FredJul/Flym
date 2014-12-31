@@ -45,7 +45,7 @@ public class ArticleTextExtractor {
      * @param input            extracts article text from given html string. wasn't tested
      *                         with improper HTML, although jSoup should be able to handle minor stuff.
      * @param contentIndicator a text which should be included into the extracted content, or null
-     * @returns extracted article, all HTML tags stripped
+     * @return extracted article, all HTML tags stripped
      */
     public static String extractContent(InputStream input, String contentIndicator) throws Exception {
         return extractContent(Jsoup.parse(input, null, ""), contentIndicator);
@@ -111,7 +111,7 @@ public class ArticleTextExtractor {
     private static int weightChildNodes(Element rootEl, String contentIndicator) {
         int weight = 0;
         Element caption = null;
-        List<Element> pEls = new ArrayList<Element>(5);
+        List<Element> pEls = new ArrayList<>(5);
         for (Element child : rootEl.children()) {
             String ownText = child.ownText();
             int ownTextLength = ownText.length();
@@ -245,7 +245,7 @@ public class ArticleTextExtractor {
      * @return a set of all important nodes
      */
     private static Collection<Element> getNodes(Document doc) {
-        Collection<Element> nodes = new HashSet<Element>(64);
+        Collection<Element> nodes = new HashSet<>(64);
         for (Element el : doc.select("body").select("*")) {
             if (NODES.matcher(el.tagName()).matches()) {
                 nodes.add(el);

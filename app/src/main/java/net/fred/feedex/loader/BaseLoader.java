@@ -30,7 +30,7 @@ import android.content.Context;
 public abstract class BaseLoader<D> extends AsyncTaskLoader<D> {
     private D mData;
 
-    public BaseLoader(Context context) {
+    protected BaseLoader(Context context) {
         super(context);
     }
 

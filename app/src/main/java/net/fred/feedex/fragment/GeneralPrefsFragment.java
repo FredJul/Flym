@@ -117,7 +117,7 @@ public class GeneralPrefsFragment extends PreferenceFragment {
     private void setRingtoneSummary() {
         Preference ringtone_preference = findPreference(PrefUtils.NOTIFICATIONS_RINGTONE);
         Uri ringtoneUri = Uri.parse(PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, ""));
-        if (ringtoneUri == null || TextUtils.isEmpty(ringtoneUri.toString())) {
+        if (TextUtils.isEmpty(ringtoneUri.toString())) {
             ringtone_preference.setSummary(R.string.settings_notifications_ringtone_none);
         } else {
             Ringtone ringtone = RingtoneManager.getRingtone(MainApplication.getContext(), ringtoneUri);

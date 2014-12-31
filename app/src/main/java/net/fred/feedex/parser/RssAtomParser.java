@@ -129,8 +129,8 @@ public class RssAtomParser extends DefaultHandler {
     private final String mFeedBaseUrl;
     private final Date mKeepDateBorder;
     private final FeedFilters mFilters;
-    private final ArrayList<ContentProviderOperation> mInserts = new ArrayList<ContentProviderOperation>();
-    private final ArrayList<ArrayList<String>> mEntriesImages = new ArrayList<ArrayList<String>>();
+    private final ArrayList<ContentProviderOperation> mInserts = new ArrayList<>();
+    private final ArrayList<ArrayList<String>> mEntriesImages = new ArrayList<>();
     private long mNewRealLastUpdate;
     private boolean mEntryTagEntered = false;
     private boolean mTitleTagEntered = false;
@@ -627,7 +627,7 @@ public class RssAtomParser extends DefaultHandler {
 
     private class FeedFilters {
 
-        private final ArrayList<Rule> mFilters = new ArrayList<Rule>();
+        private final ArrayList<Rule> mFilters = new ArrayList<>();
 
         public FeedFilters(String feedId) {
             ContentResolver cr = MainApplication.getContext().getContentResolver();

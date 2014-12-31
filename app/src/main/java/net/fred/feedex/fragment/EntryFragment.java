@@ -554,7 +554,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
 
     private class EntryPagerAdapter extends PagerAdapter {
 
-        private final SparseArray<EntryView> mEntryViews = new SparseArray<EntryView>();
+        private final SparseArray<EntryView> mEntryViews = new SparseArray<>();
 
         public EntryPagerAdapter() {
         }

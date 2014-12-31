@@ -64,7 +64,7 @@ public class HtmlUtils {
     }
 
     public static ArrayList<String> getImageURLs(String content) {
-        ArrayList<String> images = new ArrayList<String>();
+        ArrayList<String> images = new ArrayList<>();
 
         if (!TextUtils.isEmpty(content)) {
             Matcher matcher = IMG_PATTERN.matcher(content);
@@ -81,7 +81,7 @@ public class HtmlUtils {
 
         if (!TextUtils.isEmpty(content)) {
             boolean needDownloadPictures = NetworkUtils.needDownloadPictures();
-            final ArrayList<String> imagesToDl = new ArrayList<String>();
+            final ArrayList<String> imagesToDl = new ArrayList<>();
 
             Matcher matcher = IMG_PATTERN.matcher(content);
             while (matcher.find()) {

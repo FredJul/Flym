@@ -51,7 +51,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
@@ -132,17 +131,6 @@ public class EditFeedsListFragment extends ListFragment {
                                         @Override
                                         public void run() {
                                             ContentResolver cr = getActivity().getContentResolver();
-
-                                            // First we got the groupId (it will be deleted after)
-                                            Cursor feedCursor = cr.query(FeedColumns.CONTENT_URI(feedId), FeedColumns.PROJECTION_GROUP_ID, null, null,
-                                                    null);
-                                            String groupId = null;
-                                            if (feedCursor.moveToFirst()) {
-                                                groupId = feedCursor.getString(0);
-                                            }
-                                            feedCursor.close();
-
-                                            // Now we delete the feed
                                             cr.delete(FeedColumns.CONTENT_URI(feedId), null, null);
                                         }
                                     }.start();
@@ -301,7 +289,7 @@ public class EditFeedsListFragment extends ListFragment {
                     } else { // This is a feed
                         actionMode = activity.startSupportActionMode(mFeedActionModeCallback);
                     }
-                    actionMode.setTag(new Pair<Long, String>(feedId, title));
+                    actionMode.setTag(new Pair<>(feedId, title));
 
                     mListView.setItemChecked(position, true);
                 }

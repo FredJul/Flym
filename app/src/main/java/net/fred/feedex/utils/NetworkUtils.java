@@ -183,13 +183,15 @@ public class NetworkUtils {
             byte[] iconBytes = getBytes(iconURLConnection.getInputStream());
             if (iconBytes != null && iconBytes.length > 0) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
-                if (bitmap != null && bitmap.getWidth() != 0 && bitmap.getHeight() != 0) {
-                    ContentValues values = new ContentValues();
-                    values.put(FeedData.FeedColumns.ICON, iconBytes);
-                    context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
-                    success = true;
+                if (bitmap != null) {
+                    if (bitmap.getWidth() != 0 && bitmap.getHeight() != 0) {
+                        ContentValues values = new ContentValues();
+                        values.put(FeedData.FeedColumns.ICON, iconBytes);
+                        context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+                        success = true;
+                    }
+                    bitmap.recycle();
                 }
-                bitmap.recycle();
             }
         } catch (Throwable ignored) {
         } finally {

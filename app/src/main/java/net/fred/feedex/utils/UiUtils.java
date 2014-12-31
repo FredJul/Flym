@@ -38,7 +38,7 @@ import net.fred.feedex.R;
 
 public class UiUtils {
 
-    static private final LongSparseArray<Bitmap> FAVICON_CACHE = new LongSparseArray<Bitmap>();
+    static private final LongSparseArray<Bitmap> FAVICON_CACHE = new LongSparseArray<>();
 
     static public void setPreferenceTheme(Activity a) {
         if (!PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {

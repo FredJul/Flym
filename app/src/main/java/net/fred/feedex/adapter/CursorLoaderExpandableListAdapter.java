@@ -61,7 +61,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            mChildrenCursors.put(loader.getId() - 1, new Pair<Cursor, Boolean>(data, false));
+            mChildrenCursors.put(loader.getId() - 1, new Pair<>(data, false));
             notifyDataSetChanged();
         }
 
@@ -80,7 +80,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
     /**
      * The map of a group position to the group's children cursor
      */
-    private final SparseArray<Pair<Cursor, Boolean>> mChildrenCursors = new SparseArray<Pair<Cursor, Boolean>>();
+    private final SparseArray<Pair<Cursor, Boolean>> mChildrenCursors = new SparseArray<>();
     private Cursor mGroupCursor;
     private final LoaderManager.LoaderCallbacks<Cursor> mGroupLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
@@ -150,7 +150,7 @@ public abstract class CursorLoaderExpandableListAdapter extends BaseExpandableLi
         int key;
         for (int i = 0; i < mChildrenCursors.size(); i++) {
             key = mChildrenCursors.keyAt(i);
-            mChildrenCursors.put(key, new Pair<Cursor, Boolean>(mChildrenCursors.get(key).first, true));
+            mChildrenCursors.put(key, new Pair<>(mChildrenCursors.get(key).first, true));
         }
     }
 

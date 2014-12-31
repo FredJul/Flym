@@ -366,7 +366,7 @@ public class SwipeRefreshLayout extends ViewGroup {
         if (isEnabled() && !mReturningToStart && !canChildScrollUp()) {
             handled = onTouchEvent(ev);
         }
-        return !handled ? super.onInterceptTouchEvent(ev) : handled;
+        return !handled ? super.onInterceptTouchEvent(ev) : true;
     }
 
     @Override

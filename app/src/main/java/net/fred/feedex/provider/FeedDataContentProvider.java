@@ -381,6 +381,10 @@ public class FeedDataContentProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        if (uri == null || values == null) {
+            throw new IllegalArgumentException("Illegal update. Uri=" + uri + "; values=" + values);
+        }
+
         int matchCode = URI_MATCHER.match(uri);
 
         String table;
@@ -396,7 +400,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 long feedId = Long.parseLong(uri.getPathSegments().get(1));
                 where.append(FeedColumns._ID).append('=').append(feedId);
 
-                if (values != null && values.containsKey(FeedColumns.PRIORITY)) {
+                if (values.containsKey(FeedColumns.PRIORITY)) {
                     Cursor priorityCursor = database.query(FeedColumns.TABLE_NAME, new String[]{FeedColumns.PRIORITY, FeedColumns.GROUP_ID},
                             FeedColumns._ID + "=" + feedId, null, null, null, null);
                     if (priorityCursor.moveToNext()) {

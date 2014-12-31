@@ -557,7 +557,7 @@ class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, St
                 String jsonStr = new String(NetworkUtils.getBytes(conn.getInputStream()));
 
                 // Parse results
-                final ArrayList<HashMap<String, String>> results = new ArrayList<HashMap<String, String>>();
+                final ArrayList<HashMap<String, String>> results = new ArrayList<>();
                 JSONObject response = new JSONObject(jsonStr).getJSONObject("responseData");
                 JSONArray entries = response.getJSONArray("entries");
                 for (int i = 0; i < entries.length(); i++) {
@@ -565,7 +565,7 @@ class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, St
                         JSONObject entry = (JSONObject) entries.get(i);
                         String url = entry.get(EditFeedActivity.FEED_SEARCH_URL).toString();
                         if (!url.isEmpty()) {
-                            HashMap<String, String> map = new HashMap<String, String>();
+                            HashMap<String, String> map = new HashMap<>();
                             map.put(EditFeedActivity.FEED_SEARCH_TITLE, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_TITLE).toString())
                                     .toString());
                             map.put(EditFeedActivity.FEED_SEARCH_URL, url);

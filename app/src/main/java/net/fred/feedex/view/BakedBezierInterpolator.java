@@ -54,7 +54,7 @@ final class BakedBezierInterpolator implements Interpolator {
         super();
     }
 
-    public final static BakedBezierInterpolator getInstance() {
+    public static BakedBezierInterpolator getInstance() {
         return INSTANCE;
     }
 

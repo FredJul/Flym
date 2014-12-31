@@ -260,7 +260,7 @@ public class FetcherService extends IntentService {
         Cursor cursor = cr.query(TaskColumns.CONTENT_URI, new String[]{TaskColumns._ID, TaskColumns.ENTRY_ID, TaskColumns.NUMBER_ATTEMPT},
                 TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
 
-        ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
+        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
 
         while (cursor.moveToNext()) {
             long taskId = cursor.getLong(0);
@@ -349,7 +349,7 @@ public class FetcherService extends IntentService {
         Cursor cursor = cr.query(TaskColumns.CONTENT_URI, new String[]{TaskColumns._ID, TaskColumns.ENTRY_ID, TaskColumns.IMG_URL_TO_DL,
                 TaskColumns.NUMBER_ATTEMPT}, TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NOT_NULL, null, null);
 
-        ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
+        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
 
         while (cursor.moveToNext()) {
             long taskId = cursor.getLong(0);
@@ -408,7 +408,7 @@ public class FetcherService extends IntentService {
             }
         });
 
-        CompletionService<Integer> completionService = new ExecutorCompletionService<Integer>(executor);
+        CompletionService<Integer> completionService = new ExecutorCompletionService<>(executor);
         while (cursor.moveToNext()) {
             final String feedId = cursor.getString(0);
             completionService.submit(new Callable<Integer>() {
@@ -547,7 +547,7 @@ public class FetcherService extends IntentService {
                         connection.disconnect();
                         connection = NetworkUtils.setupConnection(connection.getURL());
 
-                        int start = xmlDescription != null ? xmlDescription.indexOf(ENCODING) : -1;
+                        int start = xmlDescription.indexOf(ENCODING);
 
                         if (start > -1) {
                             try {
@@ -631,7 +631,7 @@ public class FetcherService extends IntentService {
 
                 connection.disconnect();
             } catch (FileNotFoundException e) {
-                if (handler == null || (handler != null && !handler.isDone() && !handler.isCancelled())) {
+                if (handler == null || (!handler.isDone() && !handler.isCancelled())) {
                     ContentValues values = new ContentValues();
 
                     // resets the fetchmode to determine it again later
@@ -641,7 +641,7 @@ public class FetcherService extends IntentService {
                     cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
                 }
             } catch (Throwable e) {
-                if (handler == null || (handler != null && !handler.isDone() && !handler.isCancelled())) {
+                if (handler == null || (!handler.isDone() && !handler.isCancelled())) {
                     ContentValues values = new ContentValues();
 
                     // resets the fetchmode to determine it again later
