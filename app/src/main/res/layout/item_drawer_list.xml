@@ -6,7 +6,7 @@
 
     <!-- icon -->
     <ImageView
-        android:id="@+id/icon"
+        android:id="@android:id/icon"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_centerVertical="true"
@@ -20,7 +20,7 @@
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:layout_toLeftOf="@+id/unread_count"
-        android:layout_toRightOf="@+id/icon"
+        android:layout_toRightOf="@android:id/icon"
         android:gravity="center_vertical"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:orientation="vertical">
