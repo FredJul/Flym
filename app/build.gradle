@@ -36,10 +36,17 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url 'http://dl.bintray.com/amulyakhare/maven'
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:+'
     compile 'com.melnykov:floatingactionbutton:+'
     compile 'org.jsoup:jsoup:+'
     compile 'com.squareup.picasso:picasso:+'
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:+'
 }

@@ -57,6 +57,8 @@ import android.widget.ImageView;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.squareup.picasso.Picasso;
 
 import net.fred.feedex.Constants;
@@ -65,6 +67,7 @@ import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
+import net.fred.feedex.utils.CircleTransform;
 import net.fred.feedex.utils.StringUtils;
 import net.fred.feedex.utils.UiUtils;
 
@@ -72,6 +75,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     private final Uri mUri;
     private final boolean mShowFeedInfo;
+    private final CircleTransform mCircleTransform = new CircleTransform();
     private int mTitlePos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mFeedIdPos, mFeedIconPos, mFeedNamePos;
 
     public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo) {
@@ -95,17 +99,20 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
 
+        String titleText = cursor.getString(mTitlePos);
+        holder.titleTextView.setText(titleText);
+
         String mainImgUrl = cursor.getString(mMainImgPos);
+
+        ColorGenerator generator = ColorGenerator.DEFAULT;
+        int color = generator.getColor(titleText);
+        TextDrawable letterDrawable = TextDrawable.builder().buildRound(titleText.substring(0, 1), color);
         if (mainImgUrl != null) {
-            holder.mainImgView.setVisibility(View.VISIBLE);
-            Picasso.with(context).load(mainImgUrl).into(holder.mainImgView);
+            Picasso.with(context).load(mainImgUrl).transform(mCircleTransform).placeholder(letterDrawable).error(letterDrawable).into(holder.mainImgView);
         } else {
             Picasso.with(context).cancelRequest(holder.mainImgView);
-            holder.mainImgView.setImageDrawable(null);
-            holder.mainImgView.setVisibility(View.GONE);
+            holder.mainImgView.setImageDrawable(letterDrawable);
         }
-
-        holder.titleTextView.setText(cursor.getString(mTitlePos));
 
         holder.isFavorite = cursor.getInt(mFavoritePos) == 1;
 
