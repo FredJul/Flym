@@ -90,7 +90,7 @@ public class DrawerAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.item_drawer_list, parent, false);
 
             ViewHolder holder = new ViewHolder();
-            holder.iconView = (ImageView) convertView.findViewById(R.id.icon);
+            holder.iconView = (ImageView) convertView.findViewById(android.R.id.icon);
             holder.titleTxt = (TextView) convertView.findViewById(android.R.id.text1);
             holder.stateTxt = (TextView) convertView.findViewById(android.R.id.text2);
             holder.unreadTxt = (TextView) convertView.findViewById(R.id.unread_count);

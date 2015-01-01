@@ -84,7 +84,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
-        if (view.getTag() == null) {
+        if (view.getTag(R.id.holder) == null) {
             ViewHolder holder = new ViewHolder();
             holder.titleTextView = (TextView) view.findViewById(android.R.id.text1);
             holder.dateTextView = (TextView) view.findViewById(android.R.id.text2);
@@ -145,7 +145,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     }
 
     public void toggleReadState(final long id, View view) {
-        final ViewHolder holder = (ViewHolder) view.getTag();
+        final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
 
         if (holder != null) { // should not happen, but I had a crash with this on PlayStore...
             holder.isRead = !holder.isRead;
@@ -170,7 +170,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     }
 
     public void toggleFavoriteState(final long id, View view) {
-        final ViewHolder holder = (ViewHolder) view.getTag();
+        final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
 
         if (holder != null) { // should not happen, but I had a crash with this on PlayStore...
             holder.isFavorite = !holder.isFavorite;
