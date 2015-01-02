@@ -265,7 +265,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             case URI_ENTRIES_FOR_FEED: {
-                queryBuilder.setTables(EntryColumns.TABLE_NAME);
+                queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
                 queryBuilder.appendWhere(new StringBuilder(EntryColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1)));
                 break;
             }
