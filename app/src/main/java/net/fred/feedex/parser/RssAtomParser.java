@@ -377,7 +377,7 @@ public class RssAtomParser extends DefaultHandler {
                         ArrayList<String> urls = HtmlUtils.getImageURLs(improvedContent);
                         if (!urls.isEmpty()) {
                             mEntriesImages.add(urls);
-                            mainImageUrl = urls.get(0);
+                            mainImageUrl = HtmlUtils.getMainImageURL(urls);
                         }
                     } else {
                         mainImageUrl = HtmlUtils.getMainImageURL(improvedContent);

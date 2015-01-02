@@ -326,7 +326,7 @@ public class FetcherService extends IntentService {
 
                             String mainImgUrl;
                             if (imgUrlsToDownload != null) {
-                                mainImgUrl = imgUrlsToDownload.isEmpty() ? null : imgUrlsToDownload.get(0);
+                                mainImgUrl = HtmlUtils.getMainImageURL(imgUrlsToDownload);
                             } else {
                                 mainImgUrl = HtmlUtils.getMainImageURL(mobilizedHtml);
                             }

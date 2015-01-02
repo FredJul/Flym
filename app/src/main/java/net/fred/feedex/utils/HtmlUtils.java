@@ -63,18 +63,6 @@ public class HtmlUtils {
         return content;
     }
 
-    public static String getMainImageURL(String content) {
-        if (!TextUtils.isEmpty(content)) {
-            Matcher matcher = IMG_PATTERN.matcher(content);
-
-            while (matcher.find()) {
-                return matcher.group(1).replace(" ", URL_SPACE);
-            }
-        }
-
-        return null;
-    }
-
     public static ArrayList<String> getImageURLs(String content) {
         ArrayList<String> images = new ArrayList<>();
 
@@ -121,5 +109,38 @@ public class HtmlUtils {
         }
 
         return content;
+    }
+
+    public static String getMainImageURL(String content) {
+        if (!TextUtils.isEmpty(content)) {
+            Matcher matcher = IMG_PATTERN.matcher(content);
+
+            while (matcher.find()) {
+                String imgUrl = matcher.group(1).replace(" ", URL_SPACE);
+                if (isCorrectImage(imgUrl)) {
+                    return imgUrl;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static String getMainImageURL(ArrayList<String> imgUrls) {
+        for (String imgUrl : imgUrls) {
+            if (isCorrectImage(imgUrl)) {
+                return imgUrl;
+            }
+        }
+
+        return null;
+    }
+
+    private static boolean isCorrectImage(String imgUrl) {
+        if (!imgUrl.endsWith(".gif") && !imgUrl.endsWith(".GIF") && !imgUrl.endsWith(".img") && !imgUrl.endsWith(".IMG")) {
+            return true;
+        }
+
+        return false;
     }
 }
