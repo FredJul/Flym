@@ -64,9 +64,9 @@ public class NetworkUtils {
     }};
 
     public static String getDownloadedOrDistantImageUrl(long entryId, String imgUrl) {
-        String dlImgPath = NetworkUtils.getDownloadedImagePath(entryId, imgUrl);
-        if (new File(dlImgPath).exists()) {
-            return dlImgPath;
+        File dlImgFile = new File(NetworkUtils.getDownloadedImagePath(entryId, imgUrl));
+        if (dlImgFile.exists()) {
+            return Uri.fromFile(dlImgFile).toString();
         } else {
             return imgUrl;
         }
