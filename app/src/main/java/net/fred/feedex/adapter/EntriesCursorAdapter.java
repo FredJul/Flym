@@ -52,6 +52,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ResourceCursorAdapter;
@@ -68,6 +69,7 @@ import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.utils.CircleTransform;
+import net.fred.feedex.utils.NetworkUtils;
 import net.fred.feedex.utils.StringUtils;
 import net.fred.feedex.utils.UiUtils;
 
@@ -76,7 +78,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     private final Uri mUri;
     private final boolean mShowFeedInfo;
     private final CircleTransform mCircleTransform = new CircleTransform();
-    private int mTitlePos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mFeedIdPos, mFeedIconPos, mFeedNamePos;
+    private int mIdPos, mTitlePos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mFeedIdPos, mFeedIconPos, mFeedNamePos;
 
     public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo) {
         super(context, R.layout.item_entry_list, cursor, 0);
@@ -105,6 +107,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         String feedName = cursor.getString(mFeedNamePos);
 
         String mainImgUrl = cursor.getString(mMainImgPos);
+        mainImgUrl = TextUtils.isEmpty(mainImgUrl) ? null : NetworkUtils.getDownloadedOrDistantImageUrl(cursor.getLong(mIdPos), mainImgUrl);
 
         ColorGenerator generator = ColorGenerator.DEFAULT;
         int color = generator.getColor(feedName);
@@ -239,6 +242,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     private void reinit(Cursor cursor) {
         if (cursor != null && cursor.getCount() > 0) {
+            mIdPos = cursor.getColumnIndex(EntryColumns._ID);
             mTitlePos = cursor.getColumnIndex(EntryColumns.TITLE);
             mMainImgPos = cursor.getColumnIndex(EntryColumns.IMAGE_URL);
             mDatePos = cursor.getColumnIndex(EntryColumns.DATE);

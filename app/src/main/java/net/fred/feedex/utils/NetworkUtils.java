@@ -63,11 +63,20 @@ public class NetworkUtils {
         CookieHandler.setDefault(this);
     }};
 
+    public static String getDownloadedOrDistantImageUrl(long entryId, String imgUrl) {
+        String dlImgPath = NetworkUtils.getDownloadedImagePath(entryId, imgUrl);
+        if (new File(dlImgPath).exists()) {
+            return dlImgPath;
+        } else {
+            return imgUrl;
+        }
+    }
+
     public static String getDownloadedImagePath(long entryId, String imgUrl) {
         return IMAGE_FOLDER + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
     }
 
-    public static String getTempDownloadedImagePath(long entryId, String imgUrl) {
+    private static String getTempDownloadedImagePath(long entryId, String imgUrl) {
         return IMAGE_FOLDER + TEMP_PREFIX + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
     }
 
