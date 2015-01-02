@@ -111,7 +111,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         ColorGenerator generator = ColorGenerator.DEFAULT;
         int color = generator.getColor(feedName);
-        TextDrawable letterDrawable = TextDrawable.builder().buildRound(titleText.substring(0, 1).toUpperCase(), color);
+        TextDrawable letterDrawable = TextDrawable.builder().buildRound(feedName.substring(0, 1).toUpperCase(), color);
         if (mainImgUrl != null) {
             Picasso.with(context).load(mainImgUrl).transform(mCircleTransform).placeholder(letterDrawable).error(letterDrawable).into(holder.mainImgView);
         } else {
