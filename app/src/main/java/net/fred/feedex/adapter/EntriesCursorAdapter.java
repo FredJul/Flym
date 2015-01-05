@@ -104,26 +104,27 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         String titleText = cursor.getString(mTitlePos);
         holder.titleTextView.setText(titleText);
 
+        final long feedId = cursor.getLong(mFeedIdPos);
         String feedName = cursor.getString(mFeedNamePos);
 
         String mainImgUrl = cursor.getString(mMainImgPos);
         mainImgUrl = TextUtils.isEmpty(mainImgUrl) ? null : NetworkUtils.getDownloadedOrDistantImageUrl(cursor.getLong(mIdPos), mainImgUrl);
 
         ColorGenerator generator = ColorGenerator.DEFAULT;
-        int color = generator.getColor(feedName);
-        TextDrawable letterDrawable = TextDrawable.builder().buildRound(feedName.substring(0, 1).toUpperCase(), color);
+        int color = generator.getColor(Long.valueOf(feedId)); // The color is specific to the feedId (which shouldn't change)
+        TextDrawable letterDrawable = TextDrawable.builder().buildRound((feedName != null ? feedName.substring(0, 1).toUpperCase() : ""), color);
         if (mainImgUrl != null) {
             Picasso.with(context).load(mainImgUrl).transform(mCircleTransform).placeholder(letterDrawable).error(letterDrawable).into(holder.mainImgView);
         } else {
             Picasso.with(context).cancelRequest(holder.mainImgView);
             holder.mainImgView.setImageDrawable(letterDrawable);
         }
+
         holder.isFavorite = cursor.getInt(mFavoritePos) == 1;
 
         holder.starImgView.setVisibility(holder.isFavorite ? View.VISIBLE : View.INVISIBLE);
 
         if (mShowFeedInfo && mFeedIconPos > -1) {
-            final long feedId = cursor.getLong(mFeedIdPos);
             Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, cursor, mFeedIconPos);
 
             if (bitmap != null) {
@@ -249,10 +250,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
             mFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
             mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
-            if (mShowFeedInfo) {
-                mFeedIdPos = cursor.getColumnIndex(EntryColumns.FEED_ID);
+            mFeedIdPos = cursor.getColumnIndex(EntryColumns.FEED_ID);
                 mFeedIconPos = cursor.getColumnIndex(FeedColumns.ICON);
-            }
         }
     }
 
