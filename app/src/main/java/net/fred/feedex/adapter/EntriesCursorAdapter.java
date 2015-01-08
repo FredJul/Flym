@@ -124,16 +124,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         holder.starImgView.setVisibility(holder.isFavorite ? View.VISIBLE : View.INVISIBLE);
 
-        if (mShowFeedInfo && mFeedIconPos > -1) {
-            Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, cursor, mFeedIconPos);
-
-            if (bitmap != null) {
-                holder.dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(context.getResources(), bitmap), null, null, null);
-            } else {
-                holder.dateTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            }
-        }
-
         if (mShowFeedInfo && mFeedNamePos > -1) {
             if (feedName != null) {
                 holder.dateTextView.setText(new StringBuilder(feedName).append(Constants.COMMA_SPACE).append(StringUtils.getDateTimeString(cursor.getLong(mDatePos))));
