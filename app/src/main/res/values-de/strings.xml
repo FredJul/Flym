@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
  Copyright (c) 2010-2012 Stefan Handschuh
       modified 2014-2014 Matthias Dill
 
@@ -124,7 +125,7 @@
     <string name="file">Datei</string>
     <string name="download_and_save">Herunterladen und speichern</string>
     <string name="open_link">Link öffnen</string>
-    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+    <string name="tip_sentence">Tipp: Nach links wischen um Artikel als gelesen zu markieren und nach rechts wischen um Artikel zu favorisieren</string>
 
     <!-- WIDGET -->
     <string name="red">Rot</string>
