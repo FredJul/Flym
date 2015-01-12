@@ -49,9 +49,8 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -71,7 +70,6 @@ import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.utils.CircleTransform;
 import net.fred.feedex.utils.NetworkUtils;
 import net.fred.feedex.utils.StringUtils;
-import net.fred.feedex.utils.UiUtils;
 
 public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
@@ -126,7 +124,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         if (mShowFeedInfo && mFeedNamePos > -1) {
             if (feedName != null) {
-                holder.dateTextView.setText(new StringBuilder(feedName).append(Constants.COMMA_SPACE).append(StringUtils.getDateTimeString(cursor.getLong(mDatePos))));
+                holder.dateTextView.setText(Html.fromHtml(new StringBuilder("<font color='#247ab0'>").append(feedName).append("</font>").append(Constants.COMMA_SPACE).append(StringUtils.getDateTimeString(cursor.getLong(mDatePos))).toString()));
             } else {
                 holder.dateTextView.setText(StringUtils.getDateTimeString(cursor.getLong(mDatePos)));
             }
