@@ -46,13 +46,11 @@ public class DrawerAdapter extends BaseAdapter {
     private static final int POS_URL = 1;
     private static final int POS_NAME = 2;
     private static final int POS_IS_GROUP = 3;
-    private static final int POS_GROUP_ID = 4;
-    private static final int POS_ICON = 5;
-    private static final int POS_LAST_UPDATE = 6;
-    private static final int POS_ERROR = 7;
-    private static final int POS_UNREAD = 8;
+    private static final int POS_ICON = 4;
+    private static final int POS_LAST_UPDATE = 5;
+    private static final int POS_ERROR = 6;
+    private static final int POS_UNREAD = 7;
 
-    private static final int ITEM_PADDING = UiUtils.dpToPixel(20);
     private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
 
@@ -165,10 +163,6 @@ public class DrawerAdapter extends BaseAdapter {
                 if (unread != 0) {
                     holder.unreadTxt.setText(String.valueOf(unread));
                 }
-            }
-
-            if (!mFeedsCursor.isNull(POS_GROUP_ID)) { // First level
-                convertView.setPadding(ITEM_PADDING, 0, 0, 0);
             }
         }
 
