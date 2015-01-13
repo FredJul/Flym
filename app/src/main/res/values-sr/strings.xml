@@ -23,6 +23,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="app_name">Флим</string>
     <string name="about_flym">О Флиму</string>
     <string name="welcome_title">Добро дошли у Флим. Желите ли да додате довод?</string>
     <string name="never">никад</string>
@@ -141,7 +142,7 @@
     <string name="settings_notifications_enabled">Омогући</string>
     <string name="settings_notifications_enabled_description">Омогући обавештења о новим уносима</string>
     <string name="settings_notifications_ringtone">Звук</string>
-    <string name="settings_notifications_ringtone_none">None</string>
+    <string name="settings_notifications_ringtone_none">Без звука</string>
     <string name="settings_notifications_vibrate">Вибрирај</string>
     <string name="settings_notifications_vibrate_description">Омогући вибрацију по новим уносима</string>
     <string name="settings_notifications_light">Светло</string>
