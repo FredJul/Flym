@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/item_drawer_list_selector">
+    android:background="?android:attr/activatedBackgroundIndicator">
 
-    <!-- icon -->
+<!-- icon -->
     <ImageView
         android:id="@android:id/icon"
         android:layout_width="20dp"
