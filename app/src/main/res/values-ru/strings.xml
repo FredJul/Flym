@@ -191,7 +191,7 @@
     <string name="settings_proxy_type">Тип соединения</string>
 
     <plurals name="number_of_new_entries">
-        <item quantity="one">One new entry</item>
+        <item quantity="one">%d new entry</item>
         <item quantity="few">%d new entries</item>
         <item quantity="many">%d new entries</item>
         <item quantity="other">%d new entries</item>

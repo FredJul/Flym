@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.droidtitan.lintcleaner'
 
 android {
     compileSdkVersion 21

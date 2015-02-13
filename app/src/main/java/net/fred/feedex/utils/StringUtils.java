@@ -19,6 +19,7 @@
 
 package net.fred.feedex.utils;
 
+import android.annotation.TargetApi;
 import android.os.Build;
 
 import net.fred.feedex.MainApplication;
@@ -31,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class StringUtils {
 
     private static final DateFormat TIME_FORMAT = android.text.format.DateFormat.getTimeFormat(MainApplication.getContext());
