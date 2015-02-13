@@ -59,6 +59,7 @@ import android.os.Bundle;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -69,7 +70,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
 import android.widget.TabHost;
 import android.widget.Toast;
@@ -94,7 +94,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EditFeedActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-
     static final String FEED_SEARCH_TITLE = "title";
     static final String FEED_SEARCH_URL = "url";
     static final String FEED_SEARCH_DESC = "contentSnippet";
@@ -362,9 +361,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (mTabHost.getCurrentTab() == 0) {
             menu.findItem(R.id.menu_add_filter).setVisible(false);
-            menu.findItem(R.id.menu_search_feed).setVisible(true);
         } else {
-            menu.findItem(R.id.menu_search_feed).setVisible(false);
             menu.findItem(R.id.menu_add_filter).setVisible(true);
         }
 
@@ -407,95 +404,6 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                 }).show();
                 return true;
             }
-            case R.id.menu_search_feed: {
-                final View dialogView = getLayoutInflater().inflate(R.layout.dialog_search_feed, null);
-                final EditText searchText = (EditText) dialogView.findViewById(R.id.searchText);
-                if (!mUrlEditText.getText().toString().startsWith(Constants.HTTP_SCHEME) && !mUrlEditText.getText().toString().startsWith(Constants.HTTPS_SCHEME)) {
-                    searchText.setText(mUrlEditText.getText());
-                }
-                final RadioGroup radioGroup = (RadioGroup) dialogView.findViewById(R.id.radioGroup);
-
-                new AlertDialog.Builder(EditFeedActivity.this) //
-                        .setIcon(R.drawable.action_search) //
-                        .setTitle(R.string.feed_search) //
-                        .setView(dialogView) //
-                        .setPositiveButton(android.R.string.search_go, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                if (searchText.getText().length() > 0) {
-                                    String tmp = searchText.getText().toString();
-                                    try {
-                                        tmp = URLEncoder.encode(searchText.getText().toString(), Constants.UTF8);
-                                    } catch (UnsupportedEncodingException ignored) {
-                                    }
-                                    final String text = tmp;
-
-                                    switch (radioGroup.getCheckedRadioButtonId()) {
-                                        case R.id.byWebSearch:
-                                            final ProgressDialog pd = new ProgressDialog(EditFeedActivity.this);
-                                            pd.setMessage(getString(R.string.loading));
-                                            pd.setCancelable(true);
-                                            pd.setIndeterminate(true);
-                                            pd.show();
-
-                                            getLoaderManager().restartLoader(1, null, new LoaderManager.LoaderCallbacks<ArrayList<HashMap<String, String>>>() {
-
-                                                @Override
-                                                public Loader<ArrayList<HashMap<String, String>>> onCreateLoader(int id, Bundle args) {
-                                                    return new GetFeedSearchResultsLoader(EditFeedActivity.this, text);
-                                                }
-
-                                                @Override
-                                                public void onLoadFinished(Loader<ArrayList<HashMap<String, String>>> loader,
-                                                                           final ArrayList<HashMap<String, String>> data) {
-                                                    pd.cancel();
-
-                                                    if (data == null) {
-                                                        Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
-                                                    } else if (data.isEmpty()) {
-                                                        Toast.makeText(EditFeedActivity.this, R.string.no_result, Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        AlertDialog.Builder builder = new AlertDialog.Builder(EditFeedActivity.this);
-                                                        builder.setTitle(R.string.feed_search);
-
-                                                        // create the grid item mapping
-                                                        String[] from = new String[]{FEED_SEARCH_TITLE, FEED_SEARCH_DESC};
-                                                        int[] to = new int[]{android.R.id.text1, android.R.id.text2};
-
-                                                        // fill in the grid_item layout
-                                                        SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.item_search_result, from,
-                                                                to);
-                                                        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                mNameEditText.setText(data.get(which).get(FEED_SEARCH_TITLE));
-                                                                mUrlEditText.setText(data.get(which).get(FEED_SEARCH_URL));
-                                                            }
-                                                        });
-                                                        builder.show();
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onLoaderReset(Loader<ArrayList<HashMap<String, String>>> loader) {
-                                                }
-                                            });
-                                            break;
-
-                                        case R.id.byTopic:
-                                            mUrlEditText.setText("http://www.faroo.com/api?q=" + text + "&start=1&length=10&l=en&src=news&f=rss");
-                                            break;
-
-                                        case R.id.byYoutube:
-                                            mUrlEditText.setText("http://www.youtube.com/rss/user/" + text.replaceAll("\\+", "") + "/videos.rss");
-                                            break;
-                                    }
-                                }
-                            }
-                        }).setNegativeButton(android.R.string.cancel, null).show();
-                return true;
-            }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -504,10 +412,74 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     public void onClickOk(View view) {
         // only in insert mode
 
-        FeedDataContentProvider.addFeed(this, mUrlEditText.getText().toString(), mNameEditText.getText().toString(), mRetrieveFulltextCb.isChecked());
+        final String name = mNameEditText.getText().toString().trim();
+        final String urlOrSearch = mUrlEditText.getText().toString().trim();
+        if (urlOrSearch.isEmpty()) {
+            Toast.makeText(this, R.string.error_feed_error, Toast.LENGTH_SHORT).show();
+        }
 
-        setResult(RESULT_OK);
-        finish();
+        if (!urlOrSearch.contains(".") || urlOrSearch.contains(" ")) {
+            final ProgressDialog pd = new ProgressDialog(EditFeedActivity.this);
+            pd.setMessage(getString(R.string.loading));
+            pd.setCancelable(true);
+            pd.setIndeterminate(true);
+            pd.show();
+
+            getLoaderManager().restartLoader(1, null, new LoaderManager.LoaderCallbacks<ArrayList<HashMap<String, String>>>() {
+
+                @Override
+                public Loader<ArrayList<HashMap<String, String>>> onCreateLoader(int id, Bundle args) {
+                    String encodedSearchText = urlOrSearch;
+                    try {
+                        encodedSearchText = URLEncoder.encode(urlOrSearch, Constants.UTF8);
+                    } catch (UnsupportedEncodingException ignored) {
+                    }
+
+                    return new GetFeedSearchResultsLoader(EditFeedActivity.this, encodedSearchText);
+                }
+
+                @Override
+                public void onLoadFinished(Loader<ArrayList<HashMap<String, String>>> loader, final ArrayList<HashMap<String, String>> data) {
+                    pd.cancel();
+
+                    if (data == null) {
+                        Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+                    } else if (data.isEmpty()) {
+                        Toast.makeText(EditFeedActivity.this, R.string.no_result, Toast.LENGTH_SHORT).show();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(EditFeedActivity.this);
+                        builder.setTitle(R.string.feed_search);
+
+                        // create the grid item mapping
+                        String[] from = new String[]{FEED_SEARCH_TITLE, FEED_SEARCH_DESC};
+                        int[] to = new int[]{android.R.id.text1, android.R.id.text2};
+
+                        // fill in the grid_item layout
+                        SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.item_search_result, from,
+                                to);
+                        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                FeedDataContentProvider.addFeed(EditFeedActivity.this, data.get(which).get(FEED_SEARCH_URL), name.isEmpty() ? data.get(which).get(FEED_SEARCH_TITLE) : name, mRetrieveFulltextCb.isChecked());
+
+                                setResult(RESULT_OK);
+                                finish();
+                            }
+                        });
+                        builder.show();
+                    }
+                }
+
+                @Override
+                public void onLoaderReset(Loader<ArrayList<HashMap<String, String>>> loader) {
+                }
+            });
+        } else {
+            FeedDataContentProvider.addFeed(EditFeedActivity.this, urlOrSearch, name, mRetrieveFulltextCb.isChecked());
+
+            setResult(RESULT_OK);
+            finish();
+        }
     }
 
     public void onClickCancel(View view) {
@@ -537,7 +509,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
  * A custom Loader that loads feed search results from the google WS.
  */
 class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, String>>> {
-
+    private static final String TAG = GetFeedSearchResultsLoader.class.getSimpleName();
     private final String mSearchText;
 
     public GetFeedSearchResultsLoader(Context context, String searchText) {
@@ -582,6 +554,7 @@ class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, St
                 conn.disconnect();
             }
         } catch (Exception e) {
+            Log.e(TAG, "Error", e);
             return null;
         }
     }

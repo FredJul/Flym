@@ -68,8 +68,10 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.EditFeedActivity">
-            <intent-filter>
+        <activity
+            android:name=".activity.EditFeedActivity"
+            android:windowSoftInputMode="adjustResize">
+        <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.flym.feed" />

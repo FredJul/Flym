@@ -53,7 +53,7 @@
     <string name="menu_add_group">Add group</string>
     <string name="menu_import">Import from OPML</string>
     <string name="menu_export">Export to OPML</string>
-    <string name="error_feed_error">The feed address could not accessed.</string>
+    <string name="error_feed_error">The feed website is unreachable.</string>
     <string name="error_feed_process">The feed can not be processed.</string>
     <string name="error_feed_url_exists">The address already exists.</string>
     <string name="error_feed_import">The selected file could not be imported.</string>
