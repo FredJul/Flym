@@ -52,6 +52,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
@@ -78,6 +79,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RssAtomParser extends DefaultHandler {
+    private static final String TAG = RssAtomParser.class.getSimpleName();
 
     private static final String AND_SHARP = "&#";
     private static final String HTML_TEXT = "text/html";
@@ -130,7 +132,7 @@ public class RssAtomParser extends DefaultHandler {
     private final Date mKeepDateBorder;
     private final FeedFilters mFilters;
     private final ArrayList<ContentProviderOperation> mInserts = new ArrayList<>();
-    private final ArrayList<ArrayList<String>> mEntriesImages = new ArrayList<>();
+    private final ArrayList<ArrayList<String>> mInsertedEntriesImages = new ArrayList<>();
     private long mNewRealLastUpdate;
     private boolean mEntryTagEntered = false;
     private boolean mTitleTagEntered = false;
@@ -370,14 +372,14 @@ public class RssAtomParser extends DefaultHandler {
 
                 String improvedContent = null;
                 String mainImageUrl = null;
+                ArrayList<String> imagesUrls = null;
                 if (mDescription != null) {
                     // Improve the description
                     improvedContent = HtmlUtils.improveHtmlContent(mDescription.toString(), mFeedBaseUrl);
                     if (mFetchImages) {
-                        ArrayList<String> urls = HtmlUtils.getImageURLs(improvedContent);
-                        if (!urls.isEmpty()) {
-                            mEntriesImages.add(urls);
-                            mainImageUrl = HtmlUtils.getMainImageURL(urls);
+                        imagesUrls = HtmlUtils.getImageURLs(improvedContent);
+                        if (!imagesUrls.isEmpty()) {
+                            mainImageUrl = HtmlUtils.getMainImageURL(imagesUrls);
                         }
                     } else {
                         mainImageUrl = HtmlUtils.getMainImageURL(improvedContent);
@@ -447,6 +449,7 @@ public class RssAtomParser extends DefaultHandler {
                         values.put(EntryColumns.LINK, entryLinkString);
 
                         // We cannot update, we need to insert it
+                        mInsertedEntriesImages.add(imagesUrls);
                         mInserts.add(ContentProviderOperation.newInsert(mFeedEntriesUri).withValues(values).build());
 
                         mNewCount++;
@@ -606,7 +609,7 @@ public class RssAtomParser extends DefaultHandler {
 
                 if (mFetchImages) {
                     for (int i = 0; i < results.length; ++i) {
-                        ArrayList<String> images = mEntriesImages.get(i);
+                        ArrayList<String> images = mInsertedEntriesImages.get(i);
                         if (images != null) {
                             FetcherService.addImagesToDownload(results[i].uri.getLastPathSegment(), images);
                         }
@@ -622,7 +625,8 @@ public class RssAtomParser extends DefaultHandler {
                     FetcherService.addEntriesToMobilize(entriesId);
                 }
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            Log.e(TAG, "Error", e);
         }
 
         ContentValues values = new ContentValues();

@@ -481,7 +481,7 @@ public class FetcherService extends IntentService {
             int urlPosition = cursor.getColumnIndex(FeedColumns.URL);
             int idPosition = cursor.getColumnIndex(FeedColumns._ID);
             int titlePosition = cursor.getColumnIndex(FeedColumns.NAME);
-            int fetchmodePosition = cursor.getColumnIndex(FeedColumns.FETCH_MODE);
+            int fetchModePosition = cursor.getColumnIndex(FeedColumns.FETCH_MODE);
             int realLastUpdatePosition = cursor.getColumnIndex(FeedColumns.REAL_LAST_UPDATE);
             int iconPosition = cursor.getColumnIndex(FeedColumns.ICON);
             int retrieveFullscreenPosition = cursor.getColumnIndex(FeedColumns.RETRIEVE_FULLTEXT);
@@ -493,7 +493,7 @@ public class FetcherService extends IntentService {
                 String feedUrl = cursor.getString(urlPosition);
                 connection = NetworkUtils.setupConnection(feedUrl);
                 String contentType = connection.getContentType();
-                int fetchMode = cursor.getInt(fetchmodePosition);
+                int fetchMode = cursor.getInt(fetchModePosition);
 
                 handler = new RssAtomParser(new Date(cursor.getLong(realLastUpdatePosition)), keepDateBorderTime, id, cursor.getString(titlePosition), feedUrl,
                         cursor.getInt(retrieveFullscreenPosition) == 1);
@@ -618,23 +618,23 @@ public class FetcherService extends IntentService {
                         break;
                     }
                     case FETCHMODE_REENCODE: {
-                        ByteArrayOutputStream ouputStream = new ByteArrayOutputStream();
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                         InputStream inputStream = connection.getInputStream();
 
                         byte[] byteBuffer = new byte[4096];
 
                         int n;
                         while ((n = inputStream.read(byteBuffer)) > 0) {
-                            ouputStream.write(byteBuffer, 0, n);
+                            outputStream.write(byteBuffer, 0, n);
                         }
 
-                        String xmlText = ouputStream.toString();
+                        String xmlText = outputStream.toString();
 
                         int start = xmlText != null ? xmlText.indexOf(ENCODING) : -1;
 
                         if (start > -1) {
                             Xml.parse(
-                                    new StringReader(new String(ouputStream.toByteArray(),
+                                    new StringReader(new String(outputStream.toByteArray(),
                                             xmlText.substring(start + 10, xmlText.indexOf('"', start + 11)))), handler
                             );
                         } else {
@@ -646,13 +646,13 @@ public class FetcherService extends IntentService {
                                     int index2 = contentType.indexOf(';', index);
 
                                     try {
-                                        StringReader reader = new StringReader(new String(ouputStream.toByteArray(), index2 > -1 ? contentType.substring(
+                                        StringReader reader = new StringReader(new String(outputStream.toByteArray(), index2 > -1 ? contentType.substring(
                                                 index + 8, index2) : contentType.substring(index + 8)));
                                         Xml.parse(reader, handler);
                                     } catch (Exception ignored) {
                                     }
                                 } else {
-                                    StringReader reader = new StringReader(new String(ouputStream.toByteArray()));
+                                    StringReader reader = new StringReader(new String(outputStream.toByteArray()));
                                     Xml.parse(reader, handler);
                                 }
                             }
@@ -666,7 +666,7 @@ public class FetcherService extends IntentService {
                 if (handler == null || (!handler.isDone() && !handler.isCancelled())) {
                     ContentValues values = new ContentValues();
 
-                    // resets the fetchmode to determine it again later
+                    // resets the fetch mode to determine it again later
                     values.put(FeedColumns.FETCH_MODE, 0);
 
                     values.put(FeedColumns.ERROR, getString(R.string.error_feed_error));
@@ -676,7 +676,7 @@ public class FetcherService extends IntentService {
                 if (handler == null || (!handler.isDone() && !handler.isCancelled())) {
                     ContentValues values = new ContentValues();
 
-                    // resets the fetchmode to determine it again later
+                    // resets the fetch mode to determine it again later
                     values.put(FeedColumns.FETCH_MODE, 0);
 
                     values.put(FeedColumns.ERROR, e.getMessage() != null ? e.getMessage() : getString(R.string.error_feed_process));
