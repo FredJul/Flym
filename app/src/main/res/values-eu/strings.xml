@@ -79,9 +79,6 @@
     <string name="accept">ONARTU</string>
     <string name="reject">BAZTERTU</string>
     <string name="feed_search">Jario bilaketa</string>
-    <string name="feed_search_by_web_search">Bilatu jarioa gako hitzen bidez</string>
-    <string name="feed_search_by_topic">Sortu jarioa gai bidez (Faroo bidez)</string>
-    <string name="feed_search_by_youtube">Bilatu jarioa Youtubeko kanal izen bidez</string>
     <string name="select_file">Fitxategia hautatu (SD-erroa)</string>
     <string name="question_delete_feed">Benetan jario hau ezabatu nahi al duzu?</string>
 	<string name="question_delete_group">Benetan talde hau eta bere jario guztiak ezabatu nahi

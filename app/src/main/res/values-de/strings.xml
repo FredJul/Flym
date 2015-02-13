@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?><!--
  Copyright (c) 2010-2012 Stefan Handschuh
       modified 2014-2014 Matthias Dill
 
@@ -75,9 +75,6 @@
     <string name="accept">Annehmen</string>
     <string name="reject">Zurückweisen</string>
     <string name="feed_search">Feed-Suche</string>
-    <string name="feed_search_by_web_search">Finde einen Feed anhand von Stichpunkten</string>
-    <string name="feed_search_by_topic">Erstelle einen Feed nach Themen (via Faroo)</string>
-    <string name="feed_search_by_youtube">Finde einen Feed anhand des Youtube-Channel-Namens</string>
     <string name="select_file">Datei auswählen(SD-root)</string>
     <string name="question_delete_feed">Willst du diesen Feed wirklich löschen?</string>
     <string name="question_delete_group">Willst du diese Gruppe mit allen Feeds wirklich löschen?</string>

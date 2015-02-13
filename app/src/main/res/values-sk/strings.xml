@@ -76,9 +76,6 @@
     <string name="accept">POVOLIŤ</string>
     <string name="reject">VYRADIŤ</string>
     <string name="feed_search">Prehľadať zdroj</string>
-    <string name="feed_search_by_web_search">Nájsť zdroj podľa kľúčových slov</string>
-    <string name="feed_search_by_topic">Generovať zdroj podľa tématu (podľa Faroo)</string>
-    <string name="feed_search_by_youtube">Vyhľadať zdroj podľa mena Youtube kanálu</string>
     <string name="select_file">Vybrať súbor (SD-koreň)</string>
     <string name="question_delete_feed">Naozaj zmazať tento zdroj?</string>
     <string name="question_delete_group">Naozaj chcete zmazať túto skupinu a všetky jej zdroje?</string>

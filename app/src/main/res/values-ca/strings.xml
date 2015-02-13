@@ -78,9 +78,6 @@
     <string name="accept">ACCEPT</string>
     <string name="reject">REJECT</string>
     <string name="feed_search">Cerca canals</string>
-    <string name="feed_search_by_web_search">Cerca canals per paraula clau</string>
-    <string name="feed_search_by_topic">Genera canals per tema (via Faroo)</string>
-    <string name="feed_search_by_youtube">Troba un canal per canal de YouTube</string>
     <string name="select_file">Esculliu un fitxer (arrel de la targeta SD)</string>
     <string name="question_delete_feed">Voleu eliminar aquest canal?</string>
     <string name="question_delete_group">Voleu eliminar aquest grup i els seus canals?</string>

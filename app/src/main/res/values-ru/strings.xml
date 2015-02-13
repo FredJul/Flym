@@ -78,9 +78,6 @@
     <string name="accept">ACCEPT</string>
     <string name="reject">REJECT</string>
     <string name="feed_search">Поиск лент</string>
-    <string name="feed_search_by_web_search">Искать ленты по ключевым словам</string>
-    <string name="feed_search_by_topic">Создать ленту по заголовку (через Faroo)</string>
-    <string name="feed_search_by_youtube">Найти ленту по названию канала Youtube</string>
     <string name="select_file">Выбрать файл (корень SD-карты)</string>
     <string name="question_delete_feed">Вы действительно хотите удалить эту ленту?</string>
     <string name="question_delete_group">Вы действительно хотите удалить эту группу и все ее

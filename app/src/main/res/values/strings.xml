@@ -79,9 +79,6 @@
     <string name="accept">ACCEPT</string>
     <string name="reject">REJECT</string>
     <string name="feed_search">Feed search</string>
-    <string name="feed_search_by_web_search">Find feed by key words</string>
-    <string name="feed_search_by_topic">Generate feed by topic (via Faroo)</string>
-    <string name="feed_search_by_youtube">Find feed by Youtube channel name</string>
     <string name="select_file">Select file (SD-root)</string>
     <string name="question_delete_feed">Do you really want to delete this feed?</string>
     <string name="question_delete_group">Do you really want to delete this group and all of its

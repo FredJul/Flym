@@ -76,9 +76,6 @@
     <string name="accept">HYVÄKSY</string>
     <string name="reject">HYLKÄÄ</string>
     <string name="feed_search">Hae syötteitä</string>
-    <string name="feed_search_by_web_search">Hae syötteitä avainsanojen avulla</string>
-    <string name="feed_search_by_topic">Generoi syöte aiheen mukaan (FAROO-haun avulla)</string>
-    <string name="feed_search_by_youtube">Hae syöte Youtube-kanavan nimen avulla</string>
     <string name="select_file">Valitse tiedosto (SD-juuri)</string>
     <string name="question_delete_feed">Haluatko poistaa tämän syötteen?</string>
     <string name="question_delete_group">Haluatko poistaa tämän ryhmän ja kaikki siinä olevat syötteet?

@@ -77,9 +77,6 @@
     <string name="accept">ACCEPT</string>
     <string name="reject">REJECT</string>
     <string name="feed_search">Buscar fuentes</string>
-    <string name="feed_search_by_web_search">Buscar fuentes por palabra clave</string>
-    <string name="feed_search_by_topic">Buscar fuentes según género (con Faroo)</string>
-    <string name="feed_search_by_youtube">Buscar fuentes según canal de YouTube</string>
     <string name="select_file">Seleccionar archivo</string>
     <string name="question_delete_feed">¿Seguro que quiere eliminar esta fuente?</string>
     <string name="question_delete_group">¿Seguro que quiere eliminar este grupo de fuentes?</string>

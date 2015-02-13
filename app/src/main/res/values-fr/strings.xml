@@ -79,9 +79,6 @@
     <string name="accept">ACCEPT</string>
     <string name="reject">REJECT</string>
     <string name="feed_search">Recherche de flux</string>
-    <string name="feed_search_by_web_search">Recherche de flux par mot-clé</string>
-    <string name="feed_search_by_topic">Génère flux par sujet (via Faroo)</string>
-    <string name="feed_search_by_youtube">Recherche de flux par nom de chaîne Youtube</string>
     <string name="select_file">Sélectionner le fichier (racine SD)</string>
     <string name="question_delete_feed">Voulez-vous vraiment supprimer ce flux\u00A0?</string>
     <string name="question_delete_group">Voulez-vous vraiment supprimer ce groupe et tout ses

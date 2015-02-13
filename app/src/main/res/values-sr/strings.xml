@@ -75,9 +75,6 @@
     <string name="accept">ПРИХВАТИ</string>
     <string name="reject">ОДБИЈ</string>
     <string name="feed_search">Претрага довода</string>
-    <string name="feed_search_by_web_search">Нађи довод по кључним речима</string>
-    <string name="feed_search_by_topic">Генериши довод по теми (преко Faroo)</string>
-    <string name="feed_search_by_youtube">Нађи довод по имену Јутјуб канала</string>
     <string name="select_file">Изаберите фајл (корена фасцикла)</string>
     <string name="question_delete_feed">Желите ли заиста да обришете овај довод?</string>
     <string name="question_delete_group">Желите ли заиста да обришете ову групу и све њене доводе?</string>

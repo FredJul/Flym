@@ -78,9 +78,6 @@
     <string name="accept">ACCETTA</string>
     <string name="reject">BLOCCA</string>
     <string name="feed_search">Ricerca feed</string>
-    <string name="feed_search_by_web_search">Trova feed per parola chiave</string>
-    <string name="feed_search_by_topic">Genera feed per soggetto (via Faroo)</string>
-    <string name="feed_search_by_youtube">Trova feed dal nome del canale Youtube</string>
     <string name="select_file">Seleziona file (radice SD)</string>
     <string name="question_delete_feed">Vuoi cancellare questo feed?</string>
     <string name="question_delete_group">Vuoi cancellare questo gruppo e tutti i suoi feed?</string>

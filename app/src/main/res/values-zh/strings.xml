@@ -74,9 +74,6 @@
     <string name="accept">通过</string>
     <string name="reject">排除</string>
     <string name="feed_search">搜索订阅</string>
-    <string name="feed_search_by_web_search">根据关键词搜索订阅</string>
-    <string name="feed_search_by_topic">基于话题生成订阅（通过Faroo）</string>
-    <string name="feed_search_by_youtube">根据Youtube频道名搜索订阅</string>
     <string name="select_file">选择文件（SD卡目录）</string>
     <string name="question_delete_feed">你确定要删除这个订阅</string>
     <string name="question_delete_group">你确定要删除这个分组和其中所有的订阅？</string>

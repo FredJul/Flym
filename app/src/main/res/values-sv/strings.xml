@@ -74,9 +74,6 @@
     <string name="accept">ACCEPTERA</string>
     <string name="reject">AVFÄRDA</string>
     <string name="feed_search">Sök efter feed</string>
-    <string name="feed_search_by_web_search">Sök på webben med nyckelord</string>
-    <string name="feed_search_by_topic">Skapa feed utifrån en sökning (via FAROO)</string>
-    <string name="feed_search_by_youtube">Sök efter kanaler på Youtube</string>
     <string name="select_file">Välj fil (SD-root)</string>
     <string name="question_delete_feed">Vill du radera denna feed?</string>
     <string name="question_delete_group">Vill du radera denna grupp och alla dess feeds?</string>
