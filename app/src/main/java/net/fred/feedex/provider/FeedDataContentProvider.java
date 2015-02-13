@@ -59,6 +59,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import net.fred.feedex.BuildConfig;
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedData.EntryColumns;
@@ -173,31 +174,31 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_GROUPS:
             case URI_FEEDS_FOR_GROUPS:
             case URI_FEEDS:
-                return "vnd.android.cursor.dir/vnd.feedex.feed";
+                return "vnd.android.cursor.dir/vnd.flym.feed";
             case URI_GROUP:
             case URI_FEED:
-                return "vnd.android.cursor.item/vnd.feedex.feed";
+                return "vnd.android.cursor.item/vnd.flym.feed";
             case URI_FILTERS:
             case URI_FILTERS_FOR_FEED:
-                return "vnd.android.cursor.dir/vnd.feedex.filter";
+                return "vnd.android.cursor.dir/vnd.flym.filter";
             case URI_FAVORITES:
             case URI_ALL_ENTRIES:
             case URI_ENTRIES:
             case URI_ENTRIES_FOR_FEED:
             case URI_ENTRIES_FOR_GROUP:
             case URI_SEARCH:
-                return "vnd.android.cursor.dir/vnd.feedex.entry";
+                return "vnd.android.cursor.dir/vnd.flym.entry";
             case URI_FAVORITES_ENTRY:
             case URI_ENTRY:
             case URI_ALL_ENTRIES_ENTRY:
             case URI_ENTRY_FOR_FEED:
             case URI_ENTRY_FOR_GROUP:
             case URI_SEARCH_ENTRY:
-                return "vnd.android.cursor.item/vnd.feedex.entry";
+                return "vnd.android.cursor.item/vnd.flym.entry";
             case URI_TASKS:
-                return "vnd.android.cursor.dir/vnd.feedex.task";
+                return "vnd.android.cursor.dir/vnd.flym.task";
             case URI_TASK:
-                return "vnd.android.cursor.item/vnd.feedex.task";
+                return "vnd.android.cursor.item/vnd.flym.task";
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -212,6 +213,14 @@ public class FeedDataContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        // This is a debug code to allow to visualize the task with the ContentProviderHelper app
+        if (uri != null && BuildConfig.DEBUG && FeedData.CONTENT_AUTHORITY.equals(uri.toString())) {
+            SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+            queryBuilder.setTables(TaskColumns.TABLE_NAME);
+            SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
+            return queryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
+        }
+
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
         int matchCode = URI_MATCHER.match(uri);

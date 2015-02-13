@@ -56,7 +56,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.item/vnd.feedex.entry" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.flym.entry" />
             </intent-filter>
         </activity>
         <activity
@@ -72,12 +72,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.item/vnd.feedex.feed" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.flym.feed" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.INSERT" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.dir/vnd.feedex.feed" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.flym.feed" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
