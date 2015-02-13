@@ -18,12 +18,15 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(KEYSTORE_PATH)
-            storePassword KEYSTORE_PASSWORD
-            keyAlias KEY_ALIAS
-            keyPassword KEY_PASSWORD
+            if (project.hasProperty("KEYSTORE_PATH")) {
+                storeFile file(KEYSTORE_PATH)
+                storePassword KEYSTORE_PASSWORD
+                keyAlias KEY_ALIAS
+                keyPassword KEY_PASSWORD
+            }
         }
     }
+
 
     buildTypes {
         release {
