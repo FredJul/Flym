@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!--
+﻿<?xml version="1.0" encoding="utf-8"?><!--
  Copyright (c) 2010-2012 Stefan Handschuh
       modified 2014-2014 Matthias Dill
 
@@ -24,6 +23,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
     <string name="about_flym">Über Flym</string>
     <string name="welcome_title">Wilkommen in Flym. Willst du einen Feed hinzufügen?</string>
     <string name="never">nie</string>

@@ -24,6 +24,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
     <string name="about_flym">O aplikácii Flym</string>
     <string name="welcome_title">Vitajte v aplikácii Flym. Chcete pridať nový zdroj?</string>
     <string name="never">nikdy</string>

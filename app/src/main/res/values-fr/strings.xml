@@ -23,6 +23,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
     <string name="about_flym">À propos de Flym</string>
     <string name="welcome_title">Bienvenue sur Flym. Voulez vous ajouter un flux ?</string>
     <string name="never">jamais</string>

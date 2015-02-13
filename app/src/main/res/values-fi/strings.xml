@@ -22,6 +22,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
     <string name="about_flym">Tietoja Flymista</string>
     <string name="welcome_title">Tervetuloa Flym:iin. Haluaisitko lisätä syötteen?</string>
     <string name="never">ei koskaan</string>

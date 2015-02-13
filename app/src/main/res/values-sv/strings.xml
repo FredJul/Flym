@@ -22,6 +22,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
     <string name="about_flym">Om Flym</string>
     <string name="welcome_title">Välkommen till Flym. Skulle du vilja lägga till en feed?</string>
     <string name="never">aldrig</string>

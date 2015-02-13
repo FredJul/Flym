@@ -23,6 +23,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
     <string name="about_flym">플라임 정보</string>
     <string name="welcome_title">플라임 사용을 환영합니다. 피드를 추가하시겠습니까?</string>
     <string name="never">하지 않음</string>
