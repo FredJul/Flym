@@ -122,20 +122,17 @@ public class EntryView extends WebView {
 
     public EntryView(Context context) {
         super(context);
-
-        init(context, null, 0);
+        init();
     }
 
     public EntryView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        init(context, attrs, 0);
+        init();
     }
 
     public EntryView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
-        init(context, attrs, defStyle);
+        init();
     }
 
     public void setListener(EntryViewManager manager) {
@@ -146,7 +143,7 @@ public class EntryView extends WebView {
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
             contentText = HtmlUtils.replaceImageURLs(contentText, entryId);
             if (getSettings().getBlockNetworkImage()) {
-                // setBlockNetwortImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
+                // setBlockNetworkImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
                 loadData("", TEXT_HTML, Constants.UTF8);
                 getSettings().setBlockNetworkImage(false);
             }
@@ -207,7 +204,7 @@ public class EntryView extends WebView {
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
-    private void init(Context context, AttributeSet attrs, int defStyle) {
+    private void init() {
         // For scrolling
         setHorizontalScrollBarEnabled(false);
         getSettings().setUseWideViewPort(false);

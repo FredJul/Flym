@@ -294,7 +294,6 @@ public class FetcherService extends IntentService {
                 if (entryCursor.isNull(entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML))) { // If we didn't already mobilized it
                     int linkPos = entryCursor.getColumnIndex(EntryColumns.LINK);
                     int abstractHtmlPos = entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
-                    int imageUrlPos = entryCursor.getColumnIndex(EntryColumns.IMAGE_URL);
                     HttpURLConnection connection = null;
 
                     try {

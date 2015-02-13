@@ -93,7 +93,6 @@ public class DragNDropExpandableListView extends ExpandableListView {
         }
 
         return ev.getPointerCount() <= 1 || super.onTouchEvent(ev);
-
     }
 
     // move the drag view

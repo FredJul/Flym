@@ -400,40 +400,38 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
     public void onClickFullText() {
         final BaseActivity activity = (BaseActivity) getActivity();
 
-        if (!isRefreshing()) {
-            Cursor cursor = mEntryPagerAdapter.getCursor(mCurrentPagerPos);
-            final boolean alreadyMobilized = !cursor.isNull(mMobilizedHtmlPos);
+        Cursor cursor = mEntryPagerAdapter.getCursor(mCurrentPagerPos);
+        final boolean alreadyMobilized = !cursor.isNull(mMobilizedHtmlPos);
 
-            if (alreadyMobilized) {
+        if (alreadyMobilized) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mPreferFullText = true;
+                    mEntryPagerAdapter.displayEntry(mCurrentPagerPos, null, true);
+                }
+            });
+        } else if (!isRefreshing()) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+            final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+            // since we have acquired the networkInfo, we use it for basic checks
+            if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                FetcherService.addEntriesToMobilize(new long[]{mEntriesIds[mCurrentPagerPos]});
+                activity.startService(new Intent(activity, FetcherService.class).setAction(FetcherService.ACTION_MOBILIZE_FEEDS));
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mPreferFullText = true;
-                        mEntryPagerAdapter.displayEntry(mCurrentPagerPos, null, true);
+                        showSwipeProgress();
                     }
                 });
             } else {
-                ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-                final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-                // since we have acquired the networkInfo, we use it for basic checks
-                if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                    FetcherService.addEntriesToMobilize(new long[]{mEntriesIds[mCurrentPagerPos]});
-                    activity.startService(new Intent(activity, FetcherService.class).setAction(FetcherService.ACTION_MOBILIZE_FEEDS));
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showSwipeProgress();
-                        }
-                    });
-                } else {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(activity, R.string.network_error, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity, R.string.network_error, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }
     }
