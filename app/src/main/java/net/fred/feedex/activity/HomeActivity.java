@@ -59,7 +59,7 @@ import net.fred.feedex.utils.UiUtils;
 
 public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
+	private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
 
     private static final String FEED_UNREAD_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " +
             EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + '=' + FeedColumns.TABLE_NAME + '.' + FeedColumns._ID + ')';
@@ -73,8 +73,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     private static final int LOADER_ID = 0;
     private static final int SEARCH_DRAWER_POSITION = -1;
 
-    private EntriesListFragment mEntriesFragment;
-    private DrawerLayout mDrawerLayout;
+	private EntriesListFragment mEntriesFragment;
+	private DrawerLayout mDrawerLayout;
     private View mLeftDrawer;
     private ListView mDrawerList;
     private DrawerAdapter mDrawerAdapter;
@@ -206,8 +206,16 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }, 3000);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+
+		// We reset the current drawer position
+		selectDrawerItem(0);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
