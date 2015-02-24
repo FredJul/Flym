@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name" translatable="false">Flym</string>
 
-    <string name="about_us_copyright" translatable="false">Copyright 2013–2014 Frédéric Julian</string>
+    <string name="about_us_copyright" translatable="false">Copyright 2013–2015 Frédéric Julian</string>
     <string name="about_us_content" translatable="false"><![CDATA[
     <b>Community</b><br/>
     • Ildar Mulyukov<br/><br/>
