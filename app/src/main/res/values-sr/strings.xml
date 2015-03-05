@@ -115,14 +115,14 @@
     <string name="copied_clipboard">Веза копирана</string>
     <string name="get_full_text">Добави цео текст</string>
     <string name="original_text">Прикажи оригиналан текст</string>
-    <string name="see_enclosure">See enclosure</string>
+    <string name="see_enclosure">Погледај прилог</string>
     <string name="see_link">Погледај у прегледачу</string>
     <string name="cant_open_link">Ниједна апликација није додељена овој вези</string>
-    <string name="open_enclosure">Open enclosure</string>
+    <string name="open_enclosure">Отварање прилога</string>
     <string name="file">Фајл</string>
     <string name="download_and_save">Преузми и сачувај</string>
     <string name="open_link">Отвори везу</string>
-    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+    <string name="tip_sentence">Савет: клизајте лево да означите прочитаним и десно да ставите у омиљене</string>
 
     <!-- WIDGET -->
     <string name="red">Црвена</string>
