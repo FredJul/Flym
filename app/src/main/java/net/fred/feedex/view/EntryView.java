@@ -75,6 +75,8 @@ public class EntryView extends WebView {
 	private static final String TEXT_HTML = "text/html";
 	private static final String HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>";
 	private static final String BACKGROUND_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#f6f6f6" : "#181b1f";
+	private static final String QUOTE_BACKGROUND_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#e6e6e6" : "#383b3f";
+	private static final String QUOTE_LEFT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#a6a6a6" : "#686b6f";
 	private static final String TEXT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#000000" : "#C0C0C0";
 	private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#52A7DF" : "#1A5A81";
 	private static final String SUBTITLE_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true) ? "#666666" : "#8c8c8c";
@@ -89,7 +91,7 @@ public class EntryView extends WebView {
 			+ "h1 a {color: inherit; text-decoration: none}"
 			+ "img {height: auto} "
 			+ "pre {white-space: pre-wrap;} "
-			+ "blockquote {margin: 0.8em 0 0.8em 1.2em; padding: 0} "
+			+ "blockquote {border-left: thick solid " + QUOTE_LEFT_COLOR + "; background-color:" + QUOTE_BACKGROUND_COLOR + "; margin: 0.5em 0 0.5em 0em; padding: 0.5em} "
 			+ "p {margin: 0.8em 0 0.8em 0} "
 			+ "p.subtitle {color: " + SUBTITLE_COLOR + "; border-top:1px " + SUBTITLE_BORDER_COLOR + "; border-bottom:1px " + SUBTITLE_BORDER_COLOR + "; padding-top:2px; padding-bottom:2px; font-weight:800 } "
 			+ "ul, ol {margin: 0 0 0.8em 0.6em; padding: 0 0 0 1em} "
