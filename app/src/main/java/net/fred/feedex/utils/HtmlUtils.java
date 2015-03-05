@@ -44,20 +44,43 @@ public class HtmlUtils {
 			.addAttributes("source", "src", "type")
 			.addAttributes("track", "src", "kind", "srclang", "label");
 
-	// middle() is group 1; s* is important for non-whitespaces; ' also usable
-	private static final Pattern IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
 	private static final String URL_SPACE = "%20";
 
+	private static final Pattern IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
+	private static final Pattern ADS_PATTERN = Pattern.compile("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", Pattern.CASE_INSENSITIVE);
+	private static final Pattern LAZY_LOADING_PATTERN = Pattern.compile("\\s+src=[^>]+\\s+original[-]*src=(\"|')", Pattern.CASE_INSENSITIVE);
+	private static final Pattern EMPTY_IMAGE_PATTERN = Pattern.compile("<img\\s+(height=['\"]1['\"]\\s+width=['\"]1['\"]|width=['\"]1['\"]\\s+height=['\"]1['\"])\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
+	private static final Pattern NON_HTTP_IMAGE_PATTERN = Pattern.compile("\\s+(href|src)=(\"|')//", Pattern.CASE_INSENSITIVE);
+	private static final Pattern BAD_IMAGE_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)\\.img['\"][^>]*>", Pattern.CASE_INSENSITIVE);
+	private static final Pattern START_BR_PATTERN = Pattern.compile("^(\\s*<br\\s*[/]*>\\s*)*", Pattern.CASE_INSENSITIVE);
+	private static final Pattern END_BR_PATTERN = Pattern.compile("(\\s*<br\\s*[/]*>\\s*)*$", Pattern.CASE_INSENSITIVE);
+	private static final Pattern MULTIPLE_BR_PATTERN = Pattern.compile("(\\s*<br\\s*[/]*>\\s*){3,}", Pattern.CASE_INSENSITIVE);
+	private static final Pattern EMPTY_LINK_PATTERN = Pattern.compile("<a\\s+[^>]*></a>", Pattern.CASE_INSENSITIVE);
+
+
 	public static String improveHtmlContent(String content, String baseUri) {
+		content = ADS_PATTERN.matcher(content).replaceAll("");
+
 		if (content != null) {
 			// remove some ads
-			content = content.replaceAll("(?i)<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", "");
+			content = ADS_PATTERN.matcher(content).replaceAll("");
 			// remove lazy loading images stuff
-			content = content.replaceAll("(?i)\\s+src=[^>]+\\s+original[-]*src=(\"|')", " src=$1");
-			// remove bad image paths
-			content = content.replaceAll("(?i)\\s+(href|src)=(\"|')//", " $1=$2http://");
-			// clean by jsoup
+			content = LAZY_LOADING_PATTERN.matcher(content).replaceAll(" src=$1");
+
+			// clean by JSoup
 			content = Jsoup.clean(content, baseUri, JSOUP_WHITELIST);
+
+			// remove empty or bad images
+			content = EMPTY_IMAGE_PATTERN.matcher(content).replaceAll("");
+			content = BAD_IMAGE_PATTERN.matcher(content).replaceAll("");
+			// remove empty links
+			content = EMPTY_LINK_PATTERN.matcher(content).replaceAll("");
+			// fix non http image paths
+			content = NON_HTTP_IMAGE_PATTERN.matcher(content).replaceAll(" $1=$2http://");
+			// remove trailing BR & too much BR
+			content = START_BR_PATTERN.matcher(content).replaceAll("");
+			content = END_BR_PATTERN.matcher(content).replaceAll("");
+			content = MULTIPLE_BR_PATTERN.matcher(content).replaceAll("<br><br>");
 		}
 
 		return content;
