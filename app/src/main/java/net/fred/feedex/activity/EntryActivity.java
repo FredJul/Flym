@@ -1,7 +1,7 @@
 /**
  * Flym
  *
- * Copyright (c) 2012-2013 Frederic Julian
+ * Copyright (c) 2012-2015 Frederic Julian
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -32,48 +32,48 @@ import net.fred.feedex.utils.UiUtils;
 
 public class EntryActivity extends BaseActivity {
 
-    private EntryFragment mEntryFragment;
+	private EntryFragment mEntryFragment;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        UiUtils.setPreferenceTheme(this);
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		UiUtils.setPreferenceTheme(this);
+		super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_entry);
+		setContentView(R.layout.activity_entry);
 
-        mEntryFragment = (EntryFragment) getFragmentManager().findFragmentById(R.id.entry_fragment);
-        if (savedInstanceState == null) { // Put the data only the first time (the fragment will save its state)
-            mEntryFragment.setData(getIntent().getData());
-        }
+		mEntryFragment = (EntryFragment) getFragmentManager().findFragmentById(R.id.entry_fragment);
+		if (savedInstanceState == null) { // Put the data only the first time (the fragment will save its state)
+			mEntryFragment.setData(getIntent().getData());
+		}
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (PrefUtils.getBoolean(PrefUtils.DISPLAY_ENTRIES_FULLSCREEN, false)) {
-            setImmersiveFullScreen(true);
-        }
-    }
+		if (PrefUtils.getBoolean(PrefUtils.DISPLAY_ENTRIES_FULLSCREEN, false)) {
+			setImmersiveFullScreen(true);
+		}
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            Bundle b = getIntent().getExtras();
-            if (b != null && b.getBoolean(Constants.INTENT_FROM_WIDGET, false)) {
-                Intent intent = new Intent(this, HomeActivity.class);
-                startActivity(intent);
-            }
-            finish();
-            return true;
-        }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			Bundle b = getIntent().getExtras();
+			if (b != null && b.getBoolean(Constants.INTENT_FROM_WIDGET, false)) {
+				Intent intent = new Intent(this, HomeActivity.class);
+				startActivity(intent);
+			}
+			finish();
+			return true;
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
 
-        mEntryFragment.setData(intent.getData());
-    }
+		mEntryFragment.setData(intent.getData());
+	}
 }

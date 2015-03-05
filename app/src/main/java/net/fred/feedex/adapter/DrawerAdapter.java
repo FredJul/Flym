@@ -1,7 +1,7 @@
 /**
  * Flym
  *
- * Copyright (c) 2012-2013 Frederic Julian
+ * Copyright (c) 2012-2015 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,195 +42,195 @@ import java.util.Map;
 
 public class DrawerAdapter extends BaseAdapter {
 
-    private static final int POS_ID = 0;
-    private static final int POS_URL = 1;
-    private static final int POS_NAME = 2;
-    private static final int POS_IS_GROUP = 3;
-    private static final int POS_ICON = 4;
-    private static final int POS_LAST_UPDATE = 5;
-    private static final int POS_ERROR = 6;
-    private static final int POS_UNREAD = 7;
+	private static final int POS_ID = 0;
+	private static final int POS_URL = 1;
+	private static final int POS_NAME = 2;
+	private static final int POS_IS_GROUP = 3;
+	private static final int POS_ICON = 4;
+	private static final int POS_LAST_UPDATE = 5;
+	private static final int POS_ERROR = 6;
+	private static final int POS_UNREAD = 7;
 
-    private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
-    private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
+	private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
+	private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
 
-    private static final String COLON = MainApplication.getContext().getString(R.string.colon);
+	private static final String COLON = MainApplication.getContext().getString(R.string.colon);
 
-    private static final int CACHE_MAX_ENTRIES = 100;
-    private final Map<Long, String> mFormattedDateCache = new LinkedHashMap<Long, String>(CACHE_MAX_ENTRIES + 1, .75F, true) {
-        @Override
-        public boolean removeEldestEntry(Map.Entry<Long, String> eldest) {
-            return size() > CACHE_MAX_ENTRIES;
-        }
-    };
+	private static final int CACHE_MAX_ENTRIES = 100;
+	private final Map<Long, String> mFormattedDateCache = new LinkedHashMap<Long, String>(CACHE_MAX_ENTRIES + 1, .75F, true) {
+		@Override
+		public boolean removeEldestEntry(Map.Entry<Long, String> eldest) {
+			return size() > CACHE_MAX_ENTRIES;
+		}
+	};
 
-    private final Context mContext;
-    private Cursor mFeedsCursor;
-    private int mAllUnreadNumber, mFavoritesNumber;
+	private final Context mContext;
+	private Cursor mFeedsCursor;
+	private int mAllUnreadNumber, mFavoritesNumber;
 
-    public DrawerAdapter(Context context, Cursor feedCursor) {
-        mContext = context;
-        mFeedsCursor = feedCursor;
+	public DrawerAdapter(Context context, Cursor feedCursor) {
+		mContext = context;
+		mFeedsCursor = feedCursor;
 
-        updateNumbers();
-    }
+		updateNumbers();
+	}
 
-    public void setCursor(Cursor feedCursor) {
-        mFeedsCursor = feedCursor;
+	public void setCursor(Cursor feedCursor) {
+		mFeedsCursor = feedCursor;
 
-        updateNumbers();
-        notifyDataSetChanged();
-    }
+		updateNumbers();
+		notifyDataSetChanged();
+	}
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.item_drawer_list, parent, false);
+	public View getView(int position, View convertView, ViewGroup parent) {
+		if (convertView == null) {
+			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(R.layout.item_drawer_list, parent, false);
 
-            ViewHolder holder = new ViewHolder();
-            holder.iconView = (ImageView) convertView.findViewById(android.R.id.icon);
-            holder.titleTxt = (TextView) convertView.findViewById(android.R.id.text1);
-            holder.stateTxt = (TextView) convertView.findViewById(android.R.id.text2);
-            holder.unreadTxt = (TextView) convertView.findViewById(R.id.unread_count);
-            holder.separator = convertView.findViewById(R.id.separator);
-            convertView.setTag(R.id.holder, holder);
-        }
+			ViewHolder holder = new ViewHolder();
+			holder.iconView = (ImageView) convertView.findViewById(android.R.id.icon);
+			holder.titleTxt = (TextView) convertView.findViewById(android.R.id.text1);
+			holder.stateTxt = (TextView) convertView.findViewById(android.R.id.text2);
+			holder.unreadTxt = (TextView) convertView.findViewById(R.id.unread_count);
+			holder.separator = convertView.findViewById(R.id.separator);
+			convertView.setTag(R.id.holder, holder);
+		}
 
-        ViewHolder holder = (ViewHolder) convertView.getTag(R.id.holder);
+		ViewHolder holder = (ViewHolder) convertView.getTag(R.id.holder);
 
-        // default init
-        holder.iconView.setImageDrawable(null);
-        holder.titleTxt.setText("");
-        holder.titleTxt.setTextColor(NORMAL_TEXT_COLOR);
-        holder.titleTxt.setAllCaps(false);
-        holder.stateTxt.setVisibility(View.GONE);
-        holder.unreadTxt.setText("");
-        convertView.setPadding(0, 0, 0, 0);
-        holder.separator.setVisibility(View.GONE);
+		// default init
+		holder.iconView.setImageDrawable(null);
+		holder.titleTxt.setText("");
+		holder.titleTxt.setTextColor(NORMAL_TEXT_COLOR);
+		holder.titleTxt.setAllCaps(false);
+		holder.stateTxt.setVisibility(View.GONE);
+		holder.unreadTxt.setText("");
+		convertView.setPadding(0, 0, 0, 0);
+		holder.separator.setVisibility(View.GONE);
 
-        if (position == 0 || position == 1) {
-            holder.titleTxt.setText(position == 0 ? R.string.all : R.string.favorites);
-            holder.iconView.setImageResource(position == 0 ? R.drawable.ic_statusbar_rss : R.drawable.rating_important);
+		if (position == 0 || position == 1) {
+			holder.titleTxt.setText(position == 0 ? R.string.all : R.string.favorites);
+			holder.iconView.setImageResource(position == 0 ? R.drawable.ic_statusbar_rss : R.drawable.rating_important);
 
-            int unread = position == 0 ? mAllUnreadNumber : mFavoritesNumber;
-            if (unread != 0) {
-                holder.unreadTxt.setText(String.valueOf(unread));
-            }
-        }
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
-            holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
+			int unread = position == 0 ? mAllUnreadNumber : mFavoritesNumber;
+			if (unread != 0) {
+				holder.unreadTxt.setText(String.valueOf(unread));
+			}
+		}
+		if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
+			holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
 
-            if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
-                holder.titleTxt.setTextColor(GROUP_TEXT_COLOR);
-                holder.titleTxt.setAllCaps(true);
-                holder.separator.setVisibility(View.VISIBLE);
-            } else {
-                holder.stateTxt.setVisibility(View.VISIBLE);
+			if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
+				holder.titleTxt.setTextColor(GROUP_TEXT_COLOR);
+				holder.titleTxt.setAllCaps(true);
+				holder.separator.setVisibility(View.VISIBLE);
+			} else {
+				holder.stateTxt.setVisibility(View.VISIBLE);
 
-                if (mFeedsCursor.isNull(POS_ERROR)) {
-                    long timestamp = mFeedsCursor.getLong(POS_LAST_UPDATE);
+				if (mFeedsCursor.isNull(POS_ERROR)) {
+					long timestamp = mFeedsCursor.getLong(POS_LAST_UPDATE);
 
-                    // Date formatting is expensive, look at the cache
-                    String formattedDate = mFormattedDateCache.get(timestamp);
-                    if (formattedDate == null) {
+					// Date formatting is expensive, look at the cache
+					String formattedDate = mFormattedDateCache.get(timestamp);
+					if (formattedDate == null) {
 
-                        formattedDate = mContext.getString(R.string.update) + COLON;
+						formattedDate = mContext.getString(R.string.update) + COLON;
 
-                        if (timestamp == 0) {
-                            formattedDate += mContext.getString(R.string.never);
-                        } else {
-                            formattedDate += StringUtils.getDateTimeString(timestamp);
-                        }
+						if (timestamp == 0) {
+							formattedDate += mContext.getString(R.string.never);
+						} else {
+							formattedDate += StringUtils.getDateTimeString(timestamp);
+						}
 
-                        mFormattedDateCache.put(timestamp, formattedDate);
-                    }
+						mFormattedDateCache.put(timestamp, formattedDate);
+					}
 
-                    holder.stateTxt.setText(formattedDate);
-                } else {
-                    holder.stateTxt.setText(new StringBuilder(mContext.getString(R.string.error)).append(COLON).append(mFeedsCursor.getString(POS_ERROR)));
-                }
+					holder.stateTxt.setText(formattedDate);
+				} else {
+					holder.stateTxt.setText(new StringBuilder(mContext.getString(R.string.error)).append(COLON).append(mFeedsCursor.getString(POS_ERROR)));
+				}
 
-                final long feedId = mFeedsCursor.getLong(POS_ID);
-                Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, mFeedsCursor, POS_ICON);
+				final long feedId = mFeedsCursor.getLong(POS_ID);
+				Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, mFeedsCursor, POS_ICON);
 
-                if (bitmap != null) {
-                    holder.iconView.setImageBitmap(bitmap);
-                } else {
-                    holder.iconView.setImageResource(R.drawable.icon);
-                }
+				if (bitmap != null) {
+					holder.iconView.setImageBitmap(bitmap);
+				} else {
+					holder.iconView.setImageResource(R.drawable.icon);
+				}
 
-                int unread = mFeedsCursor.getInt(POS_UNREAD);
-                if (unread != 0) {
-                    holder.unreadTxt.setText(String.valueOf(unread));
-                }
-            }
-        }
+				int unread = mFeedsCursor.getInt(POS_UNREAD);
+				if (unread != 0) {
+					holder.unreadTxt.setText(String.valueOf(unread));
+				}
+			}
+		}
 
-        return convertView;
-    }
+		return convertView;
+	}
 
-    @Override
-    public int getCount() {
-        if (mFeedsCursor != null) {
-            return mFeedsCursor.getCount() + 2;
-        }
-        return 0;
-    }
+	@Override
+	public int getCount() {
+		if (mFeedsCursor != null) {
+			return mFeedsCursor.getCount() + 2;
+		}
+		return 0;
+	}
 
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
+	@Override
+	public Object getItem(int position) {
+		return null;
+	}
 
-    @Override
-    public long getItemId(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
-            return mFeedsCursor.getLong(POS_ID);
-        }
+	@Override
+	public long getItemId(int position) {
+		if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
+			return mFeedsCursor.getLong(POS_ID);
+		}
 
-        return -1;
-    }
+		return -1;
+	}
 
-    public byte[] getItemIcon(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
-            return mFeedsCursor.getBlob(POS_ICON);
-        }
+	public byte[] getItemIcon(int position) {
+		if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
+			return mFeedsCursor.getBlob(POS_ICON);
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public String getItemName(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
-            return mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME);
-        }
+	public String getItemName(int position) {
+		if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2)) {
+			return mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME);
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public boolean isItemAGroup(int position) {
-        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2) && mFeedsCursor.getInt(POS_IS_GROUP) == 1;
+	public boolean isItemAGroup(int position) {
+		return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 2) && mFeedsCursor.getInt(POS_IS_GROUP) == 1;
 
-    }
+	}
 
-    private void updateNumbers() {
-        mAllUnreadNumber = mFavoritesNumber = 0;
+	private void updateNumbers() {
+		mAllUnreadNumber = mFavoritesNumber = 0;
 
-        // Gets the numbers of entries (should be in a thread, but it's way easier like this and it shouldn't be so slow)
-        Cursor numbers = mContext.getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{FeedData.ALL_UNREAD_NUMBER, FeedData.FAVORITES_NUMBER}, null, null, null);
-        if (numbers != null) {
-            if (numbers.moveToFirst()) {
-                mAllUnreadNumber = numbers.getInt(0);
-                mFavoritesNumber = numbers.getInt(1);
-            }
-            numbers.close();
-        }
-    }
+		// Gets the numbers of entries (should be in a thread, but it's way easier like this and it shouldn't be so slow)
+		Cursor numbers = mContext.getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{FeedData.ALL_UNREAD_NUMBER, FeedData.FAVORITES_NUMBER}, null, null, null);
+		if (numbers != null) {
+			if (numbers.moveToFirst()) {
+				mAllUnreadNumber = numbers.getInt(0);
+				mFavoritesNumber = numbers.getInt(1);
+			}
+			numbers.close();
+		}
+	}
 
-    private static class ViewHolder {
-        public ImageView iconView;
-        public TextView titleTxt;
-        public TextView stateTxt;
-        public TextView unreadTxt;
-        public View separator;
-    }
+	private static class ViewHolder {
+		public ImageView iconView;
+		public TextView titleTxt;
+		public TextView stateTxt;
+		public TextView unreadTxt;
+		public View separator;
+	}
 }

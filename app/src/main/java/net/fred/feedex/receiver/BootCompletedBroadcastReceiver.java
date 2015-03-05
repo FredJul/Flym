@@ -1,7 +1,7 @@
 /**
  * Flym
  *
- * Copyright (c) 2012-2013 Frederic Julian
+ * Copyright (c) 2012-2015 Frederic Julian
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -52,12 +52,12 @@ import net.fred.feedex.service.RefreshService;
 import net.fred.feedex.utils.PrefUtils;
 
 public class BootCompletedBroadcastReceiver extends BroadcastReceiver {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
-        if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
-            context.startService(new Intent(context, RefreshService.class));
-        }
-    }
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
+		if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
+			context.startService(new Intent(context, RefreshService.class));
+		}
+	}
 
 }

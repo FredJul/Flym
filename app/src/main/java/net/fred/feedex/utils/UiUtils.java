@@ -1,7 +1,7 @@
 /**
  * Flym
  *
- * Copyright (c) 2012-2013 Frederic Julian
+ * Copyright (c) 2012-2015 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,77 +38,77 @@ import net.fred.feedex.R;
 
 public class UiUtils {
 
-    static private final LongSparseArray<Bitmap> FAVICON_CACHE = new LongSparseArray<>();
+	static private final LongSparseArray<Bitmap> FAVICON_CACHE = new LongSparseArray<>();
 
-    static public void setPreferenceTheme(Activity a) {
-        if (!PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
-            a.setTheme(R.style.Theme_Dark);
-        }
-    }
+	static public void setPreferenceTheme(Activity a) {
+		if (!PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, true)) {
+			a.setTheme(R.style.Theme_Dark);
+		}
+	}
 
-    static public int dpToPixel(int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, MainApplication.getContext().getResources().getDisplayMetrics());
-    }
+	static public int dpToPixel(int dp) {
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, MainApplication.getContext().getResources().getDisplayMetrics());
+	}
 
-    static public Bitmap getFaviconBitmap(long feedId, Cursor cursor, int iconCursorPos) {
-        Bitmap bitmap = UiUtils.FAVICON_CACHE.get(feedId);
-        if (bitmap == null) {
-            byte[] iconBytes = cursor.getBlob(iconCursorPos);
-            if (iconBytes != null && iconBytes.length > 0) {
-                bitmap = UiUtils.getScaledBitmap(iconBytes, 18);
-                UiUtils.FAVICON_CACHE.put(feedId, bitmap);
-            }
-        }
-        return bitmap;
-    }
+	static public Bitmap getFaviconBitmap(long feedId, Cursor cursor, int iconCursorPos) {
+		Bitmap bitmap = UiUtils.FAVICON_CACHE.get(feedId);
+		if (bitmap == null) {
+			byte[] iconBytes = cursor.getBlob(iconCursorPos);
+			if (iconBytes != null && iconBytes.length > 0) {
+				bitmap = UiUtils.getScaledBitmap(iconBytes, 18);
+				UiUtils.FAVICON_CACHE.put(feedId, bitmap);
+			}
+		}
+		return bitmap;
+	}
 
-    static public Bitmap getScaledBitmap(byte[] iconBytes, int sizeInDp) {
-        if (iconBytes != null && iconBytes.length > 0) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
-            if (bitmap != null && bitmap.getWidth() != 0 && bitmap.getHeight() != 0) {
-                int bitmapSizeInDip = UiUtils.dpToPixel(sizeInDp);
-                if (bitmap.getHeight() != bitmapSizeInDip) {
-                    Bitmap tmp = bitmap;
-                    bitmap = Bitmap.createScaledBitmap(tmp, bitmapSizeInDip, bitmapSizeInDip, false);
-                    tmp.recycle();
-                }
+	static public Bitmap getScaledBitmap(byte[] iconBytes, int sizeInDp) {
+		if (iconBytes != null && iconBytes.length > 0) {
+			Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
+			if (bitmap != null && bitmap.getWidth() != 0 && bitmap.getHeight() != 0) {
+				int bitmapSizeInDip = UiUtils.dpToPixel(sizeInDp);
+				if (bitmap.getHeight() != bitmapSizeInDip) {
+					Bitmap tmp = bitmap;
+					bitmap = Bitmap.createScaledBitmap(tmp, bitmapSizeInDip, bitmapSizeInDip, false);
+					tmp.recycle();
+				}
 
-                return bitmap;
-            }
-        }
+				return bitmap;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    static public void updateHideReadButton(FloatingActionButton drawerHideReadButton) {
-        if (drawerHideReadButton != null) {
-            if (PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
-                drawerHideReadButton.setColorNormalResId(getAttrResource(drawerHideReadButton.getContext(), R.attr.colorPrimary, R.color.light_theme_color_primary));
-            } else {
-                drawerHideReadButton.setColorNormalResId(R.color.floating_action_button_disabled);
-            }
-        }
-    }
+	static public void updateHideReadButton(FloatingActionButton drawerHideReadButton) {
+		if (drawerHideReadButton != null) {
+			if (PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
+				drawerHideReadButton.setColorNormalResId(getAttrResource(drawerHideReadButton.getContext(), R.attr.colorPrimary, R.color.light_theme_color_primary));
+			} else {
+				drawerHideReadButton.setColorNormalResId(R.color.floating_action_button_disabled);
+			}
+		}
+	}
 
-    static public void displayHideReadButtonAction(Context context) {
-        if (PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
-            Toast.makeText(context, R.string.context_menu_hide_read, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, R.string.context_menu_show_read, Toast.LENGTH_SHORT).show();
-        }
-    }
+	static public void displayHideReadButtonAction(Context context) {
+		if (PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
+			Toast.makeText(context, R.string.context_menu_hide_read, Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(context, R.string.context_menu_show_read, Toast.LENGTH_SHORT).show();
+		}
+	}
 
-    static public void addEmptyFooterView(ListView listView, int dp) {
-        View view = new View(listView.getContext());
-        view.setMinimumHeight(dpToPixel(dp));
-        view.setClickable(true);
-        listView.addFooterView(view);
-    }
+	static public void addEmptyFooterView(ListView listView, int dp) {
+		View view = new View(listView.getContext());
+		view.setMinimumHeight(dpToPixel(dp));
+		view.setClickable(true);
+		listView.addFooterView(view);
+	}
 
-    static public int getAttrResource(Context context, int attrId, int defValue) {
-        TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{attrId});
-        int result = a.getResourceId(0, defValue);
-        a.recycle();
-        return result;
-    }
+	static public int getAttrResource(Context context, int attrId, int defValue) {
+		TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{attrId});
+		int result = a.getResourceId(0, defValue);
+		a.recycle();
+		return result;
+	}
 }

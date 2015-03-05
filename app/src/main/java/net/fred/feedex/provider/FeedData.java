@@ -1,7 +1,7 @@
 /**
  * Flym
  *
- * Copyright (c) 2012-2013 Frederic Julian
+ * Copyright (c) 2012-2015 Frederic Julian
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -109,34 +109,34 @@ public class FeedData {
             return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId);
         }
 
-        public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {URL, TYPE_TEXT_UNIQUE}, {NAME, TYPE_TEXT}, {IS_GROUP, TYPE_BOOLEAN},
-                {GROUP_ID, TYPE_EXTERNAL_ID}, {LAST_UPDATE, TYPE_DATE_TIME}, {REAL_LAST_UPDATE, TYPE_DATE_TIME}, {RETRIEVE_FULLTEXT, TYPE_BOOLEAN},
+		public static Uri CONTENT_URI(long feedId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId);
+		}
+
+		public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {URL, TYPE_TEXT_UNIQUE}, {NAME, TYPE_TEXT}, {IS_GROUP, TYPE_BOOLEAN},
+				{GROUP_ID, TYPE_EXTERNAL_ID}, {LAST_UPDATE, TYPE_DATE_TIME}, {REAL_LAST_UPDATE, TYPE_DATE_TIME}, {RETRIEVE_FULLTEXT, TYPE_BOOLEAN},
                 {ICON, "BLOB"}, {ERROR, TYPE_TEXT}, {PRIORITY, TYPE_INT}, {FETCH_MODE, TYPE_INT}};
 
-        public static Uri CONTENT_URI(long feedId) {
-            return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId);
+		public static Uri GROUPS_CONTENT_URI(String groupId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId);
+		}
+
+		public static Uri GROUPS_CONTENT_URI(long groupId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId);
         }
 
-        public static Uri GROUPS_CONTENT_URI(String groupId) {
-            return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId);
-        }
+		public static Uri FEEDS_FOR_GROUPS_CONTENT_URI(String groupId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/feeds");
+		}
 
-        public static Uri GROUPS_CONTENT_URI(long groupId) {
-            return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId);
-        }
-
-        public static Uri FEEDS_FOR_GROUPS_CONTENT_URI(String groupId) {
-            return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/feeds");
+		public static Uri FEEDS_FOR_GROUPS_CONTENT_URI(long groupId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/feeds");
         }
 
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/feeds");
 
-        public static Uri FEEDS_FOR_GROUPS_CONTENT_URI(long groupId) {
-            return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/feeds");
-        }
 
-
-        public static final Uri GROUPED_FEEDS_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/grouped_feeds");
+		public static final Uri GROUPED_FEEDS_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/grouped_feeds");
 
         public static final Uri GROUPS_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/groups");
     }
@@ -184,52 +184,54 @@ public class FeedData {
         public static final String WHERE_READ = EntryColumns.IS_READ + Constants.DB_IS_TRUE;
         public static final String WHERE_UNREAD = "(" + EntryColumns.IS_READ + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_READ + Constants.DB_IS_FALSE + ')';
         public static final String WHERE_NOT_FAVORITE = "(" + EntryColumns.IS_FAVORITE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_FAVORITE + Constants.DB_IS_FALSE + ')';
-        public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {FEED_ID, TYPE_EXTERNAL_ID}, {TITLE, TYPE_TEXT},
-                {ABSTRACT, TYPE_TEXT}, {MOBILIZED_HTML, TYPE_TEXT}, {DATE, TYPE_DATE_TIME}, {FETCH_DATE, TYPE_DATE_TIME}, {IS_READ, TYPE_BOOLEAN}, {LINK, TYPE_TEXT},
+
+		public static Uri ENTRIES_FOR_FEED_CONTENT_URI(String feedId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/entries");
+		}
+
+		public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {FEED_ID, TYPE_EXTERNAL_ID}, {TITLE, TYPE_TEXT},
+				{ABSTRACT, TYPE_TEXT}, {MOBILIZED_HTML, TYPE_TEXT}, {DATE, TYPE_DATE_TIME}, {FETCH_DATE, TYPE_DATE_TIME}, {IS_READ, TYPE_BOOLEAN}, {LINK, TYPE_TEXT},
                 {IS_FAVORITE, TYPE_BOOLEAN}, {ENCLOSURE, TYPE_TEXT}, {GUID, TYPE_TEXT}, {AUTHOR, TYPE_TEXT}, {IMAGE_URL, TYPE_TEXT}};
 
-        public static Uri ENTRIES_FOR_FEED_CONTENT_URI(String feedId) {
-            return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/entries");
+		public static Uri ENTRIES_FOR_FEED_CONTENT_URI(long feedId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/entries");
         }
 
-        public static Uri ENTRIES_FOR_FEED_CONTENT_URI(long feedId) {
-            return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/entries");
+		public static Uri ENTRIES_FOR_GROUP_CONTENT_URI(String groupId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/entries");
+		}
+
+		public static Uri ENTRIES_FOR_GROUP_CONTENT_URI(long groupId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/entries");
         }
 
-        public static Uri ENTRIES_FOR_GROUP_CONTENT_URI(String groupId) {
-            return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/entries");
-        }
+		public static Uri ALL_ENTRIES_CONTENT_URI(String entryId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/all_entries/" + entryId);
+		}
 
-        public static Uri ENTRIES_FOR_GROUP_CONTENT_URI(long groupId) {
-            return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/entries");
-        }
+		public static Uri CONTENT_URI(String entryId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/entries/" + entryId);
+		}
 
-        public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/entries");
+		public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/entries");
 
-        public static Uri ALL_ENTRIES_CONTENT_URI(String entryId) {
-            return Uri.parse(CONTENT_AUTHORITY + "/all_entries/" + entryId);
-        }
+		public static Uri CONTENT_URI(long entryId) {
+			return Uri.parse(CONTENT_AUTHORITY + "/entries/" + entryId);
+		}
 
-        public static Uri CONTENT_URI(String entryId) {
-            return Uri.parse(CONTENT_AUTHORITY + "/entries/" + entryId);
-        }
+		public static Uri PARENT_URI(String path) {
+			return Uri.parse(CONTENT_AUTHORITY + path.substring(0, path.lastIndexOf('/')));
+		}
 
-        public static Uri CONTENT_URI(long entryId) {
-            return Uri.parse(CONTENT_AUTHORITY + "/entries/" + entryId);
-        }
-
-        public static Uri PARENT_URI(String path) {
-            return Uri.parse(CONTENT_AUTHORITY + path.substring(0, path.lastIndexOf('/')));
-        }
-
-        public static final Uri ALL_ENTRIES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/all_entries");
-
-        public static Uri SEARCH_URI(String search) {
-            return Uri.parse(CONTENT_AUTHORITY + "/entries/search/" + (TextUtils.isEmpty(search) ? " " : Uri.encode(search))); // The space is mandatory here with empty search
-        }
+		public static Uri SEARCH_URI(String search) {
+			return Uri.parse(CONTENT_AUTHORITY + "/entries/search/" + (TextUtils.isEmpty(search) ? " " : Uri.encode(search))); // The space is mandatory here with empty search
+		}
 
 
-        public static final Uri FAVORITES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/favorites");
+		public static final Uri ALL_ENTRIES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/all_entries");
+
+
+		public static final Uri FAVORITES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/favorites");
 
 
     }

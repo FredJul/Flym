@@ -1,7 +1,7 @@
 /**
  * Flym
  *
- * Copyright (c) 2012-2013 Frederic Julian
+ * Copyright (c) 2012-2015 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,17 +26,17 @@ import net.fred.feedex.utils.PrefUtils;
 
 public class MainApplication extends Application {
 
-    private static Context mContext;
+	private static Context mContext;
 
-    public static Context getContext() {
-        return mContext;
-    }
+	public static Context getContext() {
+		return mContext;
+	}
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        mContext = getApplicationContext();
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		mContext = getApplicationContext();
 
-        PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false); // init
-    }
+		PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false); // init
+	}
 }

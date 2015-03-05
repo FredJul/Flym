@@ -1,7 +1,7 @@
 /**
  * Flym
  *
- * Copyright (c) 2012-2013 Frederic Julian
+ * Copyright (c) 2012-2015 Frederic Julian
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -34,40 +34,40 @@ import net.fred.feedex.utils.UiUtils;
 
 public class AboutActivity extends BaseActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        UiUtils.setPreferenceTheme(this);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		UiUtils.setPreferenceTheme(this);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_about);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String title;
-        PackageManager manager = this.getPackageManager();
-        try {
-            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
-            title = "Flym version " + info.versionName;
-        } catch (NameNotFoundException unused) {
-            title = "Flym";
-        }
-        TextView titleView = (TextView) findViewById(R.id.about_title);
-        titleView.setText(title);
+		String title;
+		PackageManager manager = this.getPackageManager();
+		try {
+			PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+			title = "Flym version " + info.versionName;
+		} catch (NameNotFoundException unused) {
+			title = "Flym";
+		}
+		TextView titleView = (TextView) findViewById(R.id.about_title);
+		titleView.setText(title);
 
-        TextView contentView = (TextView) findViewById(R.id.about_content);
-        contentView.setText(Html.fromHtml(getString(R.string.about_us_content)));
-    }
+		TextView contentView = (TextView) findViewById(R.id.about_content);
+		contentView.setText(Html.fromHtml(getString(R.string.about_us_content)));
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return (super.onOptionsItemSelected(menuItem));
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case android.R.id.home:
+				finish();
+				return true;
+		}
+		return (super.onOptionsItemSelected(menuItem));
+	}
 
 }
 

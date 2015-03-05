@@ -1,7 +1,7 @@
 /**
  * Flym
  *
- * Copyright (c) 2012-2013 Frederic Julian
+ * Copyright (c) 2012-2015 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,13 +27,13 @@ import java.nio.channels.FileChannel;
 
 public class FileUtils {
 
-    public static void copy(File src, File dst) throws IOException {
-        FileInputStream inStream = new FileInputStream(src);
-        FileOutputStream outStream = new FileOutputStream(dst);
-        FileChannel inChannel = inStream.getChannel();
-        FileChannel outChannel = outStream.getChannel();
-        inChannel.transferTo(0, inChannel.size(), outChannel);
-        inStream.close();
-        outStream.close();
-    }
+	public static void copy(File src, File dst) throws IOException {
+		FileInputStream inStream = new FileInputStream(src);
+		FileOutputStream outStream = new FileOutputStream(dst);
+		FileChannel inChannel = inStream.getChannel();
+		FileChannel outChannel = outStream.getChannel();
+		inChannel.transferTo(0, inChannel.size(), outChannel);
+		inStream.close();
+		outStream.close();
+	}
 }

@@ -1,7 +1,7 @@
 /**
  * Flym
  *
- * Copyright (c) 2012-2013 Frederic Julian
+ * Copyright (c) 2012-2015 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,91 +35,91 @@ import net.fred.feedex.utils.UiUtils;
 
 public class FeedsCursorAdapter extends CursorLoaderExpandableListAdapter {
 
-    private int mIsGroupPos = -1;
-    private int mNamePos = -1;
-    private int mIdPos = -1;
-    private int mLinkPos = -1;
-    private int mIconPos = -1;
+	private int mIsGroupPos = -1;
+	private int mNamePos = -1;
+	private int mIdPos = -1;
+	private int mLinkPos = -1;
+	private int mIconPos = -1;
 
-    public FeedsCursorAdapter(Activity activity, Uri groupUri) {
-        super(activity, groupUri, R.layout.item_feed_list, R.layout.item_feed_list);
-    }
+	public FeedsCursorAdapter(Activity activity, Uri groupUri) {
+		super(activity, groupUri, R.layout.item_feed_list, R.layout.item_feed_list);
+	}
 
-    @Override
-    protected void onCursorLoaded(Context context, Cursor cursor) {
-        getCursorPositions(cursor);
-    }
+	@Override
+	protected void onCursorLoaded(Context context, Cursor cursor) {
+		getCursorPositions(cursor);
+	}
 
-    @Override
-    protected void bindChildView(View view, Context context, Cursor cursor) {
-        view.findViewById(R.id.indicator).setVisibility(View.INVISIBLE);
+	@Override
+	protected void bindChildView(View view, Context context, Cursor cursor) {
+		view.findViewById(R.id.indicator).setVisibility(View.INVISIBLE);
 
-        TextView textView = ((TextView) view.findViewById(android.R.id.text1));
+		TextView textView = ((TextView) view.findViewById(android.R.id.text1));
 
-        final long feedId = cursor.getLong(mIdPos);
-        Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, cursor, mIconPos);
+		final long feedId = cursor.getLong(mIdPos);
+		Bitmap bitmap = UiUtils.getFaviconBitmap(feedId, cursor, mIconPos);
 
-        if (bitmap != null) {
-            textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(context.getResources(), bitmap), null, null, null);
-        } else {
-            textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-        }
+		if (bitmap != null) {
+			textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(context.getResources(), bitmap), null, null, null);
+		} else {
+			textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+		}
 
-        textView.setText((cursor.isNull(mNamePos) ? cursor.getString(mLinkPos) : cursor.getString(mNamePos)));
-    }
+		textView.setText((cursor.isNull(mNamePos) ? cursor.getString(mLinkPos) : cursor.getString(mNamePos)));
+	}
 
-    @Override
-    protected void bindGroupView(View view, Context context, Cursor cursor, boolean isExpanded) {
-        ImageView indicatorImage = (ImageView) view.findViewById(R.id.indicator);
+	@Override
+	protected void bindGroupView(View view, Context context, Cursor cursor, boolean isExpanded) {
+		ImageView indicatorImage = (ImageView) view.findViewById(R.id.indicator);
 
-        if (cursor.getInt(mIsGroupPos) == 1) {
-            indicatorImage.setVisibility(View.VISIBLE);
+		if (cursor.getInt(mIsGroupPos) == 1) {
+			indicatorImage.setVisibility(View.VISIBLE);
 
-            TextView textView = ((TextView) view.findViewById(android.R.id.text1));
-            textView.setEnabled(true);
-            textView.setText(cursor.getString(mNamePos));
-            textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            textView.setText(cursor.getString(mNamePos));
+			TextView textView = ((TextView) view.findViewById(android.R.id.text1));
+			textView.setEnabled(true);
+			textView.setText(cursor.getString(mNamePos));
+			textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+			textView.setText(cursor.getString(mNamePos));
 
-            if (isExpanded)
-                indicatorImage.setImageResource(R.drawable.group_expanded);
-            else
-                indicatorImage.setImageResource(R.drawable.group_collapsed);
-        } else {
-            bindChildView(view, context, cursor);
-            indicatorImage.setVisibility(View.GONE);
-        }
-    }
+			if (isExpanded)
+				indicatorImage.setImageResource(R.drawable.group_expanded);
+			else
+				indicatorImage.setImageResource(R.drawable.group_collapsed);
+		} else {
+			bindChildView(view, context, cursor);
+			indicatorImage.setVisibility(View.GONE);
+		}
+	}
 
-    @Override
-    protected Uri getChildrenUri(Cursor groupCursor) {
-        return FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupCursor.getLong(mIdPos));
-    }
+	@Override
+	protected Uri getChildrenUri(Cursor groupCursor) {
+		return FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupCursor.getLong(mIdPos));
+	}
 
-    @Override
-    public void notifyDataSetChanged() {
-        getCursorPositions(null);
-        super.notifyDataSetChanged();
-    }
+	@Override
+	public void notifyDataSetChanged() {
+		getCursorPositions(null);
+		super.notifyDataSetChanged();
+	}
 
-    @Override
-    public void notifyDataSetChanged(Cursor data) {
-        getCursorPositions(data);
-    }
+	@Override
+	public void notifyDataSetChanged(Cursor data) {
+		getCursorPositions(data);
+	}
 
-    @Override
-    public void notifyDataSetInvalidated() {
-        getCursorPositions(null);
-        super.notifyDataSetInvalidated();
-    }
+	@Override
+	public void notifyDataSetInvalidated() {
+		getCursorPositions(null);
+		super.notifyDataSetInvalidated();
+	}
 
-    private synchronized void getCursorPositions(Cursor cursor) {
-        if (cursor != null && mIsGroupPos == -1) {
-            mIsGroupPos = cursor.getColumnIndex(FeedColumns.IS_GROUP);
-            mNamePos = cursor.getColumnIndex(FeedColumns.NAME);
-            mIdPos = cursor.getColumnIndex(FeedColumns._ID);
-            mLinkPos = cursor.getColumnIndex(FeedColumns.URL);
-            mIconPos = cursor.getColumnIndex(FeedColumns.ICON);
-        }
-    }
+	private synchronized void getCursorPositions(Cursor cursor) {
+		if (cursor != null && mIsGroupPos == -1) {
+			mIsGroupPos = cursor.getColumnIndex(FeedColumns.IS_GROUP);
+			mNamePos = cursor.getColumnIndex(FeedColumns.NAME);
+			mIdPos = cursor.getColumnIndex(FeedColumns._ID);
+			mLinkPos = cursor.getColumnIndex(FeedColumns.URL);
+			mIconPos = cursor.getColumnIndex(FeedColumns.ICON);
+		}
+	}
 }

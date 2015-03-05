@@ -1,7 +1,7 @@
 /**
  * Flym
  *
- * Copyright (c) 2012-2013 Frederic Julian
+ * Copyright (c) 2012-2015 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,75 +30,75 @@ import net.fred.feedex.provider.FeedData.FilterColumns;
 
 public class FiltersCursorAdapter extends ResourceCursorAdapter {
 
-    private int mFilterTextColumnPosition;
-    private int mIsAppliedToTitleColumnPosition;
-    private int mIsAcceptRulePosition;
+	private int mFilterTextColumnPosition;
+	private int mIsAppliedToTitleColumnPosition;
+	private int mIsAcceptRulePosition;
 
-    private int mSelectedFilter = -1;
+	private int mSelectedFilter = -1;
 
-    public FiltersCursorAdapter(Context context, Cursor cursor) {
-        super(context, R.layout.item_rule_list, cursor, 0);
+	public FiltersCursorAdapter(Context context, Cursor cursor) {
+		super(context, R.layout.item_rule_list, cursor, 0);
 
-        reinit(cursor);
-    }
+		reinit(cursor);
+	}
 
-    @Override
-    public void bindView(View view, final Context context, Cursor cursor) {
-        TextView isAcceptRuleTextView = (TextView) view.findViewById(android.R.id.text1);
-        TextView filterTextTextView = (TextView) view.findViewById(android.R.id.text2);
-        TextView isAppliedToTitleTextView = (TextView) view.findViewById(R.id.text3);
+	@Override
+	public void bindView(View view, final Context context, Cursor cursor) {
+		TextView isAcceptRuleTextView = (TextView) view.findViewById(android.R.id.text1);
+		TextView filterTextTextView = (TextView) view.findViewById(android.R.id.text2);
+		TextView isAppliedToTitleTextView = (TextView) view.findViewById(R.id.text3);
 
-        if (cursor.getPosition() == mSelectedFilter) {
-            view.setBackgroundResource(android.R.color.holo_blue_dark);
-        } else {
-            view.setBackgroundResource(android.R.color.transparent);
-        }
+		if (cursor.getPosition() == mSelectedFilter) {
+			view.setBackgroundResource(android.R.color.holo_blue_dark);
+		} else {
+			view.setBackgroundResource(android.R.color.transparent);
+		}
 
-        boolean isAcceptRule = cursor.getInt(mIsAcceptRulePosition) == 1;
-        isAcceptRuleTextView.setText(isAcceptRule ? R.string.accept : R.string.reject);
-        isAcceptRuleTextView.setTextColor(isAcceptRule ? context.getResources().getColor(android.R.color.holo_green_dark) :
-                context.getResources().getColor(android.R.color.holo_red_dark));
-        filterTextTextView.setText(cursor.getString(mFilterTextColumnPosition));
-        isAppliedToTitleTextView.setText(cursor.getInt(mIsAppliedToTitleColumnPosition) == 1 ? R.string.filter_apply_to_title : R.string.filter_apply_to_content);
-    }
+		boolean isAcceptRule = cursor.getInt(mIsAcceptRulePosition) == 1;
+		isAcceptRuleTextView.setText(isAcceptRule ? R.string.accept : R.string.reject);
+		isAcceptRuleTextView.setTextColor(isAcceptRule ? context.getResources().getColor(android.R.color.holo_green_dark) :
+				context.getResources().getColor(android.R.color.holo_red_dark));
+		filterTextTextView.setText(cursor.getString(mFilterTextColumnPosition));
+		isAppliedToTitleTextView.setText(cursor.getInt(mIsAppliedToTitleColumnPosition) == 1 ? R.string.filter_apply_to_title : R.string.filter_apply_to_content);
+	}
 
-    @Override
-    public void changeCursor(Cursor cursor) {
-        reinit(cursor);
-        super.changeCursor(cursor);
-    }
+	@Override
+	public void changeCursor(Cursor cursor) {
+		reinit(cursor);
+		super.changeCursor(cursor);
+	}
 
-    @Override
-    public Cursor swapCursor(Cursor newCursor) {
-        reinit(newCursor);
-        return super.swapCursor(newCursor);
-    }
+	@Override
+	public Cursor swapCursor(Cursor newCursor) {
+		reinit(newCursor);
+		return super.swapCursor(newCursor);
+	}
 
-    @Override
-    public void notifyDataSetChanged() {
-        reinit(null);
-        super.notifyDataSetChanged();
-    }
+	@Override
+	public void notifyDataSetChanged() {
+		reinit(null);
+		super.notifyDataSetChanged();
+	}
 
-    @Override
-    public void notifyDataSetInvalidated() {
-        reinit(null);
-        super.notifyDataSetInvalidated();
-    }
+	@Override
+	public void notifyDataSetInvalidated() {
+		reinit(null);
+		super.notifyDataSetInvalidated();
+	}
 
-    private void reinit(Cursor cursor) {
-        if (cursor != null && cursor.getCount() > 0) {
-            mFilterTextColumnPosition = cursor.getColumnIndex(FilterColumns.FILTER_TEXT);
-            mIsAppliedToTitleColumnPosition = cursor.getColumnIndex(FilterColumns.IS_APPLIED_TO_TITLE);
-            mIsAcceptRulePosition = cursor.getColumnIndex(FilterColumns.IS_ACCEPT_RULE);
-        }
-    }
+	private void reinit(Cursor cursor) {
+		if (cursor != null && cursor.getCount() > 0) {
+			mFilterTextColumnPosition = cursor.getColumnIndex(FilterColumns.FILTER_TEXT);
+			mIsAppliedToTitleColumnPosition = cursor.getColumnIndex(FilterColumns.IS_APPLIED_TO_TITLE);
+			mIsAcceptRulePosition = cursor.getColumnIndex(FilterColumns.IS_ACCEPT_RULE);
+		}
+	}
 
-    public int getSelectedFilter() {
-        return mSelectedFilter;
-    }
+	public int getSelectedFilter() {
+		return mSelectedFilter;
+	}
 
-    public void setSelectedFilter(int filterPos) {
-        mSelectedFilter = filterPos;
-    }
+	public void setSelectedFilter(int filterPos) {
+		mSelectedFilter = filterPos;
+	}
 }

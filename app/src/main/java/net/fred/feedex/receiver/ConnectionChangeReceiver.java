@@ -1,7 +1,7 @@
 /**
  * Flym
  *
- * Copyright (c) 2012-2013 Frederic Julian
+ * Copyright (c) 2012-2015 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,35 +32,35 @@ import net.fred.feedex.utils.PrefUtils;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
 
-    private boolean mConnection = false;
+	private boolean mConnection = false;
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        if (mConnection && intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
-            mConnection = false;
-        } else if (!mConnection && !intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
-            mConnection = true;
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		if (mConnection && intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
+			mConnection = false;
+		} else if (!mConnection && !intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
+			mConnection = true;
 
-            if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false) && PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
-                int time = 3600000;
-                try {
-                    time = Math.max(60000, Integer.parseInt(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, RefreshService.SIXTY_MINUTES)));
-                } catch (Exception ignored) {
-                }
+			if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false) && PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
+				int time = 3600000;
+				try {
+					time = Math.max(60000, Integer.parseInt(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, RefreshService.SIXTY_MINUTES)));
+				} catch (Exception ignored) {
+				}
 
-                long lastRefresh = PrefUtils.getLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
-                long elapsedRealTime = SystemClock.elapsedRealtime();
+				long lastRefresh = PrefUtils.getLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
+				long elapsedRealTime = SystemClock.elapsedRealtime();
 
-                // If the system rebooted, we need to reset the last value
-                if (elapsedRealTime < lastRefresh) {
-                    lastRefresh = 0;
-                    PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
-                }
+				// If the system rebooted, we need to reset the last value
+				if (elapsedRealTime < lastRefresh) {
+					lastRefresh = 0;
+					PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
+				}
 
-                if (lastRefresh == 0 || elapsedRealTime - lastRefresh > time) {
-                    context.startService(new Intent(context, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
-                }
-            }
-        }
-    }
+				if (lastRefresh == 0 || elapsedRealTime - lastRefresh > time) {
+					context.startService(new Intent(context, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
+				}
+			}
+		}
+	}
 }

@@ -1,7 +1,7 @@
 /**
  * Flym
  *
- * Copyright (c) 2012-2013 Frederic Julian
+ * Copyright (c) 2012-2015 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,27 +32,27 @@ import net.fred.feedex.activity.HomeActivity;
 import net.fred.feedex.utils.PrefUtils;
 
 public class WidgetProvider extends AppWidgetProvider {
-    public static final int STANDARD_BACKGROUND = 0x7c000000;
+	public static final int STANDARD_BACKGROUND = 0x7c000000;
 
-    @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        for (int appWidgetId : appWidgetIds) {
-            Intent svcIntent = new Intent(context, WidgetService.class);
+	@Override
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+		for (int appWidgetId : appWidgetIds) {
+			Intent svcIntent = new Intent(context, WidgetService.class);
 
-            svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            svcIntent.putExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, PrefUtils.getInt(appWidgetId + ".fontsize", 0));
-            svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
+			svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+			svcIntent.putExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, PrefUtils.getInt(appWidgetId + ".fontsize", 0));
+			svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
-            RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget);
-            widget.setOnClickPendingIntent(R.id.feed_icon, PendingIntent.getActivity(context, 0, new Intent(context, HomeActivity.class), 0));
-            widget.setPendingIntentTemplate(R.id.feedsListView, PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW), 0));
+			RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget);
+			widget.setOnClickPendingIntent(R.id.feed_icon, PendingIntent.getActivity(context, 0, new Intent(context, HomeActivity.class), 0));
+			widget.setPendingIntentTemplate(R.id.feedsListView, PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW), 0));
 
-            widget.setRemoteAdapter(R.id.feedsListView, svcIntent);
-            widget.setInt(R.id.feedsListView, "setBackgroundColor", PrefUtils.getInt(appWidgetId + ".background", STANDARD_BACKGROUND));
+			widget.setRemoteAdapter(R.id.feedsListView, svcIntent);
+			widget.setInt(R.id.feedsListView, "setBackgroundColor", PrefUtils.getInt(appWidgetId + ".background", STANDARD_BACKGROUND));
 
-            appWidgetManager.updateAppWidget(appWidgetId, widget);
-        }
+			appWidgetManager.updateAppWidget(appWidgetId, widget);
+		}
 
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
-    }
+		super.onUpdate(context, appWidgetManager, appWidgetIds);
+	}
 }
