@@ -36,7 +36,7 @@ public class ArticleTextExtractor {
     // Most likely negative candidates
     private static final Pattern NEGATIVE = Pattern.compile("nav($|igation)|user|com(ment|bx)|(^com-)|contact|"
             + "foot|masthead|(me(dia|ta))|outbrain|promo|related|scroll|(sho(utbox|pping))|"
-            + "sidebar|sponsor|tags|tool|widget|player|disclaimer|toc|infobox|vcard");
+			+ "sidebar|sponsor|tags|tool|widget|player|disclaimer|toc|infobox|vcard|avatar|follow-me-twitter");
 
     private static final Pattern NEGATIVE_STYLE =
             Pattern.compile("hidden|display: ?none|font-size: ?small");
