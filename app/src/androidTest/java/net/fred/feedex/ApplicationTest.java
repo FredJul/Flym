@@ -27,9 +27,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 		String link = "http://www.20minutes.fr/societe/1556095-20150305-sivens-prefet-tarn-interdit-toute-manifestation-albi-vendredi";
 		HttpURLConnection connection = NetworkUtils.setupConnection(link);
 
-		String mobilizedHtml = ArticleTextExtractor.extractContent(connection.getInputStream(), null);
+		String mobilizedHtml = ArticleTextExtractor.extractContent(connection.getInputStream(), "ou rassemblement ayant pour objet le projet de construction d");
 		mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link));
-
 		if (mobilizedHtml.contains("Doit se conformer")) {
 			throw new Exception("got comment part");
 		}

@@ -304,8 +304,8 @@ public class FetcherService extends IntentService {
 						String text = entryCursor.getString(abstractHtmlPos);
 						if (!TextUtils.isEmpty(text)) {
 							text = Html.fromHtml(text).toString();
-							if (text.length() > 43) {
-								contentIndicator = text.substring(0, 40);
+							if (text.length() > 60) {
+								contentIndicator = text.substring(20, 40);
 							}
 						}
 
