@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Light" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <!-- customize the color palette -->
+        <item name="colorPrimary">@color/light_theme_color_primary</item>
+        <item name="colorPrimaryDark">@color/light_theme_color_primary_dark</item>
+        <item name="colorAccent">@color/light_theme_color_primary</item>
+    </style>
+
+    <style name="Theme.Dark" parent="Theme.AppCompat">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <!-- customize the color palette -->
+        <item name="colorPrimary">@color/dark_theme_color_primary</item>
+        <item name="colorPrimaryDark">@color/dark_theme_color_primary_dark</item>
+        <item name="colorAccent">@color/light_theme_color_primary</item>
+    </style>
+</resources>

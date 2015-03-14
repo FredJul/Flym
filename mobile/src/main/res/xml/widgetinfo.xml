@@ -1,0 +1,12 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:configure="net.fred.feedex.widget.WidgetConfigActivity"
+                    android:initialLayout="@layout/widget"
+                    android:minHeight="180dp"
+                    android:minResizeHeight="110dp"
+                    android:minResizeWidth="180dp"
+                    android:minWidth="250dp"
+                    android:resizeMode="horizontal|vertical"
+                    android:updatePeriodMillis="3600000"
+                    android:widgetCategory="home_screen|keyguard"
+                    tools:ignore="UnusedAttribute"/>

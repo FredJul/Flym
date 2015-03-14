@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/menu_refresh"
+        android:icon="@drawable/refresh"
+        android:title="@string/menu_refresh"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"/>
+    <item
+        android:id="@+id/menu_all_read"
+        android:icon="@drawable/read_all"
+        android:title="@string/menu_all_read"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"/>
+    <item
+        android:id="@+id/menu_share_starred"
+        android:icon="@drawable/social_share"
+        android:title="@string/context_menu_share_starred"
+        app:showAsAction="always"/>
+
+</menu>

@@ -1,0 +1,58 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.droidtitan.lintcleaner'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22"
+
+    defaultConfig {
+        applicationId "net.fred.feedex"
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 55
+        versionName "1.8.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    signingConfigs {
+        release {
+            if (project.hasProperty("KEYSTORE_PATH")) {
+                storeFile file(KEYSTORE_PATH)
+                storePassword KEYSTORE_PASSWORD
+                keyAlias KEY_ALIAS
+                keyPassword KEY_PASSWORD
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    maven {
+        url 'http://dl.bintray.com/amulyakhare/maven'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    wearApp project(':wear')
+    compile 'com.android.support:appcompat-v7:+'
+    compile 'com.google.android.gms:play-services-wearable:+'
+    compile 'com.melnykov:floatingactionbutton:+'
+    compile 'org.jsoup:jsoup:+'
+    compile 'com.squareup.picasso:picasso:+'
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:+'
+}

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="updated_cursor" type="id"/>
+    <item name="holder" type="id"/>
+</resources>

@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="80dp">
+
+    <ImageView
+        android:id="@+id/main_icon"
+        android:layout_width="@dimen/entry_img_size"
+        android:layout_height="@dimen/entry_img_size"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:scaleType="centerCrop"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/main_icon"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@android:id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="3dp"
+            android:ellipsize="end"
+            android:gravity="top"
+            android:maxLines="4"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textIsSelectable="false"/>
+
+        <TextView
+            android:id="@android:id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:drawablePadding="3dp"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textIsSelectable="false"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/favorite_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/item_favorite"/>
+
+</RelativeLayout>
