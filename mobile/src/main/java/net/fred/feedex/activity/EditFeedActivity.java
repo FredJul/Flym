@@ -418,7 +418,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             Toast.makeText(this, R.string.error_feed_error, Toast.LENGTH_SHORT).show();
         }
 
-        if (!urlOrSearch.contains(".") || urlOrSearch.contains(" ")) {
+        if (!urlOrSearch.contains(".") || !urlOrSearch.contains("/") || urlOrSearch.contains(" ")) {
             final ProgressDialog pd = new ProgressDialog(EditFeedActivity.this);
             pd.setMessage(getString(R.string.loading));
             pd.setCancelable(true);
