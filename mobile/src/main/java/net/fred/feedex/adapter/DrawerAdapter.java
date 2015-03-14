@@ -156,7 +156,7 @@ public class DrawerAdapter extends BaseAdapter {
                 if (bitmap != null) {
                     holder.iconView.setImageBitmap(bitmap);
                 } else {
-                    holder.iconView.setImageResource(R.drawable.icon);
+                    holder.iconView.setImageResource(R.mipmap.ic_launcher);
                 }
 
                 int unread = mFeedsCursor.getInt(POS_UNREAD);

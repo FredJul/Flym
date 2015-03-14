@@ -93,7 +93,7 @@ class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
             intent.putExtra(Constants.INTENT_FROM_WIDGET, true);
             row.setOnClickFillInIntent(android.R.id.content, intent);
 
-            row.setImageViewResource(android.R.id.icon, R.drawable.icon);
+            row.setImageViewResource(android.R.id.icon, R.mipmap.ic_launcher);
             if (!mCursor.isNull(2)) {
                 try {
                     byte[] iconBytes = mCursor.getBlob(2);

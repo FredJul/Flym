@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/icon"/>
+        android:src="@mipmap/ic_launcher"/>
 
     <ImageView
         android:id="@+id/feed_ticker_circle"
