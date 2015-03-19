@@ -111,7 +111,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mLeftDrawer = findViewById(R.id.left_drawer);
         mDrawerList = (ListView) findViewById(R.id.drawer_list);
