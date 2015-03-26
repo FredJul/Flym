@@ -142,6 +142,8 @@ public class HtmlUtils {
                 String imgUrl = matcher.group(1).replace(" ", URL_SPACE);
                 if (isCorrectImage(imgUrl)) {
                     return imgUrl;
+                } else {
+                    return null;
                 }
             }
         }
@@ -153,6 +155,8 @@ public class HtmlUtils {
         for (String imgUrl : imgUrls) {
             if (isCorrectImage(imgUrl)) {
                 return imgUrl;
+            } else {
+                return null;
             }
         }
 
