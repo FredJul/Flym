@@ -9,8 +9,8 @@ android {
         applicationId "net.fred.feedex"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 55
-        versionName "1.8.0"
+        versionCode 56
+        versionName "1.8.1"
     }
 
     compileOptions {
@@ -48,7 +48,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    wearApp project(':wear')
+    //wearApp project(':wear')
     compile 'com.android.support:appcompat-v7:+'
     compile 'com.google.android.gms:play-services-wearable:+'
     compile 'com.melnykov:floatingactionbutton:+'
