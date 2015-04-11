@@ -27,7 +27,7 @@
     <string name="about_flym">О Флиму</string>
     <string name="welcome_title">Добро дошли у Флим. Желите ли да додате довод?</string>
     <string name="never">никад</string>
-    <string name="update">Ажурирај</string>
+    <string name="update">Ажурирано</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Поставке</string>
     <string name="menu_refresh">Освежи</string>
@@ -167,14 +167,14 @@
     <string name="settings_screen_proxy">Прокси</string>
     <string name="settings_category_network">Мрежа</string>
     <string name="settings_proxy_enabled">Омогућен</string>
-    <string name="settings_proxy_wifi_only">Само бежично</string>
+    <string name="settings_proxy_wifi_only">Само бежични</string>
     <string name="settings_proxy_wifi_only_description">Прокси само за бежичне везе</string>
     <string name="settings_proxy_host">Домаћин</string>
     <string name="settings_proxy_port">Порт</string>
     <string name="settings_proxy_type">Тип</string>
 
     <plurals name="number_of_new_entries">
-        <item quantity="one">%d нови уноса</item>
+        <item quantity="one">%d нови унос</item>
         <item quantity="few">%d нових уноса</item>
         <item quantity="other">%d нових уноса</item>
     </plurals>
@@ -211,7 +211,7 @@
     </string-array>
     <string-array name="settings_preload_image_modes">
         <item>Никад</item>
-        <item>Само бежично</item>
+        <item>Само преко бежичног</item>
         <item>Увек</item>
     </string-array>
 
