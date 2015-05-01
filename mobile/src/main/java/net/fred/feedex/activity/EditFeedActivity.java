@@ -98,7 +98,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     static final String FEED_SEARCH_URL = "url";
     static final String FEED_SEARCH_DESC = "contentSnippet";
     private static final String STATE_CURRENT_TAB = "STATE_CURRENT_TAB";
-    private static final String[] FEED_PROJECTION = new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT};
+    private static final String[] FEED_PROJECTION = new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.COOKIE_NAME, FeedColumns.COOKIE_VALUE};
     private final ActionMode.Callback mFilterActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -216,6 +216,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     };
     private TabHost mTabHost;
     private EditText mNameEditText, mUrlEditText;
+    private EditText mCookieNameEditText, mCookieValueEditText;
     private CheckBox mRetrieveFulltextCb;
     private ListView mFiltersListView;
     private FiltersCursorAdapter mFiltersCursorAdapter;
@@ -238,6 +239,8 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         mTabHost = (TabHost) findViewById(R.id.tabHost);
         mNameEditText = (EditText) findViewById(R.id.feed_title);
         mUrlEditText = (EditText) findViewById(R.id.feed_url);
+        mCookieNameEditText = (EditText) findViewById(R.id.feed_cookiename);
+        mCookieValueEditText = (EditText) findViewById(R.id.feed_cookievalue);
         mRetrieveFulltextCb = (CheckBox) findViewById(R.id.retrieve_fulltext);
         mFiltersListView = (ListView) findViewById(android.R.id.list);
         View tabWidget = findViewById(android.R.id.tabs);
@@ -292,6 +295,8 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     mNameEditText.setText(cursor.getString(0));
                     mUrlEditText.setText(cursor.getString(1));
                     mRetrieveFulltextCb.setChecked(cursor.getInt(2) == 1);
+                    mCookieNameEditText.setText(cursor.getString(3));
+                    mCookieValueEditText.setText(cursor.getString(4));
                     cursor.close();
                 } else {
                     cursor.close();
@@ -330,9 +335,13 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     values.put(FeedColumns.URL, url);
 
                     String name = mNameEditText.getText().toString();
+                    String cookieName = mCookieNameEditText.getText().toString();
+                    String cookieValue = mCookieValueEditText.getText().toString();
 
                     values.put(FeedColumns.NAME, name.trim().length() > 0 ? name : null);
                     values.put(FeedColumns.RETRIEVE_FULLTEXT, mRetrieveFulltextCb.isChecked() ? 1 : null);
+                    values.put(FeedColumns.COOKIE_NAME, cookieName.trim().length() > 0 ? cookieName : "");
+                    values.put(FeedColumns.COOKIE_VALUE, cookieValue.trim().length() > 0 ? cookieValue : "");
                     values.put(FeedColumns.FETCH_MODE, 0);
                     values.putNull(FeedColumns.ERROR);
 
@@ -414,6 +423,9 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
 
         final String name = mNameEditText.getText().toString().trim();
         final String urlOrSearch = mUrlEditText.getText().toString().trim();
+        final String cookieName = mCookieNameEditText.getText().toString();
+        final String cookieValue = mCookieValueEditText.getText().toString();
+
         if (urlOrSearch.isEmpty()) {
             Toast.makeText(this, R.string.error_feed_error, Toast.LENGTH_SHORT).show();
         }
@@ -460,7 +472,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                         builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                FeedDataContentProvider.addFeed(EditFeedActivity.this, data.get(which).get(FEED_SEARCH_URL), name.isEmpty() ? data.get(which).get(FEED_SEARCH_TITLE) : name, mRetrieveFulltextCb.isChecked());
+                                FeedDataContentProvider.addFeed(EditFeedActivity.this, data.get(which).get(FEED_SEARCH_URL), name.isEmpty() ? data.get(which).get(FEED_SEARCH_TITLE) : name, mRetrieveFulltextCb.isChecked(), cookieName, cookieValue);
 
                                 setResult(RESULT_OK);
                                 finish();
@@ -475,7 +487,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                 }
             });
         } else {
-            FeedDataContentProvider.addFeed(EditFeedActivity.this, urlOrSearch, name, mRetrieveFulltextCb.isChecked());
+            FeedDataContentProvider.addFeed(EditFeedActivity.this, urlOrSearch, name, mRetrieveFulltextCb.isChecked(), cookieName, cookieValue);
 
             setResult(RESULT_OK);
             finish();

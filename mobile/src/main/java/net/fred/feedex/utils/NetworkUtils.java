@@ -217,11 +217,21 @@ public class NetworkUtils {
         }
     }
 
+    public static HttpURLConnection setupConnection(String url, String cookieName, String cookieValue) throws IOException {
+        String cookie = cookieName + "=" + cookieValue;
+        return setupConnection(new URL(url), cookie);
+    }
+
     public static HttpURLConnection setupConnection(String url) throws IOException {
-        return setupConnection(new URL(url));
+        String cookie = "";
+        return setupConnection(new URL(url), cookie);
     }
 
     public static HttpURLConnection setupConnection(URL url) throws IOException {
+        return setupConnection(url, "");
+    }
+
+    public static HttpURLConnection setupConnection(URL url, String cookie) throws IOException {
         Proxy proxy = null;
 
         ConnectivityManager connectivityManager = (ConnectivityManager) MainApplication.getContext()
@@ -253,6 +263,10 @@ public class NetworkUtils {
 
         HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
 
+        CookieManager cookieManager = new CookieManager();
+        CookieHandler.setDefault(cookieManager);
+
+        connection.setRequestProperty("Cookie", cookie);
         connection.setDoInput(true);
         connection.setDoOutput(false);
         connection.setRequestProperty("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari"); // some feeds need this to work properly

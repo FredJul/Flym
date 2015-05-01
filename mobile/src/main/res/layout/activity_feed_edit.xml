@@ -75,14 +75,55 @@
                         android:hint="@string/optional"
                         android:singleLine="true"/>
 
+                    <TextView
+                        android:id="@+id/name_cookieview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/feed_title"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/feed_cookie"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textStyle="bold"/>
+
+                    <LinearLayout
+                        android:id="@+id/feed_linear"
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@+id/name_cookieview"
+                        android:layout_alignLeft="@+id/name_cookieview"
+                        android:layout_alignStart="@+id/name_cookieview">
+
+                        <EditText
+                            android:id="@+id/feed_cookiename"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/cookiename"
+                            android:singleLine="true"
+                            android:layout_weight="1"/>
+
+                        <EditText
+                            android:id="@+id/feed_cookievalue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/cookievalue"
+                            android:singleLine="true"
+                            android:layout_weight="1"/>
+
+                    </LinearLayout>
+
                     <CheckBox
                         android:id="@+id/retrieve_fulltext"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_below="@+id/feed_title"
+                        android:layout_below="@+id/feed_linear"
                         android:layout_marginRight="10dp"
                         android:text="@string/get_full_text"/>
+
+
                 </RelativeLayout>
 
                 <RelativeLayout

@@ -61,7 +61,7 @@ import java.io.File;
 class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "FeedEx.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     private static final String ALTER_TABLE = "ALTER TABLE ";
     private static final String ADD = " ADD ";
@@ -154,6 +154,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
         if (oldVersion < 8) {
             executeCatchedSQL(database, ALTER_TABLE + EntryColumns.TABLE_NAME + ADD + EntryColumns.IMAGE_URL + ' ' + FeedData.TYPE_TEXT);
+        }
+        if (oldVersion < 9) {
+            executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.COOKIE_NAME + ' ' + FeedData.TYPE_TEXT);
+            executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.COOKIE_VALUE + ' ' + FeedData.TYPE_TEXT);
         }
     }
 

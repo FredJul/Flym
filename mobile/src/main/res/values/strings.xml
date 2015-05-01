@@ -66,6 +66,9 @@
     <string name="feed_url">URL address</string>
     <string name="optional">(optional)</string>
     <string name="website_or_feed">(website or feed)</string>
+    <string name="feed_cookie">Authentication Cookie</string>
+    <string name="cookiename">Name</string>
+    <string name="cookievalue">Value</string>
     <string name="tab_feed_title">Feed</string>
     <string name="tab_filters_title">Filter</string>
     <string name="feed_title">TITLE</string>
