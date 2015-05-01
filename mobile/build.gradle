@@ -9,8 +9,8 @@ android {
         applicationId "net.fred.feedex"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 56
-        versionName "1.8.1"
+        versionCode 57
+        versionName "1.9.1"
     }
 
     compileOptions {
