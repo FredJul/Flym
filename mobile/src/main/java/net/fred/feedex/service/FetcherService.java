@@ -294,10 +294,19 @@ public class FetcherService extends IntentService {
                 if (entryCursor.isNull(entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML))) { // If we didn't already mobilized it
                     int linkPos = entryCursor.getColumnIndex(EntryColumns.LINK);
                     int abstractHtmlPos = entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
+                    int feedIdPos = entryCursor.getColumnIndex(EntryColumns.FEED_ID);
                     HttpURLConnection connection = null;
 
                     try {
                         String link = entryCursor.getString(linkPos);
+                        String feedId = entryCursor.getString(feedIdPos);
+                        Cursor cursorFeed = cr.query(FeedColumns.CONTENT_URI(feedId), null, null, null, null);
+                        cursorFeed.moveToNext();
+                        int cookieNamePosition = cursorFeed.getColumnIndex(FeedColumns.COOKIE_NAME);
+                        int cookieValuePosition = cursorFeed.getColumnIndex(FeedColumns.COOKIE_VALUE);
+                        String cookieName = cursorFeed.getString(cookieNamePosition);
+                        String cookieValue = cursorFeed.getString(cookieValuePosition);
+                        cursorFeed.close();
 
                         // Try to find a text indicator for better content extraction
                         String contentIndicator = null;
@@ -309,7 +318,7 @@ public class FetcherService extends IntentService {
                             }
                         }
 
-                        connection = NetworkUtils.setupConnection(link);
+                        connection = NetworkUtils.setupConnection(link,cookieName, cookieValue);
 
                         String mobilizedHtml = ArticleTextExtractor.extractContent(connection.getInputStream(), contentIndicator);
 
