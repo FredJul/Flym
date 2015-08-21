@@ -70,7 +70,7 @@
         </activity>
         <activity
             android:name=".activity.EditFeedActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT"/>
                 <category android:name="android.intent.category.DEFAULT"/>
