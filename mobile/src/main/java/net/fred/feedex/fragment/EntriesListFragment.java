@@ -184,7 +184,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         }
 
         mListView = (ListView) rootView.findViewById(android.R.id.list);
-        mListView.setFastScrollEnabled(true);
         mListView.setOnTouchListener(new SwipeGestureListener(mListView.getContext()));
 
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_TIP, true)) {
