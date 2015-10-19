@@ -76,7 +76,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     private final Uri mUri;
     private final boolean mShowFeedInfo;
     private final CircleTransform mCircleTransform = new CircleTransform();
-    private int mIdPos, mTitlePos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mFeedIdPos, mFeedIconPos, mFeedNamePos;
+    private int mIdPos, mTitlePos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mFeedIdPos, mFeedNamePos;
 
     public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo) {
         super(context, R.layout.item_entry_list, cursor, 0);
@@ -109,7 +109,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         mainImgUrl = TextUtils.isEmpty(mainImgUrl) ? null : NetworkUtils.getDownloadedOrDistantImageUrl(cursor.getLong(mIdPos), mainImgUrl);
 
         ColorGenerator generator = ColorGenerator.DEFAULT;
-        int color = generator.getColor(Long.valueOf(feedId)); // The color is specific to the feedId (which shouldn't change)
+        int color = generator.getColor(feedId); // The color is specific to the feedId (which shouldn't change)
         TextDrawable letterDrawable = TextDrawable.builder().buildRound((feedName != null ? feedName.substring(0, 1).toUpperCase() : ""), color);
         if (mainImgUrl != null) {
             Picasso.with(context).load(mainImgUrl).transform(mCircleTransform).placeholder(letterDrawable).error(letterDrawable).into(holder.mainImgView);
@@ -124,7 +124,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         if (mShowFeedInfo && mFeedNamePos > -1) {
             if (feedName != null) {
-                holder.dateTextView.setText(Html.fromHtml(new StringBuilder("<font color='#247ab0'>").append(feedName).append("</font>").append(Constants.COMMA_SPACE).append(StringUtils.getDateTimeString(cursor.getLong(mDatePos))).toString()));
+                holder.dateTextView.setText(Html.fromHtml("<font color='#247ab0'>" + feedName + "</font>" + Constants.COMMA_SPACE + StringUtils.getDateTimeString(cursor.getLong(mDatePos))));
             } else {
                 holder.dateTextView.setText(StringUtils.getDateTimeString(cursor.getLong(mDatePos)));
             }
@@ -239,7 +239,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             mFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
             mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
             mFeedIdPos = cursor.getColumnIndex(EntryColumns.FEED_ID);
-            mFeedIconPos = cursor.getColumnIndex(FeedColumns.ICON);
         }
     }
 

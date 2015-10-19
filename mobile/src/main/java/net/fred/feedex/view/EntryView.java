@@ -304,17 +304,17 @@ public class EntryView extends WebView {
     }
 
     public interface EntryViewManager {
-        public void onClickOriginalText();
+        void onClickOriginalText();
 
-        public void onClickFullText();
+        void onClickFullText();
 
-        public void onClickEnclosure();
+        void onClickEnclosure();
 
-        public void onStartVideoFullScreen();
+        void onStartVideoFullScreen();
 
-        public void onEndVideoFullScreen();
+        void onEndVideoFullScreen();
 
-        public FrameLayout getVideoLayout();
+        FrameLayout getVideoLayout();
     }
 
     private class JavaScriptObject {

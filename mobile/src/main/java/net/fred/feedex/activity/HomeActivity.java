@@ -93,7 +93,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
     };
     private CharSequence mTitle;
-    private BitmapDrawable mIcon;
     private int mCurrentDrawerPos;
 
     private boolean mCanQuit = false;
@@ -216,11 +215,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     public void onClickHideRead(View view) {
@@ -303,7 +298,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     private void selectDrawerItem(int position) {
         mCurrentDrawerPos = position;
-        mIcon = null;
+        BitmapDrawable icon = null;
 
         Uri newUri;
         boolean showFeedInfo = true;
@@ -326,7 +321,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     byte[] iconBytes = mDrawerAdapter.getItemIcon(position);
                     Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 24);
                     if (bitmap != null) {
-                        mIcon = new BitmapDrawable(getResources(), bitmap);
+                        icon = new BitmapDrawable(getResources(), bitmap);
                     }
 
                     newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
@@ -384,8 +379,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 break;
             default:
                 getSupportActionBar().setTitle(mTitle);
-                if (mIcon != null) {
-                    getSupportActionBar().setIcon(mIcon);
+                if (icon != null) {
+                    getSupportActionBar().setIcon(icon);
                 } else {
                     getSupportActionBar().setIcon(null);
                 }

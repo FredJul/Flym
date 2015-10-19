@@ -70,7 +70,7 @@ public class WearMainActivity extends Activity implements
 
     @Override
     protected void onResume() {
-        super.onStart();
+        super.onResume();
         mGoogleApiClient.connect();
     }
 
