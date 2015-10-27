@@ -53,7 +53,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -274,7 +274,7 @@ public class EditFeedsListFragment extends ListFragment {
         mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                ActionBarActivity activity = (ActionBarActivity) getActivity();
+                AppCompatActivity activity = (AppCompatActivity) getActivity();
                 if (activity != null) {
                     String title = ((TextView) view.findViewById(android.R.id.text1)).getText().toString();
                     Matcher m = Pattern.compile("(.*) \\([0-9]+\\)$").matcher(title);
