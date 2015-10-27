@@ -29,6 +29,9 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.text.Html;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.OkUrlFactory;
+
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.provider.FeedData;
@@ -218,7 +221,7 @@ public class NetworkUtils {
     }
 
     public static HttpURLConnection setupConnection(URL url) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        HttpURLConnection connection = new OkUrlFactory(new OkHttpClient()).open(url);
 
         connection.setDoInput(true);
         connection.setDoOutput(false);

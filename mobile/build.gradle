@@ -55,4 +55,5 @@ dependencies {
     compile 'org.jsoup:jsoup:+'
     compile 'com.squareup.picasso:picasso:+'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:+'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:+'
 }
