@@ -179,14 +179,6 @@
     <string name="settings_widget_background_description">Colore e trasparenza dello sfondo del widget
     </string>
     <string name="all_feeds">Tutti i feed (inclusi futuri)</string>
-    <string name="settings_screen_proxy">Proxy</string>
-    <string name="settings_category_network">Rete</string>
-    <string name="settings_proxy_enabled">Attivato</string>
-    <string name="settings_proxy_wifi_only">Solo WiFi</string>
-    <string name="settings_proxy_wifi_only_description">Usa il proxy solo per la rete WiFi</string>
-    <string name="settings_proxy_host">Host</string>
-    <string name="settings_proxy_port">Porta</string>
-    <string name="settings_proxy_type">Tipo</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Un nuovo articolo</item>

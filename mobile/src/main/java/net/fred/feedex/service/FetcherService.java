@@ -61,6 +61,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Xml;
 import android.widget.Toast;
 
@@ -342,7 +343,8 @@ public class FetcherService extends IntentService {
                                 }
                             }
                         }
-                    } catch (Throwable ignored) {
+                    } catch (Throwable e) {
+                        Log.e("ERROR", "Mobilize error", e);
                     } finally {
                         if (connection != null) {
                             connection.disconnect();

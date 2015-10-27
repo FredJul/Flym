@@ -165,14 +165,6 @@
     <string name="settings_widget_background">Pozadie</string>
     <string name="settings_widget_background_description">Farba a priehľadnosť pozadia widgetu</string>
     <string name="all_feeds">Všetky zdroje (vrátane budúcich)</string>
-    <string name="settings_screen_proxy">Proxy</string>
-    <string name="settings_category_network">Sieť</string>
-    <string name="settings_proxy_enabled">Povoliť</string>
-    <string name="settings_proxy_wifi_only">Len pre Wi-Fi</string>
-    <string name="settings_proxy_wifi_only_description">Použiť proxy len pre Wi-Fi pripojenie</string>
-    <string name="settings_proxy_host">Hosť</string>
-    <string name="settings_proxy_port">Port</string>
-    <string name="settings_proxy_type">Typ</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Jeden nový článok</item>

@@ -42,11 +42,7 @@ import java.io.InputStream;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.ProxySelector;
 import java.net.URL;
-import java.util.List;
 import java.util.regex.Pattern;
 
 public class NetworkUtils {
@@ -222,36 +218,7 @@ public class NetworkUtils {
     }
 
     public static HttpURLConnection setupConnection(URL url) throws IOException {
-        Proxy proxy = null;
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) MainApplication.getContext()
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (PrefUtils.getBoolean(PrefUtils.PROXY_ENABLED, false)
-                && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !PrefUtils.getBoolean(PrefUtils.PROXY_WIFI_ONLY, false))) {
-            try {
-                proxy = new Proxy("0".equals(PrefUtils.getString(PrefUtils.PROXY_TYPE, "0")) ? Proxy.Type.HTTP : Proxy.Type.SOCKS,
-                        new InetSocketAddress(PrefUtils.getString(PrefUtils.PROXY_HOST, ""), Integer.parseInt(PrefUtils.getString(
-                                PrefUtils.PROXY_PORT, "8080")))
-                );
-            } catch (Exception e) {
-                proxy = null;
-            }
-        }
-
-        if (proxy == null) {
-            // Try to get the system proxy
-            try {
-                ProxySelector defaultProxySelector = ProxySelector.getDefault();
-                List<Proxy> proxyList = defaultProxySelector.select(url.toURI());
-                if (!proxyList.isEmpty()) {
-                    proxy = proxyList.get(0);
-                }
-            } catch (Throwable ignored) {
-            }
-        }
-
-        HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         connection.setDoInput(true);
         connection.setDoOutput(false);

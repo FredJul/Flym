@@ -163,14 +163,6 @@
     <string name="settings_widget_background">背景色</string>
     <string name="settings_widget_background_description">挂件的颜色和透明度</string>
     <string name="all_feeds">全部订阅（包括未来的）</string>
-    <string name="settings_screen_proxy">代理</string>
-    <string name="settings_category_network">网络</string>
-    <string name="settings_proxy_enabled">启用</string>
-    <string name="settings_proxy_wifi_only">仅限Wi-Fi</string>
-    <string name="settings_proxy_wifi_only_description">仅限在Wi-Fi环境使用代理</string>
-    <string name="settings_proxy_host">主机地址</string>
-    <string name="settings_proxy_port">端口</string>
-    <string name="settings_proxy_type">类型</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="other">%d 条新消息</item>

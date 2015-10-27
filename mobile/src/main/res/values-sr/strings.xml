@@ -164,14 +164,6 @@
     <string name="settings_widget_background">Позадина</string>
     <string name="settings_widget_background_description">Боја и прозирност позадине виџета</string>
     <string name="all_feeds">Сви (укљ. будуће)</string>
-    <string name="settings_screen_proxy">Прокси</string>
-    <string name="settings_category_network">Мрежа</string>
-    <string name="settings_proxy_enabled">Омогућен</string>
-    <string name="settings_proxy_wifi_only">Само бежични</string>
-    <string name="settings_proxy_wifi_only_description">Прокси само за бежичне везе</string>
-    <string name="settings_proxy_host">Домаћин</string>
-    <string name="settings_proxy_port">Порт</string>
-    <string name="settings_proxy_type">Тип</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">%d нови унос</item>

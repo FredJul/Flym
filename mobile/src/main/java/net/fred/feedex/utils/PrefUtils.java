@@ -48,12 +48,6 @@ public class PrefUtils {
     public static final String DISPLAY_OLDEST_FIRST = "display_oldest_first";
     public static final String DISPLAY_ENTRIES_FULLSCREEN = "display_entries_fullscreen";
 
-    public static final String PROXY_ENABLED = "proxy.enabled";
-    public static final String PROXY_PORT = "proxy.port";
-    public static final String PROXY_HOST = "proxy.host";
-    public static final String PROXY_WIFI_ONLY = "proxy.wifionly";
-    public static final String PROXY_TYPE = "proxy.type";
-
     public static final String KEEP_TIME = "keeptime";
 
     public static final String FONT_SIZE = "fontsize";

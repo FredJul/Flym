@@ -183,15 +183,6 @@
         du widget
     </string>
     <string name="all_feeds">Tous les flux (y compris ceux à venir)</string>
-    <string name="settings_screen_proxy">Proxy</string>
-    <string name="settings_category_network">Réseau</string>
-    <string name="settings_proxy_enabled">Activé</string>
-    <string name="settings_proxy_wifi_only">WiFi seulement</string>
-    <string name="settings_proxy_wifi_only_description">Utilise le proxy pour le WiFi seulement
-    </string>
-    <string name="settings_proxy_host">Hôte</string>
-    <string name="settings_proxy_port">Port</string>
-    <string name="settings_proxy_type">Type</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">%d nouvel article</item>
