@@ -160,6 +160,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     @Override
     public void onStart() {
         super.onStart();
+        refreshUI(); // Should not be useful, but it's a security
         refreshSwipeProgress();
         PrefUtils.registerOnPrefChangeListener(mPrefListener);
 
