@@ -53,7 +53,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-wearable:+'
     compile 'com.melnykov:floatingactionbutton:+'
     compile 'org.jsoup:jsoup:+'
-    compile 'com.squareup.picasso:picasso:+'
+    compile 'com.github.bumptech.glide:glide:+'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:+'
     compile 'com.squareup.okhttp:okhttp-urlconnection:+'
 }

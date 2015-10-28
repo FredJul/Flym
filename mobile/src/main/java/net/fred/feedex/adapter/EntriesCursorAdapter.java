@@ -49,7 +49,10 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
@@ -59,7 +62,8 @@ import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
@@ -67,7 +71,6 @@ import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
-import net.fred.feedex.utils.CircleTransform;
 import net.fred.feedex.utils.NetworkUtils;
 import net.fred.feedex.utils.StringUtils;
 
@@ -75,7 +78,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     private final Uri mUri;
     private final boolean mShowFeedInfo;
-    private final CircleTransform mCircleTransform = new CircleTransform();
     private int mIdPos, mTitlePos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mFeedIdPos, mFeedNamePos;
 
     public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo) {
@@ -112,9 +114,16 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         int color = generator.getColor(feedId); // The color is specific to the feedId (which shouldn't change)
         TextDrawable letterDrawable = TextDrawable.builder().buildRound((feedName != null ? feedName.substring(0, 1).toUpperCase() : ""), color);
         if (mainImgUrl != null) {
-            Picasso.with(context).load(mainImgUrl).transform(mCircleTransform).placeholder(letterDrawable).error(letterDrawable).into(holder.mainImgView);
+            Glide.with(context).load(mainImgUrl).asBitmap().centerCrop().placeholder(letterDrawable).error(letterDrawable).into(new BitmapImageViewTarget(holder.mainImgView) {
+                @Override
+                protected void setResource(Bitmap resource) {
+                    RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                    circularBitmapDrawable.setCircular(true);
+                    getView().setImageDrawable(circularBitmapDrawable);
+                }
+            });
         } else {
-            Picasso.with(context).cancelRequest(holder.mainImgView);
+            //Glide.with(context).cancelRequest(holder.mainImgView);
             holder.mainImgView.setImageDrawable(letterDrawable);
         }
 
