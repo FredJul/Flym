@@ -335,12 +335,11 @@ public class FetcherService extends IntentService {
                                 values.put(EntryColumns.IMAGE_URL, mainImgUrl);
                             }
 
-                            if (cr.update(entryUri, values, null, null) > 0) {
-                                success = true;
-                                operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
-                                if (imgUrlsToDownload != null && !imgUrlsToDownload.isEmpty()) {
-                                    addImagesToDownload(String.valueOf(entryId), imgUrlsToDownload);
-                                }
+                            operations.add(ContentProviderOperation.newUpdate(entryUri).withValues(values).build());
+                            success = true;
+                            operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
+                            if (imgUrlsToDownload != null && !imgUrlsToDownload.isEmpty()) {
+                                addImagesToDownload(String.valueOf(entryId), imgUrlsToDownload);
                             }
                         }
                     } catch (Throwable e) {

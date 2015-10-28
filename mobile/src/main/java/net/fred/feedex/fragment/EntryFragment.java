@@ -120,7 +120,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
             mEntryPager.setCurrentItem(mCurrentPagerPos);
         }
 
-        mEntryPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mEntryPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i2) {
             }
