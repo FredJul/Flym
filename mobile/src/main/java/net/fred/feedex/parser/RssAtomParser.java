@@ -52,7 +52,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
@@ -61,6 +60,7 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
 import net.fred.feedex.service.FetcherService;
+import net.fred.feedex.utils.Dog;
 import net.fred.feedex.utils.HtmlUtils;
 import net.fred.feedex.utils.NetworkUtils;
 
@@ -79,8 +79,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RssAtomParser extends DefaultHandler {
-    private static final String TAG = RssAtomParser.class.getSimpleName();
-
     private static final String AND_SHARP = "&#";
     private static final String HTML_TEXT = "text/html";
     private static final String HTML_TAG_REGEX = "<(.|\n)*?>";
@@ -626,7 +624,7 @@ public class RssAtomParser extends DefaultHandler {
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, "Error", e);
+            Dog.e("Error", e);
         }
 
         ContentValues values = new ContentValues();

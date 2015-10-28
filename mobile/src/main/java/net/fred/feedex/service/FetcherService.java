@@ -61,7 +61,6 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Xml;
 import android.widget.Toast;
 
@@ -75,6 +74,7 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.TaskColumns;
 import net.fred.feedex.utils.ArticleTextExtractor;
+import net.fred.feedex.utils.Dog;
 import net.fred.feedex.utils.HtmlUtils;
 import net.fred.feedex.utils.NetworkUtils;
 import net.fred.feedex.utils.PrefUtils;
@@ -344,7 +344,7 @@ public class FetcherService extends IntentService {
                             }
                         }
                     } catch (Throwable e) {
-                        Log.e("ERROR", "Mobilize error", e);
+                        Dog.e("Mobilize error", e);
                     } finally {
                         if (connection != null) {
                             connection.disconnect();

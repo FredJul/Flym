@@ -59,7 +59,6 @@ import android.os.Bundle;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -81,6 +80,7 @@ import net.fred.feedex.loader.BaseLoader;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
+import net.fred.feedex.utils.Dog;
 import net.fred.feedex.utils.NetworkUtils;
 import net.fred.feedex.utils.UiUtils;
 
@@ -509,7 +509,6 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
  * A custom Loader that loads feed search results from the google WS.
  */
 class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, String>>> {
-    private static final String TAG = GetFeedSearchResultsLoader.class.getSimpleName();
     private final String mSearchText;
 
     public GetFeedSearchResultsLoader(Context context, String searchText) {
@@ -554,7 +553,7 @@ class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, St
                 conn.disconnect();
             }
         } catch (Exception e) {
-            Log.e(TAG, "Error", e);
+            Dog.e("Error", e);
             return null;
         }
     }

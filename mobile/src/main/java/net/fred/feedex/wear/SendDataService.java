@@ -21,7 +21,6 @@ package net.fred.feedex.wear;
 
 import android.database.Cursor;
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -33,10 +32,9 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
 import net.fred.feedex.provider.FeedData;
+import net.fred.feedex.utils.Dog;
 
 public class SendDataService extends WearableListenerService {
-
-    private static final String TAG = SendDataService.class.getSimpleName();
 
     private static final String COUNT_PATH = "/count";
     private static final String DATE_KEY = "date";
@@ -56,7 +54,7 @@ public class SendDataService extends WearableListenerService {
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         super.onMessageReceived(messageEvent);
-        Log.d(TAG, "onMessageReceived " + messageEvent);
+        Dog.d("onMessageReceived " + messageEvent);
 
         PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(COUNT_PATH);
         putDataMapRequest.getDataMap().putLong(DATE_KEY, SystemClock.elapsedRealtime());
@@ -75,17 +73,17 @@ public class SendDataService extends WearableListenerService {
         mGoogleApiClient.blockingConnect();
 
         if (!mGoogleApiClient.isConnected()) {
-            Log.e(TAG, "Cannot send data, not connected");
+            Dog.e("Cannot send data, not connected");
             return;
         }
 
-        Log.d(TAG, "Generating DataItem: " + request);
+        Dog.d("Generating DataItem: " + request);
         Wearable.DataApi.putDataItem(mGoogleApiClient, request)
                 .setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
                     @Override
                     public void onResult(DataApi.DataItemResult dataItemResult) {
                         if (!dataItemResult.getStatus().isSuccess()) {
-                            Log.e(TAG, "ERROR: failed to putDataItem, status code: " + dataItemResult.getStatus().getStatusCode());
+                            Dog.e("ERROR: failed to putDataItem, status code: " + dataItemResult.getStatus().getStatusCode());
                         }
                     }
                 });
