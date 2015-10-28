@@ -112,7 +112,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         ColorGenerator generator = ColorGenerator.DEFAULT;
         int color = generator.getColor(feedId); // The color is specific to the feedId (which shouldn't change)
-        TextDrawable letterDrawable = TextDrawable.builder().buildRound((feedName != null ? feedName.substring(0, 1).toUpperCase() : ""), color);
+        String lettersForName = feedName != null ? (feedName.length() < 2 ? feedName.toUpperCase() : feedName.substring(0, 2).toUpperCase()) : "";
+        TextDrawable letterDrawable = TextDrawable.builder().buildRound(lettersForName, color);
         if (mainImgUrl != null) {
             Glide.with(context).load(mainImgUrl).asBitmap().centerCrop().placeholder(letterDrawable).error(letterDrawable).into(new BitmapImageViewTarget(holder.mainImgView) {
                 @Override
