@@ -123,7 +123,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 }
             });
         } else {
-            //Glide.with(context).cancelRequest(holder.mainImgView);
+            Glide.clear(holder.mainImgView);
             holder.mainImgView.setImageDrawable(letterDrawable);
         }
 
