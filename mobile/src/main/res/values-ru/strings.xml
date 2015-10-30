@@ -52,6 +52,7 @@
     <string name="menu_add_group">Добавить группу</string>
     <string name="menu_import">Импорт из OPML-файла</string>
     <string name="menu_export">Экспорт в OPML-файл</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_error">Адрес ленты не доступен.</string>
     <string name="error_feed_process">Лента не может быть добавлена.</string>
     <string name="error_feed_url_exists">Такой адрес уже есть.</string>

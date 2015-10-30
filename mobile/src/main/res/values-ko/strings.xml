@@ -53,6 +53,7 @@
     <string name="menu_add_group">그룹 추가</string>
     <string name="menu_import">OPML에서 가져오기</string>
     <string name="menu_export">OPML로 내보내기</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_error">피드 주소에 접근할 수 없습니다.</string>
     <string name="error_feed_process">피드를 처리할 수 없습니다.</string>
     <string name="error_feed_url_exists">그 주소는 이미 있습니다.</string>

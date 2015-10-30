@@ -53,6 +53,7 @@
     <string name="menu_add_group">Taldea gehitu</string>
     <string name="menu_import">OPMLtik inportatu</string>
     <string name="menu_export">OPMLra esportatu</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_error">Jario helbidera ezin izan da sartu.</string>
     <string name="error_feed_process">Jarioa ezin da prozesatu.</string>
     <string name="error_feed_url_exists">Helbidea existitzen da dagoeneko.</string>

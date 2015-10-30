@@ -53,6 +53,7 @@
     <string name="menu_add_group">Ajouter un groupe</string>
     <string name="menu_import">Importer depuis OPML</string>
     <string name="menu_export">Exporter vers OPML</string>
+    <string name="storage_request_explanation">Pour pouvoir importer ou exporter les flux dans un fichier, vous devez authoriser l\'application à accéder à la mémoire de stockage.</string>
     <string name="error_feed_error">L\'adresse du flux n\'est pas accessible.</string>
     <string name="error_feed_process">Le flux ne peut pas être traité.</string>
     <string name="error_feed_url_exists">L\'adresse existe déjà.</string>

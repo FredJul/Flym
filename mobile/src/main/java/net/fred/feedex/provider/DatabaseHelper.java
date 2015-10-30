@@ -81,25 +81,23 @@ class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(createTable(TaskColumns.TABLE_NAME, TaskColumns.COLUMNS));
 
         // Check if we need to import the backup
-        File backupFile = new File(OPML.BACKUP_OPML);
-        final boolean hasBackup = backupFile.exists();
-        mHandler.post(new Runnable() { // In order to it after the database is created
-            @Override
-            public void run() {
-                new Thread(new Runnable() { // To not block the UI
-                    @Override
-                    public void run() {
-                        try {
-                            if (hasBackup) {
+        if (new File(OPML.BACKUP_OPML).exists()) {
+            mHandler.post(new Runnable() { // In order to it after the database is created
+                @Override
+                public void run() {
+                    new Thread(new Runnable() { // To not block the UI
+                        @Override
+                        public void run() {
+                            try {
                                 // Perform an automated import of the backup
                                 OPML.importFromFile(OPML.BACKUP_OPML);
+                            } catch (Exception ignored) {
                             }
-                        } catch (Exception ignored) {
                         }
-                    }
-                }).start();
-            }
-        });
+                    }).start();
+                }
+            });
+        }
     }
 
     public void exportToOPML() {

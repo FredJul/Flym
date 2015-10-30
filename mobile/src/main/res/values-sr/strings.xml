@@ -53,6 +53,7 @@
     <string name="menu_add_group">Додај групу</string>
     <string name="menu_import">Увези ОПМЛ фајл</string>
     <string name="menu_export">Извези у ОПМЛ фајл</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_error">Не може да се приступи адреси довода.</string>
     <string name="error_feed_process">Довод се не може обрадити.</string>
     <string name="error_feed_url_exists">Адреса већ постоји.</string>

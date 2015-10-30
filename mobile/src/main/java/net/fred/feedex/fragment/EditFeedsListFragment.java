@@ -44,6 +44,7 @@
 
 package net.fred.feedex.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListFragment;
@@ -51,8 +52,11 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.util.Pair;
@@ -87,6 +91,9 @@ import java.util.regex.Pattern;
 public class EditFeedsListFragment extends ListFragment {
 
     private static final int REQUEST_PICK_OPML_FILE = 1;
+    private static final int PERMISSIONS_REQUEST_IMPORT_FROM_OPML = 1;
+    private static final int PERMISSIONS_REQUEST_EXPORT_TO_OPML = 2;
+
     private final ActionMode.Callback mFeedActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -437,61 +444,68 @@ public class EditFeedsListFragment extends ListFragment {
                         }).setNegativeButton(android.R.string.cancel, null).show();
                 return true;
             }
+            case R.id.menu_export:
             case R.id.menu_import: {
-                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
-                        || Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
-                    // First, try to use a file app
-                    try {
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.setType("file/*");
-                        startActivityForResult(intent, REQUEST_PICK_OPML_FILE);
-                    } catch (Exception unused) { // Else use a custom file selector
-                        displayCustomFilePicker();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage(R.string.storage_request_explanation).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                if (item.getItemId() == R.id.menu_export) {
+                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_EXPORT_TO_OPML);
+                                } else if (item.getItemId() == R.id.menu_import) {
+                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_IMPORT_FROM_OPML);
+                                }
+                            }
+                        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancelled the dialog
+                            }
+                        });
+                        builder.show();
+                    } else {
+                        // No explanation needed, we can request the permission.
+                        if (item.getItemId() == R.id.menu_export) {
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_EXPORT_TO_OPML);
+                        } else if (item.getItemId() == R.id.menu_import) {
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_IMPORT_FROM_OPML);
+                        }
                     }
                 } else {
-                    Toast.makeText(getActivity(), R.string.error_external_storage_not_available, Toast.LENGTH_LONG).show();
+                    if (item.getItemId() == R.id.menu_export) {
+                        exportToOpml();
+                    } else if (item.getItemId() == R.id.menu_import) {
+                        importFromOpml();
+                    }
                 }
 
                 return true;
             }
-            case R.id.menu_export: {
-                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
-                        || Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
-
-                    new Thread(new Runnable() { // To not block the UI
-                        @Override
-                        public void run() {
-                            try {
-                                final String filename = Environment.getExternalStorageDirectory().toString() + "/Flym_"
-                                        + System.currentTimeMillis() + ".opml";
-
-                                OPML.exportToFile(filename);
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getActivity(), String.format(getString(R.string.message_exported_to), filename),
-                                                Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            } catch (Exception e) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getActivity(), R.string.error_feed_export, Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
-                        }
-                    }).start();
-                } else {
-                    Toast.makeText(getActivity(), R.string.error_external_storage_not_available, Toast.LENGTH_LONG).show();
-                }
-                break;
-            }
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_EXPORT_TO_OPML: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    exportToOpml();
+                }
+                return;
+            }
+            case PERMISSIONS_REQUEST_IMPORT_FROM_OPML: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    importFromOpml();
+                }
+                return;
+            }
+        }
     }
 
     @Override
@@ -561,6 +575,57 @@ public class EditFeedsListFragment extends ListFragment {
             builder.show();
         } catch (Exception unused) {
             Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void importFromOpml() {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
+                || Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+
+            // First, try to use a file app
+            try {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("file/*");
+                startActivityForResult(intent, REQUEST_PICK_OPML_FILE);
+            } catch (Exception unused) { // Else use a custom file selector
+                displayCustomFilePicker();
+            }
+        } else {
+            Toast.makeText(getActivity(), R.string.error_external_storage_not_available, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void exportToOpml() {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
+                || Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+
+            new Thread(new Runnable() { // To not block the UI
+                @Override
+                public void run() {
+                    try {
+                        final String filename = Environment.getExternalStorageDirectory().toString() + "/Flym_"
+                                + System.currentTimeMillis() + ".opml";
+
+                        OPML.exportToFile(filename);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), String.format(getString(R.string.message_exported_to), filename),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } catch (Exception e) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), R.string.error_feed_export, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                }
+            }).start();
+        } else {
+            Toast.makeText(getActivity(), R.string.error_external_storage_not_available, Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -54,6 +54,7 @@
     <string name="menu_add_group">Přidat skupinu</string>
     <string name="menu_import">Import z OPML</string>
     <string name="menu_export">Export do OPML</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_error">Adresa zdroje nemohla být otevřena.</string>
     <string name="error_feed_process">Zdroj nelze zpracovat.</string>
     <string name="error_feed_url_exists">Adresa již existuje.</string>

@@ -52,6 +52,7 @@
     <string name="menu_add_group">Afegir un grup</string>
     <string name="menu_import">Importa des de OPML</string>
     <string name="menu_export">Exporta a OPML</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_error">No es pot accedir al canal.</string>
     <string name="error_feed_process">No s\'ha pogut processar el canal.</string>
     <string name="error_feed_url_exists">Ja existeix aquesta adreça.</string>

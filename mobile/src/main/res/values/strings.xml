@@ -53,6 +53,7 @@
     <string name="menu_add_group">Add group</string>
     <string name="menu_import">Import from OPML</string>
     <string name="menu_export">Export to OPML</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_error">The feed website is unreachable.</string>
     <string name="error_feed_process">The feed can not be processed.</string>
     <string name="error_feed_url_exists">The address already exists.</string>
