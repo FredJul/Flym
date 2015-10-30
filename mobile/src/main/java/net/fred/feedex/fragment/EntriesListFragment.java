@@ -304,10 +304,19 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         inflater.inflate(R.menu.entry_list, menu);
 
-        if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
+        if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
             menu.findItem(R.id.menu_refresh).setVisible(false);
-        } else {
+            menu.findItem(R.id.menu_search).setVisible(false);
+            menu.findItem(R.id.menu_all_read).setVisible(false);
             menu.findItem(R.id.menu_share_starred).setVisible(false);
+        } else {
+            menu.findItem(R.id.menu_stop_search).setVisible(false);
+
+            if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
+                menu.findItem(R.id.menu_refresh).setVisible(false);
+            } else {
+                menu.findItem(R.id.menu_share_starred).setVisible(false);
+            }
         }
 
         super.onCreateOptionsMenu(menu, inflater);

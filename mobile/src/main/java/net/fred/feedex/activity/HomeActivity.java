@@ -30,8 +30,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -241,7 +239,19 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        if (mDrawerToggle == null || !mDrawerToggle.onOptionsItemSelected(item)) {
+            if (item.getItemId() == R.id.menu_search) {
+                selectDrawerItem(SEARCH_DRAWER_POSITION);
+            }
+            if (item.getItemId() == R.id.menu_stop_search) {
+                // We reset the current drawer position
+                selectDrawerItem(0);
+            } else {
+                return super.onOptionsItemSelected(item);
+            }
+        }
+
+        return true;
     }
 
     public void onClickHideRead(View view) {
@@ -256,16 +266,19 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         startActivity(new Intent(this, EditFeedsListActivity.class));
     }
 
-    public void onClickSearch(View view) {
-        selectDrawerItem(SEARCH_DRAWER_POSITION);
-        if (mDrawerLayout != null) {
-            mDrawerLayout.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mDrawerLayout.closeDrawer(mLeftDrawer);
-                }
-            }, 50);
-        }
+    public void onClickAdd(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.menu_add_feed)
+                .setItems(new CharSequence[]{getString(R.string.add_custom_feed), getString(R.string.google_news_title)}, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            startActivity(new Intent(Intent.ACTION_INSERT).setData(FeedColumns.CONTENT_URI));
+                        } else {
+                            startActivity(new Intent(HomeActivity.this, AddGoogleNewsActivity.class));
+                        }
+                    }
+                });
+        builder.show();
     }
 
     public void onClickSettings(View view) {
@@ -324,7 +337,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     private void selectDrawerItem(int position) {
         mCurrentDrawerPos = position;
-        BitmapDrawable icon = null;
 
         Uri newUri;
         boolean showFeedInfo = true;
@@ -344,12 +356,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 if (mDrawerAdapter.isItemAGroup(position)) {
                     newUri = EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
                 } else {
-                    byte[] iconBytes = mDrawerAdapter.getItemIcon(position);
-                    Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 24);
-                    if (bitmap != null) {
-                        icon = new BitmapDrawable(getResources(), bitmap);
-                    }
-
                     newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
                     showFeedInfo = false;
                 }
@@ -393,23 +399,15 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         switch (mCurrentDrawerPos) {
             case SEARCH_DRAWER_POSITION:
                 getSupportActionBar().setTitle(android.R.string.search_go);
-                getSupportActionBar().setIcon(R.drawable.action_search);
                 break;
             case 0:
                 getSupportActionBar().setTitle(R.string.all);
-                getSupportActionBar().setIcon(R.drawable.ic_statusbar_rss);
                 break;
             case 1:
                 getSupportActionBar().setTitle(R.string.favorites);
-                getSupportActionBar().setIcon(R.drawable.rating_important);
                 break;
             default:
                 getSupportActionBar().setTitle(mTitle);
-                if (icon != null) {
-                    getSupportActionBar().setIcon(icon);
-                } else {
-                    getSupportActionBar().setIcon(null);
-                }
                 break;
         }
 

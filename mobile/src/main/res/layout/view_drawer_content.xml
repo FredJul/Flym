@@ -18,16 +18,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="onClickEditFeeds"
-            android:src="@drawable/content_edit"/>
+            android:onClick="onClickAdd"
+            android:src="@drawable/content_new" />
 
         <ImageButton
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="onClickSearch"
-            android:src="@drawable/action_search"/>
+            android:onClick="onClickEditFeeds"
+            android:src="@drawable/content_edit" />
 
         <ImageButton
             style="?android:attr/buttonBarButtonStyle"

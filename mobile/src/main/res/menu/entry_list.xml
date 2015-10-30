@@ -10,6 +10,12 @@
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>
     <item
+        android:id="@+id/menu_search"
+        android:icon="@drawable/action_search"
+        android:title="@android:string/search_go"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+    <item
         android:id="@+id/menu_all_read"
         android:icon="@drawable/read_all"
         android:title="@string/menu_all_read"
@@ -19,6 +25,13 @@
         android:id="@+id/menu_share_starred"
         android:icon="@drawable/social_share"
         android:title="@string/context_menu_share_starred"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+    <item
+        android:id="@+id/menu_stop_search"
+        android:icon="@drawable/ic_action_cancel_white"
+        android:title="@android:string/cancel"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
 
 </menu>
