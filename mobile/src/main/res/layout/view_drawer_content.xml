@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         android:padding="3dp"
-        android:background="@color/dark_theme_color_primary">
+        android:background="@color/dark_header">
 
         <ImageButton
             style="?android:attr/buttonBarButtonStyle"

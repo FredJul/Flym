@@ -3,14 +3,6 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
-
-    <android.support.v7.widget.SearchView xmlns:support="http://schemas.android.com/apk/res-auto"
-                                          android:id="@+id/searchView"
-                                          android:layout_width="match_parent"
-                                          android:layout_height="wrap_content"
-                                          android:visibility="gone"
-                                          support:iconifiedByDefault="false"/>
-
     <Button
         android:id="@+id/refreshListBtn"
         android:layout_width="match_parent"

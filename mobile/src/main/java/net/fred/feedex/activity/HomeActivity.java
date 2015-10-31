@@ -76,7 +76,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             ") > 0)";
 
     private static final int LOADER_ID = 0;
-    private static final int SEARCH_DRAWER_POSITION = -1;
     private static final int PERMISSIONS_REQUEST_IMPORT_FROM_OPML = 1;
 
     private EntriesListFragment mEntriesFragment;
@@ -232,26 +231,13 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
         // We reset the current drawer position
         selectDrawerItem(0);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle == null || !mDrawerToggle.onOptionsItemSelected(item)) {
-            if (item.getItemId() == R.id.menu_search) {
-                selectDrawerItem(SEARCH_DRAWER_POSITION);
-            }
-            if (item.getItemId() == R.id.menu_stop_search) {
-                // We reset the current drawer position
-                selectDrawerItem(0);
-            } else {
-                return super.onOptionsItemSelected(item);
-            }
-        }
-
-        return true;
+        return mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     public void onClickHideRead(View view) {
@@ -342,9 +328,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         boolean showFeedInfo = true;
 
         switch (position) {
-            case SEARCH_DRAWER_POSITION:
-                newUri = EntryColumns.SEARCH_URI(mEntriesFragment.getCurrentSearch());
-                break;
             case 0:
                 newUri = EntryColumns.ALL_ENTRIES_CONTENT_URI;
                 break;
@@ -397,9 +380,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         // Set title & icon
         switch (mCurrentDrawerPos) {
-            case SEARCH_DRAWER_POSITION:
-                getSupportActionBar().setTitle(android.R.string.search_go);
-                break;
             case 0:
                 getSupportActionBar().setTitle(R.string.all);
                 break;

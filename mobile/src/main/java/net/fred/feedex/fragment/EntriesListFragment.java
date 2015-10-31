@@ -31,6 +31,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Gravity;
@@ -42,7 +43,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -63,18 +63,18 @@ import java.util.Date;
 
 public class EntriesListFragment extends SwipeRefreshListFragment {
 
-    private static final String STATE_URI = "STATE_URI";
+    private static final String STATE_CURRENT_URI = "STATE_CURRENT_URI";
+    private static final String STATE_ORIGINAL_URI = "STATE_ORIGINAL_URI";
     private static final String STATE_SHOW_FEED_INFO = "STATE_SHOW_FEED_INFO";
     private static final String STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE";
 
     private static final int ENTRIES_LOADER_ID = 1;
     private static final int NEW_ENTRIES_NUMBER_LOADER_ID = 2;
 
-    private Uri mUri;
+    private Uri mCurrentUri, mOriginalUri;
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
     private ListView mListView;
-    private SearchView mSearchView;
     private FloatingActionButton mHideReadButton;
     private long mListDisplayDate = new Date().getTime();
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
@@ -82,10 +82,10 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             String entriesOrder = PrefUtils.getBoolean(PrefUtils.DISPLAY_OLDEST_FIRST, false) ? Constants.DB_ASC : Constants.DB_DESC;
             String where = "(" + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + ')';
-            if (!FeedData.shouldShowReadEntries(mUri)) {
+            if (!FeedData.shouldShowReadEntries(mCurrentUri)) {
                 where += Constants.DB_AND + EntryColumns.WHERE_UNREAD;
             }
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, null, where, null, EntryColumns.DATE + entriesOrder);
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, null, where, null, EntryColumns.DATE + entriesOrder);
             cursorLoader.setUpdateThrottle(150);
             return cursorLoader;
         }
@@ -116,7 +116,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), mUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
             cursorLoader.setUpdateThrottle(150);
             return cursorLoader;
         }
@@ -149,11 +149,12 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-            mUri = savedInstanceState.getParcelable(STATE_URI);
+            mCurrentUri = savedInstanceState.getParcelable(STATE_CURRENT_URI);
+            mOriginalUri = savedInstanceState.getParcelable(STATE_ORIGINAL_URI);
             mShowFeedInfo = savedInstanceState.getBoolean(STATE_SHOW_FEED_INFO);
             mListDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE);
 
-            mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, Constants.EMPTY_CURSOR, mShowFeedInfo);
+            mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo);
         }
     }
 
@@ -164,7 +165,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         refreshSwipeProgress();
         PrefUtils.registerOnPrefChangeListener(mPrefListener);
 
-        if (mUri != null) {
+        if (mCurrentUri != null) {
             // If the list is empty when we are going back here, try with the last display date
             if (mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
                 mListDisplayDate = new Date().getTime();
@@ -227,34 +228,9 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 mListDisplayDate = new Date().getTime();
 
                 refreshUI();
-                if (mUri != null) {
+                if (mCurrentUri != null) {
                     restartLoaders();
                 }
-            }
-        });
-
-        mSearchView = (SearchView) rootView.findViewById(R.id.searchView);
-        if (savedInstanceState != null) {
-            refreshUI(); // To hide/show the search bar
-        }
-
-        mSearchView.post(new Runnable() { // Do this AFTER the text has been restored from saveInstanceState
-            @Override
-            public void run() {
-                mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String s) {
-                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(mSearchView.getWindowToken(), 0);
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String s) {
-                        setData(EntryColumns.SEARCH_URI(s), true);
-                        return false;
-                    }
-                });
             }
         });
 
@@ -271,7 +247,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(STATE_URI, mUri);
+        outState.putParcelable(STATE_CURRENT_URI, mCurrentUri);
+        outState.putParcelable(STATE_ORIGINAL_URI, mOriginalUri);
         outState.putBoolean(STATE_SHOW_FEED_INFO, mShowFeedInfo);
         outState.putLong(STATE_LIST_DISPLAY_DATE, mListDisplayDate);
 
@@ -283,18 +260,10 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         startRefresh();
     }
 
-    public void onClickHideRead(View view) {
-        if (!PrefUtils.getBoolean(PrefUtils.SHOW_READ, true)) {
-            PrefUtils.putBoolean(PrefUtils.SHOW_READ, true);
-        } else {
-            PrefUtils.putBoolean(PrefUtils.SHOW_READ, false);
-        }
-    }
-
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         if (id >= 0) { // should not happen, but I had a crash with this on PlayStore...
-            startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, id)));
+            startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mCurrentUri, id)));
         }
     }
 
@@ -304,19 +273,35 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         inflater.inflate(R.menu.entry_list, menu);
 
-        if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
-            menu.findItem(R.id.menu_refresh).setVisible(false);
-            menu.findItem(R.id.menu_search).setVisible(false);
-            menu.findItem(R.id.menu_all_read).setVisible(false);
-            menu.findItem(R.id.menu_share_starred).setVisible(false);
-        } else {
-            menu.findItem(R.id.menu_stop_search).setVisible(false);
-
-            if (EntryColumns.FAVORITES_CONTENT_URI.equals(mUri)) {
-                menu.findItem(R.id.menu_refresh).setVisible(false);
-            } else {
-                menu.findItem(R.id.menu_share_starred).setVisible(false);
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
             }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (TextUtils.isEmpty(newText)) {
+                    setData(mOriginalUri, true);
+                } else {
+                    setData(EntryColumns.SEARCH_URI(newText), true, true);
+                }
+                return false;
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                setData(mOriginalUri, true);
+                return false;
+            }
+        });
+
+        if (EntryColumns.FAVORITES_CONTENT_URI.equals(mCurrentUri)) {
+            menu.findItem(R.id.menu_refresh).setVisible(false);
+        } else {
+            menu.findItem(R.id.menu_share_starred).setVisible(false);
         }
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -354,7 +339,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                     mEntriesCursorAdapter.markAllAsRead(mListDisplayDate);
 
                     // If we are on "all items" uri, we can remove the notification here
-                    if (mUri != null && EntryColumns.CONTENT_URI.equals(mUri) && Constants.NOTIF_MGR != null) {
+                    if (mCurrentUri != null && EntryColumns.CONTENT_URI.equals(mCurrentUri) && Constants.NOTIF_MGR != null) {
                         Constants.NOTIF_MGR.cancel(0);
                     }
                 }
@@ -366,9 +351,9 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
     private void startRefresh() {
         if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
+            if (mCurrentUri != null && FeedDataContentProvider.URI_MATCHER.match(mCurrentUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED) {
                 getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FEED_ID,
-                        mUri.getPathSegments().get(1)));
+                        mCurrentUri.getPathSegments().get(1)));
             } else {
                 getActivity().startService(new Intent(getActivity(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
             }
@@ -378,22 +363,26 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     }
 
     public Uri getUri() {
-        return mUri;
-    }
-
-    public String getCurrentSearch() {
-        return mSearchView == null ? null : mSearchView.getQuery().toString();
+        return mOriginalUri;
     }
 
     public void setData(Uri uri, boolean showFeedInfo) {
-        mUri = uri;
+        setData(uri, showFeedInfo, false);
+    }
+
+    private void setData(Uri uri, boolean showFeedInfo, boolean isSearchUri) {
+        mCurrentUri = uri;
+        if (!isSearchUri) {
+            mOriginalUri = mCurrentUri;
+        }
+
         mShowFeedInfo = showFeedInfo;
 
-        mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mUri, Constants.EMPTY_CURSOR, mShowFeedInfo);
+        mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo);
         setListAdapter(mEntriesCursorAdapter);
 
         mListDisplayDate = new Date().getTime();
-        if (mUri != null) {
+        if (mCurrentUri != null) {
             restartLoaders();
         }
         refreshUI();
@@ -406,12 +395,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     }
 
     private void refreshUI() {
-        if (mUri != null && FeedDataContentProvider.URI_MATCHER.match(mUri) == FeedDataContentProvider.URI_SEARCH) {
-            mSearchView.setVisibility(View.VISIBLE);
-        } else {
-            mSearchView.setVisibility(View.GONE);
-        }
-
         if (mNewEntriesNumber > 0) {
             mRefreshListBtn.setText(getResources().getQuantityString(R.plurals.number_of_new_entries, mNewEntriesNumber, mNewEntriesNumber));
             mRefreshListBtn.setVisibility(View.VISIBLE);

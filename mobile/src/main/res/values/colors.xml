@@ -5,5 +5,6 @@
     <color name="dark_theme_color_primary">#175073</color>
     <color name="dark_theme_color_primary_dark">#ff10364e</color>
     <color name="dark_background">#FF202020</color>
+    <color name="dark_header">#163b53</color>
     <color name="floating_action_button_disabled">#ff0b2535</color>
 </resources>
