@@ -3,7 +3,7 @@ apply plugin: 'com.droidtitan.lintcleaner'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "net.fred.feedex"
