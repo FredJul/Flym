@@ -75,8 +75,21 @@ public class ArticleTextExtractor {
             }
         }
 
+        Collection<Element> metas = getMetas(doc);
+        String ogImage = null;
+        for (Element entry : metas) {
+            if (entry.hasAttr("property") && "og:image".equals(entry.attr("property"))) {
+                ogImage = entry.attr("content");
+                break;
+            }
+        }
+
         if (bestMatchElement != null) {
-            return bestMatchElement.toString();
+            String ret = bestMatchElement.toString();
+            if (ogImage != null && !ret.contains(ogImage)) {
+                ret = "<img src=\""+ogImage+"\"><br>\n"+ret;
+            }
+            return ret;
         }
 
         return null;
@@ -200,6 +213,7 @@ public class ArticleTextExtractor {
      */
     private static void prepareDocument(Document doc) {
         // stripUnlikelyCandidates(doc);
+        removeSelectsAndOptions(doc);
         removeScriptsAndStyles(doc);
     }
 
@@ -237,6 +251,31 @@ public class ArticleTextExtractor {
         }
 
         return doc;
+    }
+
+    private static Document removeSelectsAndOptions(Document doc) {
+        Elements scripts = doc.getElementsByTag("select");
+        for (Element item : scripts) {
+            item.remove();
+        }
+
+        Elements noscripts = doc.getElementsByTag("option");
+        for (Element item : noscripts) {
+            item.remove();
+        }
+
+        return doc;
+    }
+
+    /**
+     * @return a set of all meta nodes
+     */
+    private static Collection<Element> getMetas(Document doc) {
+        Collection<Element> nodes = new HashSet<>(64);
+        for (Element el : doc.select("head").select("meta")) {
+            nodes.add(el);
+        }
+        return nodes;
     }
 
     /**
