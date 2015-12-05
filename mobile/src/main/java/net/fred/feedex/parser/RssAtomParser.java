@@ -113,14 +113,24 @@ public class RssAtomParser extends DefaultHandler {
     private static final String ATTRIBUTE_LENGTH = "length";
     private static final String ATTRIBUTE_REL = "rel";
 
-    private static final String[][] TIMEZONES_REPLACE = {{"MEST", "+0200"}, {"EST", "-0500"}, {"PST", "-0800"}};
+    private static final String[][] TIMEZONES_REPLACE = {
+            {"MEST", "+0200"},
+            {"EST", "-0500"},
+            {"PST", "-0800"},
+            {"ICT", "+0700"}};
 
-    private static final DateFormat[] PUBDATE_DATE_FORMATS = {new SimpleDateFormat("d' 'MMM' 'yy' 'HH:mm:ss", Locale.US),
-            new SimpleDateFormat("d' 'MMM' 'yy' 'HH:mm:ss' 'Z", Locale.US), new SimpleDateFormat("d' 'MMM' 'yy' 'HH:mm:ss' 'z", Locale.US)};
+    private final DateFormat[] PUBDATE_DATE_FORMATS = {
+            new SimpleDateFormat("d' 'MMM' 'yy' 'HH:mm:ss' 'Z", Locale.US),
+            new SimpleDateFormat("d' 'MMM' 'yy' 'HH:mm:ss' 'z", Locale.US),
+            new SimpleDateFormat("d' 'MMM' 'yy' 'HH:mm:ss", Locale.US)
+    };
 
-    private static final DateFormat[] UPDATE_DATE_FORMATS = {new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss", Locale.US),
-            new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ssZ", Locale.US), new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSz", Locale.US),
-            new SimpleDateFormat("yyyy-MM-dd", Locale.US)};
+    private final DateFormat[] UPDATE_DATE_FORMATS = {
+            new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ssZ", Locale.US),
+            new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSz", Locale.US),
+            new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss", Locale.US),
+            new SimpleDateFormat("yyyy-MM-dd", Locale.US)
+    };
 
     private final Date mRealLastUpdateDate;
     private final String mId;
@@ -525,7 +535,7 @@ public class RssAtomParser extends DefaultHandler {
         this.mFetchImages = fetchImages;
     }
 
-    private Date parseUpdateDate(String dateStr) {
+    public Date parseUpdateDate(String dateStr) {
         dateStr = improveDateString(dateStr);
         return parseUpdateDate(dateStr, true);
     }
@@ -545,7 +555,7 @@ public class RssAtomParser extends DefaultHandler {
             return null;
     }
 
-    private Date parsePubdateDate(String dateStr) {
+    public Date parsePubdateDate(String dateStr) {
         dateStr = improveDateString(dateStr);
         return parsePubdateDate(dateStr, true);
     }
