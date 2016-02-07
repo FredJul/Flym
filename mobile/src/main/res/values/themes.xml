@@ -7,6 +7,7 @@
         <item name="colorPrimary">@color/light_theme_color_primary</item>
         <item name="colorPrimaryDark">@color/light_theme_color_primary_dark</item>
         <item name="colorAccent">@color/light_theme_color_primary</item>
+        <item name="colorReadState">@color/light_read_state</item>
     </style>
 
     <style name="Theme.Dark" parent="Theme.AppCompat.NoActionBar">
@@ -15,5 +16,6 @@
         <item name="colorPrimary">@color/dark_theme_color_primary</item>
         <item name="colorPrimaryDark">@color/dark_theme_color_primary_dark</item>
         <item name="colorAccent">@color/light_theme_color_primary</item>
+        <item name="colorReadState">@color/dark_read_state</item>
     </style>
 </resources>
