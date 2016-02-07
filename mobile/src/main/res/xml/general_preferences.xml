@@ -63,7 +63,7 @@
         <CheckBoxPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:disableDependentsState="true"
             android:key="lighttheme"
             android:summary="@string/settings_light_theme_description"
