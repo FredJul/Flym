@@ -55,7 +55,6 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ResourceCursorAdapter;
@@ -114,16 +113,9 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         ColorGenerator generator = ColorGenerator.DEFAULT;
         int color = generator.getColor(feedId); // The color is specific to the feedId (which shouldn't change)
         String lettersForName = feedName != null ? (feedName.length() < 2 ? feedName.toUpperCase() : feedName.substring(0, 2).toUpperCase()) : "";
-        TextDrawable letterDrawable = TextDrawable.builder().buildRound(lettersForName, color);
+        TextDrawable letterDrawable = TextDrawable.builder().buildRect(lettersForName, color);
         if (mainImgUrl != null) {
-            Glide.with(context).load(mainImgUrl).asBitmap().fitCenter().placeholder(letterDrawable).error(letterDrawable).into(new BitmapImageViewTarget(holder.mainImgView) {
-                @Override
-                protected void setResource(Bitmap resource) {
-                    RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                    circularBitmapDrawable.setCircular(false);
-                    getView().setImageDrawable(circularBitmapDrawable);
-                }
-            });
+            Glide.with(context).load(mainImgUrl).centerCrop().placeholder(letterDrawable).error(letterDrawable).into(holder.mainImgView);
         } else {
             Glide.clear(holder.mainImgView);
             holder.mainImgView.setImageDrawable(letterDrawable);
