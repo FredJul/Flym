@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2010-2012 Stefan Handschuh
+      modified 2014-2014 Matthias Dill
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">Über Flym</string>
+    <string name="welcome_title">Wilkommen in Flym. Willst du einen Feed hinzufügen?</string>
+    <string name="never">nie</string>
+    <string name="update">aktualisiert</string>
+    <string name="colon">:\u00A0</string>
+    <string name="menu_settings">Einstellungen</string>
+    <string name="menu_refresh">Aktualisieren</string>
+    <string name="menu_all_read">Alle als gelesen markieren</string>
+    <string name="flym_feeds">Flym-Feeds</string>
+    <string name="error">Fehler</string>
+    <string name="network_error">Kein Internet</string>
+    <string name="loading">Laden…</string>
+    <string name="no_result">Kein Ergebnis</string>
+    <string name="drawer_open">Navigationsleiste öffnen</string>
+    <string name="drawer_close">Navigationsleiste schließen</string>
+    <string name="back_again_to_quit">Zum Beenden Zurück-Taste noch einmal drücken</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Feeds</string>
+    <string name="menu_add_feed">Feed hinzufügen</string>
+    <string name="no_feeds">Keine Feeds</string>
+    <string name="no_filters">Keine Filter</string>
+    <string name="context_menu_delete">Löschen</string>
+    <string name="edit_feed_title">Feed bearbeiten</string>
+    <string name="new_feed_title">Neuer Feed</string>
+    <string name="context_menu_edit">Bearbeiten</string>
+    <string name="menu_add_group">Gruppe erstellen</string>
+    <string name="menu_import">Aus OPML importieren</string>
+    <string name="menu_export">Nach OPML exportieren</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="error_feed_error">Zugriff auf Feed-Adresse nicht möglich.</string>
+    <string name="error_feed_process">Der Feed kann nicht bearbeitet werden.</string>
+    <string name="error_feed_url_exists">Diese Adresse existiert schon.</string>
+    <string name="error_feed_import">Die ausgewählte Datei konnte nicht importiert werden.</string>
+    <string name="error_feed_export">Der Export ist fehlgeschlagen. Stelle sicher, dass du eine beschreibbare SD-Karte eingelegt hast.</string>
+    <string name="error_external_storage_not_available">Der externe Speicher (z.B. eine SD-Karte) ist nicht verfügbar.</string>
+    <string name="feed_url">URL-Adresse</string>
+    <string name="optional">(optional)</string>
+    <string name="website_or_feed">(Website oder Feed)</string>
+    <string name="tab_feed_title">Feed</string>
+    <string name="tab_filters_title">Filter</string>
+    <string name="feed_title">TITEL</string>
+    <string name="feed_filters">AUSSCHLUSS-FILTER</string>
+    <string name="filter_add_title">Filter hinzufügen</string>
+    <string name="filter_delete_title">Filter entfernen</string>
+    <string name="filter_edit_title">Filter bearbeiten</string>
+    <string name="filter_is_regex">ist ein regulärer Ausdruck</string>
+    <string name="filter_apply_to_title">Auf den Titel anwenden</string>
+    <string name="filter_apply_to_content">Auf den Inhalt anwenden</string>
+    <string name="accept">Annehmen</string>
+    <string name="reject">Zurückweisen</string>
+    <string name="feed_search">Feed-Suche</string>
+    <string name="select_file">Datei auswählen(SD-root)</string>
+    <string name="question_delete_feed">Willst du diesen Feed wirklich löschen?</string>
+    <string name="question_delete_group">Willst du diese Gruppe mit allen Feeds wirklich löschen?</string>
+    <string name="question_delete_filter">Willst du diesen Filter wirklich löschen?</string>
+    <string name="add_group_title">Gruppenname wählen</string>
+    <string name="edit_group_title">Gruppennamen bearbeiten</string>
+    <string name="message_exported_to">Nach %s exportiert.</string>
+    <string name="to_group_title">Feed-Verschiebung</string>
+    <string name="to_group_message">Du kannst den Feed entweder in oder über diese Gruppe positionieren. Was willst du tun?</string>
+    <string name="to_group_above">Über die Gruppe</string>
+    <string name="to_group_into">In die Gruppe</string>
+    <string name="add_custom_feed">Füge einen benutzerdefinierten Feed hinzu oder suche einen</string>
+    <string name="google_news_title">Google News</string>
+    <string name="google_news_indicator">Wähle ein oder mehrere Themen aus. Möglicherweise werden sie von Google nicht in deiner Sprache angeboten.</string>
+    <string name="google_news_top_stories">Schlagzeilen</string>
+    <string name="google_news_world">International</string>
+    <string name="google_news_business">Wirtschaft</string>
+    <string name="google_news_technology">Wissen/Technik</string>
+    <string name="google_news_entertainment">Unterhaltung</string>
+    <string name="google_news_sports">Sport</string>
+    <string name="google_news_science">Panorama</string>
+    <string name="google_news_health">Gesundheit</string>
+
+    <!-- ENTRIES -->
+    <string name="all">Einträge</string>
+    <string name="no_entries">Keine Einträge</string>
+    <string name="favorites">Favorisiert</string>
+    <string name="context_menu_hide_read">Gelesene Einträge verstecken</string>
+    <string name="context_menu_show_read">Gelesene Einträge anzeigen</string>
+    <string name="context_menu_share_starred">Favorisierte Einträge teilen</string>
+    <string name="menu_star">Favorisieren</string>
+    <string name="menu_unstar">Entfavorisieren</string>
+    <string name="menu_share">Teilen</string>
+    <string name="menu_full_screen">Vollbild</string>
+    <string name="menu_copy_clipboard">Link kopieren</string>
+    <string name="menu_mark_as_unread">Als ungelesen markieren</string>
+    <string name="share_favorites_title">Flym: favorisierte Einträge</string>
+    <string name="copied_clipboard">Link kopiert</string>
+    <string name="get_full_text">Vollen Text abrufen</string>
+    <string name="original_text">Ursprünglichen Text anzeigen</string>
+    <string name="see_enclosure">Anhang ansehen</string>
+    <string name="see_link">Im Browser ansehen</string>
+    <string name="cant_open_link">Keine Anwendung für diesen Link gefunden</string>
+    <string name="open_enclosure">Öffne Anhang</string>
+    <string name="file">Datei</string>
+    <string name="download_and_save">Herunterladen und speichern</string>
+    <string name="open_link">Link öffnen</string>
+    <string name="tip_sentence">Tipp: Nach links wischen um Artikel als gelesen zu markieren und nach rechts wischen um Artikel zu favorisieren</string>
+
+    <!-- WIDGET -->
+    <string name="red">Rot</string>
+    <string name="green">Grün</string>
+    <string name="blue">Blau</string>
+    <string name="transparency">Transparenz</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Automatisches Aktualisieren</string>
+    <string name="settings_refresh_enabled">Automatisches Aktualisieren</string>
+    <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren aller Feeds</string>
+    <string name="settings_refresh_interval">Aktualisierungsintervall</string>
+    <string name="settings_category_notifications">Benachrichtigungen</string>
+    <string name="settings_notifications_enabled">Benachrichtigungen aktivieren</string>
+    <string name="settings_notifications_enabled_description">Aktiviert Benachrichtigungen bei neuen Einträgen</string>
+    <string name="settings_notifications_ringtone">Klingelton</string>
+    <string name="settings_notifications_ringtone_none">Keiner</string>
+    <string name="settings_notifications_vibrate">Vibration</string>
+    <string name="settings_notifications_vibrate_description">Aktiviert Vibration bei neuen Einträgen</string>
+    <string name="settings_notifications_light">Licht</string>
+    <string name="settings_notifications_light_description">Aktiviert das Benachrichtungslicht bei neuen Einträgen</string>
+    <string name="settings_category_content_presentation">Anzeige der Inhalte</string>
+    <string name="settings_light_theme">Helles Thema</string>
+    <string name="settings_light_theme_description">Helles Thema nutzen</string>
+    <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
+    <string name="settings_display_images">Bilder anzeigen</string>
+    <string name="settings_display_images_description">Bilder in den Einträgen anzeigen</string>
+    <string name="settings_preload_image_mode">Bilder vorausladen</string>
+    <string name="settings_font_size">Textgröße</string>
+    <string name="settings_display_oldest_first">Anzeigereihenfolge</string>
+    <string name="settings_display_oldest_first_description">Zeige älteste Einträge zuerst</string>
+    <string name="settings_display_entries_fullscreen">Einträge im Vollbild anzeigen</string>
+    <string name="settings_display_entries_fullscreen_description">Einträge automatisch im Vollbild anzeigen</string>
+    <string name="settings_refresh_on_open">Feeds beim Öffnen aktualisieren</string>
+    <string name="settings_refresh_on_open_description">Aktualisiert alle Feeds beim Öffnen der Anwendung</string>
+    <string name="settings_refresh_wifi_only">Nur über WLAN aktualisieren</string>
+    <string name="settings_refresh_wifi_only_description">Die automatische Aktualisierung wird nur bei aktiver WLAN-Verbindung durchgeführt</string>
+    <string name="settings_visible_feeds">Sichtbare Feeds</string>
+    <string name="settings_widget_background">Hintergrund</string>
+    <string name="settings_widget_background_description">Farbe und Transparenz des Widget-Hintergrundes</string>
+    <string name="all_feeds">Alle Feeds (auch zukünftige)</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Ein neuer Eintrag</item>
+        <item quantity="other">%d neue Einträge</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>1 Minute</item>
+        <item>5 Minuten</item>
+        <item>15 Minuten</item>
+        <item>30 Minuten</item>
+        <item>1 Stunde</item>
+        <item>2 Stunden</item>
+        <item>6 Stunden</item>
+        <item>12 Stunden</item>
+        <item>1 Tag</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 Tag</item>
+        <item>2 Tage</item>
+        <item>4 Tage</item>
+        <item>1 Woche</item>
+        <item>2 Wochen</item>
+        <item>1 Monat</item>
+        <item>2 Monate</item>
+        <item>3 Monate</item>
+        <item>Für immer</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Standard</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Niemals</item>
+        <item>Nur über WLAN</item>
+        <item>Immer</item>
+    </string-array>
+
+</resources>

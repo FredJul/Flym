@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2013-2014 Danilo Treffiletti
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">A proposito di Flym</string>
+    <string name="welcome_title">Benvenuto in Flym. Vorresti aggiungere un feed?</string>
+    <string name="never">mai</string>
+    <string name="update">Aggiornamento</string>
+    <string name="colon">:\u00A0</string>
+    <string name="menu_settings">Impostazioni</string>
+    <string name="menu_refresh">Aggiorna</string>
+    <string name="menu_all_read">Segna tutti come letti</string>
+    <string name="flym_feeds">Feed di Flym</string>
+    <string name="error">Errore</string>
+    <string name="network_error">Nessuna connessione disponibile</string>
+    <string name="loading">Caricamento in corso…</string>
+    <string name="no_result">Nessun risultato</string>
+    <string name="drawer_open">Apri pannello di navigazione</string>
+    <string name="drawer_close">Chiudi pannello di navigazione</string>
+    <string name="back_again_to_quit">Premere indietro un\'altra volta per uscire</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Feed</string>
+    <string name="menu_add_feed">Aggiungi feed</string>
+    <string name="no_feeds">Nessun feed</string>
+    <string name="no_filters">Nessun filtro</string>
+    <string name="context_menu_delete">Elimina</string>
+    <string name="edit_feed_title">Modifica il feed</string>
+    <string name="new_feed_title">Nuovo feed</string>
+    <string name="context_menu_edit">Modifica</string>
+    <string name="menu_add_group">Aggiungi gruppo</string>
+    <string name="menu_import">Importa OPML</string>
+    <string name="menu_export">Esporta OPML</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="error_feed_error">L\'indirizzo del feed non può essere raggiunto.</string>
+    <string name="error_feed_process">Il feed non può essere processato.</string>
+    <string name="error_feed_url_exists">L\'indirizzo è già presente.</string>
+    <string name="error_feed_import">Il file selezionato non può essere importato.</string>
+    <string name="error_feed_export">L\'esportazione è fallita. Controllare di avere una scheda SD
+        scrivibile e correttamente montata.
+    </string>
+    <string name="error_external_storage_not_available">L\'archivio esterno (per esempio la scheda SD)
+        non è disponibile.
+    </string>
+    <string name="feed_url">Indirizzo URL</string>
+    <string name="optional">(opzionale)</string>
+    <string name="website_or_feed">(sito web o feed)</string>
+    <string name="tab_feed_title">Feed</string>
+    <string name="tab_filters_title">Filtri</string>
+    <string name="feed_title">TITOLO</string>
+    <string name="feed_filters">REGOLE FILTRO</string>
+    <string name="filter_add_title">Aggiungi filtro</string>
+    <string name="filter_delete_title">Elimina filtro</string>
+    <string name="filter_edit_title">Modifica filtro</string>
+    <string name="filter_is_regex">è un\'espressione regolare</string>
+    <string name="filter_apply_to_title">Applica al titolo</string>
+    <string name="filter_apply_to_content">Applica al contenuto</string>
+    <string name="accept">ACCETTA</string>
+    <string name="reject">BLOCCA</string>
+    <string name="feed_search">Ricerca feed</string>
+    <string name="select_file">Seleziona file (radice SD)</string>
+    <string name="question_delete_feed">Vuoi cancellare questo feed?</string>
+    <string name="question_delete_group">Vuoi cancellare questo gruppo e tutti i suoi feed?</string>
+    <string name="question_delete_filter">Vuoi cancellare questo filtro?</string>
+    <string name="add_group_title">Inserire nome del gruppo</string>
+    <string name="edit_group_title">Modificare nome del gruppo</string>
+    <string name="message_exported_to">Esportato su %s.</string>
+    <string name="to_group_title">Azione spostamento feed</string>
+    <string name="to_group_message">Puoi sia spostare il feed dentro il gruppo sia prima del gruppo.
+        Cosa vuoi fare?
+    </string>
+    <string name="to_group_above">Sopra il gruppo</string>
+    <string name="to_group_into">Dentro il gruppo</string>
+    <string name="add_custom_feed">Aggiungi un feed personale o cercane uno</string>
+    <string name="google_news_title">Argomenti di Google News</string>
+    <string name="google_news_indicator">Seleziona uno o più feed da aggiungere. Alcuni di questi potrebbero non essere forniti da Google nella tua lingua.</string>
+    <string name="google_news_top_stories">Temi caldi</string>
+    <string name="google_news_world">Mondo</string>
+    <string name="google_news_business">Business</string>
+    <string name="google_news_technology">Tecnologia</string>
+    <string name="google_news_entertainment">Intrattenimento</string>
+    <string name="google_news_sports">Sport</string>
+    <string name="google_news_science">Scienza</string>
+    <string name="google_news_health">Salute</string>
+
+    <!-- ENTRIES -->
+    <string name="all">Articoli</string>
+    <string name="no_entries">Nessun articolo</string>
+    <string name="favorites">Preferiti</string>
+    <string name="context_menu_hide_read">Nascondi articoli letti</string>
+    <string name="context_menu_show_read">Mostra articoli letti</string>
+    <string name="context_menu_share_starred">Condividi articoli preferiti</string>
+    <string name="menu_star">Aggiungi ai preferiti</string>
+    <string name="menu_unstar">Rimuovi dai preferiti</string>
+    <string name="menu_share">Condividi</string>
+    <string name="menu_full_screen">A tutto schermo</string>
+    <string name="menu_copy_clipboard">Copia il link</string>
+    <string name="menu_mark_as_unread">Segna come non letto</string>
+    <string name="share_favorites_title">Flym: articoli preferiti</string>
+    <string name="copied_clipboard">Link copiato</string>
+    <string name="get_full_text">Recupera il testo completo</string>
+    <string name="original_text">Mostra testo originale</string>
+    <string name="see_enclosure">Vedi allegati</string>
+    <string name="see_link">Vedi nel browser</string>
+    <string name="cant_open_link">Nessuna applicazione trovata per questo link</string>
+    <string name="open_enclosure">Apri allegato</string>
+    <string name="file">File</string>
+    <string name="download_and_save">Scarica e salva</string>
+    <string name="open_link">Apri link</string>
+    <string name="tip_sentence">Suggerimento: fai scorrere a sinistra per segnare come letto e a destra per segnare come preferito</string>
+
+    <!-- WIDGET -->
+    <string name="red">Rosso</string>
+    <string name="green">Verde</string>
+    <string name="blue">Blu</string>
+    <string name="transparency">Trasparenza</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Aggiornamento automatico</string>
+    <string name="settings_refresh_enabled">Attiva aggiornamento automatico</string>
+    <string name="settings_refresh_enabled_description">Attiva l\'aggiornamento automatico dei feed
+    </string>
+    <string name="settings_refresh_interval">Intervallo</string>
+    <string name="settings_category_notifications">Notifiche</string>
+    <string name="settings_notifications_enabled">Attiva notifiche</string>
+    <string name="settings_notifications_enabled_description">Attiva le notifiche all\'arrivo di nuovi
+        articoli
+    </string>
+    <string name="settings_notifications_ringtone">Suoneria</string>
+    <string name="settings_notifications_ringtone_none">Nessuna</string>
+    <string name="settings_notifications_vibrate">Vibrazione</string>
+    <string name="settings_notifications_vibrate_description">Attiva la vibrazione all\'arrivo di
+        nuovi articoli
+    </string>
+    <string name="settings_notifications_light">LED</string>
+    <string name="settings_notifications_light_description">Accendi il LED di notifica all\'arrivo di nuovi articoli</string>
+    <string name="settings_category_content_presentation">Aspetto e contenuti</string>
+    <string name="settings_light_theme">Tema chiaro</string>
+    <string name="settings_light_theme_description">Utilizza il tema chiaro</string>
+    <string name="settings_keep_time">Tempo di archiviazione</string>
+    <string name="settings_display_images">Mostra immagini</string>
+    <string name="settings_display_images_description">Mostra le immagini degli articoli</string>
+    <string name="settings_preload_image_mode">Scarica le immagini in anticipo</string>
+    <string name="settings_font_size">Dimensione testo</string>
+    <string name="settings_display_oldest_first">Ordinamento articoli</string>
+    <string name="settings_display_oldest_first_description">Mostra gli articoli più vecchi prima</string>
+    <string name="settings_display_entries_fullscreen">Articoli a tutto schermo in automatico</string>
+    <string name="settings_display_entries_fullscreen_description">Visualizza automaticamente a tutto schermo gli articoli</string>
+    <string name="settings_refresh_on_open">Aggiorna feed all\'apertura</string>
+    <string name="settings_refresh_on_open_description">Aggiorna tutti i feed all\'apertura
+        dell\'applicazione
+    </string>
+    <string name="settings_refresh_wifi_only">Aggiorna solo in WiFi</string>
+    <string name="settings_refresh_wifi_only_description">L\'aggiornamento automatico viene eseguito
+        solo quando si è connessi ad una rete WiFi
+    </string>
+    <string name="settings_visible_feeds">Feed visibili</string>
+    <string name="settings_widget_background">Sfondo</string>
+    <string name="settings_widget_background_description">Colore e trasparenza dello sfondo del widget
+    </string>
+    <string name="all_feeds">Tutti i feed (inclusi futuri)</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Un nuovo articolo</item>
+        <item quantity="other">%d nuovi articoli</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>1 minuto</item>
+        <item>5 minuti</item>
+        <item>15 minuti</item>
+        <item>30 minuti</item>
+        <item>1 ora</item>
+        <item>2 ore</item>
+        <item>6 ore</item>
+        <item>12 ore</item>
+        <item>1 giorno</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 giorno</item>
+        <item>2 giorni</item>
+        <item>4 giorni</item>
+        <item>1 settimana</item>
+        <item>2 settimane</item>
+        <item>1 mese</item>
+        <item>2 mesi</item>
+        <item>3 mesi</item>
+        <item>Per sempre</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Standard</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Mai</item>
+        <item>Solo con Wi-Fi</item>
+        <item>Sempre</item>
+    </string-array>
+
+</resources>

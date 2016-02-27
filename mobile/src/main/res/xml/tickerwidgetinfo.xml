@@ -1,0 +1,10 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:initialLayout="@layout/ticker_widget"
+                    android:minHeight="60dp"
+                    android:minWidth="60dp"
+                    android:previewImage="@drawable/ticker_widget_preview"
+                    android:resizeMode="horizontal|vertical"
+                    android:updatePeriodMillis="3600000"
+                    android:widgetCategory="home_screen|keyguard"
+                    tools:ignore="UnusedAttribute"/>

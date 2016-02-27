@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">About Flym</string>
+    <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
+    <string name="never">mai</string>
+    <string name="update">Actualitza</string>
+    <string name="colon">:u00A0</string>
+    <string name="menu_settings">Paràmetres</string>
+    <string name="menu_refresh">Refresca</string>
+    <string name="menu_all_read">Marca\'ls tots com a llegits</string>
+    <string name="flym_feeds">Canals de Flym</string>
+    <string name="error">Error</string>
+    <string name="network_error">No hi ha connectivitat</string>
+    <string name="loading">S\'està carregant.</string>
+    <string name="no_result">No hi ha resultats</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="back_again_to_quit">Premeu una vegada més per sortir</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Canals</string>
+    <string name="menu_add_feed">Afegir un canal</string>
+    <string name="no_feeds">No hi ha canals</string>
+    <string name="no_filters">No hi ha filtres</string>
+    <string name="context_menu_delete">Elimina</string>
+    <string name="edit_feed_title">Edita el canal</string>
+    <string name="new_feed_title">Nou canal</string>
+    <string name="context_menu_edit">Edita</string>
+    <string name="menu_add_group">Afegir un grup</string>
+    <string name="menu_import">Importa des de OPML</string>
+    <string name="menu_export">Exporta a OPML</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="error_feed_error">No es pot accedir al canal.</string>
+    <string name="error_feed_process">No s\'ha pogut processar el canal.</string>
+    <string name="error_feed_url_exists">Ja existeix aquesta adreça.</string>
+    <string name="error_feed_import">No s\'ha pogut importar el fitxer sel·leccionat.</string>
+    <string name="error_feed_export">No s\'ha pogut exportar el fitxer. Comproveu la memòria
+        externa.
+    </string>
+    <string name="error_external_storage_not_available">The external storage (e.g. SD-card) is not
+        available.
+    </string>
+    <string name="feed_url">Adreça URL</string>
+    <string name="optional">(opcional)</string>
+    <string name="website_or_feed">(lloc web o canal)</string>
+    <string name="tab_feed_title">Canal</string>
+    <string name="tab_filters_title">Filtres</string>
+    <string name="feed_title">TÍTOL</string>
+    <string name="feed_filters">FILTRES D\'EXCLUSIÓ</string>
+    <string name="filter_add_title">Addició de filtres</string>
+    <string name="filter_delete_title">Eliminació filtres</string>
+    <string name="filter_edit_title">Edició de filtres</string>
+    <string name="filter_is_regex">és una expresió regular</string>
+    <string name="filter_apply_to_title">Aplica al títol</string>
+    <string name="filter_apply_to_content">Aplica al contingut</string>
+    <string name="accept">ACCEPT</string>
+    <string name="reject">REJECT</string>
+    <string name="feed_search">Cerca canals</string>
+    <string name="select_file">Esculliu un fitxer (arrel de la targeta SD)</string>
+    <string name="question_delete_feed">Voleu eliminar aquest canal?</string>
+    <string name="question_delete_group">Voleu eliminar aquest grup i els seus canals?</string>
+    <string name="question_delete_filter">Voleu eliminar aquest filtre?</string>
+    <string name="add_group_title">Sel·lecció del nom del grup</string>
+    <string name="edit_group_title">Edició del nom del grup</string>
+    <string name="message_exported_to">S\'ha exportat a %s.</string>
+    <string name="to_group_title">Relocalització del canal</string>
+    <string name="to_group_message">Podeu posar el canal dins del grup o bé a sobre d\'aquest. Què
+        voleu fer?
+    </string>
+    <string name="to_group_above">Situa a sobre del grup</string>
+    <string name="to_group_into">Afegeix al grup</string>
+    <string name="add_custom_feed">Add a custom feed or search for one</string>
+    <string name="google_news_title">Google News topics</string>
+    <string name="google_news_indicator">Select one or several topics to add. Some of them may not be provided by Google for your language.</string>
+    <string name="google_news_top_stories">Top Stories</string>
+    <string name="google_news_world">World</string>
+    <string name="google_news_business">Business</string>
+    <string name="google_news_technology">Technology</string>
+    <string name="google_news_entertainment">Entertainment</string>
+    <string name="google_news_sports">Sports</string>
+    <string name="google_news_science">Science</string>
+    <string name="google_news_health">Health</string>
+
+    <!-- ENTRIES -->
+    <string name="all">Entrades</string>
+    <string name="no_entries">No hi ha entrades</string>
+    <string name="favorites">Destacats</string>
+    <string name="context_menu_hide_read">Amaga entrades llegides</string>
+    <string name="context_menu_show_read">Mostra entrades llegides</string>
+    <string name="context_menu_share_starred">Comparteix entrades destacades</string>
+    <string name="menu_star">Marca</string>
+    <string name="menu_unstar">Treu la marca</string>
+    <string name="menu_share">Comparteix</string>
+    <string name="menu_full_screen">Pantalla completa</string>
+    <string name="menu_copy_clipboard">Copia l\'enllaç</string>
+    <string name="menu_mark_as_unread">Marca com a no llegit</string>
+    <string name="share_favorites_title">Flym: entrades destacades</string>
+    <string name="copied_clipboard">S\'ha copiat l\'enllaç</string>
+    <string name="get_full_text">Descarrega el text complet</string>
+    <string name="original_text">Mostra el text original</string>
+    <string name="see_enclosure">Mostra el fitxer adjunt</string>
+    <string name="see_link">Mostra al navegador</string>
+    <string name="cant_open_link">No s\'ha trobat una aplicació\'per aquest enllaç.</string>
+    <string name="open_enclosure">Open enclosure</string>
+    <string name="file">File</string>
+    <string name="download_and_save">Download and save</string>
+    <string name="open_link">Open link</string>
+    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+
+    <!-- WIDGET -->
+    <string name="red">Vermell</string>
+    <string name="green">Verd</string>
+    <string name="blue">Blau</string>
+    <string name="transparency">Transparència</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Actualització automàtica</string>
+    <string name="settings_refresh_enabled">Activa les actualitzacions automàtiques</string>
+    <string name="settings_refresh_enabled_description">Descarrega el contingut dels canals
+        automàticament.
+    </string>
+    <string name="settings_refresh_interval">Interval entre actualitzacions</string>
+    <string name="settings_category_notifications">Notificacions</string>
+    <string name="settings_notifications_enabled">Activa les notificacions</string>
+    <string name="settings_notifications_enabled_description">Notifica les noves entrades.</string>
+    <string name="settings_notifications_ringtone">So</string>
+    <string name="settings_notifications_ringtone_none">None</string>
+    <string name="settings_notifications_vibrate">Vibra</string>
+    <string name="settings_notifications_vibrate_description">Vibra el terminal al mostrar la
+        notificació.
+    </string>
+    <string name="settings_notifications_light">Light</string>
+    <string name="settings_notifications_light_description">Enable notification light on new entries</string>
+    <string name="settings_category_content_presentation">Presentació del contingut</string>
+    <string name="settings_light_theme">Tema clar</string>
+    <string name="settings_light_theme_description">Utilitza el tema clar</string>
+    <string name="settings_keep_time">Temps de conservació d\'entrades</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_preload_image_mode">Preload images</string>
+    <string name="settings_font_size">Mida del text</string>
+    <string name="settings_display_oldest_first">Entries order</string>
+    <string name="settings_display_oldest_first_description">Display oldest entries first</string>
+    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
+    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
+    <string name="settings_refresh_on_open">Actualitza els canals a l\'inici</string>
+    <string name="settings_refresh_on_open_description">Descarregarà nous continguts dels canals a
+        l\'inici de l\'aplicació.
+    </string>
+    <string name="settings_refresh_wifi_only">Actualitza els canals només en Wi-Fi</string>
+    <string name="settings_refresh_wifi_only_description">Només es descarregaran nous continguts
+        dins d\'una connexió Wi-Fi.
+    </string>
+    <string name="settings_visible_feeds">Canals visibles</string>
+    <string name="settings_widget_background">Fons</string>
+    <string name="settings_widget_background_description">Color i transparència del fons del giny.
+    </string>
+    <string name="all_feeds">Tots els canals (futurs inclosos)</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">One new entry</item>
+        <item quantity="other">%d new entries</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>1 minut</item>
+        <item>5 minuts</item>
+        <item>15 minuts</item>
+        <item>30 minuts</item>
+        <item>1 hora</item>
+        <item>2 hores</item>
+        <item>6 hores</item>
+        <item>12 hores</item>
+        <item>1 dia</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 dia</item>
+        <item>2 dies</item>
+        <item>4 dies</item>
+        <item>1 setmana</item>
+        <item>2 setmanes</item>
+        <item>1 mes</item>
+        <item>2 mesos</item>
+        <item>3 mesos</item>
+        <item>Infinit</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Normal</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Never</item>
+        <item>Only over Wi-Fi</item>
+        <item>Always</item>
+    </string-array>
+
+</resources>

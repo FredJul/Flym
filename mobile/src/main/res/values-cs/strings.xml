@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2012-2015 Frederic Julian
+ Copyright (c) 2010-2012 Stefan Handschuh
+ Copyright (c) 2014-2014 Jaroslav Lichtblau
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">O aplikaci Flym</string>
+    <string name="welcome_title">Vítejte v aplikaci Flym. Chcete přidat nový zdroj?</string>
+    <string name="never">nikdy</string>
+    <string name="update">aktualizováno</string>
+    <string name="colon">:\u00A0</string>
+    <string name="menu_settings">Nastavení</string>
+    <string name="menu_refresh">Obnovit</string>
+    <string name="menu_all_read">Označit vše jako přečtené</string>
+    <string name="flym_feeds">Flym zdroje</string>
+    <string name="error">Chyba</string>
+    <string name="network_error">Síť není nastavena</string>
+    <string name="loading">Načítám…</string>
+    <string name="no_result">Žádný výsledek</string>
+    <string name="drawer_open">Otevřít navigační lištu</string>
+    <string name="drawer_close">Zavřít navigační lištu</string>
+    <string name="back_again_to_quit">Opakovaný stisk tlačítka zpět ukončí aplikaci</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Zdroje</string>
+    <string name="menu_add_feed">Přidat zdroj</string>
+    <string name="no_feeds">Žádné zdroje</string>
+    <string name="no_filters">Žádné filtry</string>
+    <string name="context_menu_delete">Smazat</string>
+    <string name="edit_feed_title">Upravit zdroj</string>
+    <string name="new_feed_title">Nový zdroj</string>
+    <string name="context_menu_edit">Upravit</string>
+    <string name="menu_add_group">Přidat skupinu</string>
+    <string name="menu_import">Import z OPML</string>
+    <string name="menu_export">Export do OPML</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="error_feed_error">Adresa zdroje nemohla být otevřena.</string>
+    <string name="error_feed_process">Zdroj nelze zpracovat.</string>
+    <string name="error_feed_url_exists">Adresa již existuje.</string>
+    <string name="error_feed_import">Vybraný soubor nemohl být importován.</string>
+    <string name="error_feed_export">Export selhal. Ujistěte se, že se na připojenou SD kartu
+        dá zapisovat.
+    </string>
+    <string name="error_external_storage_not_available">Externí úložný prostor (např. SD karta) není
+        dostupný.
+    </string>
+    <string name="feed_url">URL adresa</string>
+    <string name="optional">(nepovinné)</string>
+    <string name="website_or_feed">(webová stránka nebo zdroj)</string>
+    <string name="tab_feed_title">Zdroj</string>
+    <string name="tab_filters_title">Filtr</string>
+    <string name="feed_title">NÁZEV</string>
+    <string name="feed_filters">PRAVIDLA FILTRU</string>
+    <string name="filter_add_title">Přidat pravidlo</string>
+    <string name="filter_delete_title">Smazat pravidlo</string>
+    <string name="filter_edit_title">Upravit pravidlo</string>
+    <string name="filter_is_regex">regulární výraz</string>
+    <string name="filter_apply_to_title">Použít pro nadpis</string>
+    <string name="filter_apply_to_content">Použít pro obsah</string>
+    <string name="accept">POVOLIT</string>
+    <string name="reject">VYŘADIT</string>
+    <string name="feed_search">Prohledat zdroj</string>
+    <string name="select_file">Vybrat soubor (SD-kořen)</string>
+    <string name="question_delete_feed">Opravdu smazat tento zdroj?</string>
+    <string name="question_delete_group">Opravdu chcete smazat tuto skupinu a všechny její
+        zdroje?
+    </string>
+    <string name="question_delete_filter">Opravdu chcete smazat tento filtr?</string>
+    <string name="add_group_title">Vybrat jméno skupiny</string>
+    <string name="edit_group_title">Upravit jméno skupiny</string>
+    <string name="message_exported_to">Exportovat do %s.</string>
+    <string name="to_group_title">Akce přesunu zdroje</string>
+    <string name="to_group_message">Můžete tento zdroj posunout do a nebo nad tuto skupinu. Co
+        chcete udělat?
+    </string>
+    <string name="to_group_above">Nad skupinu</string>
+    <string name="to_group_into">Do skupiny</string>
+    <string name="add_custom_feed">Přidat vlastní zdroj nebo nový vyhledat</string>
+    <string name="google_news_title">Články Google News</string>
+    <string name="google_news_indicator">Vybrat jedno nebo několik témat k přidání. Některá z nich nemusí být poskytována Googlem pro váš jazyk.</string>
+    <string name="google_news_top_stories">Hlavní témata</string>
+    <string name="google_news_world">Svět</string>
+    <string name="google_news_business">Podnikání</string>
+    <string name="google_news_technology">Technologie</string>
+    <string name="google_news_entertainment">Zábava</string>
+    <string name="google_news_sports">Sporty</string>
+    <string name="google_news_science">Věda</string>
+    <string name="google_news_health">Zdraví</string>
+
+    <!-- ENTRIES -->
+    <string name="all">Články</string>
+    <string name="no_entries">Žádné články</string>
+    <string name="favorites">Označené</string>
+    <string name="context_menu_hide_read">Skrýt přečtené články</string>
+    <string name="context_menu_show_read">Zobrazit přečtené články</string>
+    <string name="context_menu_share_starred">Sdílet označené články</string>
+    <string name="menu_star">Označit</string>
+    <string name="menu_unstar">Odznačit</string>
+    <string name="menu_share">Sdílet</string>
+    <string name="menu_full_screen">Na celou obrazovku</string>
+    <string name="menu_copy_clipboard">Kopírovat odkaz</string>
+    <string name="menu_mark_as_unread">Označit jako nepřečtené</string>
+    <string name="share_favorites_title">Flym: označené články</string>
+    <string name="copied_clipboard">Link zkopírován</string>
+    <string name="get_full_text">Stáhnout celý text</string>
+    <string name="original_text">Zobrazit originální text</string>
+    <string name="see_enclosure">Zobrazit přílohu</string>
+    <string name="see_link">Zobrazit v prohlížeči</string>
+    <string name="cant_open_link">Pro tento odkaz nebyla nalezena žádná aplikace</string>
+    <string name="open_enclosure">Otevřít přílohu</string>
+    <string name="file">Soubor</string>
+    <string name="download_and_save">Stáhnout a uložit</string>
+    <string name="open_link">Otevřít odkaz</string>
+    <string name="tip_sentence">Tip: posunutím doleva označit jako přečtené a posunutím doprava jako oblíbené</string>
+
+    <!-- WIDGET -->
+    <string name="red">Červená</string>
+    <string name="green">Zelená</string>
+    <string name="blue">Modrá</string>
+    <string name="transparency">Průhlednost</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Automatické načítání</string>
+    <string name="settings_refresh_enabled">Povolit automatické načítání</string>
+    <string name="settings_refresh_enabled_description">Povolí automatické načítání zdrojů
+    </string>
+    <string name="settings_refresh_interval">Interval načítání</string>
+    <string name="settings_category_notifications">Oznámení</string>
+    <string name="settings_notifications_enabled">Povolit oznámení</string>
+    <string name="settings_notifications_enabled_description">Povolí oznámení v případě nových
+        článků
+    </string>
+    <string name="settings_notifications_ringtone">Tón oznámení</string>
+    <string name="settings_notifications_ringtone_none">Žádný</string>
+    <string name="settings_notifications_vibrate">Vibrovat</string>
+    <string name="settings_notifications_vibrate_description">Povolit vibrace při přijetí nových článků
+    </string>
+    <string name="settings_notifications_light">LED oznámení</string>
+    <string name="settings_notifications_light_description">Povolit oznamování blikáním při přijetí nových článků</string>
+    <string name="settings_category_content_presentation">Prezentace obsahu</string>
+    <string name="settings_light_theme">Světlý vzhled</string>
+    <string name="settings_light_theme_description">Použít světlý vzhled</string>
+    <string name="settings_keep_time">Čas po který budou články uloženy</string>
+    <string name="settings_display_images">Zobrazovat obrázky</string>
+    <string name="settings_display_images_description">Zobrazovat obrázky ve článcích</string>
+    <string name="settings_preload_image_mode">Načítat obrázky</string>
+    <string name="settings_font_size">Velikost textu</string>
+    <string name="settings_display_oldest_first">Pořadí článků</string>
+    <string name="settings_display_oldest_first_description">Zobrazovat nejdříve starší články</string>
+    <string name="settings_display_entries_fullscreen">Články na celou obrazovku</string>
+    <string name="settings_display_entries_fullscreen_description">Automaticky zobrazovat články na celou obrazovku</string>
+    <string name="settings_refresh_on_open">Načítat články při otevření</string>
+    <string name="settings_refresh_on_open_description">Obnoví zdroje a načte články při otevření
+        aplikace
+    </string>
+    <string name="settings_refresh_wifi_only">Obnovovat pouze přes Wi-Fi</string>
+    <string name="settings_refresh_wifi_only_description">Automatické obnovení bude spuštěno pouze při dostupném Wi-Fi připojení
+    </string>
+    <string name="settings_visible_feeds">Viditelné zdroje</string>
+    <string name="settings_widget_background">Pozadí</string>
+    <string name="settings_widget_background_description">Barva a průhlednost pozadí
+        widgetu
+    </string>
+    <string name="all_feeds">Všechny zdroje (včetně budoucích)</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Jeden nový článek</item>
+        <item quantity="few">%d nové články</item>
+        <item quantity="other">%d nových článků</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>1 minuta</item>
+        <item>5 minut</item>
+        <item>15 minut</item>
+        <item>30 minut</item>
+        <item>1 hodina</item>
+        <item>2 hodiny</item>
+        <item>6 hodin</item>
+        <item>12 hodin</item>
+        <item>1 den</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 den</item>
+        <item>2 dny</item>
+        <item>4 dny</item>
+        <item>1 týden</item>
+        <item>2 týdny</item>
+        <item>1 měsíc</item>
+        <item>2 měsíce</item>
+        <item>3 měsíce</item>
+        <item>Navždy</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Standartní</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Nikdy</item>
+        <item>Pouze přes Wi-Fi</item>
+        <item>Vždy</item>
+    </string-array>
+
+</resources>

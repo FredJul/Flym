@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2012-2015 Frederic Julian
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">À propos de Flym</string>
+    <string name="welcome_title">Bienvenue sur Flym. Voulez vous ajouter un flux ?</string>
+    <string name="never">jamais</string>
+    <string name="update">Mise à jour</string>
+    <string name="colon">\u00A0:\u00A0</string>
+    <string name="menu_settings">Paramètres</string>
+    <string name="menu_refresh">Actualiser</string>
+    <string name="menu_all_read">Marquer tout comme lu</string>
+    <string name="flym_feeds">Flux Flym</string>
+    <string name="error">Erreur</string>
+    <string name="network_error">Pas de connexion disponible</string>
+    <string name="loading">Chargement en cours…</string>
+    <string name="no_result">Aucun résultat</string>
+    <string name="drawer_open">Ouvrir menu de navigation</string>
+    <string name="drawer_close">Fermer menu de navigation</string>
+    <string name="back_again_to_quit">Appuyez de nouveau sur retour pour quitter</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Flux</string>
+    <string name="menu_add_feed">Ajouter un flux</string>
+    <string name="no_feeds">Pas de flux</string>
+    <string name="no_filters">Pas de filtres</string>
+    <string name="context_menu_delete">Supprimer</string>
+    <string name="edit_feed_title">Éditer le flux</string>
+    <string name="new_feed_title">Nouveau flux</string>
+    <string name="context_menu_edit">Éditer</string>
+    <string name="menu_add_group">Ajouter un groupe</string>
+    <string name="menu_import">Importer depuis OPML</string>
+    <string name="menu_export">Exporter vers OPML</string>
+    <string name="storage_request_explanation">Pour pouvoir importer ou exporter les flux dans un fichier, vous devez authoriser l\'application à accéder à la mémoire de stockage.</string>
+    <string name="error_feed_error">L\'adresse du flux n\'est pas accessible.</string>
+    <string name="error_feed_process">Le flux ne peut pas être traité.</string>
+    <string name="error_feed_url_exists">L\'adresse existe déjà.</string>
+    <string name="error_feed_import">Le fichier sélectionné n\'a pu être importé.</string>
+    <string name="error_feed_export">L\'export a échoué. Assurez-vous d\'avoir une carte SD montée
+        et autorisée en écriture.
+    </string>
+    <string name="error_external_storage_not_available">Le stockage externe (comme la carte SD)
+        n\'est pas disponible.
+    </string>
+    <string name="feed_url">Adresse URL</string>
+    <string name="optional">(optionel)</string>
+    <string name="website_or_feed">(site web ou flux)</string>
+    <string name="tab_feed_title">Flux</string>
+    <string name="tab_filters_title">Filtres</string>
+    <string name="feed_title">TITRE</string>
+    <string name="feed_filters">FILTRES D\'EXCLUSION</string>
+    <string name="filter_add_title">Ajouter un filtre</string>
+    <string name="filter_delete_title">Supprimer un filtre</string>
+    <string name="filter_edit_title">Éditer le filtre</string>
+    <string name="filter_is_regex">est une expression régulière</string>
+    <string name="filter_apply_to_title">Appliquer au titre</string>
+    <string name="filter_apply_to_content">Appliquer au contenu</string>
+    <string name="accept">ACCEPT</string>
+    <string name="reject">REJECT</string>
+    <string name="feed_search">Recherche de flux</string>
+    <string name="select_file">Sélectionner le fichier (racine SD)</string>
+    <string name="question_delete_feed">Voulez-vous vraiment supprimer ce flux\u00A0?</string>
+    <string name="question_delete_group">Voulez-vous vraiment supprimer ce groupe et tout ses
+        flux\u00A0?
+    </string>
+    <string name="question_delete_filter">Voulez-vous vraiment supprimer ce filtre\u00A0?</string>
+    <string name="add_group_title">Entrez le nom du groupe</string>
+    <string name="edit_group_title">Éditer le nom du groupe</string>
+    <string name="message_exported_to">Exporté vers %s.</string>
+    <string name="to_group_title">Déplacement de flux</string>
+    <string name="to_group_message">Vous pouvez placer ce flux dans ou au-dessus de ce groupe. Que
+        voulez-vous faire\u00A0?
+    </string>
+    <string name="to_group_above">Au-dessus du groupe</string>
+    <string name="to_group_into">Dans le groupe</string>
+    <string name="add_custom_feed">Ajoute un flux manuellement ou en rechercher</string>
+    <string name="google_news_title">Sujets Google Actualités</string>
+    <string name="google_news_indicator">Sélectionner un ou plusieurs thèmes à ajouter. Certains peuvent ne pas être fournis par Google pour votre langue.</string>
+    <string name="google_news_top_stories">À la une</string>
+    <string name="google_news_world">International</string>
+    <string name="google_news_business">Économie</string>
+    <string name="google_news_technology">High-Tech</string>
+    <string name="google_news_entertainment">Culture</string>
+    <string name="google_news_sports">Sport</string>
+    <string name="google_news_science">Science</string>
+    <string name="google_news_health">Santé</string>
+
+    <!-- ENTRIES -->
+    <string name="all">Articles</string>
+    <string name="no_entries">Pas d\'article</string>
+    <string name="favorites">Favoris</string>
+    <string name="context_menu_hide_read">Cacher les articles lus</string>
+    <string name="context_menu_show_read">Afficher les articles lus</string>
+    <string name="context_menu_share_starred">Partager les favoris</string>
+    <string name="menu_star">Mettre en favoris</string>
+    <string name="menu_unstar">Enlever des favoris</string>
+    <string name="menu_share">Partager</string>
+    <string name="menu_full_screen">Plein écran</string>
+    <string name="menu_copy_clipboard">Copier le lien</string>
+    <string name="menu_mark_as_unread">Marquer comme non lu</string>
+    <string name="share_favorites_title">Flym : articles favoris</string>
+    <string name="copied_clipboard">Lien copié</string>
+    <string name="get_full_text">Récupérer le texte complet</string>
+    <string name="original_text">Affiche le texte original</string>
+    <string name="see_enclosure">Voir le fichier joint</string>
+    <string name="see_link">Ouvrir dans le navigateur web</string>
+    <string name="cant_open_link">Aucune application trouvée pour ce lien</string>
+    <string name="open_enclosure">Ouvrir piève jointe</string>
+    <string name="file">Fichier</string>
+    <string name="download_and_save">Télécharger et sauvegarder</string>
+    <string name="open_link">Ouvrir le lien</string>
+    <string name="tip_sentence">Astuce: glisser vers la gauche pour marquer comme lu et vers la droite pour mettre en favoris</string>
+
+    <!-- WIDGET -->
+    <string name="red">Rouge</string>
+    <string name="green">Vert</string>
+    <string name="blue">Bleu</string>
+    <string name="transparency">Transparence</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Mise à jour automatique</string>
+    <string name="settings_refresh_enabled">Activer la mise à jour auto</string>
+    <string name="settings_refresh_enabled_description">Active la mise à jour automatique des flux
+    </string>
+    <string name="settings_refresh_interval">Intervalle de mise à jour</string>
+    <string name="settings_category_notifications">Notifications</string>
+    <string name="settings_notifications_enabled">Activer les notifications</string>
+    <string name="settings_notifications_enabled_description">Active les notifications en cas de
+        nouveaux articles
+    </string>
+    <string name="settings_notifications_ringtone">Sonnerie</string>
+    <string name="settings_notifications_ringtone_none">Aucune</string>
+    <string name="settings_notifications_vibrate">Vibrer</string>
+    <string name="settings_notifications_vibrate_description">Active la vibration pour les nouveaux
+        articles
+    </string>
+    <string name="settings_notifications_light">LED</string>
+    <string name="settings_notifications_light_description">Active les notifications LED pour les nouveaux articles</string>
+    <string name="settings_category_content_presentation">Présentation des flux</string>
+    <string name="settings_light_theme">Thème clair</string>
+    <string name="settings_light_theme_description">Utiliser le thème clair</string>
+    <string name="settings_keep_time">Délai de conservation des flux</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_preload_image_mode">Préchargement des images</string>
+    <string name="settings_font_size">Taille du texte</string>
+    <string name="settings_display_oldest_first">Ordre des articles</string>
+    <string name="settings_display_oldest_first_description">Affiche les plus vieux en premier</string>
+    <string name="settings_display_entries_fullscreen">Plein écran auto</string>
+    <string name="settings_display_entries_fullscreen_description">Affiche automatiquement les articles en plein écran</string>
+    <string name="settings_refresh_on_open">Mise à jour des flux à l\'ouverture</string>
+    <string name="settings_refresh_on_open_description">Met à jour tous les flux à l\'ouverture de
+        l\'application
+    </string>
+    <string name="settings_refresh_wifi_only">Mise à jour en WiFi uniquement</string>
+    <string name="settings_refresh_wifi_only_description">La mise à jour auto ne se fera que si le
+        Wifi est activé
+    </string>
+    <string name="settings_visible_feeds">Flux visibles</string>
+    <string name="settings_widget_background">Arrière-plan</string>
+    <string name="settings_widget_background_description">Couleur et transparence de l\'arrière-plan
+        du widget
+    </string>
+    <string name="all_feeds">Tous les flux (y compris ceux à venir)</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">%d nouvel article</item>
+        <item quantity="other">%d nouveaux articles</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>1 minute</item>
+        <item>5 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 heure</item>
+        <item>2 heures</item>
+        <item>6 heures</item>
+        <item>12 heures</item>
+        <item>1 jour</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 jour</item>
+        <item>2 jours</item>
+        <item>4 jours</item>
+        <item>1 semaine</item>
+        <item>2 semaines</item>
+        <item>1 mois</item>
+        <item>2 mois</item>
+        <item>3 mois</item>
+        <item>Toujours</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Standard</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Jamais</item>
+        <item>En Wi-Fi uniquement</item>
+        <item>Toujours</item>
+    </string-array>
+
+</resources>

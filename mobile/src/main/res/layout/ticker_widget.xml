@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@mipmap/ic_launcher"/>
+
+    <ImageView
+        android:id="@+id/feed_ticker_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/feed_ticker"
+        android:layout_alignLeft="@+id/feed_ticker"
+        android:layout_alignRight="@+id/feed_ticker"
+        android:layout_alignTop="@+id/feed_ticker"
+        android:src="@drawable/red_circle"/>
+
+    <TextView
+        android:id="@+id/feed_ticker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentRight="true"
+        android:ellipsize="none"
+        android:enabled="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:minHeight="30sp"
+        android:minWidth="30sp"
+        android:padding="3dp"
+        android:singleLine="false"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/feed_ticker_tap_area"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

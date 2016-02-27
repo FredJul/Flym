@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">Om Flym</string>
+    <string name="welcome_title">Välkommen till Flym. Skulle du vilja lägga till en feed?</string>
+    <string name="never">aldrig</string>
+    <string name="update">Uppdaterad</string>
+    <string name="colon">:\u00A0</string>
+    <string name="menu_settings">Inställningar</string>
+    <string name="menu_refresh">Uppdatera</string>
+    <string name="menu_all_read">Mark som läst</string>
+    <string name="flym_feeds">Flym feeds</string>
+    <string name="error">Fel</string>
+    <string name="network_error">Nätverket är inte tillgängligt</string>
+    <string name="loading">Laddar…</string>
+    <string name="no_result">Inga resultat</string>
+    <string name="drawer_open">Öppna navigationspanelen</string>
+    <string name="drawer_close">Stänga navigationspanelen</string>
+    <string name="back_again_to_quit">Press back once more to exit</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Feeds</string>
+    <string name="menu_add_feed">Lägg till feed</string>
+    <string name="no_feeds">Inga feeds</string>
+    <string name="no_filters">Inga regler</string>
+    <string name="context_menu_delete">Radera</string>
+    <string name="edit_feed_title">Redigera feed</string>
+    <string name="new_feed_title">Ny feed</string>
+    <string name="context_menu_edit">Redigera</string>
+    <string name="menu_add_group">Lägg till grupp</string>
+    <string name="menu_import">Importera från OPML</string>
+    <string name="menu_export">Exportera till OPML</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="error_feed_error">Feed:ens URL kunde inte öppnas.</string>
+    <string name="error_feed_process">Feed:en kunde inte processeras.</string>
+    <string name="error_feed_url_exists">URL:en existerar redan.</string>
+    <string name="error_feed_import">Den valda filen kunde inte importeras.</string>
+    <string name="error_feed_export">Exporten har misslyckats. Försäkra dig om att du har ett skrivbart SD-kort monterat.</string>
+    <string name="error_external_storage_not_available">Det externa lagringsmediet (d.v.s. SD-kort) finns ej tillgängligt.</string>
+    <string name="feed_url">URL</string>
+    <string name="optional">(valfritt)</string>
+    <string name="website_or_feed">(webbplats eller feed)</string>
+    <string name="tab_feed_title">Feed</string>
+    <string name="tab_filters_title">Filter</string>
+    <string name="feed_title">TITEL</string>
+    <string name="feed_filters">FILTRERINGSREGLER</string>
+    <string name="filter_add_title">Lägg till regel</string>
+    <string name="filter_delete_title">Radera regel</string>
+    <string name="filter_edit_title">Redigera regel</string>
+    <string name="filter_is_regex">är ett reguljärt uttryck (regex)</string>
+    <string name="filter_apply_to_title">Tillämpa på titeln</string>
+    <string name="filter_apply_to_content">Tillämpa på texten</string>
+    <string name="accept">ACCEPTERA</string>
+    <string name="reject">AVFÄRDA</string>
+    <string name="feed_search">Sök efter feed</string>
+    <string name="select_file">Välj fil (SD-root)</string>
+    <string name="question_delete_feed">Vill du radera denna feed?</string>
+    <string name="question_delete_group">Vill du radera denna grupp och alla dess feeds?</string>
+    <string name="question_delete_filter">Vill du radera denna regel?</string>
+    <string name="add_group_title">Ny grupp</string>
+    <string name="edit_group_title">Redigera gruppens namn</string>
+    <string name="message_exported_to">Exporterad till %s.</string>
+    <string name="to_group_title">Flytta feed</string>
+    <string name="to_group_message">Du kan flytta denna feed varken in till gruppen eller utanför gruppen. Vad vill du göra?</string>
+    <string name="to_group_above">Utanför gruppen</string>
+    <string name="to_group_into">In till gruppen</string>
+    <string name="add_custom_feed">Lägg till eller sök efter en feed</string>
+    <string name="google_news_title">Google News -temana</string>
+    <string name="google_news_indicator">Valj ett eller flera teman. Några teman må inte vara nåbar på svenska.</string>
+    <string name="google_news_top_stories">Nyheter</string>
+    <string name="google_news_world">Världen</string>
+    <string name="google_news_business">Ekonomi</string>
+    <string name="google_news_technology">Teknik</string>
+    <string name="google_news_entertainment">Nöje</string>
+    <string name="google_news_sports">Sport</string>
+    <string name="google_news_science">Vetenskap</string>
+    <string name="google_news_health">Hälsa</string>
+
+    <!-- ENTRIES -->
+    <string name="all">Inlägg</string>
+    <string name="no_entries">Inga poster</string>
+    <string name="favorites">Favoriter</string>
+    <string name="context_menu_hide_read">Göm lästa inlägg</string>
+    <string name="context_menu_show_read">Visa lästa inlägg</string>
+    <string name="context_menu_share_starred">Dela favoriter</string>
+    <string name="menu_star">Markera som favorit</string>
+    <string name="menu_unstar">Avmarkera som favorit</string>
+    <string name="menu_share">Dela</string>
+    <string name="menu_full_screen">Helskärm</string>
+    <string name="menu_copy_clipboard">Kopiera länk</string>
+    <string name="menu_mark_as_unread">Markera som oläst</string>
+    <string name="share_favorites_title">Flym: favoriter</string>
+    <string name="copied_clipboard">Länk kopierad</string>
+    <string name="get_full_text">Hämta hela texten</string>
+    <string name="original_text">Visa originaltexten</string>
+    <string name="see_enclosure">Visa bifogad mediafil</string>
+    <string name="see_link">Öppna i webläsare</string>
+    <string name="cant_open_link">Inget lämpligt program hittades för denna länk</string>
+    <string name="open_enclosure">Öppna bifogad fil</string>
+    <string name="file">Fil</string>
+    <string name="download_and_save">Ladda ned och spara</string>
+    <string name="open_link">Öppna länk</string>
+    <string name="tip_sentence">Tips: svepa åt vänster för att markera som läst, svepa åt höger för att markera som favorit.</string>
+
+    <!-- WIDGET -->
+    <string name="red">Röd</string>
+    <string name="green">Grön</string>
+    <string name="blue">Blå</string>
+    <string name="transparency">Transparens</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Automatisk uppdatering</string>
+    <string name="settings_refresh_enabled">Uppdatera automatiskt</string>
+    <string name="settings_refresh_enabled_description">Uppdatera alla feeds automatiskt</string>
+    <string name="settings_refresh_interval">Uppdateringsintervall</string>
+    <string name="settings_category_notifications">Påminnelser</string>
+    <string name="settings_notifications_enabled">Visa påminnelser</string>
+    <string name="settings_notifications_enabled_description">Visa påminnelser då nytt feed innehåll finns</string>
+    <string name="settings_notifications_ringtone">Ringsignal</string>
+    <string name="settings_notifications_ringtone_none">Ingen</string>
+    <string name="settings_notifications_vibrate">Vibrera</string>
+    <string name="settings_notifications_vibrate_description">Vibrera vid nytt feed innehåll</string>
+    <string name="settings_notifications_light">Ljus</string>
+    <string name="settings_notifications_light_description">Tända lysdioden vid nytt feed innehåll</string>
+    <string name="settings_category_content_presentation">Innehållspresentation</string>
+    <string name="settings_light_theme">Ljust tema</string>
+    <string name="settings_light_theme_description">Använd det ljusa temat</string>
+    <string name="settings_keep_time">Tid som inläggen behållas</string>
+    <string name="settings_display_images">Visa bilder</string>
+    <string name="settings_display_images_description">Visa bilder i inlägg</string>
+    <string name="settings_preload_image_mode">Förladda bilder</string>
+    <string name="settings_font_size">Typsnittsstorlek</string>
+    <string name="settings_display_oldest_first">Visa äldsta först</string>
+    <string name="settings_display_oldest_first_description">Visa äldsta inläggen först</string>
+    <string name="settings_display_entries_fullscreen">Automatisk helskärm</string>
+    <string name="settings_display_entries_fullscreen_description">Visa inlägg automatiskt i helskärm</string>
+    <string name="settings_refresh_on_open">Uppdatera feeds vid start</string>
+    <string name="settings_refresh_on_open_description">Uppdatera alla feeds när applikationen öppnas</string>
+    <string name="settings_refresh_wifi_only">Uppdatera endast via Wi-Fi</string>
+    <string name="settings_refresh_wifi_only_description">Uppdatera automatisk endast när ett Wi-Fi-nätverk är tillgänglig</string>
+    <string name="settings_visible_feeds">Synliga feeds</string>
+    <string name="settings_widget_background">Bakgrund</string>
+    <string name="settings_widget_background_description">Färg och transparens för widgetens bakgrund</string>
+    <string name="all_feeds">Alla feeds (inkl. kommande)</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Ett nytt inlägg</item>
+        <item quantity="other">%d nya inlägg</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>1 minut</item>
+        <item>5 minuter</item>
+        <item>15 minuter</item>
+        <item>30 minuter</item>
+        <item>1 timme</item>
+        <item>2 timmar</item>
+        <item>6 timmar</item>
+        <item>12 timmar</item>
+        <item>1 dag</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 dag</item>
+        <item>2 dagar</item>
+        <item>4 dagar</item>
+        <item>1 vecka</item>
+        <item>2 veckor</item>
+        <item>1 månad</item>
+        <item>2 månader</item>
+        <item>3 månader</item>
+        <item>För alltid</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Normal</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Aldrig</item>
+        <item>Endast via Wi-Fi</item>
+        <item>Alltid</item>
+    </string-array>
+
+</resources>

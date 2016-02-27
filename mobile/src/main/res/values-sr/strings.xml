@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2012-2015 Frederic Julian
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Флим</string>
+    <string name="about_flym">О Флиму</string>
+    <string name="welcome_title">Добро дошли у Флим. Желите ли да додате довод?</string>
+    <string name="never">никад</string>
+    <string name="update">Ажурирано</string>
+    <string name="colon">:\u00A0</string>
+    <string name="menu_settings">Поставке</string>
+    <string name="menu_refresh">Освежи</string>
+    <string name="menu_all_read">Означи све прочитаним</string>
+    <string name="flym_feeds">Флимови доводи</string>
+    <string name="error">Грешка</string>
+    <string name="network_error">Мрежа није постављена</string>
+    <string name="loading">Учитавам…</string>
+    <string name="no_result">Нема резултата</string>
+    <string name="drawer_open">Отвори фиоку навигације</string>
+    <string name="drawer_close">Затвори фиоку навигације</string>
+    <string name="back_again_to_quit">Притисните опет за излаз</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Доводи</string>
+    <string name="menu_add_feed">Додај довод</string>
+    <string name="no_feeds">Нема довода</string>
+    <string name="no_filters">Нема правила</string>
+    <string name="context_menu_delete">Обриши</string>
+    <string name="edit_feed_title">Уређивање довода</string>
+    <string name="new_feed_title">Нови довод</string>
+    <string name="context_menu_edit">Уреди</string>
+    <string name="menu_add_group">Додај групу</string>
+    <string name="menu_import">Увези ОПМЛ фајл</string>
+    <string name="menu_export">Извези у ОПМЛ фајл</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="error_feed_error">Не може да се приступи адреси довода.</string>
+    <string name="error_feed_process">Довод се не може обрадити.</string>
+    <string name="error_feed_url_exists">Адреса већ постоји.</string>
+    <string name="error_feed_import">Изабрани фајл се не може увести.</string>
+    <string name="error_feed_export">Извоз није успео. Проверите да ли имате монтирану уписиву СД картицу.</string>
+    <string name="error_external_storage_not_available">Спољашње складиште (нпр. СД картица) није доступно.</string>
+    <string name="feed_url">УРЛ адреса</string>
+    <string name="optional">(необавезно)</string>
+    <string name="website_or_feed">(вебсајт или довод)</string>
+    <string name="tab_feed_title">Довод</string>
+    <string name="tab_filters_title">Филтер</string>
+    <string name="feed_title">НАСЛОВ</string>
+    <string name="feed_filters">ПРАВИЛА ФИЛТЕРА</string>
+    <string name="filter_add_title">Додавање правила</string>
+    <string name="filter_delete_title">Брисање правила</string>
+    <string name="filter_edit_title">Уређивање правила</string>
+    <string name="filter_is_regex">је регуларни израз</string>
+    <string name="filter_apply_to_title">Примени на наслов</string>
+    <string name="filter_apply_to_content">Примени на садржај</string>
+    <string name="accept">ПРИХВАТИ</string>
+    <string name="reject">ОДБИЈ</string>
+    <string name="feed_search">Претрага довода</string>
+    <string name="select_file">Изаберите фајл (корена фасцикла)</string>
+    <string name="question_delete_feed">Желите ли заиста да обришете овај довод?</string>
+    <string name="question_delete_group">Желите ли заиста да обришете ову групу и све њене доводе?</string>
+    <string name="question_delete_filter">Желите ли заиста да обришете овај филтер?</string>
+    <string name="add_group_title">Одредите име групе</string>
+    <string name="edit_group_title">Уредите име групе</string>
+    <string name="message_exported_to">Извезено у %s.</string>
+    <string name="to_group_title">Померање довода</string>
+    <string name="to_group_message">Можете да померите овај довод у или изнад групе. Где желите да га померите?</string>
+    <string name="to_group_above">Изнад групе</string>
+    <string name="to_group_into">У групу</string>
+    <string name="add_custom_feed">Додај довод или тражи нови</string>
+    <string name="google_news_title">Теме Гугл Вести</string>
+    <string name="google_news_indicator">Изаберите теме за додавање. Неке од тема можда нису доступне на вашем језику.</string>
+    <string name="google_news_top_stories">Најбоље приче</string>
+    <string name="google_news_world">Свет</string>
+    <string name="google_news_business">Посао</string>
+    <string name="google_news_technology">Технологија</string>
+    <string name="google_news_entertainment">Забава</string>
+    <string name="google_news_sports">Спорт</string>
+    <string name="google_news_science">Наука</string>
+    <string name="google_news_health">Здравље</string>
+
+    <!-- ENTRIES -->
+    <string name="all">Уноси</string>
+    <string name="no_entries">Нема уноса</string>
+    <string name="favorites">Омиљено</string>
+    <string name="context_menu_hide_read">Сакриј прочитане</string>
+    <string name="context_menu_show_read">Прикажи прочитане</string>
+    <string name="context_menu_share_starred">Подели омиљене</string>
+    <string name="menu_star">Омиљено</string>
+    <string name="menu_unstar">Није омиљено</string>
+    <string name="menu_share">Подели</string>
+    <string name="menu_full_screen">Цео екран</string>
+    <string name="menu_copy_clipboard">Копирај везу</string>
+    <string name="menu_mark_as_unread">Означи као ново</string>
+    <string name="share_favorites_title">Флим: омиљено</string>
+    <string name="copied_clipboard">Веза копирана</string>
+    <string name="get_full_text">Добави цео текст</string>
+    <string name="original_text">Прикажи оригиналан текст</string>
+    <string name="see_enclosure">Погледај прилог</string>
+    <string name="see_link">Погледај у прегледачу</string>
+    <string name="cant_open_link">Ниједна апликација није додељена овој вези</string>
+    <string name="open_enclosure">Отварање прилога</string>
+    <string name="file">Фајл</string>
+    <string name="download_and_save">Преузми и сачувај</string>
+    <string name="open_link">Отвори везу</string>
+    <string name="tip_sentence">Савет: клизајте лево да означите прочитаним и десно да ставите у омиљене</string>
+
+    <!-- WIDGET -->
+    <string name="red">Црвена</string>
+    <string name="green">Зелена</string>
+    <string name="blue">Плава</string>
+    <string name="transparency">Прозирност</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Аутоматско освежавање</string>
+    <string name="settings_refresh_enabled">Омогући</string>
+    <string name="settings_refresh_enabled_description">Омогући аутоматско освежавање довода</string>
+    <string name="settings_refresh_interval">Интервал освежавања</string>
+    <string name="settings_category_notifications">Обавештења</string>
+    <string name="settings_notifications_enabled">Омогући</string>
+    <string name="settings_notifications_enabled_description">Омогући обавештења о новим уносима</string>
+    <string name="settings_notifications_ringtone">Звук</string>
+    <string name="settings_notifications_ringtone_none">Без звука</string>
+    <string name="settings_notifications_vibrate">Вибрирај</string>
+    <string name="settings_notifications_vibrate_description">Омогући вибрацију по новим уносима</string>
+    <string name="settings_notifications_light">Светло</string>
+    <string name="settings_notifications_light_description">Омогући светлосно обавештење по новим уносима</string>
+    <string name="settings_category_content_presentation">Приказ садржаја</string>
+    <string name="settings_light_theme">Светла тема</string>
+    <string name="settings_light_theme_description">Користи светлу тему</string>
+    <string name="settings_keep_time">Време чувања уноса</string>
+    <string name="settings_display_images">Прикажи слике</string>
+    <string name="settings_display_images_description">Прикажи слике у уносима</string>
+    <string name="settings_preload_image_mode">Предучитавање слика</string>
+    <string name="settings_font_size">Величина текста</string>
+    <string name="settings_display_oldest_first">Редослед уноса</string>
+    <string name="settings_display_oldest_first_description">Прикажи најстарије уносе прве</string>
+    <string name="settings_display_entries_fullscreen">Аутоматски цео екран</string>
+    <string name="settings_display_entries_fullscreen_description">Аутоматски прикажи уносе преко целог екрана</string>
+    <string name="settings_refresh_on_open">Освежи доводе по покретању</string>
+    <string name="settings_refresh_on_open_description">Освежи доводе по отварању апликације</string>
+    <string name="settings_refresh_wifi_only">Само преко бежичне везе</string>
+    <string name="settings_refresh_wifi_only_description">Аутоматско освежавање само ако је доступна бежична веза</string>
+    <string name="settings_visible_feeds">Видљиви доводи</string>
+    <string name="settings_widget_background">Позадина</string>
+    <string name="settings_widget_background_description">Боја и прозирност позадине виџета</string>
+    <string name="all_feeds">Сви (укљ. будуће)</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">%d нови унос</item>
+        <item quantity="few">%d нових уноса</item>
+        <item quantity="other">%d нових уноса</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>1 минута</item>
+        <item>5 минута</item>
+        <item>15 минута</item>
+        <item>30 минута</item>
+        <item>1 сат</item>
+        <item>2 сата</item>
+        <item>6 сати</item>
+        <item>12 сати</item>
+        <item>1 дан</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 дан</item>
+        <item>2 дана</item>
+        <item>4 дана</item>
+        <item>1 седмица</item>
+        <item>2 седмице</item>
+        <item>1 месец</item>
+        <item>2 месеца</item>
+        <item>3 месеца</item>
+        <item>Заувек</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Стандардна</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Никад</item>
+        <item>Само преко бежичног</item>
+        <item>Увек</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2012-2015 Frederic Julian
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">Flymi buruz</string>
+    <string name="welcome_title">Ongi etorri Flymera. Jario bat gehitu nahiko al zenuke?</string>
+    <string name="never">inoiz</string>
+    <string name="update">Eguneraketa</string>
+    <string name="colon">:\u00A0</string>
+    <string name="menu_settings">Ezarpenak</string>
+    <string name="menu_refresh">Freskatu</string>
+    <string name="menu_all_read">Markatu dena irakurrita bezala</string>
+    <string name="flym_feeds">Flym jarioak</string>
+    <string name="error">Akatsa</string>
+    <string name="network_error">Sarea ez dago konfiguratuta</string>
+    <string name="loading">Kargatzen…</string>
+    <string name="no_result">Emaitzik ez</string>
+    <string name="drawer_open">Ireki nabigazio tiradera</string>
+    <string name="drawer_close">Itxi nabigazio tiradera</string>
+    <string name="back_again_to_quit">Sakatu atzera beste behin irteteko</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Jarioak</string>
+    <string name="menu_add_feed">Jarioa gehitu</string>
+    <string name="no_feeds">Jariorik ez</string>
+    <string name="no_filters">Araurik ez</string>
+    <string name="context_menu_delete">Ezabatu</string>
+    <string name="edit_feed_title">Jarioa editatu</string>
+    <string name="new_feed_title">Jario berria</string>
+    <string name="context_menu_edit">Editatu</string>
+    <string name="menu_add_group">Taldea gehitu</string>
+    <string name="menu_import">OPMLtik inportatu</string>
+    <string name="menu_export">OPMLra esportatu</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="error_feed_error">Jario helbidera ezin izan da sartu.</string>
+    <string name="error_feed_process">Jarioa ezin da prozesatu.</string>
+    <string name="error_feed_url_exists">Helbidea existitzen da dagoeneko.</string>
+    <string name="error_feed_import">Hautatutako fitxategia ezin izan da inportatu.</string>
+	<string name="error_feed_export">Esportazioak huts egin du. Egiaztatu idatz daitekeen SD-txartel bat
+        muntatuta duzula.
+    </string>
+	<string name="error_external_storage_not_available">Kanpoko biltegia (adib. SD-txartela) ez dago
+        eskuragarri.
+    </string>
+    <string name="feed_url">URL helbidea</string>
+    <string name="optional">(hautazkoa)</string>
+    <string name="website_or_feed">(webgune edo jarioa)</string>
+    <string name="tab_feed_title">Jarioa</string>
+    <string name="tab_filters_title">Iragazkia</string>
+    <string name="feed_title">IZENBURUA</string>
+    <string name="feed_filters">IRAGAZKI ARAUAK</string>
+    <string name="filter_add_title">Araua gehitu</string>
+    <string name="filter_delete_title">Araua ezabatu</string>
+    <string name="filter_edit_title">Araua editatu</string>
+    <string name="filter_is_regex">adierazpen erregular bat da</string>
+    <string name="filter_apply_to_title">Izenburura aplikatu</string>
+    <string name="filter_apply_to_content">Edukira aplikatu</string>
+    <string name="accept">ONARTU</string>
+    <string name="reject">BAZTERTU</string>
+    <string name="feed_search">Jario bilaketa</string>
+    <string name="select_file">Fitxategia hautatu (SD-erroa)</string>
+    <string name="question_delete_feed">Benetan jario hau ezabatu nahi al duzu?</string>
+	<string name="question_delete_group">Benetan talde hau eta bere jario guztiak ezabatu nahi
+        al dituzu?
+    </string>
+    <string name="question_delete_filter">Benetan iragazki hau ezabatu nahi al duzu?</string>
+    <string name="add_group_title">Hautatu talde izena</string>
+    <string name="edit_group_title">Editatu talde izena</string>
+    <string name="message_exported_to">%sra esportatuta.</string>
+    <string name="to_group_title">Jario mugitze ekintza</string>
+	<string name="to_group_message">Jario hau talde honetan edo honen gainean jar dezakezu. Zer egin
+        nahi duzu?
+    </string>
+    <string name="to_group_above">Taldearen gainean</string>
+    <string name="to_group_into">Taldearen barruan</string>
+    <string name="add_custom_feed">Jario pertsonalizatu bat gehitu edo bilatu</string>
+    <string name="google_news_title">Google News gaiak</string>
+    <string name="google_news_indicator">Hautatu gehitzeko gai bat edo gehiago. Baliteke haietako batzuk Googlek zure hizkuntzan ez eskeintzea.</string>
+    <string name="google_news_top_stories">Berri nagusiak</string>
+    <string name="google_news_world">Mundua</string>
+    <string name="google_news_business">Negozioak</string>
+    <string name="google_news_technology">Teknologia</string>
+    <string name="google_news_entertainment">Denbora-pasa</string>
+    <string name="google_news_sports">Kirolak</string>
+    <string name="google_news_science">Zientzia</string>
+    <string name="google_news_health">Osasuna</string>
+
+    <!-- ENTRIES -->
+    <string name="all">Sarrerak</string>
+    <string name="no_entries">Sarrerarik ez</string>
+    <string name="favorites">Gogokoenak</string>
+    <string name="context_menu_hide_read">Ezkutatu irakurritako sarrerak</string>
+    <string name="context_menu_show_read">Erakutsi irakurritako sarrerak</string>
+    <string name="context_menu_share_starred">Partekatu sarrera gogokoenak</string>
+    <string name="menu_star">Gogokoenetara gehitu</string>
+    <string name="menu_unstar">Gogokoenetatik kendu</string>
+    <string name="menu_share">Partekatu</string>
+    <string name="menu_full_screen">Pantaila osoa</string>
+    <string name="menu_copy_clipboard">Esteka kopiatu</string>
+    <string name="menu_mark_as_unread">Ez irakurrita bezala markatu</string>
+    <string name="share_favorites_title">Flym: sarrera gogokoenak</string>
+    <string name="copied_clipboard">Esteka kopiatu da</string>
+    <string name="get_full_text">Testu osoa eskuratu</string>
+    <string name="original_text">Jatorrizko testua erakutsi</string>
+    <string name="see_enclosure">Ingurua ikusi</string>
+    <string name="see_link">Nabigatzailean ikusi</string>
+    <string name="cant_open_link">Ez da aplikaziorik aurkitu esteka honetarako</string>
+    <string name="open_enclosure">Ingurua ireki</string>
+    <string name="file">Fitxategia</string>
+    <string name="download_and_save">Deskargatu eta gorde</string>
+    <string name="open_link">Esteka ireki</string>
+    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+
+    <!-- WIDGET -->
+    <string name="red">Gorria</string>
+    <string name="green">Berdea</string>
+    <string name="blue">Urdina</string>
+    <string name="transparency">Gardentasuna</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Freskatze automatikoa</string>
+    <string name="settings_refresh_enabled">Freskatze automatikoa gaitu</string>
+    <string name="settings_refresh_enabled_description">Jarioen freskatze automatikoa gaitu
+    </string>
+    <string name="settings_refresh_interval">Freskatze tartea</string>
+    <string name="settings_category_notifications">Jakinarazpenak</string>
+    <string name="settings_notifications_enabled">Jakinarazpenak gaitu</string>
+    <string name="settings_notifications_enabled_description">Jakinarazpenak gaitu sarrera berriak 
+        badaude
+    </string>
+    <string name="settings_notifications_ringtone">Dei-tonua</string>
+    <string name="settings_notifications_ringtone_none">None</string>
+    <string name="settings_notifications_vibrate">Dardaratu</string>
+    <string name="settings_notifications_vibrate_description">Gaitu dardara sarrera berriak daudenean
+    </string>
+    <string name="settings_notifications_light">Argia</string>
+    <string name="settings_notifications_light_description">Gaitu argi jakinarazpenak sarrera berriak daudenean</string>
+    <string name="settings_category_content_presentation">Eduki aurkezpena</string>
+    <string name="settings_light_theme">Gai argia</string>
+    <string name="settings_light_theme_description">Gai argia erabili</string>
+    <string name="settings_keep_time">Sarrerak gordeta mantenduko diren denbora</string>
+    <string name="settings_display_images">Irudiak erakutsi</string>
+    <string name="settings_display_images_description">Irudiak erakutsi sarreretan</string>
+    <string name="settings_preload_image_mode">Irudiak aurretik kargatu</string>
+    <string name="settings_font_size">Testu neurria</string>
+    <string name="settings_display_oldest_first">Sarrerak antolatu</string>
+    <string name="settings_display_oldest_first_description">Erakutsi sarrera zaharrenak lehenago</string>
+    <string name="settings_display_entries_fullscreen">Automatikoki pantaila osoa gaitu sarreretan</string>
+    <string name="settings_display_entries_fullscreen_description">Sarrerak pantaila osoan erakutsi automatikoki</string>
+    <string name="settings_refresh_on_open">Irekitzerakoan jarioak freskatu</string>
+    <string name="settings_refresh_on_open_description">Aplikazioa irekitzerakoan jario guztiak freskatzen
+        ditu
+    </string>
+    <string name="settings_refresh_wifi_only">Freskatu soilik Wi-Fipean</string>
+    <string name="settings_refresh_wifi_only_description">Freskatze automatikoa soilik Wi-Fi konexioa eskuragarri badago egingo da
+    </string>
+    <string name="settings_visible_feeds">Jarioak ikusgai</string>
+    <string name="settings_widget_background">Atzeko planoa</string>
+    <string name="settings_widget_background_description">Widgetaren atzeko planoaren kolore eta
+        gardentasuna
+    </string>
+    <string name="all_feeds">Jario guztiak (etorkizunekoak barne)</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Sarrera berri bat</item>
+        <item quantity="other">%d sarrera berri</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>Minutu 1</item>
+        <item>5 minuteu</item>
+        <item>15 minutu</item>
+        <item>30 minutu</item>
+        <item>Ordu 1</item>
+        <item>2 ordu</item>
+        <item>6 ordu</item>
+        <item>12 ordu</item>
+        <item>Egun 1</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>Egun 1</item>
+        <item>2 egun</item>
+        <item>4 egun</item>
+        <item>Aste 1</item>
+        <item>2 aste</item>
+        <item>Hilabete 1</item>
+        <item>2 hilabete</item>
+        <item>3 hilabete</item>
+        <item>Betirako</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Arrunta</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Inoiz</item>
+        <item>Wi-Fipean soilik</item>
+        <item>Beti</item>
+    </string-array>
+
+</resources>

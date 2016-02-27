@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">关于Flym</string>
+    <string name="welcome_title">欢迎使用Flym。需要添加一个源吗？</string>
+    <string name="never">从未</string>
+    <string name="update">更新</string>
+    <string name="colon">:\u00A0</string>
+    <string name="menu_settings">设置</string>
+    <string name="menu_refresh">刷新</string>
+    <string name="menu_all_read">标记全部为已读</string>
+    <string name="flym_feeds">Flym源</string>
+    <string name="error">错误</string>
+    <string name="network_error">网络不可用</string>
+    <string name="loading">加载中…</string>
+    <string name="no_result">没有结果</string>
+    <string name="drawer_open">打开导航抽屉</string>
+    <string name="drawer_close">关闭导航抽屉</string>
+    <string name="back_again_to_quit">再按一次退出</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">订阅</string>
+    <string name="menu_add_feed">添加订阅</string>
+    <string name="no_feeds">没有订阅</string>
+    <string name="no_filters">没有规则</string>
+    <string name="context_menu_delete">删除</string>
+    <string name="edit_feed_title">编辑订阅</string>
+    <string name="new_feed_title">新的订阅</string>
+    <string name="context_menu_edit">编辑</string>
+    <string name="menu_add_group">添加分组</string>
+    <string name="menu_import">导出为OPML</string>
+    <string name="menu_export">导入OPML</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="error_feed_error">这个订阅没有权限</string>
+    <string name="error_feed_process">这个订阅失败</string>
+    <string name="error_feed_url_exists">这个订阅地址不存在</string>
+    <string name="error_feed_import">您选择的文件无法导入。</string>
+    <string name="error_feed_export">导出失败，请确定你的SD卡可以读写。</string>
+    <string name="error_external_storage_not_available">外置存储（如SD卡）不可用。</string>
+    <string name="feed_url">频道地址</string>
+    <string name="optional">（可选）</string>
+    <string name="website_or_feed">（网站或源）</string>
+    <string name="tab_feed_title">订阅</string>
+    <string name="tab_filters_title">过滤器</string>
+    <string name="feed_title">标题</string>
+    <string name="feed_filters">过滤规则</string>
+    <string name="filter_add_title">添加规则</string>
+    <string name="filter_delete_title">删除规则</string>
+    <string name="filter_edit_title">编辑规则</string>
+    <string name="filter_is_regex">是一个正则表达式</string>
+    <string name="filter_apply_to_title">应用到标题</string>
+    <string name="filter_apply_to_content">应用到内容</string>
+    <string name="accept">通过</string>
+    <string name="reject">排除</string>
+    <string name="feed_search">搜索订阅</string>
+    <string name="select_file">选择文件（SD卡目录）</string>
+    <string name="question_delete_feed">你确定要删除这个订阅</string>
+    <string name="question_delete_group">你确定要删除这个分组和其中所有的订阅？</string>
+    <string name="question_delete_filter">你确定删除这个过滤器</string>
+    <string name="add_group_title">选择分组名</string>
+    <string name="edit_group_title">重命名分组</string>
+    <string name="message_exported_to">已导出到 %s。</string>
+    <string name="to_group_title">移动订阅</string>
+    <string name="to_group_message">你能移动这个订阅到这个组里面或者上面。你想做什么？</string>
+    <string name="to_group_above">移动到分组上面</string>
+    <string name="to_group_into">添加到分组</string>
+    <string name="add_custom_feed">添加一个定制源，或者寻找一个</string>
+    <string name="google_news_title">Google新闻话题</string>
+    <string name="google_news_indicator">选择一个或多个话题。列表中部分可能不被Google向您的语言提供。</string>
+    <string name="google_news_top_stories">热门报道</string>
+    <string name="google_news_world">世界</string>
+    <string name="google_news_business">财经</string>
+    <string name="google_news_technology">科技</string>
+    <string name="google_news_entertainment">娱乐</string>
+    <string name="google_news_sports">体育</string>
+    <string name="google_news_science">科学</string>
+    <string name="google_news_health">健康</string>
+
+    <!-- ENTRIES -->
+    <string name="all">全部订阅</string>
+    <string name="no_entries">没有消息</string>
+    <string name="favorites">收藏</string>
+    <string name="context_menu_hide_read">隐藏已读消息</string>
+    <string name="context_menu_show_read">显示已读消息</string>
+    <string name="context_menu_share_starred">分享收藏订阅</string>
+    <string name="menu_star">收藏</string>
+    <string name="menu_unstar">取消收藏</string>
+    <string name="menu_share">分享</string>
+    <string name="menu_full_screen">全屏</string>
+    <string name="menu_copy_clipboard">复制链接</string>
+    <string name="menu_mark_as_unread">保持未读</string>
+    <string name="share_favorites_title">这条消息加星</string>
+    <string name="copied_clipboard">链接复制成功</string>
+    <string name="get_full_text">接收全文</string>
+    <string name="original_text">显示原始文本</string>
+    <string name="see_enclosure">显示附件</string>
+    <string name="see_link">浏览器打开</string>
+    <string name="cant_open_link">没有应用可以打开这个链接</string>
+    <string name="open_enclosure">打开附件</string>
+    <string name="file">文件</string>
+    <string name="download_and_save">下载并保存</string>
+    <string name="open_link">打开链接</string>
+    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+
+    <!-- WIDGET -->
+    <string name="red">红色</string>
+    <string name="green">绿色</string>
+    <string name="blue">蓝色</string>
+    <string name="transparency">透明</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">自动刷新</string>
+    <string name="settings_refresh_enabled">开启自动刷新</string>
+    <string name="settings_refresh_enabled_description">开启自动刷新</string>
+    <string name="settings_refresh_interval">刷新间隔</string>
+    <string name="settings_category_notifications">通知</string>
+    <string name="settings_notifications_enabled">启用通知</string>
+    <string name="settings_notifications_enabled_description">启用的新消息通知 </string>
+    <string name="settings_notifications_ringtone">铃声</string>
+    <string name="settings_notifications_ringtone_none">无</string>
+    <string name="settings_notifications_vibrate">震动提醒</string>
+    <string name="settings_notifications_vibrate_description">当有新的消息时，震动提醒</string>
+    <string name="settings_notifications_light">LED</string>
+    <string name="settings_notifications_light_description">当有新的消息时，点亮通知灯</string>
+    <string name="settings_category_content_presentation">内容介绍</string>
+    <string name="settings_light_theme">高亮主题</string>
+    <string name="settings_light_theme_description">使用『高亮主题』</string>
+    <string name="settings_keep_time">消息保存时间</string>
+    <string name="settings_display_images">显示图片</string>
+    <string name="settings_display_images_description">在消息中显示图片</string>
+    <string name="settings_preload_image_mode">预先加载图片</string>
+    <string name="settings_font_size">文字大小</string>
+    <string name="settings_display_oldest_first">消息排序</string>
+    <string name="settings_display_oldest_first_description">旧消息在前</string>
+    <string name="settings_display_entries_fullscreen">自动全屏显示</string>
+    <string name="settings_display_entries_fullscreen_description">自动在全屏显示消息</string>
+    <string name="settings_refresh_on_open">自动刷新</string>
+    <string name="settings_refresh_on_open_description">当程序开启时，自动刷新所有订阅</string>
+    <string name="settings_refresh_wifi_only">Wi-Fi环境才自动刷新</string>
+    <string name="settings_refresh_wifi_only_description">自动刷新仅在Wi-Fi环境启用</string>
+    <string name="settings_visible_feeds">可见源</string>
+    <string name="settings_widget_background">背景色</string>
+    <string name="settings_widget_background_description">挂件的颜色和透明度</string>
+    <string name="all_feeds">全部订阅（包括未来的）</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="other">%d 条新消息</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>1 分钟</item>
+        <item>5 分钟</item>
+        <item>15 分钟</item>
+        <item>30 分钟</item>
+        <item>1 小时</item>
+        <item>2 小时</item>
+        <item>6 小时</item>
+        <item>12 小时</item>
+        <item>1 天</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 天</item>
+        <item>2 天</item>
+        <item>4 天</item>
+        <item>1 周</item>
+        <item>2 周</item>
+        <item>1 月</item>
+        <item>2 月</item>
+        <item>3 月</item>
+        <item>永远</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>标准</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>从不</item>
+        <item>仅限Wi-Fi</item>
+        <item>总是</item>
+    </string-array>
+
+</resources>

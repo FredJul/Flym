@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">Про Flym</string>
+    <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
+    <string name="never">никогда</string>
+    <string name="update">Обновление</string>
+    <string name="colon">:\u00A0</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_refresh">Обновить</string>
+    <string name="menu_all_read">Пометить все как прочитанное</string>
+    <string name="flym_feeds">Flym ленты</string>
+    <string name="error">Ошибка</string>
+    <string name="network_error">Нет подключения к сети</string>
+    <string name="loading">Загрузка…</string>
+    <string name="no_result">Нет результатов</string>
+    <string name="drawer_open">Открыть меню навигации</string>
+    <string name="drawer_close">Закрыть меню навигации</string>
+    <string name="back_again_to_quit">Нажмите "Назад" еще раз, чтобы выйти</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Ленты</string>
+    <string name="menu_add_feed">Добавить ленту</string>
+    <string name="no_feeds">Нет лент</string>
+    <string name="no_filters">Нет фильтров</string>
+    <string name="context_menu_delete">Удалить</string>
+    <string name="edit_feed_title">Редактировать ленту</string>
+    <string name="new_feed_title">Новая лента</string>
+    <string name="context_menu_edit">Редактировать</string>
+    <string name="menu_add_group">Добавить группу</string>
+    <string name="menu_import">Импорт из OPML-файла</string>
+    <string name="menu_export">Экспорт в OPML-файл</string>
+    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="error_feed_error">Адрес ленты не доступен.</string>
+    <string name="error_feed_process">Лента не может быть добавлена.</string>
+    <string name="error_feed_url_exists">Такой адрес уже есть.</string>
+    <string name="error_feed_import">Выбранный файл не может быть импортирован.</string>
+    <string name="error_feed_export">Экспорт не удался. Удостоверьтесь, что карта памяти имеет
+        возможность записи.
+    </string>
+    <string name="error_external_storage_not_available">Внешнее хранилище (например, карта памяти)
+        недоступно.
+    </string>
+    <string name="feed_url">URL-адрес</string>
+    <string name="optional">(не обязательно)</string>
+    <string name="website_or_feed">(сайта или ленты новостей)</string>
+    <string name="tab_feed_title">Ленту</string>
+    <string name="tab_filters_title">Фильтры</string>
+    <string name="feed_title">НАЗВАНИЕ</string>
+    <string name="feed_filters">ФИЛЬТРЫ ИСКЛЮЧЕНИЙ</string>
+    <string name="filter_add_title">Добавить фильтр</string>
+    <string name="filter_delete_title">Удалить фильтр</string>
+    <string name="filter_edit_title">Редактировать фильтр</string>
+    <string name="filter_is_regex">это регулярное выражение</string>
+    <string name="filter_apply_to_title">Применить к заголовкам</string>
+    <string name="filter_apply_to_content">Применить к содержанию</string>
+    <string name="accept">ACCEPT</string>
+    <string name="reject">REJECT</string>
+    <string name="feed_search">Поиск лент</string>
+    <string name="select_file">Выбрать файл (корень SD-карты)</string>
+    <string name="question_delete_feed">Вы действительно хотите удалить эту ленту?</string>
+    <string name="question_delete_group">Вы действительно хотите удалить эту группу и все ее
+        ленты??
+    </string>
+    <string name="question_delete_filter">Вы действительно хотите удалить этот фильтр?</string>
+    <string name="add_group_title">Выберите название группы</string>
+    <string name="edit_group_title">Редактировать название группы</string>
+    <string name="message_exported_to">Экспортировано в %s.</string>
+    <string name="to_group_title">Перенос ленты</string>
+    <string name="to_group_message">Вы можете поместить ленту внутрь этой группы, либо сверху от
+        нее. Что вы хотите сделать?
+    </string>
+    <string name="to_group_above">Над группой</string>
+    <string name="to_group_into">Внутрь группы</string>
+    <string name="add_custom_feed">Add a custom feed or search for one</string>
+    <string name="google_news_title">Google News topics</string>
+    <string name="google_news_indicator">Select one or several topics to add. Some of them may not be provided by Google for your language.</string>
+    <string name="google_news_top_stories">Top Stories</string>
+    <string name="google_news_world">World</string>
+    <string name="google_news_business">Business</string>
+    <string name="google_news_technology">Technology</string>
+    <string name="google_news_entertainment">Entertainment</string>
+    <string name="google_news_sports">Sports</string>
+    <string name="google_news_science">Science</string>
+    <string name="google_news_health">Health</string>
+
+    <!-- ENTRIES -->
+    <string name="all">Новости</string>
+    <string name="no_entries">Нет новостей</string>
+    <string name="favorites">Избранное</string>
+    <string name="context_menu_hide_read">Скрыть прочитанные новости</string>
+    <string name="context_menu_show_read">Показать прочитанные новости</string>
+    <string name="context_menu_share_starred">Поделиться избранными новостями</string>
+    <string name="menu_star">Поместить в избранное</string>
+    <string name="menu_unstar">Убрать из избранного</string>
+    <string name="menu_share">Поделиться</string>
+    <string name="menu_full_screen">Полный экран</string>
+    <string name="menu_copy_clipboard">Скопировать ссылку</string>
+    <string name="menu_mark_as_unread">Пометить как непрочитанное</string>
+    <string name="share_favorites_title">Flym: избранные новости</string>
+    <string name="copied_clipboard">Ссылка скопирована</string>
+    <string name="get_full_text">Загрузить весь текст</string>
+    <string name="original_text">Показать оригинальный текст</string>
+    <string name="see_enclosure">Показать вложение</string>
+    <string name="see_link">Открыть в браузере</string>
+    <string name="cant_open_link">Не найдено приложений для открытия этой ссылки</string>
+    <string name="open_enclosure">Открыть вложение</string>
+    <string name="file">File</string>
+    <string name="download_and_save">Загрузить и сохранить</string>
+    <string name="open_link">Открыть ссылку</string>
+    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+
+    <!-- WIDGET -->
+    <string name="red">Красный</string>
+    <string name="green">Зеленый</string>
+    <string name="blue">Синий</string>
+    <string name="transparency">Прозрачный</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Автоматическое обновление</string>
+    <string name="settings_refresh_enabled">Включить автоматическое обновление</string>
+    <string name="settings_refresh_enabled_description">Включить автоматическое обновление лент
+    </string>
+    <string name="settings_refresh_interval">Интервал обновления</string>
+    <string name="settings_category_notifications">Уведомления</string>
+    <string name="settings_notifications_enabled">Включить уведомления</string>
+    <string name="settings_notifications_enabled_description">Включить уведомления о новых записях
+    </string>
+    <string name="settings_notifications_ringtone">Звук</string>
+    <string name="settings_notifications_ringtone_none">None</string>
+    <string name="settings_notifications_vibrate">Вибрация</string>
+    <string name="settings_notifications_vibrate_description">Включить вибрацию при новых записях
+    </string>
+    <string name="settings_notifications_light">Light</string>
+    <string name="settings_notifications_light_description">Enable notification light on new entries</string>
+    <string name="settings_category_content_presentation">Представление содержания</string>
+    <string name="settings_light_theme">Светлая тема</string>
+    <string name="settings_light_theme_description">Использовать светлую тему</string>
+    <string name="settings_keep_time">Время хранения новостей</string>
+    <string name="settings_display_images">Display images</string>
+    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_preload_image_mode">Preload images</string>
+    <string name="settings_font_size">Размер текста</string>
+    <string name="settings_display_oldest_first">Entries order</string>
+    <string name="settings_display_oldest_first_description">Display oldest entries first</string>
+    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
+    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
+    <string name="settings_refresh_on_open">Обновлять при запуске</string>
+    <string name="settings_refresh_on_open_description">Обновлять все ленты пии запуске приложения
+    </string>
+    <string name="settings_refresh_wifi_only">Обновлять только по WiFi</string>
+    <string name="settings_refresh_wifi_only_description">Автоматическое обновление будет
+        выполняться только при включенном WiFi
+    </string>
+    <string name="settings_visible_feeds">Видимые ленты</string>
+    <string name="settings_widget_background">Фон</string>
+    <string name="settings_widget_background_description">Цвета и прозрачность фона виджета</string>
+    <string name="all_feeds">Все ленты (включая будущие)</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">%d new entry</item>
+        <item quantity="few">%d new entries</item>
+        <item quantity="many">%d new entries</item>
+        <item quantity="other">%d new entries</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>1 минута</item>
+        <item>5 минут</item>
+        <item>15 минут</item>
+        <item>30 минут</item>
+        <item>1 час</item>
+        <item>2 часа</item>
+        <item>6 часов</item>
+        <item>12 часов</item>
+        <item>1 день</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 день</item>
+        <item>2 дня</item>
+        <item>4 дня</item>
+        <item>1 неделя</item>
+        <item>2 недели</item>
+        <item>1 месяц</item>
+        <item>2 месяца</item>
+        <item>3 месяца</item>
+        <item>Не удалять</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Стандартно</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Never</item>
+        <item>Only over Wi-Fi</item>
+        <item>Always</item>
+    </string-array>
+
+</resources>
