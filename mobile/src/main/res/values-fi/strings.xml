@@ -52,7 +52,6 @@
     <string name="menu_add_group">Lisää ryhmä</string>
     <string name="menu_import">Tuo OPML-tiedosto</string>
     <string name="menu_export">Vie OPML-tiedosto</string>
-    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_error">Syötteen verkko-osoitteeseen ei saatu yhteyttä.</string>
     <string name="error_feed_process">Syötettä ei voitu käsitellä.</string>
     <string name="error_feed_url_exists">Osoite on jo olemassa.</string>
@@ -216,5 +215,6 @@
         <item>Vain Wi-Fi -yhteyden kautta</item>
         <item>Aina</item>
     </string-array>
+    <string name="storage_request_explanation">Voidaksesi tuoda tai viedä tiedoston, sinun täytyy antaa sovellukselle käyttölupa tallennusmuistin sisältöön.</string>
 
 </resources>
