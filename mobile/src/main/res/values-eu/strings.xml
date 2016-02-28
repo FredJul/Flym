@@ -53,7 +53,7 @@
     <string name="menu_add_group">Taldea gehitu</string>
     <string name="menu_import">OPMLtik inportatu</string>
     <string name="menu_export">OPMLra esportatu</string>
-    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="storage_request_explanation">Jarioak fitxategi batetik inportatzeko edo esportatzeko, aplikazioa biltegira sartzea baimendu behar duzu.</string>
     <string name="error_feed_error">Jario helbidera ezin izan da sartu.</string>
     <string name="error_feed_process">Jarioa ezin da prozesatu.</string>
     <string name="error_feed_url_exists">Helbidea existitzen da dagoeneko.</string>
@@ -131,7 +131,7 @@
     <string name="file">Fitxategia</string>
     <string name="download_and_save">Deskargatu eta gorde</string>
     <string name="open_link">Esteka ireki</string>
-    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+    <string name="tip_sentence">Aholkua: mugitu ezkerrera irakurrita bezala markatzeko eta eskuinera gogokoen bezala markatzeko</string>
 
     <!-- WIDGET -->
     <string name="red">Gorria</string>
@@ -151,7 +151,7 @@
         badaude
     </string>
     <string name="settings_notifications_ringtone">Dei-tonua</string>
-    <string name="settings_notifications_ringtone_none">None</string>
+    <string name="settings_notifications_ringtone_none">Bat ere ez</string>
     <string name="settings_notifications_vibrate">Dardaratu</string>
     <string name="settings_notifications_vibrate_description">Gaitu dardara sarrera berriak daudenean
     </string>
@@ -190,7 +190,7 @@
 
     <string-array name="settings_intervals">
         <item>Minutu 1</item>
-        <item>5 minuteu</item>
+        <item>5 minutu</item>
         <item>15 minutu</item>
         <item>30 minutu</item>
         <item>Ordu 1</item>
