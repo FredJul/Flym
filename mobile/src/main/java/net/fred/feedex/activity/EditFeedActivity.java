@@ -266,6 +266,11 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             if (intent.hasExtra(Intent.EXTRA_TEXT)) {
                 mUrlEditText.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
             }
+        } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
+            setTitle(R.string.new_feed_title);
+
+            tabWidget.setVisibility(View.GONE);
+            mUrlEditText.setText(intent.getDataString());
         } else if (intent.getAction().equals(Intent.ACTION_EDIT)) {
             setTitle(R.string.edit_feed_title);
 
