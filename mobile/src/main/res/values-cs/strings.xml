@@ -40,7 +40,6 @@
     <string name="no_result">Žádný výsledek</string>
     <string name="drawer_open">Otevřít navigační lištu</string>
     <string name="drawer_close">Zavřít navigační lištu</string>
-    <string name="back_again_to_quit">Opakovaný stisk tlačítka zpět ukončí aplikaci</string>
 
     <!-- FEEDS -->
     <string name="feeds">Zdroje</string>
@@ -109,11 +108,8 @@
     <string name="google_news_health">Zdraví</string>
 
     <!-- ENTRIES -->
-    <string name="all">Články</string>
     <string name="no_entries">Žádné články</string>
     <string name="favorites">Označené</string>
-    <string name="context_menu_hide_read">Skrýt přečtené články</string>
-    <string name="context_menu_show_read">Zobrazit přečtené články</string>
     <string name="context_menu_share_starred">Sdílet označené články</string>
     <string name="menu_star">Označit</string>
     <string name="menu_unstar">Odznačit</string>

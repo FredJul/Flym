@@ -63,7 +63,6 @@ dependencies {
     //wearApp project(':wear')
     compile 'com.android.support:appcompat-v7:+'
     compile 'com.google.android.gms:play-services-wearable:+'
-    compile 'com.melnykov:floatingactionbutton:+'
     compile 'org.jsoup:jsoup:+'
     compile 'com.github.bumptech.glide:glide:+'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:+'

@@ -33,7 +33,5 @@
             android:layout_height="match_parent"
             android:layout_gravity="fill"
             android:footerDividersEnabled="false"/>
-
-        <include layout="@layout/view_hide_read_button"/>
     </FrameLayout>
 </LinearLayout>

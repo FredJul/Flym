@@ -39,7 +39,6 @@
     <string name="no_result">Нема резултата</string>
     <string name="drawer_open">Отвори фиоку навигације</string>
     <string name="drawer_close">Затвори фиоку навигације</string>
-    <string name="back_again_to_quit">Притисните опет за излаз</string>
 
     <!-- FEEDS -->
     <string name="feeds">Доводи</string>
@@ -100,11 +99,8 @@
     <string name="google_news_health">Здравље</string>
 
     <!-- ENTRIES -->
-    <string name="all">Уноси</string>
     <string name="no_entries">Нема уноса</string>
     <string name="favorites">Омиљено</string>
-    <string name="context_menu_hide_read">Сакриј прочитане</string>
-    <string name="context_menu_show_read">Прикажи прочитане</string>
     <string name="context_menu_share_starred">Подели омиљене</string>
     <string name="menu_star">Омиљено</string>
     <string name="menu_unstar">Није омиљено</string>

@@ -38,7 +38,6 @@
     <string name="no_result">No hi ha resultats</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="back_again_to_quit">Premeu una vegada més per sortir</string>
 
     <!-- FEEDS -->
     <string name="feeds">Canals</string>
@@ -105,11 +104,8 @@
     <string name="google_news_health">Health</string>
 
     <!-- ENTRIES -->
-    <string name="all">Entrades</string>
     <string name="no_entries">No hi ha entrades</string>
     <string name="favorites">Destacats</string>
-    <string name="context_menu_hide_read">Amaga entrades llegides</string>
-    <string name="context_menu_show_read">Mostra entrades llegides</string>
     <string name="context_menu_share_starred">Comparteix entrades destacades</string>
     <string name="menu_star">Marca</string>
     <string name="menu_unstar">Treu la marca</string>

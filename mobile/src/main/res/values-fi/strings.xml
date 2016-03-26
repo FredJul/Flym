@@ -38,7 +38,6 @@
     <string name="no_result">Ei tuloksia</string>
     <string name="drawer_open">Avaa navigointipaneeli</string>
     <string name="drawer_close">Sulje navigointipaneeli</string>
-    <string name="back_again_to_quit">Paina takaisin-näppäintä vielä kerran lopettaaksesi</string>
 
     <!-- FEEDS -->
     <string name="feeds">Syötteet</string>
@@ -102,11 +101,8 @@
     <string name="google_news_health">Terveys</string>
 
     <!-- ENTRIES -->
-    <string name="all">Artikkelit</string>
     <string name="no_entries">Ei artikkeleita</string>
     <string name="favorites">Tähdellä merkityt</string>
-    <string name="context_menu_hide_read">Piilota luetut</string>
-    <string name="context_menu_show_read">Näytä luetut</string>
     <string name="context_menu_share_starred">Jaa tähdellä merkityt</string>
     <string name="menu_star">Merkitse tähdellä</string>
     <string name="menu_unstar">Poista tähti</string>

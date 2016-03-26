@@ -38,7 +38,6 @@
     <string name="no_result">Nessun risultato</string>
     <string name="drawer_open">Apri pannello di navigazione</string>
     <string name="drawer_close">Chiudi pannello di navigazione</string>
-    <string name="back_again_to_quit">Premere indietro un\'altra volta per uscire</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feed</string>
@@ -105,11 +104,8 @@
     <string name="google_news_health">Salute</string>
 
     <!-- ENTRIES -->
-    <string name="all">Articoli</string>
     <string name="no_entries">Nessun articolo</string>
     <string name="favorites">Preferiti</string>
-    <string name="context_menu_hide_read">Nascondi articoli letti</string>
-    <string name="context_menu_show_read">Mostra articoli letti</string>
     <string name="context_menu_share_starred">Condividi articoli preferiti</string>
     <string name="menu_star">Aggiungi ai preferiti</string>
     <string name="menu_unstar">Rimuovi dai preferiti</string>

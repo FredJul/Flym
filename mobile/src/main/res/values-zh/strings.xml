@@ -38,7 +38,6 @@
     <string name="no_result">没有结果</string>
     <string name="drawer_open">打开导航抽屉</string>
     <string name="drawer_close">关闭导航抽屉</string>
-    <string name="back_again_to_quit">再按一次退出</string>
 
     <!-- FEEDS -->
     <string name="feeds">订阅</string>
@@ -99,11 +98,8 @@
     <string name="google_news_health">健康</string>
 
     <!-- ENTRIES -->
-    <string name="all">全部订阅</string>
     <string name="no_entries">没有消息</string>
     <string name="favorites">收藏</string>
-    <string name="context_menu_hide_read">隐藏已读消息</string>
-    <string name="context_menu_show_read">显示已读消息</string>
     <string name="context_menu_share_starred">分享收藏订阅</string>
     <string name="menu_star">收藏</string>
     <string name="menu_unstar">取消收藏</string>

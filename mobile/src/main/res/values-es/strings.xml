@@ -38,7 +38,6 @@
     <string name="no_result">Sin resultados</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="back_again_to_quit">Presione atrás une vez más para salir</string>
 
     <!-- FEEDS -->
     <string name="feeds">Fuentes</string>
@@ -104,11 +103,8 @@
     <string name="google_news_health">Health</string>
 
     <!-- ENTRIES -->
-    <string name="all">Entradas</string>
     <string name="no_entries">No hay entradas</string>
     <string name="favorites">Destacadas</string>
-    <string name="context_menu_hide_read">Ocultar entradas leídas</string>
-    <string name="context_menu_show_read">Mostrar entradas leídas</string>
     <string name="context_menu_share_starred">Compartir entradas seleccionadas</string>
     <string name="menu_star">Destaca</string>
     <string name="menu_unstar">No destacar</string>

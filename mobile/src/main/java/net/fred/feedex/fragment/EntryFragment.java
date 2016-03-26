@@ -34,8 +34,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -62,7 +60,6 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
-import net.fred.feedex.utils.UiUtils;
 import net.fred.feedex.view.EntryView;
 
 public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<Cursor>, EntryView.EntryViewManager {
@@ -287,15 +284,11 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
         }
 
         if (mBaseUri != null) {
-            Bundle b = getActivity().getIntent().getExtras();
-
-            String whereClause = FeedData.shouldShowReadEntries(mBaseUri) ||
-                    (b != null && b.getBoolean(Constants.INTENT_FROM_WIDGET, false)) ? null : EntryColumns.WHERE_UNREAD;
             String entriesOrder = PrefUtils.getBoolean(PrefUtils.DISPLAY_OLDEST_FIRST, false) ? Constants.DB_ASC : Constants.DB_DESC;
 
             // Load the entriesIds list. Should be in a loader... but I was too lazy to do so
             Cursor entriesCursor = MainApplication.getContext().getContentResolver().query(mBaseUri, EntryColumns.PROJECTION_ID,
-                    whereClause, null, EntryColumns.DATE + entriesOrder);
+                    null, null, EntryColumns.DATE + entriesOrder);
 
             if (entriesCursor != null && entriesCursor.getCount() > 0) {
                 mEntriesIds = new long[entriesCursor.getCount()];
@@ -325,14 +318,6 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
             String feedTitle = entryCursor.isNull(mFeedNamePos) ? entryCursor.getString(mFeedUrlPos) : entryCursor.getString(mFeedNamePos);
             BaseActivity activity = (BaseActivity) getActivity();
             activity.setTitle(feedTitle);
-
-            byte[] iconBytes = entryCursor.getBlob(mFeedIconPos);
-            Bitmap bitmap = UiUtils.getScaledBitmap(iconBytes, 24);
-            if (bitmap != null) {
-                activity.getSupportActionBar().setIcon(new BitmapDrawable(getResources(), bitmap));
-            } else {
-                activity.getSupportActionBar().setIcon(null);
-            }
 
             mFavorite = entryCursor.getInt(mIsFavoritePos) == 1;
             activity.invalidateOptionsMenu();

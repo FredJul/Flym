@@ -50,7 +50,6 @@ import android.provider.BaseColumns;
 import android.text.TextUtils;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.utils.PrefUtils;
 
 public class FeedData {
     public static final String CONTENT = "content://";
@@ -80,11 +79,6 @@ public class FeedData {
         ContentValues values = new ContentValues();
         values.putNull(EntryColumns.IS_READ);
         return values;
-    }
-
-    public static boolean shouldShowReadEntries(Uri uri) {
-        boolean alwaysShowRead = EntryColumns.FAVORITES_CONTENT_URI.equals(uri) || (FeedDataContentProvider.URI_MATCHER.match(uri) == FeedDataContentProvider.URI_SEARCH);
-        return alwaysShowRead || PrefUtils.getBoolean(PrefUtils.SHOW_READ, true);
     }
 
     public static class FeedColumns implements BaseColumns {
@@ -205,8 +199,8 @@ public class FeedData {
             return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/entries");
         }
 
-        public static Uri ALL_ENTRIES_CONTENT_URI(String entryId) {
-            return Uri.parse(CONTENT_AUTHORITY + "/all_entries/" + entryId);
+        public static Uri UNREAD_ENTRIES_CONTENT_URI(String entryId) {
+            return Uri.parse(CONTENT_AUTHORITY + "/unread_entries/" + entryId);
         }
 
         public static Uri CONTENT_URI(String entryId) {
@@ -227,9 +221,7 @@ public class FeedData {
             return Uri.parse(CONTENT_AUTHORITY + "/entries/search/" + (TextUtils.isEmpty(search) ? " " : Uri.encode(search))); // The space is mandatory here with empty search
         }
 
-
-        public static final Uri ALL_ENTRIES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/all_entries");
-
+        public static final Uri UNREAD_ENTRIES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/unread_entries");
 
         public static final Uri FAVORITES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/favorites");
 

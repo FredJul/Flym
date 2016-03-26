@@ -38,7 +38,6 @@
     <string name="no_result">Нет результатов</string>
     <string name="drawer_open">Открыть меню навигации</string>
     <string name="drawer_close">Закрыть меню навигации</string>
-    <string name="back_again_to_quit">Нажмите "Назад" еще раз, чтобы выйти</string>
 
     <!-- FEEDS -->
     <string name="feeds">Ленты</string>
@@ -107,11 +106,8 @@
     <string name="google_news_health">Health</string>
 
     <!-- ENTRIES -->
-    <string name="all">Новости</string>
     <string name="no_entries">Нет новостей</string>
     <string name="favorites">Избранное</string>
-    <string name="context_menu_hide_read">Скрыть прочитанные новости</string>
-    <string name="context_menu_show_read">Показать прочитанные новости</string>
     <string name="context_menu_share_starred">Поделиться избранными новостями</string>
     <string name="menu_star">Поместить в избранное</string>
     <string name="menu_unstar">Убрать из избранного</string>

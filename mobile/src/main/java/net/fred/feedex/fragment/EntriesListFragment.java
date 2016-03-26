@@ -47,12 +47,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.melnykov.fab.FloatingActionButton;
-
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.EntriesCursorAdapter;
-import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
@@ -75,16 +72,12 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
     private ListView mListView;
-    private FloatingActionButton mHideReadButton;
     private long mListDisplayDate = new Date().getTime();
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             String entriesOrder = PrefUtils.getBoolean(PrefUtils.DISPLAY_OLDEST_FIRST, false) ? Constants.DB_ASC : Constants.DB_DESC;
             String where = "(" + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + ')';
-            if (!FeedData.shouldShowReadEntries(mCurrentUri)) {
-                where += Constants.DB_AND + EntryColumns.WHERE_UNREAD;
-            }
             CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, null, where, null, EntryColumns.DATE + entriesOrder);
             cursorLoader.setUpdateThrottle(150);
             return cursorLoader;
@@ -103,10 +96,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (PrefUtils.SHOW_READ.equals(key)) {
-                getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-                UiUtils.updateHideReadButton(mHideReadButton);
-            } else if (PrefUtils.IS_REFRESHING.equals(key)) {
+            if (PrefUtils.IS_REFRESHING.equals(key)) {
                 refreshSwipeProgress();
             }
         }
@@ -207,18 +197,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             });
             mListView.addHeaderView(header);
         }
-
-        UiUtils.addEmptyFooterView(mListView, 90);
-
-        mHideReadButton = (FloatingActionButton) rootView.findViewById(R.id.hide_read_button);
-        mHideReadButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                UiUtils.displayHideReadButtonAction(mListView.getContext());
-                return true;
-            }
-        });
-        UiUtils.updateHideReadButton(mHideReadButton);
 
         mRefreshListBtn = (Button) rootView.findViewById(R.id.refreshListBtn);
         mRefreshListBtn.setOnClickListener(new View.OnClickListener() {

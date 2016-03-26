@@ -39,7 +39,6 @@
     <string name="no_result">No result</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="back_again_to_quit">Press back once more to exit</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
@@ -108,11 +107,10 @@
     <string name="google_news_health">Health</string>
 
     <!-- ENTRIES -->
-    <string name="all">Entries</string>
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">No entries</string>
     <string name="favorites">Starred</string>
-    <string name="context_menu_hide_read">Hide read entries</string>
-    <string name="context_menu_show_read">Show read entries</string>
     <string name="context_menu_share_starred">Share starred entries</string>
     <string name="menu_star">Star</string>
     <string name="menu_unstar">Unstar</string>
