@@ -585,7 +585,7 @@ public class EditFeedsListFragment extends ListFragment {
             // First, try to use a file app
             try {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("file/*");
+                intent.setType("text/*");
                 startActivityForResult(intent, REQUEST_PICK_OPML_FILE);
             } catch (Exception unused) { // Else use a custom file selector
                 displayCustomFilePicker();
