@@ -97,6 +97,8 @@
     <string name="google_news_health">Hälsa</string>
 
     <!-- ENTRIES -->
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">Inga poster</string>
     <string name="favorites">Favoriter</string>
     <string name="context_menu_share_starred">Dela favoriter</string>

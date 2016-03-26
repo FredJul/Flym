@@ -8,8 +8,8 @@ android {
         applicationId "net.fred.feedex"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 57
-        versionName "1.9.0"
+        versionCode 58
+        versionName "1.9.1"
     }
 
     lintOptions {
@@ -61,8 +61,8 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //wearApp project(':wear')
-    compile 'com.android.support:appcompat-v7:+'
-    compile 'com.google.android.gms:play-services-wearable:+'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    //compile 'com.google.android.gms:play-services-wearable:+'
     compile 'org.jsoup:jsoup:+'
     compile 'com.github.bumptech.glide:glide:+'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:+'

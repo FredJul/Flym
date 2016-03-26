@@ -106,6 +106,8 @@
     <string name="google_news_health">Health</string>
 
     <!-- ENTRIES -->
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">Нет новостей</string>
     <string name="favorites">Избранное</string>
     <string name="context_menu_share_starred">Поделиться избранными новостями</string>

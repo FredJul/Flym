@@ -104,6 +104,8 @@
     <string name="google_news_health">Salute</string>
 
     <!-- ENTRIES -->
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">Nessun articolo</string>
     <string name="favorites">Preferiti</string>
     <string name="context_menu_share_starred">Condividi articoli preferiti</string>

@@ -100,6 +100,8 @@
     <string name="google_news_health">Zdravie</string>
 
     <!-- ENTRIES -->
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">Žiadne články</string>
     <string name="favorites">Obľúbené Články</string>
     <string name="context_menu_share_starred">Zdieľať označené články</string>

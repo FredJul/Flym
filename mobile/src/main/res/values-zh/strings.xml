@@ -98,6 +98,8 @@
     <string name="google_news_health">健康</string>
 
     <!-- ENTRIES -->
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">没有消息</string>
     <string name="favorites">收藏</string>
     <string name="context_menu_share_starred">分享收藏订阅</string>

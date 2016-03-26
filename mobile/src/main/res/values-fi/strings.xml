@@ -101,6 +101,8 @@
     <string name="google_news_health">Terveys</string>
 
     <!-- ENTRIES -->
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">Ei artikkeleita</string>
     <string name="favorites">Tähdellä merkityt</string>
     <string name="context_menu_share_starred">Jaa tähdellä merkityt</string>

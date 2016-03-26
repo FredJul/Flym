@@ -99,6 +99,8 @@
     <string name="google_news_health">Здравље</string>
 
     <!-- ENTRIES -->
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">Нема уноса</string>
     <string name="favorites">Омиљено</string>
     <string name="context_menu_share_starred">Подели омиљене</string>

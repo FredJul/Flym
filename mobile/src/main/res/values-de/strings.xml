@@ -99,6 +99,8 @@
     <string name="google_news_health">Gesundheit</string>
 
     <!-- ENTRIES -->
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">Keine Einträge</string>
     <string name="favorites">Favorisiert</string>
     <string name="context_menu_share_starred">Favorisierte Einträge teilen</string>

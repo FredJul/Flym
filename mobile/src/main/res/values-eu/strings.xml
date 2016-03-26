@@ -107,6 +107,8 @@
     <string name="google_news_health">Osasuna</string>
 
     <!-- ENTRIES -->
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">Sarrerarik ez</string>
     <string name="favorites">Gogokoenak</string>
     <string name="context_menu_share_starred">Partekatu sarrera gogokoenak</string>

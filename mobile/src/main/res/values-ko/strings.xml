@@ -99,6 +99,8 @@
     <string name="google_news_health">건강</string>
 
     <!-- ENTRIES -->
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">항목 없음</string>
     <string name="favorites">별표</string>
     <string name="context_menu_share_starred">별표 항목 공유</string>
