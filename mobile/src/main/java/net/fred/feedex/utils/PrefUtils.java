@@ -52,8 +52,6 @@ public class PrefUtils {
 
     public static final String FONT_SIZE = "fontsize";
 
-    public static final String LAST_SCHEDULED_REFRESH = "lastscheduledrefresh";
-
     public static boolean getBoolean(String key, boolean defValue) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());
         return settings.getBoolean(key, defValue);

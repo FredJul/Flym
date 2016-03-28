@@ -45,7 +45,6 @@
 package net.fred.feedex.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -57,10 +56,21 @@ import android.text.TextUtils;
 
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
-import net.fred.feedex.service.RefreshService;
+import net.fred.feedex.service.AutoRefreshService;
 import net.fred.feedex.utils.PrefUtils;
 
 public class GeneralPrefsFragment extends PreferenceFragment {
+
+    private Preference.OnPreferenceChangeListener mOnRefreshChangeListener = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            Activity activity = getActivity();
+            if (activity != null) {
+                AutoRefreshService.initAutoRefresh(activity);
+            }
+            return true;
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,22 +80,11 @@ public class GeneralPrefsFragment extends PreferenceFragment {
 
         setRingtoneSummary();
 
+
         Preference preference = findPreference(PrefUtils.REFRESH_ENABLED);
-        preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                Activity activity = getActivity();
-                if (activity != null) {
-                    if (Boolean.TRUE.equals(newValue)) {
-                        activity.startService(new Intent(activity, RefreshService.class));
-                    } else {
-                        PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
-                        activity.stopService(new Intent(activity, RefreshService.class));
-                    }
-                }
-                return true;
-            }
-        });
+        preference.setOnPreferenceChangeListener(mOnRefreshChangeListener);
+        preference = findPreference(PrefUtils.REFRESH_INTERVAL);
+        preference.setOnPreferenceChangeListener(mOnRefreshChangeListener);
 
         preference = findPreference(PrefUtils.LIGHT_THEME);
         preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
