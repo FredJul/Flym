@@ -21,8 +21,9 @@ package net.fred.feedex.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CheckBox;
 
 import net.fred.feedex.R;
@@ -56,32 +57,37 @@ public class AddGoogleNewsActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.google_news, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-
-        return false;
-    }
-
-    public void onClickOk(View view) {
-        for (int topic = 0; topic < TOPIC_NAME.length; topic++) {
-            if (((CheckBox) findViewById(CB_IDS[topic])).isChecked()) {
-                String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss";
-                if (TOPIC_CODES[topic] != null) {
-                    url += "&topic=" + TOPIC_CODES[topic];
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.menu_validate:
+                for (int topic = 0; topic < TOPIC_NAME.length; topic++) {
+                    if (((CheckBox) findViewById(CB_IDS[topic])).isChecked()) {
+                        String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss";
+                        if (TOPIC_CODES[topic] != null) {
+                            url += "&topic=" + TOPIC_CODES[topic];
+                        }
+                        FeedDataContentProvider.addFeed(this, url, getString(TOPIC_NAME[topic]), true);
+                    }
                 }
-                FeedDataContentProvider.addFeed(this, url, getString(TOPIC_NAME[topic]), true);
-            }
+
+                setResult(RESULT_OK);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        setResult(RESULT_OK);
-        finish();
     }
 
-    public void onClickCancel(View view) {
-        finish();
-    }
 }
 

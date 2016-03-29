@@ -8,7 +8,6 @@
         android:id="@+id/tabHost"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/button_layout"
         android:layout_below="@+id/toolbar">
 
         <LinearLayout
@@ -124,28 +123,5 @@
             </FrameLayout>
         </LinearLayout>
     </TabHost>
-
-    <LinearLayout
-        android:id="@+id/button_layout"
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="right">
-
-        <Button
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClickCancel"
-            android:text="@android:string/cancel"/>
-
-        <Button
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClickOk"
-            android:text="@android:string/ok"/>
-    </LinearLayout>
 
 </RelativeLayout>
