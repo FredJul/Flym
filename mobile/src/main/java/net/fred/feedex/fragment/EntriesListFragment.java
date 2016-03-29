@@ -19,6 +19,7 @@
 
 package net.fred.feedex.fragment;
 
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +28,11 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.BaseColumns;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
@@ -48,14 +53,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import net.fred.feedex.Constants;
+import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.EntriesCursorAdapter;
+import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class EntriesListFragment extends SwipeRefreshListFragment {
@@ -71,6 +79,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private Uri mCurrentUri, mOriginalUri;
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
+    private Cursor mJustMarkedAsReadEntries;
+    private FloatingActionButton mFab;
     private ListView mListView;
     private long mListDisplayDate = new Date().getTime();
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
@@ -155,6 +165,14 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         refreshSwipeProgress();
         PrefUtils.registerOnPrefChangeListener(mPrefListener);
 
+        mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                markAllAsRead();
+            }
+        });
+
         if (mCurrentUri != null) {
             // If the list is empty when we are going back here, try with the last display date
             if (mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
@@ -220,6 +238,13 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     @Override
     public void onStop() {
         PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
+
+        if (mJustMarkedAsReadEntries != null && !mJustMarkedAsReadEntries.isClosed()) {
+            mJustMarkedAsReadEntries.close();
+        }
+
+        mFab = null;
+
         super.onStop();
     }
 
@@ -312,19 +337,55 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 startRefresh();
                 return true;
             }
-            case R.id.menu_all_read: {
-                if (mEntriesCursorAdapter != null) {
-                    mEntriesCursorAdapter.markAllAsRead(mListDisplayDate);
-
-                    // If we are on "all items" uri, we can remove the notification here
-                    if (mCurrentUri != null && EntryColumns.CONTENT_URI.equals(mCurrentUri) && Constants.NOTIF_MGR != null) {
-                        Constants.NOTIF_MGR.cancel(0);
-                    }
-                }
-                return true;
-            }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void markAllAsRead() {
+        if (mEntriesCursorAdapter != null) {
+            Snackbar.make(getActivity().findViewById(R.id.coordinator_layout), R.string.marked_as_read, Snackbar.LENGTH_LONG)
+                    .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.light_theme_color_primary))
+                    .setAction(R.string.undo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new Thread() {
+                                @Override
+                                public void run() {
+                                    if (mJustMarkedAsReadEntries != null && !mJustMarkedAsReadEntries.isClosed()) {
+                                        ArrayList<Integer> ids = new ArrayList<>();
+                                        while (mJustMarkedAsReadEntries.moveToNext()) {
+                                            ids.add(mJustMarkedAsReadEntries.getInt(0));
+                                        }
+                                        ContentResolver cr = MainApplication.getContext().getContentResolver();
+                                        String where = BaseColumns._ID + " IN (" + TextUtils.join(",", ids) + ')';
+                                        cr.update(FeedData.EntryColumns.CONTENT_URI, FeedData.getUnreadContentValues(), where, null);
+
+                                        mJustMarkedAsReadEntries.close();
+                                    }
+                                }
+                            }.start();
+                        }
+                    })
+                    .show();
+
+            new Thread() {
+                @Override
+                public void run() {
+                    ContentResolver cr = MainApplication.getContext().getContentResolver();
+                    String where = EntryColumns.WHERE_UNREAD + Constants.DB_AND + '(' + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + ')';
+                    if (mJustMarkedAsReadEntries != null && !mJustMarkedAsReadEntries.isClosed()) {
+                        mJustMarkedAsReadEntries.close();
+                    }
+                    mJustMarkedAsReadEntries = cr.query(mCurrentUri, new String[]{BaseColumns._ID}, where, null, null);
+                    cr.update(mCurrentUri, FeedData.getReadContentValues(), where, null);
+                }
+            }.start();
+
+            // If we are on "all items" uri, we can remove the notification here
+            if (mCurrentUri != null && EntryColumns.CONTENT_URI.equals(mCurrentUri) && Constants.NOTIF_MGR != null) {
+                Constants.NOTIF_MGR.cancel(0);
+            }
+        }
     }
 
     private void startRefresh() {
