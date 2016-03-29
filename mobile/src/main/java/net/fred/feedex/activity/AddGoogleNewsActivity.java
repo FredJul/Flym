@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.CheckBox;
+import android.widget.EditText;
 
 import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedDataContentProvider;
@@ -41,6 +42,7 @@ public class AddGoogleNewsActivity extends BaseActivity {
 
     private static final int[] CB_IDS = new int[]{R.id.cb_top_stories, R.id.cb_world, R.id.cb_business, R.id.cb_technology, R.id.cb_entertainment,
             R.id.cb_sports, R.id.cb_science, R.id.cb_health};
+    private EditText custom_topic_edit_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class AddGoogleNewsActivity extends BaseActivity {
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.activity_add_google_news);
+        custom_topic_edit_text = (EditText) findViewById(R.id.google_news_custom_topic);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -79,6 +82,14 @@ public class AddGoogleNewsActivity extends BaseActivity {
                         }
                         FeedDataContentProvider.addFeed(this, url, getString(TOPIC_NAME[topic]), true);
                     }
+                }
+
+                String custom_topic = custom_topic_edit_text.getText().toString();
+                if(!custom_topic.isEmpty())
+                {
+                    String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss";
+                    url+="&q="+custom_topic; //TODO: is this safe? What about mutation marks?
+                    FeedDataContentProvider.addFeed(this,url,custom_topic,true);
                 }
 
                 setResult(RESULT_OK);
