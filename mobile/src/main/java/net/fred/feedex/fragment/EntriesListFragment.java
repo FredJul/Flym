@@ -217,6 +217,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             mListView.addHeaderView(header);
         }
 
+        UiUtils.addEmptyFooterView(mListView, 90);
+
         mRefreshListBtn = (Button) rootView.findViewById(R.id.refreshListBtn);
         mRefreshListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
