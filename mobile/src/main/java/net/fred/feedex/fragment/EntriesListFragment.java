@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
@@ -73,8 +74,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private static final String STATE_SHOW_FEED_INFO = "STATE_SHOW_FEED_INFO";
     private static final String STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE";
 
-    private static final int ENTRIES_LOADER_ID = 1;
-    private static final int NEW_ENTRIES_NUMBER_LOADER_ID = 2;
+    private static final int ENTRIES_LOADER_ID = 1337;
+    private static final int NEW_ENTRIES_NUMBER_LOADER_ID = 42;
 
     private Uri mCurrentUri, mOriginalUri;
     private boolean mShowFeedInfo = false;
@@ -428,9 +429,12 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     }
 
     private void restartLoaders() {
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-        loaderManager.restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            LoaderManager loaderManager = activity.getSupportLoaderManager();
+            loaderManager.restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+            loaderManager.restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+        }
     }
 
     private void refreshUI() {
