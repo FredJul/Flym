@@ -71,7 +71,6 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
 import android.widget.TabHost;
-import android.widget.Toast;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
@@ -297,7 +296,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     cursor.close();
                 } else {
                     cursor.close();
-                    Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+                    UiUtils.showMessage(EditFeedActivity.this, R.string.error);
                     finish();
                 }
             }
@@ -322,7 +321,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                         FeedColumns.URL + Constants.DB_ARG, new String[]{url}, null);
 
                 if (cursor != null && cursor.moveToFirst() && !getIntent().getData().getLastPathSegment().equals(cursor.getString(0))) {
-                    Toast.makeText(EditFeedActivity.this, R.string.error_feed_url_exists, Toast.LENGTH_LONG).show();
+                    UiUtils.showMessage(EditFeedActivity.this, R.string.error_feed_url_exists);
                 } else {
                     ContentValues values = new ContentValues();
 
@@ -384,7 +383,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                 final String name = mNameEditText.getText().toString().trim();
                 final String urlOrSearch = mUrlEditText.getText().toString().trim();
                 if (urlOrSearch.isEmpty()) {
-                    Toast.makeText(this, R.string.error_feed_error, Toast.LENGTH_SHORT).show();
+                    UiUtils.showMessage(EditFeedActivity.this, R.string.error_feed_error);
                 }
 
                 if (!urlOrSearch.contains(".") || !urlOrSearch.contains("/") || urlOrSearch.contains(" ")) {
@@ -412,9 +411,9 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                             pd.cancel();
 
                             if (data == null) {
-                                Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+                                UiUtils.showMessage(EditFeedActivity.this, R.string.error);
                             } else if (data.isEmpty()) {
-                                Toast.makeText(EditFeedActivity.this, R.string.no_result, Toast.LENGTH_SHORT).show();
+                                UiUtils.showMessage(EditFeedActivity.this, R.string.no_result);
                             } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(EditFeedActivity.this);
                                 builder.setTitle(R.string.feed_search);

@@ -49,7 +49,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
@@ -60,6 +59,7 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
+import net.fred.feedex.utils.UiUtils;
 import net.fred.feedex.view.EntryView;
 
 public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<Cursor>, EntryView.EntryViewManager {
@@ -252,7 +252,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                     ClipData clip = ClipData.newPlainText("Copied Text", link);
                     clipboard.setPrimaryClip(clip);
 
-                    Toast.makeText(activity, R.string.copied_clipboard, Toast.LENGTH_SHORT).show();
+                    UiUtils.showMessage(getActivity(), R.string.copied_clipboard);
                     break;
                 }
                 case R.id.menu_mark_as_unread: {
@@ -360,7 +360,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
             try {
                 startActivityForResult(new Intent(Intent.ACTION_VIEW, uri), 0); // fallbackmode - let the browser handle this
             } catch (Throwable t) {
-                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+                UiUtils.showMessage(getActivity(), t.getMessage());
             }
         }
     }
@@ -414,7 +414,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(activity, R.string.network_error, Toast.LENGTH_SHORT).show();
+                        UiUtils.showMessage(getActivity(), R.string.network_error);
                     }
                 });
             }
@@ -453,7 +453,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                             DownloadManager dm = (DownloadManager) MainApplication.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
                             dm.enqueue(r);
                         } catch (Exception e) {
-                            Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_LONG).show();
+                            UiUtils.showMessage(getActivity(), R.string.error);
                         }
                     }
                 }).show();

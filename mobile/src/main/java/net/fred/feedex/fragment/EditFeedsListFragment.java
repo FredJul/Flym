@@ -72,7 +72,6 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
@@ -80,6 +79,7 @@ import net.fred.feedex.activity.AddGoogleNewsActivity;
 import net.fred.feedex.adapter.FeedsCursorAdapter;
 import net.fred.feedex.parser.OPML;
 import net.fred.feedex.provider.FeedData.FeedColumns;
+import net.fred.feedex.utils.UiUtils;
 import net.fred.feedex.view.DragNDropExpandableListView;
 import net.fred.feedex.view.DragNDropListener;
 
@@ -524,7 +524,7 @@ public class EditFeedsListFragment extends ListFragment {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
+                                        UiUtils.showMessage(getActivity(), R.string.error_feed_import);
                                     }
                                 });
                             }
@@ -564,7 +564,7 @@ public class EditFeedsListFragment extends ListFragment {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
+                                        UiUtils.showMessage(getActivity(), R.string.error_feed_import);
                                     }
                                 });
                             }
@@ -574,7 +574,7 @@ public class EditFeedsListFragment extends ListFragment {
             });
             builder.show();
         } catch (Exception unused) {
-            Toast.makeText(getActivity(), R.string.error_feed_import, Toast.LENGTH_LONG).show();
+            UiUtils.showMessage(getActivity(), R.string.error_feed_import);
         }
     }
 
@@ -591,7 +591,7 @@ public class EditFeedsListFragment extends ListFragment {
                 displayCustomFilePicker();
             }
         } else {
-            Toast.makeText(getActivity(), R.string.error_external_storage_not_available, Toast.LENGTH_LONG).show();
+            UiUtils.showMessage(getActivity(), R.string.error_external_storage_not_available);
         }
     }
 
@@ -610,22 +610,21 @@ public class EditFeedsListFragment extends ListFragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getActivity(), String.format(getString(R.string.message_exported_to), filename),
-                                        Toast.LENGTH_LONG).show();
+                                UiUtils.showMessage(getActivity(), String.format(getString(R.string.message_exported_to), filename));
                             }
                         });
                     } catch (Exception e) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getActivity(), R.string.error_feed_export, Toast.LENGTH_LONG).show();
+                                UiUtils.showMessage(getActivity(), R.string.error_feed_export);
                             }
                         });
                     }
                 }
             }).start();
         } else {
-            Toast.makeText(getActivity(), R.string.error_external_storage_not_available, Toast.LENGTH_LONG).show();
+            UiUtils.showMessage(getActivity(), R.string.error_external_storage_not_available);
         }
     }
 }

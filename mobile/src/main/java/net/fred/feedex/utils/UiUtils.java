@@ -23,6 +23,9 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.support.v4.util.LongSparseArray;
 import android.util.TypedValue;
 
@@ -41,6 +44,14 @@ public class UiUtils {
 
     static public int dpToPixel(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, MainApplication.getContext().getResources().getDisplayMetrics());
+    }
+
+    static public void showMessage(@NonNull Activity activity, @StringRes int messageId) {
+        showMessage(activity, activity.getString(messageId));
+    }
+
+    static public void showMessage(@NonNull Activity activity, @NonNull String message) {
+        Snackbar.make(activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show();
     }
 
     static public Bitmap getFaviconBitmap(long feedId, Cursor cursor, int iconCursorPos) {
