@@ -104,6 +104,7 @@
     <string name="google_news_sports">Sports</string>
     <string name="google_news_science">Science</string>
     <string name="google_news_health">Health</string>
+    <string name="google_news_custom_topic">Enter custom topic</string>
 
     <!-- ENTRIES -->
     <string name="unread_entries">Unread</string>
@@ -129,6 +130,8 @@
     <string name="download_and_save">Загрузить и сохранить</string>
     <string name="open_link">Открыть ссылку</string>
     <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+    <string name="undo">Undo</string>
+    <string name="marked_as_read">Marked as read</string>
 
     <!-- WIDGET -->
     <string name="red">Красный</string>

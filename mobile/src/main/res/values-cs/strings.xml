@@ -106,6 +106,7 @@
     <string name="google_news_sports">Sporty</string>
     <string name="google_news_science">Věda</string>
     <string name="google_news_health">Zdraví</string>
+    <string name="google_news_custom_topic">Enter custom topic</string>
 
     <!-- ENTRIES -->
     <string name="unread_entries">Unread</string>
@@ -131,6 +132,8 @@
     <string name="download_and_save">Stáhnout a uložit</string>
     <string name="open_link">Otevřít odkaz</string>
     <string name="tip_sentence">Tip: posunutím doleva označit jako přečtené a posunutím doprava jako oblíbené</string>
+    <string name="undo">Undo</string>
+    <string name="marked_as_read">Marked as read</string>
 
     <!-- WIDGET -->
     <string name="red">Červená</string>

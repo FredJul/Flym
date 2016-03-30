@@ -96,6 +96,7 @@
     <string name="google_news_sports">体育</string>
     <string name="google_news_science">科学</string>
     <string name="google_news_health">健康</string>
+    <string name="google_news_custom_topic">Enter custom topic</string>
 
     <!-- ENTRIES -->
     <string name="unread_entries">Unread</string>
@@ -121,6 +122,8 @@
     <string name="download_and_save">下载并保存</string>
     <string name="open_link">打开链接</string>
     <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+    <string name="undo">Undo</string>
+    <string name="marked_as_read">Marked as read</string>
 
     <!-- WIDGET -->
     <string name="red">红色</string>

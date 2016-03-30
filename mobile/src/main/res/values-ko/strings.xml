@@ -97,6 +97,7 @@
     <string name="google_news_sports">스포츠</string>
     <string name="google_news_science">과학</string>
     <string name="google_news_health">건강</string>
+    <string name="google_news_custom_topic">Enter custom topic</string>
 
     <!-- ENTRIES -->
     <string name="unread_entries">Unread</string>
@@ -122,6 +123,8 @@
     <string name="download_and_save">다운로드 및 저장</string>
     <string name="open_link">링크 열기</string>
     <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+    <string name="undo">Undo</string>
+    <string name="marked_as_read">Marked as read</string>
 
     <!-- WIDGET -->
     <string name="red">빨강</string>

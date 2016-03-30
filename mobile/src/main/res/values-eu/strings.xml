@@ -105,6 +105,7 @@
     <string name="google_news_sports">Kirolak</string>
     <string name="google_news_science">Zientzia</string>
     <string name="google_news_health">Osasuna</string>
+    <string name="google_news_custom_topic">Enter custom topic</string>
 
     <!-- ENTRIES -->
     <string name="unread_entries">Unread</string>
@@ -130,6 +131,8 @@
     <string name="download_and_save">Deskargatu eta gorde</string>
     <string name="open_link">Esteka ireki</string>
     <string name="tip_sentence">Aholkua: mugitu ezkerrera irakurrita bezala markatzeko eta eskuinera gogokoen bezala markatzeko</string>
+    <string name="undo">Undo</string>
+    <string name="marked_as_read">Marked as read</string>
 
     <!-- WIDGET -->
     <string name="red">Gorria</string>

@@ -99,6 +99,7 @@
     <string name="google_news_sports">Urheilu</string>
     <string name="google_news_science">Tiede</string>
     <string name="google_news_health">Terveys</string>
+    <string name="google_news_custom_topic">Enter custom topic</string>
 
     <!-- ENTRIES -->
     <string name="unread_entries">Unread</string>
@@ -124,6 +125,8 @@
     <string name="download_and_save">Lataa ja tallenna</string>
     <string name="open_link">Avaa linkki</string>
     <string name="tip_sentence">Vihje: Pyyhkäise vasemmalle merkitäksesi artikkeli luetuksi. Pyyhkäise oikealle merkitäksesi artikkeli tähdellä.</string>
+    <string name="undo">Undo</string>
+    <string name="marked_as_read">Marked as read</string>
 
     <!-- WIDGET -->
     <string name="red">Punainen</string>
