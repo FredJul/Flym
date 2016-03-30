@@ -346,7 +346,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
     public void markAllAsRead() {
         if (mEntriesCursorAdapter != null) {
-            Snackbar.make(getActivity().findViewById(R.id.coordinator_layout), R.string.marked_as_read, Snackbar.LENGTH_LONG)
+            Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.coordinator_layout), R.string.marked_as_read, Snackbar.LENGTH_LONG)
                     .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.light_theme_color_primary))
                     .setAction(R.string.undo, new View.OnClickListener() {
                         @Override
@@ -368,8 +368,9 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                                 }
                             }.start();
                         }
-                    })
-                    .show();
+                    });
+            snackbar.getView().setBackgroundResource(R.color.material_grey_900);
+            snackbar.show();
 
             new Thread() {
                 @Override

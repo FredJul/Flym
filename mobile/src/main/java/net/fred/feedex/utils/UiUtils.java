@@ -60,7 +60,10 @@ public class UiUtils {
     }
 
     static public void showMessage(@NonNull Activity activity, @NonNull String message) {
-        Snackbar.make(activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show();
+        View coordinatorLayout = activity.findViewById(R.id.coordinator_layout);
+        Snackbar snackbar = Snackbar.make((coordinatorLayout != null ? coordinatorLayout : activity.findViewById(android.R.id.content)), message, Snackbar.LENGTH_SHORT);
+        snackbar.getView().setBackgroundResource(R.color.material_grey_900);
+        snackbar.show();
     }
 
     static public Bitmap getFaviconBitmap(long feedId, Cursor cursor, int iconCursorPos) {
