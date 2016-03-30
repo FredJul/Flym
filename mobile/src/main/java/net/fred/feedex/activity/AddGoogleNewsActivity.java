@@ -31,6 +31,8 @@ import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.utils.UiUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Locale;
 
 public class AddGoogleNewsActivity extends BaseActivity {
@@ -42,7 +44,7 @@ public class AddGoogleNewsActivity extends BaseActivity {
 
     private static final int[] CB_IDS = new int[]{R.id.cb_top_stories, R.id.cb_world, R.id.cb_business, R.id.cb_technology, R.id.cb_entertainment,
             R.id.cb_sports, R.id.cb_science, R.id.cb_health};
-    private EditText custom_topic_edit_text;
+    private EditText mCustomTopicEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class AddGoogleNewsActivity extends BaseActivity {
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.activity_add_google_news);
-        custom_topic_edit_text = (EditText) findViewById(R.id.google_news_custom_topic);
+        mCustomTopicEditText = (EditText) findViewById(R.id.google_news_custom_topic);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -75,21 +77,20 @@ public class AddGoogleNewsActivity extends BaseActivity {
                 return true;
             case R.id.menu_validate:
                 for (int topic = 0; topic < TOPIC_NAME.length; topic++) {
-                    if (((CheckBox) findViewById(CB_IDS[topic])).isChecked()) {
-                        String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss";
-                        if (TOPIC_CODES[topic] != null) {
-                            url += "&topic=" + TOPIC_CODES[topic];
-                        }
+                    if (((CheckBox) findViewById(CB_IDS[topic])).isChecked() && TOPIC_CODES[topic] != null) {
+                        String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss&topic=" + TOPIC_CODES[topic];
                         FeedDataContentProvider.addFeed(this, url, getString(TOPIC_NAME[topic]), true);
                     }
                 }
 
-                String custom_topic = custom_topic_edit_text.getText().toString();
+                String custom_topic = mCustomTopicEditText.getText().toString();
                 if(!custom_topic.isEmpty())
                 {
-                    String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss";
-                    url+="&q="+custom_topic; //TODO: is this safe? What about mutation marks?
-                    FeedDataContentProvider.addFeed(this,url,custom_topic,true);
+                    try {
+                        String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss&q=" + URLEncoder.encode(custom_topic, "UTF-8");
+                        FeedDataContentProvider.addFeed(this, url, custom_topic, true);
+                    } catch (UnsupportedEncodingException ignored) {
+                    }
                 }
 
                 setResult(RESULT_OK);

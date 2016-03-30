@@ -48,6 +48,7 @@
         <activity
             android:name=".activity.AddGoogleNewsActivity"
             android:label="@string/google_news_title"
+            android:windowSoftInputMode="stateHidden"
             android:launchMode="singleTask"/>
         <activity
             android:name=".activity.AboutActivity"
