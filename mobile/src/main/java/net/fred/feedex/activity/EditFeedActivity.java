@@ -97,7 +97,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     static final String FEED_SEARCH_URL = "url";
     static final String FEED_SEARCH_DESC = "contentSnippet";
     private static final String STATE_CURRENT_TAB = "STATE_CURRENT_TAB";
-    private static final String[] FEED_PROJECTION = new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT};
+    private static final String[] FEED_PROJECTION = new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.IS_GROUP};
     private final ActionMode.Callback mFilterActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -289,15 +289,20 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             if (savedInstanceState == null) {
                 Cursor cursor = getContentResolver().query(intent.getData(), FEED_PROJECTION, null, null, null);
 
-                if (cursor.moveToNext()) {
+                if (cursor != null && cursor.moveToNext()) {
                     mNameEditText.setText(cursor.getString(0));
                     mUrlEditText.setText(cursor.getString(1));
                     mRetrieveFulltextCb.setChecked(cursor.getInt(2) == 1);
-                    cursor.close();
+                    if (cursor.getInt(3) == 1) { // if it's a group, we cannot edit it
+                        finish();
+                    }
                 } else {
-                    cursor.close();
                     UiUtils.showMessage(EditFeedActivity.this, R.string.error);
                     finish();
+                }
+
+                if (cursor != null) {
+                    cursor.close();
                 }
             }
         }
