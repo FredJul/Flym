@@ -386,7 +386,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             }.start();
 
             // If we are on "all items" uri, we can remove the notification here
-            if (mCurrentUri != null && EntryColumns.CONTENT_URI.equals(mCurrentUri) && Constants.NOTIF_MGR != null) {
+            if (mCurrentUri != null && Constants.NOTIF_MGR != null && (EntryColumns.CONTENT_URI.equals(mCurrentUri) || EntryColumns.UNREAD_ENTRIES_CONTENT_URI.equals(mCurrentUri))) {
                 Constants.NOTIF_MGR.cancel(0);
             }
         }
