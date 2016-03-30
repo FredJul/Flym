@@ -204,5 +204,6 @@
         <item>Nur über WLAN</item>
         <item>Immer</item>
     </string-array>
+    <string name="google_news_custom_topic">Eigenes Thema</string>
 
 </resources>

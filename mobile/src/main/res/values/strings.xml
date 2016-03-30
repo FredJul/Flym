@@ -182,6 +182,7 @@
         background
     </string>
     <string name="all_feeds">All feeds (incl. future)</string>
+    <string name="google_news_custom_topic">Enter custom topic</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new entry</item>

@@ -70,7 +70,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/google_news_health"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/google_news_custom_topic"
+                android:hint="@string/google_news_custom_topic"
+                android:singleLine="true"/>
+
         </LinearLayout>
+
     </ScrollView>
 
 </RelativeLayout>
