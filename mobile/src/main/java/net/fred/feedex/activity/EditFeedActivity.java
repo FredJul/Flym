@@ -71,7 +71,6 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
 import android.widget.TabHost;
-import android.widget.Toast;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
@@ -98,7 +97,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     static final String FEED_SEARCH_URL = "url";
     static final String FEED_SEARCH_DESC = "contentSnippet";
     private static final String STATE_CURRENT_TAB = "STATE_CURRENT_TAB";
-    private static final String[] FEED_PROJECTION = new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT};
+    private static final String[] FEED_PROJECTION = new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.IS_GROUP};
     private final ActionMode.Callback mFilterActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -241,7 +240,6 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         mRetrieveFulltextCb = (CheckBox) findViewById(R.id.retrieve_fulltext);
         mFiltersListView = (ListView) findViewById(android.R.id.list);
         View tabWidget = findViewById(android.R.id.tabs);
-        View buttonLayout = findViewById(R.id.button_layout);
 
         mTabHost.setup();
         mTabHost.addTab(mTabHost.newTabSpec("feedTab").setIndicator(getString(R.string.tab_feed_title)).setContent(R.id.feed_tab));
@@ -266,10 +264,13 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             if (intent.hasExtra(Intent.EXTRA_TEXT)) {
                 mUrlEditText.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
             }
+        } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
+            setTitle(R.string.new_feed_title);
+
+            tabWidget.setVisibility(View.GONE);
+            mUrlEditText.setText(intent.getDataString());
         } else if (intent.getAction().equals(Intent.ACTION_EDIT)) {
             setTitle(R.string.edit_feed_title);
-
-            buttonLayout.setVisibility(View.GONE);
 
             mFiltersCursorAdapter = new FiltersCursorAdapter(this, Constants.EMPTY_CURSOR);
             mFiltersListView.setAdapter(mFiltersCursorAdapter);
@@ -288,15 +289,20 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             if (savedInstanceState == null) {
                 Cursor cursor = getContentResolver().query(intent.getData(), FEED_PROJECTION, null, null, null);
 
-                if (cursor.moveToNext()) {
+                if (cursor != null && cursor.moveToNext()) {
                     mNameEditText.setText(cursor.getString(0));
                     mUrlEditText.setText(cursor.getString(1));
                     mRetrieveFulltextCb.setChecked(cursor.getInt(2) == 1);
-                    cursor.close();
+                    if (cursor.getInt(3) == 1) { // if it's a group, we cannot edit it
+                        finish();
+                    }
                 } else {
-                    cursor.close();
-                    Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
+                    UiUtils.showMessage(EditFeedActivity.this, R.string.error);
                     finish();
+                }
+
+                if (cursor != null) {
+                    cursor.close();
                 }
             }
         }
@@ -320,7 +326,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                         FeedColumns.URL + Constants.DB_ARG, new String[]{url}, null);
 
                 if (cursor != null && cursor.moveToFirst() && !getIntent().getData().getLastPathSegment().equals(cursor.getString(0))) {
-                    Toast.makeText(EditFeedActivity.this, R.string.error_feed_url_exists, Toast.LENGTH_LONG).show();
+                    UiUtils.showMessage(EditFeedActivity.this, R.string.error_feed_url_exists);
                 } else {
                     ContentValues values = new ContentValues();
 
@@ -365,6 +371,10 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             menu.findItem(R.id.menu_add_filter).setVisible(true);
         }
 
+        if (getIntent() != null && getIntent().getAction().equals(Intent.ACTION_EDIT)) {
+            menu.findItem(R.id.menu_validate).setVisible(false); // only in insert mode
+        }
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -373,6 +383,76 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.menu_validate: // only in insert mode
+                final String name = mNameEditText.getText().toString().trim();
+                final String urlOrSearch = mUrlEditText.getText().toString().trim();
+                if (urlOrSearch.isEmpty()) {
+                    UiUtils.showMessage(EditFeedActivity.this, R.string.error_feed_error);
+                }
+
+                if (!urlOrSearch.contains(".") || !urlOrSearch.contains("/") || urlOrSearch.contains(" ")) {
+                    final ProgressDialog pd = new ProgressDialog(EditFeedActivity.this);
+                    pd.setMessage(getString(R.string.loading));
+                    pd.setCancelable(true);
+                    pd.setIndeterminate(true);
+                    pd.show();
+
+                    getLoaderManager().restartLoader(1, null, new LoaderManager.LoaderCallbacks<ArrayList<HashMap<String, String>>>() {
+
+                        @Override
+                        public Loader<ArrayList<HashMap<String, String>>> onCreateLoader(int id, Bundle args) {
+                            String encodedSearchText = urlOrSearch;
+                            try {
+                                encodedSearchText = URLEncoder.encode(urlOrSearch, Constants.UTF8);
+                            } catch (UnsupportedEncodingException ignored) {
+                            }
+
+                            return new GetFeedSearchResultsLoader(EditFeedActivity.this, encodedSearchText);
+                        }
+
+                        @Override
+                        public void onLoadFinished(Loader<ArrayList<HashMap<String, String>>> loader, final ArrayList<HashMap<String, String>> data) {
+                            pd.cancel();
+
+                            if (data == null) {
+                                UiUtils.showMessage(EditFeedActivity.this, R.string.error);
+                            } else if (data.isEmpty()) {
+                                UiUtils.showMessage(EditFeedActivity.this, R.string.no_result);
+                            } else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(EditFeedActivity.this);
+                                builder.setTitle(R.string.feed_search);
+
+                                // create the grid item mapping
+                                String[] from = new String[]{FEED_SEARCH_TITLE, FEED_SEARCH_DESC};
+                                int[] to = new int[]{android.R.id.text1, android.R.id.text2};
+
+                                // fill in the grid_item layout
+                                SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.item_search_result, from,
+                                        to);
+                                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        FeedDataContentProvider.addFeed(EditFeedActivity.this, data.get(which).get(FEED_SEARCH_URL), name.isEmpty() ? data.get(which).get(FEED_SEARCH_TITLE) : name, mRetrieveFulltextCb.isChecked());
+
+                                        setResult(RESULT_OK);
+                                        finish();
+                                    }
+                                });
+                                builder.show();
+                            }
+                        }
+
+                        @Override
+                        public void onLoaderReset(Loader<ArrayList<HashMap<String, String>>> loader) {
+                        }
+                    });
+                } else {
+                    FeedDataContentProvider.addFeed(EditFeedActivity.this, urlOrSearch, name, mRetrieveFulltextCb.isChecked());
+
+                    setResult(RESULT_OK);
+                    finish();
+                }
                 return true;
             case R.id.menu_add_filter: {
                 final View dialogView = getLayoutInflater().inflate(R.layout.dialog_filter_edit, null);
@@ -407,83 +487,6 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void onClickOk(View view) {
-        // only in insert mode
-
-        final String name = mNameEditText.getText().toString().trim();
-        final String urlOrSearch = mUrlEditText.getText().toString().trim();
-        if (urlOrSearch.isEmpty()) {
-            Toast.makeText(this, R.string.error_feed_error, Toast.LENGTH_SHORT).show();
-        }
-
-        if (!urlOrSearch.contains(".") || !urlOrSearch.contains("/") || urlOrSearch.contains(" ")) {
-            final ProgressDialog pd = new ProgressDialog(EditFeedActivity.this);
-            pd.setMessage(getString(R.string.loading));
-            pd.setCancelable(true);
-            pd.setIndeterminate(true);
-            pd.show();
-
-            getLoaderManager().restartLoader(1, null, new LoaderManager.LoaderCallbacks<ArrayList<HashMap<String, String>>>() {
-
-                @Override
-                public Loader<ArrayList<HashMap<String, String>>> onCreateLoader(int id, Bundle args) {
-                    String encodedSearchText = urlOrSearch;
-                    try {
-                        encodedSearchText = URLEncoder.encode(urlOrSearch, Constants.UTF8);
-                    } catch (UnsupportedEncodingException ignored) {
-                    }
-
-                    return new GetFeedSearchResultsLoader(EditFeedActivity.this, encodedSearchText);
-                }
-
-                @Override
-                public void onLoadFinished(Loader<ArrayList<HashMap<String, String>>> loader, final ArrayList<HashMap<String, String>> data) {
-                    pd.cancel();
-
-                    if (data == null) {
-                        Toast.makeText(EditFeedActivity.this, R.string.error, Toast.LENGTH_SHORT).show();
-                    } else if (data.isEmpty()) {
-                        Toast.makeText(EditFeedActivity.this, R.string.no_result, Toast.LENGTH_SHORT).show();
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(EditFeedActivity.this);
-                        builder.setTitle(R.string.feed_search);
-
-                        // create the grid item mapping
-                        String[] from = new String[]{FEED_SEARCH_TITLE, FEED_SEARCH_DESC};
-                        int[] to = new int[]{android.R.id.text1, android.R.id.text2};
-
-                        // fill in the grid_item layout
-                        SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.item_search_result, from,
-                                to);
-                        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                FeedDataContentProvider.addFeed(EditFeedActivity.this, data.get(which).get(FEED_SEARCH_URL), name.isEmpty() ? data.get(which).get(FEED_SEARCH_TITLE) : name, mRetrieveFulltextCb.isChecked());
-
-                                setResult(RESULT_OK);
-                                finish();
-                            }
-                        });
-                        builder.show();
-                    }
-                }
-
-                @Override
-                public void onLoaderReset(Loader<ArrayList<HashMap<String, String>>> loader) {
-                }
-            });
-        } else {
-            FeedDataContentProvider.addFeed(EditFeedActivity.this, urlOrSearch, name, mRetrieveFulltextCb.isChecked());
-
-            setResult(RESULT_OK);
-            finish();
-        }
-    }
-
-    public void onClickCancel(View view) {
-        finish();
     }
 
     @Override

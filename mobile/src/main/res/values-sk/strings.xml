@@ -40,7 +40,6 @@
     <string name="no_result">Žiadny výsledok</string>
     <string name="drawer_open">Otvoriť navigačnú lištu</string>
     <string name="drawer_close">Zavřít navigačnú lištu</string>
-    <string name="back_again_to_quit">Opakovaný stisk tlačítka spät ukončí aplikáciu</string>
 
     <!-- FEEDS -->
     <string name="feeds">Zdroje</string>
@@ -99,13 +98,13 @@
     <string name="google_news_sports">Športy</string>
     <string name="google_news_science">Veda</string>
     <string name="google_news_health">Zdravie</string>
+    <string name="google_news_custom_topic">Enter custom topic</string>
 
     <!-- ENTRIES -->
-    <string name="all">Všetky Články</string>
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">Žiadne články</string>
     <string name="favorites">Obľúbené Články</string>
-    <string name="context_menu_hide_read">Skryť prečítané články</string>
-    <string name="context_menu_show_read">Zobraziť prečítané články</string>
     <string name="context_menu_share_starred">Zdieľať označené články</string>
     <string name="menu_star">Označiť</string>
     <string name="menu_unstar">Odznačiť</string>
@@ -125,6 +124,8 @@
     <string name="download_and_save">Stiahnúť a uložiť</string>
     <string name="open_link">Otvoriť odkaz</string>
     <string name="tip_sentence">Tip: Posunutím doľava označíte článok ako prečítaný, posunutím doprava ako obľúbený.</string>
+    <string name="undo">Undo</string>
+    <string name="marked_as_read">Marked as read</string>
 
     <!-- WIDGET -->
     <string name="red">Červená</string>

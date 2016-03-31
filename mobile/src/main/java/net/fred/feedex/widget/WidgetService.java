@@ -67,7 +67,7 @@ class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
             }
         };
         ContentResolver cr = mContext.getContentResolver();
-        cr.registerContentObserver(EntryColumns.ALL_ENTRIES_CONTENT_URI, true, mContentObserver);
+        cr.registerContentObserver(EntryColumns.CONTENT_URI, true, mContentObserver);
     }
 
     @Override
@@ -89,7 +89,7 @@ class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
         if (mCursor.moveToPosition(position)) {
             row.setTextViewText(android.R.id.text1, mCursor.getString(0));
             row.setFloat(android.R.id.text1, "setTextSize", 15 + (mFontSize * 3));
-            Intent intent = new Intent(Intent.ACTION_VIEW, EntryColumns.ALL_ENTRIES_CONTENT_URI(mCursor.getString(1)));
+            Intent intent = new Intent(Intent.ACTION_VIEW, EntryColumns.CONTENT_URI(mCursor.getString(1)));
             intent.putExtra(Constants.INTENT_FROM_WIDGET, true);
             row.setOnClickFillInIntent(android.R.id.content, intent);
 
@@ -152,7 +152,7 @@ class WidgetFeedsFactory implements RemoteViewsService.RemoteViewsFactory {
         }
 
         ContentResolver cr = mContext.getContentResolver();
-        mCursor = cr.query(EntryColumns.ALL_ENTRIES_CONTENT_URI, new String[]{EntryColumns.TITLE, EntryColumns._ID, FeedData.FeedColumns.ICON}, selection.toString(), null,
+        mCursor = cr.query(EntryColumns.CONTENT_URI, new String[]{EntryColumns.TITLE, EntryColumns._ID, FeedData.FeedColumns.ICON}, selection.toString(), null,
                 EntryColumns.DATE + Constants.DB_DESC);
     }
 }

@@ -21,14 +21,18 @@ package net.fred.feedex.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 
 import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.utils.UiUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Locale;
 
 public class AddGoogleNewsActivity extends BaseActivity {
@@ -40,6 +44,7 @@ public class AddGoogleNewsActivity extends BaseActivity {
 
     private static final int[] CB_IDS = new int[]{R.id.cb_top_stories, R.id.cb_world, R.id.cb_business, R.id.cb_technology, R.id.cb_entertainment,
             R.id.cb_sports, R.id.cb_science, R.id.cb_health};
+    private EditText mCustomTopicEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,7 @@ public class AddGoogleNewsActivity extends BaseActivity {
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.activity_add_google_news);
+        mCustomTopicEditText = (EditText) findViewById(R.id.google_news_custom_topic);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -56,32 +62,44 @@ public class AddGoogleNewsActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.google_news, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-
-        return false;
-    }
-
-    public void onClickOk(View view) {
-        for (int topic = 0; topic < TOPIC_NAME.length; topic++) {
-            if (((CheckBox) findViewById(CB_IDS[topic])).isChecked()) {
-                String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss";
-                if (TOPIC_CODES[topic] != null) {
-                    url += "&topic=" + TOPIC_CODES[topic];
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.menu_validate:
+                for (int topic = 0; topic < TOPIC_NAME.length; topic++) {
+                    if (((CheckBox) findViewById(CB_IDS[topic])).isChecked() && TOPIC_CODES[topic] != null) {
+                        String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss&topic=" + TOPIC_CODES[topic];
+                        FeedDataContentProvider.addFeed(this, url, getString(TOPIC_NAME[topic]), true);
+                    }
                 }
-                FeedDataContentProvider.addFeed(this, url, getString(TOPIC_NAME[topic]), true);
-            }
+
+                String custom_topic = mCustomTopicEditText.getText().toString();
+                if(!custom_topic.isEmpty())
+                {
+                    try {
+                        String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss&q=" + URLEncoder.encode(custom_topic, "UTF-8");
+                        FeedDataContentProvider.addFeed(this, url, custom_topic, true);
+                    } catch (UnsupportedEncodingException ignored) {
+                    }
+                }
+
+                setResult(RESULT_OK);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        setResult(RESULT_OK);
-        finish();
     }
 
-    public void onClickCancel(View view) {
-        finish();
-    }
 }
 

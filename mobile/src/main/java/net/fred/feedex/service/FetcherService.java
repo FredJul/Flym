@@ -58,7 +58,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Xml;
@@ -203,10 +202,6 @@ public class FetcherService extends IntentService {
             downloadAllImages();
         } else { // == Constants.ACTION_REFRESH_FEEDS
             PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);
-
-            if (isFromAutoRefresh) {
-                PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, SystemClock.elapsedRealtime());
-            }
 
             long keepTime = Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l;
             long keepDateBorderTime = keepTime > 0 ? System.currentTimeMillis() - keepTime : 0;

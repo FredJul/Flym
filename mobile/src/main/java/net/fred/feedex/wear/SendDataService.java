@@ -18,6 +18,7 @@
  */
 
 package net.fred.feedex.wear;
+/*
 
 import android.database.Cursor;
 import android.os.SystemClock;
@@ -89,3 +90,4 @@ public class SendDataService extends WearableListenerService {
                 });
     }
 }
+*/

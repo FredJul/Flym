@@ -39,7 +39,6 @@
     <string name="no_result">결과 없음</string>
     <string name="drawer_open">네비게이션 드로어 열기</string>
     <string name="drawer_close">네비게이션 드로어 닫기</string>
-    <string name="back_again_to_quit">뒤로 가기 버튼을 한번 더 누르면 나갑니다</string>
 
     <!-- FEEDS -->
     <string name="feeds">피드</string>
@@ -98,13 +97,13 @@
     <string name="google_news_sports">스포츠</string>
     <string name="google_news_science">과학</string>
     <string name="google_news_health">건강</string>
+    <string name="google_news_custom_topic">Enter custom topic</string>
 
     <!-- ENTRIES -->
-    <string name="all">항목</string>
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">항목 없음</string>
     <string name="favorites">별표</string>
-    <string name="context_menu_hide_read">읽은 항목 감추기</string>
-    <string name="context_menu_show_read">읽은 항목 보이기</string>
     <string name="context_menu_share_starred">별표 항목 공유</string>
     <string name="menu_star">별표</string>
     <string name="menu_unstar">별표 취소</string>
@@ -124,6 +123,8 @@
     <string name="download_and_save">다운로드 및 저장</string>
     <string name="open_link">링크 열기</string>
     <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+    <string name="undo">Undo</string>
+    <string name="marked_as_read">Marked as read</string>
 
     <!-- WIDGET -->
     <string name="red">빨강</string>

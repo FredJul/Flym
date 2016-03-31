@@ -7,7 +7,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/button_layout"
         android:layout_below="@+id/toolbar"
         android:orientation="vertical">
 
@@ -71,31 +70,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/google_news_health"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/google_news_custom_topic"
+                android:hint="@string/google_news_custom_topic"
+                android:singleLine="true"
+                android:layout_marginTop="15dp" />
+
         </LinearLayout>
+
     </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/button_layout"
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <Button
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:onClick="onClickCancel"
-            android:text="@android:string/cancel"/>
-
-        <Button
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:onClick="onClickOk"
-            android:text="@android:string/ok"/>
-    </LinearLayout>
 
 </RelativeLayout>

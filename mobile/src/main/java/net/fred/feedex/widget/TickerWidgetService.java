@@ -49,7 +49,7 @@ public class TickerWidgetService extends Service {
                 updateWidgets();
             }
         };
-        getContentResolver().registerContentObserver(EntryColumns.ALL_ENTRIES_CONTENT_URI, true, mContentObserver);
+        getContentResolver().registerContentObserver(EntryColumns.CONTENT_URI, true, mContentObserver);
     }
 
     @Override

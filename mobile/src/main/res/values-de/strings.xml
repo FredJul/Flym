@@ -39,7 +39,6 @@
     <string name="no_result">Kein Ergebnis</string>
     <string name="drawer_open">Navigationsleiste öffnen</string>
     <string name="drawer_close">Navigationsleiste schließen</string>
-    <string name="back_again_to_quit">Zum Beenden Zurück-Taste noch einmal drücken</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
@@ -98,13 +97,13 @@
     <string name="google_news_sports">Sport</string>
     <string name="google_news_science">Panorama</string>
     <string name="google_news_health">Gesundheit</string>
+    <string name="google_news_custom_topic">Eigenes Thema</string>
 
     <!-- ENTRIES -->
-    <string name="all">Einträge</string>
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">Keine Einträge</string>
     <string name="favorites">Favorisiert</string>
-    <string name="context_menu_hide_read">Gelesene Einträge verstecken</string>
-    <string name="context_menu_show_read">Gelesene Einträge anzeigen</string>
     <string name="context_menu_share_starred">Favorisierte Einträge teilen</string>
     <string name="menu_star">Favorisieren</string>
     <string name="menu_unstar">Entfavorisieren</string>
@@ -124,6 +123,8 @@
     <string name="download_and_save">Herunterladen und speichern</string>
     <string name="open_link">Link öffnen</string>
     <string name="tip_sentence">Tipp: Nach links wischen um Artikel als gelesen zu markieren und nach rechts wischen um Artikel zu favorisieren</string>
+    <string name="undo">Undo</string>
+    <string name="marked_as_read">Marked as read</string>
 
     <!-- WIDGET -->
     <string name="red">Rot</string>

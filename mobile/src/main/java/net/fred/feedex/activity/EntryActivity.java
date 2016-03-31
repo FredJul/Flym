@@ -41,7 +41,7 @@ public class EntryActivity extends BaseActivity {
 
         setContentView(R.layout.activity_entry);
 
-        mEntryFragment = (EntryFragment) getFragmentManager().findFragmentById(R.id.entry_fragment);
+        mEntryFragment = (EntryFragment) getSupportFragmentManager().findFragmentById(R.id.entry_fragment);
         if (savedInstanceState == null) { // Put the data only the first time (the fragment will save its state)
             mEntryFragment.setData(getIntent().getData());
         }

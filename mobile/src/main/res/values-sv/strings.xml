@@ -38,7 +38,6 @@
     <string name="no_result">Inga resultat</string>
     <string name="drawer_open">Öppna navigationspanelen</string>
     <string name="drawer_close">Stänga navigationspanelen</string>
-    <string name="back_again_to_quit">Press back once more to exit</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
@@ -52,7 +51,6 @@
     <string name="menu_add_group">Lägg till grupp</string>
     <string name="menu_import">Importera från OPML</string>
     <string name="menu_export">Exportera till OPML</string>
-    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_error">Feed:ens URL kunde inte öppnas.</string>
     <string name="error_feed_process">Feed:en kunde inte processeras.</string>
     <string name="error_feed_url_exists">URL:en existerar redan.</string>
@@ -97,13 +95,13 @@
     <string name="google_news_sports">Sport</string>
     <string name="google_news_science">Vetenskap</string>
     <string name="google_news_health">Hälsa</string>
+    <string name="google_news_custom_topic">Enter custom topic</string>
 
     <!-- ENTRIES -->
-    <string name="all">Inlägg</string>
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">Inga poster</string>
     <string name="favorites">Favoriter</string>
-    <string name="context_menu_hide_read">Göm lästa inlägg</string>
-    <string name="context_menu_show_read">Visa lästa inlägg</string>
     <string name="context_menu_share_starred">Dela favoriter</string>
     <string name="menu_star">Markera som favorit</string>
     <string name="menu_unstar">Avmarkera som favorit</string>
@@ -123,6 +121,8 @@
     <string name="download_and_save">Ladda ned och spara</string>
     <string name="open_link">Öppna länk</string>
     <string name="tip_sentence">Tips: svepa åt vänster för att markera som läst, svepa åt höger för att markera som favorit.</string>
+    <string name="undo">Undo</string>
+    <string name="marked_as_read">Marked as read</string>
 
     <!-- WIDGET -->
     <string name="red">Röd</string>
@@ -205,5 +205,6 @@
         <item>Endast via Wi-Fi</item>
         <item>Alltid</item>
     </string-array>
+    <string name="storage_request_explanation">För att kunna importera eller exportera en fil, du måste ge appen behörighet att läsa och spara på minneskort.</string>
 
 </resources>
