@@ -39,7 +39,6 @@
     <string name="no_result">Aucun résultat</string>
     <string name="drawer_open">Ouvrir menu de navigation</string>
     <string name="drawer_close">Fermer menu de navigation</string>
-    <string name="back_again_to_quit">Appuyez de nouveau sur retour pour quitter</string>
 
     <!-- FEEDS -->
     <string name="feeds">Flux</string>
@@ -106,13 +105,13 @@
     <string name="google_news_sports">Sport</string>
     <string name="google_news_science">Science</string>
     <string name="google_news_health">Santé</string>
+    <string name="google_news_custom_topic">Entrer un sujet personnalisé</string>
 
     <!-- ENTRIES -->
-    <string name="all">Articles</string>
+    <string name="unread_entries">Non lus</string>
+    <string name="all_entries">Tous les articles</string>
     <string name="no_entries">Pas d\'article</string>
     <string name="favorites">Favoris</string>
-    <string name="context_menu_hide_read">Cacher les articles lus</string>
-    <string name="context_menu_show_read">Afficher les articles lus</string>
     <string name="context_menu_share_starred">Partager les favoris</string>
     <string name="menu_star">Mettre en favoris</string>
     <string name="menu_unstar">Enlever des favoris</string>
@@ -132,6 +131,8 @@
     <string name="download_and_save">Télécharger et sauvegarder</string>
     <string name="open_link">Ouvrir le lien</string>
     <string name="tip_sentence">Astuce: glisser vers la gauche pour marquer comme lu et vers la droite pour mettre en favoris</string>
+    <string name="undo">Annuler</string>
+    <string name="marked_as_read">Marqués comme lus</string>
 
     <!-- WIDGET -->
     <string name="red">Rouge</string>

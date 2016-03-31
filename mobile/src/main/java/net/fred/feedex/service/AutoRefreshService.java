@@ -42,22 +42,53 @@
  * THE SOFTWARE.
  */
 
-package net.fred.feedex.receiver;
+package net.fred.feedex.service;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import net.fred.feedex.service.RefreshService;
+import com.google.android.gms.gcm.GcmNetworkManager;
+import com.google.android.gms.gcm.GcmTaskService;
+import com.google.android.gms.gcm.PeriodicTask;
+import com.google.android.gms.gcm.Task;
+import com.google.android.gms.gcm.TaskParams;
+
+import net.fred.feedex.Constants;
 import net.fred.feedex.utils.PrefUtils;
 
-public class BootCompletedBroadcastReceiver extends BroadcastReceiver {
+public class AutoRefreshService extends GcmTaskService {
+    public static final String SIXTY_MINUTES = "3600000";
+    public static final String TASK_TAG_PERIODIC = "TASK_TAG_PERIODIC";
+
     @Override
-    public void onReceive(Context context, Intent intent) {
-        PrefUtils.putLong(PrefUtils.LAST_SCHEDULED_REFRESH, 0);
-        if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
-            context.startService(new Intent(context, RefreshService.class));
-        }
+    public int onRunTask(TaskParams taskParams) {
+        getBaseContext().startService(new Intent(getBaseContext(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
+
+        return GcmNetworkManager.RESULT_SUCCESS;
     }
 
+    public static void initAutoRefresh(Context context) {
+        GcmNetworkManager gcmNetworkManager = GcmNetworkManager.getInstance(context);
+
+        long time = 3600L;
+        try {
+            time = Math.max(60L, Long.parseLong(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, SIXTY_MINUTES)) / 1000);
+        } catch (Exception ignored) {
+        }
+
+        if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
+            PeriodicTask task = new PeriodicTask.Builder()
+                    .setService(AutoRefreshService.class)
+                    .setTag(TASK_TAG_PERIODIC)
+                    .setPeriod(time)
+                    .setPersisted(true)
+                    .setRequiredNetwork(Task.NETWORK_STATE_CONNECTED)
+                    .setUpdateCurrent(true)
+                    .build();
+
+            gcmNetworkManager.schedule(task);
+        } else {
+            gcmNetworkManager.cancelTask(TASK_TAG_PERIODIC, AutoRefreshService.class);
+        }
+    }
 }

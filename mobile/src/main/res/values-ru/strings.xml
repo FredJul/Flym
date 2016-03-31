@@ -38,7 +38,6 @@
     <string name="no_result">Нет результатов</string>
     <string name="drawer_open">Открыть меню навигации</string>
     <string name="drawer_close">Закрыть меню навигации</string>
-    <string name="back_again_to_quit">Нажмите "Назад" еще раз, чтобы выйти</string>
 
     <!-- FEEDS -->
     <string name="feeds">Ленты</string>
@@ -105,13 +104,13 @@
     <string name="google_news_sports">Sports</string>
     <string name="google_news_science">Science</string>
     <string name="google_news_health">Health</string>
+    <string name="google_news_custom_topic">Enter custom topic</string>
 
     <!-- ENTRIES -->
-    <string name="all">Новости</string>
+    <string name="unread_entries">Unread</string>
+    <string name="all_entries">All entries</string>
     <string name="no_entries">Нет новостей</string>
     <string name="favorites">Избранное</string>
-    <string name="context_menu_hide_read">Скрыть прочитанные новости</string>
-    <string name="context_menu_show_read">Показать прочитанные новости</string>
     <string name="context_menu_share_starred">Поделиться избранными новостями</string>
     <string name="menu_star">Поместить в избранное</string>
     <string name="menu_unstar">Убрать из избранного</string>
@@ -131,6 +130,8 @@
     <string name="download_and_save">Загрузить и сохранить</string>
     <string name="open_link">Открыть ссылку</string>
     <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+    <string name="undo">Undo</string>
+    <string name="marked_as_read">Marked as read</string>
 
     <!-- WIDGET -->
     <string name="red">Красный</string>

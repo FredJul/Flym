@@ -49,10 +49,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
@@ -63,7 +60,6 @@ import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
@@ -195,17 +191,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 }
             }.start();
         }
-    }
-
-    public void markAllAsRead(final long untilDate) {
-        new Thread() {
-            @Override
-            public void run() {
-                ContentResolver cr = MainApplication.getContext().getContentResolver();
-                String where = EntryColumns.WHERE_UNREAD + Constants.DB_AND + '(' + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + untilDate + ')';
-                cr.update(mUri, FeedData.getReadContentValues(), where, null);
-            }
-        }.start();
     }
 
     @Override

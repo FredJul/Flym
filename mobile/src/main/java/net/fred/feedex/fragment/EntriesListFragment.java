@@ -19,17 +19,23 @@
 
 package net.fred.feedex.fragment;
 
-import android.app.LoaderManager;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.BaseColumns;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.GestureDetector;
@@ -47,9 +53,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.melnykov.fab.FloatingActionButton;
-
 import net.fred.feedex.Constants;
+import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.EntriesCursorAdapter;
 import net.fred.feedex.provider.FeedData;
@@ -59,6 +64,7 @@ import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class EntriesListFragment extends SwipeRefreshListFragment {
@@ -68,23 +74,21 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private static final String STATE_SHOW_FEED_INFO = "STATE_SHOW_FEED_INFO";
     private static final String STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE";
 
-    private static final int ENTRIES_LOADER_ID = 1;
-    private static final int NEW_ENTRIES_NUMBER_LOADER_ID = 2;
+    private static final int ENTRIES_LOADER_ID = 1337;
+    private static final int NEW_ENTRIES_NUMBER_LOADER_ID = 42;
 
     private Uri mCurrentUri, mOriginalUri;
     private boolean mShowFeedInfo = false;
     private EntriesCursorAdapter mEntriesCursorAdapter;
+    private Cursor mJustMarkedAsReadEntries;
+    private FloatingActionButton mFab;
     private ListView mListView;
-    private FloatingActionButton mHideReadButton;
     private long mListDisplayDate = new Date().getTime();
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             String entriesOrder = PrefUtils.getBoolean(PrefUtils.DISPLAY_OLDEST_FIRST, false) ? Constants.DB_ASC : Constants.DB_DESC;
             String where = "(" + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + ')';
-            if (!FeedData.shouldShowReadEntries(mCurrentUri)) {
-                where += Constants.DB_AND + EntryColumns.WHERE_UNREAD;
-            }
             CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, null, where, null, EntryColumns.DATE + entriesOrder);
             cursorLoader.setUpdateThrottle(150);
             return cursorLoader;
@@ -103,10 +107,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (PrefUtils.SHOW_READ.equals(key)) {
-                getLoaderManager().restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-                UiUtils.updateHideReadButton(mHideReadButton);
-            } else if (PrefUtils.IS_REFRESHING.equals(key)) {
+            if (PrefUtils.IS_REFRESHING.equals(key)) {
                 refreshSwipeProgress();
             }
         }
@@ -165,6 +166,14 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         refreshSwipeProgress();
         PrefUtils.registerOnPrefChangeListener(mPrefListener);
 
+        mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                markAllAsRead();
+            }
+        });
+
         if (mCurrentUri != null) {
             // If the list is empty when we are going back here, try with the last display date
             if (mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
@@ -210,16 +219,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         UiUtils.addEmptyFooterView(mListView, 90);
 
-        mHideReadButton = (FloatingActionButton) rootView.findViewById(R.id.hide_read_button);
-        mHideReadButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                UiUtils.displayHideReadButtonAction(mListView.getContext());
-                return true;
-            }
-        });
-        UiUtils.updateHideReadButton(mHideReadButton);
-
         mRefreshListBtn = (Button) rootView.findViewById(R.id.refreshListBtn);
         mRefreshListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,6 +241,13 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     @Override
     public void onStop() {
         PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
+
+        if (mJustMarkedAsReadEntries != null && !mJustMarkedAsReadEntries.isClosed()) {
+            mJustMarkedAsReadEntries.close();
+        }
+
+        mFab = null;
+
         super.onStop();
     }
 
@@ -334,19 +340,56 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 startRefresh();
                 return true;
             }
-            case R.id.menu_all_read: {
-                if (mEntriesCursorAdapter != null) {
-                    mEntriesCursorAdapter.markAllAsRead(mListDisplayDate);
-
-                    // If we are on "all items" uri, we can remove the notification here
-                    if (mCurrentUri != null && EntryColumns.CONTENT_URI.equals(mCurrentUri) && Constants.NOTIF_MGR != null) {
-                        Constants.NOTIF_MGR.cancel(0);
-                    }
-                }
-                return true;
-            }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void markAllAsRead() {
+        if (mEntriesCursorAdapter != null) {
+            Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.coordinator_layout), R.string.marked_as_read, Snackbar.LENGTH_LONG)
+                    .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.light_theme_color_primary))
+                    .setAction(R.string.undo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new Thread() {
+                                @Override
+                                public void run() {
+                                    if (mJustMarkedAsReadEntries != null && !mJustMarkedAsReadEntries.isClosed()) {
+                                        ArrayList<Integer> ids = new ArrayList<>();
+                                        while (mJustMarkedAsReadEntries.moveToNext()) {
+                                            ids.add(mJustMarkedAsReadEntries.getInt(0));
+                                        }
+                                        ContentResolver cr = MainApplication.getContext().getContentResolver();
+                                        String where = BaseColumns._ID + " IN (" + TextUtils.join(",", ids) + ')';
+                                        cr.update(FeedData.EntryColumns.CONTENT_URI, FeedData.getUnreadContentValues(), where, null);
+
+                                        mJustMarkedAsReadEntries.close();
+                                    }
+                                }
+                            }.start();
+                        }
+                    });
+            snackbar.getView().setBackgroundResource(R.color.material_grey_900);
+            snackbar.show();
+
+            new Thread() {
+                @Override
+                public void run() {
+                    ContentResolver cr = MainApplication.getContext().getContentResolver();
+                    String where = EntryColumns.WHERE_UNREAD + Constants.DB_AND + '(' + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + ')';
+                    if (mJustMarkedAsReadEntries != null && !mJustMarkedAsReadEntries.isClosed()) {
+                        mJustMarkedAsReadEntries.close();
+                    }
+                    mJustMarkedAsReadEntries = cr.query(mCurrentUri, new String[]{BaseColumns._ID}, where, null, null);
+                    cr.update(mCurrentUri, FeedData.getReadContentValues(), where, null);
+                }
+            }.start();
+
+            // If we are on "all items" uri, we can remove the notification here
+            if (mCurrentUri != null && Constants.NOTIF_MGR != null && (EntryColumns.CONTENT_URI.equals(mCurrentUri) || EntryColumns.UNREAD_ENTRIES_CONTENT_URI.equals(mCurrentUri))) {
+                Constants.NOTIF_MGR.cancel(0);
+            }
+        }
     }
 
     private void startRefresh() {
@@ -389,9 +432,12 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     }
 
     private void restartLoaders() {
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-        loaderManager.restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            LoaderManager loaderManager = activity.getSupportLoaderManager();
+            loaderManager.restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+            loaderManager.restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
+        }
     }
 
     private void refreshUI() {
