@@ -99,11 +99,8 @@
     <string name="google_news_sports">Urheilu</string>
     <string name="google_news_science">Tiede</string>
     <string name="google_news_health">Terveys</string>
-    <string name="google_news_custom_topic">Enter custom topic</string>
 
     <!-- ENTRIES -->
-    <string name="unread_entries">Unread</string>
-    <string name="all_entries">All entries</string>
     <string name="no_entries">Ei artikkeleita</string>
     <string name="favorites">Tähdellä merkityt</string>
     <string name="context_menu_share_starred">Jaa tähdellä merkityt</string>
@@ -125,8 +122,7 @@
     <string name="download_and_save">Lataa ja tallenna</string>
     <string name="open_link">Avaa linkki</string>
     <string name="tip_sentence">Vihje: Pyyhkäise vasemmalle merkitäksesi artikkeli luetuksi. Pyyhkäise oikealle merkitäksesi artikkeli tähdellä.</string>
-    <string name="undo">Undo</string>
-    <string name="marked_as_read">Marked as read</string>
+    <string name="marked_as_read">Merkitty luetuksi</string>
 
     <!-- WIDGET -->
     <string name="red">Punainen</string>
@@ -217,5 +213,9 @@
         <item>Aina</item>
     </string-array>
     <string name="storage_request_explanation">Voidaksesi tuoda tai viedä tiedoston, sinun täytyy antaa sovellukselle käyttölupa tallennusmuistin sisältöön.</string>
+    <string name="undo">Peru</string>
+    <string name="unread_entries">Uudet</string>
+    <string name="google_news_custom_topic">Lisää oma aihe</string>
+    <string name="all_entries">Kaikki </string>
 
 </resources>
