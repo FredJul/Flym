@@ -1,7 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
  Copyright (c) 2010-2012 Stefan Handschuh
-      modified 2014-2014 Matthias Dill
+ Copyright (c) 2012-2014 Frederic Julian
+      modified 2014-2016 Matthias Dill
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +25,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
     <string name="about_flym">Über Flym</string>
     <string name="welcome_title">Wilkommen in Flym. Willst du einen Feed hinzufügen?</string>
     <string name="never">nie</string>
@@ -53,6 +55,7 @@
     <string name="menu_add_group">Gruppe erstellen</string>
     <string name="menu_import">Aus OPML importieren</string>
     <string name="menu_export">Nach OPML exportieren</string>
+    <string name="storage_request_explanation">Um Feeds aus/in eine(r) Datei zu importieren/exportieren, muss das Program die Berechtigung haben auf den Speicher zuzugreifen.</string>
     <string name="error_feed_error">Zugriff auf Feed-Adresse nicht möglich.</string>
     <string name="error_feed_process">Der Feed kann nicht bearbeitet werden.</string>
     <string name="error_feed_url_exists">Diese Adresse existiert schon.</string>
@@ -75,9 +78,6 @@
     <string name="accept">Annehmen</string>
     <string name="reject">Zurückweisen</string>
     <string name="feed_search">Feed-Suche</string>
-    <string name="feed_search_by_web_search">Finde einen Feed anhand von Stichpunkten</string>
-    <string name="feed_search_by_topic">Erstelle einen Feed nach Themen (via Faroo)</string>
-    <string name="feed_search_by_youtube">Finde einen Feed anhand des Youtube-Channel-Namens</string>
     <string name="select_file">Datei auswählen(SD-root)</string>
     <string name="question_delete_feed">Willst du diesen Feed wirklich löschen?</string>
     <string name="question_delete_group">Willst du diese Gruppe mit allen Feeds wirklich löschen?</string>
@@ -102,7 +102,8 @@
     <string name="google_news_health">Gesundheit</string>
 
     <!-- ENTRIES -->
-    <string name="all">Einträge</string>
+    <string name="unread_entries">Ungelesene Einträge</string>
+    <string name="all_entries">Alle Einträge</string>
     <string name="no_entries">Keine Einträge</string>
     <string name="favorites">Favorisiert</string>
     <string name="context_menu_hide_read">Gelesene Einträge verstecken</string>
@@ -126,6 +127,8 @@
     <string name="download_and_save">Herunterladen und speichern</string>
     <string name="open_link">Link öffnen</string>
     <string name="tip_sentence">Tipp: Nach links wischen um Artikel als gelesen zu markieren und nach rechts wischen um Artikel zu favorisieren</string>
+    <string name="undo">Rückgängig</string>
+    <string name="marked_as_read">Als gelesen markieren</string>
 
     <!-- WIDGET -->
     <string name="red">Rot</string>
@@ -167,14 +170,6 @@
     <string name="settings_widget_background">Hintergrund</string>
     <string name="settings_widget_background_description">Farbe und Transparenz des Widget-Hintergrundes</string>
     <string name="all_feeds">Alle Feeds (auch zukünftige)</string>
-    <string name="settings_screen_proxy">Proxy</string>
-    <string name="settings_category_network">Netzwerk</string>
-    <string name="settings_proxy_enabled">aktiviert</string>
-    <string name="settings_proxy_wifi_only">Nur WLAN</string>
-    <string name="settings_proxy_wifi_only_description">Proxy nur für WLAN nutzen</string>
-    <string name="settings_proxy_host">Host</string>
-    <string name="settings_proxy_port">Port</string>
-    <string name="settings_proxy_type">Typ</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Eintrag</item>
