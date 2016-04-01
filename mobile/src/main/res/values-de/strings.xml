@@ -1,6 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
  Copyright (c) 2010-2012 Stefan Handschuh
-      modified 2014-2014 Matthias Dill
+ Copyright (c) 2012-2014 Frederic Julian
+      modified 2014-2016 Matthias Dill
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +41,7 @@
     <string name="no_result">Kein Ergebnis</string>
     <string name="drawer_open">Navigationsleiste öffnen</string>
     <string name="drawer_close">Navigationsleiste schließen</string>
+    <string name="back_again_to_quit">Zum Beenden Zurück-Taste noch einmal drücken</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
@@ -52,7 +55,7 @@
     <string name="menu_add_group">Gruppe erstellen</string>
     <string name="menu_import">Aus OPML importieren</string>
     <string name="menu_export">Nach OPML exportieren</string>
-    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="storage_request_explanation">Um Feeds aus/in eine(r) Datei zu importieren/exportieren, muss das Program die Berechtigung haben auf den Speicher zuzugreifen.</string>
     <string name="error_feed_error">Zugriff auf Feed-Adresse nicht möglich.</string>
     <string name="error_feed_process">Der Feed kann nicht bearbeitet werden.</string>
     <string name="error_feed_url_exists">Diese Adresse existiert schon.</string>
@@ -100,10 +103,12 @@
     <string name="google_news_custom_topic">Eigenes Thema</string>
 
     <!-- ENTRIES -->
-    <string name="unread_entries">Unread</string>
-    <string name="all_entries">All entries</string>
+    <string name="unread_entries">Ungelesene Einträge</string>
+    <string name="all_entries">Alle Einträge</string>
     <string name="no_entries">Keine Einträge</string>
     <string name="favorites">Favorisiert</string>
+    <string name="context_menu_hide_read">Gelesene Einträge verstecken</string>
+    <string name="context_menu_show_read">Gelesene Einträge anzeigen</string>
     <string name="context_menu_share_starred">Favorisierte Einträge teilen</string>
     <string name="menu_star">Favorisieren</string>
     <string name="menu_unstar">Entfavorisieren</string>
@@ -123,8 +128,8 @@
     <string name="download_and_save">Herunterladen und speichern</string>
     <string name="open_link">Link öffnen</string>
     <string name="tip_sentence">Tipp: Nach links wischen um Artikel als gelesen zu markieren und nach rechts wischen um Artikel zu favorisieren</string>
-    <string name="undo">Undo</string>
-    <string name="marked_as_read">Marked as read</string>
+    <string name="undo">Rückgängig</string>
+    <string name="marked_as_read">Als gelesen markieren</string>
 
     <!-- WIDGET -->
     <string name="red">Rot</string>
