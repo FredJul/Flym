@@ -1,18 +1,18 @@
 /**
  * Flym
- * <p/>
+ * <p>
  * Copyright (c) 2012-2015 Frederic Julian
- * <p/>
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p/>
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p/>
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,7 +31,6 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
@@ -74,8 +73,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private static final String STATE_SHOW_FEED_INFO = "STATE_SHOW_FEED_INFO";
     private static final String STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE";
 
-    private static final int ENTRIES_LOADER_ID = 1337;
-    private static final int NEW_ENTRIES_NUMBER_LOADER_ID = 42;
+    private static final int ENTRIES_LOADER_ID = 1;
+    private static final int NEW_ENTRIES_NUMBER_LOADER_ID = 2;
 
     private Uri mCurrentUri, mOriginalUri;
     private boolean mShowFeedInfo = false;
@@ -101,7 +100,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
-            mEntriesCursorAdapter.swapCursor(Constants.EMPTY_CURSOR);
+            //HACK: commented to workaround a hard-to-reproduce bug with non-refreshing loaders...
+            //mEntriesCursorAdapter.swapCursor(Constants.EMPTY_CURSOR);
         }
     };
     private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
@@ -432,12 +432,14 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     }
 
     private void restartLoaders() {
-        FragmentActivity activity = getActivity();
-        if (activity != null) {
-            LoaderManager loaderManager = activity.getSupportLoaderManager();
-            loaderManager.restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
-            loaderManager.restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
-        }
+        LoaderManager loaderManager = getLoaderManager();
+
+        //HACK: To workaround a hard-to-reproduce bug with non-refreshing loaders...
+        loaderManager.destroyLoader(ENTRIES_LOADER_ID);
+        loaderManager.destroyLoader(NEW_ENTRIES_NUMBER_LOADER_ID);
+
+        loaderManager.restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+        loaderManager.restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
     }
 
     private void refreshUI() {
