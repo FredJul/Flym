@@ -60,8 +60,8 @@
     <string name="error_feed_process">Der Feed kann nicht bearbeitet werden.</string>
     <string name="error_feed_url_exists">Diese Adresse existiert schon.</string>
     <string name="error_feed_import">Die ausgewählte Datei konnte nicht importiert werden.</string>
-    <string name="error_feed_export">Der Export ist fehlgeschlagen. Stelle sicher, dass du eine beschreibbare SD-Karte eingelegt hast.</string>
-    <string name="error_external_storage_not_available">Der externe Speicher (z.B. eine SD-Karte) ist nicht verfügbar.</string>
+    <string name="error_feed_export">Der Export ist fehlgeschlagen. Stelle sicher, dass eine beschreibbare SD-Karte eingelegt ist.</string>
+    <string name="error_external_storage_not_available">Der externe Speicher (z.B. SD-Karte) ist nicht verfügbar.</string>
     <string name="feed_url">URL-Adresse</string>
     <string name="optional">(optional)</string>
     <string name="website_or_feed">(Website oder Feed)</string>
@@ -86,7 +86,7 @@
     <string name="edit_group_title">Gruppennamen bearbeiten</string>
     <string name="message_exported_to">Nach %s exportiert.</string>
     <string name="to_group_title">Feed-Verschiebung</string>
-    <string name="to_group_message">Du kannst den Feed entweder in oder über diese Gruppe positionieren. Was willst du tun?</string>
+    <string name="to_group_message">Du kannst den Feed entweder in oder über dieser Gruppe positionieren. Was willst du tun?</string>
     <string name="to_group_above">Über die Gruppe</string>
     <string name="to_group_into">In die Gruppe</string>
     <string name="add_custom_feed">Füge einen benutzerdefinierten Feed hinzu oder suche einen</string>
@@ -157,7 +157,7 @@
     <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
     <string name="settings_display_images">Bilder anzeigen</string>
     <string name="settings_display_images_description">Bilder in den Einträgen anzeigen</string>
-    <string name="settings_preload_image_mode">Bilder vorausladen</string>
+    <string name="settings_preload_image_mode">Bilder vorab laden</string>
     <string name="settings_font_size">Textgröße</string>
     <string name="settings_display_oldest_first">Anzeigereihenfolge</string>
     <string name="settings_display_oldest_first_description">Zeige älteste Einträge zuerst</string>
