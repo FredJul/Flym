@@ -95,11 +95,9 @@
     <string name="google_news_sports">Sport</string>
     <string name="google_news_science">Vetenskap</string>
     <string name="google_news_health">Hälsa</string>
-    <string name="google_news_custom_topic">Enter custom topic</string>
 
     <!-- ENTRIES -->
-    <string name="unread_entries">Unread</string>
-    <string name="all_entries">All entries</string>
+    <string name="all_entries">Alla</string>
     <string name="no_entries">Inga poster</string>
     <string name="favorites">Favoriter</string>
     <string name="context_menu_share_starred">Dela favoriter</string>
@@ -121,8 +119,7 @@
     <string name="download_and_save">Ladda ned och spara</string>
     <string name="open_link">Öppna länk</string>
     <string name="tip_sentence">Tips: svepa åt vänster för att markera som läst, svepa åt höger för att markera som favorit.</string>
-    <string name="undo">Undo</string>
-    <string name="marked_as_read">Marked as read</string>
+    <string name="marked_as_read">Markerade som läst</string>
 
     <!-- WIDGET -->
     <string name="red">Röd</string>
@@ -206,5 +203,8 @@
         <item>Alltid</item>
     </string-array>
     <string name="storage_request_explanation">För att kunna importera eller exportera en fil, du måste ge appen behörighet att läsa och spara på minneskort.</string>
+    <string name="google_news_custom_topic">Lägg till eget tema</string>
+    <string name="unread_entries">Nya</string>
+    <string name="undo">Avmarkera</string>
 
 </resources>
