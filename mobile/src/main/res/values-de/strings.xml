@@ -1,6 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
  Copyright (c) 2010-2012 Stefan Handschuh
-      modified 2014-2014 Matthias Dill
+ Copyright (c) 2012-2014 Frederic Julian
+      modified 2014-2016 Matthias Dill
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +41,7 @@
     <string name="no_result">Kein Ergebnis</string>
     <string name="drawer_open">Navigationsleiste öffnen</string>
     <string name="drawer_close">Navigationsleiste schließen</string>
+    <string name="back_again_to_quit">Zum Beenden Zurück-Taste noch einmal drücken</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
@@ -52,13 +55,13 @@
     <string name="menu_add_group">Gruppe erstellen</string>
     <string name="menu_import">Aus OPML importieren</string>
     <string name="menu_export">Nach OPML exportieren</string>
-    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="storage_request_explanation">Um Feeds aus/in eine(r) Datei zu importieren/exportieren, muss das Program die Berechtigung haben auf den Speicher zuzugreifen.</string>
     <string name="error_feed_error">Zugriff auf Feed-Adresse nicht möglich.</string>
     <string name="error_feed_process">Der Feed kann nicht bearbeitet werden.</string>
     <string name="error_feed_url_exists">Diese Adresse existiert schon.</string>
     <string name="error_feed_import">Die ausgewählte Datei konnte nicht importiert werden.</string>
-    <string name="error_feed_export">Der Export ist fehlgeschlagen. Stelle sicher, dass du eine beschreibbare SD-Karte eingelegt hast.</string>
-    <string name="error_external_storage_not_available">Der externe Speicher (z.B. eine SD-Karte) ist nicht verfügbar.</string>
+    <string name="error_feed_export">Der Export ist fehlgeschlagen. Stelle sicher, dass eine beschreibbare SD-Karte eingelegt ist.</string>
+    <string name="error_external_storage_not_available">Der externe Speicher (z.B. SD-Karte) ist nicht verfügbar.</string>
     <string name="feed_url">URL-Adresse</string>
     <string name="optional">(optional)</string>
     <string name="website_or_feed">(Website oder Feed)</string>
@@ -83,7 +86,7 @@
     <string name="edit_group_title">Gruppennamen bearbeiten</string>
     <string name="message_exported_to">Nach %s exportiert.</string>
     <string name="to_group_title">Feed-Verschiebung</string>
-    <string name="to_group_message">Du kannst den Feed entweder in oder über diese Gruppe positionieren. Was willst du tun?</string>
+    <string name="to_group_message">Du kannst den Feed entweder in oder über dieser Gruppe positionieren. Was willst du tun?</string>
     <string name="to_group_above">Über die Gruppe</string>
     <string name="to_group_into">In die Gruppe</string>
     <string name="add_custom_feed">Füge einen benutzerdefinierten Feed hinzu oder suche einen</string>
@@ -100,10 +103,12 @@
     <string name="google_news_custom_topic">Eigenes Thema</string>
 
     <!-- ENTRIES -->
-    <string name="unread_entries">Unread</string>
-    <string name="all_entries">All entries</string>
+    <string name="unread_entries">Ungelesene Einträge</string>
+    <string name="all_entries">Alle Einträge</string>
     <string name="no_entries">Keine Einträge</string>
     <string name="favorites">Favorisiert</string>
+    <string name="context_menu_hide_read">Gelesene Einträge verstecken</string>
+    <string name="context_menu_show_read">Gelesene Einträge anzeigen</string>
     <string name="context_menu_share_starred">Favorisierte Einträge teilen</string>
     <string name="menu_star">Favorisieren</string>
     <string name="menu_unstar">Entfavorisieren</string>
@@ -123,8 +128,8 @@
     <string name="download_and_save">Herunterladen und speichern</string>
     <string name="open_link">Link öffnen</string>
     <string name="tip_sentence">Tipp: Nach links wischen um Artikel als gelesen zu markieren und nach rechts wischen um Artikel zu favorisieren</string>
-    <string name="undo">Undo</string>
-    <string name="marked_as_read">Marked as read</string>
+    <string name="undo">Rückgängig</string>
+    <string name="marked_as_read">Als gelesen markieren</string>
 
     <!-- WIDGET -->
     <string name="red">Rot</string>
@@ -152,7 +157,7 @@
     <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
     <string name="settings_display_images">Bilder anzeigen</string>
     <string name="settings_display_images_description">Bilder in den Einträgen anzeigen</string>
-    <string name="settings_preload_image_mode">Bilder vorausladen</string>
+    <string name="settings_preload_image_mode">Bilder vorab laden</string>
     <string name="settings_font_size">Textgröße</string>
     <string name="settings_display_oldest_first">Anzeigereihenfolge</string>
     <string name="settings_display_oldest_first_description">Zeige älteste Einträge zuerst</string>
