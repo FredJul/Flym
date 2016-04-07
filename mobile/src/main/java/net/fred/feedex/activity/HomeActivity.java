@@ -35,6 +35,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -174,7 +175,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     public void onBackPressed() {
         // Before exiting from app the navigation drawer is opened
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
@@ -319,19 +320,22 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         // Set title & icon
-        switch (mCurrentDrawerPos) {
-            case 0:
-                getSupportActionBar().setTitle(R.string.unread_entries);
-                break;
-            case 1:
-                getSupportActionBar().setTitle(R.string.all_entries);
-                break;
-            case 2:
-                getSupportActionBar().setTitle(R.string.favorites);
-                break;
-            default:
-                getSupportActionBar().setTitle(mTitle);
-                break;
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            switch (mCurrentDrawerPos) {
+                case 0:
+                    getSupportActionBar().setTitle(R.string.unread_entries);
+                    break;
+                case 1:
+                    getSupportActionBar().setTitle(R.string.all_entries);
+                    break;
+                case 2:
+                    getSupportActionBar().setTitle(R.string.favorites);
+                    break;
+                default:
+                    getSupportActionBar().setTitle(mTitle);
+                    break;
+            }
         }
 
         // Put the good menu
