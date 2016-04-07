@@ -8,8 +8,8 @@ android {
         applicationId "net.fred.feedex"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 59
-        versionName "1.9.2"
+        versionCode 60
+        versionName "1.9.3"
     }
 
     lintOptions {
