@@ -100,8 +100,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
-            //HACK: commented to workaround a hard-to-reproduce bug with non-refreshing loaders...
-            //mEntriesCursorAdapter.swapCursor(Constants.EMPTY_CURSOR);
+            mEntriesCursorAdapter.swapCursor(Constants.EMPTY_CURSOR);
         }
     };
     private final OnSharedPreferenceChangeListener mPrefListener = new OnSharedPreferenceChangeListener() {
@@ -434,9 +433,9 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private void restartLoaders() {
         LoaderManager loaderManager = getLoaderManager();
 
-        //HACK: To workaround a hard-to-reproduce bug with non-refreshing loaders...
-        loaderManager.destroyLoader(ENTRIES_LOADER_ID);
-        loaderManager.destroyLoader(NEW_ENTRIES_NUMBER_LOADER_ID);
+        //HACK: 2 times to workaround a hard-to-reproduce bug with non-refreshing loaders...
+        loaderManager.restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+        loaderManager.restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
 
         loaderManager.restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
         loaderManager.restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
