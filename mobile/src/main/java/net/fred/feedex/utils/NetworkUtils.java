@@ -29,9 +29,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.text.Html;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.OkUrlFactory;
-
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.provider.FeedData;
@@ -47,6 +44,9 @@ import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Pattern;
+
+import okhttp3.OkHttpClient;
+import okhttp3.OkUrlFactory;
 
 public class NetworkUtils {
 
