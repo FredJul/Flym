@@ -49,9 +49,9 @@
     <string name="new_feed_title">新的订阅</string>
     <string name="context_menu_edit">编辑</string>
     <string name="menu_add_group">添加分组</string>
-    <string name="menu_import">导出为OPML</string>
-    <string name="menu_export">导入OPML</string>
-    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="menu_import">导入OPML</string>
+    <string name="menu_export">导出为OPML</string>
+    <string name="storage_request_explanation">程序需要获取存储读写权限以便导入导出订阅源。</string>
     <string name="error_feed_error">这个订阅没有权限</string>
     <string name="error_feed_process">这个订阅失败</string>
     <string name="error_feed_url_exists">这个订阅地址不存在</string>
@@ -96,11 +96,11 @@
     <string name="google_news_sports">体育</string>
     <string name="google_news_science">科学</string>
     <string name="google_news_health">健康</string>
-    <string name="google_news_custom_topic">Enter custom topic</string>
+    <string name="google_news_custom_topic">自定义话题</string>
 
     <!-- ENTRIES -->
-    <string name="unread_entries">Unread</string>
-    <string name="all_entries">All entries</string>
+    <string name="unread_entries">未读</string>
+    <string name="all_entries">所有条目</string>
     <string name="no_entries">没有消息</string>
     <string name="favorites">收藏</string>
     <string name="context_menu_share_starred">分享收藏订阅</string>
@@ -121,9 +121,9 @@
     <string name="file">文件</string>
     <string name="download_and_save">下载并保存</string>
     <string name="open_link">打开链接</string>
-    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
-    <string name="undo">Undo</string>
-    <string name="marked_as_read">Marked as read</string>
+    <string name="tip_sentence">提示：左划标记已读，右划标记收藏</string>
+    <string name="undo">撤销</string>
+    <string name="marked_as_read">标记已读</string>
 
     <!-- WIDGET -->
     <string name="red">红色</string>
@@ -167,6 +167,7 @@
     <string name="all_feeds">全部订阅（包括未来的）</string>
 
     <plurals name="number_of_new_entries">
+        <item quantity="one"> 1 条新消息</item>
         <item quantity="other">%d 条新消息</item>
     </plurals>
 
