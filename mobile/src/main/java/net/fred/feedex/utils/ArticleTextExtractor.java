@@ -34,7 +34,8 @@ public class ArticleTextExtractor {
             + "|arti(cle|kel)|instapaper_body");
 
     // Most likely negative candidates
-    private static final Pattern NEGATIVE = Pattern.compile("nav($|igation)|user|com(ment|bx)|(^com-)|contact|"
+    //private static final Pattern NEGATIVE = Pattern.compile("nav($|igation)|user|com(ment|bx)|(^com-)|contact|"
+    private static final Pattern NEGATIVE = Pattern.compile("nav($|igation)|user|combx|(^com-)|contact|"
             + "foot|masthead|(me(dia|ta))|outbrain|promo|related|scroll|(sho(utbox|pping))|"
             + "sidebar|sponsor|tags|tool|widget|player|disclaimer|toc|infobox|vcard");
 
@@ -85,12 +86,19 @@ public class ArticleTextExtractor {
         }
 
         if (bestMatchElement != null) {
+
             String ret = bestMatchElement.toString();
             if (ogImage != null && !ret.contains(ogImage)) {
                 ret = "<img src=\""+ogImage+"\"><br>\n"+ret;
             }
+
+            Element comments = doc.getElementById( "comments" );
+            if ( comments != null )
+                ret += comments;
+
             return ret;
         }
+
 
         return null;
     }
