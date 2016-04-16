@@ -153,9 +153,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (getSupportActionBar() != null) {
                 getSupportActionBar().hide();
             }
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-
+            /*getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);*/
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             if (mOnFullScreenListener != null) {
                 mOnFullScreenListener.onFullScreenEnabled(false, isImmersiveFallback);
             }
