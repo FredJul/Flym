@@ -82,10 +82,10 @@ public class EntryView extends WebView {
     private static final String SUBTITLE_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#666666" : "#8c8c8c";
     private static final String SUBTITLE_BORDER_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "solid #ddd" : "solid #303030";
     private static final String CSS = "<head><style type='text/css'> "
-            + "body {max-width: 100%; margin: 0.3cm; font-family: sans-serif-light; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 150%} "
+            + "body {max-width: 100%; margin: 0.1cm; text-align:justify; font-weight: normal; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 120%} "
             + "* {max-width: 100%; word-break: break-word}"
             + "h1, h2 {font-weight: normal; line-height: 130%} "
-            + "h1 {font-size: 170%; margin-bottom: 0.1em} "
+            + "h1 {font-size: 170%; text-align:center; margin-bottom: 0.1em} "
             + "h2 {font-size: 140%} "
             + "a {color: #0099CC}"
             + "h1 a {color: inherit; text-decoration: none}"

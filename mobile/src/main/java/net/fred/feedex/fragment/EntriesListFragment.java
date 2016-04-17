@@ -172,6 +172,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 markAllAsRead();
             }
         });
+        mFab.hide();
 
         if (mCurrentUri != null) {
             // If the list is empty when we are going back here, try with the last display date

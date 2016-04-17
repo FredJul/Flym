@@ -49,6 +49,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
@@ -82,6 +83,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
     private EntryPagerAdapter mEntryPagerAdapter;
 
     private View mCancelFullscreenBtn;
+    private View mPageDownBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +105,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                 setImmersiveFullScreen(false);
             }
         });
+
 
         mEntryPager = (ViewPager) rootView.findViewById(R.id.pager);
         //mEntryPager.setPageTransformer(true, new DepthPageTransformer());
@@ -133,6 +136,29 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
 
             @Override
             public void onPageScrollStateChanged(int i) {
+            }
+        });
+
+        rootView.findViewById(R.id.pageDownBtn).setOnClickListener(new TextView.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //EntryView entryView = (EntryView) mEntryPager.findViewWithTag("EntryView" + mEntryPager.getCurrentItem());
+                EntryView entryView = mEntryPagerAdapter.mEntryViews.get(mEntryPager.getCurrentItem());
+                //Toast.makeText(getContext(), "pageDown onclick", Toast.LENGTH_LONG ).show();
+                if (entryView != null) {
+                    //Toast.makeText(getContext(), "pageDown onclick not null", Toast.LENGTH_LONG ).show();
+                    entryView.pageDown(false);
+                }
+            }
+        });
+
+        rootView.findViewById(R.id.pageUpBtn).setOnClickListener(new TextView.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EntryView entryView = mEntryPagerAdapter.mEntryViews.get(mEntryPager.getCurrentItem());
+                if (entryView != null) {
+                    entryView.pageUp(false);
+                }
             }
         });
 
@@ -192,7 +218,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
             item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
         }
 
-        super.onCreateOptionsMenu(menu, inflater);
+            super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -554,6 +580,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
             container.addView(view);
             view.setListener(EntryFragment.this);
             getLoaderManager().restartLoader(position, null, EntryFragment.this);
+            view.setTag("EntryView" + position);
             return view;
         }
 
