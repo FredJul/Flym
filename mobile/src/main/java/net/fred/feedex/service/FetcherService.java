@@ -417,8 +417,10 @@ public class FetcherService extends IntentService {
     private void deleteOldEntries(long keepDateBorderTime) {
         if (keepDateBorderTime > 0) {
             String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
-            // Delete the entries, the cache files will be deleted by the content provider
+            // Delete the entries
             MainApplication.getContext().getContentResolver().delete(EntryColumns.CONTENT_URI, where, null);
+            // Delete the cache files
+            NetworkUtils.deleteEntriesImagesCache(keepDateBorderTime);
         }
     }
 
