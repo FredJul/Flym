@@ -33,6 +33,9 @@ public class ArticleTextExtractor {
     private static final Pattern POSITIVE = Pattern.compile("(^(body|content|h?entry|main|page|post|text|blog|story|haupt))"
             + "|arti(cle|kel)|instapaper_body");
 
+    // Very most likely positive candidates, used by Joomla CMS
+    private static final Pattern ITSJOOMLA = Pattern.compile("articleBody");
+    
     // Most likely negative candidates
     private static final Pattern NEGATIVE = Pattern.compile("nav($|igation)|user|com(ment|bx)|(^com-)|contact|"
             + "foot|masthead|(me(dia|ta))|outbrain|promo|related|scroll|(sho(utbox|pping))|"
@@ -184,6 +187,9 @@ public class ArticleTextExtractor {
 
         if (POSITIVE.matcher(e.id()).find())
             weight += 40;
+
+        if (ITSJOOMLA.matcher(e.attributes().toString()).find())
+            weight += 200;
 
         if (UNLIKELY.matcher(e.className()).find())
             weight -= 20;
