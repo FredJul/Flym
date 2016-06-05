@@ -102,6 +102,9 @@ public class RssAtomParser extends DefaultHandler {
     private static final String TAG_DATE = "date";
     private static final String TAG_LAST_BUILD_DATE = "lastBuildDate";
     private static final String TAG_ENCLOSURE = "enclosure";
+    private static final String TAG_ALTERNATE = "alternate";
+    private static final String TAG_RELATED = "related";
+    private static final String TAG_VIA = "via";
     private static final String TAG_GUID = "guid";
     private static final String TAG_AUTHOR = "author";
     private static final String TAG_CREATOR = "creator";
@@ -231,6 +234,9 @@ public class RssAtomParser extends DefaultHandler {
             }
             if (TAG_ENCLOSURE.equals(attributes.getValue("", ATTRIBUTE_REL))) {
                 startEnclosure(attributes, attributes.getValue("", ATTRIBUTE_HREF));
+            } else if(TAG_ALTERNATE.equals(attributes.getValue("", ATTRIBUTE_REL))) {
+            } else if(TAG_RELATED.equals(attributes.getValue("", ATTRIBUTE_REL))) {
+            } else if(TAG_VIA.equals(attributes.getValue("", ATTRIBUTE_REL))) {
             } else {
                 // Get the link only if we don't have one or if its the good one (html)
                 if (mEntryLink == null || HTML_TEXT.equals(attributes.getValue("", ATTRIBUTE_TYPE))) {
