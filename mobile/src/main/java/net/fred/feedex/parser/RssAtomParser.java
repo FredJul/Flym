@@ -234,7 +234,7 @@ public class RssAtomParser extends DefaultHandler {
             }
             if (TAG_ENCLOSURE.equals(attributes.getValue("", ATTRIBUTE_REL))) {
                 startEnclosure(attributes, attributes.getValue("", ATTRIBUTE_HREF));
-            } else if(TAG_ALTERNATE.equals(attributes.getValue("", ATTRIBUTE_REL))) {
+            //} else if(TAG_ALTERNATE.equals(attributes.getValue("", ATTRIBUTE_REL))) {
             } else if(TAG_RELATED.equals(attributes.getValue("", ATTRIBUTE_REL))) {
             } else if(TAG_VIA.equals(attributes.getValue("", ATTRIBUTE_REL))) {
             } else {
