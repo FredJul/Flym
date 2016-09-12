@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
  Copyright (c) 2012-2015 Frederic Julian
  Copyright (c) 2010-2012 Stefan Handschuh
- Copyright (c) 2014-2014 Jaroslav Lichtblau
+ Copyright (c) 2014-2016 Jaroslav Lichtblau
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -53,7 +53,7 @@
     <string name="menu_add_group">Přidat skupinu</string>
     <string name="menu_import">Import z OPML</string>
     <string name="menu_export">Export do OPML</string>
-    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="storage_request_explanation">Aby bylo možno importovat či exportovat zdroje z a nebo do souboru, musíte povolit aplikaci oprávnění pro zápis do úložiště.</string>
     <string name="error_feed_error">Adresa zdroje nemohla být otevřena.</string>
     <string name="error_feed_process">Zdroj nelze zpracovat.</string>
     <string name="error_feed_url_exists">Adresa již existuje.</string>
@@ -106,11 +106,11 @@
     <string name="google_news_sports">Sporty</string>
     <string name="google_news_science">Věda</string>
     <string name="google_news_health">Zdraví</string>
-    <string name="google_news_custom_topic">Enter custom topic</string>
+    <string name="google_news_custom_topic">Zadat vlastní téma</string>
 
     <!-- ENTRIES -->
-    <string name="unread_entries">Unread</string>
-    <string name="all_entries">All entries</string>
+    <string name="unread_entries">Nepřečtené</string>
+    <string name="all_entries">Všechny články</string>
     <string name="no_entries">Žádné články</string>
     <string name="favorites">Označené</string>
     <string name="context_menu_share_starred">Sdílet označené články</string>
@@ -132,8 +132,8 @@
     <string name="download_and_save">Stáhnout a uložit</string>
     <string name="open_link">Otevřít odkaz</string>
     <string name="tip_sentence">Tip: posunutím doleva označit jako přečtené a posunutím doprava jako oblíbené</string>
-    <string name="undo">Undo</string>
-    <string name="marked_as_read">Marked as read</string>
+    <string name="undo">Vrátit</string>
+    <string name="marked_as_read">Označeno jako přečtené</string>
 
     <!-- WIDGET -->
     <string name="red">Červená</string>
