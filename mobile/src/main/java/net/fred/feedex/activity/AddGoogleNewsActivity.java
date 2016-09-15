@@ -78,7 +78,10 @@ public class AddGoogleNewsActivity extends BaseActivity {
             case R.id.menu_validate:
                 for (int topic = 0; topic < TOPIC_NAME.length; topic++) {
                     if (((CheckBox) findViewById(CB_IDS[topic])).isChecked()) {
-                        String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss" + (TOPIC_CODES[topic] != null ? "&topic=" + TOPIC_CODES[topic] : "");
+                        String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss";
+                        if (TOPIC_CODES[topic] != null) {
+                            url += "&topic=" + TOPIC_CODES[topic];
+                        }
                         FeedDataContentProvider.addFeed(this, url, getString(TOPIC_NAME[topic]), true);
                     }
                 }
