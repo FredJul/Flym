@@ -45,6 +45,7 @@
 package net.fred.feedex.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
@@ -60,58 +61,51 @@ public class ColorPickerDialogPreference extends DialogPreference {
     private SeekBar mBlueSeekBar;
     private SeekBar mTransparencySeekBar;
 
-    private int mColor;
+    private int mSavedColor = WidgetProvider.STANDARD_BACKGROUND;
+    private int mTempColor = WidgetProvider.STANDARD_BACKGROUND;
+
+    public ColorPickerDialogPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
 
     public ColorPickerDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mColor = WidgetProvider.STANDARD_BACKGROUND;
     }
 
     @Override
     protected View onCreateDialogView() {
         final View view = super.onCreateDialogView();
 
-        view.setBackgroundColor(mColor);
+        view.setBackgroundColor(mSavedColor);
 
         mRedSeekBar = (SeekBar) view.findViewById(R.id.seekbar_red);
         mGreenSeekBar = (SeekBar) view.findViewById(R.id.seekbar_green);
         mBlueSeekBar = (SeekBar) view.findViewById(R.id.seekbar_blue);
         mTransparencySeekBar = (SeekBar) view.findViewById(R.id.seekbar_transparency);
 
-        int _color = mColor;
-
-        mTransparencySeekBar.setProgress(((_color / 0x01000000) * 100) / 255);
-        _color %= 0x01000000;
-        mRedSeekBar.setProgress(((_color / 0x00010000) * 100) / 255);
-        _color %= 0x00010000;
-        mGreenSeekBar.setProgress(((_color / 0x00000100) * 100) / 255);
-        _color %= 0x00000100;
-        mBlueSeekBar.setProgress((_color * 100) / 255);
+        mTransparencySeekBar.setMax(255);
+        mTransparencySeekBar.setProgress(Color.alpha(mSavedColor));
+        mRedSeekBar.setMax(255);
+        mRedSeekBar.setProgress(Color.red(mSavedColor));
+        mGreenSeekBar.setMax(255);
+        mGreenSeekBar.setProgress(Color.green(mSavedColor));
+        mBlueSeekBar.setMax(255);
+        mBlueSeekBar.setProgress(Color.blue(mSavedColor));
 
         OnSeekBarChangeListener onSeekBarChangeListener = new OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                int red = (mRedSeekBar.getProgress() * 255) / 100;
-
-                int green = (mGreenSeekBar.getProgress() * 255) / 100;
-
-                int blue = (mBlueSeekBar.getProgress() * 255) / 100;
-
-                int transparency = (mTransparencySeekBar.getProgress() * 255) / 100;
-
-                mColor = transparency * 0x01000000 + red * 0x00010000 + green * 0x00000100 + blue;
-                view.setBackgroundColor(mColor);
+                mTempColor = Color.argb(mTransparencySeekBar.getProgress(), mRedSeekBar.getProgress(), mGreenSeekBar.getProgress(), mBlueSeekBar.getProgress());
+                view.setBackgroundColor(mTempColor);
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         };
 
@@ -125,7 +119,8 @@ public class ColorPickerDialogPreference extends DialogPreference {
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
-            persistInt(mColor);
+            mSavedColor = mTempColor;
+            persistInt(mTempColor);
         }
         super.onDialogClosed(positiveResult);
     }

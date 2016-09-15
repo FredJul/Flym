@@ -49,6 +49,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import net.fred.feedex.R;
+import net.fred.feedex.utils.PrefUtils;
 
 public class WidgetConfigActivity extends AppCompatActivity {
 
@@ -67,6 +68,7 @@ public class WidgetConfigActivity extends AppCompatActivity {
             finish();
         }
 
+        PrefUtils.remove("widget.background"); // to avoid a potential bug with bad default color
         setContentView(R.layout.widget_config);
 
         // Display the fragment as the main content.
