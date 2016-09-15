@@ -77,15 +77,14 @@ public class AddGoogleNewsActivity extends BaseActivity {
                 return true;
             case R.id.menu_validate:
                 for (int topic = 0; topic < TOPIC_NAME.length; topic++) {
-                    if (((CheckBox) findViewById(CB_IDS[topic])).isChecked() && TOPIC_CODES[topic] != null) {
-                        String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss&topic=" + TOPIC_CODES[topic];
+                    if (((CheckBox) findViewById(CB_IDS[topic])).isChecked()) {
+                        String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss" + (TOPIC_CODES[topic] != null ? "&topic=" + TOPIC_CODES[topic] : "");
                         FeedDataContentProvider.addFeed(this, url, getString(TOPIC_NAME[topic]), true);
                     }
                 }
 
                 String custom_topic = mCustomTopicEditText.getText().toString();
-                if(!custom_topic.isEmpty())
-                {
+                if (!custom_topic.isEmpty()) {
                     try {
                         String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss&q=" + URLEncoder.encode(custom_topic, "UTF-8");
                         FeedDataContentProvider.addFeed(this, url, custom_topic, true);
