@@ -11,7 +11,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="30dp"
-        android:background="#7C000000"
+        android:background="@android:color/white"
         android:padding="5dp"/>
 
     <ImageView

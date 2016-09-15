@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "23.0.3"
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         applicationId "net.fred.feedex"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 62
-        versionName "1.9.5"
+        versionCode 63
+        versionName "1.9.6"
     }
 
     lintOptions {

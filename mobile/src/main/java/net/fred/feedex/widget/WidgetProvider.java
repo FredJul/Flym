@@ -24,6 +24,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.widget.RemoteViews;
 
@@ -32,7 +33,7 @@ import net.fred.feedex.activity.HomeActivity;
 import net.fred.feedex.utils.PrefUtils;
 
 public class WidgetProvider extends AppWidgetProvider {
-    public static final int STANDARD_BACKGROUND = 0x7c000000;
+    public static final int STANDARD_BACKGROUND = Color.WHITE;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
