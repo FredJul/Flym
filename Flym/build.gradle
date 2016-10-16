@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    buildToolsVersion "24.0.3"
 
     defaultConfig {
         applicationId "net.fred.feedex"
@@ -60,11 +60,9 @@ repositories {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    //wearApp project(':wear')
     compile 'com.android.support:appcompat-v7:+'
     compile 'com.android.support:design:+'
     compile 'com.google.android.gms:play-services-gcm:+'
-    //compile 'com.google.android.gms:play-services-wearable:+'
     compile 'org.jsoup:jsoup:+'
     compile 'com.github.bumptech.glide:glide:+'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:+'
