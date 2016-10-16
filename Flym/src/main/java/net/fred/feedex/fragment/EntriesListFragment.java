@@ -278,7 +278,20 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         inflater.inflate(R.menu.entry_list, menu);
 
-        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        if (EntryColumns.isSearchUri(mCurrentUri)) {
+            searchItem.expandActionView();
+            searchView.post(new Runnable() { // Without that, it just does not work
+                @Override
+                public void run() {
+                    searchView.setQuery(mCurrentUri.getLastPathSegment(), false);
+                    searchView.clearFocus();
+                }
+            });
+
+        }
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
