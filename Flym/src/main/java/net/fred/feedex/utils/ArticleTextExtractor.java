@@ -25,9 +25,9 @@ public class ArticleTextExtractor {
 
     // Unlikely candidates
     private static final Pattern UNLIKELY = Pattern.compile("com(bx|ment|munity)|dis(qus|cuss)|e(xtra|[-]?mail)|foot|"
-            + "header|menu|re(mark|ply)|rss|sh(are|outbox)|sponsor"
+            + "header|menu|re(mark|ply)|rss|sh(are|outbox)|social|twitter|facebook|sponsor"
             + "a(d|ll|gegate|rchive|ttachment)|(pag(er|ination))|popup|print|"
-            + "login|si(debar|gn|ngle)");
+            + "login|si(debar|gn|ngle)|hinweis|expla(in|nation)?|metablock");
 
     // Most likely positive candidates
     private static final Pattern POSITIVE = Pattern.compile("(^(body|content|h?entry|main|page|post|text|blog|story|haupt))"
