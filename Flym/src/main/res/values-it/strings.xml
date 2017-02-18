@@ -106,7 +106,7 @@
     <string name="google_news_custom_topic">Aggiungi un tema personalizzato</string>
 
     <!-- ENTRIES -->
-    <string name="unread_entries">Articoli non letti</string>
+    <string name="unread_entries">Non letti</string>
     <string name="all_entries">Tutti gli articoli</string>
     <string name="no_entries">Nessun articolo</string>
     <string name="favorites">Preferiti</string>
