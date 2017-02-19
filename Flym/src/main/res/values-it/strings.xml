@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2017 Luca (lukekul90)
  Copyright (c) 2013-2014 Danilo Treffiletti
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -51,7 +52,7 @@
     <string name="menu_add_group">Aggiungi gruppo</string>
     <string name="menu_import">Importa OPML</string>
     <string name="menu_export">Esporta OPML</string>
-    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="storage_request_explanation">Per poter importare/esportare i feed da/su file, è necessario consentire all\'applicazione di accedere alla memoria di archiviazione.</string>
     <string name="error_feed_error">L\'indirizzo del feed non può essere raggiunto.</string>
     <string name="error_feed_process">Il feed non può essere processato.</string>
     <string name="error_feed_url_exists">L\'indirizzo è già presente.</string>
@@ -96,17 +97,17 @@
     <string name="google_news_indicator">Seleziona uno o più feed da aggiungere. Alcuni di questi potrebbero non essere forniti da Google nella tua lingua.</string>
     <string name="google_news_top_stories">Temi caldi</string>
     <string name="google_news_world">Mondo</string>
-    <string name="google_news_business">Business</string>
+    <string name="google_news_business">Economia</string>
     <string name="google_news_technology">Tecnologia</string>
     <string name="google_news_entertainment">Intrattenimento</string>
     <string name="google_news_sports">Sport</string>
     <string name="google_news_science">Scienza</string>
     <string name="google_news_health">Salute</string>
-    <string name="google_news_custom_topic">Enter custom topic</string>
+    <string name="google_news_custom_topic">Aggiungi un tema personalizzato</string>
 
     <!-- ENTRIES -->
-    <string name="unread_entries">Unread</string>
-    <string name="all_entries">All entries</string>
+    <string name="unread_entries">Non letti</string>
+    <string name="all_entries">Tutti gli articoli</string>
     <string name="no_entries">Nessun articolo</string>
     <string name="favorites">Preferiti</string>
     <string name="context_menu_share_starred">Condividi articoli preferiti</string>
@@ -128,8 +129,8 @@
     <string name="download_and_save">Scarica e salva</string>
     <string name="open_link">Apri link</string>
     <string name="tip_sentence">Suggerimento: fai scorrere a sinistra per segnare come letto e a destra per segnare come preferito</string>
-    <string name="undo">Undo</string>
-    <string name="marked_as_read">Marked as read</string>
+    <string name="undo">Annulla</string>
+    <string name="marked_as_read">Contrassegnato come letto</string>
 
     <!-- WIDGET -->
     <string name="red">Rosso</string>
