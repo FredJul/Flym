@@ -1,9 +1,12 @@
+[![API](https://img.shields.io/badge/API-15%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=15)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/fredericjulian)
+
 Flym News Reader
 ==================
 
-##**WARNING: unfortunately I'm facing a important lack of time theses days and I have decided to not maintain this software as much as before. I'll surely improve it from time to time, but I really encourage people who wants more modification to start and maintain a fork**##
+##**I didn't updated that application for a long time, but I'm currently preparing a totally new V2 version from scratched, stay tunned.**##
 
-Light and modern Android feed reader, based on Sparse rss.
+Light and modern Android feed reader (Atom/RSS), based on Sparse rss.
 
 PlayStore link:
 https://play.google.com/store/apps/details?id=net.fred.feedex
