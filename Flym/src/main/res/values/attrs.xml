@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <attr name="card_color" format="reference"/>
-    <attr name="colorReadState" format="color|reference" />
-</resources>

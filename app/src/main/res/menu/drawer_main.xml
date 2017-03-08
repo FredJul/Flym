@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/primary_nav"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_main_nav__people"
+            android:icon="@drawable/ic_people_24dp"
+            android:title="@string/menu_main_nav__people" />
+        <item
+            android:id="@+id/menu_main_nav__favorites"
+            android:icon="@drawable/ic_favorite_24dp"
+            android:title="@string/menu_main_nav__favorites" />
+    </group>
+
+    <group
+        android:id="@+id/secondary_nav"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/menu_main_nav__settings"
+            android:icon="@drawable/ic_settings_24dp"
+            android:title="@string/menu_main_nav__settings" />
+        <item
+            android:id="@+id/menu_main_nav__feedback"
+            android:icon="@drawable/ic_feedback_24dp"
+            android:title="@string/menu_main_nav__feedback" />
+    </group>
+
+</menu>

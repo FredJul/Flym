@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_person_details__favorite"
+        android:title="@string/menu_person_details__favorite"
+        android:icon="@drawable/ic_favorite_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_person_details__share"
+        android:title="@string/menu_person_details__share"
+        android:icon="@drawable/ic_share_24dp"
+        app:showAsAction="always" />
+</menu>

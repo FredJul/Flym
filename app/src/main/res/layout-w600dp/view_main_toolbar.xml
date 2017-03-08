@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_general"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize" />
+
+    <FrameLayout
+        android:id="@+id/frame_specific"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginStart="@dimen/container_horizontal_padding_start">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_specific"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+    </FrameLayout>
+
+</merge>

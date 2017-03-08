@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/two_columns_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <net.frju.flym.ui.views.CustomAppBar
+            android:id="@+id/custom_appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:stateListAnimator="@animator/appbar_always_elevated" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/frame_master"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/container_horizontal_padding_start"
+            app:cardCornerRadius="0dp" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/frame_details"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/container_horizontal_padding_end"
+        android:layout_marginStart="@dimen/container_horizontal_padding_start"
+        android:layout_marginTop="?actionBarSize"
+        app:cardBackgroundColor="@color/colorBackground"
+        app:cardElevation="3dp" />
+</FrameLayout>
