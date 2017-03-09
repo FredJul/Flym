@@ -4,7 +4,7 @@
 Flym News Reader
 ==================
 
-##**I didn't updated that application for a long time, but I'm currently preparing a totally new V2 version from scratched, stay tunned.**##
+##**I didn't updated that application for a long time, but I'm currently preparing a totally new V2 version from scratch (in Kotlin), stay tuned.**##
 
 Light and modern Android feed reader (Atom/RSS), based on Sparse rss.
 
