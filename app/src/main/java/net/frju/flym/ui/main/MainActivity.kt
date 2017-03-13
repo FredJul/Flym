@@ -34,12 +34,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             nav_side.setNavigationItemSelectedListener(this)
         }
 
-        val layoutManager = LinearLayoutManager(this)
-
+        nav.layoutManager = LinearLayoutManager(this)
         doAsync {
             val feeds = FEED.select()
-                    .where(Where.field(FEED.IS_GROUP).isTrue.or(Where.field(FEED.GROUP_ID).isNotEqualTo(null)))
-                    .queryAndInit().map { FeedGroup(it, it.subFeeds!!) }
+                    .where(Where.field(FEED.IS_GROUP).isTrue.or(Where.field(FEED.GROUP_ID).isEqualTo(null)))
+                    .queryAndInit().map { FeedGroup(it, it.subFeeds ?: listOf()) }
 
             uiThread {
                 feedAdapter = FeedAdapter(feeds)

@@ -55,7 +55,7 @@ class Feed : Parcelable, ModelListener {
     }
 
     override fun onPreInsert() {
-        if (id == null) {
+        if (id.isEmpty()) {
             id = UUID.randomUUID().toString()
         }
     }
@@ -68,8 +68,8 @@ class Feed : Parcelable, ModelListener {
 
     @InitMethod
     fun initSubFeeds() {
-        if (groupId != null) {
-            subFeeds = FEED.select().where(Where.field(FEED.GROUP_ID).isEqualTo(groupId)).orderByDesc(FEED.DISPLAY_PRIORITY).query().toList()
+        if (isGroup) {
+            subFeeds = FEED.select().where(Where.field(FEED.GROUP_ID).isEqualTo(id)).orderByDesc(FEED.DISPLAY_PRIORITY).query().toList()
         }
     }
 

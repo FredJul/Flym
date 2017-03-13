@@ -41,15 +41,15 @@ class LocalDatabaseProvider(context: Context) : BaseLocalDatabaseProvider(contex
         feedInsideGroup.link = "https://news.google.fr/?output=rss"
         feedInsideGroup.groupId = group1.id
 
-        val feed = Feed()
-        feed.title = "LeMonde"
-        feed.link = "http://www.lemonde.fr/rss/une.xml"
-        feed.groupId = group1.id
+        val feedInsideGroup2 = Feed()
+        feedInsideGroup2.title = "LeMonde"
+        feedInsideGroup2.link = "http://www.lemonde.fr/rss/une.xml"
+        feedInsideGroup2.groupId = group1.id
 
-        val feed2 = Feed()
-        feed2.title = "The Register"
-        feed2.link = "https://www.theregister.co.uk/software/headlines.atom"
+        val feedOutsideGroup = Feed()
+        feedOutsideGroup.title = "The Register"
+        feedOutsideGroup.link = "https://www.theregister.co.uk/software/headlines.atom"
 
-        FEED.insert(feedInsideGroup, feed, feed2).query()
+        FEED.insert(feedInsideGroup, feedInsideGroup2, feedOutsideGroup).query()
     }
 }
