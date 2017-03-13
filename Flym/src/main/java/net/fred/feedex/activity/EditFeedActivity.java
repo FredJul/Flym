@@ -94,8 +94,8 @@ import java.util.HashMap;
 
 public class EditFeedActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     static final String FEED_SEARCH_TITLE = "title";
-    static final String FEED_SEARCH_URL = "url";
-    static final String FEED_SEARCH_DESC = "contentSnippet";
+    static final String FEED_SEARCH_URL = "feedId";
+    static final String FEED_SEARCH_DESC = "description";
     private static final String STATE_CURRENT_TAB = "STATE_CURRENT_TAB";
     private static final String[] FEED_PROJECTION = new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.IS_GROUP};
     private final ActionMode.Callback mFilterActionModeCallback = new ActionMode.Callback() {
@@ -526,18 +526,17 @@ class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, St
     @Override
     public ArrayList<HashMap<String, String>> loadInBackground() {
         try {
-            HttpURLConnection conn = NetworkUtils.setupConnection("https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=" + mSearchText);
+            HttpURLConnection conn = NetworkUtils.setupConnection("http://cloud.feedly.com/v3/search/feeds?count=20&locale=" + getContext().getResources().getConfiguration().locale.getLanguage() + "&query=" + mSearchText);
             try {
                 String jsonStr = new String(NetworkUtils.getBytes(conn.getInputStream()));
 
                 // Parse results
                 final ArrayList<HashMap<String, String>> results = new ArrayList<>();
-                JSONObject response = new JSONObject(jsonStr).getJSONObject("responseData");
-                JSONArray entries = response.getJSONArray("entries");
+                JSONArray entries = new JSONObject(jsonStr).getJSONArray("results");
                 for (int i = 0; i < entries.length(); i++) {
                     try {
                         JSONObject entry = (JSONObject) entries.get(i);
-                        String url = entry.get(EditFeedActivity.FEED_SEARCH_URL).toString();
+                        String url = entry.get(EditFeedActivity.FEED_SEARCH_URL).toString().replace("feed/", "");
                         if (!url.isEmpty()) {
                             HashMap<String, String> map = new HashMap<>();
                             map.put(EditFeedActivity.FEED_SEARCH_TITLE, Html.fromHtml(entry.get(EditFeedActivity.FEED_SEARCH_TITLE).toString())
