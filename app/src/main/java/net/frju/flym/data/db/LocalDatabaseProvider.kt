@@ -7,7 +7,6 @@ import net.frju.androidquery.gen.FEED
 import net.frju.androidquery.gen.Q
 import net.frju.flym.data.Feed
 import org.jetbrains.anko.doAsync
-import java.util.*
 
 
 class LocalDatabaseProvider(context: Context) : BaseLocalDatabaseProvider(context) {
@@ -26,16 +25,31 @@ class LocalDatabaseProvider(context: Context) : BaseLocalDatabaseProvider(contex
 
     override fun onPostCreate() {
         doAsync {
-            addDefaultRestrictions()
+            addDefaultFeeds()
         }
     }
 
-    private fun addDefaultRestrictions() {
-        val feed = Feed()
-        feed.id = UUID.randomUUID().toString()
-        feed.title = "Default rss"
-        feed.link = "https://news.google.fr/?output=rss"
+    private fun addDefaultFeeds() {
+        val group1 = Feed()
+        group1.title = "Default group"
+        group1.isGroup = true
 
-        FEED.insert(feed).query()
+        FEED.insert(group1).query()
+
+        val feedInsideGroup = Feed()
+        feedInsideGroup.title = "Google News"
+        feedInsideGroup.link = "https://news.google.fr/?output=rss"
+        feedInsideGroup.groupId = group1.id
+
+        val feed = Feed()
+        feed.title = "LeMonde"
+        feed.link = "http://www.lemonde.fr/rss/une.xml"
+        feed.groupId = group1.id
+
+        val feed2 = Feed()
+        feed2.title = "The Register"
+        feed2.link = "https://www.theregister.co.uk/software/headlines.atom"
+
+        FEED.insert(feedInsideGroup, feed, feed2).query()
     }
 }

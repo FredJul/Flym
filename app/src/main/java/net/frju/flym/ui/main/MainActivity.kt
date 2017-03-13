@@ -5,16 +5,25 @@ import android.support.design.widget.NavigationView
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_main_containers.view.*
 import net.fred.feedex.R
+import net.frju.androidquery.gen.FEED
+import net.frju.androidquery.operation.condition.Where
 import net.frju.flym.data.Item
 import net.frju.flym.ui.itemdetails.ItemDetailsFragment
 import net.frju.flym.ui.items.ItemsFragment
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, MainNavigator {
+
+    private var feedAdapter: FeedAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +34,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             nav_side.setNavigationItemSelectedListener(this)
         }
 
-        nav.setNavigationItemSelectedListener(this)
+        val layoutManager = LinearLayoutManager(this)
+
+        doAsync {
+            val feeds = FEED.select()
+                    .where(Where.field(FEED.IS_GROUP).isTrue.or(Where.field(FEED.GROUP_ID).isNotEqualTo(null)))
+                    .queryAndInit().map { FeedGroup(it, it.subFeeds!!) }
+
+            uiThread {
+                feedAdapter = FeedAdapter(feeds)
+                feedAdapter?.onFeedClick { feed ->
+                    Toast.makeText(this@MainActivity, "feed ${feed.title} clicked", Toast.LENGTH_SHORT).show()
+                }
+
+                nav.adapter = feedAdapter
+            }
+        }
+
+        //nav.setNavigationItemSelectedListener(this)
         containers_layout.custom_appbar.setOnNavigationClickListener(View.OnClickListener { toggleDrawer() })
 
         if (savedInstanceState == null) {
@@ -34,6 +60,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             goToItemsList()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        feedAdapter?.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        feedAdapter?.onRestoreInstanceState(savedInstanceState)
     }
 
     fun closeDrawer() {
@@ -57,14 +93,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun highlightPeople() {
-        nav.setCheckedItem(R.id.menu_main_nav__people)
+        //nav.setCheckedItem(R.id.menu_main_nav__people)
         if (nav_side != null) {
             nav_side.setCheckedItem(R.id.menu_main_nav__people)
         }
     }
 
     fun highlightFavorites() {
-        nav.setCheckedItem(R.id.menu_main_nav__favorites)
+        //nav.setCheckedItem(R.id.menu_main_nav__favorites)
         if (nav_side != null) {
             nav_side.setCheckedItem(R.id.menu_main_nav__favorites)
         }

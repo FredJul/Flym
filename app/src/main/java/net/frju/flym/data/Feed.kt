@@ -5,14 +5,16 @@ import android.os.Parcelable
 import net.frju.androidquery.annotation.DbField
 import net.frju.androidquery.annotation.DbModel
 import net.frju.androidquery.annotation.InitMethod
+import net.frju.androidquery.database.ModelListener
 import net.frju.androidquery.gen.FEED
 import net.frju.androidquery.operation.condition.Where
 import net.frju.flym.data.db.LocalDatabaseProvider
 import paperparcel.PaperParcel
+import java.util.*
 
 @PaperParcel
 @DbModel(databaseProvider = LocalDatabaseProvider::class)
-class Feed : Parcelable {
+class Feed : Parcelable, ModelListener {
 
     @DbField(primaryKey = true)
     var id = ""
@@ -50,6 +52,18 @@ class Feed : Parcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         PaperParcelFeed.writeToParcel(this, dest, flags)
+    }
+
+    override fun onPreInsert() {
+        if (id == null) {
+            id = UUID.randomUUID().toString()
+        }
+    }
+
+    override fun onPreUpdate() {
+    }
+
+    override fun onPreDelete() {
     }
 
     @InitMethod

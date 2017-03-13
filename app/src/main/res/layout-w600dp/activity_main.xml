@@ -9,9 +9,9 @@
     tools:openDrawer="start">
 
     <FrameLayout
-        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <android.support.design.widget.NavigationView
             android:id="@+id/nav_side"
@@ -21,8 +21,8 @@
             android:fitsSystemWindows="true"
             android:gravity="center_horizontal"
             app:elevation="0dp"
-            app:itemBackground="@android:color/transparent"
             app:headerLayout="@layout/view_side_header"
+            app:itemBackground="@android:color/transparent"
             app:menu="@menu/side_main" />
 
         <net.frju.flym.ui.views.ContainersLayout
@@ -31,15 +31,23 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav"
+    <LinearLayout
         android:layout_width="@dimen/nav_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/colorBackground"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/view_main_header"
-        app:menu="@menu/drawer_main" />
+        android:orientation="vertical">
+
+        <include layout="@layout/view_main_header" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/nav"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+
+    </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>
 
