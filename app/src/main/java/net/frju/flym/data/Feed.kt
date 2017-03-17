@@ -85,5 +85,9 @@ class Feed : Parcelable, ModelListener {
 
     companion object {
         @JvmField val CREATOR = PaperParcelFeed.CREATOR
+
+        @JvmField val UNREAD_ITEMS_ID = "unread_items"
+        @JvmField val ALL_ITEMS_ID = "all_items"
+        @JvmField val FAVORITES_ID = "favorites"
     }
 }

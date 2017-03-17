@@ -8,12 +8,12 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_main_containers.view.*
 import net.fred.feedex.R
 import net.frju.androidquery.gen.FEED
 import net.frju.androidquery.operation.condition.Where
+import net.frju.flym.data.Feed
 import net.frju.flym.data.Item
 import net.frju.flym.ui.itemdetails.ItemDetailsFragment
 import net.frju.flym.ui.items.ItemsFragment
@@ -30,20 +30,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         setContentView(R.layout.activity_main)
 
-        if (nav_side != null) {
-            nav_side.setNavigationItemSelectedListener(this)
-        }
-
         nav.layoutManager = LinearLayoutManager(this)
         doAsync {
             val feeds = FEED.select()
                     .where(Where.field(FEED.IS_GROUP).isTrue.or(Where.field(FEED.GROUP_ID).isEqualTo(null)))
-                    .queryAndInit().map { FeedGroup(it, it.subFeeds ?: listOf()) }
+                    .queryAndInit().map { FeedGroup(it, it.subFeeds ?: listOf()) }.toMutableList()
+
+            val unreads = Feed()
+            unreads.id = Feed.UNREAD_ITEMS_ID
+            unreads.title = getString(R.string.unread_entries)
+            feeds.add(0, FeedGroup(unreads, listOf()))
+
+            val all = Feed()
+            all.id = Feed.ALL_ITEMS_ID
+            all.title = getString(R.string.all_entries)
+            feeds.add(1, FeedGroup(all, listOf()))
+
+            val favorites = Feed()
+            favorites.id = Feed.FAVORITES_ID
+            favorites.title = getString(R.string.favorites)
+            feeds.add(2, FeedGroup(favorites, listOf()))
 
             uiThread {
                 feedAdapter = FeedAdapter(feeds)
                 feedAdapter?.onFeedClick { feed ->
-                    Toast.makeText(this@MainActivity, "feed ${feed.title} clicked", Toast.LENGTH_SHORT).show()
+                    goToItemsList(feed)
                 }
 
                 nav.adapter = feedAdapter
@@ -57,7 +68,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             highlightPeople()
             closeDrawer()
 
-            goToItemsList()
+            goToItemsList(null)
         }
     }
 
@@ -93,16 +104,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun highlightPeople() {
         //nav.setCheckedItem(R.id.menu_main_nav__people)
-        if (nav_side != null) {
-            nav_side.setCheckedItem(R.id.menu_main_nav__people)
-        }
     }
 
     fun highlightFavorites() {
         //nav.setCheckedItem(R.id.menu_main_nav__favorites)
-        if (nav_side != null) {
-            nav_side.setCheckedItem(R.id.menu_main_nav__favorites)
-        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -111,7 +116,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 highlightPeople()
                 closeDrawer()
 
-                goToItemsList()
+                goToItemsList(null)
             }
 
             R.id.menu_main_nav__settings -> {
@@ -170,11 +175,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    override fun goToItemsList() {
+    override fun goToItemsList(feed: Feed?) {
         clearDetails()
         containers_layout.custom_appbar.setState(MainNavigator.State.TWO_COLUMNS_EMPTY)
         containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
-        val master = ItemsFragment.newInstance()
+        val master = ItemsFragment.newInstance(feed)
         supportFragmentManager.beginTransaction().replace(R.id.frame_master, master, TAG_MASTER).commit()
     }
 

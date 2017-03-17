@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.fragment_items.*
 import kotlinx.android.synthetic.main.view_main_containers.view.*
 import net.fred.feedex.R
 import net.frju.androidquery.operation.function.CursorResult
+import net.frju.flym.data.Feed
 import net.frju.flym.data.Item
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainActivity
@@ -29,13 +30,14 @@ class ItemsFragment : Fragment() {
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
     private var adapter: ItemsAdapter? = null
+    private var feed: Feed? = null
 
     private val USER_LOADER_ID = 0
 
     private val loaderCallbacks = object : LoaderManager.LoaderCallbacks<CursorResult<Item>> {
 
         override fun onCreateLoader(id: Int, args: Bundle?): Loader<CursorResult<Item>> {
-            val loader = ItemsLoader(context)
+            val loader = ItemsLoader(context, feed)
             loader.setUpdateThrottle(100)
             return loader
         }
@@ -59,6 +61,9 @@ class ItemsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        feed = arguments.getParcelable(ARG_FEED)
+
         setupToolbar()
         setupRecyclerView()
         setupSwipeRefresh()
@@ -139,11 +144,13 @@ class ItemsFragment : Fragment() {
 
     companion object {
 
+        private val ARG_FEED = "feed"
         private val STATE_SELECTED_ITEM_ID = "state_selected_item_id"
 
-        fun newInstance(): ItemsFragment {
+        fun newInstance(feed: Feed?): ItemsFragment {
             val fragment = ItemsFragment()
             val bundle = Bundle()
+            bundle.putParcelable(ARG_FEED, feed)
             fragment.arguments = bundle
             return fragment
         }

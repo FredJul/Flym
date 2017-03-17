@@ -38,7 +38,7 @@ class ItemDetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        item = arguments.getParcelable(KEY_ITEM)
+        item = arguments.getParcelable(ARG_ITEM)
 
         setupToolbar()
 
@@ -91,19 +91,19 @@ class ItemDetailsFragment : Fragment() {
 
     fun setItem(item: Item) {
         this.item = item
-        arguments.putParcelable(KEY_ITEM, item)
+        arguments.putParcelable(ARG_ITEM, item)
 
         updateUI()
     }
 
     companion object {
 
-        private val KEY_ITEM = "key_item"
+        private val ARG_ITEM = "item"
 
         fun newInstance(item: Item): ItemDetailsFragment {
             val fragment = ItemDetailsFragment()
             val bundle = Bundle()
-            bundle.putParcelable(KEY_ITEM, item)
+            bundle.putParcelable(ARG_ITEM, item)
             fragment.arguments = bundle
             return fragment
         }
