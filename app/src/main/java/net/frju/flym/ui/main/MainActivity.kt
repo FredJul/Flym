@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 feedAdapter?.onFeedClick { view, feed ->
                     goToItemsList(feed)
+                    closeDrawer()
                 }
 
                 nav.adapter = feedAdapter
