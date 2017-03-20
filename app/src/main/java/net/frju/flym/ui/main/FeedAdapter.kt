@@ -13,7 +13,7 @@ import net.fred.feedex.R
 import net.frju.flym.data.Feed
 import org.jetbrains.anko.onClick
 
-private val SAVE_SELECTED_ID = "SAVE_SELECTED_ID"
+private val STATE_SELECTED_ID = "STATE_SELECTED_ID"
 
 class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerViewAdapter<FeedAdapter.FeedGroupViewHolder, FeedAdapter.FeedViewHolder>(groups) {
 
@@ -51,13 +51,13 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerViewAdapter<FeedA
     override fun onSaveInstanceState(savedInstanceState: Bundle?) {
         super.onSaveInstanceState(savedInstanceState)
 
-        savedInstanceState?.putString(SAVE_SELECTED_ID, selectedItemId)
+        savedInstanceState?.putString(STATE_SELECTED_ID, selectedItemId)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
 
-        selectedItemId = savedInstanceState?.getString(SAVE_SELECTED_ID)
+        selectedItemId = savedInstanceState?.getString(STATE_SELECTED_ID)
     }
 
     override fun getItemCount(): Int {

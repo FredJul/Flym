@@ -19,7 +19,6 @@ import net.frju.flym.data.Item
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainActivity
 import net.frju.flym.ui.main.MainNavigator
-import net.frju.flym.ui.views.SwipeRefreshFragment
 import net.frju.parentalcontrol.utils.PrefUtils
 
 
@@ -59,7 +58,7 @@ class ItemsFragment : SwipeRefreshFragment() {
         }
     }
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun inflateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_items, container, true)
     }
 
