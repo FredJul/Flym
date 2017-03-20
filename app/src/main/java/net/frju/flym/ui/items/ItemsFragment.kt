@@ -1,8 +1,8 @@
 package net.frju.flym.ui.items
 
 import android.content.Intent
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.Loader
 import android.support.v7.widget.LinearLayoutManager
@@ -19,13 +19,15 @@ import net.frju.flym.data.Item
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainActivity
 import net.frju.flym.ui.main.MainNavigator
+import net.frju.flym.ui.views.SwipeRefreshFragment
+import net.frju.parentalcontrol.utils.PrefUtils
 
 
 /**
  * Created by Lucas on 04/01/2017.
  */
 
-class ItemsFragment : Fragment() {
+class ItemsFragment : SwipeRefreshFragment() {
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
@@ -33,6 +35,12 @@ class ItemsFragment : Fragment() {
     private var feed: Feed? = null
 
     private val USER_LOADER_ID = 0
+
+    private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
+        if (PrefUtils.IS_REFRESHING == key) {
+            refreshSwipeProgress()
+        }
+    }
 
     private val loaderCallbacks = object : LoaderManager.LoaderCallbacks<CursorResult<Item>> {
 
@@ -51,8 +59,8 @@ class ItemsFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_items, container, false)
+    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_items, container, true)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -66,13 +74,23 @@ class ItemsFragment : Fragment() {
 
         setupToolbar()
         setupRecyclerView()
-        setupSwipeRefresh()
 
         if (savedInstanceState != null) {
             adapter?.selectedItemId = savedInstanceState.getString(STATE_SELECTED_ITEM_ID)
         }
 
         loaderManager.initLoader(USER_LOADER_ID, null, loaderCallbacks)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        PrefUtils.registerOnPrefChangeListener(prefListener)
+        refreshSwipeProgress()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        PrefUtils.unregisterOnPrefChangeListener(prefListener)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -105,29 +123,8 @@ class ItemsFragment : Fragment() {
         appBar.setMenuRes(R.menu.people_general, R.menu.people_specific, R.menu.people_merged)
     }
 
-    private fun setupSwipeRefresh() {
-        swipe_refresh.setOnRefreshListener {
-            //TODO
-            context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        //swipeRefreshLayout bug
-        if (swipe_refresh != null) {
-            swipe_refresh.isRefreshing = false
-            swipe_refresh.destroyDrawingCache()
-            swipe_refresh.clearAnimation()
-        }
-    }
-
-    fun showLoading() {
-        swipe_refresh.isRefreshing = true
-    }
-
-    fun hideLoading() {
-        swipe_refresh.isRefreshing = false
+    override fun onRefresh() {
+        context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
     }
 
     fun setSelectedItem(selectedItem: Item) {
@@ -140,6 +137,14 @@ class ItemsFragment : Fragment() {
 
     fun getPreviousItem(): Item? {
         return adapter?.getPreviousItem()
+    }
+
+    private fun refreshSwipeProgress() {
+        if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+            showSwipeProgress()
+        } else {
+            hideSwipeProgress()
+        }
     }
 
     companion object {
