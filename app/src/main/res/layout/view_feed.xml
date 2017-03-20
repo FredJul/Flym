@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:minHeight="50dp"
     android:id="@+id/row"
-    android:background="@drawable/selected_item_background"
+    android:background="@drawable/selected_feed_background"
     android:foreground="?selectableItemBackground">
 
     <ImageView

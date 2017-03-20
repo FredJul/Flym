@@ -1,5 +1,6 @@
 package net.frju.flym.ui.main
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,18 @@ import net.fred.feedex.R
 import net.frju.flym.data.Feed
 import org.jetbrains.anko.onClick
 
+private val SAVE_SELECTED_ID = "SAVE_SELECTED_ID"
+
 class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerViewAdapter<FeedAdapter.FeedGroupViewHolder, FeedAdapter.FeedViewHolder>(groups) {
 
-    var feedClickListener: ((Feed) -> Unit)? = null
+    var feedClickListener: ((View, Feed) -> Unit)? = null
+    var selectedItemId: String? = null
+        set(newValue) {
+            notifyDataSetChanged()
+            field = newValue
+        }
 
-    fun onFeedClick(listener: (Feed) -> Unit) {
+    fun onFeedClick(listener: (View, Feed) -> Unit) {
         feedClickListener = listener
     }
 
@@ -40,6 +48,18 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerViewAdapter<FeedA
         holder.bindItem(group as FeedGroup)
     }
 
+    override fun onSaveInstanceState(savedInstanceState: Bundle?) {
+        super.onSaveInstanceState(savedInstanceState)
+
+        savedInstanceState?.putString(SAVE_SELECTED_ID, selectedItemId)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        selectedItemId = savedInstanceState?.getString(SAVE_SELECTED_ID)
+    }
+
     override fun getItemCount(): Int {
         // Needed to avoid a crash with the lib when there is 0 item
         try {
@@ -54,10 +74,12 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerViewAdapter<FeedA
         : GroupViewHolder(itemView) {
 
         fun bindItem(group: FeedGroup) {
+            itemView.isSelected = selectedItemId == group.feed.id
             itemView.title.text = group.title
             itemView.onClick {
                 if (!group.feed.isGroup) {
-                    feedClickListener?.invoke(group.feed)
+                    selectedItemId = group.feed.id
+                    feedClickListener?.invoke(itemView, group.feed)
                 } else {
                     toggleGroup(group)
                 }
@@ -69,9 +91,11 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerViewAdapter<FeedA
         : ChildViewHolder(itemView) {
 
         fun bindItem(feed: Feed) {
+            itemView.isSelected = selectedItemId == feed.id
             itemView.title.text = feed.title
             itemView.onClick {
-                feedClickListener?.invoke(feed)
+                selectedItemId = feed.id
+                feedClickListener?.invoke(itemView, feed)
             }
         }
     }

@@ -53,7 +53,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             uiThread {
                 feedAdapter = FeedAdapter(feeds)
-                feedAdapter?.onFeedClick { feed ->
+                if (savedInstanceState != null) {
+                    feedAdapter?.onRestoreInstanceState(savedInstanceState)
+                } else {
+                    feedAdapter?.selectedItemId = Feed.UNREAD_ITEMS_ID
+                }
+
+                feedAdapter?.onFeedClick { view, feed ->
                     goToItemsList(feed)
                 }
 
@@ -75,11 +81,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         feedAdapter?.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-        feedAdapter?.onRestoreInstanceState(savedInstanceState)
     }
 
     fun closeDrawer() {
