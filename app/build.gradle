@@ -51,7 +51,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0' // glide does not like the +
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:+'
     compile 'com.github.Tunous:SwipeActionView:+'
-    compile 'com.thoughtbot:expandablerecyclerview:+'
+    compile 'com.bignerdranch.android:expandablerecyclerview:+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     // here the + does not always fetch the last version
 }

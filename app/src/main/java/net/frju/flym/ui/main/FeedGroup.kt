@@ -1,10 +1,16 @@
 package net.frju.flym.ui.main
 
-import android.annotation.SuppressLint
-import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
-
+import com.bignerdranch.expandablerecyclerview.model.Parent
 import net.frju.flym.data.Feed
 
 
-@SuppressLint("ParcelCreator")
-class FeedGroup(val feed: Feed, items: List<Feed>) : ExpandableGroup<Feed>(feed.title, items)
+class FeedGroup(val feed: Feed, val subFeeds: MutableList<Feed>) : Parent<Feed> {
+
+    override fun getChildList(): MutableList<Feed> {
+        return subFeeds
+    }
+
+    override fun isInitiallyExpanded(): Boolean {
+        return false
+    }
+}

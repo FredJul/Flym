@@ -23,7 +23,8 @@ import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, MainNavigator {
 
-    private var feedAdapter: FeedAdapter? = null
+    private val feedGroups = mutableListOf<FeedGroup>()
+    private val feedAdapter = FeedAdapter(feedGroups)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,35 +32,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
 
         nav.layoutManager = LinearLayoutManager(this)
+
         doAsync {
-            val feeds = FEED.select()
+            feedGroups.clear()
+
+            feedGroups.addAll(
+                    FEED.select()
                     .where(Where.field(FEED.IS_GROUP).isTrue.or(Where.field(FEED.GROUP_ID).isEqualTo(null)))
-                    .queryAndInit().map { FeedGroup(it, it.subFeeds ?: listOf()) }.toMutableList()
+                            .queryAndInit().map { FeedGroup(it, it.subFeeds?.toMutableList() ?: mutableListOf()) }
+            )
 
             val unreads = Feed()
             unreads.id = Feed.UNREAD_ITEMS_ID
             unreads.title = getString(R.string.unread_entries)
-            feeds.add(0, FeedGroup(unreads, listOf()))
+            feedGroups.add(0, FeedGroup(unreads, mutableListOf()))
 
             val all = Feed()
             all.id = Feed.ALL_ITEMS_ID
             all.title = getString(R.string.all_entries)
-            feeds.add(1, FeedGroup(all, listOf()))
+            feedGroups.add(1, FeedGroup(all, mutableListOf()))
 
             val favorites = Feed()
             favorites.id = Feed.FAVORITES_ID
             favorites.title = getString(R.string.favorites)
-            feeds.add(2, FeedGroup(favorites, listOf()))
+            feedGroups.add(2, FeedGroup(favorites, mutableListOf()))
 
             uiThread {
-                feedAdapter = FeedAdapter(feeds)
-                if (savedInstanceState != null) {
-                    feedAdapter?.onRestoreInstanceState(savedInstanceState)
-                } else {
-                    feedAdapter?.selectedItemId = Feed.UNREAD_ITEMS_ID
-                }
+                feedAdapter.notifyParentDataSetChanged(true)
 
-                feedAdapter?.onFeedClick { view, feed ->
+                feedAdapter.onFeedClick { view, feed ->
                     goToItemsList(feed)
                     closeDrawer()
                 }
@@ -68,20 +69,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
-        //nav.setNavigationItemSelectedListener(this)
         containers_layout.custom_appbar.setOnNavigationClickListener(View.OnClickListener { toggleDrawer() })
 
         if (savedInstanceState == null) {
-            highlightPeople()
             closeDrawer()
 
             goToItemsList(null)
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        feedAdapter.onRestoreInstanceState(savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        feedAdapter?.onSaveInstanceState(outState)
+        feedAdapter.onSaveInstanceState(outState)
     }
 
     fun closeDrawer() {
@@ -104,23 +108,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    fun highlightPeople() {
-        //nav.setCheckedItem(R.id.menu_main_nav__people)
-    }
-
-    fun highlightFavorites() {
-        //nav.setCheckedItem(R.id.menu_main_nav__favorites)
-    }
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_main_nav__people -> {
-                highlightPeople()
-                closeDrawer()
-
-                goToItemsList(null)
-            }
-
             R.id.menu_main_nav__settings -> {
                 closeDrawer()
 
@@ -168,13 +157,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             return true
         }
         return false
-    }
-
-    private fun clearMaster() {
-        val master = supportFragmentManager.findFragmentByTag(TAG_MASTER)
-        if (master != null) {
-            supportFragmentManager.beginTransaction().remove(master).commit()
-        }
     }
 
     override fun goToItemsList(feed: Feed?) {
