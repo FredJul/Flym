@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
 
         nav.layoutManager = LinearLayoutManager(this)
+        nav.adapter = feedAdapter
 
         doAsync {
             feedGroups.clear()
@@ -64,8 +65,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     goToItemsList(feed)
                     closeDrawer()
                 }
-
-                nav.adapter = feedAdapter
             }
         }
 
