@@ -44,7 +44,7 @@ dependencies {
     compile 'nz.bradcampbell:paperparcel-kotlin:+'
     kapt 'nz.bradcampbell:paperparcel-compiler:+'
 
-    compile 'org.jetbrains.anko:anko-sdk21:+'
+    compile 'org.jetbrains.anko:anko-sdk21:0.9.1'
     compile 'com.einmalfel:earl:+'
     compile 'com.squareup.okhttp3:okhttp:+'
     compile 'org.jsoup:jsoup:+'
