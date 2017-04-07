@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2012-2015 Frederic Julian
+ Copyright (c) 2010-2012 Stefan Handschuh
+ Copyright (c) 2017 Michał Foreiter
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+    <string name="app_name">Flym</string>
+    <string name="about_flym">O Flym</string>
+    <string name="accept">AKCEPTUJ</string>
+    <string name="add_custom_feed">Dodaj źródło lub wyszukaj źródła</string>
+    <string name="add_group_title">Wybierz nazwę grupy</string>
+    <string name="all_entries">Wszystkie wpisy</string>
+    <string name="all_feeds">Wszystkie źródła</string>
+    <string name="blue">Niebieski</string>
+    <string name="cant_open_link">Nie znaleziono aplikacji obsługującej ten link</string>
+    <string name="colon">:</string>
+    <string name="context_menu_delete">Usuń</string>
+    <string name="context_menu_edit">Modyfikuj</string>
+    <string name="context_menu_share_starred">Podziel się wpisami oznaczonymi gwiazdką</string>
+    <string name="copied_clipboard">Skopiowano link</string>
+    <string name="download_and_save">Pobierz i zapisz</string>
+    <string name="drawer_close">Zamknij szufladę nawigacyjną</string>
+    <string name="drawer_open">Otwórz szufladę nawigacyjną</string>
+    <string name="edit_feed_title">Modyfikuj źródło</string>
+    <string name="edit_group_title">Zmień nazwę grupy</string>
+    <string name="error">Błąd</string>
+    <string name="error_external_storage_not_available">Pamięć zewnętrzna (np. Karta pamięci) jest niedostępna.</string>
+    <string name="error_feed_error">Strona internetowa źródła jest niedostępna.</string>
+    <string name="error_feed_export">Eksportowanie nie powiodło się. Upewnij się, że posiadasz podłączoną kartę pamięci.</string>
+    <string name="error_feed_import">Importowanie wybranego pliku nie powiodło się.</string>
+    <string name="error_feed_process">Nie można przetworzyć wybranego źródła.</string>
+    <string name="error_feed_url_exists">Ten adres (źródło) już istnieje</string>
+    <string name="favorites">Oznaczone gwiazdką</string>
+    <string name="feed_filters">ZASADY FILTROWANIA</string>
+    <string name="feed_search">Wyszukiwanie źródeł</string>
+    <string name="feed_title">TYTUŁ</string>
+    <string name="feed_url">Adres URL</string>
+    <string name="feeds">Źródła</string>
+    <string name="file">Plik</string>
+    <string name="filter_add_title">Dodaj zasadę filtrowania</string>
+    <string name="filter_apply_to_content">Zastosuj filtr do zawartości</string>
+    <string name="filter_apply_to_title">Zastosuj filtr do tytułu</string>
+    <string name="filter_delete_title">Usuń filtr</string>
+    <string name="filter_edit_title">Edytuj filtr</string>
+    <string name="filter_is_regex">jest wyrażeniem regularnym</string>
+    <string name="flym_feeds">Artykuły</string>
+    <string name="get_full_text">Pobierz pełny tekst</string>
+    <string name="google_news_business">Biznes</string>
+    <string name="google_news_custom_topic">Wpisz niestandardowy temat</string>
+    <string name="google_news_entertainment">Rozrywka</string>
+    <string name="google_news_health">Zdrowie</string>
+    <string name="google_news_indicator">Wybierz jeden lub więcej tematów do dodania. Niektóre z nich mogą nie być udostępnione przez Google w twoim języku.</string>
+    <string name="undo">Cofnij</string>
+    <string name="unread_entries">Nieprzeczytane</string>
+    <string name="update">Ostatnia aktualizacja</string>
+    <string name="website_or_feed">(adres strony lub źródło)</string>
+    <string name="welcome_title">Witamy w aplikacji Flym. Czy chiałbyś dodać źródło?</string>
+    <string name="transparency">Przezroczystość</string>
+    <string name="google_news_science">Nauka</string>
+    <string name="google_news_sports">Sport</string>
+    <string name="google_news_technology">Technologia</string>
+    <string name="google_news_title">Tematy z Wiadomości Google</string>
+    <string name="google_news_top_stories">Główne wiadomości</string>
+    <string name="google_news_world">Świat</string>
+    <string name="green">Zielony</string>
+    <string name="loading">Ładowanie…</string>
+    <string name="marked_as_read">Oznaczono jako przeczytane</string>
+    <string name="menu_add_feed">Dodaj źródło</string>
+    <string name="menu_add_group">Dodaj grupę</string>
+    <string name="menu_all_read">Oznacz wszystkie jako przeczytane</string>
+    <string name="menu_copy_clipboard">Skopiuj link</string>
+    <string name="menu_export">Eksportuj do pliku OPML</string>
+    <string name="menu_full_screen">Pełny ekran</string>
+    <string name="menu_import">Importuj z pliku OPML</string>
+    <string name="menu_mark_as_unread">Oznacz jako nieprzeczytane</string>
+    <string name="menu_refresh">Odśwież</string>
+    <string name="menu_settings">Ustawienia</string>
+    <string name="menu_share">Udostępnij</string>
+    <string name="menu_star">Oznacz gwiazdką</string>
+    <string name="message_exported_to">Eksportowano do %s.</string>
+    <string name="menu_unstar">Usuń gwiazdkę</string>
+    <string name="network_error">Brak połączenia z internetem</string>
+    <string name="never">Nigdy</string>
+    <string name="new_feed_title">Nowe źródło</string>
+    <string name="no_entries">Brak artykułów</string>
+    <string name="no_feeds">Brak źródeł</string>
+    <string name="no_filters">Brak filtrów</string>
+    <string name="no_result">Brak wyników</string>
+    <string name="open_enclosure">Otwórz zawartość</string>
+    <string name="open_link">Otwórz link</string>
+    <string name="optional">(opcjonalne)</string>
+    <string name="original_text">Pokaż oryginalny tekst</string>
+    <string name="question_delete_feed">Czy na pewno chcesz usunąć to źródło?</string>
+    <string name="question_delete_filter">Czy na pewno chcesz usunąć ten filtr?</string>
+    <string name="question_delete_group">Czy na pewno chcesz usunąć tę grupę i wszystkie zawarte w niej źródła?</string>
+    <string name="red">Czerwony</string>
+    <string name="reject">ODRZUĆ</string>
+    <string name="see_enclosure">Zobacz zawartość</string>
+    <string name="see_link">Otwórz w przeglądarce</string>
+    <string name="select_file">Wybierz plik (Katalog główny karty pamięci)</string>
+    <string name="settings_category_content_presentation">Prezentacja zawartości</string>
+    <string name="settings_category_notifications">Powiadomienia</string>
+    <string name="settings_category_refresh">Automatyczne odświeżanie</string>
+    <string name="settings_display_entries_fullscreen">Wpisy na pełnym ekranie</string>
+    <string name="settings_display_entries_fullscreen_description">Otwórz wpisy automatycznie na pełnym ekranie</string>
+    <string name="settings_display_images">Pokazuj obrazki</string>
+    <string name="settings_display_images_description">Pokazuj obrazki w wpisach</string>
+    <string name="settings_display_oldest_first">Kolejność artykułów</string>
+    <string name="settings_display_oldest_first_description">Najpierw pokazuj najstarsze artykuły</string>
+    <string name="settings_font_size">Rozmiar czcionki</string>
+    <string name="settings_keep_time">Czas przechowywania artykułów</string>
+    <string name="settings_light_theme">Jasny motyw</string>
+    <string name="settings_light_theme_description">Zastosuj jasny motyw</string>
+    <string name="settings_notifications_enabled">Włącz powiadomienia</string>
+    <string name="settings_notifications_enabled_description">Włącz powiadomienia w przypadku nowych artykułów</string>
+    <string name="settings_notifications_light">Dioda LED</string>
+    <string name="settings_notifications_light_description">Włącz diodę powiadomień dla nowych artykułów</string>
+    <string name="settings_notifications_ringtone">Dzwonek</string>
+    <string name="settings_notifications_ringtone_none">Brak</string>
+    <string name="settings_notifications_vibrate">Wibracje</string>
+    <string name="settings_notifications_vibrate_description">Włącz wibracje dla nowych artykułów</string>
+    <string name="settings_preload_image_mode">Pobieraj obrazy przy odświeżaniu źródeł</string>
+    <string name="settings_refresh_enabled">Automatyczne odświeżanie</string>
+    <string name="settings_refresh_enabled_description">Włącz automatyczne odświeżanie</string>
+    <string name="settings_refresh_interval">Odstęp czasu pomiędzy odświeżeniem źródeł</string>
+    <string name="to_group_title">Akcja przesunięcia źródła</string>
+    <string name="settings_widget_background">Tło</string>
+    <string name="settings_widget_background_description">Kolor i przezroczystość tła widżetu</string>
+    <string name="share_favorites_title">Flym: oznaczone gwiazdką</string>
+    <string name="storage_request_explanation">Żeby móc importować lub eksportować źródła z lub do pliku, musisz zezwolić aplikacji na dostęp do pamięci wewnętrznej.</string>
+    <string name="tab_feed_title">Źródło</string>
+    <string name="tab_filters_title">Filtr</string>
+    <string name="tip_sentence">Porada: przesuń w lewo żeby oznaczyć jako przeczytane lub przesuń w prawo żeby oznaczyć gwiazdką</string>
+    <string name="to_group_above">Nad grupę</string>
+    <string name="to_group_into">Do grupy</string>
+    <string name="to_group_message">Możesz umieścić to źródło w tej grupie lub nad tą grupą. Co chcesz zrobić?</string>
+    <string name="settings_refresh_on_open">Odśwież źródła przy otwarciu aplikacji</string>
+    <string name="settings_refresh_on_open_description">Odświeża wszystkie źródła przy otwieraniu aplikacji</string>
+    <string name="settings_refresh_wifi_only">Odświeżaj tylko podczas korzystania z Wi-Fi</string>
+    <string name="settings_refresh_wifi_only_description">Automatyczne odświeżenie nastąpi tylko jeżeli sieć Wi-Fi będzie dostępna</string>
+    <string name="settings_visible_feeds">Widoczne źródła</string>
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Jeden nowy artykuł</item>
+        <item quantity="few">%d nowe artykuły</item>
+        <item quantity="many">%d nowych artykułów</item>
+        <item quantity="other">%d nowych artykułów</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>1 minuta</item>
+        <item>5 minut</item>
+        <item>15 minut</item>
+        <item>30 minut</item>
+        <item>1 godzina</item>
+        <item>2 godziny</item>
+        <item>6 godzin</item>
+        <item>12 godzin</item>
+        <item>1 dzień</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 dzień</item>
+        <item>2 dni</item>
+        <item>4 dni</item>
+        <item>1 tydzień</item>
+        <item>2 tygodnie</item>
+        <item>1 miesiąc</item>
+        <item>2 miesiące</item>
+        <item>3 miesiące</item>
+        <item>Zawsze</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Standardowa</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Nigdy</item>
+        <item>Tylko przez Wi-Fi</item>
+        <item>Zawsze</item>
+    </string-array>
+
+</resources>
