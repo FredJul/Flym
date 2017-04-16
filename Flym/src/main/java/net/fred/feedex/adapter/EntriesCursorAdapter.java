@@ -156,15 +156,19 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 holder.dateTextView.setEnabled(true);
             }
 
-            new Thread() {
-                @Override
-                public void run() {
-                    ContentResolver cr = MainApplication.getContext().getContentResolver();
-                    Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                    cr.update(entryUri, holder.isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
-                }
-            }.start();
+            setReadState(id, holder.isRead);
         }
+    }
+
+    public void setReadState(final long id, final boolean isRead) {
+        new Thread() {
+            @Override
+            public void run() {
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                Uri entryUri = ContentUris.withAppendedId(mUri, id);
+                cr.update(entryUri, isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
+            }
+        }.start();
     }
 
     public void toggleFavoriteState(final long id, View view) {

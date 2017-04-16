@@ -494,7 +494,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                     if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
                         mEntriesCursorAdapter.toggleReadState(id, view);
                         if (EntryColumns.UNREAD_ENTRIES_CONTENT_URI.equals(mCurrentUri)) {
-                            showUndoButton(id, view);
+                            showUndoButton(id);
                         }
                     } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
                         mEntriesCursorAdapter.toggleFavoriteState(id, view);
@@ -521,13 +521,13 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             return mGestureDetector.onTouchEvent(event);
         }
 
-        private void showUndoButton(final long id, final View view) {
+        private void showUndoButton(final long id) {
             Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.coordinator_layout), R.string.marked_as_read, Snackbar.LENGTH_LONG)
                     .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.light_theme_color_primary))
                     .setAction(R.string.undo, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mEntriesCursorAdapter.toggleReadState(id, view);
+                            mEntriesCursorAdapter.setReadState(id, false);
                         }
                     });
             snackbar.getView().setBackgroundResource(R.color.material_grey_900);
