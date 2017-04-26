@@ -17,10 +17,6 @@ import net.frju.flym.ui.main.MainNavigator
 import org.jetbrains.annotations.NotNull
 
 
-/**
- * Created by Lucas on 02/01/2017.
- */
-
 class ItemDetailsFragment : Fragment() {
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }

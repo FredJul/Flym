@@ -3,10 +3,6 @@ package net.frju.flym.ui.main
 import net.frju.flym.data.Feed
 import net.frju.flym.data.Item
 
-/**
- * Created by Lucas on 02/01/2017.
- */
-
 interface MainNavigator {
 
     enum class State {

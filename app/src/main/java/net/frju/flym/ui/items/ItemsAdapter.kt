@@ -6,10 +6,6 @@ import net.frju.androidquery.operation.function.CursorResult
 import net.frju.flym.data.Item
 import org.jetbrains.anko.onClick
 
-/**
- * Created by Lucas on 04/01/2017.
- */
-
 class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ItemViewHolder>() {
 
     var selectedItemId: String? = null

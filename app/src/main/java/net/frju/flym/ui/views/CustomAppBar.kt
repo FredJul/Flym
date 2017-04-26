@@ -12,10 +12,6 @@ import kotlinx.android.synthetic.main.view_main_toolbar.view.*
 import net.fred.feedex.R
 import net.frju.flym.ui.main.MainNavigator
 
-/**
- * Created by Lucas on 02/01/2017.
- */
-
 class CustomAppBar : AppBarLayout {
 
     private var state: MainNavigator.State? = null

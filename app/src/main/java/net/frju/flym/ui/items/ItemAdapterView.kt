@@ -13,10 +13,6 @@ import net.fred.feedex.R
 import net.frju.flym.data.Item
 import net.frju.flym.service.FetcherService
 
-/**
- * Created by Lucas on 04/01/2017.
- */
-
 class ItemAdapterView : FrameLayout {
 
     private var item: Item? = null

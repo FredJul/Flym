@@ -22,10 +22,6 @@ import net.frju.flym.ui.main.MainNavigator
 import net.frju.parentalcontrol.utils.PrefUtils
 
 
-/**
- * Created by Lucas on 04/01/2017.
- */
-
 class ItemsFragment : SwipeRefreshFragment() {
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }

@@ -23,10 +23,6 @@ import net.fred.feedex.R
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.onLaidOut
 
-/**
- * Created by Lucas on 03/01/2017.
- */
-
 class ContainersLayout : FrameLayout {
 
     var state: MainNavigator.State? = null
