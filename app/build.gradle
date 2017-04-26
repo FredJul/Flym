@@ -19,6 +19,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        // if true, stop the gradle build if errors are found
+        abortOnError true
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -29,6 +35,7 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+    ext.androidquery_version = '1.5.5'
     kapt "net.frju.androidquery:android-query-preprocessor:${androidquery_version}"
     compile "net.frju.androidquery:android-query:${androidquery_version}"
 
