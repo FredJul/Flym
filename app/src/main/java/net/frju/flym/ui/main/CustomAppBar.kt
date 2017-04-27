@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.annotation.MenuRes
+import android.support.annotation.StringRes
 import android.support.design.widget.AppBarLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -47,6 +48,10 @@ class CustomAppBar : AppBarLayout {
 
     fun setTitle(title: String) {
         toolbar_specific.title = title
+    }
+
+    fun setTitle(@StringRes title: Int) {
+        toolbar_specific.setTitle(title)
     }
 
     fun clearMenu() {
