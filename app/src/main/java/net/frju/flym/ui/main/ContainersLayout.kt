@@ -1,4 +1,4 @@
-package net.frju.flym.ui.views
+package net.frju.flym.ui.main
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -20,7 +20,6 @@ import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.view_main_containers.view.*
 import kotlinx.android.synthetic.main.view_main_toolbar.view.*
 import net.fred.feedex.R
-import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.onLaidOut
 
 class ContainersLayout : FrameLayout {

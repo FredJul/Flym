@@ -1,4 +1,4 @@
-package net.frju.flym.ui.views
+package net.frju.flym.ui.main
 
 import android.content.Context
 import android.os.Bundle
@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import kotlinx.android.synthetic.main.view_main_toolbar.view.*
 import net.fred.feedex.R
-import net.frju.flym.ui.main.MainNavigator
 
 class CustomAppBar : AppBarLayout {
 
@@ -75,7 +74,7 @@ class CustomAppBar : AppBarLayout {
     override fun onSaveInstanceState(): Parcelable {
         val bundle = Bundle()
         bundle.putParcelable(STATE_SUPER, super.onSaveInstanceState())
-        bundle.putString(STATE_TITLE, toolbar_specific.title as String)
+        bundle.putString(STATE_TITLE, toolbar_specific.title as String?)
         bundle.putString(STATE_TOOLBAR_STATE, state?.name)
         return bundle
     }

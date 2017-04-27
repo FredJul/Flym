@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <net.frju.flym.ui.views.ContainersLayout
+    <net.frju.flym.ui.main.ContainersLayout
         android:id="@+id/containers_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
