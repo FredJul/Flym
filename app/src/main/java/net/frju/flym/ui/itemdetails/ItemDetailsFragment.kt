@@ -12,7 +12,6 @@ import me.thanel.swipeactionview.SwipeActionView
 import me.thanel.swipeactionview.SwipeGestureListener
 import net.fred.feedex.R
 import net.frju.flym.data.Item
-import net.frju.flym.ui.main.MainActivity
 import net.frju.flym.ui.main.MainNavigator
 import org.jetbrains.annotations.NotNull
 
@@ -79,7 +78,7 @@ class ItemDetailsFragment : Fragment() {
     private fun setupToolbar() {
         toolbar.inflateMenu(R.menu.person_details)
 
-        if (!(activity as MainActivity).containers_layout.hasTwoColumns()) {
+        if (!activity.containers_layout.hasTwoColumns()) {
             toolbar.setNavigationIcon(R.drawable.ic_back_24dp)
             toolbar.setNavigationOnClickListener { activity.onBackPressed() }
         }

@@ -17,7 +17,6 @@ import net.frju.androidquery.operation.function.CursorResult
 import net.frju.flym.data.Feed
 import net.frju.flym.data.Item
 import net.frju.flym.service.FetcherService
-import net.frju.flym.ui.main.MainActivity
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.parentalcontrol.utils.PrefUtils
 
@@ -113,7 +112,7 @@ class ItemsFragment : SwipeRefreshFragment() {
     }
 
     private fun setupToolbar() {
-        val appBar = (activity as MainActivity).containers_layout.custom_appbar
+        val appBar = activity.containers_layout.custom_appbar
         appBar.setTitle(R.string.fragment_people__title)
         appBar.setMenuRes(R.menu.people_general, R.menu.people_specific, R.menu.people_merged)
     }
