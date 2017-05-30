@@ -19,11 +19,18 @@
 package net.fred.feedex.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.security.ProviderInstaller;
 
 import net.fred.feedex.Constants;
 
@@ -38,6 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        updateAndroidSecurityProvider(this);
         mDecorView = getWindow().getDecorView();
 
         // For immersive mode
@@ -171,6 +179,20 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (mOnFullScreenListener != null) {
                 mOnFullScreenListener.onFullScreenDisabled();
             }
+        }
+    }
+
+    // Fix to allow Android < 5.0 to access HTTPS feeds
+    // For more info see https://stackoverflow.com/a/36892715
+    private void updateAndroidSecurityProvider(Activity callingActivity) {
+        try {
+            ProviderInstaller.installIfNeeded(this);
+        } catch (GooglePlayServicesRepairableException e) {
+            // Thrown when Google Play Services is not installed, up-to-date, or enabled
+            // Show dialog to allow users to install, update, or otherwise enable Google Play services.
+            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), callingActivity, 0);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            Log.e("SecurityException", "Google Play Services not available.");
         }
     }
 
