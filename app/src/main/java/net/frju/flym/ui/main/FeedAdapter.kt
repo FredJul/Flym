@@ -10,7 +10,7 @@ import com.bignerdranch.expandablerecyclerview.ParentViewHolder
 import kotlinx.android.synthetic.main.view_feed.view.*
 import net.fred.feedex.R
 import net.frju.flym.data.Feed
-import org.jetbrains.anko.onClick
+import org.jetbrains.anko.sdk21.coroutines.onClick
 
 
 private val STATE_SELECTED_ID = "STATE_SELECTED_ID"

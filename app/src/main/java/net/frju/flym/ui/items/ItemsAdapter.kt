@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import net.frju.androidquery.operation.function.CursorResult
 import net.frju.flym.data.Item
-import org.jetbrains.anko.onClick
+import org.jetbrains.anko.sdk21.coroutines.onClick
 
 class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ItemViewHolder>() {
 
@@ -44,13 +44,13 @@ class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ItemViewHolder>() {
     }
 
     fun getPreviousItem(): Item? {
-        if (items != null) {
-            for (i in 0..items!!.count - 1) {
-                if (items!![i]!!.id == selectedItemId) {
+        items?.let {
+            for (i in 0..it.count - 1) {
+                if (it[i]!!.id == selectedItemId) {
                     if (i == 0) {
                         return null
                     }
-                    return items!!.get(i - 1)
+                    return it.get(i - 1)
                 }
             }
         }
@@ -59,13 +59,13 @@ class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ItemViewHolder>() {
     }
 
     fun getNextItem(): Item? {
-        if (items != null) {
-            for (i in 0..items!!.count - 1) {
-                if (items!![i]!!.id == selectedItemId) {
+        items?.let {
+            for (i in 0..it.count - 1) {
+                if (it[i]!!.id == selectedItemId) {
                     if (i == items!!.count - 1) {
                         return null
                     }
-                    return items!!.get(i + 1)
+                    return it.get(i + 1)
                 }
             }
         }

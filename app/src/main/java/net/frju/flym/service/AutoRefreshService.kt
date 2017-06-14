@@ -88,7 +88,7 @@ class AutoRefreshService : JobService() {
             }
 
             if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
-                val builder = JobInfo.Builder(JOB_ID, ComponentName(context, FetcherService::class.java))
+                val builder = JobInfo.Builder(JOB_ID, ComponentName(context, AutoRefreshService::class.java))
                         .setPeriodic(time)
                         .setPersisted(true)
                         .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)

@@ -6,6 +6,7 @@ import android.os.Parcelable
 import android.support.annotation.MenuRes
 import android.support.annotation.StringRes
 import android.support.design.widget.AppBarLayout
+import android.support.v7.widget.Toolbar
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -44,6 +45,11 @@ class CustomAppBar : AppBarLayout {
         } else {
             toolbar_specific.setNavigationOnClickListener(onNavigationClickListener)
         }
+    }
+
+    fun setOnMenuItemClickListener(listener: Toolbar.OnMenuItemClickListener) {
+        toolbar_general?.setOnMenuItemClickListener(listener)
+        toolbar_specific?.setOnMenuItemClickListener(listener)
     }
 
     fun setTitle(title: String) {

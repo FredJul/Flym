@@ -225,7 +225,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                         .build()
                 HTTP_CLIENT.newCall(request).execute().use {
 
-                    var mobilizedHtml = ArticleTextExtractor.extractContent(it.body().byteStream(), contentIndicator)
+                    var mobilizedHtml = ArticleTextExtractor.extractContent(it.body()!!.byteStream(), contentIndicator)
                     if (mobilizedHtml != null) {
                         mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, getBaseUrl(item.link!!))
 
@@ -341,7 +341,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         var response: Response? = null
         try {
             response = HTTP_CLIENT.newCall(request).execute()
-            val earlFeed = EarlParser.parseOrThrow(response.body().byteStream(), 0)
+            val earlFeed = EarlParser.parseOrThrow(response.body()!!.byteStream(), 0)
             earlFeed.items.forEach {
                 val newItem = it.toDbFormat(feed)
                 val updateValues = it.toUpdateValues()
@@ -389,7 +389,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             try {
                 response = HTTP_CLIENT.newCall(request).execute()
                 val fileOutput = FileOutputStream(tempImgPath)
-                val inputStream = response.body().byteStream()
+                val inputStream = response.body()!!.byteStream()
 
                 val buffer = ByteArray(2048)
                 var bufferLength = inputStream.read(buffer)
@@ -450,7 +450,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 .url(url.protocol + PROTOCOL_SEPARATOR + url.host + FILE_FAVICON)
                 .build()
         HTTP_CLIENT.newCall(request).execute().use {
-            val iconBytes = it.body().bytes()
+            val iconBytes = it.body()!!.bytes()
             if (iconBytes != null && iconBytes.isNotEmpty() && iconBytes.size < 100000) {
                 val values = ContentValues()
                 values.put(FEED.FAVICON, iconBytes)
@@ -499,7 +499,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 "[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>",
                 Pattern.CASE_INSENSITIVE)
 
-        val IMAGE_FOLDER_FILE = File(App.context?.cacheDir, "images/")
+        val IMAGE_FOLDER_FILE = File(App.context.cacheDir, "images/")
         val IMAGE_FOLDER = IMAGE_FOLDER_FILE.absolutePath + '/'
         val TEMP_PREFIX = "TEMP__"
         val ID_SEPARATOR = "__"
@@ -518,10 +518,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
             var downloadPictures = false
             if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
-                if (PrefUtils.PRELOAD_IMAGE_MODE__ALWAYS.equals(fetchPictureMode)) {
+                if (PrefUtils.PRELOAD_IMAGE_MODE__ALWAYS == fetchPictureMode) {
                     downloadPictures = true
-                } else if (PrefUtils.PRELOAD_IMAGE_MODE__WIFI_ONLY.equals(fetchPictureMode)) {
-                    val ni = (App.context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
+                } else if (PrefUtils.PRELOAD_IMAGE_MODE__WIFI_ONLY == fetchPictureMode) {
+                    val ni = (App.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
                     if (ni != null && ni.type == ConnectivityManager.TYPE_WIFI) {
                         downloadPictures = true
                     }
