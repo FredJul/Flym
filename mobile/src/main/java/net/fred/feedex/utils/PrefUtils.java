@@ -44,13 +44,27 @@ public class PrefUtils {
 
     public static final String LIGHT_THEME = "lighttheme";
     public static final String DISPLAY_IMAGES = "display_images";
+    public static final String FULL_SCREEN_STATUSBAR_VISIBLE = "full_screen_statusbar_visible";
     public static final String PRELOAD_IMAGE_MODE = "preload_image_mode";
     public static final String DISPLAY_OLDEST_FIRST = "display_oldest_first";
     public static final String DISPLAY_ENTRIES_FULLSCREEN = "display_entries_fullscreen";
+    public static final String ENTRY_FONT_BOLD = "entry_font_bold";
+    public static final String TEXT_COLOR_BRIGHTNESS = "text_color_brightness";
+    public static final String MAX_IMAGE_DOWNLOAD_COUNT = "max_image_download_count";
+    public static final String LAST_ENTRY_URI = "last_entry_uri";
+    public static final String LAST_ENTRY_SCROLL_Y = "last_entry_scroll_y";
+    public static final String LAST_ENTRY_ID = "last_entry_id";
+
+
+
 
     public static final String KEEP_TIME = "keeptime";
 
     public static final String FONT_SIZE = "fontsize";
+
+    public static int getImageDownloadCount() {
+        return Integer.parseInt( PrefUtils.getString(PrefUtils.MAX_IMAGE_DOWNLOAD_COUNT, "0") );
+    }
 
     public static boolean getBoolean(String key, boolean defValue) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());

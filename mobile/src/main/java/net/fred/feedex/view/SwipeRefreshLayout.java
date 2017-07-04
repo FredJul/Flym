@@ -463,6 +463,7 @@ public class SwipeRefreshLayout extends ViewGroup {
      */
     public interface OnRefreshListener {
         void onRefresh();
+        void refreshSwipeProgress();
     }
 
     /**

@@ -2,20 +2,21 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "net.fred.feedex"
-        minSdkVersion 15
+        minSdkVersion 10
         targetSdkVersion 23
         versionCode 61
-        versionName "1.9.4"
+        versionName "1.10.1"
     }
 
     lintOptions {
         // if true, stop the gradle build if errors are found
         abortOnError true
     }
+
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -61,12 +62,12 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //wearApp project(':wear')
-    compile 'com.android.support:appcompat-v7:23.3.+'
-    compile 'com.android.support:design:23.3.+'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.2.1'
     compile 'com.google.android.gms:play-services-gcm:+'
     //compile 'com.google.android.gms:play-services-wearable:+'
     compile 'org.jsoup:jsoup:+'
     compile 'com.github.bumptech.glide:glide:+'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:+'
-    compile 'com.squareup.okhttp3:okhttp-urlconnection:+'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:+'
 }

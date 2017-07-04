@@ -19,6 +19,11 @@
 
 package net.fred.feedex.utils;
 
+import android.os.Environment;
+import android.widget.Toast;
+
+import net.fred.feedex.MainApplication;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,4 +41,21 @@ public class FileUtils {
         inStream.close();
         outStream.close();
     }
+
+    public static File GetFolder() {
+        File result = new File(Environment.getExternalStorageDirectory(), "feedex/");
+        if ( !result.exists() )
+            if ( !result.mkdirs() )
+                Toast.makeText(MainApplication.getContext(), "Cannot create dir " + result.getAbsolutePath(), Toast.LENGTH_LONG ).show();
+        return result;
+    }
+
+    public static File GetImagesFolder() {
+        File result = new File(GetFolder(), "images/");
+        if ( !result.exists() )
+            if ( !result.mkdirs() )
+                Toast.makeText(MainApplication.getContext(), "Cannot create dir " + result.getAbsolutePath(), Toast.LENGTH_LONG ).show();
+        return result;
+    }
+
 }

@@ -81,6 +81,15 @@ public class FeedData {
         return values;
     }
 
+    public static ContentValues getFavoriteContentValues( boolean favorite ) {
+        ContentValues values = new ContentValues();
+        if ( favorite )
+            values.put(EntryColumns.IS_FAVORITE, 1);
+        else
+            values.putNull(EntryColumns.IS_FAVORITE);
+        return values;
+    }
+
     public static class FeedColumns implements BaseColumns {
         public static final String TABLE_NAME = "feeds";
 
@@ -95,6 +104,8 @@ public class FeedData {
         public static final String ERROR = "error";
         public static final String PRIORITY = "priority";
         public static final String FETCH_MODE = "fetchmode";
+        public static final String SHOW_TEXT_IN_ENTRY_LIST = "show_text_in_entry_list";
+        public static final String IS_GROUP_EXPANDED = "is_group_expanded";
         public static final String[] PROJECTION_ID = new String[]{FeedColumns._ID};
         public static final String[] PROJECTION_GROUP_ID = new String[]{FeedColumns.GROUP_ID};
         public static final String[] PROJECTION_PRIORITY = new String[]{FeedColumns.PRIORITY};
@@ -109,7 +120,7 @@ public class FeedData {
 
         public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {URL, TYPE_TEXT_UNIQUE}, {NAME, TYPE_TEXT}, {IS_GROUP, TYPE_BOOLEAN},
                 {GROUP_ID, TYPE_EXTERNAL_ID}, {LAST_UPDATE, TYPE_DATE_TIME}, {REAL_LAST_UPDATE, TYPE_DATE_TIME}, {RETRIEVE_FULLTEXT, TYPE_BOOLEAN},
-                {ICON, "BLOB"}, {ERROR, TYPE_TEXT}, {PRIORITY, TYPE_INT}, {FETCH_MODE, TYPE_INT}};
+                {ICON, "BLOB"}, {ERROR, TYPE_TEXT}, {PRIORITY, TYPE_INT}, {FETCH_MODE, TYPE_INT}, {SHOW_TEXT_IN_ENTRY_LIST, TYPE_BOOLEAN}, {IS_GROUP_EXPANDED, TYPE_BOOLEAN}};
 
         public static Uri GROUPS_CONTENT_URI(String groupId) {
             return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId);
@@ -186,6 +197,10 @@ public class FeedData {
         public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {FEED_ID, TYPE_EXTERNAL_ID}, {TITLE, TYPE_TEXT},
                 {ABSTRACT, TYPE_TEXT}, {MOBILIZED_HTML, TYPE_TEXT}, {DATE, TYPE_DATE_TIME}, {FETCH_DATE, TYPE_DATE_TIME}, {IS_READ, TYPE_BOOLEAN}, {LINK, TYPE_TEXT},
                 {IS_FAVORITE, TYPE_BOOLEAN}, {ENCLOSURE, TYPE_TEXT}, {GUID, TYPE_TEXT}, {AUTHOR, TYPE_TEXT}, {IMAGE_URL, TYPE_TEXT}};
+
+        public static Uri UNREAD_ENTRIES_FOR_FEED_CONTENT_URI(long feedId) {
+            return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/unread_entries");
+        }
 
         public static Uri ENTRIES_FOR_FEED_CONTENT_URI(long feedId) {
             return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/entries");

@@ -23,7 +23,7 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="app_name">Flym</string>
+    <string name="app_name">Handy Reader </string>
     <string name="about_flym">About Flym</string>
     <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
     <string name="never">never</string>
@@ -109,11 +109,20 @@
     <string name="menu_unstar">Unstar</string>
     <string name="menu_share">Share</string>
     <string name="menu_full_screen">Full screen</string>
+    <string name="menu_font_bold">Full screen</string>
     <string name="menu_copy_clipboard">Copy link</string>
+    <string name="menu_cancel_refresh">Cancel update</string>
+    <string name="menu_delete_all">Delete all</string>
+    <string name="menu_toogle_unread_all">Unread|All</string>
+    <string name="menu_load_all_images">Load all images</string>
+    <string name="menu_mark_as_favorite">Mark as favorite</string>
+    <string name="menu_mark_as_unfavorite">Mark as favorite</string>
     <string name="menu_mark_as_unread">Mark as unread</string>
+    <string name="menu_reload_full_text">Reload full text</string>
     <string name="share_favorites_title">Flym: starred entries</string>
     <string name="copied_clipboard">Link copied</string>
     <string name="get_full_text">Retrieve the full text</string>
+    <string name="show_text_in_entry_list">Show text in entry list</string>
     <string name="original_text">Show original text</string>
     <string name="see_enclosure">See enclosure</string>
     <string name="see_link">See in browser</string>
@@ -162,6 +171,8 @@
     <string name="settings_refresh_on_open_description">Refreshes all feeds after opening the application</string>
     <string name="settings_refresh_wifi_only">Refresh only over Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Automatic refresh will only be done if Wi-Fi connection is available</string>
+    <string name="settings_display_text_color">Text color</string>
+    <string name="settings_max_image_download_count">Max image download count</string>
     <string name="settings_visible_feeds">Visible feeds</string>
     <string name="settings_widget_background">Background</string>
     <string name="settings_widget_background_description">Color and transparency of the widget background</string>

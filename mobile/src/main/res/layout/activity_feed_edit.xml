@@ -82,6 +82,14 @@
                         android:layout_below="@+id/feed_title"
                         android:layout_marginRight="10dp"
                         android:text="@string/get_full_text"/>
+                    <CheckBox
+                        android:id="@+id/show_text_in_entry_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/retrieve_fulltext"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/show_text_in_entry_list"/>
                 </RelativeLayout>
 
                 <RelativeLayout

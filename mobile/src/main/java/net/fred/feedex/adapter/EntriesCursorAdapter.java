@@ -48,12 +48,15 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
@@ -67,44 +70,76 @@ import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
+import net.fred.feedex.utils.Dog;
+import net.fred.feedex.utils.HtmlUtils;
 import net.fred.feedex.utils.NetworkUtils;
 import net.fred.feedex.utils.StringUtils;
+
+import org.jsoup.examples.HtmlToPlainText;
+
+import java.util.ArrayList;
 
 public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     private final Uri mUri;
+    private final Context mContext;
     private final boolean mShowFeedInfo;
-    private int mIdPos, mTitlePos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mFeedIdPos, mFeedNamePos;
+    private final boolean mShowEntryText;
+    private static final ArrayList<Long> mMarkAsReadList = new ArrayList<Long>();
 
-    public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo) {
+    private int mIdPos, mTitlePos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mMobilizedPos, mFeedIdPos, mFeedNamePos, mAbstractPos ;
+
+    public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo, boolean showEntryText) {
         super(context, R.layout.item_entry_list, cursor, 0);
+        mContext = context;
         mUri = uri;
         mShowFeedInfo = showFeedInfo;
+        mShowEntryText = showEntryText;
 
         reinit(cursor);
     }
 
     @Override
-    public void bindView(View view, final Context context, Cursor cursor) {
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return super.getView(position, convertView, parent);
+    }
+
+    @Override
+    public void bindView(final View view, final Context context, Cursor cursor) {
+
+        view.findViewById(R.id.text2hor).setVisibility(View.GONE);
+        view.findViewById(android.R.id.text2).setVisibility(View.GONE);
+
         if (view.getTag(R.id.holder) == null) {
             ViewHolder holder = new ViewHolder();
             holder.titleTextView = (TextView) view.findViewById(android.R.id.text1);
-            holder.dateTextView = (TextView) view.findViewById(android.R.id.text2);
+            holder.textTextView = (TextView) view.findViewById(R.id.textSource);
+            if ( mShowEntryText )
+                holder.dateTextView = (TextView) view.findViewById(R.id.text2hor);
+            else
+                holder.dateTextView = (TextView) view.findViewById(android.R.id.text2);
             holder.mainImgView = (ImageView) view.findViewById(R.id.main_icon);
             holder.starImgView = (ImageView) view.findViewById(R.id.favorite_icon);
+            holder.mobilizedImgView = (ImageView) view.findViewById(R.id.mobilized_icon);
+            holder.readImgView = (ImageView) view.findViewById(R.id.read_icon);
+            holder.textLayout = (LinearLayout)view.findViewById(R.id.textLayout);
+
             view.setTag(R.id.holder, holder);
         }
 
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
 
+        holder.dateTextView.setVisibility(View.VISIBLE);
+
         String titleText = cursor.getString(mTitlePos);
         holder.titleTextView.setText(titleText);
 
         final long feedId = cursor.getLong(mFeedIdPos);
+        final long entryId = cursor.getLong(mIdPos);
         String feedName = cursor.getString(mFeedNamePos);
 
         String mainImgUrl = cursor.getString(mMainImgPos);
-        mainImgUrl = TextUtils.isEmpty(mainImgUrl) ? null : NetworkUtils.getDownloadedOrDistantImageUrl(cursor.getLong(mIdPos), mainImgUrl);
+        mainImgUrl = TextUtils.isEmpty(mainImgUrl) ? null : NetworkUtils.getDownloadedOrDistantImageUrl(entryId, mainImgUrl);
 
         ColorGenerator generator = ColorGenerator.DEFAULT;
         int color = generator.getColor(feedId); // The color is specific to the feedId (which shouldn't change)
@@ -119,7 +154,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         holder.isFavorite = cursor.getInt(mFavoritePos) == 1;
 
-        holder.starImgView.setVisibility(holder.isFavorite ? View.VISIBLE : View.INVISIBLE);
+        holder.isMobilized = !cursor.isNull(mMobilizedPos);
 
         if (mShowFeedInfo && mFeedNamePos > -1) {
             if (feedName != null) {
@@ -140,6 +175,67 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.dateTextView.setEnabled(false);
             holder.isRead = true;
         }
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (feedId >= 0) { // should not happen, but I had a crash with this on PlayStore...
+                    mContext.startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, entryId)));
+                }
+            }
+        };
+
+        holder.textLayout.setOnClickListener( listener );
+        //holder.textTextView.setOnClickListener( listener );
+
+        //holder.starImgView.setVisibility(holder.isFavorite ? View.VISIBLE : View.INVISIBLE);
+        UpdateStarImgView(holder);
+        holder.starImgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFavoriteState(entryId, view);
+            }
+        });
+
+        holder.mobilizedImgView.setVisibility(holder.isMobilized ? View.VISIBLE : View.INVISIBLE);
+
+        UpdaterReadImgView(holder);
+        holder.readImgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleReadState(entryId, view);
+            }
+        });
+
+        if ( mShowEntryText ) {
+            holder.textTextView.setVisibility(View.VISIBLE);
+            holder.textTextView.setText( Html.fromHtml(cursor.getString(mAbstractPos).toString() ) );
+            if ( !holder.isRead ) {
+                //SetIsRead(entryId, true, 100 * 1000);
+                if ( holder.entryID != -1 ){
+                    synchronized ( mMarkAsReadList ) {
+                        if ( !mMarkAsReadList.contains(holder.entryID)) {
+                            mMarkAsReadList.add(holder.entryID);
+                            Dog.i("mMarkAsReadList.add " + holder.entryID);
+                        }
+                    }
+                }
+                holder.entryID = entryId;
+
+            }
+            holder.textTextView.setEnabled(!holder.isRead);
+        } else
+            holder.textTextView.setVisibility(View.GONE);
+
+
+
+    }
+
+    private void UpdateStarImgView(ViewHolder holder) {
+        holder.starImgView.setImageResource(holder.isFavorite ? R.drawable.star_yellow: R.drawable.star_empty_gray );
+    }
+    private void UpdaterReadImgView(ViewHolder holder) {
+        holder.readImgView.setImageResource(holder.isRead ? R.drawable.rounded_checbox_gray : R.drawable.rounded_empty_gray);
     }
 
     public void toggleReadState(final long id, View view) {
@@ -155,16 +251,56 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 holder.titleTextView.setEnabled(true);
                 holder.dateTextView.setEnabled(true);
             }
+            //UpdaterReadImgView( holder );
 
-            new Thread() {
-                @Override
-                public void run() {
-                    ContentResolver cr = MainApplication.getContext().getContentResolver();
-                    Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                    cr.update(entryUri, holder.isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
-                }
-            }.start();
+
+            SetIsRead(id, holder.isRead, 0);
         }
+    }
+
+    public void SetIsRead(final long id, final boolean isRead, final int sleepMsec ) {
+        new Thread() {
+            @Override
+            public void run() {
+
+                try {
+                    if (sleepMsec > 0)
+                        sleep(sleepMsec);
+                } catch( InterruptedException e ) {
+
+                }
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                Uri entryUri = ContentUris.withAppendedId(mUri, id);
+                cr.update(entryUri, isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
+            }
+        }.start();
+    }
+
+    public void SetIsReadMakredList() {
+        if ( !mMarkAsReadList.isEmpty() ) {
+            Dog.i("SetIsReadMakredList()");
+            new MarkAsRadThread( mUri ).start();
+        }
+    }
+
+    class MarkAsRadThread extends Thread  {
+        private final Uri mFeedUri;
+
+        public MarkAsRadThread( Uri feedUri ) {
+            mFeedUri = feedUri;
+        }
+        @Override
+        public void run() {
+            synchronized (mMarkAsReadList) {
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                for (Long id : mMarkAsReadList) {
+                    Uri entryUri = ContentUris.withAppendedId(mFeedUri, id);
+                    cr.update(entryUri, FeedData.getReadContentValues(), null, null);
+                }
+                mMarkAsReadList.clear();
+            }
+        }
+
     }
 
     public void toggleFavoriteState(final long id, View view) {
@@ -172,12 +308,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         if (holder != null) { // should not happen, but I had a crash with this on PlayStore...
             holder.isFavorite = !holder.isFavorite;
-
-            if (holder.isFavorite) {
-                holder.starImgView.setVisibility(View.VISIBLE);
-            } else {
-                holder.starImgView.setVisibility(View.INVISIBLE);
-            }
+            //UpdateStarImgView(holder);
 
             new Thread() {
                 @Override
@@ -190,17 +321,21 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                     cr.update(entryUri, values, null, null);
                 }
             }.start();
+
+
         }
     }
 
     @Override
     public void changeCursor(Cursor cursor) {
+        SetIsReadMakredList();
         reinit(cursor);
         super.changeCursor(cursor);
     }
 
     @Override
     public Cursor swapCursor(Cursor newCursor) {
+        SetIsReadMakredList();
         reinit(newCursor);
         return super.swapCursor(newCursor);
     }
@@ -225,6 +360,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             mDatePos = cursor.getColumnIndex(EntryColumns.DATE);
             mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
             mFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
+            mMobilizedPos = cursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
+            mAbstractPos = cursor.getColumnIndex(EntryColumns.ABSTRACT);
             mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
             mFeedIdPos = cursor.getColumnIndex(EntryColumns.FEED_ID);
         }
@@ -232,9 +369,23 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     private static class ViewHolder {
         public TextView titleTextView;
+        public TextView textTextView;
         public TextView dateTextView;
         public ImageView mainImgView;
         public ImageView starImgView;
-        public boolean isRead, isFavorite;
+        public ImageView mobilizedImgView;
+        public ImageView readImgView;
+        public LinearLayout textLayout;
+        public boolean isRead, isFavorite, isMobilized;
+        public long entryID = -1;
+    }
+
+    public int GetFirstUnReadPos() {
+        for (int i = 0; i < getCount(); i++) {
+            Cursor cursor = (Cursor) getItem(i);
+            if ( cursor.isNull( mIsReadPos ) )
+                return i;
+        }
+        return -1;
     }
 }

@@ -19,12 +19,10 @@
 
 package net.fred.feedex.utils;
 
-import android.content.Context;
-import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import net.fred.feedex.Constants;
-import net.fred.feedex.MainApplication;
 import net.fred.feedex.service.FetcherService;
 
 import org.jsoup.Jsoup;
@@ -44,7 +42,7 @@ public class HtmlUtils {
             .addAttributes("source", "src", "type")
             .addAttributes("track", "src", "kind", "srclang", "label");
 
-    private static final String URL_SPACE = "%20";
+    public static final String URL_SPACE = "%20";
 
     private static final Pattern IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
     private static final Pattern ADS_PATTERN = Pattern.compile("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", Pattern.CASE_INSENSITIVE);
@@ -56,6 +54,7 @@ public class HtmlUtils {
     private static final Pattern END_BR_PATTERN = Pattern.compile("(\\s*<br\\s*[/]*>\\s*)*$", Pattern.CASE_INSENSITIVE);
     private static final Pattern MULTIPLE_BR_PATTERN = Pattern.compile("(\\s*<br\\s*[/]*>\\s*){3,}", Pattern.CASE_INSENSITIVE);
     private static final Pattern EMPTY_LINK_PATTERN = Pattern.compile("<a\\s+[^>]*></a>", Pattern.CASE_INSENSITIVE);
+    //public static boolean mIsDownloadingImagesForEntryView = false;
 
 
     public static String improveHtmlContent(String content, String baseUri) {
@@ -91,11 +90,14 @@ public class HtmlUtils {
 
         if (!TextUtils.isEmpty(content)) {
             Matcher matcher = IMG_PATTERN.matcher(content);
-
-            while (matcher.find()) {
+            int index = 0;
+            while (matcher.find() && ( ( index < FetcherService.mMaxImageDownloadCount ) || ( FetcherService.mMaxImageDownloadCount == 0 ) ) ) {
                 images.add(matcher.group(1).replace(" ", URL_SPACE));
+                index++;
             }
+            FetcherService.mMaxImageDownloadCount = PrefUtils.getImageDownloadCount();
         }
+
 
         return images;
     }
@@ -103,35 +105,58 @@ public class HtmlUtils {
     public static String replaceImageURLs(String content, final long entryId) {
 
         if (!TextUtils.isEmpty(content)) {
-            boolean needDownloadPictures = NetworkUtils.needDownloadPictures();
+            boolean needDownloadPictures = PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true);//NetworkUtils.needDownloadPictures();
             final ArrayList<String> imagesToDl = new ArrayList<>();
 
             Matcher matcher = IMG_PATTERN.matcher(content);
-            while (matcher.find()) {
-                String match = matcher.group(1).replace(" ", URL_SPACE);
-
+            int index = 0;
+            while ( matcher.find()  ) {
+                index++;
+                String match = matcher.group(1);
+                //String match1 = matcher.group(1).replace(" ", URL_SPACE);
                 String imgPath = NetworkUtils.getDownloadedImagePath(entryId, match);
+
                 if (new File(imgPath).exists()) {
                     content = content.replace(match, Constants.FILE_SCHEME + imgPath);
                 } else if (needDownloadPictures) {
-                    imagesToDl.add(match);
+                    if ( ( index < FetcherService.mMaxImageDownloadCount ) || ( FetcherService.mMaxImageDownloadCount == 0 ) ) {
+                        imagesToDl.add(match);
+                        content = content.replace(match, Constants.FILE_SCHEME + imgPath);
+                    } else {
+                        String match0 = matcher.group(0);
+                        String html = getButtonHtml("downloadImage('" + match + "')" , "Download image") +
+                                      getButtonHtml("downloadNextImages()" , "Download next " + FetcherService.mMaxImageDownloadCount ) + "<br/>";
+
+                        content = content.replace(match0, html + match0.replace(match, Constants.FILE_SCHEME + imgPath));
+                    }
                 }
             }
 
+            //FetcherService.mMaxImageDownloadCount = PrefUtils.getImageDownloadCount();
+
             // Download the images if needed
-            if (!imagesToDl.isEmpty()) {
+            if (!imagesToDl.isEmpty() ) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        FetcherService.addImagesToDownload(String.valueOf(entryId), imagesToDl);
-                        Context context = MainApplication.getContext();
-                        context.startService(new Intent(context, FetcherService.class).setAction(FetcherService.ACTION_DOWNLOAD_IMAGES));
-                    }
+                    //FetcherService.addImagesToDownload(String.valueOf(entryId), imagesToDl);
+                    FetcherService.downloadEntryImages( entryId, imagesToDl );
+                }
                 }).start();
             }
+
         }
 
         return content;
+    }
+
+    @NonNull
+    private static String getButtonHtml(String methodName, String caption) {
+        final String BUTTON_START = "<i onclick=\"";
+        //final String BUTTON_MIDDLE = " onclick=\"";
+        final String BUTTON_END = "\">" + caption + "   </i>";
+        //String html = BUTTON_SECTION_START + BUTTON_START + "Download image" + BUTTON_MIDDLE + "ImageDownloadJavaScriptObject.downloadImage('" + match + "');" + BUTTON_END + BUTTON_SECTION_END;
+        return BUTTON_START + "ImageDownloadJavaScriptObject." + methodName + ";" + BUTTON_END;
     }
 
     public static String getMainImageURL(String content) {

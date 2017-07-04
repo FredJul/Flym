@@ -123,6 +123,17 @@
             android:key="display_entries_fullscreen"
             android:summary="@string/settings_display_entries_fullscreen_description"
             android:title="@string/settings_display_entries_fullscreen"/>
+
+        <EditTextPreference
+            android:key="text_color_brightness"
+            android:inputType="number"
+            android:title="@string/settings_display_text_color" />
+
+        <EditTextPreference
+            android:key="max_image_download_count"
+            android:inputType="number"
+            android:title="@string/settings_max_image_download_count" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -27,6 +27,7 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Environment;
 import android.text.Html;
 
 import com.squareup.okhttp.OkHttpClient;
@@ -35,6 +36,8 @@ import com.squareup.okhttp.OkUrlFactory;
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
 import net.fred.feedex.provider.FeedData;
+import net.fred.feedex.service.FetcherService;
+import net.fred.feedex.view.EntryView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,9 +53,10 @@ import java.util.regex.Pattern;
 
 public class NetworkUtils {
 
-    public static final File IMAGE_FOLDER_FILE = new File(MainApplication.getContext().getCacheDir(), "images/");
-    public static final String IMAGE_FOLDER = IMAGE_FOLDER_FILE.getAbsolutePath() + '/';
+    //public static final File IMAGE_FOLDER_FILE = new File(MainApplication.getContext().getCacheDir(), "images/");
+    //public static final String IMAGE_FOLDER = IMAGE_FOLDER_FILE.getAbsolutePath() + '/';
     public static final String TEMP_PREFIX = "TEMP__";
+    //public static final File FOLDER = new File(Environment.getExternalStorageDirectory(), "feedex/");
     public static final String ID_SEPARATOR = "__";
 
     private static final String FILE_FAVICON = "/favicon.ico";
@@ -67,44 +71,60 @@ public class NetworkUtils {
         if (dlImgFile.exists()) {
             return Uri.fromFile(dlImgFile).toString();
         } else {
-            return imgUrl;
+            return null;//imgUrl;
         }
     }
 
     public static String getDownloadedImagePath(long entryId, String imgUrl) {
-        return IMAGE_FOLDER + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
+        return FileUtils.GetImagesFolder().getAbsolutePath() + "/" + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl.replace(" ", HtmlUtils.URL_SPACE));
     }
 
     private static String getTempDownloadedImagePath(long entryId, String imgUrl) {
-        return IMAGE_FOLDER + TEMP_PREFIX + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
+        return FileUtils.GetImagesFolder().getAbsolutePath() + "/" + TEMP_PREFIX + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
     }
 
-    public static void downloadImage(long entryId, String imgUrl) throws IOException {
+    public static void downloadImage(final long entryId, String imgUrl, boolean updateGUI ) throws IOException {
+        if ( FetcherService.isCancelRefresh() )
+            return;
         String tempImgPath = getTempDownloadedImagePath(entryId, imgUrl);
         String finalImgPath = getDownloadedImagePath(entryId, imgUrl);
 
         if (!new File(tempImgPath).exists() && !new File(finalImgPath).exists()) {
             HttpURLConnection imgURLConnection = null;
             try {
-                IMAGE_FOLDER_FILE.mkdir(); // create images dir
+                //IMAGE_FOLDER_FILE.mkdir(); // create images dir
 
                 // Compute the real URL (without "&eacute;", ...)
                 String realUrl = Html.fromHtml(imgUrl).toString();
                 imgURLConnection = setupConnection(realUrl);
 
+
+
                 FileOutputStream fileOutput = new FileOutputStream(tempImgPath);
                 InputStream inputStream = imgURLConnection.getInputStream();
 
+                int bytesRecieved = 0;
+                int progressBytes = 0;
+                final int cStep = 1024 * 10;
                 byte[] buffer = new byte[2048];
                 int bufferLength;
-                while ((bufferLength = inputStream.read(buffer)) > 0) {
+                FetcherService.getObservable().ChangeProgress(getProgressText(bytesRecieved));
+                while (!FetcherService.isCancelRefresh() && (bufferLength = inputStream.read(buffer)) > 0) {
                     fileOutput.write(buffer, 0, bufferLength);
+                    bytesRecieved += bufferLength;
+                    progressBytes += bufferLength;
+                    if (progressBytes >= cStep) {
+                        progressBytes = 0;
+                        FetcherService.getObservable().ChangeProgress(getProgressText(bytesRecieved));
+                    }
                 }
+                FetcherService.getObservable().AddBytes( bytesRecieved );
                 fileOutput.flush();
                 fileOutput.close();
                 inputStream.close();
 
                 new File(tempImgPath).renameTo(new File(finalImgPath));
+
             } catch (IOException e) {
                 new File(tempImgPath).delete();
                 throw e;
@@ -114,10 +134,16 @@ public class NetworkUtils {
                 }
             }
         }
+        if ( updateGUI )
+            EntryView.NotifyToUpdate( entryId );
+    }
+
+    private static String getProgressText(int bytesRecieved) {
+        return String.format("%d KB ...", bytesRecieved / 1024);
     }
 
     public static synchronized void deleteEntriesImagesCache(Uri entriesUri, String selection, String[] selectionArgs) {
-        if (IMAGE_FOLDER_FILE.exists()) {
+        if (FileUtils.GetImagesFolder().exists()) {
             PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
 
             Cursor cursor = MainApplication.getContext().getContentResolver().query(entriesUri, FeedData.EntryColumns.PROJECTION_ID, selection, selectionArgs, null);
@@ -125,7 +151,7 @@ public class NetworkUtils {
             while (cursor.moveToNext()) {
                 filenameFilter.setEntryId(cursor.getString(0));
 
-                File[] files = IMAGE_FOLDER_FILE.listFiles(filenameFilter);
+                File[] files = FileUtils.GetImagesFolder().listFiles(filenameFilter);
                 if (files != null) {
                     for (File file : files) {
                         file.delete();
@@ -171,6 +197,7 @@ public class NetworkUtils {
 
         int n;
         while ((n = inputStream.read(buffer)) > 0) {
+            FetcherService.getObservable().AddBytes( n );
             output.write(buffer, 0, n);
         }
 
@@ -221,7 +248,10 @@ public class NetworkUtils {
     }
 
     public static HttpURLConnection setupConnection(URL url) throws IOException {
-        HttpURLConnection connection = new OkUrlFactory(new OkHttpClient()).open(url);
+        HttpURLConnection connection;
+        FetcherService.getObservable().ChangeProgress("setupConnection");
+
+        connection = new OkUrlFactory(new OkHttpClient()).open(url);
 
         connection.setDoInput(true);
         connection.setDoOutput(false);
@@ -234,7 +264,7 @@ public class NetworkUtils {
 
         COOKIE_MANAGER.getCookieStore().removeAll(); // Cookie is important for some sites, but we clean them each times
         connection.connect();
-
+        FetcherService.getObservable().ChangeProgress("");
         return connection;
     }
 

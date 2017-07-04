@@ -19,7 +19,7 @@
         android:id="@+id/menu_full_screen"
         android:icon="@drawable/full_screen"
         android:title="@string/menu_full_screen"
-        app:showAsAction="always"
+        app:showAsAction="never"
         tools:ignore="AlwaysShowAction"/>
     <item
         android:id="@+id/menu_copy_clipboard"
@@ -28,5 +28,27 @@
     <item
         android:id="@+id/menu_mark_as_unread"
         android:title="@string/menu_mark_as_unread"/>
-
+    <item
+        android:id="@+id/menu_mark_as_favorite"
+        android:icon="@drawable/rating_important"
+        android:title="@string/menu_mark_as_favorite"/>
+    <item
+        android:id="@+id/menu_mark_as_unfavorite"
+        android:icon="@drawable/rating_not_important"
+        android:title="@string/menu_mark_as_unfavorite"/>
+    <item
+        android:id="@+id/menu_font_bold"
+        android:title="@string/menu_font_bold"/>
+    <item
+        android:id="@+id/menu_reload_full_text"
+        android:icon="@drawable/refresh"
+        android:title="@string/menu_reload_full_text"/>
+    <item
+        android:id="@+id/menu_load_all_images"
+        android:title="@string/menu_load_all_images"/>
+    <item
+        android:id="@+id/menu_cancel_refresh"
+        android:icon="@drawable/ic_action_cancel"
+        app:showAsAction="withText"
+        android:title="@string/menu_cancel_refresh"/>
 </menu>

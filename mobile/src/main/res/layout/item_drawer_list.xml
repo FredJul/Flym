@@ -7,10 +7,11 @@
     <!-- icon -->
     <ImageView
         android:id="@android:id/icon"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_centerVertical="true"
-        android:layout_margin="10dp"/>
+        android:layout_margin="1dp"/>
+
 
     <!-- text -->
     <LinearLayout

@@ -10,8 +10,8 @@
 -keep class android.support.v7.widget.SearchView { *; }
 
 # for OkHttp
--dontwarn okhttp3.**
 -dontwarn okio.**
+-dontwarn com.squareup.okhttp.**
 
 # for Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule

@@ -52,6 +52,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.SparseIntArray;
+import android.util.SparseLongArray;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
@@ -74,6 +76,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -402,8 +405,11 @@ public class RssAtomParser extends DefaultHandler {
                     values.put(EntryColumns.IMAGE_URL, mainImageUrl);
                 }
 
+                String improvedAuthor = "";
+                if ( mAuthor != null )
+                    improvedAuthor = mAuthor.toString();
                 // Try to find if the entry is not filtered and need to be processed
-                if (!mFilters.isEntryFiltered(improvedTitle, improvedContent)) {
+                if (!mFilters.isEntryFiltered(improvedTitle, improvedAuthor, improvedContent)) {
 
                     if (mAuthor != null) {
                         values.put(EntryColumns.AUTHOR, mAuthor.toString());
@@ -612,6 +618,7 @@ public class RssAtomParser extends DefaultHandler {
         ContentResolver cr = MainApplication.getContext().getContentResolver();
 
         try {
+            HashSet<Long> entriesId = new HashSet<Long>();
             if (!mInserts.isEmpty()) {
                 ContentProviderResult[] results = cr.applyBatch(FeedData.AUTHORITY, mInserts);
 
@@ -625,14 +632,25 @@ public class RssAtomParser extends DefaultHandler {
                 }
 
                 if (mRetrieveFullText) {
-                    long[] entriesId = new long[results.length];
+                    //long[] entriesId = new long[results.length];
                     for (int i = 0; i < results.length; i++) {
-                        entriesId[i] = Long.valueOf(results[i].uri.getLastPathSegment());
+                        //entriesId[i] = Long.valueOf(results[i].uri.getLastPathSegment());
+                        entriesId.add(Long.valueOf(results[i].uri.getLastPathSegment()) );
                     }
 
-                    FetcherService.addEntriesToMobilize(entriesId);
+
                 }
             }
+            if (mRetrieveFullText) {
+                Cursor c = cr.query(mFeedEntriesUri, new String[]{EntryColumns._ID}, EntryColumns.MOBILIZED_HTML + Constants.DB_IS_NULL, null, EntryColumns.DATE + Constants.DB_DESC);
+                while (c.moveToNext()) {
+                    entriesId.add(c.getLong(0));
+                }
+                c.close();
+
+                FetcherService.addEntriesToMobilize((Long[]) entriesId.toArray( new Long[entriesId.size()] ));
+            }
+
         } catch (Exception e) {
             Dog.e("Error", e);
         }
@@ -669,7 +687,7 @@ public class RssAtomParser extends DefaultHandler {
 
         }
 
-        public boolean isEntryFiltered(String title, String content) {
+        public boolean isEntryFiltered(String title, String author, String content) {
 
             boolean isFiltered = false;
 
@@ -679,13 +697,15 @@ public class RssAtomParser extends DefaultHandler {
                 if (r.isRegex) {
                     Pattern p = Pattern.compile(r.filterText);
                     if (r.isAppliedToTitle) {
-                        Matcher m = p.matcher(title);
-                        isMatch = m.find();
+                        Matcher mT = p.matcher(title);
+                        Matcher mA = p.matcher(author);
+                        isMatch = mT.find() || mA.find();
                     } else if (content != null) {
                         Matcher m = p.matcher(content);
                         isMatch = m.find();
                     }
-                } else if ((r.isAppliedToTitle && title.contains(r.filterText)) || (!r.isAppliedToTitle && content != null && content.contains(r.filterText))) {
+                } else if ((r.isAppliedToTitle && ( title.contains(r.filterText) || author.contains(r.filterText) )) ||
+                           (!r.isAppliedToTitle && content != null && content.contains(r.filterText))) {
                     isMatch = true;
                 }
 

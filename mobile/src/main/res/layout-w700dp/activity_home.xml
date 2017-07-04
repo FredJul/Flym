@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="#000000"
     android:layout_height="match_parent">
 
     <include layout="@layout/view_left_drawer" />
@@ -7,6 +8,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
+        android:background="@color/dark_background"
         android:layout_height="match_parent">
 
         <include layout="@layout/view_home" />

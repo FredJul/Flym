@@ -107,8 +107,8 @@
     <string name="google_news_custom_topic">Enter custom topic</string>
 
     <!-- ENTRIES -->
-    <string name="unread_entries">Unread</string>
-    <string name="all_entries">All entries</string>
+    <string name="unread_entries">Непрочитаное</string>
+    <string name="all_entries">Все</string>
     <string name="no_entries">Нет новостей</string>
     <string name="favorites">Избранное</string>
     <string name="context_menu_share_starred">Поделиться избранными новостями</string>
@@ -116,8 +116,16 @@
     <string name="menu_unstar">Убрать из избранного</string>
     <string name="menu_share">Поделиться</string>
     <string name="menu_full_screen">Полный экран</string>
+    <string name="menu_font_bold">Жирный шрифт</string>
+    <string name="menu_cancel_refresh">Отменить обновление</string>
+    <string name="menu_delete_all">Удалить все</string>
     <string name="menu_copy_clipboard">Скопировать ссылку</string>
+    <string name="menu_load_all_images">Загрузить все картинки</string>
+    <string name="menu_mark_as_favorite">В избранное</string>
+    <string name="menu_mark_as_unfavorite">Убрать из избранного</string>
     <string name="menu_mark_as_unread">Пометить как непрочитанное</string>
+    <string name="menu_reload_full_text">Перезагрузить весь текст</string>
+    <string name="menu_toogle_unread_all">Прочитанные|Все</string>
     <string name="share_favorites_title">Flym: избранные новости</string>
     <string name="copied_clipboard">Ссылка скопирована</string>
     <string name="get_full_text">Загрузить весь текст</string>
@@ -131,7 +139,7 @@
     <string name="open_link">Открыть ссылку</string>
     <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
     <string name="undo">Undo</string>
-    <string name="marked_as_read">Marked as read</string>
+    <string name="marked_as_read">Пометить как прочитанное</string>
 
     <!-- WIDGET -->
     <string name="red">Красный</string>
@@ -168,6 +176,7 @@
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>
     <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
     <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
+    <string name="settings_max_image_download_count">Max число изображений при загрузке</string>
     <string name="settings_refresh_on_open">Обновлять при запуске</string>
     <string name="settings_refresh_on_open_description">Обновлять все ленты пии запуске приложения
     </string>

@@ -19,10 +19,14 @@
 
 package net.fred.feedex.adapter;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +54,8 @@ public class DrawerAdapter extends BaseAdapter {
     private static final int POS_LAST_UPDATE = 5;
     private static final int POS_ERROR = 6;
     private static final int POS_UNREAD = 7;
+    private static final int POS_IS_SHOW_TEXT_IN_ENTRY_LIST = 8;
+    private static final int POS_IS_GROUP_EXPANDED = 9;
 
     private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
@@ -82,7 +88,7 @@ public class DrawerAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item_drawer_list, parent, false);
@@ -134,6 +140,16 @@ public class DrawerAdapter extends BaseAdapter {
             holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
 
             if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
+                holder.iconView.setImageResource(isGroupExpanded(position) ? R.drawable.group_expanded : R.drawable.group_collapsed);
+                holder.iconView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ContentResolver cr = MainApplication.getContext().getContentResolver();
+                        ContentValues values = new ContentValues();
+                        values.put(FeedData.FeedColumns.IS_GROUP_EXPANDED, isGroupExpanded(position) ? null : 1 );
+                        cr.update(FeedData.FeedColumns.CONTENT_URI(getItemId(position)), values, null, null);
+                    }
+                });
                 holder.titleTxt.setTextColor(GROUP_TEXT_COLOR);
                 holder.titleTxt.setAllCaps(true);
                 holder.separator.setVisibility(View.VISIBLE);
@@ -222,6 +238,16 @@ public class DrawerAdapter extends BaseAdapter {
 
     public boolean isItemAGroup(int position) {
         return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3) && mFeedsCursor.getInt(POS_IS_GROUP) == 1;
+
+    }
+
+    public boolean isShowTextInEntryList(int position) {
+        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3) && mFeedsCursor.getInt(POS_IS_SHOW_TEXT_IN_ENTRY_LIST) == 1;
+
+    }
+
+    private boolean isGroupExpanded(int position) {
+        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3) && mFeedsCursor.getInt(POS_IS_GROUP_EXPANDED) == 1;
 
     }
 

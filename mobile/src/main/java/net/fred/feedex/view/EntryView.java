@@ -50,11 +50,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Handler;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -62,6 +65,8 @@ import android.widget.Toast;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.R;
+import net.fred.feedex.activity.EntryActivity;
+import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.FileUtils;
 import net.fred.feedex.utils.HtmlUtils;
 import net.fred.feedex.utils.PrefUtils;
@@ -69,20 +74,31 @@ import net.fred.feedex.utils.PrefUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
 
-public class EntryView extends WebView {
+public class EntryView extends WebView implements Observer {
 
     private static final String TEXT_HTML = "text/html";
     private static final String HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>";
     private static final String BACKGROUND_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#f6f6f6" : "#181b1f";
     private static final String QUOTE_BACKGROUND_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#e6e6e6" : "#383b3f";
     private static final String QUOTE_LEFT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#a6a6a6" : "#686b6f";
-    private static final String TEXT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#000000" : "#C0C0C0";
+    private long mEntryId = -1;
+
+    //private static final String TEXT_COLOR_BRIGHTNESS = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#000000" : "#C0C0C0";
+    private static String GetTextColor() {return PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#000000" : getTextColorDarkTheme();}
+
+    private static String getTextColorDarkTheme() {
+        int b = Integer.parseInt( PrefUtils.getString(PrefUtils.TEXT_COLOR_BRIGHTNESS, "200") );
+        return "#" + Integer.toHexString( Color.argb( 255, b, b, b ) ).substring( 2 );
+    }
+
     private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#52A7DF" : "#1A5A81";
     private static final String SUBTITLE_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#666666" : "#8c8c8c";
     private static final String SUBTITLE_BORDER_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "solid #ddd" : "solid #303030";
-    private static final String CSS = "<head><style type='text/css'> "
-            + "body {max-width: 100%; margin: 0.1cm; text-align:justify; font-weight: normal; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 120%} "
+    private static String GetCSS() { return "<head><style type='text/css'> "
+            + "body {max-width: 100%; margin: 0.1cm; text-align:justify; font-weight: " + getFontBold() + " color: " + GetTextColor() + "; background-color:" + BACKGROUND_COLOR + "; line-height: 120%} "
             + "* {max-width: 100%; word-break: break-word}"
             + "h1, h2 {font-weight: normal; line-height: 130%} "
             + "h1 {font-size: 170%; text-align:center; margin-bottom: 0.1em} "
@@ -100,7 +116,15 @@ public class EntryView extends WebView {
             + ".button-section p {margin: 0.1cm 0 0.2cm 0}"
             + ".button-section p.marginfix {margin: 0.5cm 0 0.5cm 0}"
             + ".button-section input, .button-section a {font-family: sans-serif-light; font-size: 100%; color: #FFFFFF; background-color: " + BUTTON_COLOR + "; text-decoration: none; border: none; border-radius:0.2cm; padding: 0.3cm} "
-            + "</style><meta name='viewport' content='width=device-width'/></head>";
+            + "</style><meta name='viewport' content='width=device-width'/></head>"; }
+
+    private static String getFontBold() {
+        if ( PrefUtils.getBoolean( PrefUtils.ENTRY_FONT_BOLD, false ) )
+            return "bold;";
+        else
+            return "normal;";
+    }
+
     private static final String BODY_START = "<body>";
     private static final String BODY_END = "</body>";
     private static final String TITLE_START = "<h1><a href='";
@@ -108,8 +132,8 @@ public class EntryView extends WebView {
     private static final String TITLE_END = "</a></h1>";
     private static final String SUBTITLE_START = "<p class='subtitle'>";
     private static final String SUBTITLE_END = "</p>";
-    private static final String BUTTON_SECTION_START = "<div class='button-section'>";
-    private static final String BUTTON_SECTION_END = "</div>";
+    static final String BUTTON_SECTION_START = "<div class='button-section'>";
+    static final String BUTTON_SECTION_END = "</div>";
     private static final String BUTTON_START = "<p><input type='button' value='";
     private static final String BUTTON_MIDDLE = "' onclick='";
     private static final String BUTTON_END = "'/></p>";
@@ -120,7 +144,15 @@ public class EntryView extends WebView {
     private static final String IMAGE_ENCLOSURE = "[@]image/";
 
     private final JavaScriptObject mInjectedJSObject = new JavaScriptObject();
+    private final ImageDownloadJavaScriptObject mImageDownloadObject = new ImageDownloadJavaScriptObject();
+    public static final ImageDownloadObservable mImageDownloadObservable = new ImageDownloadObservable();
     private EntryViewManager mEntryViewMgr;
+    public static Handler mHandler = null;
+    String mData = "";
+    public int mScrollY = 0;
+
+    private EntryActivity mActivity;
+
 
     public EntryView(Context context) {
         super(context);
@@ -141,7 +173,19 @@ public class EntryView extends WebView {
         mEntryViewMgr = manager;
     }
 
-    public void setHtml(long entryId, String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
+    public void setHtml(long entryId,
+                        String title,
+                        String link,
+                        String contentText,
+                        String enclosure,
+                        String author,
+                        long timestamp,
+                        boolean preferFullText,
+                        EntryActivity activity) {
+        mActivity = activity;
+        mEntryId = entryId;
+        getSettings().setBlockNetworkLoads(true);
+        getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
             contentText = HtmlUtils.replaceImageURLs(contentText, entryId);
             if (getSettings().getBlockNetworkImage()) {
@@ -161,13 +205,15 @@ public class EntryView extends WebView {
         // baseUrl = url.getProtocol() + "://" + url.getHost();
         // } catch (MalformedURLException ignored) {
         // }
-
         // do not put 'null' to the base url...
-        loadDataWithBaseURL("", generateHtmlContent(title, link, contentText, enclosure, author, timestamp, preferFullText), TEXT_HTML, Constants.UTF8, null);
+        mData = generateHtmlContent(title, link, contentText, enclosure, author, timestamp, preferFullText);
+        if ( getScrollY() != 0 )
+            mScrollY = getScrollY();
+        loadDataWithBaseURL("", mData, TEXT_HTML, Constants.UTF8, null);
     }
 
     private String generateHtmlContent(String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
-        StringBuilder content = new StringBuilder(CSS).append(BODY_START);
+        StringBuilder content = new StringBuilder(GetCSS()).append(BODY_START);
 
         if (link == null) {
             link = "";
@@ -207,6 +253,9 @@ public class EntryView extends WebView {
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     private void init() {
+        if ( mHandler == null )
+            mHandler = new Handler();
+        mImageDownloadObservable.addObserver(this);
         // For scrolling
         setHorizontalScrollBarEnabled(false);
         getSettings().setUseWideViewPort(false);
@@ -223,6 +272,7 @@ public class EntryView extends WebView {
         // For javascript
         getSettings().setJavaScriptEnabled(true);
         addJavascriptInterface(mInjectedJSObject, mInjectedJSObject.toString());
+        addJavascriptInterface(mImageDownloadObject, mImageDownloadObject.toString());
 
         // For HTML5 video
         setWebChromeClient(new WebChromeClient() {
@@ -277,6 +327,7 @@ public class EntryView extends WebView {
             }
         });
 
+
         setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -300,7 +351,62 @@ public class EntryView extends WebView {
                 }
                 return true;
             }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                Log.v("main", "EntryView.this.scrollTo " + mScrollY);
+                if (mScrollY != 0) {
+                    //EntryView.this.scrollTo(0, mScrollY);
+                    view.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //float webviewsize = mWebView.getContentHeight() - mWebView.getTop();
+                            //float positionInWV = webviewsize * mProgressToRestore;
+                            //int positionY = Math.round(mWebView.getTop() + positionInWV);
+                            EntryView.this.scrollTo(0, mScrollY);
+                        }
+                        // Delay the scrollTo to make it work
+                    }, 150);
+                }
+            }
         });
+
+
+    }
+
+    @Override
+    protected void onScrollChanged (int l, int t, int oldl, int oldt) {
+        FetcherService.getObservable().Hide();
+        int height = (int) Math.floor(getContentHeight() * getScale());
+        int webViewHeight = getMeasuredHeight();
+        if(getScrollY() + webViewHeight >= height){
+            //EntryActivity activity = (EntryActivity) getActivity();
+            mActivity.setFullScreen(false, mActivity.GetIsActionBarHidden());
+        }
+        mActivity.mEntryFragment.mProgressBar.setMax( height - webViewHeight );
+        mActivity.mEntryFragment.mProgressBar.setProgress( getScrollY() );
+
+        mActivity.mEntryFragment.UpdateClock();
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        if ( ( data != null ) && ( (Long)data == mEntryId ) )  {
+            if (getScrollY() != 0)
+                mScrollY = getScrollY();
+            loadDataWithBaseURL("", mData, TEXT_HTML, Constants.UTF8, null);
+        //setScrollY( y );
+        }
+    }
+
+    public static void NotifyToUpdate( final long entryId) {
+        if ( mHandler != null  )
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mImageDownloadObservable.notifyObservers( entryId );
+                }
+            });
     }
 
     public interface EntryViewManager {
@@ -315,6 +421,10 @@ public class EntryView extends WebView {
         void onEndVideoFullScreen();
 
         FrameLayout getVideoLayout();
+
+        void downloadImage(String url);
+
+        void downloadNextImages();
     }
 
     private class JavaScriptObject {
@@ -339,4 +449,30 @@ public class EntryView extends WebView {
             mEntryViewMgr.onClickEnclosure();
         }
     }
+
+    private class ImageDownloadJavaScriptObject {
+        @Override
+        @JavascriptInterface
+        public String toString() {
+            return "ImageDownloadJavaScriptObject";
+        }
+        @JavascriptInterface
+        public void downloadImage( String url ) {
+            mEntryViewMgr.downloadImage(url);
+        }
+        @JavascriptInterface
+        public void downloadNextImages() {
+            mEntryViewMgr.downloadNextImages();
+        }
+    }
+
+    public static class ImageDownloadObservable extends Observable {
+        @Override
+        public boolean hasChanged () {
+            return true;
+        }
+    }
+
+
+
 }

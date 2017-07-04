@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.view.SwipeRefreshLayout;
 
 public abstract class SwipeRefreshListFragment extends ListFragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -67,14 +68,14 @@ public abstract class SwipeRefreshListFragment extends ListFragment implements S
     /**
      * It shows the SwipeRefreshLayout progress
      */
-    public void showSwipeProgress() {
+    private void showSwipeProgress() {
         mRefreshLayout.setRefreshing(true);
     }
 
     /**
      * It shows the SwipeRefreshLayout progress
      */
-    public void hideSwipeProgress() {
+    private void hideSwipeProgress() {
         mRefreshLayout.setRefreshing(false);
     }
 
@@ -99,4 +100,13 @@ public abstract class SwipeRefreshListFragment extends ListFragment implements S
     public boolean isRefreshing() {
         return mRefreshLayout.isRefreshing();
     }
+
+    public void refreshSwipeProgress() {
+        if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+            showSwipeProgress();
+        } else {
+            hideSwipeProgress();
+        }
+    }
+
 }

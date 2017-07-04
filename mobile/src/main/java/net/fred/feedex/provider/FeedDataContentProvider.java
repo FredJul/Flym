@@ -1,7 +1,7 @@
 /**
  * Flym
  * <p/>
- * Copyright (c) 2012-2015 Frederic Julian
+ * Copyri`ht (c) 2012-2015 Frederic Julian
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,6 +57,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import net.fred.feedex.BuildConfig;
@@ -66,6 +67,8 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
 import net.fred.feedex.provider.FeedData.TaskColumns;
+import net.fred.feedex.service.FetcherService;
+import net.fred.feedex.utils.Dog;
 import net.fred.feedex.utils.NetworkUtils;
 
 import java.util.Date;
@@ -94,6 +97,8 @@ public class FeedDataContentProvider extends ContentProvider {
     public static final int URI_TASK = 20;
     public static final int URI_SEARCH = 21;
     public static final int URI_SEARCH_ENTRY = 22;
+    public static final int URI_UNREAD_ENTRIES_FOR_FEED = 23;
+    public static final int URI_UNREAD_ENTRY_FOR_FEED = 24;
 
     public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -106,6 +111,8 @@ public class FeedDataContentProvider extends ContentProvider {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#", URI_FEED);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/entries", URI_ENTRIES_FOR_FEED);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/entries/#", URI_ENTRY_FOR_FEED);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/unread_entries", URI_UNREAD_ENTRIES_FOR_FEED);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/unread_entries/#", URI_UNREAD_ENTRY_FOR_FEED);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#/entries", URI_ENTRIES_FOR_GROUP);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#/entries/#", URI_ENTRY_FOR_GROUP);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "filters", URI_FILTERS);
@@ -114,6 +121,7 @@ public class FeedDataContentProvider extends ContentProvider {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/#", URI_ENTRY);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "unread_entries", URI_UNREAD_ENTRIES);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "unread_entries/#", URI_UNREAD_ENTRIES_ENTRY);
+
         URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites", URI_FAVORITES);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites/#", URI_FAVORITES_ENTRY);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "tasks", URI_TASKS);
@@ -126,7 +134,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
     private DatabaseHelper mDatabaseHelper;
 
-    public static void addFeed(Context context, String url, String name, boolean retrieveFullText) {
+    public static void addFeed(Context context, String url, String name, boolean retrieveFullText, boolean showTextInEntryList) {
         ContentResolver cr = context.getContentResolver();
 
         if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME)) {
@@ -150,6 +158,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 values.put(FeedColumns.NAME, name);
             }
             values.put(FeedColumns.RETRIEVE_FULLTEXT, retrieveFullText ? 1 : null);
+            values.put(FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, showTextInEntryList ? 1 : null);
             cr.insert(FeedColumns.CONTENT_URI, values);
         }
     }
@@ -185,6 +194,7 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_UNREAD_ENTRIES:
             case URI_ENTRIES:
             case URI_ENTRIES_FOR_FEED:
+            case URI_UNREAD_ENTRIES_FOR_FEED:
             case URI_ENTRIES_FOR_GROUP:
             case URI_SEARCH:
                 return "vnd.android.cursor.dir/vnd.flym.entry";
@@ -193,6 +203,7 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_UNREAD_ENTRIES_ENTRY:
             case URI_ENTRY_FOR_FEED:
             case URI_ENTRY_FOR_GROUP:
+            case URI_UNREAD_ENTRY_FOR_FEED:
             case URI_SEARCH_ENTRY:
                 return "vnd.android.cursor.item/vnd.flym.entry";
             case URI_TASKS:
@@ -213,11 +224,15 @@ public class FeedDataContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        FetcherService.getObservable().ChangeDB("query DB");
+
+        long time = new Date().getTime();
         // This is a debug code to allow to visualize the task with the ContentProviderHelper app
         if (uri != null && BuildConfig.DEBUG && FeedData.CONTENT_AUTHORITY.equals(uri.toString())) {
             SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
             queryBuilder.setTables(TaskColumns.TABLE_NAME);
             SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
+            FetcherService.getObservable().ChangeDB("");
             return queryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
         }
 
@@ -267,6 +282,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             case URI_ENTRY_FOR_FEED:
+            case URI_UNREAD_ENTRY_FOR_FEED:
             case URI_ENTRY_FOR_GROUP:
             case URI_SEARCH_ENTRY: {
                 queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
@@ -289,6 +305,13 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             case URI_UNREAD_ENTRIES: {
                 queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
+                queryBuilder.appendWhere(EntryColumns.WHERE_UNREAD);
+                break;
+            }
+            case URI_UNREAD_ENTRIES_FOR_FEED: {
+                queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
+                queryBuilder.appendWhere(EntryColumns.FEED_ID + '=' + uri.getPathSegments().get(1));
+                queryBuilder.appendWhere(Constants.DB_AND);
                 queryBuilder.appendWhere(EntryColumns.WHERE_UNREAD);
                 break;
             }
@@ -327,11 +350,15 @@ public class FeedDataContentProvider extends ContentProvider {
         Cursor cursor = queryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
 
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        Dog.v("query " + (new Date().getTime() - time) + " uri = " + uri);
+
+        FetcherService.getObservable().ChangeDB("");
         return cursor;
     }
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+        FetcherService.getObservable().ChangeDB("insert DB");
         long newId;
 
         int matchCode = URI_MATCHER.match(uri);
@@ -383,7 +410,7 @@ public class FeedDataContentProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Illegal insert. Match code=" + matchCode + "; uri=" + uri);
         }
-
+        FetcherService.getObservable().ChangeDB("");
         if (newId > -1) {
             notifyChangeOnAllUris(matchCode, uri);
             return ContentUris.withAppendedId(uri, newId);
@@ -398,6 +425,7 @@ public class FeedDataContentProvider extends ContentProvider {
             throw new IllegalArgumentException("Illegal update. Uri=" + uri + "; values=" + values);
         }
 
+        FetcherService.getObservable().ChangeDB("update DB");
         int matchCode = URI_MATCHER.match(uri);
 
         String table;
@@ -479,12 +507,14 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             case URI_ENTRY_FOR_FEED:
+            case URI_UNREAD_ENTRY_FOR_FEED:
             case URI_ENTRY_FOR_GROUP:
             case URI_SEARCH_ENTRY: {
                 table = EntryColumns.TABLE_NAME;
                 where.append(EntryColumns._ID).append('=').append(uri.getPathSegments().get(3));
                 break;
             }
+            case URI_UNREAD_ENTRIES_FOR_FEED:
             case URI_ENTRIES_FOR_FEED: {
                 table = EntryColumns.TABLE_NAME;
                 where.append(EntryColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1));
@@ -548,15 +578,16 @@ public class FeedDataContentProvider extends ContentProvider {
                 && (values.containsKey(FeedColumns.NAME) || values.containsKey(FeedColumns.URL) || values.containsKey(FeedColumns.PRIORITY))) {
             mDatabaseHelper.exportToOPML();
         }
+        FetcherService.getObservable().ChangeDB("");
         if (count > 0) {
             notifyChangeOnAllUris(matchCode, uri);
         }
-
         return count;
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+        FetcherService.getObservable().ChangeDB("delete DB");
         int matchCode = URI_MATCHER.match(uri);
 
         String table;
@@ -670,6 +701,14 @@ public class FeedDataContentProvider extends ContentProvider {
 
                 break;
             }
+            case URI_UNREAD_ENTRIES_FOR_FEED: {
+                table = EntryColumns.TABLE_NAME;
+                where.append(EntryColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1));
+
+                //TODO also remove tasks
+
+                break;
+            }
             case URI_ENTRIES_FOR_GROUP: {
                 table = EntryColumns.TABLE_NAME;
                 where.append(EntryColumns.FEED_ID).append(" IN (SELECT ").append(FeedColumns._ID).append(" FROM ").append(FeedColumns.TABLE_NAME).append(" WHERE ").append(FeedColumns.GROUP_ID).append('=').append(uri.getPathSegments().get(1)).append(')');
@@ -737,6 +776,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
             notifyChangeOnAllUris(matchCode, uri);
         }
+        FetcherService.getObservable().ChangeDB("");
         return count;
     }
 

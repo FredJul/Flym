@@ -49,6 +49,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -72,17 +73,28 @@ import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.TaskColumns;
+import net.fred.feedex.provider.FeedDataContentProvider;
 import net.fred.feedex.utils.ArticleTextExtractor;
 import net.fred.feedex.utils.Dog;
+import net.fred.feedex.utils.FileUtils;
 import net.fred.feedex.utils.HtmlUtils;
 import net.fred.feedex.utils.NetworkUtils;
 import net.fred.feedex.utils.PrefUtils;
+import net.fred.feedex.view.StatusText;
+import net.fred.feedex.view.EntryView;
+
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -118,12 +130,28 @@ public class FetcherService extends IntentService {
     private static final String HTML_BODY = "<body";
     private static final String ENCODING = "encoding=\"";
 
+    public static Boolean mCancelRefresh = false;
+    public static Boolean mIsCancelDownloadEntryImages = false;
+    public static Boolean mIsDownloadImageCursorNeedsRequery = false;
+
+
+
     /* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
     private static final Pattern FEED_LINK_PATTERN = Pattern.compile(
             "[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>",
             Pattern.CASE_INSENSITIVE);
+    public static int mMaxImageDownloadCount = Integer.parseInt( PrefUtils.getString(PrefUtils.MAX_IMAGE_DOWNLOAD_COUNT, "0") );
 
     private final Handler mHandler;
+
+    public static StatusText.FetcherObservable getObservable() {
+        if ( mObservable == null ) {
+            mObservable = new StatusText.FetcherObservable();
+        }
+        return mObservable;
+    }
+
+    private static StatusText.FetcherObservable mObservable = null;
 
     public FetcherService() {
         super(FetcherService.class.getSimpleName());
@@ -154,7 +182,7 @@ public class FetcherService extends IntentService {
         }
     }
 
-    public static void addEntriesToMobilize(long[] entriesId) {
+    public static void addEntriesToMobilize(Long[] entriesId) {
         ContentValues[] values = new ContentValues[entriesId.length];
         for (int i = 0; i < entriesId.length; i++) {
             values[i] = new ContentValues();
@@ -201,230 +229,366 @@ public class FetcherService extends IntentService {
         } else if (ACTION_DOWNLOAD_IMAGES.equals(intent.getAction())) {
             downloadAllImages();
         } else { // == Constants.ACTION_REFRESH_FEEDS
-            PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);
+            int status = getObservable().Start("Refresh feeds: "); try {
 
-            long keepTime = Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l;
-            long keepDateBorderTime = keepTime > 0 ? System.currentTimeMillis() - keepTime : 0;
+                PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);
+                mCancelRefresh = false;
 
-            deleteOldEntries(keepDateBorderTime);
+                long keepTime = Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l;
+                long keepDateBorderTime = keepTime > 0 ? System.currentTimeMillis() - keepTime : 0;
 
-            String feedId = intent.getStringExtra(Constants.FEED_ID);
-            int newCount = (feedId == null ? refreshFeeds(keepDateBorderTime) : refreshFeed(feedId, keepDateBorderTime));
+                deleteOldEntries(keepDateBorderTime);
 
-            if (newCount > 0) {
-                if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
-                    Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{Constants.DB_COUNT}, EntryColumns.WHERE_UNREAD, null, null);
+                String feedId = intent.getStringExtra(Constants.FEED_ID);
+                String groupId = intent.getStringExtra(Constants.GROUP_ID);
+                int newCount = (feedId == null ? refreshFeeds(keepDateBorderTime, groupId) : refreshFeed(feedId, keepDateBorderTime));
 
-                    cursor.moveToFirst();
-                    newCount = cursor.getInt(0); // The number has possibly changed
-                    cursor.close();
+                if (newCount > 0) {
+                    if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
+                        Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{Constants.DB_COUNT}, EntryColumns.WHERE_UNREAD, null, null);
 
-                    if (newCount > 0) {
-                        String text = getResources().getQuantityString(R.plurals.number_of_new_entries, newCount, newCount);
+                        cursor.moveToFirst();
+                        newCount = cursor.getInt(0); // The number has possibly changed
+                        cursor.close();
 
-                        Intent notificationIntent = new Intent(FetcherService.this, HomeActivity.class);
-                        PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT);
+                        if (newCount > 0) {
+                            String text = getResources().getQuantityString(R.plurals.number_of_new_entries, newCount, newCount);
 
-                        Notification.Builder notifBuilder = new Notification.Builder(MainApplication.getContext()) //
-                                .setContentIntent(contentIntent) //
-                                .setSmallIcon(R.drawable.ic_statusbar_rss) //
-                                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)) //
-                                .setTicker(text) //
-                                .setWhen(System.currentTimeMillis()) //
-                                .setAutoCancel(true) //
-                                .setContentTitle(getString(R.string.flym_feeds)) //
-                                .setContentText(text) //
-                                .setLights(0xffffffff, 0, 0);
+                            Intent notificationIntent = new Intent(FetcherService.this, HomeActivity.class);
+                            PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent,
+                                    PendingIntent.FLAG_UPDATE_CURRENT);
 
-                        if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_VIBRATE, false)) {
-                            notifBuilder.setVibrate(new long[]{0, 1000});
+                            Notification.Builder notifBuilder = new Notification.Builder(MainApplication.getContext()) //
+                                    .setContentIntent(contentIntent) //
+                                    .setSmallIcon(R.drawable.ic_statusbar_rss) //
+                                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)) //
+                                    .setTicker(text) //
+                                    .setWhen(System.currentTimeMillis()) //
+                                    .setAutoCancel(true) //
+                                    .setContentTitle(getString(R.string.flym_feeds)) //
+                                    .setContentText(text) //
+                                    .setLights(0xffffffff, 0, 0);
+
+                            if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_VIBRATE, false)) {
+                                notifBuilder.setVibrate(new long[]{0, 1000});
+                            }
+
+                            String ringtone = PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, null);
+                            if (ringtone != null && ringtone.length() > 0) {
+                                notifBuilder.setSound(Uri.parse(ringtone));
+                            }
+
+                            if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_LIGHT, false)) {
+                                notifBuilder.setLights(0xffffffff, 300, 1000);
+                            }
+
+                            if (Constants.NOTIF_MGR != null) {
+                                Constants.NOTIF_MGR.notify(0, notifBuilder.getNotification());
+                            }
                         }
-
-                        String ringtone = PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, null);
-                        if (ringtone != null && ringtone.length() > 0) {
-                            notifBuilder.setSound(Uri.parse(ringtone));
-                        }
-
-                        if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_LIGHT, false)) {
-                            notifBuilder.setLights(0xffffffff, 300, 1000);
-                        }
-
-                        if (Constants.NOTIF_MGR != null) {
-                            Constants.NOTIF_MGR.notify(0, notifBuilder.getNotification());
-                        }
+                    } else if (Constants.NOTIF_MGR != null) {
+                        Constants.NOTIF_MGR.cancel(0);
                     }
-                } else if (Constants.NOTIF_MGR != null) {
-                    Constants.NOTIF_MGR.cancel(0);
                 }
+
+                mobilizeAllEntries();
+                downloadAllImages();
+
+            } finally {
+                getObservable().End( status );
             }
 
-            mobilizeAllEntries();
-            downloadAllImages();
-
             PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false);
+
+        }
+        synchronized ( mCancelRefresh ) {
+            mCancelRefresh = false;
+        }
+    }
+
+    public static boolean isCancelRefresh() {
+        synchronized (mCancelRefresh) {
+            if (mCancelRefresh) {
+                MainApplication.getContext().getContentResolver().delete( TaskColumns.CONTENT_URI, null, null );
+            }
+            return mCancelRefresh;
+        }
+    }
+
+    public static boolean isCancelDownloadEntryImages() {
+        synchronized (mIsCancelDownloadEntryImages) {
+            return mIsCancelDownloadEntryImages;
+        }
+    }
+    public static void setCancelDownloadEntryImages( boolean value ) {
+        synchronized (mIsCancelDownloadEntryImages) {
+            mIsCancelDownloadEntryImages = value;
+        }
+    }
+
+    public static boolean isDownloadImageCursorNeedsRequery() {
+        synchronized (mIsDownloadImageCursorNeedsRequery) {
+            return mIsDownloadImageCursorNeedsRequery;
+        }
+    }
+    public static void setDownloadImageCursorNeedsRequery( boolean value ) {
+        synchronized (mIsDownloadImageCursorNeedsRequery) {
+            mIsDownloadImageCursorNeedsRequery = value;
         }
     }
 
     private void mobilizeAllEntries() {
-        ContentResolver cr = getContentResolver();
-        Cursor cursor = cr.query(TaskColumns.CONTENT_URI, new String[]{TaskColumns._ID, TaskColumns.ENTRY_ID, TaskColumns.NUMBER_ATTEMPT},
-                TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
+        int status = getObservable().Start("mobilizeAll"); try {
+            ContentResolver cr = getContentResolver();
+            //getObservable().ChangeProgress("query DB");
+            Cursor cursor = cr.query(TaskColumns.CONTENT_URI, new String[]{TaskColumns._ID, TaskColumns.ENTRY_ID, TaskColumns.NUMBER_ATTEMPT},
+                    TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
+            getObservable().ChangeProgress("");
+            ArrayList<ContentProviderOperation> operations = new ArrayList<>();
 
-        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+            while (cursor.moveToNext() && !isCancelRefresh()) {
+                int status1 = getObservable().Start(String.format("%d/%d", cursor.getPosition(), cursor.getCount())); try {
+                    long taskId = cursor.getLong(0);
+                    long entryId = cursor.getLong(1);
+                    int nbAttempt = 0;
+                    if (!cursor.isNull(2)) {
+                        nbAttempt = cursor.getInt(2);
+                    }
 
-        while (cursor.moveToNext()) {
-            long taskId = cursor.getLong(0);
-            long entryId = cursor.getLong(1);
-            int nbAttempt = 0;
-            if (!cursor.isNull(2)) {
-                nbAttempt = cursor.getInt(2);
-            }
+                    //boolean success = ;
 
-            boolean success = false;
-
-            Uri entryUri = EntryColumns.CONTENT_URI(entryId);
-            Cursor entryCursor = cr.query(entryUri, null, null, null, null);
-
-            if (entryCursor.moveToFirst()) {
-                if (entryCursor.isNull(entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML))) { // If we didn't already mobilized it
-                    int linkPos = entryCursor.getColumnIndex(EntryColumns.LINK);
-                    int abstractHtmlPos = entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
-                    HttpURLConnection connection = null;
-
-                    try {
-                        String link = entryCursor.getString(linkPos);
-
-                        // Try to find a text indicator for better content extraction
-                        String contentIndicator = null;
-                        String text = entryCursor.getString(abstractHtmlPos);
-                        if (!TextUtils.isEmpty(text)) {
-                            text = Html.fromHtml(text).toString();
-                            if (text.length() > 60) {
-                                contentIndicator = text.substring(20, 40);
-                            }
-                        }
-
-                        connection = NetworkUtils.setupConnection(link);
-
-                        String mobilizedHtml = ArticleTextExtractor.extractContent(connection.getInputStream(), contentIndicator);
-
-                        if (mobilizedHtml != null) {
-                            mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link));
-                            ContentValues values = new ContentValues();
-                            values.put(EntryColumns.MOBILIZED_HTML, mobilizedHtml);
-
-                            ArrayList<String> imgUrlsToDownload = null;
-                            if (NetworkUtils.needDownloadPictures()) {
-                                imgUrlsToDownload = HtmlUtils.getImageURLs(mobilizedHtml);
-                            }
-
-                            String mainImgUrl;
-                            if (imgUrlsToDownload != null) {
-                                mainImgUrl = HtmlUtils.getMainImageURL(imgUrlsToDownload);
-                            } else {
-                                mainImgUrl = HtmlUtils.getMainImageURL(mobilizedHtml);
-                            }
-
-                            if (mainImgUrl != null) {
-                                values.put(EntryColumns.IMAGE_URL, mainImgUrl);
-                            }
-
-                            operations.add(ContentProviderOperation.newUpdate(entryUri).withValues(values).build());
-                            success = true;
+                    if (mobilizeEntry(cr, entryId)) {
+                        cr.delete(TaskColumns.CONTENT_URI(taskId), null, null);//operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
+                    } else {
+                        if (nbAttempt + 1 > MAX_TASK_ATTEMPT) {
                             operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
-                            if (imgUrlsToDownload != null && !imgUrlsToDownload.isEmpty()) {
-                                addImagesToDownload(String.valueOf(entryId), imgUrlsToDownload);
-                            }
-                        }
-                    } catch (Throwable e) {
-                        Dog.e("Mobilize error", e);
-                    } finally {
-                        if (connection != null) {
-                            connection.disconnect();
+                        } else {
+                            ContentValues values = new ContentValues();
+                            values.put(TaskColumns.NUMBER_ATTEMPT, nbAttempt + 1);
+                            operations.add(ContentProviderOperation.newUpdate(TaskColumns.CONTENT_URI(taskId)).withValues(values).build());
                         }
                     }
-                } else { // We already mobilized it
-                    success = true;
-                    operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
+
+                } finally {
+                    getObservable().End( status1 );
                 }
             }
-            entryCursor.close();
 
-            if (!success) {
-                if (nbAttempt + 1 > MAX_TASK_ATTEMPT) {
-                    operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
-                } else {
-                    ContentValues values = new ContentValues();
-                    values.put(TaskColumns.NUMBER_ATTEMPT, nbAttempt + 1);
-                    operations.add(ContentProviderOperation.newUpdate(TaskColumns.CONTENT_URI(taskId)).withValues(values).build());
+            cursor.close();
+
+            if (!operations.isEmpty()) {
+                getObservable().ChangeProgress("apply operations");
+                try {
+                    cr.applyBatch(FeedData.AUTHORITY, operations);
+                } catch (Throwable ignored) {
                 }
+            }
+        } finally { getObservable().End( status ); }
+
+
+    }
+
+    public static boolean mobilizeEntry(ContentResolver cr, long entryId) {
+        boolean success = false;
+
+        Uri entryUri = EntryColumns.CONTENT_URI(entryId);
+        Cursor entryCursor = cr.query(entryUri, null, null, null, null);
+
+        if (entryCursor.moveToFirst()) {
+            if (entryCursor.isNull(entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML))) { // If we didn't already mobilized it
+                int linkPos = entryCursor.getColumnIndex(EntryColumns.LINK);
+                int abstractHtmlPos = entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
+                HttpURLConnection connection = null;
+
+                try {
+                    String link = entryCursor.getString(linkPos);
+
+                    // Try to find a text indicator for better content extraction
+                    String contentIndicator = null;
+                    String text = entryCursor.getString(abstractHtmlPos);
+                    if (!TextUtils.isEmpty(text)) {
+                        text = Html.fromHtml(text).toString();
+                        if (text.length() > 60) {
+                            contentIndicator = text.substring(20, 40);
+                        }
+                    }
+
+                    connection = NetworkUtils.setupConnection(link);
+
+                    String mobilizedHtml = "";
+                    getObservable().ChangeProgress("extractContent");
+                    mobilizedHtml = ArticleTextExtractor.extractContent(connection.getInputStream(), contentIndicator);
+                    getObservable().ChangeProgress("");
+
+                    if (mobilizedHtml != null) {
+                        getObservable().ChangeProgress("improveHtmlContent");
+                        mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link));
+                        getObservable().ChangeProgress("");
+                        ContentValues values = new ContentValues();
+                        values.put(EntryColumns.MOBILIZED_HTML, mobilizedHtml);
+
+                        ArrayList<String> imgUrlsToDownload = null;
+                        if (NetworkUtils.needDownloadPictures()) {
+                            imgUrlsToDownload = HtmlUtils.getImageURLs(mobilizedHtml);
+                        }
+
+                        String mainImgUrl;
+                        if (imgUrlsToDownload != null) {
+                            mainImgUrl = HtmlUtils.getMainImageURL(imgUrlsToDownload);
+                        } else {
+                            mainImgUrl = HtmlUtils.getMainImageURL(mobilizedHtml);
+                        }
+
+                        if (mainImgUrl != null) {
+                            values.put(EntryColumns.IMAGE_URL, mainImgUrl);
+                        }
+
+                        cr.update( entryUri, values, null, null );//operations.add(ContentProviderOperation.newUpdate(entryUri).withValues(values).build());
+
+                        success = true;
+                        if (imgUrlsToDownload != null && !imgUrlsToDownload.isEmpty()) {
+                            addImagesToDownload(String.valueOf(entryId), imgUrlsToDownload);
+                        }
+                    }
+                } catch (Throwable e) {
+                    Dog.e("Mobilize error", e);
+                } finally {
+                    if (connection != null) {
+                        connection.disconnect();
+                    }
+                }
+            } else { // We already mobilized it
+                success = true;
+                //operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
             }
         }
+        entryCursor.close();
+        return success;
+    }
 
-        cursor.close();
+    public static void downloadAllImages() {
+        StatusText.FetcherObservable obs = getObservable();
+        int status = obs.Start("AllImages"); try {
 
-        if (!operations.isEmpty()) {
-            try {
-                cr.applyBatch(FeedData.AUTHORITY, operations);
-            } catch (Throwable ignored) {
+            ContentResolver cr = MainApplication.getContext().getContentResolver();
+            Cursor cursor = cr.query(TaskColumns.CONTENT_URI, new String[]{TaskColumns._ID, TaskColumns.ENTRY_ID, TaskColumns.IMG_URL_TO_DL,
+                    TaskColumns.NUMBER_ATTEMPT}, TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NOT_NULL, null, null);
+            ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+
+            while (cursor.moveToNext() && !isCancelRefresh() && !isDownloadImageCursorNeedsRequery()) {
+                int status1 = obs.Start(String.format("%d/%d", cursor.getPosition() + 1, cursor.getCount())); try {
+                //int status1 = obs.Start(String.format("%d", cursor.getPosition() + 1, cursor.getCount())); try {
+                    long taskId = cursor.getLong(0);
+                    long entryId = cursor.getLong(1);
+                    String imgPath = cursor.getString(2);
+                    int nbAttempt = 0;
+                    if (!cursor.isNull(3)) {
+                        nbAttempt = cursor.getInt(3);
+                    }
+
+                    try {
+                        NetworkUtils.downloadImage(entryId, imgPath, false);
+
+                        // If we are here, everything is OK
+                        operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
+                    } catch (Exception e) {
+                        if (nbAttempt + 1 > MAX_TASK_ATTEMPT) {
+                            operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
+                        } else {
+                            ContentValues values = new ContentValues();
+                            values.put(TaskColumns.NUMBER_ATTEMPT, nbAttempt + 1);
+                            operations.add(ContentProviderOperation.newUpdate(TaskColumns.CONTENT_URI(taskId)).withValues(values).build());
+                        }
+                    }
+                    EntryView.NotifyToUpdate( entryId );
+                } finally {
+                    obs.End( status1 );
+                }
+
             }
+
+            cursor.close();
+
+            if (!operations.isEmpty()) {
+                obs.ChangeProgress("apply operations");
+                try {
+                    cr.applyBatch(FeedData.AUTHORITY, operations);
+                } catch (Throwable ignored) {
+
+                }
+            }
+        } finally { obs.End( status ); }
+
+        if ( isDownloadImageCursorNeedsRequery() ) {
+            setDownloadImageCursorNeedsRequery( false );
+            downloadAllImages();
         }
     }
 
-    private void downloadAllImages() {
-        ContentResolver cr = MainApplication.getContext().getContentResolver();
-        Cursor cursor = cr.query(TaskColumns.CONTENT_URI, new String[]{TaskColumns._ID, TaskColumns.ENTRY_ID, TaskColumns.IMG_URL_TO_DL,
-                TaskColumns.NUMBER_ATTEMPT}, TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NOT_NULL, null, null);
+    public static void downloadEntryImages( long entryId, ArrayList<String> imageList ) {
+        StatusText.FetcherObservable obs = getObservable();
+        int status = obs.Start("EntryImages"); try {
+            for( String imgPath: imageList ) {
+                if (isCancelRefresh() || isCancelDownloadEntryImages())
+                    break;
+                int status1 = obs.Start(String.format("%d/%d", imageList.indexOf(imgPath) + 1, imageList.size()));
+                try {
+                    NetworkUtils.downloadImage(entryId, imgPath, false);
+                } catch (Exception e) {
 
-        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
-
-        while (cursor.moveToNext()) {
-            long taskId = cursor.getLong(0);
-            long entryId = cursor.getLong(1);
-            String imgPath = cursor.getString(2);
-            int nbAttempt = 0;
-            if (!cursor.isNull(3)) {
-                nbAttempt = cursor.getInt(3);
-            }
-
-            try {
-                NetworkUtils.downloadImage(entryId, imgPath);
-
-                // If we are here, everything is OK
-                operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
-            } catch (Exception e) {
-                if (nbAttempt + 1 > MAX_TASK_ATTEMPT) {
-                    operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
-                } else {
-                    ContentValues values = new ContentValues();
-                    values.put(TaskColumns.NUMBER_ATTEMPT, nbAttempt + 1);
-                    operations.add(ContentProviderOperation.newUpdate(TaskColumns.CONTENT_URI(taskId)).withValues(values).build());
+                } finally {
+                    obs.End(status1);
                 }
             }
-        }
-
-        cursor.close();
-
-        if (!operations.isEmpty()) {
-            try {
-                cr.applyBatch(FeedData.AUTHORITY, operations);
-            } catch (Throwable ignored) {
-            }
-        }
+        } finally { obs.End( status ); }
+        EntryView.NotifyToUpdate( entryId );
     }
 
-    private void deleteOldEntries(long keepDateBorderTime) {
+    private void deleteOldEntries(final long keepDateBorderTime) {
         if (keepDateBorderTime > 0) {
-            String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
-            // Delete the entries, the cache files will be deleted by the content provider
-            MainApplication.getContext().getContentResolver().delete(EntryColumns.CONTENT_URI, where, null);
+
+
+                new Thread() {
+                    @Override
+                    public void run() {
+                        int status = getObservable().Start("deleteOldEntries"); try {
+                                String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
+                            // Delete the entries, the cache files will be deleted by the content provider
+                            MainApplication.getContext().getContentResolver().delete(EntryColumns.CONTENT_URI, where, null);
+
+                            getObservable().ChangeProgress("delete images");
+                            File[] files = FileUtils.GetImagesFolder().listFiles(new FileFilter() {//NetworkUtils.IMAGE_FOLDER_FILE.listFiles(new FileFilter() {
+                                @Override
+                                public boolean accept(File pathname) {
+                                    return (pathname.lastModified() < keepDateBorderTime);
+                                            }
+                            });
+                            if ( files != null ) {
+                                int i = 0;
+                                for( File file: files ) {
+                                    i++;
+                                    getObservable().ChangeProgress(String.format( "delete images %d/%d", i, files.length ) );
+                                    file.delete();
+                                }
+                            }
+                            getObservable().ChangeProgress("");
+                        } finally { getObservable().End( status );  }
+                    }
+                }.start();
+
+
+
         }
     }
 
-    private int refreshFeeds(final long keepDateBorderTime) {
+    private int refreshFeeds(final long keepDateBorderTime, String groupID) {
+
         ContentResolver cr = getContentResolver();
-        final Cursor cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
+        final Cursor cursor;
+        if ( groupID != null )
+            cursor = cr.query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupID), FeedColumns.PROJECTION_ID, null, null, null);
+        else
+            cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
         int nbFeed = cursor.getCount();
 
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_NUMBER, new ThreadFactory() {
@@ -438,18 +602,21 @@ public class FetcherService extends IntentService {
 
         CompletionService<Integer> completionService = new ExecutorCompletionService<>(executor);
         while (cursor.moveToNext()) {
+            //getObservable().Start(String.format("%d from %d", cursor.getPosition(), cursor.getCount()));
             final String feedId = cursor.getString(0);
             completionService.submit(new Callable<Integer>() {
                 @Override
                 public Integer call() {
                     int result = 0;
                     try {
-                        result = refreshFeed(feedId, keepDateBorderTime);
+                        if (!isCancelRefresh())
+                            result = refreshFeed(feedId, keepDateBorderTime);
                     } catch (Exception ignored) {
                     }
                     return result;
                 }
             });
+            //getObservable().End();
         }
         cursor.close();
 
@@ -463,6 +630,8 @@ public class FetcherService extends IntentService {
         }
 
         executor.shutdownNow(); // To purge all threads
+
+
 
         return globalResult;
     }
@@ -481,18 +650,26 @@ public class FetcherService extends IntentService {
             int realLastUpdatePosition = cursor.getColumnIndex(FeedColumns.REAL_LAST_UPDATE);
             int iconPosition = cursor.getColumnIndex(FeedColumns.ICON);
             int retrieveFullscreenPosition = cursor.getColumnIndex(FeedColumns.RETRIEVE_FULLTEXT);
+            //int showTextInEntryList = cursor.getColumnIndex(FeedColumns.SHOW_TEXT_IN_ENTRY_LIST);
+
 
             String id = cursor.getString(idPosition);
             HttpURLConnection connection = null;
 
+            int status = getObservable().Start(cursor.getString(titlePosition));
             try {
+
                 String feedUrl = cursor.getString(urlPosition);
                 connection = NetworkUtils.setupConnection(feedUrl);
                 String contentType = connection.getContentType();
                 int fetchMode = cursor.getInt(fetchModePosition);
 
-                handler = new RssAtomParser(new Date(cursor.getLong(realLastUpdatePosition)), keepDateBorderTime, id, cursor.getString(titlePosition), feedUrl,
-                        cursor.getInt(retrieveFullscreenPosition) == 1);
+                handler = new RssAtomParser(new Date(cursor.getLong(realLastUpdatePosition)),
+                                            keepDateBorderTime,
+                                            id,
+                                            cursor.getString(titlePosition),
+                                            feedUrl,
+                                            cursor.getInt(retrieveFullscreenPosition) == 1);
                 handler.setFetchImages(NetworkUtils.needDownloadPictures());
 
                 if (fetchMode == 0) {
@@ -503,6 +680,7 @@ public class FetcherService extends IntentService {
                         int posStart = -1;
 
                         while ((line = reader.readLine()) != null) {
+                            FetcherService.getObservable().AddBytes( line.length() );
                             if (line.contains(HTML_BODY)) {
                                 break;
                             } else {
@@ -570,6 +748,8 @@ public class FetcherService extends IntentService {
 
                         int length = bufferedReader.read(chars);
 
+                        FetcherService.getObservable().AddBytes( length );
+
                         String xmlDescription = new String(chars, 0, length);
 
                         connection.disconnect();
@@ -604,12 +784,14 @@ public class FetcherService extends IntentService {
                             int index2 = contentType.indexOf(';', index);
 
                             InputStream inputStream = connection.getInputStream();
-                            Xml.parse(inputStream,
+                            parseXml(inputStream,
                                     Xml.findEncodingByName(index2 > -1 ? contentType.substring(index + 8, index2) : contentType.substring(index + 8)),
                                     handler);
+
                         } else {
                             InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-                            Xml.parse(reader, handler);
+                            parseXml(reader, handler);
+
                         }
                         break;
                     }
@@ -621,6 +803,7 @@ public class FetcherService extends IntentService {
 
                         int n;
                         while ((n = inputStream.read(byteBuffer)) > 0) {
+                            FetcherService.getObservable().AddBytes( n );
                             outputStream.write(byteBuffer, 0, n);
                         }
 
@@ -629,7 +812,7 @@ public class FetcherService extends IntentService {
                         int start = xmlText != null ? xmlText.indexOf(ENCODING) : -1;
 
                         if (start > -1) {
-                            Xml.parse(
+                            parseXml(
                                     new StringReader(new String(outputStream.toByteArray(),
                                             xmlText.substring(start + 10, xmlText.indexOf('"', start + 11)))), handler
                             );
@@ -644,12 +827,12 @@ public class FetcherService extends IntentService {
                                     try {
                                         StringReader reader = new StringReader(new String(outputStream.toByteArray(), index2 > -1 ? contentType.substring(
                                                 index + 8, index2) : contentType.substring(index + 8)));
-                                        Xml.parse(reader, handler);
+                                        parseXml(reader, handler);
                                     } catch (Exception ignored) {
                                     }
                                 } else {
                                     StringReader reader = new StringReader(new String(outputStream.toByteArray()));
-                                    Xml.parse(reader, handler);
+                                    parseXml(reader, handler);
                                 }
                             }
                         }
@@ -696,11 +879,85 @@ public class FetcherService extends IntentService {
                 if (connection != null) {
                     connection.disconnect();
                 }
+                getObservable().End( status );
             }
         }
 
         cursor.close();
 
         return handler != null ? handler.getNewCount() : 0;
+    }
+
+    private static void parseXml(InputStream in, Xml.Encoding encoding,
+                             ContentHandler contentHandler) throws IOException, SAXException {
+        getObservable().ChangeProgress( "parseXml" );
+        Xml.parse(in, encoding, contentHandler);
+        getObservable().ChangeProgress( "" );
+        getObservable().AddBytes(contentHandler.toString().length());
+    }
+    private static void parseXml(Reader reader,
+                                 ContentHandler contentHandler) throws IOException, SAXException {
+        getObservable().ChangeProgress( "parseXml" );
+        Xml.parse(reader, contentHandler);
+        getObservable().ChangeProgress( "" );
+        getObservable().AddBytes(contentHandler.toString().length() );
+    }
+
+    public static void cancelRefresh() {
+    //if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+        synchronized (mCancelRefresh) {
+            mCancelRefresh = true;
+        }
+    //}
+    }
+
+    public static void deleteAllFeedEntries( String feedID ) {
+        int status = getObservable().Start("deleteAllFeedEntries");
+        try {
+            ContentResolver cr = MainApplication.getContext().getContentResolver();
+            cr.delete(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedID), EntryColumns.WHERE_NOT_FAVORITE, null);
+            ContentValues values = new ContentValues();
+            values.putNull( FeedColumns.LAST_UPDATE );
+            values.putNull( FeedColumns.REAL_LAST_UPDATE );
+            cr.update(FeedColumns.CONTENT_URI( feedID ), values, null, null );
+        } finally {
+            getObservable().End(status);
+        }
+
+    }
+
+    public static void createTestData() {
+        int status = getObservable().Start("createTestData");
+        try {
+            final String testFeedID = "10000";
+            final String testAbstract1 = "safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd ";
+            String testAbstract = "";
+            for ( int i = 0; i < 1; i++  )
+                testAbstract += testAbstract1;
+            final String testAbstract2 = "sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff";
+
+            deleteAllFeedEntries(testFeedID);
+
+            ContentResolver cr = MainApplication.getContext().getContentResolver();
+            ContentValues values = new ContentValues();
+            values.put(FeedColumns._ID, testFeedID);
+            values.put(FeedColumns.NAME, "testFeed");
+            values.putNull(FeedColumns.IS_GROUP);
+            //values.putNull(FeedColumns.GROUP_ID);
+            values.putNull(FeedColumns.LAST_UPDATE);
+            values.put(FeedColumns.FETCH_MODE, 0);
+            cr.insert(FeedColumns.CONTENT_URI, values);
+
+            for( int i = 0; i < 30; i++ ) {
+                values.clear();
+                values.put(EntryColumns._ID, i);
+                values.put(EntryColumns.ABSTRACT, testAbstract);
+                values.put(EntryColumns.TITLE, "testTitile" + i);
+                cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(testFeedID), values);
+            }
+        } finally {
+            getObservable().End(status);
+        }
+
     }
 }

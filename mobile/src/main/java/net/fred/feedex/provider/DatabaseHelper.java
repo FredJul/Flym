@@ -61,7 +61,7 @@ import java.io.File;
 class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "FeedEx.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 10;
 
     private static final String ALTER_TABLE = "ALTER TABLE ";
     private static final String ADD = " ADD ";
@@ -127,12 +127,12 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
+        if (oldVersion < 2)
             executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.REAL_LAST_UPDATE + ' ' + FeedData.TYPE_DATE_TIME);
-        }
-        if (oldVersion < 3) {
+
+        if (oldVersion < 3)
             executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.RETRIEVE_FULLTEXT + ' ' + FeedData.TYPE_BOOLEAN);
-        }
+
         if (oldVersion < 4) {
             executeCatchedSQL(database, createTable(TaskColumns.TABLE_NAME, TaskColumns.COLUMNS));
             // Remove old FeedEx directory (now useless)
@@ -141,18 +141,23 @@ class DatabaseHelper extends SQLiteOpenHelper {
             } catch (Exception ignored) {
             }
         }
-        if (oldVersion < 5) {
+        if (oldVersion < 5)
             executeCatchedSQL(database, ALTER_TABLE + TaskColumns.TABLE_NAME + ADD + "UNIQUE(" + TaskColumns.ENTRY_ID + ", " + TaskColumns.IMG_URL_TO_DL + ") ON CONFLICT IGNORE");
-        }
-        if (oldVersion < 6) {
+
+        if (oldVersion < 6)
             executeCatchedSQL(database, ALTER_TABLE + FilterColumns.TABLE_NAME + ADD + FilterColumns.IS_ACCEPT_RULE + ' ' + FeedData.TYPE_BOOLEAN);
-        }
-        if (oldVersion < 7) {
+
+        if (oldVersion < 7)
             executeCatchedSQL(database, ALTER_TABLE + EntryColumns.TABLE_NAME + ADD + EntryColumns.FETCH_DATE + ' ' + FeedData.TYPE_DATE_TIME);
-        }
-        if (oldVersion < 8) {
+
+        if (oldVersion < 8)
             executeCatchedSQL(database, ALTER_TABLE + EntryColumns.TABLE_NAME + ADD + EntryColumns.IMAGE_URL + ' ' + FeedData.TYPE_TEXT);
-        }
+
+        if (oldVersion < 9)
+            executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.SHOW_TEXT_IN_ENTRY_LIST + ' ' + FeedData.TYPE_BOOLEAN);
+
+        if (oldVersion < 10)
+            executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.IS_GROUP_EXPANDED + ' ' + FeedData.TYPE_BOOLEAN);
     }
 
     private void executeCatchedSQL(SQLiteDatabase database, String query) {

@@ -1,10 +1,17 @@
 package net.fred.feedex.utils;
 
+import android.util.Log;
+
+import net.fred.feedex.service.FetcherService;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,6 +63,7 @@ public class ArticleTextExtractor {
         if (doc == null)
             throw new NullPointerException("missing document");
 
+        FetcherService.getObservable().AddBytes( doc.html().length() );
         // now remove the clutter
         prepareDocument(doc);
 
@@ -64,18 +72,20 @@ public class ArticleTextExtractor {
         int maxWeight = 0;
         Element bestMatchElement = null;
 
-        for (Element entry : nodes) {
-            int currentWeight = getWeight(entry, contentIndicator);
-            if (currentWeight > maxWeight) {
-                maxWeight = currentWeight;
-                bestMatchElement = entry;
+        bestMatchElement = getBestElementFromFile(doc);
+        if (bestMatchElement == null) {
+            for (Element entry : nodes) {
+                int currentWeight = getWeight(entry, contentIndicator);
+                if (currentWeight > maxWeight) {
+                    maxWeight = currentWeight;
+                    bestMatchElement = entry;
 
-                if (maxWeight > 300) {
-                    break;
+                    if (maxWeight > 300) {
+                        break;
+                    }
                 }
             }
         }
-
         Collection<Element> metas = getMetas(doc);
         String ogImage = null;
         for (Element entry : metas) {
@@ -87,20 +97,90 @@ public class ArticleTextExtractor {
 
         if (bestMatchElement != null) {
 
+            Elements title = bestMatchElement.getElementsByClass("title");
+            for (Element entry : title)
+                if ( entry.tagName().toLowerCase().equals( "h1" ) ) {
+                    title.first().remove();
+                    break;
+                }
+
             String ret = bestMatchElement.toString();
             if (ogImage != null && !ret.contains(ogImage)) {
                 ret = "<img src=\""+ogImage+"\"><br>\n"+ret;
             }
 
-            Element comments = doc.getElementById( "comments" );
-            if ( comments != null )
+
+            Element comments = doc.getElementById("comments");
+            if ( comments != null ) {
+                Elements li = comments.getElementsByTag( "li" );
+                for (Element entry : li) {
+                    entry.tagName( "p" );
+                }
+                Elements ul = comments.getElementsByTag( "ul" );
+                for (Element entry : ul) {
+                    entry.tagName( "p" );
+                }
                 ret += comments;
+            }
+
+            ret = ret.replaceAll("<table(.)*?>", "<p>");
+            ret = ret.replaceAll("</table>", "</p>");
+
+            ret = ret.replaceAll("<tr(.)*?>", "<p>");
+            ret = ret.replaceAll("</tr>", "</p>");
+
+            ret = ret.replaceAll("<td(.)*?>", "<p>");
+            ret = ret.replaceAll("</td>", "</p>");
+
+            ret = ret.replaceAll("<th(.)*?>", "<p>");
+            ret = ret.replaceAll("</th>", "</p>");
 
             return ret;
         }
 
 
         return null;
+    }
+
+    private static Element getBestElementFromFile(Document doc) {
+        Element result = null;
+        File file = new File( "/sdcard/feedex/fulltextroot.txt" );
+        if ( file.exists() ) {
+            BufferedReader in;
+            try {
+                in = new BufferedReader(new FileReader(file.getAbsolutePath()));
+                try {
+                    while ( result == null ) {
+                        String line = in.readLine();
+                        try {
+                            if ( ( line == null ) )
+                                break;
+                            String[] list1 = line.split(":");
+                            String keyWord = list1[0];
+                            String[] list2 = list1[1].split("=");
+                            String elementType = list2[0].toLowerCase();
+                            String elementValue = list2[1];
+                            if ( doc.head().html().contains(keyWord) ) {
+                                if ( elementType.equals( "id" ) )
+                                    result = doc.getElementById( elementValue );
+                                else if ( elementType.equals( "class" ) ) {
+                                    Elements elements = doc.getElementsByClass(elementValue);
+                                    if ( !elements.isEmpty() )
+                                        result = elements.first();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.w("Feedex", e.getLocalizedMessage() + " " + line);
+                        }
+                    }
+                } finally {
+                    in.close();
+                }
+            } catch (Exception e) {
+                Log.w("Feedex", e.getLocalizedMessage());
+            }
+        }
+        return result;
     }
 
     /**

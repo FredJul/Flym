@@ -79,7 +79,7 @@ public class AddGoogleNewsActivity extends BaseActivity {
                 for (int topic = 0; topic < TOPIC_NAME.length; topic++) {
                     if (((CheckBox) findViewById(CB_IDS[topic])).isChecked() && TOPIC_CODES[topic] != null) {
                         String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss&topic=" + TOPIC_CODES[topic];
-                        FeedDataContentProvider.addFeed(this, url, getString(TOPIC_NAME[topic]), true);
+                        FeedDataContentProvider.addFeed(this, url, getString(TOPIC_NAME[topic]), true, false);
                     }
                 }
 
@@ -88,7 +88,7 @@ public class AddGoogleNewsActivity extends BaseActivity {
                 {
                     try {
                         String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss&q=" + URLEncoder.encode(custom_topic, "UTF-8");
-                        FeedDataContentProvider.addFeed(this, url, custom_topic, true);
+                        FeedDataContentProvider.addFeed(this, url, custom_topic, true, false);
                     } catch (UnsupportedEncodingException ignored) {
                     }
                 }

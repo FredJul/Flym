@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical">
+              android:orientation="vertical"
+    android:gravity="left|top">
     <Button
         android:id="@+id/refreshListBtn"
         android:layout_width="match_parent"
@@ -15,6 +16,16 @@
         android:textColor="@android:color/white"
         android:visibility="gone"/>
 
+    <TextView
+        android:id="@+id/statusText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="status"
+        android:visibility="visible"
+        android:layout_gravity="left|top"
+        android:gravity="left|top" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -26,6 +37,8 @@
             android:clickable="true"
             android:gravity="center"
             android:text="@string/no_entries"/>
+
+
 
         <ListView
             android:id="@android:id/list"

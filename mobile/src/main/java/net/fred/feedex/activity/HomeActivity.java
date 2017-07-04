@@ -22,15 +22,18 @@ package net.fred.feedex.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -48,12 +51,14 @@ import net.fred.feedex.R;
 import net.fred.feedex.adapter.DrawerAdapter;
 import net.fred.feedex.fragment.EntriesListFragment;
 import net.fred.feedex.parser.OPML;
+import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.service.AutoRefreshService;
 import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
+import net.fred.feedex.view.EntryView;
 
 import java.io.File;
 
@@ -75,6 +80,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mTitle;
     private int mCurrentDrawerPos;
+    private Handler mHandler = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +125,13 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             }
         });
 
+        if (savedInstanceState != null)
+            mCurrentDrawerPos = savedInstanceState.getInt(STATE_CURRENT_DRAWER_POS);
+        else
+            mCurrentDrawerPos = PrefUtils.getInt( STATE_CURRENT_DRAWER_POS, 1 );
+
+        //selectDrawerItem(1);
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (mDrawerLayout != null) {
             mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -127,9 +140,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             mDrawerLayout.setDrawerListener(mDrawerToggle);
         }
 
-        if (savedInstanceState != null) {
-            mCurrentDrawerPos = savedInstanceState.getInt(STATE_CURRENT_DRAWER_POS);
-        }
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
@@ -158,6 +168,19 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_IMPORT_FROM_OPML);
             }
         }
+
+        mHandler = new Handler();
+        FetcherService.getObservable().setHandler(mHandler);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String lastUri = PrefUtils.getString( PrefUtils.LAST_ENTRY_URI, "" );
+        if ( !lastUri.isEmpty() && !lastUri.contains( "-1" ) )
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse( lastUri )));
     }
 
     @Override
@@ -170,18 +193,22 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         // We reset the current drawer position
-        selectDrawerItem(0);
+        // selectDrawerItem(0);
     }
 
     public void onBackPressed() {
         // Before exiting from app the navigation drawer is opened
-        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout != null && !mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.openDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
@@ -229,9 +256,20 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        CursorLoader cursorLoader = new CursorLoader(this, FeedColumns.GROUPED_FEEDS_CONTENT_URI, new String[]{FeedColumns._ID, FeedColumns.URL, FeedColumns.NAME,
-                FeedColumns.IS_GROUP, FeedColumns.ICON, FeedColumns.LAST_UPDATE, FeedColumns.ERROR, FEED_UNREAD_NUMBER}, null, null, null
-        );
+        CursorLoader cursorLoader =
+                new CursorLoader(this,
+                                 FeedColumns.GROUPED_FEEDS_CONTENT_URI,
+                                 new String[]{FeedColumns._ID, FeedColumns.URL, FeedColumns.NAME,
+                                              FeedColumns.IS_GROUP, FeedColumns.ICON, FeedColumns.LAST_UPDATE,
+                                              FeedColumns.ERROR, FEED_UNREAD_NUMBER, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST,
+                                              FeedColumns.IS_GROUP_EXPANDED  },
+                                         FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR +
+                                         FeedColumns.GROUP_ID + Constants.DB_IS_NULL  + Constants.DB_OR +
+                                         FeedColumns.GROUP_ID + " IN (SELECT " + FeedColumns._ID +
+                                                                     " FROM " + FeedColumns.TABLE_NAME +
+                                                                     " WHERE " + FeedColumns.IS_GROUP_EXPANDED + Constants.DB_IS_TRUE + ")",
+                                 null,
+                                 null );
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
     }
@@ -288,7 +326,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         if (!newUri.equals(mEntriesFragment.getUri())) {
-            mEntriesFragment.setData(newUri, showFeedInfo);
+            mEntriesFragment.setData(newUri, showFeedInfo, mDrawerAdapter.isShowTextInEntryList(position));
         }
 
         mDrawerList.setItemChecked(position, true);
@@ -337,6 +375,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     break;
             }
         }
+
+        PrefUtils.putInt(STATE_CURRENT_DRAWER_POS, mCurrentDrawerPos);
 
         // Put the good menu
         invalidateOptionsMenu();
