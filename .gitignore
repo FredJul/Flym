@@ -17,6 +17,8 @@ bin/
 gen/
 proguard/
 
+captures/
+
 # Local configuration file (sdk path, keystore, etc)
 local.properties
 gradle.properties
