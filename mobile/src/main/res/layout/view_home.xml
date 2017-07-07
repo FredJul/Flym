@@ -15,7 +15,7 @@
 
         <fragment
             android:id="@+id/entries_list_fragment"
-            android:name="net.fred.feedex.fragment.EntriesListFragment"
+            android:name="ru.yanus171.feedexmod.fragment.EntriesListFragment"
             android:background="@color/dark_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

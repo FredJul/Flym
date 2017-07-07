@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="net.fred.feedex"
+          package="ru.yanus171.feedexmod"
           xmlns:tools="http://schemas.android.com/tools"
           android:installLocation="auto">
 
@@ -11,17 +11,17 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <permission
-        android:name="net.fred.feedex.provider.WRITE_PERMISSION"
+        android:name="ru.yanus171.feedexmod.provider.WRITE_PERMISSION"
         android:protectionLevel="signature"/>
 
     <application
-        android:name=".MainApplication"
+        android:name="ru.yanus171.feedexmod.MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Dark">
         <service
-            android:name=".service.AutoRefreshService"
+            android:name="ru.yanus171.feedexmod.service.AutoRefreshService"
             android:exported="true"
             android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
             <intent-filter>
@@ -29,16 +29,16 @@
             </intent-filter>
         </service>
 
-        <service android:name=".service.FetcherService"/>
+        <service android:name="ru.yanus171.feedexmod.service.FetcherService"/>
 
         <provider
-            android:name=".provider.FeedDataContentProvider"
-            android:authorities="net.fred.feedex.provider.FeedData"
+            android:name="ru.yanus171.feedexmod.provider.FeedDataContentProvider"
+            android:authorities="ru.yanus171.feedexmod.provider.FeedData"
             android:exported="true"
-            android:writePermission="net.fred.feedex.provider.WRITE_PERMISSION"/>
+            android:writePermission="ru.yanus171.feedexmod.provider.WRITE_PERMISSION"/>
 
         <activity
-            android:name=".activity.HomeActivity"
+            android:name="ru.yanus171.feedexmod.activity.HomeActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask">
             <intent-filter>
@@ -47,20 +47,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.AddGoogleNewsActivity"
+            android:name="ru.yanus171.feedexmod.activity.AddGoogleNewsActivity"
             android:label="@string/google_news_title"
             android:windowSoftInputMode="stateHidden"
             android:launchMode="singleTask"/>
         <activity
-            android:name=".activity.AboutActivity"
+            android:name="ru.yanus171.feedexmod.activity.AboutActivity"
             android:label="@string/about_flym"
             android:launchMode="singleTask"/>
         <activity
-            android:name=".activity.EditFeedsListActivity"
+            android:name="ru.yanus171.feedexmod.activity.EditFeedsListActivity"
             android:label="@string/feeds"
             android:launchMode="singleTask"/>
         <activity
-            android:name=".activity.EntryActivity"
+            android:name="ru.yanus171.feedexmod.activity.EntryActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask">
             <intent-filter>
@@ -70,16 +70,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.GeneralPrefsActivity"
+            android:name="ru.yanus171.feedexmod.activity.GeneralPrefsActivity"
             android:label="@string/menu_settings"
             android:launchMode="singleTask"/>
-        <activity android:name=".widget.WidgetConfigActivity">
+        <activity android:name="ru.yanus171.feedexmod.widget.WidgetConfigActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.EditFeedActivity"
+            android:name="ru.yanus171.feedexmod.activity.EditFeedActivity"
             android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT"/>
@@ -149,7 +149,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".widget.WidgetProvider">
+        <receiver android:name="ru.yanus171.feedexmod.widget.WidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
@@ -159,7 +159,7 @@
                 android:resource="@xml/widgetinfo"/>
         </receiver>
 
-        <receiver android:name=".widget.TickerWidgetProvider">
+        <receiver android:name="ru.yanus171.feedexmod.widget.TickerWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
@@ -170,10 +170,10 @@
         </receiver>
 
         <service
-            android:name=".widget.WidgetService"
+            android:name="ru.yanus171.feedexmod.widget.WidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
-        <service android:name=".widget.TickerWidgetService"/>
+        <service android:name="ru.yanus171.feedexmod.widget.TickerWidgetService"/>
 
         <!--     <meta-data
                  android:name="com.google.android.gms.version"

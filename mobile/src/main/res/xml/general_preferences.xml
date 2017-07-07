@@ -10,8 +10,8 @@
 
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="net.fred.feedex.activity.AboutActivity"
-            android:targetPackage="net.fred.feedex"/>
+            android:targetClass="ru.yanus171.feedexmod.activity.AboutActivity"
+            android:targetPackage="ru.yanus171.feedexmod"/>
     </PreferenceScreen>
 
     <PreferenceCategory
@@ -27,7 +27,7 @@
             android:summary="@string/settings_refresh_enabled_description"
             android:title="@string/settings_refresh_enabled"/>
 
-        <net.fred.feedex.view.AutoSummaryListPreference
+        <ru.yanus171.feedexmod.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="1800000"
@@ -69,7 +69,7 @@
             android:summary="@string/settings_light_theme_description"
             android:title="@string/settings_light_theme"/>
 
-        <net.fred.feedex.view.AutoSummaryListPreference
+        <ru.yanus171.feedexmod.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="4"
@@ -79,7 +79,7 @@
             android:key="keeptime"
             android:title="@string/settings_keep_time"/>
 
-        <net.fred.feedex.view.AutoSummaryListPreference
+        <ru.yanus171.feedexmod.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="0"
@@ -97,7 +97,7 @@
             android:summary="@string/settings_display_images_description"
             android:title="@string/settings_display_images"/>
 
-        <net.fred.feedex.view.AutoSummaryListPreference
+        <ru.yanus171.feedexmod.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="WIFI_ONLY_PRELOAD"

@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/entry_fragment"
-        class="net.fred.feedex.fragment.EditFeedsListFragment"
+        class="ru.yanus171.feedexmod.fragment.EditFeedsListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
