@@ -2,6 +2,15 @@
 <resources>
     <string name="about_us_copyright" translatable="false">Copyright 2013–2016 Frédéric Julian</string>
     <string name="about_us_content" translatable="false"><![CDATA[
+
+    This is a mod of Flym RSS Reader made by yanus171. Among added features are
+    - feed group exanding
+    - invisible fullscreen page up|down buttons
+    - max image per feed download count
+    - ability to cancel refresh process
+    - ...
+    <a href="https://github.com/yanus171/Flym">source on github</a>
+
     <b>Community</b><br/>
     • Ildar Mulyukov<br/><br/>
 

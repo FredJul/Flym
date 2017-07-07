@@ -23,7 +23,6 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="app_name">Flym</string>
     <string name="about_flym">Flymi buruz</string>
     <string name="welcome_title">Ongi etorri Flymera. Jario bat gehitu nahiko al zenuke?</string>
     <string name="never">inoiz</string>

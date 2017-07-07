@@ -23,7 +23,6 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="app_name">Флим</string>
     <string name="about_flym">О Флиму</string>
     <string name="welcome_title">Добро дошли у Флим. Желите ли да додате довод?</string>
     <string name="never">никад</string>

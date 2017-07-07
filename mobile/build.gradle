@@ -3,25 +3,37 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion '25.0.0'
-
     defaultConfig {
-        applicationId "net.fred.feedex"
-        minSdkVersion 10
+        //applicationId 'ru.yanus171.feedexmod'
+        applicationId 'net.fred.feedex'
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 61
-        versionName "1.10.1"
+        versionName '0.1'
     }
-
     lintOptions {
+        checkReleaseBuilds false
         // if true, stop the gradle build if errors are found
-        abortOnError true
+        abortOnError false
     }
-
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
+    /*applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def appId = variant.applicationId
+            def versionName = variant.versionName
+            def versionCode = variant.versionCode
+            def flavorName = variant.flavorName // e. g. free
+            def buildType = variant.buildType // e. g. debug
+            def variantName = variant.name // e. g. freeDebug
+
+            def apkName = appId + '_' + variantName + '_' + versionName + '_' + versionCode + '.apk';
+            output.outputFile = new File(output.outputFile.parentFile, apkName)
+        }
+    }*/
 
     signingConfigs {
         debug {
@@ -42,14 +54,15 @@ android {
             }
         }
     }
-
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-			signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
+    }
+    productFlavors {
     }
 }
 
@@ -62,10 +75,10 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //wearApp project(':wear')
+    //compile 'com.google.android.gms:play-services-wearable:+'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
     compile 'com.google.android.gms:play-services-gcm:+'
-    //compile 'com.google.android.gms:play-services-wearable:+'
     compile 'org.jsoup:jsoup:+'
     compile 'com.github.bumptech.glide:glide:+'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:+'

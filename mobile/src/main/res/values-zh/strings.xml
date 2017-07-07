@@ -22,7 +22,6 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="app_name">Flym</string>
     <string name="about_flym">关于Flym</string>
     <string name="welcome_title">欢迎使用Flym。需要添加一个源吗？</string>
     <string name="never">从未</string>
