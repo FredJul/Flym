@@ -122,17 +122,29 @@ public class RssAtomParser extends DefaultHandler {
             {"PST", "-0800"},
             {"ICT", "+0700"}};
 
-    private final DateFormat[] PUBDATE_DATE_FORMATS = {
-            new SimpleDateFormat("d' 'MMM' 'yy' 'HH:mm:ss' 'Z", Locale.US),
-            new SimpleDateFormat("d' 'MMM' 'yy' 'HH:mm:ss' 'z", Locale.US),
-            new SimpleDateFormat("d' 'MMM' 'yy' 'HH:mm:ss", Locale.US)
+    private static final ThreadLocal<DateFormat[]> PUBDATE_DATE_FORMATS
+            = new ThreadLocal<DateFormat[]>(){
+        @Override
+        protected DateFormat[] initialValue() {
+            return new DateFormat[] {  // For RSS date time strings
+                    new SimpleDateFormat("d' 'MMM' 'yy' 'HH:mm:ss' 'Z", Locale.US),
+                    new SimpleDateFormat("d' 'MMM' 'yy' 'HH:mm:ss' 'z", Locale.US),
+                    new SimpleDateFormat("d' 'MMM' 'yy' 'HH:mm:ss", Locale.US)
+            };
+        }
     };
 
-    private final DateFormat[] UPDATE_DATE_FORMATS = {
-            new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ssZ", Locale.US),
-            new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSz", Locale.US),
-            new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss", Locale.US),
-            new SimpleDateFormat("yyyy-MM-dd", Locale.US)
+    private static final ThreadLocal<DateFormat[]> UPDATE_DATE_FORMATS
+            = new ThreadLocal<DateFormat[]>(){
+        @Override
+        protected DateFormat[] initialValue() {
+            return new DateFormat[] {  // For ATOM date time strings
+                    new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ssZ", Locale.US),
+                    new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.SSSz", Locale.US),
+                    new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss", Locale.US),
+                    new SimpleDateFormat("yyyy-MM-dd", Locale.US)
+            };
+        }
     };
 
     private final Date mRealLastUpdateDate;
@@ -234,7 +246,7 @@ public class RssAtomParser extends DefaultHandler {
             }
             if (TAG_ENCLOSURE.equals(attributes.getValue("", ATTRIBUTE_REL))) {
                 startEnclosure(attributes, attributes.getValue("", ATTRIBUTE_HREF));
-            //} else if(TAG_ALTERNATE.equals(attributes.getValue("", ATTRIBUTE_REL))) {
+                //} else if(TAG_ALTERNATE.equals(attributes.getValue("", ATTRIBUTE_REL))) {
             } else if(TAG_RELATED.equals(attributes.getValue("", ATTRIBUTE_REL))) {
             } else if(TAG_VIA.equals(attributes.getValue("", ATTRIBUTE_REL))) {
             } else {
@@ -547,7 +559,7 @@ public class RssAtomParser extends DefaultHandler {
     }
 
     private Date parseUpdateDate(String dateStr, boolean tryAllFormat) {
-        for (DateFormat format : UPDATE_DATE_FORMATS) {
+        for (DateFormat format : UPDATE_DATE_FORMATS.get()) {
             try {
                 Date result = format.parse(dateStr);
                 return (result.getTime() > mNow ? new Date(mNow) : result);
@@ -567,7 +579,7 @@ public class RssAtomParser extends DefaultHandler {
     }
 
     private Date parsePubdateDate(String dateStr, boolean tryAllFormat) {
-        for (DateFormat format : PUBDATE_DATE_FORMATS) {
+        for (DateFormat format : PUBDATE_DATE_FORMATS.get()) {
             try {
                 Date result = format.parse(dateStr);
                 return (result.getTime() > mNow ? new Date(mNow) : result);
