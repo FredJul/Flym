@@ -123,7 +123,7 @@
     <string name="file">Datei</string>
     <string name="download_and_save">Herunterladen und speichern</string>
     <string name="open_link">Link öffnen</string>
-    <string name="tip_sentence">Tipp: Nach links wischen um Artikel als gelesen zu markieren und nach rechts wischen um Artikel zu favorisieren</string>
+    <string name="tip_sentence">Tipp: Nach links wischen um Artikel als gelesen zu markieren</string>
     <string name="undo">Rückgängig</string>
     <string name="marked_as_read">Als gelesen markieren</string>
 

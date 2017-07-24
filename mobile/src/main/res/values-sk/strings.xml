@@ -122,7 +122,7 @@
     <string name="file">Súbor</string>
     <string name="download_and_save">Stiahnúť a uložiť</string>
     <string name="open_link">Otvoriť odkaz</string>
-    <string name="tip_sentence">Tip: Posunutím doľava označíte článok ako prečítaný, posunutím doprava ako obľúbený.</string>
+    <string name="tip_sentence">Tip: Posunutím doľava označíte článok ako prečítaný</string>
     <string name="undo">Undo</string>
     <string name="marked_as_read">Marked as read</string>
 

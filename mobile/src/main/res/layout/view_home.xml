@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#000000"
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000"
         android:orientation="vertical"
         tools:showIn="@layout/activity_home">
 
@@ -15,7 +13,7 @@
 
         <fragment
             android:id="@+id/entries_list_fragment"
-            android:name="ru.yanus171.feedexmod.fragment.EntriesListFragment"
+            android:name="ru.yanus171.feedexfork.fragment.EntriesListFragment"
             android:background="@color/dark_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

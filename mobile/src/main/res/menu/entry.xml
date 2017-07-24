@@ -27,6 +27,8 @@
         android:title="@string/menu_copy_clipboard"/>
     <item
         android:id="@+id/menu_mark_as_unread"
+        app:showAsAction="always"
+        android:icon="@drawable/rounded_checbox_gray"
         android:title="@string/menu_mark_as_unread"/>
     <item
         android:id="@+id/menu_mark_as_favorite"

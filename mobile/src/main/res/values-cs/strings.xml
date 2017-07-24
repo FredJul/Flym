@@ -130,7 +130,7 @@
     <string name="file">Soubor</string>
     <string name="download_and_save">Stáhnout a uložit</string>
     <string name="open_link">Otevřít odkaz</string>
-    <string name="tip_sentence">Tip: posunutím doleva označit jako přečtené a posunutím doprava jako oblíbené</string>
+    <string name="tip_sentence">Tip: posunutím doleva označit jako přečtené</string>
     <string name="undo">Undo</string>
     <string name="marked_as_read">Marked as read</string>
 

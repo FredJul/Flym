@@ -50,7 +50,7 @@
     <string name="menu_add_group">Добавить группу</string>
     <string name="menu_import">Импорт из OPML-файла</string>
     <string name="menu_export">Экспорт в OPML-файл</string>
-    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="storage_request_explanation">Для экспорта/импорта лент в файл необходимо предоставить приложению разрешение на доступ к карте памяти.</string>
     <string name="error_feed_error">Адрес ленты не доступен.</string>
     <string name="error_feed_process">Лента не может быть добавлена.</string>
     <string name="error_feed_url_exists">Такой адрес уже есть.</string>
@@ -92,18 +92,18 @@
     </string>
     <string name="to_group_above">Над группой</string>
     <string name="to_group_into">Внутрь группы</string>
-    <string name="add_custom_feed">Add a custom feed or search for one</string>
+    <string name="add_custom_feed">Добавить ленту по адресу или по названию</string>
     <string name="google_news_title">Google News topics</string>
-    <string name="google_news_indicator">Select one or several topics to add. Some of them may not be provided by Google for your language.</string>
+    <string name="google_news_indicator">Выберите один или несколько категорий.</string>
     <string name="google_news_top_stories">Top Stories</string>
-    <string name="google_news_world">World</string>
-    <string name="google_news_business">Business</string>
-    <string name="google_news_technology">Technology</string>
-    <string name="google_news_entertainment">Entertainment</string>
-    <string name="google_news_sports">Sports</string>
-    <string name="google_news_science">Science</string>
-    <string name="google_news_health">Health</string>
-    <string name="google_news_custom_topic">Enter custom topic</string>
+    <string name="google_news_world">Мир</string>
+    <string name="google_news_business">Бизнес</string>
+    <string name="google_news_technology">Технолгии</string>
+    <string name="google_news_entertainment">Развлечения</string>
+    <string name="google_news_sports">Спорт</string>
+    <string name="google_news_science">Наука</string>
+    <string name="google_news_health">Здоровье</string>
+    <string name="google_news_custom_topic">Своя тема</string>
 
     <!-- ENTRIES -->
     <string name="unread_entries">Непрочитаное</string>
@@ -136,7 +136,7 @@
     <string name="file">File</string>
     <string name="download_and_save">Загрузить и сохранить</string>
     <string name="open_link">Открыть ссылку</string>
-    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+    <string name="tip_sentence">Tip: slide left to mark as read</string>
     <string name="undo">Undo</string>
     <string name="marked_as_read">Пометить как прочитанное</string>
 
@@ -173,13 +173,13 @@
     <string name="settings_font_size">Размер текста</string>
     <string name="settings_display_oldest_first">Entries order</string>
     <string name="settings_display_oldest_first_description">Display oldest entries first</string>
-    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
-    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
+    <string name="settings_display_entries_fullscreen">Статьи на полный экран</string>
+    <string name="settings_display_entries_fullscreen_description">Открывать текст статьи на полный экран</string>
     <string name="settings_max_image_download_count">Max число изображений при загрузке</string>
     <string name="settings_refresh_on_open">Обновлять при запуске</string>
     <string name="settings_refresh_on_open_description">Обновлять все ленты пии запуске приложения
     </string>
-    <string name="settings_refresh_wifi_only">Обновлять только по WiFi</string>
+    <string name="settings_refresh_wifi_only">Обновлять толькоа по WiFi</string>
     <string name="settings_refresh_wifi_only_description">Автоматическое обновление будет
         выполняться только при включенном WiFi
     </string>
@@ -187,6 +187,22 @@
     <string name="settings_widget_background">Фон</string>
     <string name="settings_widget_background_description">Цвета и прозрачность фона виджета</string>
     <string name="all_feeds">Все ленты (включая будущие)</string>
+    <string name="settings_display_text_color_description">в темной теме (0..255)</string>
+    <string name="downloadImage">Изображение</string>
+    <string name="loadFullText">Полный текст</string>
+    <string name="deleteOldEntries">Удаление старых статей</string>
+    <string name="AllImages">Все изображения</string>
+    <string name="EntryImages">Избражения статьи</string>
+    <string name="mobilizeAll">Формат полных текстов</string>
+    <string name="RefreshFeeds">Обновление</string>
+    <string name="deleteImages">Удаление изображений</string>
+    <string name="applyOperations">Завершение операций</string>
+    <string name="extractContent">Выборка текста</string>
+    <string name="improveHtmlContent">Очитка текста</string>
+    <string name="parseXml">Разбор XML</string>
+    <string name="setupConnection">Установка соединения</string>
+    <string name="settings_content_extract_rules">Правила поиска полных текстов</string>
+    <string name="settings_content_extract_rules_description">задаются для отдельных сайтов (необходимы базовые знания HTML)</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">%d new entry</item>

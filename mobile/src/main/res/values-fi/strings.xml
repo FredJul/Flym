@@ -120,7 +120,7 @@
     <string name="file">Tiedosto</string>
     <string name="download_and_save">Lataa ja tallenna</string>
     <string name="open_link">Avaa linkki</string>
-    <string name="tip_sentence">Vihje: Pyyhkäise vasemmalle merkitäksesi artikkeli luetuksi. Pyyhkäise oikealle merkitäksesi artikkeli tähdellä.</string>
+    <string name="tip_sentence">Vihje: Pyyhkäise vasemmalle merkitäksesi artikkeli luetuksi.</string>
     <string name="marked_as_read">Merkitty luetuksi</string>
 
     <!-- WIDGET -->

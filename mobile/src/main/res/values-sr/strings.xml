@@ -121,7 +121,7 @@
     <string name="file">Фајл</string>
     <string name="download_and_save">Преузми и сачувај</string>
     <string name="open_link">Отвори везу</string>
-    <string name="tip_sentence">Савет: клизајте лево да означите прочитаним и десно да ставите у омиљене</string>
+    <string name="tip_sentence">Савет: клизајте лево да означите прочитаним</string>
     <string name="undo">Undo</string>
     <string name="marked_as_read">Marked as read</string>
 

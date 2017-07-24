@@ -10,8 +10,8 @@
 
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="ru.yanus171.feedexmod.activity.AboutActivity"
-            android:targetPackage="ru.yanus171.feedexmod"/>
+            android:targetClass="ru.yanus171.feedexfork.activity.AboutActivity"
+            android:targetPackage="ru.yanus171.feedexfork"/>
     </PreferenceScreen>
 
     <PreferenceCategory
@@ -27,7 +27,7 @@
             android:summary="@string/settings_refresh_enabled_description"
             android:title="@string/settings_refresh_enabled"/>
 
-        <ru.yanus171.feedexmod.view.AutoSummaryListPreference
+        <ru.yanus171.feedexfork.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="1800000"
@@ -69,7 +69,7 @@
             android:summary="@string/settings_light_theme_description"
             android:title="@string/settings_light_theme"/>
 
-        <ru.yanus171.feedexmod.view.AutoSummaryListPreference
+        <ru.yanus171.feedexfork.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="4"
@@ -79,7 +79,7 @@
             android:key="keeptime"
             android:title="@string/settings_keep_time"/>
 
-        <ru.yanus171.feedexmod.view.AutoSummaryListPreference
+        <ru.yanus171.feedexfork.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="0"
@@ -97,7 +97,7 @@
             android:summary="@string/settings_display_images_description"
             android:title="@string/settings_display_images"/>
 
-        <ru.yanus171.feedexmod.view.AutoSummaryListPreference
+        <ru.yanus171.feedexfork.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="WIFI_ONLY_PRELOAD"
@@ -127,12 +127,15 @@
         <EditTextPreference
             android:key="text_color_brightness"
             android:inputType="number"
-            android:title="@string/settings_display_text_color" />
+            android:title="@string/settings_display_text_color"
+            android:summary="@string/settings_display_text_color_description"/>
 
         <EditTextPreference
             android:key="max_image_download_count"
             android:inputType="number"
+            android:defaultValue="10"
             android:title="@string/settings_max_image_download_count" />
+
 
     </PreferenceCategory>
 
@@ -174,6 +177,22 @@
             android:summary="@string/settings_notifications_light_description"
             android:title="@string/settings_notifications_light"/>
 
+
     </PreferenceCategory>
+
+    <EditTextPreference
+        android:key="content_extract_rules"
+        android:inputType="none"
+        android:dialogLayout="@layout/fragment_entry"
+        android:dialogTitle="site_url:id=XXX\nsite_url:class=XXX\n"
+        android:title="tap zones"/>
+
+    <EditTextPreference
+        android:key="content_extract_rules"
+        android:inputType="text"
+        android:defaultValue="@string/full_text_root_default"
+        android:dialogTitle="site_url:id=XXX\nsite_url:class=XXX\n"
+        android:title="@string/settings_content_extract_rules"
+        android:summary="@string/settings_content_extract_rules_description"/>
 
 </PreferenceScreen>

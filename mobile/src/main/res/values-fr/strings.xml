@@ -129,7 +129,7 @@
     <string name="file">Fichier</string>
     <string name="download_and_save">Télécharger et sauvegarder</string>
     <string name="open_link">Ouvrir le lien</string>
-    <string name="tip_sentence">Astuce: glisser vers la gauche pour marquer comme lu et vers la droite pour mettre en favoris</string>
+    <string name="tip_sentence">Astuce: glisser vers la gauche pour marquer comme lu et</string>
     <string name="undo">Annuler</string>
     <string name="marked_as_read">Marqués comme lus</string>
 

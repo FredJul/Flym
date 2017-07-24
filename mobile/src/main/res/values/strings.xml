@@ -131,7 +131,7 @@
     <string name="file">File</string>
     <string name="download_and_save">Download and save</string>
     <string name="open_link">Open link</string>
-    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
+    <string name="tip_sentence">Tip: slide left to mark as read</string>
     <string name="undo">Undo</string>
     <string name="marked_as_read">Marked as read</string>
 
@@ -171,12 +171,28 @@
     <string name="settings_refresh_on_open_description">Refreshes all feeds after opening the application</string>
     <string name="settings_refresh_wifi_only">Refresh only over Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Automatic refresh will only be done if Wi-Fi connection is available</string>
-    <string name="settings_display_text_color">Text color</string>
+    <string name="settings_display_text_color">Яркость текста</string>
     <string name="settings_max_image_download_count">Max image download count</string>
     <string name="settings_visible_feeds">Visible feeds</string>
     <string name="settings_widget_background">Background</string>
     <string name="settings_widget_background_description">Color and transparency of the widget background</string>
     <string name="all_feeds">All feeds (incl. future)</string>
+    <string name="settings_display_text_color_description">in dark theme (0..255)</string>
+    <string name="downloadImage">Download image</string>
+    <string name="loadFullText">load FullText</string>
+    <string name="deleteOldEntries">Delete old entries</string>
+    <string name="AllImages">All images</string>
+    <string name="EntryImages">Entry images</string>
+    <string name="mobilizeAll">mobilize all</string>
+    <string name="RefreshFeeds">Refresh feeds</string>
+    <string name="deleteImages">Delete images</string>
+    <string name="applyOperations">Apply operations</string>
+    <string name="extractContent">Extract content</string>
+    <string name="improveHtmlContent">Improve html content</string>
+    <string name="parseXml">Parse XML</string>
+    <string name="setupConnection">Setup connection</string>
+    <string name="settings_content_extract_rules">Content extract rules</string>
+    <string name="settings_content_extract_rules_description">set for each site (base HTML knoledges needed)</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new entry</item>

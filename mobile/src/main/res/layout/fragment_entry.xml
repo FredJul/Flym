@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
     android:orientation="vertical">
 
     <TextView
@@ -20,52 +19,45 @@
 
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
-            android:background="#000000"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
         <TextView
             android:id="@+id/pageUpBtn"
+            style="@style/TapZone"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="0dp"
-            android:layout_marginRight="0dp"
-            android:text=""
-            android:visibility="visible"/>
+            android:text="page up"/>
 
         <TextView
             android:id="@+id/pageDownBtn"
+            style="@style/TapZone"
+            android:text="page down"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="0dp"
-            android:layout_marginRight="0dp"
-            android:text=""
-            android:visibility="visible"/>
+            android:layout_alignParentBottom="true"/>
 
         <TextView
             android:id="@+id/pageDownBtnVert"
+            style="@style/TapZone"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="0dp"
-            android:layout_marginRight="0dp"
-            android:text=""
-            android:visibility="visible"/>
+            android:text="page down"/>
 
-        <ImageView
+        <TextView
             android:id="@+id/toggleFullScreenStatusBarBtn"
+            style="@style/TapZone"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_centerInParent="true"
             android:layout_marginBottom="5dp"
             android:layout_marginRight="5dp"
-            android:background="#00000000"
-            android:visibility="visible"/>
+            android:text="full screen toggle"/>
 
         <ImageView
-            android:id="@+id/cancelFullscreenBtn"
+            android:id="@+id/toggleFullscreenBtn"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"

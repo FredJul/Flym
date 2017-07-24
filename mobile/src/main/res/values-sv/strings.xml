@@ -117,7 +117,7 @@
     <string name="file">Fil</string>
     <string name="download_and_save">Ladda ned och spara</string>
     <string name="open_link">Öppna länk</string>
-    <string name="tip_sentence">Tips: svepa åt vänster för att markera som läst, svepa åt höger för att markera som favorit.</string>
+    <string name="tip_sentence">Tips: svepa åt vänster för att markera som läst.</string>
     <string name="marked_as_read">Markerade som läst</string>
 
     <!-- WIDGET -->

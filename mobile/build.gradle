@@ -2,14 +2,15 @@ apply plugin: 'com.android.application'
 
 android {
 
-    dexOptions {
+    /*dexOptions {
         javaMaxHeapSize "1g"
-    }
+        //incremental true
+    }*/
 
     compileSdkVersion 23
     buildToolsVersion '25.0.0'
     defaultConfig {
-        applicationId 'ru.yanus171.feedexmod'
+        applicationId 'ru.yanus171.feedexfork'
         //applicationId 'net.fred.feedex'
         minSdkVersion 14
         targetSdkVersion 23
