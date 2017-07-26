@@ -23,6 +23,8 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
+import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.service.FetcherService;
 
 import org.jsoup.Jsoup;
@@ -124,8 +126,8 @@ public class HtmlUtils {
                         content = content.replace(match, Constants.FILE_SCHEME + imgPath);
                     } else {
                         String match0 = matcher.group(0);
-                        String html = getButtonHtml("downloadImage('" + match + "')" , "Download image") +
-                                      getButtonHtml("downloadNextImages()" , "Download next " + FetcherService.mMaxImageDownloadCount ) + "<br/>";
+                        String html = getButtonHtml("downloadImage('" + match + "')" , getString( R.string.downloadOneImage ) ) +
+                                      getButtonHtml("downloadNextImages()" , getString( R.string.downloadNext ) + PrefUtils.getImageDownloadCount() ) + "<br/>";
 
                         content = content.replace(match0, html + match0.replace(match, Constants.FILE_SCHEME + imgPath));
                     }
@@ -150,6 +152,10 @@ public class HtmlUtils {
         return content;
     }
 
+    private static String getString( int id ) {
+        return MainApplication.getContext().getString(id);
+
+    }
     @NonNull
     private static String getButtonHtml(String methodName, String caption) {
         final String BUTTON_START = "<i onclick=\"";

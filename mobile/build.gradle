@@ -15,7 +15,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 61
-        versionName '0.1'
+        versionName '0.2'
     }
     lintOptions {
         checkReleaseBuilds false
@@ -83,7 +83,9 @@ dependencies {
     //wearApp project(':wear')
     //compile 'com.google.android.gms:play-services-wearable:+'
     compile 'com.android.support:appcompat-v7:23.2.1'
+    //compile 'com.android.support:appcompat-v7:+'
     compile 'com.android.support:design:23.2.1'
+    //compile 'com.android.support:design:+'
     compile 'com.google.android.gms:play-services-gcm:+'
     compile 'org.jsoup:jsoup:+'
     compile 'com.github.bumptech.glide:glide:+'

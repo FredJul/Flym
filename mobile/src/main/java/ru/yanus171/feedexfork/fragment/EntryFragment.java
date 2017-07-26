@@ -31,6 +31,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -201,13 +202,20 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
         disableSwipe();
 
-        rootView.findViewById(R.id.pageDownBtnVert).setVisibility(View.INVISIBLE);
-        rootView.findViewById(R.id.pageDownBtn).setVisibility(View.INVISIBLE);
-        rootView.findViewById(R.id.pageUpBtn).setVisibility(View.INVISIBLE);
-        rootView.findViewById(R.id.toggleFullScreenStatusBarBtn).setVisibility(View.INVISIBLE);
+        HideButtonText(rootView, R.id.pageDownBtnVert);
+        HideButtonText(rootView, R.id.pageDownBtn);
+        HideButtonText(rootView, R.id.pageUpBtn);
+        HideButtonText(rootView, R.id.toggleFullScreenStatusBarBtn);
 
         return rootView;
     }
+
+    void HideButtonText(View rootView, int ID) {
+        TextView btn = (TextView)rootView.findViewById(ID);
+        btn.setBackgroundColor(Color.TRANSPARENT);
+        btn.setText("");
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

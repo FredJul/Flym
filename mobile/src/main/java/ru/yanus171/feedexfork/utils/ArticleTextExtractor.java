@@ -110,17 +110,19 @@ public class ArticleTextExtractor {
             }
 
 
-            Element comments = doc.getElementById("comments");
-            if ( comments != null ) {
-                Elements li = comments.getElementsByTag( "li" );
-                for (Element entry : li) {
-                    entry.tagName( "p" );
-                }
-                Elements ul = comments.getElementsByTag( "ul" );
-                for (Element entry : ul) {
-                    entry.tagName( "p" );
-                }
-                ret += comments;
+            if ( PrefUtils.getBoolean( PrefUtils.LOAD_COMMENTS, false ) ) {
+              Element comments = doc.getElementById("comments");
+              if ( comments != null ) {
+                  Elements li = comments.getElementsByTag( "li" );
+                  for (Element entry : li) {
+                      entry.tagName( "p" );
+                  }
+                  Elements ul = comments.getElementsByTag( "ul" );
+                  for (Element entry : ul) {
+                      entry.tagName( "p" );
+                  }
+                  ret += comments;
+              }
             }
 
             ret = ret.replaceAll("<table(.)*?>", "<p>");

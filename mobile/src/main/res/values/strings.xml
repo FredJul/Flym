@@ -103,6 +103,7 @@
     <string name="unread_entries">Unread</string>
     <string name="all_entries">All entries</string>
     <string name="no_entries">No entries</string>
+    <string name="downloadOneImage">Download image</string>
     <string name="favorites">Starred</string>
     <string name="context_menu_share_starred">Share starred entries</string>
     <string name="menu_star">Star</string>
@@ -193,6 +194,14 @@
     <string name="setupConnection">Setup connection</string>
     <string name="settings_content_extract_rules">Content extract rules</string>
     <string name="settings_content_extract_rules_description">set for each site (base HTML knoledges needed)</string>
+    <string name="settings_tapZones">tap zones</string>
+    <string name="settings_additional">Additional</string>
+    <string name="settings_load_comments">Load comments</string>
+    <string name="settings_load_comments_description">in articles full text</string>
+    <string name="settings_tap_zones_description">of entry view window</string>
+    <string name="settings_tap_zones_dialogtitle">only for info, changes unavailable</string>
+    <string name="settings_max_image_download_count_description">per one entity</string>
+    <string name="downloadNext">"Download next "</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new entry</item>

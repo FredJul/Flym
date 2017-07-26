@@ -52,6 +52,7 @@ public class PrefUtils {
     public static final String TEXT_COLOR_BRIGHTNESS = "text_color_brightness";
     public static final String MAX_IMAGE_DOWNLOAD_COUNT = "max_image_download_count";
     public static final String CONTENT_EXTRACT_RULES = "content_extract_rules";
+    public static final String LOAD_COMMENTS = "load_comments";
 
     public static final String LAST_ENTRY_URI = "last_entry_uri";
     public static final String LAST_ENTRY_SCROLL_Y = "last_entry_scroll_y";

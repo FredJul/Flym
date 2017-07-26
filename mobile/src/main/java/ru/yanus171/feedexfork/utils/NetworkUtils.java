@@ -163,7 +163,7 @@ public class NetworkUtils {
     }
 
     public static boolean needDownloadPictures() {
-        String fetchPictureMode = PrefUtils.getString(PrefUtils.PRELOAD_IMAGE_MODE, Constants.FETCH_PICTURE_MODE_WIFI_ONLY_PRELOAD);
+        String fetchPictureMode = PrefUtils.getString(PrefUtils.PRELOAD_IMAGE_MODE, Constants.FETCH_PICTURE_MODE_ALWAYS_PRELOAD);
 
         boolean downloadPictures = false;
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {

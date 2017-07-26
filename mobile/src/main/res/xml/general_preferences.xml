@@ -100,7 +100,7 @@
         <ru.yanus171.feedexfork.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="WIFI_ONLY_PRELOAD"
+            android:defaultValue="ALWAYS_PRELOAD"
             android:dependency="display_images"
             android:entries="@array/settings_preload_image_modes"
             android:entryValues="@array/settings_preload_image_modes_values"
@@ -134,7 +134,8 @@
             android:key="max_image_download_count"
             android:inputType="number"
             android:defaultValue="10"
-            android:title="@string/settings_max_image_download_count" />
+            android:title="@string/settings_max_image_download_count"
+            android:summary="@string/settings_max_image_download_count_description"/>
 
 
     </PreferenceCategory>
@@ -145,8 +146,6 @@
         android:title="@string/settings_category_notifications">
 
         <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:defaultValue="true"
             android:key="notifications.enabled"
             android:summary="@string/settings_notifications_enabled_description"
@@ -180,19 +179,31 @@
 
     </PreferenceCategory>
 
-    <EditTextPreference
-        android:key="content_extract_rules"
-        android:inputType="none"
-        android:dialogLayout="@layout/fragment_entry"
-        android:dialogTitle="site_url:id=XXX\nsite_url:class=XXX\n"
-        android:title="tap zones"/>
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/settings_additional">
 
-    <EditTextPreference
-        android:key="content_extract_rules"
-        android:inputType="text"
-        android:defaultValue="@string/full_text_root_default"
-        android:dialogTitle="site_url:id=XXX\nsite_url:class=XXX\n"
-        android:title="@string/settings_content_extract_rules"
-        android:summary="@string/settings_content_extract_rules_description"/>
+        <CheckBoxPreference
+            android:key="load_comments"
+            android:title="@string/settings_load_comments"
+            android:summary="@string/settings_load_comments_description"/>
+
+        <EditTextPreference
+            android:key="settings_tap_zones"
+            android:inputType="none"
+            android:dialogLayout="@layout/fragment_entry"
+            android:dialogTitle="@string/settings_tap_zones_dialogtitle"
+            android:summary="@string/settings_tap_zones_description"
+            android:title="@string/settings_tapZones"/>
+
+        <EditTextPreference
+            android:key="content_extract_rules"
+            android:inputType="text"
+            android:defaultValue="@string/full_text_root_default"
+            android:dialogTitle="site_url:id=XXX\nsite_url:class=XXX\n"
+            android:title="@string/settings_content_extract_rules"
+            android:summary="@string/settings_content_extract_rules_description"/>
+    </PreferenceCategory>
 
 </PreferenceScreen>
