@@ -1,27 +1,25 @@
 package net.frju.flym.ui.main
 
+import android.arch.lifecycle.LifecycleActivity
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_main_containers.view.*
 import net.fred.feedex.R
-import net.frju.androidquery.gen.FEED
-import net.frju.androidquery.operation.condition.Where
-import net.frju.flym.data.Feed
-import net.frju.flym.data.Item
+import net.frju.flym.App
+import net.frju.flym.data.entities.Feed
+import net.frju.flym.data.entities.Item
 import net.frju.flym.ui.itemdetails.ItemDetailsFragment
 import net.frju.flym.ui.items.ItemsFragment
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, MainNavigator {
+class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelectedListener, MainNavigator {
 
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = FeedAdapter(feedGroups)
@@ -34,31 +32,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav.layoutManager = LinearLayoutManager(this)
         nav.adapter = feedAdapter
 
-        doAsync {
-            feedGroups.clear()
+        App.db.feedDao().observeRootItems.observe(this@MainActivity, Observer {
+            it?.let {
+                feedGroups.clear()
 
-            feedGroups.addAll(
-                    FEED.select()
-                    .where(Where.field(FEED.IS_GROUP).isTrue.or(Where.field(FEED.GROUP_ID).isEqualTo(null)))
-                            .queryAndInit().map { FeedGroup(it, it.subFeeds?.toMutableList() ?: mutableListOf()) }
-            )
+                val unreads = Feed()
+                unreads.id = Feed.UNREAD_ITEMS_ID
+                unreads.title = getString(R.string.unread_entries)
+                feedGroups.add(FeedGroup(unreads, mutableListOf()))
 
-            val unreads = Feed()
-            unreads.id = Feed.UNREAD_ITEMS_ID
-            unreads.title = getString(R.string.unread_entries)
-            feedGroups.add(0, FeedGroup(unreads, mutableListOf()))
+                val all = Feed()
+                all.id = Feed.ALL_ITEMS_ID
+                all.title = getString(R.string.all_entries)
+                feedGroups.add(FeedGroup(all, mutableListOf()))
 
-            val all = Feed()
-            all.id = Feed.ALL_ITEMS_ID
-            all.title = getString(R.string.all_entries)
-            feedGroups.add(1, FeedGroup(all, mutableListOf()))
+                val favorites = Feed()
+                favorites.id = Feed.FAVORITES_ID
+                favorites.title = getString(R.string.favorites)
+                feedGroups.add(FeedGroup(favorites, mutableListOf()))
 
-            val favorites = Feed()
-            favorites.id = Feed.FAVORITES_ID
-            favorites.title = getString(R.string.favorites)
-            feedGroups.add(2, FeedGroup(favorites, mutableListOf()))
+                feedGroups.addAll(
+                        it.map { FeedGroup(it, mutableListOf()) }
+                )
 
-            uiThread {
                 feedAdapter.notifyParentDataSetChanged(true)
 
                 feedAdapter.onFeedClick { view, feed ->
@@ -66,7 +62,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     closeDrawer()
                 }
             }
-        }
+        })
 
         containers_layout.custom_appbar.setOnNavigationClickListener(View.OnClickListener { toggleDrawer() })
 

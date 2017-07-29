@@ -1,8 +1,9 @@
 package net.frju.flym
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import net.frju.androidquery.gen.Q
+import net.frju.flym.data.AppDatabase
 
 class App : Application() {
 
@@ -10,13 +11,17 @@ class App : Application() {
         super.onCreate()
 
         context = applicationContext
-
-        Q.init(this)
+        db = AppDatabase.createDatabase(context)
     }
 
     companion object {
+        @SuppressLint("StaticFieldLeak")
         @JvmStatic
         lateinit var context: Context
+            private set
+
+        @JvmStatic
+        lateinit var db: AppDatabase
             private set
     }
 }

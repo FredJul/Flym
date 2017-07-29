@@ -1,7 +1,7 @@
 package net.frju.flym.ui.main
 
-import net.frju.flym.data.Feed
-import net.frju.flym.data.Item
+import net.frju.flym.data.entities.Feed
+import net.frju.flym.data.entities.Item
 
 interface MainNavigator {
 

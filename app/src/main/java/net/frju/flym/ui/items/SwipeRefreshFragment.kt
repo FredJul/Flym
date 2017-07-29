@@ -22,16 +22,15 @@
  */
 package net.frju.flym.ui.items
 
+import android.arch.lifecycle.LifecycleFragment
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import net.fred.feedex.R
 import net.frju.flym.ui.views.SwipeRefreshLayout
 
-abstract class SwipeRefreshFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+abstract class SwipeRefreshFragment : LifecycleFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var refreshLayout: SwipeRefreshLayout? = null
 

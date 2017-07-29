@@ -2,8 +2,8 @@ package net.frju.flym.ui.items
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import net.frju.androidquery.operation.function.CursorResult
-import net.frju.flym.data.Item
+import net.frju.flym.data.entities.Item
+import net.frju.flym.data.entities.ItemWithFeed
 import org.jetbrains.anko.sdk21.coroutines.onClick
 
 class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ItemViewHolder>() {
@@ -13,7 +13,7 @@ class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ItemViewHolder>() {
             notifyDataSetChanged()
             field = newValue
         }
-    private var items: CursorResult<Item>? = null
+    private var items: List<ItemWithFeed>? = null
     private var onItemClickListener: ItemAdapterView.OnItemClickListener? = null
 
     class ItemViewHolder(var itemAdapterView: ItemAdapterView) : RecyclerView.ViewHolder(itemAdapterView)
@@ -27,30 +27,30 @@ class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ItemViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.itemAdapterView.isSelected = selectedItemId == items!![position]!!.id
+        holder.itemAdapterView.isSelected = selectedItemId == items!![position].id
 
-        holder.itemAdapterView.setItem(items!!.get(position)!!)
+        holder.itemAdapterView.setItem(items!![position])
         holder.itemAdapterView.onClick {
-            val item = items!![holder.adapterPosition]!!
+            val item = items!![holder.adapterPosition]
             selectedItemId = item.id
 
             onItemClickListener?.onItemClick(item)
         }
     }
 
-    fun setItems(items: CursorResult<Item>) {
+    fun setItems(items: List<ItemWithFeed>) {
         this.items = items
         notifyDataSetChanged()
     }
 
     fun getPreviousItem(): Item? {
         items?.let {
-            for (i in 0..it.count - 1) {
-                if (it[i]!!.id == selectedItemId) {
+            for (i in 0..it.size - 1) {
+                if (it[i].id == selectedItemId) {
                     if (i == 0) {
                         return null
                     }
-                    return it.get(i - 1)
+                    return it[i - 1]
                 }
             }
         }
@@ -60,12 +60,12 @@ class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ItemViewHolder>() {
 
     fun getNextItem(): Item? {
         items?.let {
-            for (i in 0..it.count - 1) {
-                if (it[i]!!.id == selectedItemId) {
-                    if (i == items!!.count - 1) {
+            for (i in 0..it.size - 1) {
+                if (it[i].id == selectedItemId) {
+                    if (i == items!!.size - 1) {
                         return null
                     }
-                    return it.get(i + 1)
+                    return it[i + 1]
                 }
             }
         }
@@ -74,6 +74,6 @@ class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ItemViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return items?.count ?: 0
+        return items?.size ?: 0
     }
 }

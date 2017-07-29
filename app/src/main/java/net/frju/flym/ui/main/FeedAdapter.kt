@@ -9,7 +9,7 @@ import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter
 import com.bignerdranch.expandablerecyclerview.ParentViewHolder
 import kotlinx.android.synthetic.main.view_feed.view.*
 import net.fred.feedex.R
-import net.frju.flym.data.Feed
+import net.frju.flym.data.entities.Feed
 import org.jetbrains.anko.sdk21.coroutines.onClick
 
 

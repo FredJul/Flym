@@ -58,7 +58,6 @@ import android.app.IntentService
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -71,12 +70,11 @@ import android.text.TextUtils
 import android.widget.Toast
 import com.einmalfel.earl.EarlParser
 import net.fred.feedex.R
-import net.frju.androidquery.gen.FEED
-import net.frju.androidquery.gen.ITEM
-import net.frju.androidquery.gen.TASK
-import net.frju.androidquery.operation.condition.Where
 import net.frju.flym.App
-import net.frju.flym.data.*
+import net.frju.flym.data.entities.Feed
+import net.frju.flym.data.entities.Item
+import net.frju.flym.data.entities.Task
+import net.frju.flym.data.entities.toDbFormat
 import net.frju.flym.toMd5
 import net.frju.flym.ui.main.MainActivity
 import net.frju.flym.utils.ArticleTextExtractor
@@ -90,7 +88,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.net.CookieHandler
 import java.net.CookieManager
-import java.net.URL
 import java.util.*
 import java.util.concurrent.ExecutorCompletionService
 import java.util.concurrent.Executors
@@ -139,23 +136,22 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             val keepTime = java.lang.Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000L
             val keepDateBorderTime = if (keepTime > 0) System.currentTimeMillis() - keepTime else 0
 
-            deleteOldEntries(keepDateBorderTime)
+            deleteOldItems(keepDateBorderTime)
             COOKIE_MANAGER.cookieStore.removeAll() // Cookies are important for some sites, but we clean them each times
 
             var newCount = 0
-            val feedId = intent.getStringExtra(FEED.ID)
+            val feedId = intent.getStringExtra(EXTRA_FEED_ID)
             if (feedId == null) {
                 newCount = refreshFeeds()
             } else {
-                val feed = FEED.select().where(Where.field(FEED.ID).isEqualTo(feedId)).queryFirst()
-                if (feed != null) {
-                    newCount = refreshFeed(feed)
+                App.db.feedDao().findById(feedId)?.let {
+                    newCount = refreshFeed(it)
                 }
             }
 
             if (newCount > 0) {
                 if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
-                    val unread = ITEM.count().where(Where.field(ITEM.READ).isEqualTo(false)).query()
+                    val unread = App.db.itemDao().countUnread
 
                     if (unread > 0) {
                         val text = resources.getQuantityString(R.plurals.number_of_new_entries, unread.toInt(), unread)
@@ -203,89 +199,87 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
     }
 
     private fun mobilizeAllEntries() {
-        TASK.select().where(Where.field(TASK.IMAGE_LINK_TO_DL).isEqualTo(null)).query().toArray().forEach { task ->
+        App.db.taskDao().mobilizeTasks.forEach { task ->
 
             var success = false
 
-            val item = ITEM.select().where(Where.field(ITEM.ID).isEqualTo(task.itemId)).queryFirst()
-            if (item != null && item.link != null) {
-                // Try to find a text indicator for better content extraction
-                var contentIndicator: String? = null
-                if (!TextUtils.isEmpty(item.description)) {
-                    contentIndicator = Html.fromHtml(item.description).toString()
-                    if (contentIndicator.length > 60) {
-                        contentIndicator = contentIndicator.substring(20, 40)
-                    }
-                }
-
-                val request = Request.Builder()
-                        .url(item.link)
-                        .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
-                        .addHeader("accept", "*/*")
-                        .build()
-                HTTP_CLIENT.newCall(request).execute().use {
-
-                    var mobilizedHtml = ArticleTextExtractor.extractContent(it.body()!!.byteStream(), contentIndicator)
-                    if (mobilizedHtml != null) {
-                        mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, getBaseUrl(item.link!!))
-
-                        val values = ContentValues()
-                        values.put(ITEM.MOBILIZED_CONTENT, mobilizedHtml)
-
-                        var imgUrlsToDownload: ArrayList<String>? = null
-                        if (needDownloadPictures()) {
-                            imgUrlsToDownload = HtmlUtils.getImageURLs(mobilizedHtml)
-                        }
-
-                        val mainImgUrl: String?
-                        if (imgUrlsToDownload != null) {
-                            mainImgUrl = HtmlUtils.getMainImageURL(imgUrlsToDownload)
-                        } else {
-                            mainImgUrl = HtmlUtils.getMainImageURL(mobilizedHtml)
-                        }
-
-                        if (mainImgUrl != null) {
-                            values.put(ITEM.IMAGE_LINK, mainImgUrl)
-                        }
-
-                        success = true
-
-                        TASK.delete().model(task).query()
-                        item.mobilizedContent = mobilizedHtml
-                        ITEM.update().model(item).query()
-
-                        if (imgUrlsToDownload != null && !imgUrlsToDownload.isEmpty()) {
-                            addImagesToDownload(item.id, imgUrlsToDownload)
+            App.db.itemDao().findById(task.itemId)?.let { item ->
+                if (item.link != null) {
+                    // Try to find a text indicator for better content extraction
+                    var contentIndicator: String? = null
+                    if (!TextUtils.isEmpty(item.description)) {
+                        contentIndicator = Html.fromHtml(item.description).toString()
+                        if (contentIndicator.length > 60) {
+                            contentIndicator = contentIndicator.substring(20, 40)
                         }
                     }
 
+                    val request = Request.Builder()
+                            .url(item.link)
+                            .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
+                            .addHeader("accept", "*/*")
+                            .build()
+                    HTTP_CLIENT.newCall(request).execute().use {
+
+                        var mobilizedHtml = ArticleTextExtractor.extractContent(it.body()!!.byteStream(), contentIndicator)
+                        if (mobilizedHtml != null) {
+                            mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, getBaseUrl(item.link!!))
+
+                            var imgUrlsToDownload: ArrayList<String>? = null
+                            if (needDownloadPictures()) {
+                                imgUrlsToDownload = HtmlUtils.getImageURLs(mobilizedHtml)
+                            }
+
+                            val mainImgUrl: String?
+                            if (imgUrlsToDownload != null) {
+                                mainImgUrl = HtmlUtils.getMainImageURL(imgUrlsToDownload)
+                            } else {
+                                mainImgUrl = HtmlUtils.getMainImageURL(mobilizedHtml)
+                            }
+
+                            if (mainImgUrl != null) {
+                                item.imageLink = mainImgUrl
+                            }
+
+                            success = true
+
+                            App.db.taskDao().deleteAll(task)
+
+                            item.mobilizedContent = mobilizedHtml
+                            App.db.itemDao().insertAll(item)
+
+                            if (imgUrlsToDownload != null && !imgUrlsToDownload.isEmpty()) {
+                                addImagesToDownload(item.id, imgUrlsToDownload)
+                            }
+                        }
+                    }
                 }
             }
 
             if (!success) {
                 if (task.numberAttempt + 1 > MAX_TASK_ATTEMPT) {
-                    TASK.delete().model(task).query()
+                    App.db.taskDao().deleteAll(task)
                 } else {
                     task.numberAttempt += 1
-                    TASK.update().model(task).query()
+                    App.db.taskDao().insertAll(task)
                 }
             }
         }
     }
 
     private fun downloadAllImages() {
-        TASK.select().where(Where.field(TASK.IMAGE_LINK_TO_DL).isNotEqualTo(null)).query().toArray().forEach { task ->
+        App.db.taskDao().downloadTasks.forEach { task ->
             try {
-                downloadImage(task.itemId, task.imageLinkToDl)
+                downloadImage(task.itemId, task.imageLinkToDl!!)
 
                 // If we are here, everything is OK
-                TASK.delete().model(task).query()
+                App.db.taskDao().deleteAll(task)
             } catch (ignored: Exception) {
                 if (task.numberAttempt + 1 > MAX_TASK_ATTEMPT) {
-                    TASK.delete().model(task).query()
+                    App.db.taskDao().deleteAll(task)
                 } else {
                     task.numberAttempt += 1
-                    TASK.update().model(task).query()
+                    App.db.taskDao().insertAll(task)
                 }
             }
         }
@@ -294,13 +288,15 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
     private fun refreshFeeds(): Int {
 
         val executor = Executors.newFixedThreadPool(THREAD_NUMBER) { r ->
-            val t = Thread(r)
-            t.priority = Thread.MIN_PRIORITY
-            t
+            Thread(r).apply {
+                priority = Thread.MIN_PRIORITY
+            }
         }
         val completionService = ExecutorCompletionService<Int>(executor)
 
-        val feeds = FEED.select().query().toArray()
+        var globalResult = 0
+
+        val feeds = App.db.feedDao().all
 
         feeds.forEach {
             completionService.submit {
@@ -314,7 +310,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             }
         }
 
-        var globalResult = 0
         for (i in 0..feeds.size - 1) {
             try {
                 val f = completionService.take()
@@ -324,7 +319,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
         }
 
-        executor.shutdownNow() // To purge all threads
+        executor.shutdownNow() // To purge observeAll threads
 
         return globalResult
     }
@@ -336,20 +331,13 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 .addHeader("accept", "*/*")
                 .build()
 
-        val itemsToInsert = ArrayList<Item>()
+        val itemsToInsert = mutableListOf<Item>()
 
         var response: Response? = null
         try {
             response = HTTP_CLIENT.newCall(request).execute()
             val earlFeed = EarlParser.parseOrThrow(response.body()!!.byteStream(), 0)
-            earlFeed.items.forEach {
-                val newItem = it.toDbFormat(feed)
-                val updateValues = it.toUpdateValues()
-                // If we can't update the item, it means we need to insert it
-                if (ITEM.update().where(Where.field(ITEM.ID).isEqualTo(newItem.id)).values(updateValues).query() <= 0) {
-                    itemsToInsert.add(newItem)
-                }
-            }
+            earlFeed.items.map { it.toDbFormat(feed) }.forEach { itemsToInsert.add(it) }
             feed.update(earlFeed)
         } catch (e: Exception) {
             feed.fetchError = true
@@ -357,15 +345,15 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             response?.close()
         }
 
-        FEED.save(feed).query()
-        ITEM.insert(itemsToInsert).query()
+        App.db.feedDao().insertAll(feed)
+        App.db.itemDao().insertAll(*(itemsToInsert.toTypedArray()))
 
         return itemsToInsert.size
     }
 
-    private fun deleteOldEntries(keepDateBorderTime: Long) {
+    private fun deleteOldItems(keepDateBorderTime: Long) {
         if (keepDateBorderTime > 0) {
-            ITEM.delete().where(Where.field(ITEM.FETCH_DATE).isLessThan(keepDateBorderTime), Where.field(ITEM.FAVORITE).isEqualTo(false)).query()
+            App.db.itemDao().deleteOlderThan(keepDateBorderTime)
             // Delete the cache files
             deleteEntriesImagesCache(keepDateBorderTime)
         }
@@ -414,7 +402,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         if (IMAGE_FOLDER_FILE.exists()) {
 
             // We need to exclude favorite entries images to this cleanup
-            val favorites = ITEM.select().where(Where.field(ITEM.FAVORITE).isEqualTo(true)).query().toArray()
+            val favorites = App.db.itemDao().favorites
 
             IMAGE_FOLDER_FILE.listFiles().forEach { file ->
                 if (file.lastModified() < keepDateBorderTime) {
@@ -443,56 +431,57 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         return baseUrl
     }
 
-    private fun retrieveFavicon(url: URL, id: String) {
-        var success = false
-
-        val request = Request.Builder()
-                .url(url.protocol + PROTOCOL_SEPARATOR + url.host + FILE_FAVICON)
-                .build()
-        HTTP_CLIENT.newCall(request).execute().use {
-            val iconBytes = it.body()!!.bytes()
-            if (iconBytes != null && iconBytes.isNotEmpty() && iconBytes.size < 100000) {
-                val values = ContentValues()
-                values.put(FEED.FAVICON, iconBytes)
-                if (FEED.update().where(Where.field(FEED.ID).isEqualTo(id)).values(values).query() > 0) {
-                    success = true
-                }
-            }
-        }
-
-        if (!success) {
-            // no icon found or error
-            val values = ContentValues()
-            values.putNull(FEED.FAVICON)
-            FEED.update().where(Where.field(FEED.ID).isEqualTo(id)).values(values).query()
-        }
-    }
+//    private fun retrieveFavicon(url: URL, id: String) {
+//        var success = false
+//
+//        val request = Request.Builder()
+//                .url(url.protocol + PROTOCOL_SEPARATOR + url.host + FILE_FAVICON)
+//                .build()
+//        HTTP_CLIENT.newCall(request).execute().use {
+//            val iconBytes = it.body()!!.bytes()
+//            if (iconBytes != null && iconBytes.isNotEmpty() && iconBytes.size < 100000) {
+//                val values = ContentValues()
+//                values.put(FEED.FAVICON, iconBytes)
+//                if (FEED.update().where(Where.field(FEED.ID).isEqualTo(id)).values(values).query() > 0) {
+//                    success = true
+//                }
+//            }
+//        }
+//
+//        if (!success) {
+//            // no icon found or error
+//            val values = ContentValues()
+//            values.putNull(FEED.FAVICON)
+//            FEED.update().where(Where.field(FEED.ID).isEqualTo(id)).values(values).query()
+//        }
+//    }
 
     companion object {
+        const val EXTRA_FEED_ID = "EXTRA_FEED_ID"
 
         private val HTTP_CLIENT = OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .build()
 
-        val FROM_AUTO_REFRESH = "from_auto_refresh"
+        const val FROM_AUTO_REFRESH = "from_auto_refresh"
 
-        val ACTION_REFRESH_FEEDS = "net.fred.feedex.REFRESH"
-        val ACTION_MOBILIZE_FEEDS = "net.fred.feedex.MOBILIZE_FEEDS"
-        val ACTION_DOWNLOAD_IMAGES = "net.fred.feedex.DOWNLOAD_IMAGES"
+        const val ACTION_REFRESH_FEEDS = "net.fred.feedex.REFRESH"
+        const val ACTION_MOBILIZE_FEEDS = "net.fred.feedex.MOBILIZE_FEEDS"
+        const val ACTION_DOWNLOAD_IMAGES = "net.fred.feedex.DOWNLOAD_IMAGES"
 
-        private val THREAD_NUMBER = 3
-        private val MAX_TASK_ATTEMPT = 3
+        private const val THREAD_NUMBER = 3
+        private const val MAX_TASK_ATTEMPT = 3
 
-        private val FETCHMODE_DIRECT = 1
-        private val FETCHMODE_REENCODE = 2
+        private const val FETCHMODE_DIRECT = 1
+        private const val FETCHMODE_REENCODE = 2
 
-        private val CHARSET = "charset="
-        private val CONTENT_TYPE_TEXT_HTML = "text/html"
-        private val HREF = "href=\""
+        private const val CHARSET = "charset="
+        private const val CONTENT_TYPE_TEXT_HTML = "text/html"
+        private const val HREF = "href=\""
 
-        private val HTML_BODY = "<body"
-        private val ENCODING = "encoding=\""
+        private const val HTML_BODY = "<body"
+        private const val ENCODING = "encoding=\""
 
         /* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
         private val FEED_LINK_PATTERN = Pattern.compile(
@@ -501,11 +490,11 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
         val IMAGE_FOLDER_FILE = File(App.context.cacheDir, "images/")
         val IMAGE_FOLDER = IMAGE_FOLDER_FILE.absolutePath + '/'
-        val TEMP_PREFIX = "TEMP__"
-        val ID_SEPARATOR = "__"
+        const val TEMP_PREFIX = "TEMP__"
+        const val ID_SEPARATOR = "__"
 
-        private val FILE_FAVICON = "/favicon.ico"
-        private val PROTOCOL_SEPARATOR = "://"
+        private const val FILE_FAVICON = "/favicon.ico"
+        private const val PROTOCOL_SEPARATOR = "://"
 
         private val COOKIE_MANAGER = object : CookieManager() {
             init {
@@ -547,10 +536,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             }
         }
 
-        fun hasMobilizationTask(itemId: String): Boolean {
-            return TASK.count().where(Where.field(TASK.ITEM_ID).isEqualTo(itemId)).query() > 0
-        }
-
         fun addImagesToDownload(itemId: String, images: ArrayList<String>?) {
             if (images != null && !images.isEmpty()) {
                 val newTasks = mutableListOf<Task>()
@@ -561,7 +546,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                     newTasks.add(task)
                 }
 
-                TASK.insert(newTasks).query()
+                App.db.taskDao().insertAll(*newTasks.toTypedArray())
             }
         }
 
@@ -573,7 +558,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 newTasks.add(task)
             }
 
-            TASK.insert(newTasks).query()
+            App.db.taskDao().insertAll(*newTasks.toTypedArray())
         }
     }
 }

@@ -10,12 +10,13 @@ import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.view_item.view.*
 import net.fred.feedex.R
-import net.frju.flym.data.Item
+import net.frju.flym.data.entities.Item
+import net.frju.flym.data.entities.ItemWithFeed
 import net.frju.flym.service.FetcherService
 
 class ItemAdapterView : FrameLayout {
 
-    private var item: Item? = null
+    private var item: ItemWithFeed? = null
     private var onItemClickListener: ItemAdapterView.OnItemClickListener? = null
 
     interface OnItemClickListener {
@@ -37,8 +38,8 @@ class ItemAdapterView : FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.view_item, this, true)
     }
 
-    fun setItem(item: Item) {
-        val feedName = item.feed?.title ?: ""
+    fun setItem(item: ItemWithFeed) {
+        val feedName = item.feedTitle ?: ""
 
         this.item = item
         title.text = item.title

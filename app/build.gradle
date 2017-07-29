@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+//apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
@@ -30,14 +30,23 @@ android {
     }
 }
 
+kapt {
+    generateStubs = true
+    arguments {
+        //arg("androidManifestFile", variant.outputs[0].processResourcesTask.manifestFile)
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    ext.androidquery_version = '1.5.5'
-    kapt "net.frju.androidquery:android-query-preprocessor:${androidquery_version}"
-    compile "net.frju.androidquery:android-query:${androidquery_version}"
+    compile "android.arch.lifecycle:runtime:+"
+    compile "android.arch.lifecycle:extensions:+"
+    kapt "android.arch.lifecycle:compiler:+"
+    compile "android.arch.persistence.room:runtime:+"
+    kapt "android.arch.persistence.room:compiler:+"
 
     // Support dependencies
     compile 'com.android.support:appcompat-v7:+'
@@ -59,10 +68,9 @@ dependencies {
     compile 'com.einmalfel:earl:+'
     compile 'com.squareup.okhttp3:okhttp:+'
     compile 'org.jsoup:jsoup:+'
-    compile 'com.github.bumptech.glide:glide:3.8.0' // glide does not like the +
+    compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:+'
     compile 'com.github.Tunous:SwipeActionView:+'
     compile 'com.bignerdranch.android:expandablerecyclerview:+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    // here the + does not always fetch the last version
 }

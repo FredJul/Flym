@@ -1,10 +1,9 @@
 package net.frju.flym.ui.items
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
-import android.support.v4.app.LoaderManager
-import android.support.v4.content.Loader
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +12,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_items.*
 import kotlinx.android.synthetic.main.view_main_containers.view.*
 import net.fred.feedex.R
-import net.frju.androidquery.operation.function.CursorResult
-import net.frju.flym.data.Feed
-import net.frju.flym.data.Item
+import net.frju.flym.App
+import net.frju.flym.data.entities.Feed
+import net.frju.flym.data.entities.Item
+import net.frju.flym.data.entities.ItemWithFeed
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.parentalcontrol.utils.PrefUtils
+
 
 
 class ItemsFragment : SwipeRefreshFragment() {
@@ -28,28 +29,9 @@ class ItemsFragment : SwipeRefreshFragment() {
     private var adapter: ItemsAdapter? = null
     private var feed: Feed? = null
 
-    private val USER_LOADER_ID = 0
-
     private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (PrefUtils.IS_REFRESHING == key) {
             refreshSwipeProgress()
-        }
-    }
-
-    private val loaderCallbacks = object : LoaderManager.LoaderCallbacks<CursorResult<Item>> {
-
-        override fun onCreateLoader(id: Int, args: Bundle?): Loader<CursorResult<Item>> {
-            val loader = ItemsLoader(context, feed)
-            loader.setUpdateThrottle(100)
-            return loader
-        }
-
-        override fun onLoadFinished(loader: Loader<CursorResult<Item>>, data: CursorResult<Item>) {
-            adapter?.setItems(data)
-            recycler_view.scrollToPosition(0)
-        }
-
-        override fun onLoaderReset(loader: Loader<CursorResult<Item>>) {
         }
     }
 
@@ -73,7 +55,18 @@ class ItemsFragment : SwipeRefreshFragment() {
             adapter?.selectedItemId = savedInstanceState.getString(STATE_SELECTED_ITEM_ID)
         }
 
-        loaderManager.initLoader(USER_LOADER_ID, null, loaderCallbacks)
+        when {
+            feed == null || feed!!.id == Feed.UNREAD_ITEMS_ID -> App.db.itemDao().observeUnread
+            feed!!.id == Feed.ALL_ITEMS_ID -> App.db.itemDao().observeAll
+            feed!!.id == Feed.FAVORITES_ID -> App.db.itemDao().observeFavorites
+            feed!!.isGroup -> App.db.itemDao().observeByGroup(feed!!.id)
+            else -> App.db.itemDao().observeByFeed(feed!!.id)
+        }.observe(this, Observer<List<ItemWithFeed>> {
+            it?.let {
+                adapter?.setItems(it)
+                recycler_view.scrollToPosition(0)
+            }
+        })
     }
 
     override fun onStart() {

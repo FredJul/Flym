@@ -32,7 +32,7 @@ import android.widget.Toast
 import net.fred.feedex.R
 import net.frju.flym.FILE_SCHEME
 import net.frju.flym.UTF8
-import net.frju.flym.data.Item
+import net.frju.flym.data.entities.Item
 import net.frju.flym.utils.HtmlUtils
 import net.frju.parentalcontrol.utils.PrefUtils
 import java.io.File
@@ -95,7 +95,7 @@ class ItemDetailsView : WebView {
             settings.textZoom = 100 + fontSize * 20
         }
 
-        setWebViewClient(object : WebViewClient() {
+        webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 val context = context
                 try {
@@ -119,7 +119,7 @@ class ItemDetailsView : WebView {
 
                 return true
             }
-        })
+        }
     }
 
     fun setItem(item: Item?) {

@@ -58,6 +58,7 @@ object HtmlUtils {
 
 
     fun improveHtmlContent(content: String?, baseUri: String): String {
+        @Suppress("NAME_SHADOWING")
         var content = content
         content = ADS_PATTERN.matcher(content!!).replaceAll("")
 
@@ -101,6 +102,7 @@ object HtmlUtils {
     }
 
     fun replaceImageURLs(content: String, itemId: String): String {
+        @Suppress("NAME_SHADOWING")
         var content = content
 
         if (!TextUtils.isEmpty(content)) {
@@ -123,7 +125,7 @@ object HtmlUtils {
             if (!imagesToDl.isEmpty()) {
                 Thread(Runnable {
                     FetcherService.addImagesToDownload(itemId, imagesToDl)
-                    App.context!!.startService(Intent(App.context, FetcherService::class.java).setAction(FetcherService.ACTION_DOWNLOAD_IMAGES))
+                    App.context.startService(Intent(App.context, FetcherService::class.java).setAction(FetcherService.ACTION_DOWNLOAD_IMAGES))
                 }).start()
             }
         }

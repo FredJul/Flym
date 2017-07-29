@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.fragment_item_details.*
 import me.thanel.swipeactionview.SwipeActionView
 import me.thanel.swipeactionview.SwipeGestureListener
 import net.fred.feedex.R
-import net.frju.flym.data.Item
+import net.frju.flym.data.entities.Item
 import net.frju.flym.ui.main.MainNavigator
 import org.jetbrains.annotations.NotNull
 
