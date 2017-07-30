@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_refresh"
+        android:icon="@drawable/refresh"
+        android:title="@string/menu_refresh"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_cancel_refresh"
+        android:icon="@drawable/ic_action_cancel"
+        app:showAsAction="always"
+        android:visible="false"
+        android:title="@string/menu_cancel_refresh"/>
+    <item
+        android:id="@+id/menu_delete_all"
+        android:icon="@drawable/content_discard"
+        android:title="@string/menu_delete_all"/>
+    <item
+        android:id="@+id/menu_toogle_toogle_unread_all"
+        android:icon="@drawable/rounded_checbox_white"
+        android:title="@string/menu_toogle_unread_all"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_create_test_data"
+        android:title="Create test data"/>
+    <item
+        android:id="@+id/menu_search"
+        android:icon="@drawable/action_search"
+        android:title="@android:string/search_go"
+        app:showAsAction="collapseActionView|ifRoom"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
+    <item
+        android:id="@+id/menu_share_starred"
+        android:icon="@drawable/social_share"
+        android:title="@string/context_menu_share_starred"
+        app:showAsAction="ifRoom" />
+
+</menu>
