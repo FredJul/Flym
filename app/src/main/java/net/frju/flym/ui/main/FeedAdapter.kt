@@ -18,7 +18,7 @@ private val STATE_SELECTED_ID = "STATE_SELECTED_ID"
 class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup, Feed, FeedAdapter.FeedGroupViewHolder, FeedAdapter.FeedViewHolder>(groups) {
 
     var feedClickListener: ((View, Feed) -> Unit)? = null
-    var selectedItemId: String = Feed.UNREAD_ITEMS_ID
+    var selectedItemId: String = Feed.ALL_ITEMS_ID
         set(newValue) {
             notifyParentDataSetChanged(true)
             field = newValue
@@ -51,7 +51,7 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        selectedItemId = savedInstanceState?.getString(STATE_SELECTED_ID) ?: Feed.UNREAD_ITEMS_ID
+        selectedItemId = savedInstanceState?.getString(STATE_SELECTED_ID) ?: Feed.ALL_ITEMS_ID
     }
 
     inner class FeedGroupViewHolder(itemView: View)

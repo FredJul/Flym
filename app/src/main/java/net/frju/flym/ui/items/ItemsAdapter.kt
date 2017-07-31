@@ -38,7 +38,7 @@ class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ItemViewHolder>() {
         }
     }
 
-    fun setItems(items: List<ItemWithFeed>) {
+    fun setItems(items: List<ItemWithFeed>?) {
         this.items = items
         notifyDataSetChanged()
     }

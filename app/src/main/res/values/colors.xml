@@ -8,5 +8,6 @@
     <color name="red">#B0171F</color>
     <color name="color_unread">#ffffff</color>
     <color name="color_read">#9e9e9e</color>
+    <color name="bottom_navigation_disable">#7bffffff</color>
 
 </resources>

@@ -36,20 +36,10 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
             it?.let {
                 feedGroups.clear()
 
-                val unreads = Feed()
-                unreads.id = Feed.UNREAD_ITEMS_ID
-                unreads.title = getString(R.string.unread_entries)
-                feedGroups.add(FeedGroup(unreads, mutableListOf()))
-
                 val all = Feed()
                 all.id = Feed.ALL_ITEMS_ID
                 all.title = getString(R.string.all_entries)
                 feedGroups.add(FeedGroup(all, mutableListOf()))
-
-                val favorites = Feed()
-                favorites.id = Feed.FAVORITES_ID
-                favorites.title = getString(R.string.favorites)
-                feedGroups.add(FeedGroup(favorites, mutableListOf()))
 
                 feedGroups.addAll(
                         it.map { FeedGroup(it, mutableListOf()) }

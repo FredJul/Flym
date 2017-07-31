@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/unreads"
+        android:icon="@drawable/ic_favorite_24dp"
+        android:title="Unreads"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/all"
+        android:icon="@drawable/ic_favorite_24dp"
+        android:title="All"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/favorites"
+        android:icon="@drawable/ic_favorite_24dp"
+        android:title="Favorites"
+        app:showAsAction="ifRoom|withText" />
+</menu>

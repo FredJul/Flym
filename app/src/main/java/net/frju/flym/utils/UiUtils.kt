@@ -1,7 +1,5 @@
 package net.frju.flym.utils
 
-import android.content.Context
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewTreeObserver
 
@@ -29,8 +27,4 @@ fun View.onLaidOut(runnable: () -> Unit) {
             runnable()
         }
     })
-}
-
-fun Context.dpToPixel(dp: Float): Float {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
 }

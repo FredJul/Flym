@@ -19,8 +19,7 @@ interface FeedDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg feeds: Feed) {
-        feeds
-                .filter { it.id.isEmpty() }
+        feeds.filter { it.id.isEmpty() }
                 .forEach { it.id = UUID.randomUUID().toString() }
     }
 

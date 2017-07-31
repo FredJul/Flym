@@ -24,9 +24,7 @@ data class Feed(
     companion object {
         @JvmField val CREATOR = PaperParcelFeed.CREATOR
 
-        @JvmField val UNREAD_ITEMS_ID = "unread_items"
         @JvmField val ALL_ITEMS_ID = "all_items"
-        @JvmField val FAVORITES_ID = "favorites"
     }
 
     override fun describeContents() = 0

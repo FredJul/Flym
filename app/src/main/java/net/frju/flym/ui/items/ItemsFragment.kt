@@ -28,6 +28,7 @@ class ItemsFragment : SwipeRefreshFragment() {
 
     private var adapter: ItemsAdapter? = null
     private var feed: Feed? = null
+    private var unfilteredItems: List<ItemWithFeed>? = null
 
     private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (PrefUtils.IS_REFRESHING == key) {
@@ -50,23 +51,35 @@ class ItemsFragment : SwipeRefreshFragment() {
 
         setupToolbar()
         setupRecyclerView()
+        bottom_navigation.setOnNavigationItemSelectedListener {
+            recycler_view.post {
+                updateUI()
+                recycler_view.scrollToPosition(0)
+            }
+            true
+        }
 
         if (savedInstanceState != null) {
             adapter?.selectedItemId = savedInstanceState.getString(STATE_SELECTED_ITEM_ID)
         }
 
         when {
-            feed == null || feed!!.id == Feed.UNREAD_ITEMS_ID -> App.db.itemDao().observeUnread
-            feed!!.id == Feed.ALL_ITEMS_ID -> App.db.itemDao().observeAll
-            feed!!.id == Feed.FAVORITES_ID -> App.db.itemDao().observeFavorites
+            feed == null || feed!!.id == Feed.ALL_ITEMS_ID -> App.db.itemDao().observeAll
             feed!!.isGroup -> App.db.itemDao().observeByGroup(feed!!.id)
             else -> App.db.itemDao().observeByFeed(feed!!.id)
         }.observe(this, Observer<List<ItemWithFeed>> {
-            it?.let {
-                adapter?.setItems(it)
-                recycler_view.scrollToPosition(0)
-            }
+            unfilteredItems = it
+            updateUI()
         })
+    }
+
+    private fun updateUI() {
+        val items = when (bottom_navigation.selectedItemId) {
+            R.id.unreads -> unfilteredItems?.filter { !it.read }
+            R.id.favorites -> unfilteredItems?.filter { it.favorite }
+            else -> unfilteredItems
+        }
+        adapter?.setItems(items)
     }
 
     override fun onStart() {
