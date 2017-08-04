@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.view_main_containers.view.*
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
-import net.frju.flym.data.entities.Item
+import net.frju.flym.data.entities.ItemWithFeed
 import net.frju.flym.ui.itemdetails.ItemDetailsFragment
 import net.frju.flym.ui.items.ItemsFragment
 
@@ -152,7 +152,7 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
         supportFragmentManager.beginTransaction().replace(R.id.frame_master, master, TAG_MASTER).commit()
     }
 
-    override fun goToItemDetails(item: Item) {
+    override fun goToItemDetails(item: ItemWithFeed) {
         containers_layout.custom_appbar.setState(MainNavigator.State.TWO_COLUMNS_WITH_DETAILS)
         containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
         val fragment = ItemDetailsFragment.newInstance(item)

@@ -27,7 +27,7 @@
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax" />
 
-            <net.frju.flym.ui.views.AutoResizeTextView
+            <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -38,8 +38,9 @@
                 android:padding="15dp"
                 android:textColor="@android:color/white"
                 android:textSize="24sp"
+                app:autoSizeTextType="uniform"
                 app:layout_collapseMode="pin"
-                app:maxTextSize="23sp"
+                app:autoSizeMaxTextSize="23sp"
                 tools:text="My long title, very long long long title, it needs to fit in several lines" />
 
             <TextView

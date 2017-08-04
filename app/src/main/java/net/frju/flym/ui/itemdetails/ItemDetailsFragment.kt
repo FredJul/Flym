@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.fragment_item_details.*
 import me.thanel.swipeactionview.SwipeActionView
 import me.thanel.swipeactionview.SwipeGestureListener
 import net.fred.feedex.R
-import net.frju.flym.data.entities.Item
+import net.frju.flym.data.entities.ItemWithFeed
 import net.frju.flym.ui.main.MainNavigator
 import org.jetbrains.annotations.NotNull
 
@@ -20,7 +20,7 @@ class ItemDetailsFragment : Fragment() {
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
-    private var item: Item? = null
+    private var item: ItemWithFeed? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_item_details, container, false)
@@ -84,7 +84,7 @@ class ItemDetailsFragment : Fragment() {
         }
     }
 
-    fun setItem(item: Item) {
+    fun setItem(item: ItemWithFeed) {
         this.item = item
         arguments.putParcelable(ARG_ITEM, item)
 
@@ -95,7 +95,7 @@ class ItemDetailsFragment : Fragment() {
 
         private val ARG_ITEM = "item"
 
-        fun newInstance(item: Item): ItemDetailsFragment {
+        fun newInstance(item: ItemWithFeed): ItemDetailsFragment {
             val fragment = ItemDetailsFragment()
             val bundle = Bundle()
             bundle.putParcelable(ARG_ITEM, item)

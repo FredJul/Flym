@@ -32,7 +32,7 @@ import android.widget.Toast
 import net.fred.feedex.R
 import net.frju.flym.FILE_SCHEME
 import net.frju.flym.UTF8
-import net.frju.flym.data.entities.Item
+import net.frju.flym.data.entities.ItemWithFeed
 import net.frju.flym.utils.HtmlUtils
 import net.frju.parentalcontrol.utils.PrefUtils
 import java.io.File
@@ -122,7 +122,7 @@ class ItemDetailsView : WebView {
         }
     }
 
-    fun setItem(item: Item?) {
+    fun setItem(item: ItemWithFeed?) {
         if (item == null) {
             loadDataWithBaseURL("", "", TEXT_HTML, UTF8, null)
         } else {

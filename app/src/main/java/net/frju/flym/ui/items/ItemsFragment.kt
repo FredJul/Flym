@@ -1,5 +1,6 @@
 package net.frju.flym.ui.items
 
+import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
@@ -8,25 +9,24 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import eu.davidea.flexibleadapter.FlexibleAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_items.*
 import kotlinx.android.synthetic.main.view_main_containers.view.*
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
-import net.frju.flym.data.entities.Item
 import net.frju.flym.data.entities.ItemWithFeed
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.parentalcontrol.utils.PrefUtils
 
 
-
-class ItemsFragment : SwipeRefreshFragment() {
+class ItemsFragment : LifecycleFragment() {
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
-    private var adapter: ItemsAdapter? = null
+    private var adapter: FlexibleAdapter<ItemWithFeed>? = null
     private var feed: Feed? = null
     private var unfilteredItems: List<ItemWithFeed>? = null
 
@@ -36,12 +36,8 @@ class ItemsFragment : SwipeRefreshFragment() {
         }
     }
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_items, container, true)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_items, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -60,7 +56,7 @@ class ItemsFragment : SwipeRefreshFragment() {
         }
 
         if (savedInstanceState != null) {
-            adapter?.selectedItemId = savedInstanceState.getString(STATE_SELECTED_ITEM_ID)
+            //adapter?.selectedItemId = savedInstanceState.getString(STATE_SELECTED_ITEM_ID)
         }
 
         when {
@@ -79,7 +75,7 @@ class ItemsFragment : SwipeRefreshFragment() {
             R.id.favorites -> unfilteredItems?.filter { it.favorite }
             else -> unfilteredItems
         }
-        adapter?.setItems(items)
+        adapter?.updateDataSet(items, false)
     }
 
     override fun onStart() {
@@ -94,7 +90,7 @@ class ItemsFragment : SwipeRefreshFragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(STATE_SELECTED_ITEM_ID, adapter?.selectedItemId)
+        //outState.putString(STATE_SELECTED_ITEM_ID, adapter?.selectedItemId)
 
         super.onSaveInstanceState(outState)
     }
@@ -104,17 +100,15 @@ class ItemsFragment : SwipeRefreshFragment() {
 
         val layoutManager = LinearLayoutManager(activity)
         recycler_view.layoutManager = layoutManager
-        adapter = ItemsAdapter()
-        adapter?.setOnItemClickListener(object : ItemAdapterView.OnItemClickListener {
-            override fun onItemClick(item: Item) {
-                navigator.goToItemDetails(item)
-            }
-
-            override fun onItemFavoriteIconClick(item: Item) {
-                // toast?
-            }
-        })
+        adapter = FlexibleAdapter<ItemWithFeed>(null, FlexibleAdapter.OnItemClickListener { position ->
+            adapter?.getItem(position)?.let { navigator.goToItemDetails(it) }
+            true
+        }, true)
         recycler_view.adapter = adapter
+
+        refresh_layout.setOnRefreshListener { refreshLayout ->
+            context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
+        }
     }
 
     private fun setupToolbar() {
@@ -123,27 +117,35 @@ class ItemsFragment : SwipeRefreshFragment() {
         appBar.setMenuRes(R.menu.people_general, R.menu.people_specific, R.menu.people_merged)
     }
 
-    override fun onRefresh() {
-        context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
+    fun setSelectedItem(selectedItem: ItemWithFeed) {
+        //adapter?.selectedItemId = selectedItem.id
     }
 
-    fun setSelectedItem(selectedItem: Item) {
-        adapter?.selectedItemId = selectedItem.id
+    fun getPreviousItem(): ItemWithFeed? {
+        adapter?.selectedPositions?.let {
+            if (it.size > 0 && it[0] > 0) {
+                return adapter?.getItem(it[0]--)
+            }
+        }
+
+        return null
     }
 
-    fun getNextItem(): Item? {
-        return adapter?.getNextItem()
-    }
+    fun getNextItem(): ItemWithFeed? {
+        adapter?.selectedPositions?.let {
+            if (it.size > 0 && it[0] < adapter!!.currentItems.size - 1) {
+                return adapter?.getItem(it[0]++)
+            }
+        }
 
-    fun getPreviousItem(): Item? {
-        return adapter?.getPreviousItem()
+        return null
     }
 
     private fun refreshSwipeProgress() {
         if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            showSwipeProgress()
+            refresh_layout.autoRefresh()
         } else {
-            hideSwipeProgress()
+            refresh_layout.finishRefresh()
         }
     }
 

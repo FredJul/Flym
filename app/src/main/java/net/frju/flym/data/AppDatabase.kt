@@ -39,6 +39,10 @@ abstract class AppDatabase : RoomDatabase() {
                             values.put("id", UUID.randomUUID().toString())
                             values.put("feedTitle", "Google News")
                             values.put("link", "https://news.google.fr/?output=rss")
+                            values.put("fetchError", false)
+                            values.put("retrieveFullText", true)
+                            values.put("isGroup", false)
+                            values.put("displayPriority", 0)
                             db.insert("feeds", SQLiteDatabase.CONFLICT_REPLACE, values)
                         }
                     })

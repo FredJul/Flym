@@ -73,4 +73,7 @@ dependencies {
     compile 'com.github.Tunous:SwipeActionView:+'
     compile 'com.bignerdranch.android:expandablerecyclerview:+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'eu.davidea:flexible-adapter:+'
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:+'
+    compile 'com.scwang.smartrefresh:SmartRefreshHeader:+'
 }
