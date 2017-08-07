@@ -76,4 +76,5 @@ dependencies {
     compile 'eu.davidea:flexible-adapter:+'
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:+'
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:+'
+    compile 'com.github.mirrajabi:search-dialog:+'
 }

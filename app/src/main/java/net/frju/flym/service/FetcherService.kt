@@ -459,7 +459,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
     companion object {
         const val EXTRA_FEED_ID = "EXTRA_FEED_ID"
 
-        private val HTTP_CLIENT = OkHttpClient.Builder()
+        val HTTP_CLIENT: OkHttpClient = OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .build()

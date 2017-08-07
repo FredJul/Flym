@@ -2,27 +2,47 @@ package net.frju.flym.ui.main
 
 import android.arch.lifecycle.LifecycleActivity
 import android.arch.lifecycle.Observer
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Html
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
+import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
+import ir.mirrajabi.searchdialog.core.BaseFilter
+import ir.mirrajabi.searchdialog.core.SearchResultListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_main_containers.view.*
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.ItemWithFeed
+import net.frju.flym.data.entities.SearchFeedResult
+import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.itemdetails.ItemDetailsFragment
 import net.frju.flym.ui.items.ItemsFragment
+import okhttp3.Request
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.hintTextColor
+import org.jetbrains.anko.sdk21.coroutines.onClick
+import org.jetbrains.anko.textColor
+import org.json.JSONObject
+import java.net.URLEncoder
+import java.util.*
 
 
 class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelectedListener, MainNavigator {
 
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = FeedAdapter(feedGroups)
+    val FEED_SEARCH_TITLE = "title"
+    val FEED_SEARCH_URL = "feedId"
+    val FEED_SEARCH_DESC = "description"
+    val DEFAULT_ITEMS = arrayListOf(SearchFeedResult("http://www.nytimes.com/services/xml/rss/nyt/World.xml", "NY Times", "Word news"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +51,74 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
 
         nav.layoutManager = LinearLayoutManager(this)
         nav.adapter = feedAdapter
+        fab.onClick {
+            val searchDialog = SimpleSearchDialogCompat(this@MainActivity, "Search...",
+                    "What are you looking for...?", null, DEFAULT_ITEMS,
+                    SearchResultListener<SearchFeedResult> { dialog, item, position ->
+                        Toast.makeText(this@MainActivity, "Added",
+                                Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                        doAsync { App.db.feedDao().insertAll(Feed(UUID.randomUUID().toString(), item.link, item.name)) }
+                    })
+
+            val apiFilter = object : BaseFilter<SearchFeedResult>() {
+                override fun performFiltering(charSequence: CharSequence): FilterResults? {
+                    doBeforeFiltering()
+
+                    val results = FilterResults()
+                    val array = ArrayList<SearchFeedResult>()
+
+                    if (charSequence.isNotEmpty()) {
+                        try {
+                            val request = Request.Builder()
+                                    .url("http://cloud.feedly.com/v3/search/feeds?count=20&locale=" + resources.configuration.locale.language + "&query=" + URLEncoder.encode(charSequence.toString(), "UTF-8"))
+                                    .build()
+                            FetcherService.HTTP_CLIENT.newCall(request).execute().use {
+
+                                val jsonStr = it.body()!!.string()
+
+                                // Parse results
+                                val entries = JSONObject(jsonStr).getJSONArray("results")
+                                for (i in 0..entries.length() - 1) {
+                                    try {
+                                        val entry = entries.get(i) as JSONObject
+                                        val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
+                                        if (!url.isEmpty()) {
+                                            array.add(
+                                                    SearchFeedResult(url,
+                                                            Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString(),
+                                                            Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString()))
+                                        }
+                                    } catch (ignored: Exception) {
+                                    }
+                                }
+                            }
+                        } catch (ignored: Exception) {
+                        }
+                    } else {
+                        array.addAll(DEFAULT_ITEMS)
+                    }
+
+                    results.values = array
+                    results.count = array.size
+                    return results
+                }
+
+                override fun publishResults(charSequence: CharSequence, filterResults: FilterResults?) {
+                    filterResults?.let {
+                        searchDialog.filterResultListener.onFilter(it.values as ArrayList<SearchFeedResult>)
+                    }
+                    doAfterFiltering()
+                }
+            }
+            searchDialog.filter = apiFilter
+            searchDialog.show()
+            searchDialog.searchBox.apply {
+                textColor = Color.BLACK
+                hintTextColor = Color.GRAY
+            }
+
+        }
 
         App.db.feedDao().observeRootItems.observe(this@MainActivity, Observer {
             it?.let {
