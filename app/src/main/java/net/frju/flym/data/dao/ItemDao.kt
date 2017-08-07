@@ -11,17 +11,11 @@ interface ItemDao {
     @get:Query("SELECT * FROM items")
     val all: List<Item>
 
-    @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.id")
+    @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.id ORDER BY items.publicationDate DESC")
     val observeAll: LiveData<List<ItemWithFeed>>
-
-    @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.id WHERE read = 0")
-    val observeUnread: LiveData<List<ItemWithFeed>>
 
     @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.id WHERE favorite = 1")
     val favorites: List<ItemWithFeed>
-
-    @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.id WHERE favorite = 1")
-    val observeFavorites: LiveData<List<ItemWithFeed>>
 
     @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.id WHERE feedId IS :arg0")
     fun observeByFeed(feedId: String): LiveData<List<ItemWithFeed>>
