@@ -346,6 +346,18 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         }
 
         App.db.feedDao().insertAll(feed)
+
+        // First we retrieve the data we don't want to overwrite
+        for (dbItem in App.db.itemDao().findByIds(itemsToInsert.map { it.id })) {
+            itemsToInsert.filter { it.id == dbItem.id }.first().apply {
+                publicationDate = dbItem.publicationDate
+                read = dbItem.read
+                favorite = dbItem.favorite
+                mobilizedContent = dbItem.mobilizedContent
+            }
+        }
+
+        // Update everything
         App.db.itemDao().insertAll(*(itemsToInsert.toTypedArray()))
 
         return itemsToInsert.size

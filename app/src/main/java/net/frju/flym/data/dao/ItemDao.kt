@@ -11,7 +11,7 @@ interface ItemDao {
     @get:Query("SELECT * FROM items")
     val all: List<Item>
 
-    @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.id ORDER BY items.publicationDate DESC")
+    @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.id ORDER BY items.publicationDate DESC, id")
     val observeAll: LiveData<List<ItemWithFeed>>
 
     @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.id WHERE favorite = 1")
@@ -26,8 +26,11 @@ interface ItemDao {
     @get:Query("SELECT COUNT(*) FROM items WHERE read = 0")
     val countUnread: Int
 
-    @Query("SELECT * FROM items WHERE id LIKE :arg0 LIMIT 1")
+    @Query("SELECT * FROM items WHERE id IS :arg0 LIMIT 1")
     fun findById(id: String): Item?
+
+    @Query("SELECT * FROM items WHERE id IN (:arg0)")
+    fun findByIds(ids: List<String>): List<Item>
 
     @Query("DELETE FROM items WHERE fetchDate < :arg0 AND favorite = 0")
     fun deleteOlderThan(keepDateBorderTime: Long)
