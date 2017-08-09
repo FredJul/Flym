@@ -38,7 +38,7 @@ abstract class AppDatabase : RoomDatabase() {
                             val values = ContentValues()
                             values.put("id", UUID.randomUUID().toString())
                             values.put("feedTitle", "Google News")
-                            values.put("link", "https://news.google.fr/?output=rss")
+                            values.put("feedLink", "https://news.google.fr/?output=rss")
                             values.put("fetchError", false)
                             values.put("retrieveFullText", true)
                             values.put("isGroup", false)

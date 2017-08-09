@@ -7,15 +7,16 @@ import android.os.Parcelable
 import paperparcel.PaperParcel
 
 @PaperParcel
-@Entity(tableName = "feeds", primaryKeys = arrayOf("id", "link"))
+@Entity(tableName = "feeds", primaryKeys = arrayOf("id", "feedLink"))
 data class Feed(
         var id: String = "",
+        @ColumnInfo(name = "feedLink")
         var link: String = "",
         @ColumnInfo(name = "feedTitle")
         var title: String? = null,
+        @ColumnInfo(name = "feedImageLink")
         var imageLink: String? = null,
         var fetchError: Boolean = false,
-        //var favicon: ByteArray? = null
         var retrieveFullText: Boolean = false,
         var isGroup: Boolean = false,
         var groupId: String? = null,

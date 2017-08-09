@@ -57,7 +57,7 @@
         android:textIsSelectable="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/main_icon"
+        app:layout_constraintStart_toEndOf="@+id/feed_icon"
         app:layout_constraintTop_toBottomOf="@+id/title"
         tools:text="feed name" />
 
@@ -71,5 +71,16 @@
         android:src="@drawable/ic_favorite_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/feed_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/feed_name"
+        app:layout_constraintStart_toEndOf="@+id/main_icon"
+        app:layout_constraintTop_toTopOf="@+id/feed_name"
+        tools:background="@color/colorPrimaryDark" />
 
 </android.support.constraint.ConstraintLayout>
