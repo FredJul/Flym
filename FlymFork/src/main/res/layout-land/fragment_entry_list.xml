@@ -41,11 +41,11 @@
 
 
 
-        <ListView
+        <GridView
             android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="fill"
-            android:footerDividersEnabled="false"/>
+            android:layout_weight="1"
+            android:numColumns="2"/>
     </FrameLayout>
 </LinearLayout>

@@ -1,17 +1,25 @@
 package ru.yanus171.feedexfork.view;
 
+import android.app.Notification;
+import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.support.v7.app.NotificationCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
-import ru.yanus171.feedexfork.MainApplication;
-import ru.yanus171.feedexfork.service.FetcherService;
-import ru.yanus171.feedexfork.utils.Dog;
-
 import java.util.LinkedHashMap;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
+
+import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
+import ru.yanus171.feedexfork.R;
+import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.utils.Dog;
+import ru.yanus171.feedexfork.utils.PrefUtils;
 
 /**
  * Created by Admin on 03.06.2016.
@@ -20,11 +28,11 @@ import java.util.Observer;
 
 public class StatusText implements Observer {
     TextView mView;
-    SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
+    //SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
     static int MaxID = 0;
 
-    public StatusText( TextView view, Observable observable, SwipeRefreshLayout.OnRefreshListener onRefreshListener ) {
-        mOnRefreshListener = onRefreshListener;
+    public StatusText( TextView view, Observable observable/*, SwipeRefreshLayout.OnRefreshListener onRefreshListener*/ ) {
+        //mOnRefreshListener = onRefreshListener;
         observable.addObserver( this );
         mView = view;
         mView.setVisibility(View.GONE);
@@ -49,10 +57,12 @@ public class StatusText implements Observer {
                     mView.setText(text);
                     mView.setVisibility(View.VISIBLE);
                 }
-                mOnRefreshListener.refreshSwipeProgress();
+                //mOnRefreshListener.refreshSwipeProgress();
             }
         });
     }
+
+    public static final int NOTIFICATION_ID = 1;
 
     public static class FetcherObservable extends Observable {
         private Handler mHandler = null;
@@ -60,6 +70,7 @@ public class StatusText implements Observer {
         LinkedHashMap<Integer,String> mList = new LinkedHashMap<Integer,String>();
         private String mProgressText = "";
         private String mDBText = "";
+        private long mLastNotificationUpdateTime = ( new Date() ).getTime();
 
         @Override
         public boolean hasChanged () {
@@ -96,6 +107,11 @@ public class StatusText implements Observer {
                         if ( mBytesRecievedLast > 0 )
                             s = String.format( "(%.2f MB) ", ( float ) mBytesRecievedLast / 1024 / 1024 ) + s;
                         notifyObservers(s);
+                        if ( PrefUtils.getBoolean( PrefUtils.IS_REFRESHING, false ) &&
+                           ( ( new Date() ).getTime() - mLastNotificationUpdateTime  > 1000 ) ) {
+                            Constants.NOTIF_MGR.notify(NOTIFICATION_ID, GetNotification(s));
+                            mLastNotificationUpdateTime = ( new Date() ).getTime();
+                        }
                         Dog.v("Status Update " + s.replace("\n", " "));
                     }
                 }
@@ -154,5 +170,26 @@ public class StatusText implements Observer {
                 });
         }
     }
+    static public Notification GetNotification(String text ) {
+        Context context = MainApplication.getContext();
+        NotificationCompat.BigTextStyle bigxtstyle =
+                new NotificationCompat.BigTextStyle();
+        bigxtstyle.bigText(text);
+        bigxtstyle.setBigContentTitle(context.getString(R.string.update));
+        return new NotificationCompat.Builder(MainApplication.getContext()) //
+                //.setContentIntent(NULL) //
+                .setSmallIcon(R.drawable.refresh) //
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher)) //
+                //.setTicker("") //
+                //.setWhen(System.currentTimeMillis()) //
+                //.setAutoCancel(true) //
+                //.setContentTitle(context.getString(R.string.update)) //
+                //.setContentText(text) //
+                .setStyle( bigxtstyle )
+                //.setLights(0xffffffff, 0, 0)
+                .build();
+    }
+
+
 }
 

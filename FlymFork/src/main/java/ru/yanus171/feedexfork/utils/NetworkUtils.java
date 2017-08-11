@@ -83,7 +83,7 @@ public class NetworkUtils {
         return FileUtils.GetImagesFolder().getAbsolutePath() + "/" + TEMP_PREFIX + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
     }
 
-    public static void downloadImage(final long entryId, String imgUrl, boolean updateGUI ) throws IOException {
+    public static void downloadImage(final long entryId, String imgUrl/*, boolean updateGUI*/ ) throws IOException {
         if ( FetcherService.isCancelRefresh() )
             return;
         String tempImgPath = getTempDownloadedImagePath(entryId, imgUrl);
@@ -134,7 +134,7 @@ public class NetworkUtils {
                 }
             }
         }
-        if ( updateGUI )
+        //if ( updateGUI )
             EntryView.NotifyToUpdate( entryId );
     }
 

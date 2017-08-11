@@ -399,14 +399,22 @@ public class EntryView extends WebView implements Observer {
         }
     }
 
+    static volatile boolean mNotifyInProcess = false;
     public static void NotifyToUpdate( final long entryId) {
-        if ( mHandler != null  )
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mImageDownloadObservable.notifyObservers( entryId );
-                }
-            });
+        synchronized ( mImageDownloadObservable ) {
+            if (mHandler != null && !mNotifyInProcess) {
+                mNotifyInProcess = true;
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        synchronized ( mImageDownloadObservable ) {
+                            mNotifyInProcess = false;
+                            mImageDownloadObservable.notifyObservers(entryId);
+                        }
+                    }
+                }, 1000);
+            }
+        }
     }
 
     public interface EntryViewManager {
