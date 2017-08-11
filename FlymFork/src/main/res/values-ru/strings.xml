@@ -215,6 +215,7 @@
     <string name="loadingLink">Загрузка ссылки</string>
     <string name="loadLink">Читать</string>
     <string name="addFeed">Добавить канал</string>
+    <string name="externalLinks">Внешние ссылки</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">%d new entry</item>

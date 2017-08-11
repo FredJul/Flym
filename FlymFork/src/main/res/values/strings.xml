@@ -205,6 +205,7 @@
     <string name="loadingLink">Loading link</string>
     <string name="loadLink">Mobilize</string>
     <string name="addFeed">Add feed</string>
+    <string name="externalLinks">External links</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new entry</item>
