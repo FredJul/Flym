@@ -199,7 +199,7 @@
 
         <EditTextPreference
             android:key="content_extract_rules"
-            android:inputType="text"
+            android:inputType="text|textMultiLine"
             android:defaultValue="@string/full_text_root_default"
             android:dialogTitle="site_url:id=XXX\nsite_url:class=XXX\n"
             android:title="@string/settings_content_extract_rules"

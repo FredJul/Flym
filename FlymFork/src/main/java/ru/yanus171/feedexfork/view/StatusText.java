@@ -31,7 +31,7 @@ public class StatusText implements Observer {
     //SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
     static int MaxID = 0;
 
-    public StatusText( TextView view, Observable observable/*, SwipeRefreshLayout.OnRefreshListener onRefreshListener*/ ) {
+    public StatusText(TextView view, final Observable observable/*, SwipeRefreshLayout.OnRefreshListener onRefreshListener*/ ) {
         //mOnRefreshListener = onRefreshListener;
         observable.addObserver( this );
         mView = view;
@@ -40,7 +40,12 @@ public class StatusText implements Observer {
         mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setVisibility(View.GONE);
+                FetcherObservable status = (FetcherObservable)observable;
+
+                    status.Clear();
+
+                    v.setVisibility(View.GONE);
+
             }
         });
         mView.setLines( 2 );
@@ -51,7 +56,7 @@ public class StatusText implements Observer {
         mView.post(new Runnable() {
             @Override
             public void run() {
-                if ( text.isEmpty() )
+                if ( text.trim().isEmpty() )
                     mView.setVisibility(View.GONE);
                 else {
                     mView.setText(text);
@@ -66,7 +71,7 @@ public class StatusText implements Observer {
 
     public static class FetcherObservable extends Observable {
         private Handler mHandler = null;
-        volatile private int mBytesRecievedLast = 0;
+        volatile int mBytesRecievedLast = 0;
         LinkedHashMap<Integer,String> mList = new LinkedHashMap<Integer,String>();
         private String mProgressText = "";
         private String mDBText = "";
@@ -116,6 +121,12 @@ public class StatusText implements Observer {
                     }
                 }
             });
+        }
+        public void Clear() {
+            synchronized ( mList ) {
+                if (mList.isEmpty())
+                    mBytesRecievedLast = 0;
+            }
         }
         public int Start( final String text ) {
             Dog.v("Status Start " + text);
