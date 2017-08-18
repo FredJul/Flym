@@ -14,11 +14,12 @@ interface FeedDao {
     @get:Query("SELECT * FROM feeds WHERE isGroup=1 OR groupId IS NULL")
     val observeRootItems: LiveData<List<Feed>>
 
-    @Query("SELECT * FROM feeds WHERE id LIKE :arg0 LIMIT 1")
+    @Query("SELECT * FROM feeds WHERE feedId LIKE :arg0 LIMIT 1")
     fun findById(id: String): Feed?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg feeds: Feed) {
+        //TODO is that working?
         feeds.filter { it.id.isEmpty() }
                 .forEach { it.id = UUID.randomUUID().toString() }
     }

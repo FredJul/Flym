@@ -8,19 +8,17 @@ import net.frju.flym.data.entities.ItemWithFeed
 
 @Dao
 interface ItemDao {
-    @get:Query("SELECT * FROM items")
-    val all: List<Item>
 
-    @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.id ORDER BY items.publicationDate DESC, id")
+    @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId ORDER BY publicationDate DESC, id")
     val observeAll: LiveData<List<ItemWithFeed>>
 
-    @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.id WHERE favorite = 1")
+    @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE favorite = 1")
     val favorites: List<ItemWithFeed>
 
-    @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.id WHERE feedId IS :arg0")
+    @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE items.feedId IS :arg0")
     fun observeByFeed(feedId: String): LiveData<List<ItemWithFeed>>
 
-    @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.id WHERE groupId IS :arg0")
+    @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE groupId IS :arg0")
     fun observeByGroup(groupId: String): LiveData<List<ItemWithFeed>>
 
     @get:Query("SELECT COUNT(*) FROM items WHERE read = 0")
@@ -31,6 +29,9 @@ interface ItemDao {
 
     @Query("SELECT * FROM items WHERE id IN (:arg0)")
     fun findByIds(ids: List<String>): List<Item>
+
+    @Query("UPDATE items SET read = 1 WHERE id IN (:arg0)")
+    fun markAsRead(ids: List<String>)
 
     @Query("DELETE FROM items WHERE fetchDate < :arg0 AND favorite = 0")
     fun deleteOlderThan(keepDateBorderTime: Long)

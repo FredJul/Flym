@@ -11,8 +11,10 @@ import kotlinx.android.synthetic.main.fragment_item_details.*
 import me.thanel.swipeactionview.SwipeActionView
 import me.thanel.swipeactionview.SwipeGestureListener
 import net.fred.feedex.R
+import net.frju.flym.App
 import net.frju.flym.data.entities.ItemWithFeed
 import net.frju.flym.ui.main.MainNavigator
+import org.jetbrains.anko.doAsync
 import org.jetbrains.annotations.NotNull
 
 
@@ -66,6 +68,11 @@ class ItemDetailsFragment : Fragment() {
             }
 
             subtitle.text = dateStringBuilder.toString()
+
+            doAsync {
+                item!!.read = true
+                App.db.itemDao().insertAll(item!!)
+            }
         } else {
             collapsing_toolbar.title = ""
             title.text = ""

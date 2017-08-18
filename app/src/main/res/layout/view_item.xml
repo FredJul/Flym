@@ -1,6 +1,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/selected_item_background"
@@ -35,11 +36,11 @@
         android:textColor="@color/read_state"
         android:textIsSelectable="false"
         app:layout_constraintBottom_toTopOf="@+id/feed_name"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/main_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="long title" />
+        tools:text="long title"
+        app:layout_constraintEnd_toStartOf="@+id/favorite_icon" />
 
     <TextView
         android:id="@+id/feed_name"
@@ -70,7 +71,8 @@
         android:layout_marginTop="8dp"
         android:src="@drawable/ic_favorite_24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="5dp" />
 
     <ImageView
         android:id="@+id/feed_icon"

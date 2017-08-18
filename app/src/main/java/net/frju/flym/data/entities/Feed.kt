@@ -2,13 +2,17 @@ package net.frju.flym.data.entities
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Index
+import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
 import paperparcel.PaperParcel
 
 @PaperParcel
-@Entity(tableName = "feeds", primaryKeys = arrayOf("id", "feedLink"))
+@Entity(tableName = "feeds", indices = arrayOf(Index(value = "feedLink", unique = true)))
 data class Feed(
+        @PrimaryKey
+        @ColumnInfo(name = "feedId")
         var id: String = "",
         @ColumnInfo(name = "feedLink")
         var link: String = "",
