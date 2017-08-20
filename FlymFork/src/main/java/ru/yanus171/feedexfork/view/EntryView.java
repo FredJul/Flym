@@ -91,7 +91,13 @@ public class EntryView extends WebView implements Observer {
     private static String GetTextColor() {return PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#000000" : getTextColorDarkTheme();}
 
     private static String getTextColorDarkTheme() {
-        int b = Integer.parseInt( PrefUtils.getString(PrefUtils.TEXT_COLOR_BRIGHTNESS, "200") );
+
+        int b = 200;
+        try {
+            b = Integer.parseInt( PrefUtils.getString(PrefUtils.TEXT_COLOR_BRIGHTNESS, "200") );
+        } catch (NumberFormatException e) {
+
+        }
         return "#" + Integer.toHexString( Color.argb( 255, b, b, b ) ).substring( 2 );
     }
 

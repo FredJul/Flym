@@ -216,6 +216,7 @@
     <string name="loadLink">Читать</string>
     <string name="addFeed">Добавить канал</string>
     <string name="externalLinks">Внешние ссылки</string>
+    <string name="markAllAsRead">Пометить все как прочитанные</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">%d new entry</item>

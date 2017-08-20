@@ -51,7 +51,6 @@
     <item
         android:id="@+id/menu_cancel_refresh"
         android:icon="@drawable/ic_action_cancel"
-        android:visible="false"
-        app:showAsAction="always"
+        android:visible="true"
         android:title="@string/menu_cancel_refresh"/>
 </menu>
