@@ -25,7 +25,6 @@ import net.frju.flym.data.entities.ItemWithFeed
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.parentalcontrol.utils.PrefUtils
-import net.idik.lib.slimadapter.SlimAdapter
 import net.idik.lib.slimadapter.viewinjector.IViewInjector
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.toast
@@ -36,7 +35,7 @@ class ItemsFragment : LifecycleFragment() {
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
-    private var adapter: SlimAdapter? = null
+    private var adapter: ItemAdapter? = null
     private var feed: Feed? = null
     private var unfilteredItems: List<ItemWithFeed>? = null
 
@@ -110,46 +109,48 @@ class ItemsFragment : LifecycleFragment() {
 
         val layoutManager = LinearLayoutManager(activity)
         recycler_view.layoutManager = layoutManager
-        adapter = SlimAdapter.create()
-                .register<ItemWithFeed>(R.layout.view_item) { item, injector ->
-                    injector
-                            .clicked(R.id.item_container) {
-                                navigator.goToItemDetails(item)
+        adapter = ItemAdapter().apply {
+            register<ItemWithFeed>(R.layout.view_item) { item, injector ->
+                injector
+                        .clicked(R.id.item_container) {
+                            navigator.goToItemDetails(item)
+                        }
+                        .clicked(R.id.favorite_icon) {
+                            toast("marked as fav")
+                            doAsync {
+                                item.favorite = !item.favorite
+                                App.db.itemDao().insertAll(item)
                             }
-                            .clicked(R.id.favorite_icon) {
-                                toast("marked as fav")
-                                doAsync {
-                                    item.favorite = !item.favorite
-                                    App.db.itemDao().insertAll(item)
-                                }
+                        }
+                        .with(R.id.title, IViewInjector.Action<TextView> { view ->
+                            view.text = item.title
+                        })
+                        .with(R.id.feed_name, IViewInjector.Action<TextView> { view ->
+                            view.text = item.feedTitle ?: ""
+                        })
+                        .with(R.id.main_icon, IViewInjector.Action<ImageView> { view ->
+                            val feedName = item.feedTitle ?: ""
+
+                            val mainImgUrl = if (TextUtils.isEmpty(item.imageLink)) null else FetcherService.getDownloadedOrDistantImageUrl(item.id, item.imageLink!!)
+
+                            val color = ColorGenerator.DEFAULT.getColor(item.feedId) // The color is specific to the feedId (which shouldn't change)
+                            val lettersForName = if (feedName.length < 2) feedName.toUpperCase() else feedName.substring(0, 2).toUpperCase()
+                            val letterDrawable = TextDrawable.builder().buildRect(lettersForName, color)
+                            if (mainImgUrl != null) {
+                                GlideApp.with(view.context).load(mainImgUrl).centerCrop().placeholder(letterDrawable).error(letterDrawable).into(view)
+                            } else {
+                                GlideApp.with(view.context).clear(view)
+                                view.setImageDrawable(letterDrawable)
                             }
-                            .with(R.id.title, IViewInjector.Action<TextView> { view ->
-                                view.text = item.title
-                            })
-                            .with(R.id.feed_name, IViewInjector.Action<TextView> { view ->
-                                view.text = item.feedTitle ?: ""
-                            })
-                            .with(R.id.main_icon, IViewInjector.Action<ImageView> { view ->
-                                val feedName = item.feedTitle ?: ""
+                        })
+                        .with(R.id.feed_icon, IViewInjector.Action<ImageView> { view ->
+                            val domain = URL(item.feedLink).host
+                            GlideApp.with(view.context).load("https://www.google.com/s2/favicons?domain=$domain").error(R.mipmap.ic_launcher).into(view)
+                        })
+            }
 
-                                val mainImgUrl = if (TextUtils.isEmpty(item.imageLink)) null else FetcherService.getDownloadedOrDistantImageUrl(item.id, item.imageLink!!)
-
-                                val color = ColorGenerator.DEFAULT.getColor(item.feedId) // The color is specific to the feedId (which shouldn't change)
-                                val lettersForName = if (feedName.length < 2) feedName.toUpperCase() else feedName.substring(0, 2).toUpperCase()
-                                val letterDrawable = TextDrawable.builder().buildRect(lettersForName, color)
-                                if (mainImgUrl != null) {
-                                    GlideApp.with(view.context).load(mainImgUrl).centerCrop().placeholder(letterDrawable).error(letterDrawable).into(view)
-                                } else {
-                                    GlideApp.with(view.context).clear(view)
-                                    view.setImageDrawable(letterDrawable)
-                                }
-                            })
-                            .with(R.id.feed_icon, IViewInjector.Action<ImageView> { view ->
-                                val domain = URL(item.feedLink).host
-                                GlideApp.with(view.context).load("https://www.google.com/s2/favicons?domain=$domain").error(R.mipmap.ic_launcher).into(view)
-                            })
-                }
-                .attachTo(recycler_view)
+            attachTo(recycler_view)
+        }
 
         refresh_layout.setOnRefreshListener { refreshLayout ->
             context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
@@ -163,27 +164,15 @@ class ItemsFragment : LifecycleFragment() {
     }
 
     fun setSelectedItem(selectedItem: ItemWithFeed) {
-        //adapter?.selectedItemId = selectedItem.id
+        adapter?.selectedItemId = selectedItem.id
     }
 
     fun getPreviousItem(): ItemWithFeed? {
-//        adapter?.selectedPositions?.let {
-//            if (it.size > 0 && it[0] > 0) {
-//                return adapter?.getItem(it[0]--)
-//            }
-//        }
-
-        return null
+        return adapter?.previousItem
     }
 
     fun getNextItem(): ItemWithFeed? {
-//        adapter?.selectedPositions?.let {
-//            if (it.size > 0 && it[0] < adapter!!.currentItems.size - 1) {
-//                return adapter?.getItem(it[0]++)
-//            }
-//        }
-
-        return null
+        return adapter?.nextItem
     }
 
     private fun refreshSwipeProgress() {

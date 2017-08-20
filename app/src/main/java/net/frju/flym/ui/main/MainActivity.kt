@@ -249,6 +249,9 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.frame_details, fragment, TAG_DETAILS)
                 .commit()
+
+        val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as ItemsFragment
+        listFragment.setSelectedItem(item)
     }
 
     override fun goToPreviousItem() {
