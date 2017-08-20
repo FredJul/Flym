@@ -841,7 +841,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                     String title = newCursor.getString(mTitlePos);
                     String enclosure = newCursor.getString(mEnclosurePos);
 
-                    FetcherService.setCancelDownloadEntryImages( false );
+                    FetcherService.setCurrentEntryID( getCurrentEntryID() );
                     view.setHtml(mEntriesIds[pagerPos],
                                  title,
                                  link,

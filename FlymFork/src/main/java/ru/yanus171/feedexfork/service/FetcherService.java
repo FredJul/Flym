@@ -136,7 +136,7 @@ public class FetcherService extends IntentService {
     private static final String ENCODING = "encoding=\"";
 
     public static Boolean mCancelRefresh = false;
-    public static Boolean mIsCancelDownloadEntryImages = false;
+    public static Long mCurrentEntryID = -1L;
     public static Boolean mIsDownloadImageCursorNeedsRequery = false;
 
     public static volatile Boolean mIsDeletingOld = false;
@@ -327,14 +327,14 @@ public class FetcherService extends IntentService {
         }
     }
 
-    public static boolean isCancelDownloadEntryImages() {
-        synchronized (mIsCancelDownloadEntryImages) {
-            return mIsCancelDownloadEntryImages;
+    public static long currentEntryID() {
+        synchronized (mCurrentEntryID) {
+            return mCurrentEntryID;
         }
     }
-    public static void setCancelDownloadEntryImages( boolean value ) {
-        synchronized (mIsCancelDownloadEntryImages) {
-            mIsCancelDownloadEntryImages = value;
+    public static void setCurrentEntryID( long value ) {
+        synchronized (mCurrentEntryID) {
+            mCurrentEntryID = value;
         }
     }
 
@@ -554,7 +554,7 @@ public class FetcherService extends IntentService {
         StatusText.FetcherObservable obs = getObservable();
         int status = obs.Start(MainApplication.getContext().getString(R.string.EntryImages)); try {
             for( String imgPath: imageList ) {
-                if (isCancelRefresh() || isCancelDownloadEntryImages())
+                if (isCancelRefresh() || currentEntryID() != entryId)
                     break;
                 int status1 = obs.Start(String.format("%d/%d", imageList.indexOf(imgPath) + 1, imageList.size()));
                 try {

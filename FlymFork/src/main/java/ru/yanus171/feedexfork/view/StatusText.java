@@ -56,13 +56,13 @@ public class StatusText implements Observer {
         mView.post(new Runnable() {
             @Override
             public void run() {
-                if ( text.trim().isEmpty() )
-                    mView.setVisibility(View.GONE);
-                else {
-                    mView.setText(text);
-                    mView.setVisibility(View.VISIBLE);
-                }
-                //mOnRefreshListener.refreshSwipeProgress();
+            if ( text.trim().isEmpty() )
+                mView.setVisibility(View.GONE);
+            else {
+                mView.setText(text);
+                mView.setVisibility(View.VISIBLE);
+            }
+            //mOnRefreshListener.refreshSwipeProgress();
             }
         });
     }
@@ -74,6 +74,7 @@ public class StatusText implements Observer {
         volatile int mBytesRecievedLast = 0;
         LinkedHashMap<Integer,String> mList = new LinkedHashMap<Integer,String>();
         private String mProgressText = "";
+        private String mErrorText = "";
         private String mDBText = "";
         private long mLastNotificationUpdateTime = ( new Date() ).getTime();
 
@@ -168,14 +169,16 @@ public class StatusText implements Observer {
                 mBytesRecievedLast += bytes;
             //}
         }
-        public void Hide() {
+        public void HideByScroll() {
             if ( mHandler != null )
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         synchronized (mList) {
-                            if ( mList.isEmpty()  )
+                            if ( mList.isEmpty() ) {
+                                mBytesRecievedLast = 0;
                                 notifyObservers("");
+                            }
                         }
                     }
                 });

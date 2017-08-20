@@ -128,7 +128,7 @@ public class EntryActivity extends BaseActivity {
         editor.commit();*/
         PrefUtils.putLong(PrefUtils.LAST_ENTRY_ID, 0);
         PrefUtils.putString(PrefUtils.LAST_ENTRY_URI, "");
-        FetcherService.setCancelDownloadEntryImages( true );
+        FetcherService.setCurrentEntryID( -1 );
         new Thread() {
             @Override
             public void run() {

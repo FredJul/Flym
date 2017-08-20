@@ -61,7 +61,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.File;
@@ -191,7 +190,7 @@ public class EntryView extends WebView implements Observer {
                         EntryActivity activity) {
         mActivity = activity;
         mEntryId = entryId;
-        getSettings().setBlockNetworkLoads(true);
+        //getSettings().setBlockNetworkLoads(true);
         getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
             contentText = HtmlUtils.replaceImageURLs(contentText, entryId);
@@ -320,7 +319,7 @@ public class EntryView extends WebView implements Observer {
                     setVisibility(View.VISIBLE);
                     videoLayout.setVisibility(View.GONE);
 
-                    // Hide the custom view.
+                    // HideByScroll the custom view.
                     mCustomView.setVisibility(View.GONE);
 
                     // Remove the custom view from its container.
@@ -383,7 +382,7 @@ public class EntryView extends WebView implements Observer {
 
     @Override
     protected void onScrollChanged (int l, int t, int oldl, int oldt) {
-        FetcherService.getObservable().Hide();
+        FetcherService.getObservable().HideByScroll();
         int height = (int) Math.floor(getContentHeight() * getScale());
         int webViewHeight = getMeasuredHeight();
         if(getScrollY() + webViewHeight >= height){
