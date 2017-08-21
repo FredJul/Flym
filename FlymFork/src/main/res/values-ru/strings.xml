@@ -22,7 +22,7 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">О приложении</string>
+    <string name="about_flym">О приложении / Помощь</string>
     <string name="welcome_title">Добавить канал?</string>
     <string name="never">никогда</string>
     <string name="update">Обновление</string>
@@ -138,7 +138,7 @@
     <string name="download_and_save">Загрузить и сохранить</string>
     <string name="open_link">Открыть ссылку</string>
     <string name="tip_sentence">Подсказка: свайп влево помечает статью как прочитанную</string>
-    <string name="undo">Undo</string>
+    <string name="undo">Отменить</string>
     <string name="marked_as_read">Пометить как прочитанное</string>
 
     <!-- WIDGET -->
@@ -260,5 +260,86 @@
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>
+
+
+    <string name="about_us_content" translatable="true"><![CDATA[
+
+    Это программа основана на \'Flym RSS Reader\', Copyright 2013–2016 Frédéric Julian, и распростаняется под лицензией GNU GPL.<br/>
+
+    <br/>
+    Ссылка на <a href=\"https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork\">Google play</a>  <br/>
+    Ссылка на <a href=\"http://4pda.ru/forum/index.php?showtopic=510993&st=120#entry63119542\">4pda</a>  <br/>
+
+    <br/>
+    <a href=\"mailto:workyalex@mail.ru?subject=Flym Fork RSS Reader question\">Написать разработчику</a><br/>
+
+    <br/>
+    <b>Основные функции:</b> <br/>
+    - загрузка RSS лент статей  <br/>
+    - поиск им добавление ленты по ключевому слову <br/>
+    - загрузка оффлайн полнотекстовых версий статей с изображениями <br/>
+    - импорт/экспорт списка каналов из OPML <br/>
+    - фильтр статей по ключевым словам или регулярным выражениям <br/>
+    - полноэкранный режим чтения <br/>
+    - темная и светлая тема <br/>
+
+    <br/>
+    <b>Из доработанного:</b>  <br/>
+    - сворачивание групп лент <br/>
+    - возможность скрытия прочитанных статей канала <br/>
+    - открытие внешних ссылок в приложении (подготовленных для чтения) <br/>
+    - жирный шрифт чтения статей <br/>
+    - ограничение числа загружаемых изображений статьи <br/>
+    - возможность загрузки отдельных изображений статьи <br/>
+    - подробная описание процесса загрузки статей, чтобы понимать, что приложение делает в данный момент <br/>
+    - счетчик потребляемого трафика <br/>
+    - настройка автоматической отметки статей как прочитанных при листании списка <br/>
+    - настройка отображение текста статей в списке статей (эти два пункта полезны для чтения форумов) <br/>
+    - тап зоны для перехода на следующую/предыдущую страницу при чтении статьи <br/>
+    - быстрый переход в полноэкранный режим и обратно, а также показ/скрытие панели действий <br/>
+    - многое другое ... <br/>
+
+    <br/>
+    Это приложение НЕ синхронизируется с онлайн читалками лент новостей (например, Feedly)<br/>
+
+    <br/>
+    <b>Помочь проекту:</b><br/>
+    - <a href=\"https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork\">оценить</a> приложение<br/>
+    - <a href=\"mailto:workyalex@mail.ru?subject=Flym Fork RSS Reader idea\">предложить </a> супер идею
+
+
+    <br/>
+    Исходные тексты на <a href=\"https://github.com/yanus171/Flym\">github</a> <br/>
+
+    <br/>
+    <b>Разработчики</b><br/>
+    • eighthave<br/>
+    • equiem<br/>
+    • Frédéric Julian<br/>
+    • madx666<br/>
+    • Mikko Huhtala<br/>
+    • Paul Schaub<br/>
+    • RyDroid<br/>
+    • Sergii Pylypenko<br/>
+    • Shapochkin Mihail<br/>
+    • Suyash Bhatt<br/>
+    • Zhaofeng Li<br/>
+    • yanus171<br/><br/>
+
+    <b>Переводчики</b><br/>
+    • Aitor Beriain<br/>
+    • Benjamin Schütte<br/>
+    • Changwoo Ryu<br/>
+    • chenjia404<br/>
+    • Danilo Treffiletti<br/>
+    • Enric Morales<br/>
+    • Jaroslav Lichtblau<br/>
+    • Jozef Jaroščiak<br/>
+    • Matthias Dill<br/>
+    • Mladen Pejaković<br/><br/>
+
+    Эта программа свободна; вы можете перераспространять и/или изменять ее на условиях Стандартной общественной лицензии GNU, опубликованной Фондом свободного программного обеспечения; либо версии 3 этой лицензии, либо (по вашему выбору) любой более поздней версии. Подробности на http://www.gnu.org/licenses<br/><br/>.
+
+    ]]></string>
 
 </resources>

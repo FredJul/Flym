@@ -25,6 +25,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -55,6 +56,14 @@ public class AboutActivity extends BaseActivity {
         titleView.setText(title);
 
         TextView contentView = (TextView) findViewById(R.id.about_content);
+        //String html = getString(R.string.about_us_content);
+        //if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        //    html = Html.fromHtml(html,Html.FROM_HTML_MODE_LEGACY);
+        //} else {
+        //    html = Html.fromHtml(html);
+        //}
+        contentView.setMovementMethod( LinkMovementMethod.getInstance() );
+        contentView.setClickable(true);
         contentView.setText(Html.fromHtml(getString(R.string.about_us_content)));
     }
 
@@ -63,7 +72,7 @@ public class AboutActivity extends BaseActivity {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
                 finish();
-                return true;
+                return true;//
         }
         return (super.onOptionsItemSelected(menuItem));
     }

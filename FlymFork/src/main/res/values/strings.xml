@@ -24,7 +24,7 @@
 
     <!-- GENERAL -->
     <string name="app_name">Flym Fork</string>
-    <string name="about_flym">About app</string>
+    <string name="about_flym">About app / Help</string>
     <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
     <string name="never">never</string>
     <string name="update">Update</string>
