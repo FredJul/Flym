@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="full_text_root_default">lenta.ru:class=b-topic__content</string>
+    <string name="full_text_root_default">lenta.ru:class=b-topic__content
+    wikipedia.org:id=bodyContent
+    developer.android.com:id=body-content
+    livejournal.com:class=entry-content</string>
 </resources>
