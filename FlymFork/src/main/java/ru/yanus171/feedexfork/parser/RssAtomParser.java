@@ -53,17 +53,6 @@ import android.net.Uri;
 import android.text.Html;
 import android.text.TextUtils;
 
-import ru.yanus171.feedexfork.Constants;
-import ru.yanus171.feedexfork.MainApplication;
-import ru.yanus171.feedexfork.provider.FeedData;
-import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
-import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
-import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
-import ru.yanus171.feedexfork.service.FetcherService;
-import ru.yanus171.feedexfork.utils.Dog;
-import ru.yanus171.feedexfork.utils.HtmlUtils;
-import ru.yanus171.feedexfork.utils.NetworkUtils;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -78,6 +67,17 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
+import ru.yanus171.feedexfork.provider.FeedData;
+import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
+import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
+import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
+import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.utils.Dog;
+import ru.yanus171.feedexfork.utils.HtmlUtils;
+import ru.yanus171.feedexfork.utils.NetworkUtils;
 
 public class RssAtomParser extends DefaultHandler {
     private static final String AND_SHARP = "&#";
@@ -646,7 +646,7 @@ public class RssAtomParser extends DefaultHandler {
                 }
                 c.close();
 
-                FetcherService.addEntriesToMobilize((Long[]) entriesId.toArray( new Long[entriesId.size()] ));
+                FetcherService.addEntriesToMobilize(entriesId.toArray( new Long[entriesId.size()] ));
             }
 
         } catch (Exception e) {
@@ -709,13 +709,16 @@ public class RssAtomParser extends DefaultHandler {
 
                 if (r.isAcceptRule) {
                     if (isMatch) {
-                        // accept rules override reject rules, the rest of the rules must be ignored
+
                         isFiltered = false;
+                        //break; // accept rules override reject rules, the rest of the rules must be ignored
+                    } else {
+                        isFiltered = true;
                         break;
                     }
                 } else if (isMatch) {
                     isFiltered = true;
-                    // no break, there might be an accept rule later
+                    break;// // no break, there might be an accept rule later
                 }
             }
 
