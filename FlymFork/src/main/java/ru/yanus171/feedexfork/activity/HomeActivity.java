@@ -27,7 +27,6 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -45,7 +44,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.support.v4.app.Fragment;
 
 import java.io.File;
 import java.util.Date;
@@ -56,7 +54,6 @@ import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.adapter.DrawerAdapter;
 import ru.yanus171.feedexfork.fragment.EntriesListFragment;
-import ru.yanus171.feedexfork.fragment.SwipeRefreshFragment;
 import ru.yanus171.feedexfork.parser.OPML;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
@@ -133,7 +130,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         else
             mCurrentDrawerPos = PrefUtils.getInt(STATE_CURRENT_DRAWER_POS, 1);
 
-        //selectDrawerItem(1);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (mDrawerLayout != null) {
@@ -143,6 +139,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             mDrawerLayout.setDrawerListener(mDrawerToggle);
         }
 
+        if (!PrefUtils.getBoolean(PrefUtils.REMEBER_LAST_ENTRY, true))
+            selectDrawerItem(1);
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
@@ -185,7 +183,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         Intent intent = getIntent();
         if (intent.getScheme() != null && intent.getScheme().startsWith("http")) {
 
-        } else {
+        } else if (PrefUtils.getBoolean(PrefUtils.REMEBER_LAST_ENTRY, true)) {
             String lastUri = PrefUtils.getString(PrefUtils.LAST_ENTRY_URI, "");
             if (!lastUri.isEmpty() && !lastUri.contains("-1"))
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(lastUri)));
@@ -415,7 +413,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         if (!newUri.equals(mEntriesFragment.getUri())) {
-            mEntriesFragment.setData(newUri, showFeedInfo, mDrawerAdapter.isShowTextInEntryList(position));
+             mEntriesFragment.setData(newUri, showFeedInfo, mDrawerAdapter == null ? false : mDrawerAdapter.isShowTextInEntryList(position));
         }
 
         mDrawerList.setItemChecked(position, true);
