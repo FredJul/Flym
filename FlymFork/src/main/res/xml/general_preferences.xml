@@ -98,8 +98,6 @@
             android:title="@string/settings_display_images"/>
 
         <ru.yanus171.feedexfork.view.AutoSummaryListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:defaultValue="ALWAYS_PRELOAD"
             android:dependency="display_images"
             android:entries="@array/settings_preload_image_modes"
@@ -109,8 +107,12 @@
             android:title="@string/settings_preload_image_mode"/>
 
         <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="remember_last_entry"
+            android:summary="@string/settings_remeber_last_entry_description"
+            android:title="@string/settings_remember_last_entry"/>
+
+        <CheckBoxPreference
             android:defaultValue="false"
             android:key="display_oldest_first"
             android:summary="@string/settings_display_oldest_first_description"

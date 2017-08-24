@@ -29,7 +29,7 @@
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Настройки</string>
     <string name="menu_refresh">Обновить</string>
-    <string name="menu_all_read">Пометить все как прочитанное</string>
+    <string name="menu_all_read">Отметить все как прочитанное</string>
     <string name="flym_feeds">Ленты</string>
     <string name="error">Ошибка</string>
     <string name="network_error">Нет подключения к сети</string>
@@ -123,7 +123,7 @@
     <string name="menu_load_all_images">Загрузить все картинки</string>
     <string name="menu_mark_as_favorite">В избранное</string>
     <string name="menu_mark_as_unfavorite">Убрать из избранного</string>
-    <string name="menu_mark_as_unread">Пометить как непрочитанное</string>
+    <string name="menu_mark_as_unread">Отметить как непрочитанное</string>
     <string name="menu_reload_full_text">Перезагрузить весь текст</string>
     <string name="menu_toogle_unread_all">Прочитанные|Все</string>
     <string name="share_favorites_title">Избранные новости</string>
@@ -139,7 +139,7 @@
     <string name="open_link">Открыть ссылку</string>
     <string name="tip_sentence">Подсказка: свайп влево помечает статью как прочитанную</string>
     <string name="undo">Отменить</string>
-    <string name="marked_as_read">Пометить как прочитанное</string>
+    <string name="marked_as_read">Отмечено как прочитанное</string>
 
     <!-- WIDGET -->
     <string name="red">Красный</string>
@@ -216,7 +216,7 @@
     <string name="loadLink">Читать</string>
     <string name="addFeed">Добавить канал</string>
     <string name="externalLinks">Внешние ссылки</string>
-    <string name="markAllAsRead">Пометить все как прочитанные</string>
+    <string name="markAllAsRead">Отметить все как прочитанные</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">%d new entry</item>
@@ -341,5 +341,7 @@
     Эта программа свободна; вы можете перераспространять и/или изменять ее на условиях Стандартной общественной лицензии GNU, опубликованной Фондом свободного программного обеспечения; либо версии 3 этой лицензии, либо (по вашему выбору) любой более поздней версии. Подробности на http://www.gnu.org/licenses<br/><br/>.
 
     ]]></string>
+    <string name="settings_remember_last_entry">Запоминать статью</string>
+    <string name="settings_remeber_last_entry_description">Открывать последнюю просмотренную статью при запуске, иначе список всех статей</string>
 
 </resources>

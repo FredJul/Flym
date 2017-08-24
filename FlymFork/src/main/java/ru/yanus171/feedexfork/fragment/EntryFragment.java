@@ -123,7 +123,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
             @Override
             public void onClick(View view) {
                 EntryActivity activity = (EntryActivity) getActivity();
-                activity.setFullScreen( activity.GetIsStatusBarHidden(), !activity.GetIsActionBarHidden() );
+                activity.setFullScreen( EntryActivity.GetIsStatusBarHidden(), !EntryActivity.GetIsActionBarHidden() );
             }
         });
 
@@ -445,7 +445,10 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
     }
 
     public long getCurrentEntryID() {
-        return mEntriesIds[mCurrentPagerPos];
+        if ( mCurrentPagerPos >= 0 && mCurrentPagerPos < mEntriesIds.length )
+            return mEntriesIds[mCurrentPagerPos];
+        else
+            return -1;
     }
 
     public void setData(Uri uri) {
