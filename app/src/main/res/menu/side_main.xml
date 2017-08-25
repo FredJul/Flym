@@ -10,7 +10,7 @@
             android:title="" />
         <item
             android:id="@+id/menu_main_nav__favorites"
-            android:icon="@drawable/ic_favorite_24dp"
+            android:icon="@drawable/ic_star_white_24dp"
             android:title="" />
     </group>
 

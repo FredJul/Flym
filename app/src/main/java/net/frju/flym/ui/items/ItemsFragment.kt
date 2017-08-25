@@ -27,7 +27,6 @@ import net.frju.flym.ui.main.MainNavigator
 import net.frju.parentalcontrol.utils.PrefUtils
 import net.idik.lib.slimadapter.viewinjector.IViewInjector
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.support.v4.toast
 import java.net.URL
 
 
@@ -115,10 +114,18 @@ class ItemsFragment : LifecycleFragment() {
                         .clicked(R.id.item_container) {
                             navigator.goToItemDetails(item)
                         }
-                        .clicked(R.id.favorite_icon) {
-                            toast("marked as fav")
+                        .clicked(R.id.favorite_icon) { view ->
+                            item.favorite = !item.favorite
+
+                            (view as? ImageView)?.let {
+                                if (item.favorite) {
+                                    it.setImageResource(R.drawable.ic_star_white_24dp)
+                                } else {
+                                    it.setImageResource(R.drawable.ic_star_border_white_24dp)
+                                }
+                            }
+
                             doAsync {
-                                item.favorite = !item.favorite
                                 App.db.itemDao().insertAll(item)
                             }
                         }
@@ -146,6 +153,13 @@ class ItemsFragment : LifecycleFragment() {
                         .with(R.id.feed_icon, IViewInjector.Action<ImageView> { view ->
                             val domain = URL(item.feedLink).host
                             GlideApp.with(view.context).load("https://www.google.com/s2/favicons?domain=$domain").error(R.mipmap.ic_launcher).into(view)
+                        })
+                        .with(R.id.favorite_icon, IViewInjector.Action<ImageView> { view ->
+                            if (item.favorite) {
+                                view.setImageResource(R.drawable.ic_star_white_24dp)
+                            } else {
+                                view.setImageResource(R.drawable.ic_star_border_white_24dp)
+                            }
                         })
             }
 

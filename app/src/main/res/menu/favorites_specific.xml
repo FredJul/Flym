@@ -4,6 +4,6 @@
     <item
         android:id="@+id/menu_favorites__heart"
         android:title="@string/menu_favorites__heart"
-        android:icon="@drawable/ic_favorite_24dp"
+        android:icon="@drawable/ic_star_white_24dp"
         app:showAsAction="always" />
 </menu>
