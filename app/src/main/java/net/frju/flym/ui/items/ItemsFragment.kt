@@ -64,7 +64,7 @@ class ItemsFragment : LifecycleFragment() {
         }
 
         if (savedInstanceState != null) {
-            //adapter?.selectedItemId = savedInstanceState.getString(STATE_SELECTED_ITEM_ID)
+            adapter?.selectedItemId = savedInstanceState.getString(STATE_SELECTED_ITEM_ID)
         }
 
         when {
@@ -98,7 +98,7 @@ class ItemsFragment : LifecycleFragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        //outState.putString(STATE_SELECTED_ITEM_ID, adapter?.selectedItemId)
+        outState.putString(STATE_SELECTED_ITEM_ID, adapter?.selectedItemId)
 
         super.onSaveInstanceState(outState)
     }
