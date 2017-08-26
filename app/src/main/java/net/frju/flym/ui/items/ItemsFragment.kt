@@ -196,8 +196,7 @@ class ItemsFragment : LifecycleFragment() {
                             if (mainImgUrl != null) {
                                 GlideApp.with(view.context).load(mainImgUrl).centerCrop().placeholder(letterDrawable).error(letterDrawable).into(view)
                             } else {
-                                GlideApp.with(view.context).clear(view)
-                                view.setImageDrawable(letterDrawable)
+                                GlideApp.with(view.context).load(letterDrawable)
                             }
                         })
                         .with(R.id.feed_icon, IViewInjector.Action<ImageView> { view ->

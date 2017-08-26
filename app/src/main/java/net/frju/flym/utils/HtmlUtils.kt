@@ -57,31 +57,31 @@ object HtmlUtils {
     private val EMPTY_LINK_PATTERN = Pattern.compile("<a\\s+[^>]*></a>", Pattern.CASE_INSENSITIVE)
 
 
-    fun improveHtmlContent(content: String?, baseUri: String): String {
+    fun improveHtmlContent(content: String, baseUri: String): String {
         @Suppress("NAME_SHADOWING")
         var content = content
-        content = ADS_PATTERN.matcher(content!!).replaceAll("")
+        content = ADS_PATTERN.matcher(content).replaceAll("")
 
         if (content != null) {
             // remove some ads
             content = ADS_PATTERN.matcher(content).replaceAll("")
             // remove lazy loading images stuff
-            content = LAZY_LOADING_PATTERN.matcher(content!!).replaceAll(" src=$2")
+            content = LAZY_LOADING_PATTERN.matcher(content).replaceAll(" src=$2")
 
             // clean by JSoup
             content = Jsoup.clean(content, baseUri, JSOUP_WHITELIST)
 
             // remove empty or bad images
-            content = EMPTY_IMAGE_PATTERN.matcher(content!!).replaceAll("")
-            content = BAD_IMAGE_PATTERN.matcher(content!!).replaceAll("")
+            content = EMPTY_IMAGE_PATTERN.matcher(content).replaceAll("")
+            content = BAD_IMAGE_PATTERN.matcher(content).replaceAll("")
             // remove empty links
-            content = EMPTY_LINK_PATTERN.matcher(content!!).replaceAll("")
+            content = EMPTY_LINK_PATTERN.matcher(content).replaceAll("")
             // fix non http image paths
-            content = NON_HTTP_IMAGE_PATTERN.matcher(content!!).replaceAll(" $1=$2http://")
+            content = NON_HTTP_IMAGE_PATTERN.matcher(content).replaceAll(" $1=$2http://")
             // remove trailing BR & too much BR
-            content = START_BR_PATTERN.matcher(content!!).replaceAll("")
-            content = END_BR_PATTERN.matcher(content!!).replaceAll("")
-            content = MULTIPLE_BR_PATTERN.matcher(content!!).replaceAll("<br><br>")
+            content = START_BR_PATTERN.matcher(content).replaceAll("")
+            content = END_BR_PATTERN.matcher(content).replaceAll("")
+            content = MULTIPLE_BR_PATTERN.matcher(content).replaceAll("<br><br>")
         }
 
         return content
@@ -106,7 +106,7 @@ object HtmlUtils {
         var content = content
 
         if (!TextUtils.isEmpty(content)) {
-            val needDownloadPictures = FetcherService.needDownloadPictures()
+            val needDownloadPictures = FetcherService.shouldDownloadPictures()
             val imagesToDl = ArrayList<String>()
 
             val matcher = IMG_PATTERN.matcher(content)
