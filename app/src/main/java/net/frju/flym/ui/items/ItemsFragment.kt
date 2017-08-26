@@ -173,9 +173,11 @@ class ItemsFragment : LifecycleFragment() {
                             }
                         }
                         .with(R.id.title, IViewInjector.Action<TextView> { view ->
+                            view.isEnabled = !item.read
                             view.text = item.title
                         })
                         .with(R.id.feed_name, IViewInjector.Action<TextView> { view ->
+                            view.isEnabled = !item.read
                             view.text = item.feedTitle ?: ""
                         })
                         .with(R.id.main_icon, IViewInjector.Action<ImageView> { view ->
