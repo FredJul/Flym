@@ -120,6 +120,11 @@ class ItemsFragment : LifecycleFragment() {
     }
 
     private fun updateUI() {
+        empty_view_refresh_button.visibility = when (bottom_navigation.selectedItemId) {
+            R.id.favorites -> View.GONE
+            else -> View.VISIBLE
+        }
+
         val items = when (bottom_navigation.selectedItemId) {
             R.id.unreads -> unfilteredItems?.filter { !it.read }
             R.id.favorites -> unfilteredItems?.filter { it.favorite }
@@ -212,8 +217,19 @@ class ItemsFragment : LifecycleFragment() {
         }
 
         refresh_layout.setOnRefreshListener { refreshLayout ->
-            context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
+            startRefresh()
         }
+
+        recycler_view.emptyView = empty_view
+
+        empty_view_refresh_button.onClick {
+            startRefresh()
+        }
+    }
+
+    private fun startRefresh() {
+        // TODO specify the feed to refresh
+        context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
     }
 
     private fun setupToolbar() {
