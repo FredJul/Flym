@@ -51,7 +51,7 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
 
         nav.layoutManager = LinearLayoutManager(this)
         nav.adapter = feedAdapter
-        fab.onClick {
+        add_feed_fab.onClick {
             val searchDialog = SimpleSearchDialogCompat(this@MainActivity, "Search...",
                     "What are you looking for...?", null, DEFAULT_ITEMS,
                     SearchResultListener<SearchFeedResult> { dialog, item, position ->

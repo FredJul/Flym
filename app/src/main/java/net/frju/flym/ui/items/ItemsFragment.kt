@@ -30,6 +30,7 @@ import net.frju.flym.utils.indefiniteSnackbar
 import net.frju.parentalcontrol.utils.PrefUtils
 import net.idik.lib.slimadapter.viewinjector.IViewInjector
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.sdk21.coroutines.onClick
 import java.net.URL
 import java.util.*
 
@@ -63,12 +64,21 @@ class ItemsFragment : LifecycleFragment() {
 
         setupToolbar()
         setupRecyclerView()
+
         bottom_navigation.setOnNavigationItemSelectedListener {
             recycler_view.post {
                 updateUI()
                 recycler_view.scrollToPosition(0)
             }
             true
+        }
+
+        read_all_fab.onClick {
+            unfilteredItems?.let {
+                doAsync {
+                    App.db.itemDao().markAsRead(it.map { it.id })
+                }
+            }
         }
 
         if (savedInstanceState != null) {
