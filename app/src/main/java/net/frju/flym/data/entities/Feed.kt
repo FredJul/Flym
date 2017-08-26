@@ -7,6 +7,7 @@ import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
 import paperparcel.PaperParcel
+import java.util.*
 
 @PaperParcel
 @Entity(tableName = "feeds", indices = arrayOf(Index(value = "feedLink", unique = true)))
@@ -20,6 +21,8 @@ data class Feed(
         var title: String? = null,
         @ColumnInfo(name = "feedImageLink")
         var imageLink: String? = null,
+        @ColumnInfo(name = "feedCreationDate")
+        var creationDate: Date = Date(),
         var fetchError: Boolean = false,
         var retrieveFullText: Boolean = false,
         var isGroup: Boolean = false,

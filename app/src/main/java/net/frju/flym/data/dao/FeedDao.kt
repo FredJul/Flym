@@ -11,7 +11,7 @@ interface FeedDao {
     @get:Query("SELECT * FROM feeds")
     val all: List<Feed>
 
-    @get:Query("SELECT * FROM feeds WHERE isGroup=1 OR groupId IS NULL")
+    @get:Query("SELECT * FROM feeds WHERE isGroup=1 OR groupId IS NULL ORDER BY displayPriority ASC, feedCreationDate ASC")
     val observeRootItems: LiveData<List<Feed>>
 
     @Query("SELECT * FROM feeds WHERE feedId LIKE :arg0 LIMIT 1")

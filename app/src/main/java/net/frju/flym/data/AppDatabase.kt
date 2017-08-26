@@ -39,6 +39,7 @@ abstract class AppDatabase : RoomDatabase() {
                             values.put("feedId", UUID.randomUUID().toString())
                             values.put("feedTitle", "Google News")
                             values.put("feedLink", "https://news.google.fr/?output=rss")
+                            values.put("feedCreationDate", Date().time)
                             values.put("fetchError", false)
                             values.put("retrieveFullText", true)
                             values.put("isGroup", false)
