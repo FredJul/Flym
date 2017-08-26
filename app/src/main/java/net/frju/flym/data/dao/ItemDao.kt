@@ -9,17 +9,20 @@ import net.frju.flym.data.entities.ItemWithFeed
 @Dao
 interface ItemDao {
 
-    @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId ORDER BY publicationDate DESC, id")
-    val observeAll: LiveData<List<ItemWithFeed>>
+    @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE fetchDate <= :arg0 ORDER BY publicationDate DESC, id")
+    fun observeAll(maxDate: Long): LiveData<List<ItemWithFeed>>
+
+    @Query("SELECT COUNT(*) FROM items WHERE read = 0 AND fetchDate > :arg0")
+    fun observeNewItemsCount(minDate: Long): LiveData<Long>
 
     @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE favorite = 1")
     val favorites: List<ItemWithFeed>
 
-    @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE items.feedId IS :arg0")
-    fun observeByFeed(feedId: String): LiveData<List<ItemWithFeed>>
+    @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE items.feedId IS :arg0 AND fetchDate <= :arg1")
+    fun observeByFeed(feedId: String, maxDate: Long): LiveData<List<ItemWithFeed>>
 
-    @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE groupId IS :arg0")
-    fun observeByGroup(groupId: String): LiveData<List<ItemWithFeed>>
+    @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE groupId IS :arg0 AND fetchDate <= :arg1")
+    fun observeByGroup(groupId: String, maxDate: Long): LiveData<List<ItemWithFeed>>
 
     @get:Query("SELECT COUNT(*) FROM items WHERE read = 0")
     val countUnread: Int

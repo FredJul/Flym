@@ -1,10 +1,12 @@
 package net.frju.flym.ui.items
 
 import android.arch.lifecycle.LifecycleFragment
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -24,10 +26,12 @@ import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.ItemWithFeed
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
+import net.frju.flym.utils.indefiniteSnackbar
 import net.frju.parentalcontrol.utils.PrefUtils
 import net.idik.lib.slimadapter.viewinjector.IViewInjector
 import org.jetbrains.anko.doAsync
 import java.net.URL
+import java.util.*
 
 
 class ItemsFragment : LifecycleFragment() {
@@ -37,6 +41,10 @@ class ItemsFragment : LifecycleFragment() {
     private var adapter: ItemAdapter? = null
     private var feed: Feed? = null
     private var unfilteredItems: List<ItemWithFeed>? = null
+    private var listDisplayDate = Date().time
+    private var dataObserver: LiveData<List<ItemWithFeed>>? = null
+    private var newItemsCountObserver: LiveData<Long>? = null
+    private var newItemsSnackbar: Snackbar? = null
 
     private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (PrefUtils.IS_REFRESHING == key) {
@@ -65,15 +73,39 @@ class ItemsFragment : LifecycleFragment() {
 
         if (savedInstanceState != null) {
             adapter?.selectedItemId = savedInstanceState.getString(STATE_SELECTED_ITEM_ID)
+            listDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE)
         }
 
-        when {
-            feed == null || feed!!.id == Feed.ALL_ITEMS_ID -> App.db.itemDao().observeAll
-            feed!!.isGroup -> App.db.itemDao().observeByGroup(feed!!.id)
-            else -> App.db.itemDao().observeByFeed(feed!!.id)
-        }.observe(this, Observer<List<ItemWithFeed>> {
+        initDataObservers()
+    }
+
+    private fun initDataObservers() {
+        dataObserver?.removeObservers(this)
+        newItemsCountObserver?.removeObservers(this)
+
+        dataObserver = when {
+            feed == null || feed!!.id == Feed.ALL_ITEMS_ID -> App.db.itemDao().observeAll(listDisplayDate)
+            feed!!.isGroup -> App.db.itemDao().observeByGroup(feed!!.id, listDisplayDate)
+            else -> App.db.itemDao().observeByFeed(feed!!.id, listDisplayDate)
+        }
+
+        dataObserver?.observe(this, Observer<List<ItemWithFeed>> {
             unfilteredItems = it
             updateUI()
+        })
+
+        newItemsCountObserver = App.db.itemDao().observeNewItemsCount(listDisplayDate)
+        newItemsCountObserver?.observe(this, Observer<Long> {
+            if (it ?: 0 > 0) {
+                if (newItemsSnackbar?.isShown != true) {
+                    newItemsSnackbar = coordinator.indefiniteSnackbar("$it new items", "refresh") {
+                        listDisplayDate = Date().time
+                        initDataObservers()
+                    }
+                } else {
+                    newItemsSnackbar?.setText("$it new items")
+                }
+            }
         })
     }
 
@@ -99,6 +131,7 @@ class ItemsFragment : LifecycleFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString(STATE_SELECTED_ITEM_ID, adapter?.selectedItemId)
+        outState.putLong(STATE_LIST_DISPLAY_DATE, listDisplayDate)
 
         super.onSaveInstanceState(outState)
     }
@@ -200,7 +233,8 @@ class ItemsFragment : LifecycleFragment() {
     companion object {
 
         private val ARG_FEED = "feed"
-        private val STATE_SELECTED_ITEM_ID = "state_selected_item_id"
+        private val STATE_SELECTED_ITEM_ID = "STATE_SELECTED_ITEM_ID"
+        private val STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE"
 
         fun newInstance(feed: Feed?): ItemsFragment {
             val fragment = ItemsFragment()

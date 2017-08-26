@@ -138,6 +138,7 @@
     <orderEntry type="library" name="anko-support-v4-0.10.1" level="project" />
     <orderEntry type="library" name="support-db-1.0.0-alpha9" level="project" />
     <orderEntry type="library" name="com.amulyakhare.textdrawable-1.0.1" level="project" />
+    <orderEntry type="library" name="anko-appcompat-v7-coroutines-0.10.1" level="project" />
     <orderEntry type="library" name="anko-appcompat-v7-commons-0.10.1" level="project" />
     <orderEntry type="library" name="animated-vector-drawable-26.0.1" level="project" />
     <orderEntry type="library" name="anko-commons-0.10.1" level="project" />
@@ -158,6 +159,7 @@
     <orderEntry type="library" name="anko-sdk21-0.10.1" level="project" />
     <orderEntry type="library" name="anko-appcompat-v7-0.10.1" level="project" />
     <orderEntry type="library" name="paperparcel-api-2.0.2" level="project" />
+    <orderEntry type="library" name="anko-design-0.10.1" level="project" />
     <orderEntry type="library" name="anko-sdk21-coroutines-0.10.1" level="project" />
     <orderEntry type="library" name="search-dialog-1.2.1" level="project" />
     <orderEntry type="library" name="gifdecoder-4.0.0" level="project" />
@@ -169,6 +171,7 @@
     <orderEntry type="library" name="kotlinx-coroutines-android-0.15" level="project" />
     <orderEntry type="library" name="support-compat-26.0.1" level="project" />
     <orderEntry type="library" name="constraint-layout-solver-1.0.2" level="project" />
+    <orderEntry type="library" name="anko-design-coroutines-0.10.1" level="project" />
     <orderEntry type="library" name="okio-1.13.0" level="project" />
     <orderEntry type="library" name="annotations-13.0" level="project" />
     <orderEntry type="library" name="support-annotations-26.0.1" level="project" />

@@ -1,5 +1,6 @@
 package net.frju.flym.utils
 
+import android.support.design.widget.Snackbar
 import android.view.View
 import android.view.ViewTreeObserver
 
@@ -28,3 +29,27 @@ fun View.onLaidOut(runnable: () -> Unit) {
         }
     })
 }
+
+/**
+ * Display Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text resource.
+ */
+inline fun View.indefiniteSnackbar(message: Int, actionText: Int, noinline action: (View) -> Unit) = Snackbar
+        .make(this, message, Snackbar.LENGTH_INDEFINITE)
+        .apply {
+            setAction(actionText, action)
+            show()
+        }
+
+/**
+ * Display Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
+ *
+ * @param message the message text.
+ */
+inline fun View.indefiniteSnackbar(message: String, actionText: String, noinline action: (View) -> Unit) = Snackbar
+        .make(this, message, Snackbar.LENGTH_INDEFINITE)
+        .apply {
+            setAction(actionText, action)
+            show()
+        }
