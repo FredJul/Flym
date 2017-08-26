@@ -21,17 +21,14 @@ package ru.yanus171.feedexfork.activity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
 import ru.yanus171.feedexfork.Constants;
-import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.fragment.EntryFragment;
 import ru.yanus171.feedexfork.provider.FeedData;
@@ -39,7 +36,8 @@ import ru.yanus171.feedexfork.service.FetcherService;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
 
-import static ru.yanus171.feedexfork.utils.PrefUtils.*;
+import static ru.yanus171.feedexfork.utils.PrefUtils.DISPLAY_ENTRIES_FULLSCREEN;
+import static ru.yanus171.feedexfork.utils.PrefUtils.getBoolean;
 
 public class EntryActivity extends BaseActivity {
 
@@ -128,7 +126,7 @@ public class EntryActivity extends BaseActivity {
         editor.commit();*/
         PrefUtils.putLong(PrefUtils.LAST_ENTRY_ID, 0);
         PrefUtils.putString(PrefUtils.LAST_ENTRY_URI, "");
-        FetcherService.setCurrentEntryID( -1 );
+        FetcherService.clearActiveEntryID();
         new Thread() {
             @Override
             public void run() {

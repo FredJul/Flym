@@ -24,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.view.SwipeRefreshLayout;
 
 public abstract class SwipeRefreshFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -67,11 +66,11 @@ public abstract class SwipeRefreshFragment extends Fragment implements SwipeRefr
     }
 
     public void refreshSwipeProgress() {
-        if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+        /*if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
             showSwipeProgress();
         } else {
             hideSwipeProgress();
-        }
+        }*/
     }
     /**
      * Enables swipe gesture

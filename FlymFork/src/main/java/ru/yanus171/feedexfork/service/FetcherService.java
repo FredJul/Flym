@@ -64,13 +64,10 @@ import android.util.Xml;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -136,7 +133,7 @@ public class FetcherService extends IntentService {
     private static final String ENCODING = "encoding=\"";
 
     public static Boolean mCancelRefresh = false;
-    public static Long mCurrentEntryID = -1L;
+    public static ArrayList<Long> mActiveEntryIDList = new ArrayList<Long>();
     public static Boolean mIsDownloadImageCursorNeedsRequery = false;
 
     public static volatile Boolean mIsDeletingOld = false;
@@ -327,17 +324,28 @@ public class FetcherService extends IntentService {
         }
     }
 
-    public static long currentEntryID() {
-        synchronized (mCurrentEntryID) {
-            return mCurrentEntryID;
+    public static boolean isEntryIDActive( long id) {
+        synchronized (mActiveEntryIDList) {
+            return mActiveEntryIDList.contains( id );
         }
     }
-    public static void setCurrentEntryID( long value ) {
-        synchronized (mCurrentEntryID) {
-            mCurrentEntryID = value;
+    public static void addActiveEntryID( long value ) {
+        synchronized (mActiveEntryIDList) {
+            if ( !mActiveEntryIDList.contains( value ) )
+                mActiveEntryIDList.add( value );
         }
     }
-
+    public static void removeActiveEntryID( long value ) {
+        synchronized (mActiveEntryIDList) {
+            if ( mActiveEntryIDList.contains( value ) )
+                mActiveEntryIDList.remove( value );
+        }
+    }
+    public static void clearActiveEntryID() {
+        synchronized (mActiveEntryIDList) {
+            mActiveEntryIDList.clear();
+        }
+    }
     public static boolean isDownloadImageCursorNeedsRequery() {
         synchronized (mIsDownloadImageCursorNeedsRequery) {
             return mIsDownloadImageCursorNeedsRequery;
@@ -554,7 +562,7 @@ public class FetcherService extends IntentService {
         StatusText.FetcherObservable obs = getObservable();
         int status = obs.Start(MainApplication.getContext().getString(R.string.EntryImages)); try {
             for( String imgPath: imageList ) {
-                if (isCancelRefresh() || currentEntryID() != entryId)
+                if (isCancelRefresh() || !isEntryIDActive( entryId ) )
                     break;
                 int status1 = obs.Start(String.format("%d/%d", imageList.indexOf(imgPath) + 1, imageList.size()));
                 try {

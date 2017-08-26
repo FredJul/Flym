@@ -66,6 +66,7 @@ import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
@@ -786,6 +787,8 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
+            Dog.d( "EntryPagerAdapter.destroyItem " + position );
+            FetcherService.removeActiveEntryID( mEntriesIds[position] );
             getLoaderManager().destroyLoader(position);
             container.removeView((View) object);
             EntryView.mImageDownloadObservable.deleteObserver(mEntryViews.get(position));
@@ -794,6 +797,8 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
+            Dog.d( "EntryPagerAdapter.instantiateItem" + position );
+            FetcherService.addActiveEntryID( mEntriesIds[position] );
             final EntryView view = new EntryView(getActivity());
             mEntryViews.put(position, view);
             container.addView(view);
@@ -820,6 +825,8 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
         }
 
         public void displayEntry(int pagerPos, Cursor newCursor, boolean forceUpdate) {
+            Dog.d( "EntryPagerAdapter.displayEntry" + pagerPos);
+
             EntryView view = mEntryViews.get(pagerPos);
             if (view != null) {
                 if (newCursor == null) {
@@ -844,11 +851,11 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                     String title = newCursor.getString(mTitlePos);
                     String enclosure = newCursor.getString(mEnclosurePos);
 
-                    FetcherService.setCurrentEntryID( getCurrentEntryID() );
+                    //FetcherService.setCurrentEntryID( getCurrentEntryID() );
                     view.setHtml(mEntriesIds[pagerPos],
                                  title,
                                  link,
-                                    contentText,
+                                 contentText,
                                  enclosure,
                                  author,
                                  timestamp,

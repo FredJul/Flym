@@ -140,7 +140,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         if (!PrefUtils.getBoolean(PrefUtils.REMEBER_LAST_ENTRY, true))
-            selectDrawerItem(1);
+            selectDrawerItem(0);
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
@@ -413,7 +413,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         if (!newUri.equals(mEntriesFragment.getUri())) {
-             mEntriesFragment.setData(newUri, showFeedInfo, mDrawerAdapter == null ? false : mDrawerAdapter.isShowTextInEntryList(position));
+             mEntriesFragment.setData(newUri,
+                                      showFeedInfo,
+                                      mDrawerAdapter == null ? false : mDrawerAdapter.isShowTextInEntryList(position));
         }
 
         mDrawerList.setItemChecked(position, true);
