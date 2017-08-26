@@ -14,7 +14,7 @@ import java.util.*
 open class Item : Parcelable {
 
     @PrimaryKey var id: String = ""
-    var feedId: String = ""
+    var feedId: Long = 0L
     var link: String? = null
     var publicationDate: Date = Date()
     var fetchDate: Date = Date()
@@ -53,7 +53,7 @@ open class Item : Parcelable {
 }
 
 fun com.einmalfel.earl.Item.toDbFormat(feed: Feed): Item {
-    val itemId = feed.id + "_" + (id ?: link ?: title ?: UUID.randomUUID().toString())
+    val itemId = feed.id.toString() + "_" + (id ?: link ?: title ?: UUID.randomUUID().toString())
 
     val item = App.db.itemDao().findById(itemId) ?: Item()
     item.id = itemId

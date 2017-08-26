@@ -7,22 +7,19 @@ import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
 import paperparcel.PaperParcel
-import java.util.*
 
 @PaperParcel
 @Entity(tableName = "feeds", indices = arrayOf(Index(value = "feedLink", unique = true)))
 data class Feed(
-        @PrimaryKey
+        @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "feedId")
-        var id: String = "",
+        var id: Long = 0L,
         @ColumnInfo(name = "feedLink")
         var link: String = "",
         @ColumnInfo(name = "feedTitle")
         var title: String? = null,
         @ColumnInfo(name = "feedImageLink")
         var imageLink: String? = null,
-        @ColumnInfo(name = "feedCreationDate")
-        var creationDate: Date = Date(),
         var fetchError: Boolean = false,
         var retrieveFullText: Boolean = false,
         var isGroup: Boolean = false,
@@ -32,7 +29,8 @@ data class Feed(
     companion object {
         @JvmField val CREATOR = PaperParcelFeed.CREATOR
 
-        @JvmField val ALL_ITEMS_ID = "all_items"
+        @JvmField
+        val ALL_ITEMS_ID = -1L
     }
 
     override fun describeContents() = 0

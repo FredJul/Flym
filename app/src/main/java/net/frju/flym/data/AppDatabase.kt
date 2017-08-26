@@ -15,7 +15,6 @@ import net.frju.flym.data.dao.TaskDao
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.Item
 import net.frju.flym.data.entities.Task
-import java.util.*
 
 
 @Database(entities = arrayOf(Feed::class, Item::class, Task::class), version = 1)
@@ -36,10 +35,8 @@ abstract class AppDatabase : RoomDatabase() {
                             super.onCreate(db)
 
                             val values = ContentValues()
-                            values.put("feedId", UUID.randomUUID().toString())
                             values.put("feedTitle", "Google News")
                             values.put("feedLink", "https://news.google.fr/?output=rss")
-                            values.put("feedCreationDate", Date().time)
                             values.put("fetchError", false)
                             values.put("retrieveFullText", true)
                             values.put("isGroup", false)

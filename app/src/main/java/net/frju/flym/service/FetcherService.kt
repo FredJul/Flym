@@ -140,8 +140,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             COOKIE_MANAGER.cookieStore.removeAll() // Cookies are important for some sites, but we clean them each times
 
             var newCount = 0
-            val feedId = intent.getStringExtra(EXTRA_FEED_ID)
-            if (feedId == null) {
+            val feedId = intent.getLongExtra(EXTRA_FEED_ID, 0L)
+            if (feedId == 0L) {
                 newCount = refreshFeeds()
             } else {
                 App.db.feedDao().findById(feedId)?.let {

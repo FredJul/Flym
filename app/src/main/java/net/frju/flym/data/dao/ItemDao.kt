@@ -19,13 +19,13 @@ interface ItemDao {
     val favorites: List<ItemWithFeed>
 
     @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE items.feedId IS :arg0 AND fetchDate <= :arg1")
-    fun observeByFeed(feedId: String, maxDate: Long): LiveData<List<ItemWithFeed>>
+    fun observeByFeed(feedId: Long, maxDate: Long): LiveData<List<ItemWithFeed>>
 
     @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE groupId IS :arg0 AND fetchDate <= :arg1")
-    fun observeByGroup(groupId: String, maxDate: Long): LiveData<List<ItemWithFeed>>
+    fun observeByGroup(groupId: Long, maxDate: Long): LiveData<List<ItemWithFeed>>
 
     @get:Query("SELECT COUNT(*) FROM items WHERE read = 0")
-    val countUnread: Int
+    val countUnread: Long
 
     @Query("SELECT * FROM items WHERE id IS :arg0 LIMIT 1")
     fun findById(id: String): Item?
