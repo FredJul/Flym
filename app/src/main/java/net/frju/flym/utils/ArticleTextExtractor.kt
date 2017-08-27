@@ -281,7 +281,6 @@ object ArticleTextExtractor {
      * @return a set of all important nodes
      */
     private fun getNodes(doc: Document): Collection<Element> {
-        val nodes = doc.select("body").select("*").filterTo(HashSet<Element>(64)) { NODES.matcher(it.tagName()).matches() }
-        return nodes
+        return doc.select("body").select("*").filterTo(HashSet<Element>(64)) { NODES.matcher(it.tagName()).matches() }
     }
 }

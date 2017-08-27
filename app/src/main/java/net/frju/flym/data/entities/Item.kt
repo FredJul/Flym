@@ -63,7 +63,7 @@ fun com.einmalfel.earl.Item.toDbFormat(feed: Feed): Item {
     item.link = link
     item.imageLink = imageLink
     item.author = author
-    item.publicationDate = publicationDate ?: Date()
+    item.publicationDate = if (publicationDate?.before(item.publicationDate) == true) publicationDate!! else item.publicationDate
 
     return item
 }

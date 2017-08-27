@@ -342,6 +342,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         // First we retrieve the data we don't want to overwrite
         for (dbItem in App.db.itemDao().findByIds(itemsToInsert.map { it.id })) {
             itemsToInsert.first { it.id == dbItem.id }.apply {
+                fetchDate = dbItem.fetchDate // never update it
                 publicationDate = dbItem.publicationDate
                 read = dbItem.read
                 favorite = dbItem.favorite
