@@ -126,7 +126,8 @@ class ItemDetailsView : WebView {
         if (item == null) {
             loadDataWithBaseURL("", "", TEXT_HTML, UTF8, null)
         } else {
-            var contentText = item.description ?: ""
+            // TODO dynamic switch
+            var contentText = item.mobilizedContent ?: item.description ?: ""
             if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
                 contentText = HtmlUtils.replaceImageURLs(contentText, item.id)
                 if (settings.blockNetworkImage) {

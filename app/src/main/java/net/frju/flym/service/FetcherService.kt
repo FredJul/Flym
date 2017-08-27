@@ -339,17 +339,9 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
         App.db.feedDao().insertAll(feed)
 
-        // First we retrieve the data we don't want to overwrite
-        for (dbItem in App.db.itemDao().findByIds(itemsToInsert.map { it.id })) {
-            itemsToInsert.first { it.id == dbItem.id }.apply {
-                fetchDate = dbItem.fetchDate // never update it
-                publicationDate = dbItem.publicationDate
-                read = dbItem.read
-                favorite = dbItem.favorite
-                mobilizedContent = dbItem.mobilizedContent
-                imageLink = dbItem.imageLink
-            }
-        }
+        // First we remove the items that we already have in db (no update to save data)
+        val existingIds = App.db.itemDao().checkExistingIds(itemsToInsert.map { it.id })
+        itemsToInsert.removeAll { existingIds.contains(it.id) }
 
         val feedBaseUrl = getBaseUrl(feed.link)
 
@@ -375,6 +367,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
         // Update everything
         App.db.itemDao().insertAll(*(itemsToInsert.toTypedArray()))
+
+        if (feed.retrieveFullText) {
+            FetcherService.addEntriesToMobilize(itemsToInsert.map { it.id })
+        }
 
         return itemsToInsert.size
     }
@@ -527,7 +523,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             }
         }
 
-        fun addEntriesToMobilize(itemIds: ArrayList<String>) {
+        fun addEntriesToMobilize(itemIds: List<String>) {
             val newTasks = mutableListOf<Task>()
             itemIds.forEach {
                 val task = Task()
