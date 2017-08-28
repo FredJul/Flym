@@ -223,29 +223,32 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                             .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
                             .addHeader("accept", "*/*")
                             .build()
-                    HTTP_CLIENT.newCall(request).execute().use {
+                    try {
+                        HTTP_CLIENT.newCall(request).execute().use {
 
-                        var mobilizedHtml = ArticleTextExtractor.extractContent(it.body()!!.byteStream(), contentIndicator)
-                        if (mobilizedHtml != null) {
-                            mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, getBaseUrl(item.link!!))
+                            var mobilizedHtml = ArticleTextExtractor.extractContent(it.body()!!.byteStream(), contentIndicator)
+                            if (mobilizedHtml != null) {
+                                mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, getBaseUrl(item.link!!))
 
-                            if (downloadPictures) {
-                                val imgUrlsToDownload = HtmlUtils.getImageURLs(mobilizedHtml)
-                                if (item.imageLink == null && imgUrlsToDownload.isNotEmpty()) {
-                                    item.imageLink = HtmlUtils.getMainImageURL(imgUrlsToDownload)
+                                if (downloadPictures) {
+                                    val imgUrlsToDownload = HtmlUtils.getImageURLs(mobilizedHtml)
+                                    if (item.imageLink == null && imgUrlsToDownload.isNotEmpty()) {
+                                        item.imageLink = HtmlUtils.getMainImageURL(imgUrlsToDownload)
+                                    }
+                                    addImagesToDownload(item.id, imgUrlsToDownload)
+                                } else if (item.imageLink == null) {
+                                    item.imageLink = HtmlUtils.getMainImageURL(mobilizedHtml)
                                 }
-                                addImagesToDownload(item.id, imgUrlsToDownload)
-                            } else if (item.imageLink == null) {
-                                item.imageLink = HtmlUtils.getMainImageURL(mobilizedHtml)
+
+                                success = true
+
+                                App.db.taskDao().deleteAll(task)
+
+                                item.mobilizedContent = mobilizedHtml
+                                App.db.itemDao().insertAll(item)
                             }
-
-                            success = true
-
-                            App.db.taskDao().deleteAll(task)
-
-                            item.mobilizedContent = mobilizedHtml
-                            App.db.itemDao().insertAll(item)
                         }
+                    } catch (_: Throwable) {
                     }
                 }
             }

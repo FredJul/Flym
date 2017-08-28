@@ -9,7 +9,10 @@ import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter
 import com.bignerdranch.expandablerecyclerview.ParentViewHolder
 import kotlinx.android.synthetic.main.view_feed.view.*
 import net.fred.feedex.R
+import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.Feed
+import net.frju.flym.utils.loadFavicon
+import org.jetbrains.anko.dip
 import org.jetbrains.anko.sdk21.coroutines.onClick
 
 
@@ -59,7 +62,13 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
 
         fun bindItem(group: FeedGroup) {
             if (group.feed.isGroup) {
+                GlideApp.with(itemView.context).clear(itemView.icon)
                 itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_down_white_24dp)
+                if (isExpanded) {
+                    itemView.icon.animate().rotationBy(180F).setDuration(0).start()
+                }
+
+                itemView.icon.isClickable = true
                 itemView.icon.onClick {
                     if (isExpanded) {
                         itemView.icon.animate().rotationBy(-180F).start()
@@ -69,9 +78,18 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
                         expandView()
                     }
                 }
+            } else {
+                itemView.icon.isClickable = false
+                if (group.feed.link.isEmpty()) {
+                    GlideApp.with(itemView.context).clear(itemView.icon)
+                    itemView.icon.setImageDrawable(null)
+                } else {
+                    itemView.icon.loadFavicon(group.feed.link)
+                }
             }
             itemView.isSelected = selectedItemId == group.feed.id
             itemView.title.text = group.feed.title
+            itemView.setPadding(0, 0, 0, 0)
             itemView.onClick {
                 selectedItemId = group.feed.id
                 feedClickListener?.invoke(itemView, group.feed)
@@ -89,6 +107,9 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
         fun bindItem(feed: Feed) {
             itemView.isSelected = selectedItemId == feed.id
             itemView.title.text = feed.title
+            itemView.icon.isClickable = false
+            itemView.icon.loadFavicon(feed.link)
+            itemView.setPadding(itemView.dip(30), 0, 0, 0)
             itemView.onClick {
                 selectedItemId = feed.id
                 feedClickListener?.invoke(itemView, feed)

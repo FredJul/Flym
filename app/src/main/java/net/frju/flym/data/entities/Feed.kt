@@ -9,7 +9,7 @@ import android.os.Parcelable
 import paperparcel.PaperParcel
 
 @PaperParcel
-@Entity(tableName = "feeds", indices = arrayOf(Index(value = "feedLink", unique = true)))
+@Entity(tableName = "feeds", indices = arrayOf(Index(value = *arrayOf("feedId", "feedLink"), unique = true)))
 data class Feed(
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "feedId")
@@ -23,7 +23,7 @@ data class Feed(
         var fetchError: Boolean = false,
         var retrieveFullText: Boolean = false,
         var isGroup: Boolean = false,
-        var groupId: String? = null,
+        var groupId: Long? = null,
         var displayPriority: Int = 0) : Parcelable {
 
     companion object {

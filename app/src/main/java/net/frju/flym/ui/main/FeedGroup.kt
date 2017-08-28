@@ -4,9 +4,9 @@ import com.bignerdranch.expandablerecyclerview.model.Parent
 import net.frju.flym.data.entities.Feed
 
 
-class FeedGroup(val feed: Feed, val subFeeds: MutableList<Feed>) : Parent<Feed> {
+class FeedGroup(val feed: Feed, val subFeeds: List<Feed>) : Parent<Feed> {
 
-    override fun getChildList(): MutableList<Feed> {
+    override fun getChildList(): List<Feed> {
         return subFeeds
     }
 

@@ -79,7 +79,7 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
 
                                 // Parse results
                                 val entries = JSONObject(jsonStr).getJSONArray("results")
-                                for (i in 0..entries.length() - 1) {
+                                for (i in 0 until entries.length()) {
                                     try {
                                         val entry = entries.get(i) as JSONObject
                                         val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
@@ -106,6 +106,7 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
 
                 override fun publishResults(charSequence: CharSequence, filterResults: FilterResults?) {
                     filterResults?.let {
+                        @Suppress("UNCHECKED_CAST")
                         searchDialog.filterResultListener.onFilter(it.values as ArrayList<SearchFeedResult>)
                     }
                     doAfterFiltering()
@@ -120,17 +121,19 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
 
         }
 
-        App.db.feedDao().observeRootItems.observe(this@MainActivity, Observer {
+        App.db.feedDao().observeAll.observe(this@MainActivity, Observer {
             it?.let {
                 feedGroups.clear()
 
                 val all = Feed()
                 all.id = Feed.ALL_ITEMS_ID
                 all.title = getString(R.string.all_entries)
-                feedGroups.add(FeedGroup(all, mutableListOf()))
+                feedGroups.add(FeedGroup(all, listOf()))
+
+                val subFeedMap = it.groupBy { it.groupId }
 
                 feedGroups.addAll(
-                        it.map { FeedGroup(it, mutableListOf()) }
+                        subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.id] ?: listOf()) } ?: listOf()
                 )
 
                 feedAdapter.notifyParentDataSetChanged(true)
@@ -286,7 +289,7 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
 
     companion object {
 
-        private val TAG_DETAILS = "tag_details"
-        private val TAG_MASTER = "tag_master"
+        private val TAG_DETAILS = "TAG_DETAILS"
+        private val TAG_MASTER = "TAG_MASTER"
     }
 }

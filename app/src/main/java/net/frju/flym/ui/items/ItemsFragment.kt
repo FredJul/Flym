@@ -27,11 +27,11 @@ import net.frju.flym.data.entities.ItemWithFeed
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.indefiniteSnackbar
+import net.frju.flym.utils.loadFavicon
 import net.frju.parentalcontrol.utils.PrefUtils
 import net.idik.lib.slimadapter.viewinjector.IViewInjector
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk21.coroutines.onClick
-import java.net.URL
 import java.util.*
 
 
@@ -201,8 +201,7 @@ class ItemsFragment : LifecycleFragment() {
                             }
                         })
                         .with(R.id.feed_icon, IViewInjector.Action<ImageView> { view ->
-                            val domain = URL(item.feedLink).host
-                            GlideApp.with(view.context).load("https://www.google.com/s2/favicons?domain=$domain").error(R.mipmap.ic_launcher).into(view)
+                            view.loadFavicon(item.feedLink)
                         })
                         .with(R.id.favorite_icon, IViewInjector.Action<ImageView> { view ->
                             if (item.favorite) {
