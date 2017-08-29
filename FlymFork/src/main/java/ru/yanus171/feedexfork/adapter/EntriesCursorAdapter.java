@@ -71,7 +71,6 @@ import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
-import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.StringUtils;
@@ -82,7 +81,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     private final Context mContext;
     private final boolean mShowFeedInfo;
     private final boolean mShowEntryText;
-    private static final ArrayList<Long> mMarkAsReadList = new ArrayList<Long>();
+    public static final ArrayList<Uri> mMarkAsReadList = new ArrayList<Uri>();
 
     private int mIdPos, mTitlePos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mMobilizedPos, mFeedIdPos, mFeedNamePos, mAbstractPos ;
 
@@ -92,6 +91,9 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         mUri = uri;
         mShowFeedInfo = showFeedInfo;
         mShowEntryText = showEntryText;
+        //SetIsReadMakredList();
+
+        mMarkAsReadList.clear();
 
         reinit(cursor);
     }
@@ -101,6 +103,9 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         return super.getView(position, convertView, parent);
     }
 
+    public Uri EntryUri( long id ) {
+        return ContentUris.withAppendedId(mUri, id);
+    }
     @Override
     public void bindView(final View view, final Context context, Cursor cursor) {
 
@@ -126,17 +131,30 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
 
+
+
         holder.dateTextView.setVisibility(View.VISIBLE);
 
         String titleText = cursor.getString(mTitlePos);
         holder.titleTextView.setText(titleText);
 
         final long feedId = cursor.getLong(mFeedIdPos);
-        final long entryId = cursor.getLong(mIdPos);
+        final long entryID = cursor.getLong(mIdPos);
+
+        /*if ( mShowEntryText && ( holder.entryID != -1 ) && !holder.isRead ) {
+            SetIsRead(holder.entryID, true, 0);
+            synchronized ( mMarkAsReadList ) {
+                if ( mMarkAsReadList.contains( holder.entryID ) )
+                    mMarkAsReadList.remove( holder.entryID );
+            }
+        }*/
+        holder.entryID = entryID;
+
+
         String feedName = cursor.getString(mFeedNamePos);
 
         String mainImgUrl = cursor.getString(mMainImgPos);
-        mainImgUrl = TextUtils.isEmpty(mainImgUrl) ? null : NetworkUtils.getDownloadedOrDistantImageUrl(entryId, mainImgUrl);
+        mainImgUrl = TextUtils.isEmpty(mainImgUrl) ? null : NetworkUtils.getDownloadedOrDistantImageUrl(entryID, mainImgUrl);
 
         ColorGenerator generator = ColorGenerator.DEFAULT;
         int color = generator.getColor(feedId); // The color is specific to the feedId (which shouldn't change)
@@ -173,6 +191,14 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.isRead = true;
         }
 
+        /*synchronized ( mMarkAsReadList ) {
+            if ( !holder.isRead && !mMarkAsReadList.contains(holder.entryID)) {
+                mMarkAsReadList.add( EntryUri( holder.entryID ) );
+                Dog.i("mMarkAsReadList.add " +  EntryUri( holder.entryID ));
+            }
+        }*/
+
+
         /*View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,7 +216,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         holder.starImgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleFavoriteState(entryId, view);
+                toggleFavoriteState(entryID, view);
             }
         });
 
@@ -200,7 +226,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         holder.readImgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleReadState(entryId, view);
+                toggleReadState(entryID, view);
             }
         });
 
@@ -209,22 +235,20 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.textTextView.setText( Html.fromHtml(cursor.getString(mAbstractPos).toString() ) );
             if ( !holder.isRead ) {
                 //SetIsRead(entryId, true, 100 * 1000);
-                if ( holder.entryID != -1 ){
+                /*if ( entryID != -1 ){
                     synchronized ( mMarkAsReadList ) {
-                        if ( !mMarkAsReadList.contains(holder.entryID)) {
-                            mMarkAsReadList.add(holder.entryID);
-                            Dog.i("mMarkAsReadList.add " + holder.entryID);
+                        if ( !mMarkAsReadList.contains(EntryUri( entryID ))) {
+                            mMarkAsReadList.add(EntryUri( entryID ));
+                            Dog.d("mMarkAsReadList.add " + EntryUri( entryID ));
                         }
                     }
-                }
-                holder.entryID = entryId;
+                }*/
+                //holder.entryID = entryId;
 
             }
             holder.textTextView.setEnabled(!holder.isRead);
         } else
             holder.textTextView.setVisibility(View.GONE);
-
-
 
     }
 
@@ -253,11 +277,11 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             UpdateStarImgView( holder );
 
 
-            SetIsRead(id, holder.isRead, 0);
+            SetIsRead(EntryUri(id), holder.isRead, 0);
         }
     }
 
-    public void SetIsRead(final long id, final boolean isRead, final int sleepMsec ) {
+    static public void SetIsRead(final Uri entryUri, final boolean isRead, final int sleepMsec ) {
         new Thread() {
             @Override
             public void run() {
@@ -269,38 +293,19 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
                 }
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
-                Uri entryUri = ContentUris.withAppendedId(mUri, id);
+                //Uri entryUri = ContentUris.withAppendedId(mUri, id);
                 cr.update(entryUri, isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
             }
         }.start();
     }
 
-    public void SetIsReadMakredList() {
+    /*public static void SetIsReadMakredList() {
         if ( !mMarkAsReadList.isEmpty() ) {
-            Dog.i("SetIsReadMakredList()");
-            new MarkAsRadThread( mUri ).start();
+            Dog.d("SetIsReadMakredList()");
+            new MarkAsRadThread().start();
         }
-    }
+    }*/
 
-    class MarkAsRadThread extends Thread  {
-        private final Uri mFeedUri;
-
-        public MarkAsRadThread( Uri feedUri ) {
-            mFeedUri = feedUri;
-        }
-        @Override
-        public void run() {
-            synchronized (mMarkAsReadList) {
-                ContentResolver cr = MainApplication.getContext().getContentResolver();
-                for (Long id : mMarkAsReadList) {
-                    Uri entryUri = ContentUris.withAppendedId(mFeedUri, id);
-                    cr.update(entryUri, FeedData.getReadContentValues(), null, null);
-                }
-                mMarkAsReadList.clear();
-            }
-        }
-
-    }
 
     public void toggleFavoriteState(final long id, View view) {
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
@@ -327,14 +332,14 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     @Override
     public void changeCursor(Cursor cursor) {
-        SetIsReadMakredList();
+        //SetIsReadMakredList();
         reinit(cursor);
         super.changeCursor(cursor);
     }
 
     @Override
     public Cursor swapCursor(Cursor newCursor) {
-        SetIsReadMakredList();
+        //SetIsReadMakredList();
         reinit(newCursor);
         return super.swapCursor(newCursor);
     }
@@ -388,3 +393,20 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         return -1;
     }
 }
+
+/*class MarkAsRadThread extends Thread  {
+    //private final Uri mFeedUri;
+
+    @Override
+    public void run() {
+        synchronized (EntriesCursorAdapter.mMarkAsReadList) {
+            ContentResolver cr = MainApplication.getContext().getContentResolver();
+            for (Uri uri : EntriesCursorAdapter.mMarkAsReadList) {
+                //Uri entryUri = ContentUris.withAppendedId(mFeedUri, id);
+                cr.update(uri, FeedData.getReadContentValues(), null, null);
+            }
+            EntriesCursorAdapter.mMarkAsReadList.clear();
+        }
+    }
+
+}*/

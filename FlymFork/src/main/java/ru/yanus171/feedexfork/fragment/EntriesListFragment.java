@@ -49,8 +49,8 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -246,6 +246,24 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         mListView = (AbsListView) rootView.findViewById(android.R.id.list);
         mListView.setOnTouchListener(new SwipeGestureListener(mListView.getContext()));
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                for ( int i = 0; i < firstVisibleItem; i++ ) {
+                    long id = mEntriesCursorAdapter.getItemId(i);
+                    Uri uri = mEntriesCursorAdapter.EntryUri(id);
+                    if (!EntriesCursorAdapter.mMarkAsReadList.contains(uri)) {
+                        EntriesCursorAdapter.SetIsRead(mEntriesCursorAdapter.EntryUri(id), true, 0);
+                        EntriesCursorAdapter.mMarkAsReadList.add(uri);
+                    }
+                }
+            }
+        });
 
         if (mEntriesCursorAdapter != null) {
             //mListView.setListAdapter(mEntriesCursorAdapter);

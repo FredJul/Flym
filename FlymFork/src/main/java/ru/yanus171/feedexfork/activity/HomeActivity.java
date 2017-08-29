@@ -53,6 +53,7 @@ import java.util.regex.Pattern;
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.adapter.DrawerAdapter;
+import ru.yanus171.feedexfork.adapter.EntriesCursorAdapter;
 import ru.yanus171.feedexfork.fragment.EntriesListFragment;
 import ru.yanus171.feedexfork.parser.OPML;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
@@ -174,6 +175,14 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         FetcherService.getObservable().setHandler(mHandler);
 
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+
+    @Override
+    public void onPause() {
+        synchronized ( EntriesCursorAdapter.mMarkAsReadList ) {
+            EntriesCursorAdapter.mMarkAsReadList.clear();//SetIsReadMakredList();
+        }
+        super.onPause();
     }
 
     @Override

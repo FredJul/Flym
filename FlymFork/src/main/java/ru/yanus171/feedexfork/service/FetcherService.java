@@ -961,31 +961,63 @@ public class FetcherService extends IntentService {
     public static void createTestData() {
         int status = getObservable().Start("createTestData");
         try {
-            final String testFeedID = "10000";
-            final String testAbstract1 = "safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd ";
-            String testAbstract = "";
-            for ( int i = 0; i < 10; i++  )
-                testAbstract += testAbstract1;
-            //final String testAbstract2 = "sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff";
+            {
+                final String testFeedID = "10000";
+                final String testAbstract1 = "safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd ";
+                String testAbstract = "";
+                for (int i = 0; i < 10; i++)
+                    testAbstract += testAbstract1;
+                //final String testAbstract2 = "sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff";
 
-            deleteAllFeedEntries(testFeedID);
+                deleteAllFeedEntries(testFeedID);
 
-            ContentResolver cr = MainApplication.getContext().getContentResolver();
-            ContentValues values = new ContentValues();
-            values.put(FeedColumns._ID, testFeedID);
-            values.put(FeedColumns.NAME, "testFeed");
-            values.putNull(FeedColumns.IS_GROUP);
-            //values.putNull(FeedColumns.GROUP_ID);
-            values.putNull(FeedColumns.LAST_UPDATE);
-            values.put(FeedColumns.FETCH_MODE, 0);
-            cr.insert(FeedColumns.CONTENT_URI, values);
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                ContentValues values = new ContentValues();
+                values.put(FeedColumns._ID, testFeedID);
+                values.put(FeedColumns.NAME, "testFeed");
+                values.putNull(FeedColumns.IS_GROUP);
+                //values.putNull(FeedColumns.GROUP_ID);
+                values.putNull(FeedColumns.LAST_UPDATE);
+                values.put(FeedColumns.FETCH_MODE, 0);
+                cr.insert(FeedColumns.CONTENT_URI, values);
 
-            for( int i = 0; i < 30; i++ ) {
-                values.clear();
-                values.put(EntryColumns._ID, i);
-                values.put(EntryColumns.ABSTRACT, testAbstract);
-                values.put(EntryColumns.TITLE, "testTitile" + i);
-                cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(testFeedID), values);
+                for (int i = 0; i < 30; i++) {
+                    values.clear();
+                    values.put(EntryColumns._ID, i);
+                    values.put(EntryColumns.ABSTRACT, testAbstract);
+                    values.put(EntryColumns.TITLE, "testTitle" + i);
+                    cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(testFeedID), values);
+                }
+            }
+
+            {
+                // small
+                final String testFeedID = "10001";
+                final String testAbstract1 = "safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd ";
+                String testAbstract = "";
+                for ( int i = 0; i < 1; i++  )
+                    testAbstract += testAbstract1;
+                //final String testAbstract2 = "sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff";
+
+                deleteAllFeedEntries(testFeedID);
+
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                ContentValues values = new ContentValues();
+                values.put(FeedColumns._ID, testFeedID);
+                values.put(FeedColumns.NAME, "testFeedSmall");
+                values.putNull(FeedColumns.IS_GROUP);
+                //values.putNull(FeedColumns.GROUP_ID);
+                values.putNull(FeedColumns.LAST_UPDATE);
+                values.put(FeedColumns.FETCH_MODE, 0);
+                cr.insert(FeedColumns.CONTENT_URI, values);
+
+                for (int i = 0; i < 30; i++) {
+                    values.clear();
+                    values.put(EntryColumns._ID, 100 + i);
+                    values.put(EntryColumns.ABSTRACT, testAbstract);
+                    values.put(EntryColumns.TITLE, "testTitleSmall" + i);
+                    cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(testFeedID), values);
+                }
             }
         } finally {
             getObservable().End(status);
