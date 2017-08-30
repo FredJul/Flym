@@ -145,10 +145,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 var newCount = 0
                 val feedId = intent.getLongExtra(EXTRA_FEED_ID, 0L)
                 if (feedId == 0L) {
-                    newCount = refreshFeeds()
+                    newCount = refreshFeeds(keepDateBorderTime)
                 } else {
                     App.db.feedDao().findById(feedId)?.let {
-                        newCount = refreshFeed(it)
+                        newCount = refreshFeed(it, keepDateBorderTime)
                     }
                 }
 
@@ -282,7 +282,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         }
     }
 
-    private fun refreshFeeds(): Int {
+    private fun refreshFeeds(keepDateBorderTime: Long): Int {
 
         val executor = Executors.newFixedThreadPool(THREAD_NUMBER) { r ->
             Thread(r).apply {
@@ -299,7 +299,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             completionService.submit {
                 var result = 0
                 try {
-                    result = refreshFeed(it)
+                    result = refreshFeed(it, keepDateBorderTime)
                 } catch (ignored: Exception) {
                 }
 
@@ -321,7 +321,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         return globalResult
     }
 
-    private fun refreshFeed(feed: Feed): Int {
+    private fun refreshFeed(feed: Feed, keepDateBorderTime: Long): Int {
         val request = Request.Builder()
                 .url(feed.link)
                 .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
@@ -333,7 +333,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         try {
             HTTP_CLIENT.newCall(request).execute().use { response ->
                 val earlFeed = EarlParser.parseOrThrow(response.body()!!.byteStream(), 0)
-                earlFeed.items.map { it.toDbFormat(feed) }.forEach { itemsToInsert.add(it) }
+                earlFeed.items.filter { it.publicationDate?.time ?: Long.MAX_VALUE > keepDateBorderTime }.map { it.toDbFormat(feed) }.forEach { itemsToInsert.add(it) }
                 feed.update(earlFeed)
             }
         } catch (e: Exception) {
