@@ -25,7 +25,9 @@
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clipToPadding="false"
                 android:overScrollMode="never"
+                android:paddingBottom="60dp"
                 android:scrollbars="vertical" />
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
@@ -40,10 +42,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No items"
-                android:textColor="@android:color/darker_gray"
+                android:drawableTop="@drawable/ic_empty_gray_100dp"
                 android:gravity="center"
-                android:drawableTop="@drawable/ic_empty_gray_100dp" />
+                android:text="No items"
+                android:textColor="@android:color/darker_gray" />
 
             <Button
                 android:id="@+id/empty_view_refresh_button"

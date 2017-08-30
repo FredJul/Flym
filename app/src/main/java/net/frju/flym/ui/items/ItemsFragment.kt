@@ -230,7 +230,7 @@ class ItemsFragment : LifecycleFragment() {
             attachTo(recycler_view)
         }
 
-        refresh_layout.setOnRefreshListener { refreshLayout ->
+        refresh_layout.setOnRefreshListener {
             startRefresh()
         }
 
