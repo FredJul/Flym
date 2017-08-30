@@ -49,8 +49,6 @@ class EmptyRecyclerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun checkIfEmpty() {
-        if (emptyView != null && adapter != null) {
-            emptyView!!.visibility = if (adapter.itemCount > 0) View.GONE else View.VISIBLE
-        }
+        emptyView?.visibility = if (adapter?.itemCount ?: 0 > 0) View.GONE else View.VISIBLE
     }
 }

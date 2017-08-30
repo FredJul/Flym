@@ -225,27 +225,28 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                             .build()
                     try {
                         HTTP_CLIENT.newCall(request).execute().use {
+                            it.body()?.let { body ->
+                                var mobilizedHtml = ArticleTextExtractor.extractContent(body.byteStream(), contentIndicator)
+                                if (mobilizedHtml != null) {
+                                    mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, getBaseUrl(item.link!!))
 
-                            var mobilizedHtml = ArticleTextExtractor.extractContent(it.body()!!.byteStream(), contentIndicator)
-                            if (mobilizedHtml != null) {
-                                mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, getBaseUrl(item.link!!))
-
-                                if (downloadPictures) {
-                                    val imgUrlsToDownload = HtmlUtils.getImageURLs(mobilizedHtml)
-                                    if (item.imageLink == null && imgUrlsToDownload.isNotEmpty()) {
-                                        item.imageLink = HtmlUtils.getMainImageURL(imgUrlsToDownload)
+                                    if (downloadPictures) {
+                                        val imgUrlsToDownload = HtmlUtils.getImageURLs(mobilizedHtml)
+                                        if (item.imageLink == null && imgUrlsToDownload.isNotEmpty()) {
+                                            item.imageLink = HtmlUtils.getMainImageURL(imgUrlsToDownload)
+                                        }
+                                        addImagesToDownload(item.id, imgUrlsToDownload)
+                                    } else if (item.imageLink == null) {
+                                        item.imageLink = HtmlUtils.getMainImageURL(mobilizedHtml)
                                     }
-                                    addImagesToDownload(item.id, imgUrlsToDownload)
-                                } else if (item.imageLink == null) {
-                                    item.imageLink = HtmlUtils.getMainImageURL(mobilizedHtml)
+
+                                    success = true
+
+                                    App.db.taskDao().deleteAll(task)
+
+                                    item.mobilizedContent = mobilizedHtml
+                                    App.db.itemDao().insertAll(item)
                                 }
-
-                                success = true
-
-                                App.db.taskDao().deleteAll(task)
-
-                                item.mobilizedContent = mobilizedHtml
-                                App.db.itemDao().insertAll(item)
                             }
                         }
                     } catch (_: Throwable) {
@@ -336,7 +337,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 earlFeed.items.filter { it.publicationDate?.time ?: Long.MAX_VALUE > keepDateBorderTime }.map { it.toDbFormat(feed) }.forEach { itemsToInsert.add(it) }
                 feed.update(earlFeed)
             }
-        } catch (e: Exception) {
+        } catch (t: Throwable) {
             feed.fetchError = true
         }
 

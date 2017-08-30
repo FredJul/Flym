@@ -31,6 +31,7 @@ import net.frju.flym.utils.indefiniteSnackbar
 import net.frju.flym.utils.loadFavicon
 import net.frju.parentalcontrol.utils.PrefUtils
 import net.idik.lib.slimadapter.viewinjector.IViewInjector
+import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk21.coroutines.onClick
 import java.util.*
@@ -61,7 +62,9 @@ class ItemsFragment : LifecycleFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        feed = arguments.getParcelable(ARG_FEED)
+        if (arguments?.containsKey(ARG_FEED) == true) {
+            feed = arguments.getParcelable(ARG_FEED)
+        }
 
         setupToolbar()
         setupRecyclerView()
@@ -277,9 +280,9 @@ class ItemsFragment : LifecycleFragment() {
 
         fun newInstance(feed: Feed?): ItemsFragment {
             val fragment = ItemsFragment()
-            val bundle = Bundle()
-            bundle.putParcelable(ARG_FEED, feed)
-            fragment.arguments = bundle
+            feed?.let {
+                fragment.arguments = bundleOf(ARG_FEED to feed)
+            }
             return fragment
         }
     }

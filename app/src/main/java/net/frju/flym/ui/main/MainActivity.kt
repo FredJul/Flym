@@ -74,26 +74,27 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
                                     .url("http://cloud.feedly.com/v3/search/feeds?count=20&locale=" + resources.configuration.locale.language + "&query=" + URLEncoder.encode(charSequence.toString(), "UTF-8"))
                                     .build()
                             FetcherService.HTTP_CLIENT.newCall(request).execute().use {
+                                it.body()?.let { body ->
+                                    val jsonStr = body.string()
 
-                                val jsonStr = it.body()!!.string()
-
-                                // Parse results
-                                val entries = JSONObject(jsonStr).getJSONArray("results")
-                                for (i in 0 until entries.length()) {
-                                    try {
-                                        val entry = entries.get(i) as JSONObject
-                                        val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
-                                        if (!url.isEmpty()) {
-                                            array.add(
-                                                    SearchFeedResult(url,
-                                                            Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString(),
-                                                            Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString()))
+                                    // Parse results
+                                    val entries = JSONObject(jsonStr).getJSONArray("results")
+                                    for (i in 0 until entries.length()) {
+                                        try {
+                                            val entry = entries.get(i) as JSONObject
+                                            val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
+                                            if (!url.isEmpty()) {
+                                                array.add(
+                                                        SearchFeedResult(url,
+                                                                Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString(),
+                                                                Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString()))
+                                            }
+                                        } catch (ignored: Exception) {
                                         }
-                                    } catch (ignored: Exception) {
                                     }
                                 }
                             }
-                        } catch (ignored: Exception) {
+                        } catch (_: Exception) {
                         }
                     } else {
                         array.addAll(DEFAULT_ITEMS)

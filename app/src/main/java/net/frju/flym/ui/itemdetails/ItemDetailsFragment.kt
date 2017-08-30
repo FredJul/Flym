@@ -14,6 +14,7 @@ import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.ItemWithFeed
 import net.frju.flym.ui.main.MainNavigator
+import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.doAsync
 import org.jetbrains.annotations.NotNull
 
@@ -55,28 +56,27 @@ class ItemDetailsFragment : Fragment() {
     }
 
     private fun updateUI() {
+        collapsing_toolbar.title = ""
+        title.text = ""
+        subtitle.text = ""
 
-        if (item != null) {
-            collapsing_toolbar.title = item!!.title ?: ""
-            title.text = item!!.title ?: ""
+        item?.let { item ->
+            collapsing_toolbar.title = item.title ?: ""
+            title.text = item.title ?: ""
 
-            val dateStringBuilder = StringBuilder(DateFormat.getLongDateFormat(context).format(item!!.publicationDate)).append(' ').append(
-                    DateFormat.getTimeFormat(context).format(item!!.publicationDate))
+            val dateStringBuilder = StringBuilder(DateFormat.getLongDateFormat(context).format(item.publicationDate)).append(' ').append(
+                    DateFormat.getTimeFormat(context).format(item.publicationDate))
 
-            if (item!!.author != null && item!!.author!!.isNotEmpty()) {
-                dateStringBuilder.append(" — ").append(item!!.author)
+            if (item.author?.isNotEmpty() == true) {
+                dateStringBuilder.append(" — ").append(item.author)
             }
 
             subtitle.text = dateStringBuilder.toString()
 
             doAsync {
-                item!!.read = true
-                App.db.itemDao().insertAll(item!!)
+                item.read = true
+                App.db.itemDao().insertAll(item)
             }
-        } else {
-            collapsing_toolbar.title = ""
-            title.text = ""
-            subtitle.text = ""
         }
 
         item_view.setItem(item)
@@ -104,9 +104,7 @@ class ItemDetailsFragment : Fragment() {
 
         fun newInstance(item: ItemWithFeed): ItemDetailsFragment {
             val fragment = ItemDetailsFragment()
-            val bundle = Bundle()
-            bundle.putParcelable(ARG_ITEM, item)
-            fragment.arguments = bundle
+            fragment.arguments = bundleOf(ARG_ITEM to item)
             return fragment
         }
     }
