@@ -135,8 +135,11 @@
     <orderEntry type="library" name="support-core-utils-26.0.2" level="project" />
     <orderEntry type="library" name="jsoup-1.10.3" level="project" />
     <orderEntry type="library" name="paperparcel-2.0.4" level="project" />
+    <orderEntry type="library" name="rxandroid-2.0.1" level="project" />
     <orderEntry type="library" name="anko-support-v4-0.10.1" level="project" />
     <orderEntry type="library" name="support-db-1.0.0-alpha9" level="project" />
+    <orderEntry type="library" name="reactive-streams-1.0.0" level="project" />
+    <orderEntry type="library" name="rxjava2-1.0.0-alpha9" level="project" />
     <orderEntry type="library" name="rome-opml-1.7.4" level="project" />
     <orderEntry type="library" name="com.amulyakhare.textdrawable-1.0.1" level="project" />
     <orderEntry type="library" name="anko-appcompat-v7-coroutines-0.10.1" level="project" />
@@ -164,6 +167,7 @@
     <orderEntry type="library" name="anko-design-0.10.1" level="project" />
     <orderEntry type="library" name="anko-sdk21-coroutines-0.10.1" level="project" />
     <orderEntry type="library" name="search-dialog-1.2.1" level="project" />
+    <orderEntry type="library" name="rxjava-2.0.6" level="project" />
     <orderEntry type="library" name="gifdecoder-4.0.0" level="project" />
     <orderEntry type="library" name="transition-26.0.2" level="project" />
     <orderEntry type="library" name="rome-1.7.4" level="project" />

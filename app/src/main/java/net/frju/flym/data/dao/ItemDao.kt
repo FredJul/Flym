@@ -1,7 +1,7 @@
 package net.frju.flym.data.dao
 
-import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
+import io.reactivex.Flowable
 import net.frju.flym.data.entities.Item
 import net.frju.flym.data.entities.ItemWithFeed
 
@@ -10,19 +10,19 @@ import net.frju.flym.data.entities.ItemWithFeed
 interface ItemDao {
 
     @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE fetchDate <= :arg0 ORDER BY publicationDate DESC, id")
-    fun observeAll(maxDate: Long): LiveData<List<ItemWithFeed>>
+    fun observeAll(maxDate: Long): Flowable<List<ItemWithFeed>>
 
     @Query("SELECT COUNT(*) FROM items WHERE read = 0 AND fetchDate > :arg0")
-    fun observeNewItemsCount(minDate: Long): LiveData<Long>
+    fun observeNewItemsCount(minDate: Long): Flowable<Long>
 
     @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE favorite = 1")
     val favorites: List<ItemWithFeed>
 
     @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE items.feedId IS :arg0 AND fetchDate <= :arg1")
-    fun observeByFeed(feedId: Long, maxDate: Long): LiveData<List<ItemWithFeed>>
+    fun observeByFeed(feedId: Long, maxDate: Long): Flowable<List<ItemWithFeed>>
 
     @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE groupId IS :arg0 AND fetchDate <= :arg1")
-    fun observeByGroup(groupId: Long, maxDate: Long): LiveData<List<ItemWithFeed>>
+    fun observeByGroup(groupId: Long, maxDate: Long): Flowable<List<ItemWithFeed>>
 
     @get:Query("SELECT COUNT(*) FROM items WHERE read = 0")
     val countUnread: Long

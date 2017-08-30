@@ -47,6 +47,8 @@ dependencies {
     kapt "android.arch.lifecycle:compiler:+"
     compile "android.arch.persistence.room:runtime:+"
     kapt "android.arch.persistence.room:compiler:+"
+    compile "android.arch.persistence.room:rxjava2:+"
+    compile 'io.reactivex.rxjava2:rxandroid:+'
 
     // Support dependencies
     compile 'com.android.support:appcompat-v7:+'

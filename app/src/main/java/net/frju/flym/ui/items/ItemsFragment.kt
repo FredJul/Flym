@@ -1,8 +1,6 @@
 package net.frju.flym.ui.items
 
 import android.arch.lifecycle.LifecycleFragment
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
@@ -16,6 +14,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_items.*
 import kotlinx.android.synthetic.main.view_main_containers.view.*
@@ -33,6 +34,7 @@ import net.idik.lib.slimadapter.viewinjector.IViewInjector
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk21.coroutines.onClick
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class ItemsFragment : LifecycleFragment() {
@@ -43,8 +45,7 @@ class ItemsFragment : LifecycleFragment() {
     private var feed: Feed? = null
     private var unfilteredItems: List<ItemWithFeed>? = null
     private var listDisplayDate = Date().time
-    private var dataObserver: LiveData<List<ItemWithFeed>>? = null
-    private var newItemsCountObserver: LiveData<Long>? = null
+    private val disposables = CompositeDisposable()
     private var newItemsSnackbar: Snackbar? = null
 
     private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
@@ -90,33 +91,44 @@ class ItemsFragment : LifecycleFragment() {
     }
 
     private fun initDataObservers() {
-        dataObserver?.removeObservers(this)
-        newItemsCountObserver?.removeObservers(this)
+        disposables.clear()
 
-        dataObserver = when {
+        val itemsFlow = when {
             feed == null || feed!!.id == Feed.ALL_ITEMS_ID -> App.db.itemDao().observeAll(listDisplayDate)
             feed!!.isGroup -> App.db.itemDao().observeByGroup(feed!!.id, listDisplayDate)
             else -> App.db.itemDao().observeByFeed(feed!!.id, listDisplayDate)
         }
 
-        dataObserver?.observe(this, Observer<List<ItemWithFeed>> {
-            unfilteredItems = it
-            updateUI()
-        })
+        disposables.add(
+                itemsFlow.subscribeOn(Schedulers.io())
+                        .debounce(500, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            unfilteredItems = it
+                            updateUI()
+                        })
 
-        newItemsCountObserver = App.db.itemDao().observeNewItemsCount(listDisplayDate)
-        newItemsCountObserver?.observe(this, Observer<Long> {
-            if (it ?: 0 > 0) {
-                if (newItemsSnackbar?.isShown != true) {
-                    newItemsSnackbar = coordinator.indefiniteSnackbar("$it new items", "refresh") {
-                        listDisplayDate = Date().time
-                        initDataObservers()
+        disposables.add(App.db.itemDao().observeNewItemsCount(listDisplayDate)
+                .subscribeOn(Schedulers.io())
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    if (it > 0) {
+                        if (newItemsSnackbar?.isShown != true) {
+                            newItemsSnackbar = coordinator.indefiniteSnackbar("$it new items", "refresh") {
+                                listDisplayDate = Date().time
+                                initDataObservers()
+                            }
+                        } else {
+                            newItemsSnackbar?.setText("$it new items")
+                        }
                     }
-                } else {
-                    newItemsSnackbar?.setText("$it new items")
-                }
-            }
-        })
+                })
+    }
+
+    override fun onDestroy() {
+        disposables.clear()
+        super.onDestroy()
     }
 
     private fun updateUI() {
