@@ -7,6 +7,7 @@ import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import net.fred.feedex.R
 import net.frju.flym.data.AppDatabase
+import net.frju.parentalcontrol.utils.PrefUtils
 
 
 class App : Application() {
@@ -16,6 +17,8 @@ class App : Application() {
 
         context = applicationContext
         db = AppDatabase.createDatabase(context)
+
+        PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false) // init
 
         SmartRefreshLayout.setDefaultRefreshHeaderCreater({ context, layout ->
             layout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.white)

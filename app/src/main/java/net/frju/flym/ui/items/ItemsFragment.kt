@@ -248,8 +248,14 @@ class ItemsFragment : LifecycleFragment() {
     }
 
     private fun startRefresh() {
-        // TODO specify the feed to refresh
-        context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
+        if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+            if (feed?.id != Feed.ALL_ITEMS_ID) {
+                context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.EXTRA_FEED_ID,
+                        feed?.id))
+            } else {
+                context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
+            }
+        }
     }
 
     private fun setupToolbar() {

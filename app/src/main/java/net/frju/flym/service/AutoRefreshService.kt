@@ -66,7 +66,9 @@ import net.frju.parentalcontrol.utils.PrefUtils
 class AutoRefreshService : JobService() {
 
     override fun onStartJob(params: JobParameters): Boolean {
-        baseContext.startService(Intent(baseContext, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.FROM_AUTO_REFRESH, true))
+        if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+            baseContext.startService(Intent(baseContext, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.FROM_AUTO_REFRESH, true))
+        }
 
         return false
     }
