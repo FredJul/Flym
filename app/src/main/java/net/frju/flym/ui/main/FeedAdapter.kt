@@ -1,5 +1,6 @@
 package net.frju.flym.ui.main
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -72,10 +73,10 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
                 itemView.icon.isClickable = true
                 itemView.icon.onClick {
                     if (isExpanded) {
-                        itemView.icon.animate().rotationBy(-180F).start()
+                        itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_down_white_24dp)
                         collapseView()
                     } else {
-                        itemView.icon.animate().rotationBy(180F).start()
+                        itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_up_white_24dp)
                         expandView()
                     }
                 }
@@ -90,6 +91,11 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
             }
             itemView.isSelected = selectedItemId == group.feed.id
             itemView.title.text = group.feed.title
+            if (group.feed.fetchError) { //TODO better
+                itemView.title.setTextColor(Color.RED)
+            } else {
+                itemView.title.setTextColor(Color.WHITE)
+            }
             itemView.setPadding(0, 0, 0, 0)
             itemView.onClick {
                 selectedItemId = group.feed.id
@@ -108,6 +114,11 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
         fun bindItem(feed: Feed) {
             itemView.isSelected = selectedItemId == feed.id
             itemView.title.text = feed.title
+            if (feed.fetchError) { //TODO better
+                itemView.title.setTextColor(Color.RED)
+            } else {
+                itemView.title.setTextColor(Color.WHITE)
+            }
             itemView.icon.isClickable = false
             itemView.icon.loadFavicon(feed.link)
             itemView.setPadding(itemView.dip(30), 0, 0, 0)

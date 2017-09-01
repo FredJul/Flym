@@ -148,7 +148,6 @@
     <orderEntry type="library" name="anko-commons-0.10.1" level="project" />
     <orderEntry type="library" name="appcompat-v7-26.0.2" level="project" />
     <orderEntry type="library" name="disklrucache-4.0.0" level="project" />
-    <orderEntry type="library" name="SmartRefreshLayout-1.0.4-alpha-0" level="project" />
     <orderEntry type="library" name="extensions-1.0.0-alpha9" level="project" />
     <orderEntry type="library" name="paperparcel-kotlin-2.0.4" level="project" />
     <orderEntry type="library" name="kotlin-stdlib-1.1.4-3" level="project" />
@@ -177,6 +176,7 @@
     <orderEntry type="library" name="2_runtime-1.0.0-alpha9" level="project" />
     <orderEntry type="library" name="kotlinx-coroutines-android-0.15" level="project" />
     <orderEntry type="library" name="rome-utils-1.7.4" level="project" />
+    <orderEntry type="library" name="SmartRefreshLayout-1.0.3" level="project" />
     <orderEntry type="library" name="support-compat-26.0.2" level="project" />
     <orderEntry type="library" name="constraint-layout-solver-1.0.2" level="project" />
     <orderEntry type="library" name="anko-design-coroutines-0.10.1" level="project" />
