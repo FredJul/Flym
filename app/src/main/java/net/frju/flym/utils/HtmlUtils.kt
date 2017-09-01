@@ -124,7 +124,7 @@ object HtmlUtils {
             // Download the images if needed
             if (!imagesToDl.isEmpty()) {
                 Thread(Runnable {
-                    FetcherService.addImagesToDownload(itemId, imagesToDl)
+                    FetcherService.addImagesToDownload(mapOf(itemId to imagesToDl))
                     App.context.startService(Intent(App.context, FetcherService::class.java).setAction(FetcherService.ACTION_DOWNLOAD_IMAGES))
                 }).start()
             }

@@ -104,16 +104,22 @@ class ItemsFragment : LifecycleFragment() {
 
         disposables.add(
                 itemsFlow.subscribeOn(Schedulers.io())
-                        .debounce(500, TimeUnit.MILLISECONDS)
+                        .debounce(100, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
                             unfilteredItems = it
                             updateUI()
                         })
 
-        disposables.add(App.db.itemDao().observeNewItemsCount(listDisplayDate)
-                .subscribeOn(Schedulers.io())
-                .debounce(500, TimeUnit.MILLISECONDS)
+        val newCountFlow = when {
+            feed == null || feed!!.id == Feed.ALL_ITEMS_ID -> App.db.itemDao().observeNewItemsCount(listDisplayDate)
+            feed!!.isGroup -> App.db.itemDao().observeNewItemsCountByFeed(feed!!.id, listDisplayDate)
+            else -> App.db.itemDao().observeNewItemsCountByGroup(feed!!.id, listDisplayDate)
+        }
+
+        disposables.add(
+                newCountFlow.subscribeOn(Schedulers.io())
+                        .debounce(100, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it > 0) {
@@ -268,7 +274,7 @@ class ItemsFragment : LifecycleFragment() {
         if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
             refresh_layout.autoRefresh()
         } else {
-            refresh_layout.finishRefresh()
+            //refresh_layout.finishRefresh()
         }
     }
 

@@ -12,17 +12,23 @@ interface ItemDao {
     @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE fetchDate <= :arg0 ORDER BY publicationDate DESC, id")
     fun observeAll(maxDate: Long): Flowable<List<ItemWithFeed>>
 
+    @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE items.feedId IS :arg0 AND fetchDate <= :arg1 ORDER BY publicationDate DESC, id")
+    fun observeByFeed(feedId: Long, maxDate: Long): Flowable<List<ItemWithFeed>>
+
+    @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE groupId IS :arg0 AND fetchDate <= :arg1 ORDER BY publicationDate DESC, id")
+    fun observeByGroup(groupId: Long, maxDate: Long): Flowable<List<ItemWithFeed>>
+
     @Query("SELECT COUNT(*) FROM items WHERE read = 0 AND fetchDate > :arg0")
     fun observeNewItemsCount(minDate: Long): Flowable<Long>
 
+    @Query("SELECT COUNT(*) FROM items WHERE items.feedId IS :arg0 AND read = 0 AND fetchDate > :arg1")
+    fun observeNewItemsCountByFeed(feedId: Long, minDate: Long): Flowable<Long>
+
+    @Query("SELECT COUNT(*) FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE groupId IS :arg0 AND read = 0 AND fetchDate > :arg1")
+    fun observeNewItemsCountByGroup(groupId: Long, minDate: Long): Flowable<Long>
+
     @get:Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE favorite = 1")
     val favorites: List<ItemWithFeed>
-
-    @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE items.feedId IS :arg0 AND fetchDate <= :arg1")
-    fun observeByFeed(feedId: Long, maxDate: Long): Flowable<List<ItemWithFeed>>
-
-    @Query("SELECT * FROM items INNER JOIN feeds ON items.feedId = feeds.feedId WHERE groupId IS :arg0 AND fetchDate <= :arg1")
-    fun observeByGroup(groupId: Long, maxDate: Long): Flowable<List<ItemWithFeed>>
 
     @get:Query("SELECT COUNT(*) FROM items WHERE read = 0")
     val countUnread: Long

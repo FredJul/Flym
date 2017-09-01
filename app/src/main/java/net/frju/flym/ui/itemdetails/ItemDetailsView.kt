@@ -19,6 +19,7 @@
 
 package net.frju.flym.ui.itemdetails
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -79,12 +80,13 @@ class ItemDetailsView : WebView {
         init()
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun init() {
         // For scrolling
         isHorizontalScrollBarEnabled = false
         settings.useWideViewPort = false
         settings.cacheMode = WebSettings.LOAD_NO_CACHE
-        settings.javaScriptEnabled = false // TODO check videos
+        settings.javaScriptEnabled = true
 
         // For color
         setBackgroundColor(Color.parseColor(BACKGROUND_COLOR))

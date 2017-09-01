@@ -88,7 +88,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.net.CookieHandler
 import java.net.CookieManager
-import java.util.*
 import java.util.concurrent.ExecutorCompletionService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -203,8 +202,11 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
     }
 
     private fun mobilizeAllEntries() {
-        App.db.taskDao().mobilizeTasks.forEach { task ->
 
+        val tasks = App.db.taskDao().mobilizeTasks
+        val imgUrlsToDownload = mutableMapOf<String, List<String>>()
+
+        for (task in tasks) {
             var success = false
 
             App.db.itemDao().findById(task.itemId)?.let { item ->
@@ -231,11 +233,13 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                                     mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, getBaseUrl(item.link!!))
 
                                     if (downloadPictures) {
-                                        val imgUrlsToDownload = HtmlUtils.getImageURLs(mobilizedHtml)
-                                        if (item.imageLink == null && imgUrlsToDownload.isNotEmpty()) {
-                                            item.imageLink = HtmlUtils.getMainImageURL(imgUrlsToDownload)
+                                        val imagesList = HtmlUtils.getImageURLs(mobilizedHtml)
+                                        if (imagesList.isNotEmpty()) {
+                                            if (item.imageLink == null) {
+                                                item.imageLink = HtmlUtils.getMainImageURL(imagesList)
+                                            }
+                                            imgUrlsToDownload.put(item.id, imagesList)
                                         }
-                                        addImagesToDownload(item.id, imgUrlsToDownload)
                                     } else if (item.imageLink == null) {
                                         item.imageLink = HtmlUtils.getMainImageURL(mobilizedHtml)
                                     }
@@ -263,10 +267,13 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 }
             }
         }
+
+        addImagesToDownload(imgUrlsToDownload)
     }
 
     private fun downloadAllImages() {
-        App.db.taskDao().downloadTasks.forEach { task ->
+        val tasks = App.db.taskDao().downloadTasks
+        for (task in tasks) {
             try {
                 downloadImage(task.itemId, task.imageLinkToDl!!)
 
@@ -295,12 +302,11 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         var globalResult = 0
 
         val feeds = App.db.feedDao().all
-
-        feeds.forEach {
+        for (feed in feeds) {
             completionService.submit {
                 var result = 0
                 try {
-                    result = refreshFeed(it, keepDateBorderTime)
+                    result = refreshFeed(feed, keepDateBorderTime)
                 } catch (ignored: Exception) {
                 }
 
@@ -330,6 +336,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 .build()
 
         val itemsToInsert = mutableListOf<Item>()
+        val imgUrlsToDownload = mutableMapOf<String, List<String>>()
 
         try {
             HTTP_CLIENT.newCall(request).execute().use { response ->
@@ -350,17 +357,19 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         val feedBaseUrl = getBaseUrl(feed.link)
 
         // Now we improve the html and find images
-        itemsToInsert.forEach { item ->
+        for (item in itemsToInsert) {
             item.description?.let { desc ->
                 // Improve the description
                 val improvedContent = HtmlUtils.improveHtmlContent(desc, feedBaseUrl)
 
                 if (downloadPictures) {
-                    val imgUrlsToDownload = HtmlUtils.getImageURLs(improvedContent)
-                    if (item.imageLink == null && !imgUrlsToDownload.isEmpty()) {
-                        item.imageLink = HtmlUtils.getMainImageURL(imgUrlsToDownload)
+                    val imagesList = HtmlUtils.getImageURLs(improvedContent)
+                    if (imagesList.isNotEmpty()) {
+                        if (item.imageLink == null) {
+                            item.imageLink = HtmlUtils.getMainImageURL(imagesList)
+                        }
+                        imgUrlsToDownload.put(item.id, imagesList)
                     }
-                    addImagesToDownload(item.id, imgUrlsToDownload)
                 } else if (item.imageLink == null) {
                     item.imageLink = HtmlUtils.getMainImageURL(improvedContent)
                 }
@@ -375,6 +384,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         if (feed.retrieveFullText) {
             FetcherService.addEntriesToMobilize(itemsToInsert.map { it.id })
         }
+
+        addImagesToDownload(imgUrlsToDownload)
 
         return itemsToInsert.size
     }
@@ -513,14 +524,16 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             }
         }
 
-        fun addImagesToDownload(itemId: String, images: ArrayList<String>?) {
-            if (images != null && !images.isEmpty()) {
+        fun addImagesToDownload(imgUrlsToDownload: Map<String, List<String>>) {
+            if (imgUrlsToDownload.isNotEmpty()) {
                 val newTasks = mutableListOf<Task>()
-                images.forEach {
-                    val task = Task()
-                    task.itemId = itemId
-                    task.imageLinkToDl = it
-                    newTasks.add(task)
+                for ((key, value) in imgUrlsToDownload) {
+                    for (img in value) {
+                        val task = Task()
+                        task.itemId = key
+                        task.imageLinkToDl = img
+                        newTasks.add(task)
+                    }
                 }
 
                 App.db.taskDao().insertAll(*newTasks.toTypedArray())
@@ -529,9 +542,9 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
         fun addEntriesToMobilize(itemIds: List<String>) {
             val newTasks = mutableListOf<Task>()
-            itemIds.forEach {
+            for (id in itemIds) {
                 val task = Task()
-                task.itemId = it
+                task.itemId = id
                 newTasks.add(task)
             }
 
