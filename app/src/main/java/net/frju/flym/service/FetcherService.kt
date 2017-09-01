@@ -83,6 +83,7 @@ import net.frju.parentalcontrol.utils.PrefUtils
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
+import org.jetbrains.anko.AnkoLogger
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -93,7 +94,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 
-class FetcherService : IntentService(FetcherService::class.java.simpleName) {
+class FetcherService : IntentService(FetcherService::class.java.simpleName), AnkoLogger {
 
     private val handler = Handler()
     private val notifMgr by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }

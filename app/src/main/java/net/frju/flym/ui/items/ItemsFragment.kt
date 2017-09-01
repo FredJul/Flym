@@ -97,9 +97,9 @@ class ItemsFragment : LifecycleFragment() {
         disposables.clear()
 
         val itemsFlow = when {
-            feed == null || feed!!.id == Feed.ALL_ITEMS_ID -> App.db.itemDao().observeAll(listDisplayDate)
-            feed!!.isGroup -> App.db.itemDao().observeByGroup(feed!!.id, listDisplayDate)
-            else -> App.db.itemDao().observeByFeed(feed!!.id, listDisplayDate)
+            feed?.isGroup == true -> App.db.itemDao().observeByGroup(feed!!.id, listDisplayDate)
+            feed != null && feed?.id != Feed.ALL_ITEMS_ID -> App.db.itemDao().observeByFeed(feed!!.id, listDisplayDate)
+            else -> App.db.itemDao().observeAll(listDisplayDate)
         }
 
         disposables.add(
@@ -112,9 +112,9 @@ class ItemsFragment : LifecycleFragment() {
                         })
 
         val newCountFlow = when {
-            feed == null || feed!!.id == Feed.ALL_ITEMS_ID -> App.db.itemDao().observeNewItemsCount(listDisplayDate)
-            feed!!.isGroup -> App.db.itemDao().observeNewItemsCountByFeed(feed!!.id, listDisplayDate)
-            else -> App.db.itemDao().observeNewItemsCountByGroup(feed!!.id, listDisplayDate)
+            feed?.isGroup == true -> App.db.itemDao().observeNewItemsCountByGroup(feed!!.id, listDisplayDate)
+            feed != null && feed?.id != Feed.ALL_ITEMS_ID -> App.db.itemDao().observeNewItemsCountByFeed(feed!!.id, listDisplayDate)
+            else -> App.db.itemDao().observeNewItemsCount(listDisplayDate)
         }
 
         disposables.add(
@@ -249,7 +249,7 @@ class ItemsFragment : LifecycleFragment() {
 
     private fun startRefresh() {
         if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            if (feed?.id != Feed.ALL_ITEMS_ID) {
+            if (feed != null && feed?.id != Feed.ALL_ITEMS_ID) {
                 context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.EXTRA_FEED_ID,
                         feed?.id))
             } else {

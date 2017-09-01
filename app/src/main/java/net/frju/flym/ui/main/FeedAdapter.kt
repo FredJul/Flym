@@ -63,9 +63,10 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
         fun bindItem(group: FeedGroup) {
             if (group.feed.isGroup) {
                 GlideApp.with(itemView.context).clear(itemView.icon)
-                itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_down_white_24dp)
                 if (isExpanded) {
-                    itemView.icon.animate().rotationBy(180F).setDuration(0).start()
+                    itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_up_white_24dp)
+                } else {
+                    itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_down_white_24dp)
                 }
 
                 itemView.icon.isClickable = true
