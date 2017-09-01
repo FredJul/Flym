@@ -335,13 +335,14 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 .addHeader("accept", "*/*")
                 .build()
 
+        val items = mutableListOf<Item>()
         val itemsToInsert = mutableListOf<Item>()
         val imgUrlsToDownload = mutableMapOf<String, List<String>>()
 
         try {
             HTTP_CLIENT.newCall(request).execute().use { response ->
                 val earlFeed = EarlParser.parseOrThrow(response.body()!!.byteStream(), 0)
-                earlFeed.items.filter { it.publicationDate?.time ?: Long.MAX_VALUE > keepDateBorderTime }.map { it.toDbFormat(feed) }.forEach { itemsToInsert.add(it) }
+                earlFeed.items.filter { it.publicationDate?.time ?: Long.MAX_VALUE > keepDateBorderTime }.map { it.toDbFormat(feed) }.forEach { items.add(it) }
                 feed.update(earlFeed)
             }
         } catch (t: Throwable) {
@@ -351,30 +352,43 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         App.db.feedDao().insertAll(feed)
 
         // First we remove the items that we already have in db (no update to save data)
-        val existingIds = App.db.itemDao().checkExistingIds(itemsToInsert.map { it.id })
-        itemsToInsert.removeAll { existingIds.contains(it.id) }
+        val existingIds = App.db.itemDao().checkCurrentIdsForFeed(feed.id)
+        items.removeAll { existingIds.contains(it.id) }
 
         val feedBaseUrl = getBaseUrl(feed.link)
+        var foundExisting = false
 
         // Now we improve the html and find images
-        for (item in itemsToInsert) {
-            item.description?.let { desc ->
-                // Improve the description
-                val improvedContent = HtmlUtils.improveHtmlContent(desc, feedBaseUrl)
+        for (item in items) {
+            if (existingIds.contains(item.id)) {
+                foundExisting = true
+            }
 
-                if (downloadPictures) {
-                    val imagesList = HtmlUtils.getImageURLs(improvedContent)
-                    if (imagesList.isNotEmpty()) {
-                        if (item.imageLink == null) {
-                            item.imageLink = HtmlUtils.getMainImageURL(imagesList)
+            if (item.publicationDate != item.fetchDate || !foundExisting) { // we try to not put back old item, even when there is no date
+                if (!existingIds.contains(item.id)) {
+                    itemsToInsert.add(item)
+
+                    item.description?.let { desc ->
+                        // Improve the description
+                        val improvedContent = HtmlUtils.improveHtmlContent(desc, feedBaseUrl)
+
+                        if (downloadPictures) {
+                            val imagesList = HtmlUtils.getImageURLs(improvedContent)
+                            if (imagesList.isNotEmpty()) {
+                                if (item.imageLink == null) {
+                                    item.imageLink = HtmlUtils.getMainImageURL(imagesList)
+                                }
+                                imgUrlsToDownload.put(item.id, imagesList)
+                            }
+                        } else if (item.imageLink == null) {
+                            item.imageLink = HtmlUtils.getMainImageURL(improvedContent)
                         }
-                        imgUrlsToDownload.put(item.id, imagesList)
-                    }
-                } else if (item.imageLink == null) {
-                    item.imageLink = HtmlUtils.getMainImageURL(improvedContent)
-                }
 
-                item.description = improvedContent
+                        item.description = improvedContent
+                    }
+                } else {
+                    foundExisting = true
+                }
             }
         }
 
@@ -382,12 +396,12 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         App.db.itemDao().insertAll(*(itemsToInsert.toTypedArray()))
 
         if (feed.retrieveFullText) {
-            FetcherService.addEntriesToMobilize(itemsToInsert.map { it.id })
+            FetcherService.addEntriesToMobilize(items.map { it.id })
         }
 
         addImagesToDownload(imgUrlsToDownload)
 
-        return itemsToInsert.size
+        return items.size
     }
 
     private fun deleteOldItems(keepDateBorderTime: Long) {

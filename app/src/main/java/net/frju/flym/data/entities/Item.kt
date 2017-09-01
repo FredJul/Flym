@@ -16,8 +16,8 @@ open class Item : Parcelable {
     @PrimaryKey var id: String = ""
     var feedId: Long = 0L
     var link: String? = null
-    var publicationDate: Date = Date()
     var fetchDate: Date = Date()
+    var publicationDate: Date = fetchDate // important to know if the publication date has been set
     var title: String? = null
     var description: String? = null
     var mobilizedContent: String? = null

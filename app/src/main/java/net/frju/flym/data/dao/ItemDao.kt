@@ -36,8 +36,8 @@ interface ItemDao {
     @Query("SELECT * FROM items WHERE id IS :arg0 LIMIT 1")
     fun findById(id: String): Item?
 
-    @Query("SELECT id FROM items WHERE id IN (:arg0)")
-    fun checkExistingIds(ids: List<String>): List<String>
+    @Query("SELECT id FROM items WHERE feedId IS (:arg0)")
+    fun checkCurrentIdsForFeed(feedId: Long): List<String>
 
     @Query("UPDATE items SET read = 1 WHERE id IN (:arg0)")
     fun markAsRead(ids: List<String>)
