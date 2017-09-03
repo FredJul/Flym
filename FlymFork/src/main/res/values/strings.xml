@@ -207,8 +207,11 @@
     <string name="addFeed">Add feed</string>
     <string name="externalLinks">External links</string>
     <string name="markAllAsRead">Mark all as read</string>
-    <string name="settings_remember_last_entry">Remeber entry</string>
+    <string name="settings_remember_last_entry">Remeber last entry</string>
     <string name="settings_remeber_last_entry_description">Open last viewed entry on startup, otherwise all entries list</string>
+    <string name="pageUp">page up</string>
+    <string name="pageDown">page down</string>
+    <string name="fullScreenToggle">full screen toggle</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new entry</item>

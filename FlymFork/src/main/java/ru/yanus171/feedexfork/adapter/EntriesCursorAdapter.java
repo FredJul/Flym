@@ -257,7 +257,9 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         holder.starImgView.setImageResource(holder.isFavorite ? startID : R.drawable.star_empty_gray );
     }
     private void UpdateReadImgView(ViewHolder holder) {
-        holder.readImgView.setImageResource(holder.isRead ? R.drawable.rounded_checbox_gray : R.drawable.rounded_empty_gray);
+        holder.readImgView.setVisibility( mShowEntryText ? View.GONE : View.VISIBLE );
+        if ( !mShowEntryText )
+            holder.readImgView.setImageResource(holder.isRead ? R.drawable.rounded_checbox_gray : R.drawable.rounded_empty_gray);
     }
 
     public void toggleReadState(final long id, View view) {
@@ -294,7 +296,10 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 }
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
                 //Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                cr.update(entryUri, isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
+                Cursor cur = cr.query( entryUri, new String[]{ EntryColumns.IS_READ }, EntryColumns.WHERE_UNREAD, null, null );
+                if ( cur.moveToFirst()  )
+                    cr.update(entryUri, isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
+                cur.close();
             }
         }.start();
     }
@@ -369,6 +374,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
             mFeedIdPos = cursor.getColumnIndex(EntryColumns.FEED_ID);
         }
+
     }
 
     private static class ViewHolder {

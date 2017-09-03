@@ -1,8 +1,5 @@
 package ru.yanus171.feedexfork.utils;
 
-import android.text.TextUtils;
-import android.util.Log;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,7 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.service.FetcherService;
 
@@ -166,7 +162,7 @@ public class ArticleTextExtractor {
                                 if ( elementType.equals( "id" ) )
                                     result = doc.getElementById( elementValue );
                                 else if ( elementType.equals( "class" ) ) {
-                                    Elements elements = doc.getElementsByClass(elementValue);
+                                    Elements elements = doc.getElementsByClass( elementValue );
                                     if ( !elements.isEmpty() )
                                         result = elements.first();
                                 }

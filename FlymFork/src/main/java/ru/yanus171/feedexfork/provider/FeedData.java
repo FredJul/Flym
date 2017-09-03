@@ -245,7 +245,9 @@ public class FeedData {
 
         public static final Uri FAVORITES_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/favorites");
 
-
+        public static boolean isSearchUri(Uri uri) {
+            return uri != null && uri.toString().startsWith(CONTENT_AUTHORITY + "/entries/search/");
+        }
     }
 
     public static class TaskColumns implements BaseColumns {

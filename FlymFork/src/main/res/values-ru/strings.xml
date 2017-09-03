@@ -132,6 +132,7 @@
     <string name="original_text">Показать оригинальный текст</string>
     <string name="see_enclosure">Показать вложение</string>
     <string name="see_link">Открыть в браузере</string>
+    <string name="show_text_in_entry_list">Отображать тексты статей в списке статей</string>
     <string name="cant_open_link">Не найдено приложений для открытия этой ссылки</string>
     <string name="open_enclosure">Открыть вложение</string>
     <string name="file">File</string>
@@ -343,5 +344,8 @@
     ]]></string>
     <string name="settings_remember_last_entry">Запоминать статью</string>
     <string name="settings_remeber_last_entry_description">Открывать последнюю просмотренную статью при запуске, иначе список всех статей</string>
+    <string name="pageUp">Страница вверх</string>
+    <string name="pageDown">Страница вниз</string>
+    <string name="fullScreenToggle">Пркл. полный экран</string>
 
 </resources>

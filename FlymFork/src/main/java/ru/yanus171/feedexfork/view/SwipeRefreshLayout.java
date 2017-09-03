@@ -318,6 +318,9 @@ public class SwipeRefreshLayout extends ViewGroup {
         final int childWidth = width - getPaddingLeft() - getPaddingRight();
         final int childHeight = height - getPaddingTop() - getPaddingBottom();
         child.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight);
+        //synchronized ( EntriesListFragment.mAutoScrolSetIsReadEnabled ) {
+        //    EntriesListFragment.mAutoScrolSetIsReadEnabled = true;
+        //}
     }
 
     @Override

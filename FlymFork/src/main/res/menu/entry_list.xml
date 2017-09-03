@@ -32,7 +32,7 @@
         android:id="@+id/menu_search"
         android:icon="@drawable/action_search"
         android:title="@android:string/search_go"
-        app:showAsAction="collapseActionView|ifRoom"
+        app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />
     <item
         android:id="@+id/menu_share_starred"

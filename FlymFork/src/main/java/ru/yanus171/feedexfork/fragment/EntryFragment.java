@@ -129,8 +129,10 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
         });
 
         mProgressBar = (ProgressBar)rootView.findViewById(R.id.progressBar);
+        mProgressBar.setProgress( 0 );
 
         mLabelClock = (TextView)rootView.findViewById(R.id.textClock);
+        mLabelClock.setText("");
 
         mToggleStatusBarVisbleBtn =  rootView.findViewById(R.id.toggleFullScreenStatusBarBtn);
         mToggleStatusBarVisbleBtn.setOnClickListener(new View.OnClickListener() {

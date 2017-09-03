@@ -27,12 +27,12 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentTop="true"
-            android:text="page up"/>
+            android:text="@string/pageUp"/>
 
         <TextView
             android:id="@+id/pageDownBtn"
             style="@style/TapZone"
-            android:text="page down"
+            android:text="@string/pageDown"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"/>
@@ -43,7 +43,7 @@
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:text="page down"/>
+            android:text="@string/pageDown"/>
 
         <TextView
             android:id="@+id/toggleFullScreenStatusBarBtn"
@@ -53,7 +53,7 @@
             android:layout_centerInParent="true"
             android:layout_marginBottom="5dp"
             android:layout_marginRight="5dp"
-            android:text="full screen toggle"/>
+            android:text="@string/fullScreenToggle"/>
 
         <ImageView
             android:id="@+id/toggleFullscreenBtn"

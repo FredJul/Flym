@@ -77,11 +77,12 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     private DrawerLayout mDrawerLayout;
     private View mLeftDrawer;
     private ListView mDrawerList;
-    private DrawerAdapter mDrawerAdapter;
+    private DrawerAdapter mDrawerAdapter = null;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mTitle;
     private int mCurrentDrawerPos;
     private Handler mHandler = null;
+    public static Boolean mFeedSetupChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,6 +199,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(lastUri)));
         }
 
+        //getLoaderManager().restartLoader(LOADER_ID, null, this);
+        //if ( mDrawerAdapter != null  )
+        //    selectDrawerItem( mCurrentDrawerPos );
     }
 
     @Override
@@ -368,20 +372,26 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        if (mDrawerAdapter != null) {
-            mDrawerAdapter.setCursor(cursor);
-        } else {
-            mDrawerAdapter = new DrawerAdapter(this, cursor);
-            mDrawerList.setAdapter(mDrawerAdapter);
 
-            // We don't have any menu yet, we need to display it
-            mDrawerList.post(new Runnable() {
-                @Override
-                public void run() {
-                    selectDrawerItem(mCurrentDrawerPos);
-                }
-            });
+        synchronized (mFeedSetupChanged) {
+            if (mDrawerAdapter != null && !mFeedSetupChanged) {
+                mDrawerAdapter.setCursor(cursor);
+            } else {
+                mFeedSetupChanged = false;
+
+                mDrawerAdapter = new DrawerAdapter(this, cursor);
+                mDrawerList.setAdapter(mDrawerAdapter);
+                // We don't have any menu yet, we need to display it
+
+                mDrawerList.post(new Runnable() {
+                    @Override
+                    public void run() {
+                            selectDrawerItem(mCurrentDrawerPos);
+                        }
+                });
+            }
         }
+
     }
 
     @Override
@@ -390,6 +400,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     private void selectDrawerItem(int position) {
+
+
         mCurrentDrawerPos = position;
 
         Uri newUri;
@@ -421,11 +433,12 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 break;
         }
 
-        if (!newUri.equals(mEntriesFragment.getUri())) {
+        //if (!newUri.equals(mEntriesFragment.getUri()))
              mEntriesFragment.setData(newUri,
                                       showFeedInfo,
+                                      false,
                                       mDrawerAdapter == null ? false : mDrawerAdapter.isShowTextInEntryList(position));
-        }
+
 
         mDrawerList.setItemChecked(position, true);
 

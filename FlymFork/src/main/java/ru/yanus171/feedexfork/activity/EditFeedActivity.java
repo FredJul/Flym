@@ -72,6 +72,15 @@ import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
 import android.widget.TabHost;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.adapter.FiltersCursorAdapter;
@@ -82,15 +91,6 @@ import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
 import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class EditFeedActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     static final String FEED_SEARCH_TITLE = "title";
@@ -319,7 +319,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         if (getIntent().getAction().equals(Intent.ACTION_EDIT)) {
             String url = mUrlEditText.getText().toString();
             ContentResolver cr = getContentResolver();
@@ -347,7 +347,10 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     values.put(FeedColumns.FETCH_MODE, 0);
                     values.putNull(FeedColumns.ERROR);
 
-                    cr.update(getIntent().getData(), values, null, null);
+                    synchronized (HomeActivity.mFeedSetupChanged ) {
+                        HomeActivity.mFeedSetupChanged = true;
+                        cr.update(getIntent().getData(), values, null, null);
+                    }
                 }
             } catch (Exception ignored) {
             } finally {
@@ -355,6 +358,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     cursor.close();
                 }
             }
+
         }
 
         super.onDestroy();
