@@ -48,7 +48,7 @@ fun ImageView.loadFavicon(feedLink: String) {
  *
  * @param message the message text resource.
  */
-inline fun View.indefiniteSnackbar(message: Int, actionText: Int, noinline action: (View) -> Unit) = Snackbar
+fun View.indefiniteSnackbar(message: Int, actionText: Int, action: (View) -> Unit) = Snackbar
         .make(this, message, Snackbar.LENGTH_INDEFINITE)
         .apply {
             setAction(actionText, action)
@@ -60,7 +60,7 @@ inline fun View.indefiniteSnackbar(message: Int, actionText: Int, noinline actio
  *
  * @param message the message text.
  */
-inline fun View.indefiniteSnackbar(message: String, actionText: String, noinline action: (View) -> Unit) = Snackbar
+fun View.indefiniteSnackbar(message: String, actionText: String, action: (View) -> Unit) = Snackbar
         .make(this, message, Snackbar.LENGTH_INDEFINITE)
         .apply {
             setAction(actionText, action)

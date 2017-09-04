@@ -33,7 +33,7 @@ android {
 kapt {
     generateStubs = true
     arguments {
-        //arg("androidManifestFile", variant.outputs[0].processResourcesTask.manifestFile)
+        arg("room.schemaLocation", "$projectDir/schemas")
     }
 }
 
