@@ -143,7 +143,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                 val keepTime = java.lang.Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000L
                 val keepDateBorderTime = if (keepTime > 0) System.currentTimeMillis() - keepTime else 0
 
-                deleteOldItems(keepDateBorderTime)
+                deleteOldEntries(keepDateBorderTime)
                 COOKIE_MANAGER.cookieStore.removeAll() // Cookies are important for some sites, but we clean them each times
 
                 var newCount = 0
@@ -214,24 +214,24 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         val tasks = App.db.taskDao().mobilizeTasks
         val imgUrlsToDownload = mutableMapOf<String, List<String>>()
 
-        warn("mobilizing ${tasks.size} items")
+        warn("mobilizing ${tasks.size} entries")
         for (task in tasks) {
             var success = false
 
-            App.db.entryDao().findById(task.entryId)?.let { item ->
-                warn("mobilizing item ${item.id}")
-                if (item.link != null) {
+            App.db.entryDao().findById(task.entryId)?.let { entry ->
+                warn("mobilizing entry ${entry.id}")
+                if (entry.link != null) {
                     // Try to find a text indicator for better content extraction
                     var contentIndicator: String? = null
-                    if (!TextUtils.isEmpty(item.description)) {
-                        contentIndicator = Html.fromHtml(item.description).toString()
+                    if (!TextUtils.isEmpty(entry.description)) {
+                        contentIndicator = Html.fromHtml(entry.description).toString()
                         if (contentIndicator.length > 60) {
                             contentIndicator = contentIndicator.substring(20, 40)
                         }
                     }
 
                     val request = Request.Builder()
-                            .url(item.link)
+                            .url(entry.link)
                             .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
                             .addHeader("accept", "*/*")
                             .build()
@@ -240,26 +240,26 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                             it.body()?.let { body ->
                                 var mobilizedHtml = ArticleTextExtractor.extractContent(body.byteStream(), contentIndicator)
                                 if (mobilizedHtml != null) {
-                                    mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, getBaseUrl(item.link!!))
+                                    mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, getBaseUrl(entry.link!!))
 
                                     if (downloadPictures) {
                                         val imagesList = HtmlUtils.getImageURLs(mobilizedHtml)
                                         if (imagesList.isNotEmpty()) {
-                                            if (item.imageLink == null) {
-                                                item.imageLink = HtmlUtils.getMainImageURL(imagesList)
+                                            if (entry.imageLink == null) {
+                                                entry.imageLink = HtmlUtils.getMainImageURL(imagesList)
                                             }
-                                            imgUrlsToDownload.put(item.id, imagesList)
+                                            imgUrlsToDownload.put(entry.id, imagesList)
                                         }
-                                    } else if (item.imageLink == null) {
-                                        item.imageLink = HtmlUtils.getMainImageURL(mobilizedHtml)
+                                    } else if (entry.imageLink == null) {
+                                        entry.imageLink = HtmlUtils.getMainImageURL(mobilizedHtml)
                                     }
 
                                     success = true
 
                                     App.db.taskDao().deleteAll(task)
 
-                                    item.mobilizedContent = mobilizedHtml
-                                    App.db.entryDao().insertAll(item)
+                                    entry.mobilizedContent = mobilizedHtml
+                                    App.db.entryDao().insertAll(entry)
                                 }
                             }
                         }
@@ -367,7 +367,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
 
         App.db.feedDao().insertAll(feed)
 
-        // First we remove the items that we already have in db (no update to save data)
+        // First we remove the entries that we already have in db (no update to save data)
         val existingIds = App.db.entryDao().checkCurrentIdsForFeed(feed.id)
         entries.removeAll { existingIds.contains(it.id) }
 
@@ -380,7 +380,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                 foundExisting = true
             }
 
-            if (entry.publicationDate != entry.fetchDate || !foundExisting) { // we try to not put back old item, even when there is no date
+            if (entry.publicationDate != entry.fetchDate || !foundExisting) { // we try to not put back old entries, even when there is no date
                 if (!existingIds.contains(entry.id)) {
                     entriesToInsert.add(entry)
 
@@ -420,7 +420,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         return entries.size
     }
 
-    private fun deleteOldItems(keepDateBorderTime: Long) {
+    private fun deleteOldEntries(keepDateBorderTime: Long) {
         if (keepDateBorderTime > 0) {
             App.db.entryDao().deleteOlderThan(keepDateBorderTime)
             // Delete the cache files
@@ -432,6 +432,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
     private fun downloadImage(entryId: String, imgUrl: String) {
         val tempImgPath = getTempDownloadedImagePath(entryId, imgUrl)
         val finalImgPath = getDownloadedImagePath(entryId, imgUrl)
+        warn("dl file $finalImgPath")
 
         if (!File(tempImgPath).exists() && !File(finalImgPath).exists()) {
             IMAGE_FOLDER_FILE.mkdir() // create images dir
@@ -469,7 +470,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                 if (file.lastModified() < keepDateBorderTime) {
                     var isAFavoriteEntryImage = false
                     favorites.forEach loop@ {
-                        if (file.name.startsWith(it.toString() + ID_SEPARATOR)) {
+                        if (file.name.startsWith(it.id + ID_SEPARATOR)) {
                             isAFavoriteEntryImage = true
                             return@loop
                         }

@@ -79,8 +79,8 @@ class EntriesFragment : LifecycleFragment() {
 
         read_all_fab.onClick {
             unfilteredEntries?.let {
-                for (item in it) {
-                    item.read = true
+                for (entry in it) {
+                    entry.read = true
                 }
 
                 updateUI()
@@ -152,12 +152,12 @@ class EntriesFragment : LifecycleFragment() {
             else -> View.VISIBLE
         }
 
-        val items = when (bottom_navigation.selectedItemId) {
+        val entries = when (bottom_navigation.selectedItemId) {
             R.id.unreads -> unfilteredEntries?.filter { !it.read }
             R.id.favorites -> unfilteredEntries?.filter { it.favorite }
             else -> unfilteredEntries
         }
-        adapter?.updateData(items)
+        adapter?.updateData(entries)
     }
 
     override fun onStart() {
@@ -186,7 +186,7 @@ class EntriesFragment : LifecycleFragment() {
         adapter = EntryAdapter().apply {
             register<EntryWithFeed>(R.layout.view_entry) { entry, injector ->
                 injector
-                        .clicked(R.id.item_container) {
+                        .clicked(R.id.entry_container) {
                             navigator.goToEntryDetails(entry)
                         }
                         .clicked(R.id.favorite_icon) { view ->

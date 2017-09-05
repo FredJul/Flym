@@ -6,6 +6,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.rometools.rome.feed.synd.SyndEntry
 import net.frju.flym.App
+import net.frju.flym.toMd5
 import paperparcel.PaperParcel
 import java.util.*
 
@@ -55,7 +56,7 @@ open class Entry : Parcelable {
 }
 
 fun SyndEntry.toDbFormat(feed: Feed): Entry {
-    val itemId = feed.id.toString() + "_" + (uri ?: link ?: title ?: UUID.randomUUID().toString())
+    val itemId = (feed.id.toString() + "_" + (uri ?: link ?: title ?: UUID.randomUUID().toString())).toMd5()
 
     val item = App.db.entryDao().findById(itemId) ?: Entry()
     item.id = itemId
