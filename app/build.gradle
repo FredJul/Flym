@@ -71,7 +71,6 @@ dependencies {
     compile "org.jetbrains.anko:anko-design-coroutines:$anko_version"
 
     compile 'com.rometools:rome-opml:+'
-    compile 'com.einmalfel:earl:+'
     compile 'com.squareup.okhttp3:okhttp:+'
     compile 'org.jsoup:jsoup:+'
     compile 'com.github.bumptech.glide:glide:4.0.0'

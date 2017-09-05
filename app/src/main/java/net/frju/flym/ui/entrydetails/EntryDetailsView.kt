@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package net.frju.flym.ui.itemdetails
+package net.frju.flym.ui.entrydetails
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
@@ -33,13 +33,13 @@ import android.widget.Toast
 import net.fred.feedex.R
 import net.frju.flym.FILE_SCHEME
 import net.frju.flym.UTF8
-import net.frju.flym.data.entities.ItemWithFeed
+import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.utils.HtmlUtils
 import net.frju.parentalcontrol.utils.PrefUtils
 import java.io.File
 import java.io.IOException
 
-class ItemDetailsView : WebView {
+class EntryDetailsView : WebView {
 
     private val TEXT_HTML = "text/html"
     private val HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>"
@@ -124,14 +124,16 @@ class ItemDetailsView : WebView {
         }
     }
 
-    fun setItem(item: ItemWithFeed?) {
-        if (item == null) {
+    fun setEntry(entry: EntryWithFeed?) {
+        loadDataWithBaseURL("", "", TEXT_HTML, UTF8, null)
+
+        if (entry == null) {
             loadDataWithBaseURL("", "", TEXT_HTML, UTF8, null)
         } else {
             // TODO dynamic switch
-            var contentText = item.mobilizedContent ?: item.description ?: ""
+            var contentText = entry.mobilizedContent ?: entry.description ?: ""
             if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
-                contentText = HtmlUtils.replaceImageURLs(contentText, item.id)
+                contentText = HtmlUtils.replaceImageURLs(contentText, entry.id)
                 if (settings.blockNetworkImage) {
                     // setBlockNetworkImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
                     loadData("", TEXT_HTML, UTF8)

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7c2bf4f64afc5dea371d761ddca1a634",
+    "identityHash": "3751ee039c8ed38150a015898e72bc88",
     "entities": [
       {
         "tableName": "feeds",
@@ -83,7 +83,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "items",
+        "tableName": "entries",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `feedId` INTEGER NOT NULL, `link` TEXT, `fetchDate` INTEGER NOT NULL, `publicationDate` INTEGER NOT NULL, `title` TEXT, `description` TEXT, `mobilizedContent` TEXT, `imageLink` TEXT, `author` TEXT, `read` INTEGER NOT NULL, `favorite` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -170,11 +170,11 @@
       },
       {
         "tableName": "tasks",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`itemId` TEXT NOT NULL, `imageLinkToDl` TEXT, `numberAttempt` INTEGER NOT NULL, PRIMARY KEY(`itemId`, `imageLinkToDl`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryId` TEXT NOT NULL, `imageLinkToDl` TEXT, `numberAttempt` INTEGER NOT NULL, PRIMARY KEY(`entryId`, `imageLinkToDl`))",
         "fields": [
           {
-            "fieldPath": "itemId",
-            "columnName": "itemId",
+            "fieldPath": "entryId",
+            "columnName": "entryId",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -193,7 +193,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "itemId",
+            "entryId",
             "imageLinkToDl"
           ],
           "autoGenerate": false
@@ -204,7 +204,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7c2bf4f64afc5dea371d761ddca1a634\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"3751ee039c8ed38150a015898e72bc88\")"
     ]
   }
 }

@@ -68,11 +68,12 @@ import android.os.Handler
 import android.text.Html
 import android.text.TextUtils
 import android.widget.Toast
-import com.einmalfel.earl.EarlParser
+import com.rometools.rome.io.SyndFeedInput
+import com.rometools.rome.io.XmlReader
 import net.fred.feedex.R
 import net.frju.flym.App
+import net.frju.flym.data.entities.Entry
 import net.frju.flym.data.entities.Feed
-import net.frju.flym.data.entities.Item
 import net.frju.flym.data.entities.Task
 import net.frju.flym.data.entities.toDbFormat
 import net.frju.flym.toMd5
@@ -84,6 +85,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
+import org.jetbrains.anko.warn
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -135,6 +138,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
             ACTION_DOWNLOAD_IMAGES == intent.action -> downloadAllImages()
             else -> { // == Constants.ACTION_REFRESH_FEEDS
                 PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true)
+                debug("start refresh")
 
                 val keepTime = java.lang.Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000L
                 val keepDateBorderTime = if (keepTime > 0) System.currentTimeMillis() - keepTime else 0
@@ -154,7 +158,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
 
                 if (newCount > 0) {
                     if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
-                        val unread = App.db.itemDao().countUnread
+                        val unread = App.db.entryDao().countUnread
 
                         if (unread > 0) {
                             val text = resources.getQuantityString(R.plurals.number_of_new_entries, unread.toInt(), unread)
@@ -194,9 +198,12 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                     }
                 }
 
+                warn("start mobilizing")
+
                 mobilizeAllEntries()
                 downloadAllImages()
 
+                warn("refresh finished")
                 PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false)
             }
         }
@@ -207,10 +214,12 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         val tasks = App.db.taskDao().mobilizeTasks
         val imgUrlsToDownload = mutableMapOf<String, List<String>>()
 
+        warn("mobilizing ${tasks.size} items")
         for (task in tasks) {
             var success = false
 
-            App.db.itemDao().findById(task.itemId)?.let { item ->
+            App.db.entryDao().findById(task.entryId)?.let { item ->
+                warn("mobilizing item ${item.id}")
                 if (item.link != null) {
                     // Try to find a text indicator for better content extraction
                     var contentIndicator: String? = null
@@ -250,7 +259,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                                     App.db.taskDao().deleteAll(task)
 
                                     item.mobilizedContent = mobilizedHtml
-                                    App.db.itemDao().insertAll(item)
+                                    App.db.entryDao().insertAll(item)
                                 }
                             }
                         }
@@ -268,6 +277,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                 }
             }
         }
+        warn("finish mobilizing")
 
         addImagesToDownload(imgUrlsToDownload)
     }
@@ -276,7 +286,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         val tasks = App.db.taskDao().downloadTasks
         for (task in tasks) {
             try {
-                downloadImage(task.itemId, task.imageLinkToDl!!)
+                downloadImage(task.entryId, task.imageLinkToDl!!)
 
                 // If we are here, everything is OK
                 App.db.taskDao().deleteAll(task)
@@ -330,62 +340,67 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
     }
 
     private fun refreshFeed(feed: Feed, keepDateBorderTime: Long): Int {
+        warn("refresh feed ${feed.title}")
+
         val request = Request.Builder()
                 .url(feed.link)
                 .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
                 .addHeader("accept", "*/*")
                 .build()
 
-        val items = mutableListOf<Item>()
-        val itemsToInsert = mutableListOf<Item>()
+        val entries = mutableListOf<Entry>()
+        val entriesToInsert = mutableListOf<Entry>()
         val imgUrlsToDownload = mutableMapOf<String, List<String>>()
 
         try {
             HTTP_CLIENT.newCall(request).execute().use { response ->
-                val earlFeed = EarlParser.parseOrThrow(response.body()!!.byteStream(), 0)
-                earlFeed.items.filter { it.publicationDate?.time ?: Long.MAX_VALUE > keepDateBorderTime }.map { it.toDbFormat(feed) }.forEach { items.add(it) }
-                feed.update(earlFeed)
+                val input = SyndFeedInput()
+                val romeFeed = input.build(XmlReader(response.body()!!.byteStream()))
+                romeFeed.entries.filter { it.publishedDate?.time ?: Long.MAX_VALUE > keepDateBorderTime }.map { it.toDbFormat(feed) }.forEach { entries.add(it) }
+                feed.update(romeFeed)
             }
         } catch (t: Throwable) {
             feed.fetchError = true
         }
 
+        warn("fetch done ${feed.title}")
+
         App.db.feedDao().insertAll(feed)
 
         // First we remove the items that we already have in db (no update to save data)
-        val existingIds = App.db.itemDao().checkCurrentIdsForFeed(feed.id)
-        items.removeAll { existingIds.contains(it.id) }
+        val existingIds = App.db.entryDao().checkCurrentIdsForFeed(feed.id)
+        entries.removeAll { existingIds.contains(it.id) }
 
         val feedBaseUrl = getBaseUrl(feed.link)
         var foundExisting = false
 
         // Now we improve the html and find images
-        for (item in items) {
-            if (existingIds.contains(item.id)) {
+        for (entry in entries) {
+            if (existingIds.contains(entry.id)) {
                 foundExisting = true
             }
 
-            if (item.publicationDate != item.fetchDate || !foundExisting) { // we try to not put back old item, even when there is no date
-                if (!existingIds.contains(item.id)) {
-                    itemsToInsert.add(item)
+            if (entry.publicationDate != entry.fetchDate || !foundExisting) { // we try to not put back old item, even when there is no date
+                if (!existingIds.contains(entry.id)) {
+                    entriesToInsert.add(entry)
 
-                    item.description?.let { desc ->
+                    entry.description?.let { desc ->
                         // Improve the description
                         val improvedContent = HtmlUtils.improveHtmlContent(desc, feedBaseUrl)
 
                         if (downloadPictures) {
                             val imagesList = HtmlUtils.getImageURLs(improvedContent)
                             if (imagesList.isNotEmpty()) {
-                                if (item.imageLink == null) {
-                                    item.imageLink = HtmlUtils.getMainImageURL(imagesList)
+                                if (entry.imageLink == null) {
+                                    entry.imageLink = HtmlUtils.getMainImageURL(imagesList)
                                 }
-                                imgUrlsToDownload.put(item.id, imagesList)
+                                imgUrlsToDownload.put(entry.id, imagesList)
                             }
-                        } else if (item.imageLink == null) {
-                            item.imageLink = HtmlUtils.getMainImageURL(improvedContent)
+                        } else if (entry.imageLink == null) {
+                            entry.imageLink = HtmlUtils.getMainImageURL(improvedContent)
                         }
 
-                        item.description = improvedContent
+                        entry.description = improvedContent
                     }
                 } else {
                     foundExisting = true
@@ -394,29 +409,29 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         }
 
         // Update everything
-        App.db.itemDao().insertAll(*(itemsToInsert.toTypedArray()))
+        App.db.entryDao().insertAll(*(entriesToInsert.toTypedArray()))
 
         if (feed.retrieveFullText) {
-            FetcherService.addEntriesToMobilize(items.map { it.id })
+            FetcherService.addEntriesToMobilize(entries.map { it.id })
         }
 
         addImagesToDownload(imgUrlsToDownload)
 
-        return items.size
+        return entries.size
     }
 
     private fun deleteOldItems(keepDateBorderTime: Long) {
         if (keepDateBorderTime > 0) {
-            App.db.itemDao().deleteOlderThan(keepDateBorderTime)
+            App.db.entryDao().deleteOlderThan(keepDateBorderTime)
             // Delete the cache files
             deleteEntriesImagesCache(keepDateBorderTime)
         }
     }
 
     @Throws(IOException::class)
-    private fun downloadImage(itemId: String, imgUrl: String) {
-        val tempImgPath = getTempDownloadedImagePath(itemId, imgUrl)
-        val finalImgPath = getDownloadedImagePath(itemId, imgUrl)
+    private fun downloadImage(entryId: String, imgUrl: String) {
+        val tempImgPath = getTempDownloadedImagePath(entryId, imgUrl)
+        val finalImgPath = getDownloadedImagePath(entryId, imgUrl)
 
         if (!File(tempImgPath).exists() && !File(finalImgPath).exists()) {
             IMAGE_FOLDER_FILE.mkdir() // create images dir
@@ -448,7 +463,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         if (IMAGE_FOLDER_FILE.exists()) {
 
             // We need to exclude favorite entries images to this cleanup
-            val favorites = App.db.itemDao().favorites
+            val favorites = App.db.entryDao().favorites
 
             IMAGE_FOLDER_FILE.listFiles().forEach { file ->
                 if (file.lastModified() < keepDateBorderTime) {
@@ -485,11 +500,11 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                 .readTimeout(10, TimeUnit.SECONDS)
                 .build()
 
-        const val FROM_AUTO_REFRESH = "from_auto_refresh"
+        const val FROM_AUTO_REFRESH = "FROM_AUTO_REFRESH"
 
-        const val ACTION_REFRESH_FEEDS = "net.fred.feedex.REFRESH"
-        const val ACTION_MOBILIZE_FEEDS = "net.fred.feedex.MOBILIZE_FEEDS"
-        const val ACTION_DOWNLOAD_IMAGES = "net.fred.feedex.DOWNLOAD_IMAGES"
+        const val ACTION_REFRESH_FEEDS = "net.frju.flym.REFRESH"
+        const val ACTION_MOBILIZE_FEEDS = "net.frju.flym.MOBILIZE_FEEDS"
+        const val ACTION_DOWNLOAD_IMAGES = "net.frju.flym.DOWNLOAD_IMAGES"
 
         private const val THREAD_NUMBER = 3
         private const val MAX_TASK_ATTEMPT = 3
@@ -522,16 +537,16 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
             return downloadPictures
         }
 
-        fun getDownloadedImagePath(itemId: String, imgUrl: String): String {
-            return IMAGE_FOLDER + itemId + ID_SEPARATOR + imgUrl.toMd5()
+        fun getDownloadedImagePath(entryId: String, imgUrl: String): String {
+            return IMAGE_FOLDER + entryId + ID_SEPARATOR + imgUrl.toMd5()
         }
 
-        fun getTempDownloadedImagePath(itemId: String, imgUrl: String): String {
-            return IMAGE_FOLDER + TEMP_PREFIX + itemId + ID_SEPARATOR + imgUrl.toMd5()
+        fun getTempDownloadedImagePath(entryId: String, imgUrl: String): String {
+            return IMAGE_FOLDER + TEMP_PREFIX + entryId + ID_SEPARATOR + imgUrl.toMd5()
         }
 
-        fun getDownloadedOrDistantImageUrl(itemId: String, imgUrl: String): String {
-            val dlImgFile = File(getDownloadedImagePath(itemId, imgUrl))
+        fun getDownloadedOrDistantImageUrl(entryId: String, imgUrl: String): String {
+            val dlImgFile = File(getDownloadedImagePath(entryId, imgUrl))
             return if (dlImgFile.exists()) {
                 Uri.fromFile(dlImgFile).toString()
             } else {
@@ -545,7 +560,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                 for ((key, value) in imgUrlsToDownload) {
                     for (img in value) {
                         val task = Task()
-                        task.itemId = key
+                        task.entryId = key
                         task.imageLinkToDl = img
                         newTasks.add(task)
                     }
@@ -555,11 +570,11 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
             }
         }
 
-        fun addEntriesToMobilize(itemIds: List<String>) {
+        fun addEntriesToMobilize(entryIds: List<String>) {
             val newTasks = mutableListOf<Task>()
-            for (id in itemIds) {
+            for (id in entryIds) {
                 val task = Task()
-                task.itemId = id
+                task.entryId = id
                 newTasks.add(task)
             }
 

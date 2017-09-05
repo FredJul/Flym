@@ -16,7 +16,7 @@ interface TaskDao {
     @get:Query("SELECT * FROM tasks WHERE imageLinkToDl IS NULL")
     val mobilizeTasks: List<Task>
 
-    @Query("SELECT COUNT(*) FROM tasks WHERE imageLinkToDl IS NULL AND itemId IS :arg0")
+    @Query("SELECT COUNT(*) FROM tasks WHERE imageLinkToDl IS NULL AND entryId IS :arg0")
     fun countMobilizeTasks(itemId: String): Int
 
     @get:Query("SELECT * FROM tasks WHERE imageLinkToDl IS NOT NULL")

@@ -1,4 +1,4 @@
-package net.frju.flym.ui.itemdetails
+package net.frju.flym.ui.entrydetails
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -7,26 +7,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_item_details.*
+import kotlinx.android.synthetic.main.fragment_entry_details.*
 import me.thanel.swipeactionview.SwipeActionView
 import me.thanel.swipeactionview.SwipeGestureListener
 import net.fred.feedex.R
 import net.frju.flym.App
-import net.frju.flym.data.entities.ItemWithFeed
+import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.ui.main.MainNavigator
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.doAsync
 import org.jetbrains.annotations.NotNull
 
 
-class ItemDetailsFragment : Fragment() {
+class EntryDetailsFragment : Fragment() {
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
-    private var item: ItemWithFeed? = null
+    private var entry: EntryWithFeed? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_item_details, container, false)
+        return inflater.inflate(R.layout.fragment_entry_details, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -36,18 +36,18 @@ class ItemDetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        item = arguments.getParcelable(ARG_ITEM)
+        entry = arguments.getParcelable(ARG_ENTRY)
 
         setupToolbar()
 
         swipe_view.swipeGestureListener = object : SwipeGestureListener {
             override fun onSwipedLeft(@NotNull swipeActionView: SwipeActionView): Boolean {
-                navigator.goToNextItem()
+                navigator.goToNextEntry()
                 return true
             }
 
             override fun onSwipedRight(@NotNull swipeActionView: SwipeActionView): Boolean {
-                navigator.goToPreviousItem()
+                navigator.goToPreviousEntry()
                 return true
             }
         }
@@ -60,26 +60,26 @@ class ItemDetailsFragment : Fragment() {
         title.text = ""
         subtitle.text = ""
 
-        item?.let { item ->
-            collapsing_toolbar.title = item.title ?: ""
-            title.text = item.title ?: ""
+        entry?.let { entry ->
+            collapsing_toolbar.title = entry.title ?: ""
+            title.text = entry.title ?: ""
 
-            val dateStringBuilder = StringBuilder(DateFormat.getLongDateFormat(context).format(item.publicationDate)).append(' ').append(
-                    DateFormat.getTimeFormat(context).format(item.publicationDate))
+            val dateStringBuilder = StringBuilder(DateFormat.getLongDateFormat(context).format(entry.publicationDate)).append(' ').append(
+                    DateFormat.getTimeFormat(context).format(entry.publicationDate))
 
-            if (item.author?.isNotEmpty() == true) {
-                dateStringBuilder.append(" — ").append(item.author)
+            if (entry.author?.isNotEmpty() == true) {
+                dateStringBuilder.append(" — ").append(entry.author)
             }
 
             subtitle.text = dateStringBuilder.toString()
 
             doAsync {
-                item.read = true
-                App.db.itemDao().insertAll(item)
+                entry.read = true
+                App.db.entryDao().insertAll(entry)
             }
         }
 
-        item_view.setItem(item)
+        entry_view.setEntry(entry)
     }
 
     private fun setupToolbar() {
@@ -91,20 +91,20 @@ class ItemDetailsFragment : Fragment() {
         }
     }
 
-    fun setItem(item: ItemWithFeed) {
-        this.item = item
-        arguments.putParcelable(ARG_ITEM, item)
+    fun setEntry(entry: EntryWithFeed) {
+        this.entry = entry
+        arguments.putParcelable(ARG_ENTRY, entry)
 
         updateUI()
     }
 
     companion object {
 
-        private val ARG_ITEM = "item"
+        private val ARG_ENTRY = "ARG_ENTRY"
 
-        fun newInstance(item: ItemWithFeed): ItemDetailsFragment {
-            val fragment = ItemDetailsFragment()
-            fragment.arguments = bundleOf(ARG_ITEM to item)
+        fun newInstance(entry: EntryWithFeed): EntryDetailsFragment {
+            val fragment = EntryDetailsFragment()
+            fragment.arguments = bundleOf(ARG_ENTRY to entry)
             return fragment
         }
     }

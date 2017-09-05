@@ -19,12 +19,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_main_containers.view.*
 import net.fred.feedex.R
 import net.frju.flym.App
+import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
-import net.frju.flym.data.entities.ItemWithFeed
 import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.service.FetcherService
-import net.frju.flym.ui.itemdetails.ItemDetailsFragment
-import net.frju.flym.ui.items.ItemsFragment
+import net.frju.flym.ui.entries.EntriesFragment
+import net.frju.flym.ui.entrydetails.EntryDetailsFragment
 import okhttp3.Request
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.hintTextColor
@@ -42,7 +42,7 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
     val FEED_SEARCH_TITLE = "title"
     val FEED_SEARCH_URL = "feedId"
     val FEED_SEARCH_DESC = "description"
-    val DEFAULT_ITEMS = arrayListOf(SearchFeedResult("http://www.nytimes.com/services/xml/rss/nyt/World.xml", "NY Times", "Word news"))
+    val DEFAULT_FEEDS = arrayListOf(SearchFeedResult("http://www.nytimes.com/services/xml/rss/nyt/World.xml", "NY Times", "Word news"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +53,7 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
         nav.adapter = feedAdapter
         add_feed_fab.onClick {
             val searchDialog = SimpleSearchDialogCompat(this@MainActivity, "Search...",
-                    "What are you looking for...?", null, DEFAULT_ITEMS,
+                    "What are you looking for...?", null, DEFAULT_FEEDS,
                     SearchResultListener<SearchFeedResult> { dialog, item, position ->
                         Toast.makeText(this@MainActivity, "Added",
                                 Toast.LENGTH_SHORT).show()
@@ -97,7 +97,7 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
                         } catch (_: Exception) {
                         }
                     } else {
-                        array.addAll(DEFAULT_ITEMS)
+                        array.addAll(DEFAULT_FEEDS)
                     }
 
                     results.values = array
@@ -127,7 +127,7 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
                 feedGroups.clear()
 
                 val all = Feed()
-                all.id = Feed.ALL_ITEMS_ID
+                all.id = Feed.ALL_ENTRIES_ID
                 all.title = getString(R.string.all_entries)
                 feedGroups.add(FeedGroup(all, listOf()))
 
@@ -140,7 +140,7 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
                 feedAdapter.notifyParentDataSetChanged(true)
 
                 feedAdapter.onFeedClick { view, feed ->
-                    goToItemsList(feed)
+                    goToEntriesList(feed)
                     closeDrawer()
                 }
             }
@@ -151,7 +151,7 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
         if (savedInstanceState == null) {
             closeDrawer()
 
-            goToItemsList(null)
+            goToEntriesList(null)
         }
     }
 
@@ -236,47 +236,47 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
         return false
     }
 
-    override fun goToItemsList(feed: Feed?) {
+    override fun goToEntriesList(feed: Feed?) {
         clearDetails()
         containers_layout.custom_appbar.setState(MainNavigator.State.TWO_COLUMNS_EMPTY)
         containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
-        val master = ItemsFragment.newInstance(feed)
+        val master = EntriesFragment.newInstance(feed)
         supportFragmentManager.beginTransaction().replace(R.id.frame_master, master, TAG_MASTER).commit()
     }
 
-    override fun goToItemDetails(item: ItemWithFeed) {
+    override fun goToEntryDetails(entry: EntryWithFeed) {
         containers_layout.custom_appbar.setState(MainNavigator.State.TWO_COLUMNS_WITH_DETAILS)
         containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
-        val fragment = ItemDetailsFragment.newInstance(item)
+        val fragment = EntryDetailsFragment.newInstance(entry)
         supportFragmentManager
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.frame_details, fragment, TAG_DETAILS)
                 .commit()
 
-        val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as ItemsFragment
-        listFragment.setSelectedItem(item)
+        val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
+        listFragment.setSelectedEntry(entry)
     }
 
-    override fun goToPreviousItem() {
-        val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as ItemsFragment
-        val detailFragment = supportFragmentManager.findFragmentById(R.id.frame_details) as ItemDetailsFragment
+    override fun goToPreviousEntry() {
+        val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
+        val detailFragment = supportFragmentManager.findFragmentById(R.id.frame_details) as EntryDetailsFragment
 
-        val previousItem = listFragment.getPreviousItem()
-        if (previousItem != null) {
-            listFragment.setSelectedItem(previousItem)
-            detailFragment.setItem(previousItem)
+        val previousEntry = listFragment.getPreviousEntry()
+        if (previousEntry != null) {
+            listFragment.setSelectedEntry(previousEntry)
+            detailFragment.setEntry(previousEntry)
         }
     }
 
-    override fun goToNextItem() {
-        val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as ItemsFragment
-        val detailFragment = supportFragmentManager.findFragmentById(R.id.frame_details) as ItemDetailsFragment
+    override fun goToNextEntry() {
+        val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
+        val detailFragment = supportFragmentManager.findFragmentById(R.id.frame_details) as EntryDetailsFragment
 
-        val nextItem = listFragment.getNextItem()
-        if (nextItem != null) {
-            listFragment.setSelectedItem(nextItem)
-            detailFragment.setItem(nextItem)
+        val nextEntry = listFragment.getNextEntry()
+        if (nextEntry != null) {
+            listFragment.setSelectedEntry(nextEntry)
+            detailFragment.setEntry(nextEntry)
         }
     }
 

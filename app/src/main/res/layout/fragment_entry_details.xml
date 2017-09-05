@@ -89,8 +89,8 @@
             android:layout_height="match_parent"
             android:background="@color/colorBackground">
 
-            <net.frju.flym.ui.itemdetails.ItemDetailsView
-                android:id="@+id/item_view"
+            <net.frju.flym.ui.entrydetails.EntryDetailsView
+                android:id="@+id/entry_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </android.support.v4.widget.NestedScrollView>

@@ -4,14 +4,15 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
+import com.rometools.rome.feed.synd.SyndEntry
 import net.frju.flym.App
 import paperparcel.PaperParcel
 import java.util.*
 
 
 @PaperParcel
-@Entity(tableName = "items")
-open class Item : Parcelable {
+@Entity(tableName = "entries")
+open class Entry : Parcelable {
 
     @PrimaryKey var id: String = ""
     var feedId: Long = 0L
@@ -27,20 +28,21 @@ open class Item : Parcelable {
     var favorite: Boolean = false
 
     companion object {
-        @JvmField val CREATOR = PaperParcelItem.CREATOR
+        @JvmField
+        val CREATOR = PaperParcelEntry.CREATOR
     }
 
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        PaperParcelItem.writeToParcel(this, dest, flags)
+        PaperParcelEntry.writeToParcel(this, dest, flags)
     }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other?.javaClass != javaClass) return false
 
-        other as Item
+        other as Entry
 
         if (id != other.id) return false
 
@@ -52,18 +54,20 @@ open class Item : Parcelable {
     }
 }
 
-fun com.einmalfel.earl.Item.toDbFormat(feed: Feed): Item {
-    val itemId = feed.id.toString() + "_" + (id ?: link ?: title ?: UUID.randomUUID().toString())
+fun SyndEntry.toDbFormat(feed: Feed): Entry {
+    val itemId = feed.id.toString() + "_" + (uri ?: link ?: title ?: UUID.randomUUID().toString())
 
-    val item = App.db.itemDao().findById(itemId) ?: Item()
+    val item = App.db.entryDao().findById(itemId) ?: Entry()
     item.id = itemId
     item.feedId = feed.id
     item.title = title
-    item.description = description
+    if (contents?.isNotEmpty() == true) {
+        item.description = contents[0].value
+    }
     item.link = link
-    item.imageLink = imageLink
+    //TODO item.imageLink = null
     item.author = author
-    item.publicationDate = if (publicationDate?.before(item.publicationDate) == true) publicationDate!! else item.publicationDate
+    item.publicationDate = if (publishedDate?.before(item.publicationDate) == true) publishedDate!! else item.publicationDate
 
     return item
 }

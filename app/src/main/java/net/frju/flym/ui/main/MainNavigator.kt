@@ -1,7 +1,7 @@
 package net.frju.flym.ui.main
 
+import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
-import net.frju.flym.data.entities.ItemWithFeed
 
 interface MainNavigator {
 
@@ -9,16 +9,16 @@ interface MainNavigator {
         SINGLE_COLUMN_MASTER, SINGLE_COLUMN_DETAILS, TWO_COLUMNS_EMPTY, TWO_COLUMNS_WITH_DETAILS
     }
 
-    fun goToItemsList(feed: Feed?)
+    fun goToEntriesList(feed: Feed?)
 
-    fun goToItemDetails(item: ItemWithFeed)
+    fun goToEntryDetails(entry: EntryWithFeed)
 
     fun goToSettings()
 
     fun goToFeedback()
 
-    fun goToPreviousItem()
+    fun goToPreviousEntry()
 
-    fun goToNextItem()
+    fun goToNextEntry()
 
 }

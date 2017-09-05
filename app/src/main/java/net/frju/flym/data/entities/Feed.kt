@@ -6,6 +6,7 @@ import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
+import com.rometools.rome.feed.synd.SyndFeed
 import paperparcel.PaperParcel
 
 @PaperParcel
@@ -30,7 +31,7 @@ data class Feed(
         @JvmField val CREATOR = PaperParcelFeed.CREATOR
 
         @JvmField
-        val ALL_ITEMS_ID = -1L
+        val ALL_ENTRIES_ID = -1L
     }
 
     override fun describeContents() = 0
@@ -39,13 +40,13 @@ data class Feed(
         PaperParcelFeed.writeToParcel(this, dest, flags)
     }
 
-    fun update(feed: com.einmalfel.earl.Feed) {
+    fun update(feed: SyndFeed) {
         if (title == null) {
             title = feed.title
         }
 
-        if (feed.imageLink != null) {
-            imageLink = feed.imageLink
+        if (feed.image?.url != null) {
+            imageLink = feed.image?.url
         }
     }
 }

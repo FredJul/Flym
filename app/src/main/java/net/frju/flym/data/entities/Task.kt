@@ -6,9 +6,9 @@ import android.os.Parcelable
 import paperparcel.PaperParcel
 
 @PaperParcel
-@Entity(tableName = "tasks", primaryKeys = arrayOf("itemId", "imageLinkToDl"))
+@Entity(tableName = "tasks", primaryKeys = arrayOf("entryId", "imageLinkToDl"))
 data class Task(
-        var itemId: String = "",
+        var entryId: String = "",
         var imageLinkToDl: String? = null,
         var numberAttempt: Int = 0) : Parcelable {
 

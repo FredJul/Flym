@@ -1,4 +1,4 @@
-package net.frju.flym.ui.items
+package net.frju.flym.ui.entries
 
 import android.arch.lifecycle.LifecycleFragment
 import android.content.Intent
@@ -18,13 +18,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_items.*
+import kotlinx.android.synthetic.main.fragment_entries.*
 import kotlinx.android.synthetic.main.view_main_containers.view.*
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.GlideApp
+import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
-import net.frju.flym.data.entities.ItemWithFeed
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.indefiniteSnackbar
@@ -38,16 +38,16 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class ItemsFragment : LifecycleFragment() {
+class EntriesFragment : LifecycleFragment() {
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
-    private var adapter: ItemAdapter? = null
+    private var adapter: EntryAdapter? = null
     private var feed: Feed? = null
-    private var unfilteredItems: List<ItemWithFeed>? = null
+    private var unfilteredEntries: List<EntryWithFeed>? = null
     private var listDisplayDate = Date().time
     private val disposables = CompositeDisposable()
-    private var newItemsSnackbar: Snackbar? = null
+    private var newEntriesSnackbar: Snackbar? = null
 
     private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (PrefUtils.IS_REFRESHING == key) {
@@ -56,7 +56,7 @@ class ItemsFragment : LifecycleFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_items, container, false)
+        return inflater.inflate(R.layout.fragment_entries, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -78,18 +78,21 @@ class ItemsFragment : LifecycleFragment() {
         }
 
         read_all_fab.onClick {
-            unfilteredItems?.let {
+            unfilteredEntries?.let {
+                for (item in it) {
+                    item.read = true
+                }
+
+                updateUI()
+
                 doAsync {
-                    for (item in it) {
-                        item.read = true
-                    }
-                    App.db.itemDao().insertAll(*it.toTypedArray())
+                    App.db.entryDao().insertAll(*it.toTypedArray())
                 }
             }
         }
 
         if (savedInstanceState != null) {
-            adapter?.selectedItemId = savedInstanceState.getString(STATE_SELECTED_ITEM_ID)
+            adapter?.selectedEntryId = savedInstanceState.getString(STATE_SELECTED_ENTRY_ID)
             listDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE)
         }
 
@@ -99,25 +102,25 @@ class ItemsFragment : LifecycleFragment() {
     private fun initDataObservers() {
         disposables.clear()
 
-        val itemsFlow = when {
-            feed?.isGroup == true -> App.db.itemDao().observeByGroup(feed!!.id, listDisplayDate)
-            feed != null && feed?.id != Feed.ALL_ITEMS_ID -> App.db.itemDao().observeByFeed(feed!!.id, listDisplayDate)
-            else -> App.db.itemDao().observeAll(listDisplayDate)
+        val entriesFlow = when {
+            feed?.isGroup == true -> App.db.entryDao().observeByGroup(feed!!.id, listDisplayDate)
+            feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeByFeed(feed!!.id, listDisplayDate)
+            else -> App.db.entryDao().observeAll(listDisplayDate)
         }
 
         disposables.add(
-                itemsFlow.subscribeOn(Schedulers.io())
+                entriesFlow.subscribeOn(Schedulers.io())
                         .debounce(100, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
-                            unfilteredItems = it
+                            unfilteredEntries = it
                             updateUI()
                         })
 
         val newCountFlow = when {
-            feed?.isGroup == true -> App.db.itemDao().observeNewItemsCountByGroup(feed!!.id, listDisplayDate)
-            feed != null && feed?.id != Feed.ALL_ITEMS_ID -> App.db.itemDao().observeNewItemsCountByFeed(feed!!.id, listDisplayDate)
-            else -> App.db.itemDao().observeNewItemsCount(listDisplayDate)
+            feed?.isGroup == true -> App.db.entryDao().observeNewEntriesCountByGroup(feed!!.id, listDisplayDate)
+            feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeNewEntriesCountByFeed(feed!!.id, listDisplayDate)
+            else -> App.db.entryDao().observeNewEntriesCount(listDisplayDate)
         }
 
         disposables.add(
@@ -126,13 +129,13 @@ class ItemsFragment : LifecycleFragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (it > 0) {
-                        if (newItemsSnackbar?.isShown != true) {
-                            newItemsSnackbar = coordinator.indefiniteSnackbar("$it new items", "refresh") {
+                        if (newEntriesSnackbar?.isShown != true) {
+                            newEntriesSnackbar = coordinator.indefiniteSnackbar("$it new entries", "refresh") {
                                 listDisplayDate = Date().time
                                 initDataObservers()
                             }
                         } else {
-                            newItemsSnackbar?.setText("$it new items")
+                            newEntriesSnackbar?.setText("$it new entries")
                         }
                     }
                 })
@@ -150,9 +153,9 @@ class ItemsFragment : LifecycleFragment() {
         }
 
         val items = when (bottom_navigation.selectedItemId) {
-            R.id.unreads -> unfilteredItems?.filter { !it.read }
-            R.id.favorites -> unfilteredItems?.filter { it.favorite }
-            else -> unfilteredItems
+            R.id.unreads -> unfilteredEntries?.filter { !it.read }
+            R.id.favorites -> unfilteredEntries?.filter { it.favorite }
+            else -> unfilteredEntries
         }
         adapter?.updateData(items)
     }
@@ -169,7 +172,7 @@ class ItemsFragment : LifecycleFragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(STATE_SELECTED_ITEM_ID, adapter?.selectedItemId)
+        outState.putString(STATE_SELECTED_ENTRY_ID, adapter?.selectedEntryId)
         outState.putLong(STATE_LIST_DISPLAY_DATE, listDisplayDate)
 
         super.onSaveInstanceState(outState)
@@ -180,17 +183,17 @@ class ItemsFragment : LifecycleFragment() {
 
         val layoutManager = LinearLayoutManager(activity)
         recycler_view.layoutManager = layoutManager
-        adapter = ItemAdapter().apply {
-            register<ItemWithFeed>(R.layout.view_item) { item, injector ->
+        adapter = EntryAdapter().apply {
+            register<EntryWithFeed>(R.layout.view_entry) { entry, injector ->
                 injector
                         .clicked(R.id.item_container) {
-                            navigator.goToItemDetails(item)
+                            navigator.goToEntryDetails(entry)
                         }
                         .clicked(R.id.favorite_icon) { view ->
-                            item.favorite = !item.favorite
+                            entry.favorite = !entry.favorite
 
                             (view as? ImageView)?.let {
-                                if (item.favorite) {
+                                if (entry.favorite) {
                                     it.setImageResource(R.drawable.ic_star_white_24dp)
                                 } else {
                                     it.setImageResource(R.drawable.ic_star_border_white_24dp)
@@ -198,23 +201,23 @@ class ItemsFragment : LifecycleFragment() {
                             }
 
                             doAsync {
-                                App.db.itemDao().insertAll(item)
+                                App.db.entryDao().insertAll(entry)
                             }
                         }
                         .with(R.id.title, IViewInjector.Action<TextView> { view ->
-                            view.isEnabled = !item.read
-                            view.text = item.title
+                            view.isEnabled = !entry.read
+                            view.text = entry.title
                         })
                         .with(R.id.feed_name, IViewInjector.Action<TextView> { view ->
-                            view.isEnabled = !item.read
-                            view.text = item.feedTitle ?: ""
+                            view.isEnabled = !entry.read
+                            view.text = entry.feedTitle ?: ""
                         })
                         .with(R.id.main_icon, IViewInjector.Action<ImageView> { view ->
-                            val feedName = item.feedTitle ?: ""
+                            val feedName = entry.feedTitle ?: ""
 
-                            val mainImgUrl = if (TextUtils.isEmpty(item.imageLink)) null else FetcherService.getDownloadedOrDistantImageUrl(item.id, item.imageLink!!)
+                            val mainImgUrl = if (TextUtils.isEmpty(entry.imageLink)) null else FetcherService.getDownloadedOrDistantImageUrl(entry.id, entry.imageLink!!)
 
-                            val color = ColorGenerator.DEFAULT.getColor(item.feedId) // The color is specific to the feedId (which shouldn't change)
+                            val color = ColorGenerator.DEFAULT.getColor(entry.feedId) // The color is specific to the feedId (which shouldn't change)
                             val lettersForName = if (feedName.length < 2) feedName.toUpperCase() else feedName.substring(0, 2).toUpperCase()
                             val letterDrawable = TextDrawable.builder().buildRect(lettersForName, color)
                             if (mainImgUrl != null) {
@@ -225,10 +228,10 @@ class ItemsFragment : LifecycleFragment() {
                             }
                         })
                         .with(R.id.feed_icon, IViewInjector.Action<ImageView> { view ->
-                            view.loadFavicon(item.feedLink)
+                            view.loadFavicon(entry.feedLink)
                         })
                         .with(R.id.favorite_icon, IViewInjector.Action<ImageView> { view ->
-                            if (item.favorite) {
+                            if (entry.favorite) {
                                 view.setImageResource(R.drawable.ic_star_white_24dp)
                             } else {
                                 view.setImageResource(R.drawable.ic_star_border_white_24dp)
@@ -252,7 +255,7 @@ class ItemsFragment : LifecycleFragment() {
 
     private fun startRefresh() {
         if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            if (feed != null && feed?.id != Feed.ALL_ITEMS_ID) {
+            if (feed != null && feed?.id != Feed.ALL_ENTRIES_ID) {
                 context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.EXTRA_FEED_ID,
                         feed?.id))
             } else {
@@ -267,16 +270,16 @@ class ItemsFragment : LifecycleFragment() {
         appBar.setMenuRes(R.menu.people_general, R.menu.people_specific, R.menu.people_merged)
     }
 
-    fun setSelectedItem(selectedItem: ItemWithFeed) {
-        adapter?.selectedItemId = selectedItem.id
+    fun setSelectedEntry(selectedEntry: EntryWithFeed) {
+        adapter?.selectedEntryId = selectedEntry.id
     }
 
-    fun getPreviousItem(): ItemWithFeed? {
-        return adapter?.previousItem
+    fun getPreviousEntry(): EntryWithFeed? {
+        return adapter?.previousEntry
     }
 
-    fun getNextItem(): ItemWithFeed? {
-        return adapter?.nextItem
+    fun getNextEntry(): EntryWithFeed? {
+        return adapter?.nextEntry
     }
 
     private fun refreshSwipeProgress() {
@@ -286,11 +289,11 @@ class ItemsFragment : LifecycleFragment() {
     companion object {
 
         private val ARG_FEED = "feed"
-        private val STATE_SELECTED_ITEM_ID = "STATE_SELECTED_ITEM_ID"
+        private val STATE_SELECTED_ENTRY_ID = "STATE_SELECTED_ENTRY_ID"
         private val STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE"
 
-        fun newInstance(feed: Feed?): ItemsFragment {
-            val fragment = ItemsFragment()
+        fun newInstance(feed: Feed?): EntriesFragment {
+            val fragment = EntriesFragment()
             feed?.let {
                 fragment.arguments = bundleOf(ARG_FEED to feed)
             }

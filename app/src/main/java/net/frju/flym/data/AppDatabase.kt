@@ -11,22 +11,22 @@ import com.rometools.opml.feed.opml.Opml
 import com.rometools.rome.io.WireFeedInput
 import net.frju.flym.App
 import net.frju.flym.data.converters.Converters
+import net.frju.flym.data.dao.EntryDao
 import net.frju.flym.data.dao.FeedDao
-import net.frju.flym.data.dao.ItemDao
 import net.frju.flym.data.dao.TaskDao
+import net.frju.flym.data.entities.Entry
 import net.frju.flym.data.entities.Feed
-import net.frju.flym.data.entities.Item
 import net.frju.flym.data.entities.Task
 import org.jetbrains.anko.doAsync
 import java.io.File
 
 
-@Database(entities = arrayOf(Feed::class, Item::class, Task::class), version = 1)
+@Database(entities = arrayOf(Feed::class, Entry::class, Task::class), version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun feedDao(): FeedDao
-    abstract fun itemDao(): ItemDao
+    abstract fun entryDao(): EntryDao
     abstract fun taskDao(): TaskDao
 
     companion object {
