@@ -7,9 +7,14 @@ Flym News Reader
 ##**I didn't updated that application for a long time, but I'm currently preparing a totally new V2 version from scratch (in Kotlin), stay tuned.**##
 
 Light and modern Android feed reader (Atom/RSS), based on Sparse rss.
+It is [free/libre software](https://www.gnu.org/philosophy/free-sw.html).
 
-PlayStore link:
-https://play.google.com/store/apps/details?id=net.fred.feedex
+## Download
+
+- [F-Droid](https://f-droid.org/packages/net.fred.feedex/)
+- [Google Play Store](https://play.google.com/store/apps/details?id=net.fred.feedex)
+
+## Screenshots
 
 ![](https://lh3.ggpht.com/iIe-VheufUo37FbsB6uiMx1Gdgj_gAoVxjEQQIq5azkRuUFUAWehiKBMsdpCHao_Tg=h310-rw) _
 ![](https://lh4.ggpht.com/esKE8BI14gVwMGcZkHIYuNue6-2ay-BJeuFgK_5gWguUAD24xDDQVu3jpfP0UAR4XQ=h310-rw) _
