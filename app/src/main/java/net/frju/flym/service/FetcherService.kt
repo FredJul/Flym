@@ -76,10 +76,10 @@ import net.frju.flym.data.entities.Entry
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.Task
 import net.frju.flym.data.entities.toDbFormat
-import net.frju.flym.toMd5
 import net.frju.flym.ui.main.MainActivity
 import net.frju.flym.utils.ArticleTextExtractor
 import net.frju.flym.utils.HtmlUtils
+import net.frju.flym.utils.sha1
 import net.frju.parentalcontrol.utils.PrefUtils
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -368,7 +368,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         App.db.feedDao().insertAll(feed)
 
         // First we remove the entries that we already have in db (no update to save data)
-        val existingIds = App.db.entryDao().checkCurrentIdsForFeed(feed.id)
+        val existingIds = App.db.entryDao().idsForFeed(feed.id)
         entries.removeAll { existingIds.contains(it.id) }
 
         val feedBaseUrl = getBaseUrl(feed.link)
@@ -539,11 +539,11 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         }
 
         fun getDownloadedImagePath(entryId: String, imgUrl: String): String {
-            return IMAGE_FOLDER + entryId + ID_SEPARATOR + imgUrl.toMd5()
+            return IMAGE_FOLDER + entryId + ID_SEPARATOR + imgUrl.sha1()
         }
 
         fun getTempDownloadedImagePath(entryId: String, imgUrl: String): String {
-            return IMAGE_FOLDER + TEMP_PREFIX + entryId + ID_SEPARATOR + imgUrl.toMd5()
+            return IMAGE_FOLDER + TEMP_PREFIX + entryId + ID_SEPARATOR + imgUrl.sha1()
         }
 
         fun getDownloadedOrDistantImageUrl(entryId: String, imgUrl: String): String {

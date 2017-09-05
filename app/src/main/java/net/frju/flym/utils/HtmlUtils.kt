@@ -26,7 +26,6 @@ package net.frju.flym.utils
 import android.content.Intent
 import android.text.TextUtils
 import net.frju.flym.App
-import net.frju.flym.FILE_SCHEME
 import net.frju.flym.service.FetcherService
 import org.jsoup.Jsoup
 import org.jsoup.safety.Whitelist

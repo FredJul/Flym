@@ -37,7 +37,7 @@ interface EntryDao {
     fun findById(id: String): Entry?
 
     @Query("SELECT id FROM entries WHERE feedId IS (:arg0)")
-    fun checkCurrentIdsForFeed(feedId: Long): List<String>
+    fun idsForFeed(feedId: Long): List<String>
 
     @Query("DELETE FROM entries WHERE fetchDate < :arg0 AND favorite = 0")
     fun deleteOlderThan(keepDateBorderTime: Long)

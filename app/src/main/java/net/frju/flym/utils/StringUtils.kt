@@ -1,14 +1,14 @@
-package net.frju.flym
+package net.frju.flym.utils
 
 import java.math.BigInteger
 import java.security.MessageDigest
 
 val FILE_SCHEME = "file://"
 val UTF8 = "UTF-8"
-val MD5_INSTANCE: MessageDigest = MessageDigest.getInstance("MD5")
+val SHA1_INSTANCE: MessageDigest = MessageDigest.getInstance("SHA-1")
 
-fun String.toMd5(): String {
-    val messageDigest = MD5_INSTANCE.digest(toByteArray())
+fun String.sha1(): String {
+    val messageDigest = SHA1_INSTANCE.digest(toByteArray())
     val number = BigInteger(1, messageDigest)
     return number.toString(16)
 }
