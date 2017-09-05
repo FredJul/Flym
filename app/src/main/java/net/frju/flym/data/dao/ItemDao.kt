@@ -39,9 +39,6 @@ interface ItemDao {
     @Query("SELECT id FROM items WHERE feedId IS (:arg0)")
     fun checkCurrentIdsForFeed(feedId: Long): List<String>
 
-    @Query("UPDATE items SET read = 1 WHERE id IN (:arg0)")
-    fun markAsRead(ids: List<String>)
-
     @Query("DELETE FROM items WHERE fetchDate < :arg0 AND favorite = 0")
     fun deleteOlderThan(keepDateBorderTime: Long)
 

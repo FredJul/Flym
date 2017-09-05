@@ -157,7 +157,6 @@
     <orderEntry type="library" name="1_common-1.0.0-alpha9" level="project" />
     <orderEntry type="library" name="2_common-1.0.0-alpha9" level="project" />
     <orderEntry type="library" name="constraint-layout-1.0.2" level="project" />
-    <orderEntry type="library" name="SmartRefreshHeader-1.0.4-alpha-0" level="project" />
     <orderEntry type="library" name="annotations-4.0.0" level="project" />
     <orderEntry type="library" name="kotlinx-coroutines-core-0.15" level="project" />
     <orderEntry type="library" name="jdom2-2.0.6" level="project" />
@@ -177,7 +176,6 @@
     <orderEntry type="library" name="2_runtime-1.0.0-alpha9" level="project" />
     <orderEntry type="library" name="kotlinx-coroutines-android-0.15" level="project" />
     <orderEntry type="library" name="rome-utils-1.7.4" level="project" />
-    <orderEntry type="library" name="SmartRefreshLayout-1.0.3" level="project" />
     <orderEntry type="library" name="support-compat-26.0.2" level="project" />
     <orderEntry type="library" name="constraint-layout-solver-1.0.2" level="project" />
     <orderEntry type="library" name="anko-design-coroutines-0.10.1" level="project" />

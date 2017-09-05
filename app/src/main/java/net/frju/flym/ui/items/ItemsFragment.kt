@@ -80,7 +80,10 @@ class ItemsFragment : LifecycleFragment() {
         read_all_fab.onClick {
             unfilteredItems?.let {
                 doAsync {
-                    App.db.itemDao().markAsRead(it.map { it.id })
+                    for (item in it) {
+                        item.read = true
+                    }
+                    App.db.itemDao().insertAll(*it.toTypedArray())
                 }
             }
         }
@@ -277,11 +280,7 @@ class ItemsFragment : LifecycleFragment() {
     }
 
     private fun refreshSwipeProgress() {
-        if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            refresh_layout.autoRefresh()
-        } else {
-            //refresh_layout.finishRefresh()
-        }
+        refresh_layout.isRefreshing = PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)
     }
 
     companion object {

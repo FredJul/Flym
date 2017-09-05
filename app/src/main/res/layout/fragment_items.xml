@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -29,7 +29,7 @@
                 android:overScrollMode="never"
                 android:paddingBottom="60dp"
                 android:scrollbars="vertical" />
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <LinearLayout
             android:id="@+id/empty_view"

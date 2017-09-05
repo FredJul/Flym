@@ -81,7 +81,5 @@ dependencies {
     compile 'com.bignerdranch.android:expandablerecyclerview:+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'net.idik:slimadapter:+'
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:+'
-    compile 'com.scwang.smartrefresh:SmartRefreshHeader:+'
     compile 'com.github.mirrajabi:search-dialog:+'
 }
