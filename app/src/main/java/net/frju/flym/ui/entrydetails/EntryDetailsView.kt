@@ -32,6 +32,7 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import net.fred.feedex.R
 import net.frju.flym.data.entities.EntryWithFeed
+import net.frju.flym.ui.views.NestedWebView
 import net.frju.flym.utils.FILE_SCHEME
 import net.frju.flym.utils.HtmlUtils
 import net.frju.flym.utils.UTF8
@@ -39,11 +40,11 @@ import net.frju.parentalcontrol.utils.PrefUtils
 import java.io.File
 import java.io.IOException
 
-class EntryDetailsView : WebView {
+class EntryDetailsView : NestedWebView {
 
     private val TEXT_HTML = "text/html"
     private val HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>"
-    private val BACKGROUND_COLOR = "#FF2B2B2B"
+    private val BACKGROUND_COLOR = "#2B2B2B"
     private val QUOTE_BACKGROUND_COLOR = "#383b3f"
     private val QUOTE_LEFT_COLOR = "#686b6f"
     private val TEXT_COLOR = "#C0C0C0"

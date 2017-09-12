@@ -84,16 +84,10 @@
             android:layout_gravity="end|center_vertical"
             android:src="@mipmap/ic_launcher" />
 
-        <android.support.v4.widget.NestedScrollView
+        <net.frju.flym.ui.entrydetails.EntryDetailsView
+            android:id="@+id/entry_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorBackground">
-
-            <net.frju.flym.ui.entrydetails.EntryDetailsView
-                android:id="@+id/entry_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </android.support.v4.widget.NestedScrollView>
+            android:layout_height="match_parent" />
     </me.thanel.swipeactionview.SwipeActionView>
 
     <android.support.design.widget.FloatingActionButton
