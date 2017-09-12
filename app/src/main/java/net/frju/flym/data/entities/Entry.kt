@@ -62,9 +62,7 @@ fun SyndEntry.toDbFormat(feed: Feed): Entry {
     item.id = itemId
     item.feedId = feed.id
     item.title = title
-    if (contents?.isNotEmpty() == true) {
-        item.description = contents[0].value
-    }
+    item.description = description?.value ?: contents.getOrNull(0)?.value
     item.link = link
     //TODO item.imageLink = null
     item.author = author
