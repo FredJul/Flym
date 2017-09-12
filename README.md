@@ -37,7 +37,9 @@ Feedback and suggestions are welcome
 PlayStore link:
 https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork
 
+<img src="/images/FFEditFeedFilter.png" width="30%">
 ![Alt text](/images/FFEditFeedFilter.png?raw=true "Title")
+
 
 ![](https://lh3.ggpht.com/iIe-VheufUo37FbsB6uiMx1Gdgj_gAoVxjEQQIq5azkRuUFUAWehiKBMsdpCHao_Tg=h310-rw) _
 ![](https://lh4.ggpht.com/esKE8BI14gVwMGcZkHIYuNue6-2ay-BJeuFgK_5gWguUAD24xDDQVu3jpfP0UAR4XQ=h310-rw) _
