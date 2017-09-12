@@ -255,7 +255,7 @@ class EntriesFragment : LifecycleFragment() {
 
     private fun startRefresh() {
         if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            if (feed != null && feed?.id != Feed.ALL_ENTRIES_ID) {
+            if (feed?.isGroup == false && feed?.id != Feed.ALL_ENTRIES_ID) {
                 context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.EXTRA_FEED_ID,
                         feed?.id))
             } else {

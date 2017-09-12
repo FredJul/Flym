@@ -125,8 +125,6 @@ class EntryDetailsView : WebView {
     }
 
     fun setEntry(entry: EntryWithFeed?) {
-        loadDataWithBaseURL("", "", TEXT_HTML, UTF8, null)
-
         if (entry == null) {
             loadDataWithBaseURL("", "", TEXT_HTML, UTF8, null)
         } else {
