@@ -14,8 +14,4 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="TranslucentText">
-        <item name="android:textColor">#00FFFFFF</item>
-    </style>
-
 </resources>

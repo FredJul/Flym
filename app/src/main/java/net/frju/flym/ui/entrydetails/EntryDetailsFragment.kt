@@ -2,7 +2,6 @@ package net.frju.flym.ui.entrydetails
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,23 +55,7 @@ class EntryDetailsFragment : Fragment() {
     }
 
     private fun updateUI() {
-        collapsing_toolbar.title = ""
-        title.text = ""
-        subtitle.text = ""
-
         entry?.let { entry ->
-            collapsing_toolbar.title = entry.title ?: ""
-            title.text = entry.title ?: ""
-
-            val dateStringBuilder = StringBuilder(DateFormat.getLongDateFormat(context).format(entry.publicationDate)).append(' ').append(
-                    DateFormat.getTimeFormat(context).format(entry.publicationDate))
-
-            if (entry.author?.isNotEmpty() == true) {
-                dateStringBuilder.append(" — ").append(entry.author)
-            }
-
-            subtitle.text = dateStringBuilder.toString()
-
             doAsync {
                 entry.read = true
                 App.db.entryDao().insertAll(entry)

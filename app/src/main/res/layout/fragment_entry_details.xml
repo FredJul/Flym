@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,58 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimaryDark"
-            app:contentScrim="@color/colorPrimaryDark"
-            app:expandedTitleTextAppearance="@style/TranslucentText"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax" />
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="30dp"
-                android:gravity="bottom"
-                android:maxLines="5"
-                android:padding="15dp"
-                android:textColor="@android:color/white"
-                android:textSize="24sp"
-                app:autoSizeTextType="uniform"
-                app:layout_collapseMode="pin"
-                app:autoSizeMaxTextSize="23sp"
-                tools:text="My long title, very long long long title, it needs to fit in several lines" />
-
-            <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:maxLines="1"
-                android:padding="15dp"
-                android:textColor="@android:color/white"
-                android:textSize="17sp"
-                app:layout_collapseMode="pin"
-                tools:text="My subtitle" />
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin" />
-
-        </android.support.design.widget.CollapsingToolbarLayout>
+            android:layout_height="?attr/actionBarSize" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -70,19 +20,19 @@
         android:id="@+id/swipe_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:paddingTop="?attr/actionBarSize">
 
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/ic_navigate_before_white_24dp" />
 
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="end|center_vertical"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/ic_navigate_next_white_24dp" />
 
         <net.frju.flym.ui.entrydetails.EntryDetailsView
             android:id="@+id/entry_view"
@@ -90,12 +40,4 @@
             android:layout_height="match_parent" />
     </me.thanel.swipeactionview.SwipeActionView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:src="@drawable/ic_star_white_24dp"
-        app:layout_anchor="@id/app_bar_layout"
-        app:layout_anchorGravity="bottom|right|end" />
-
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

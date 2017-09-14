@@ -32,6 +32,16 @@
             android:exported="true" />
 
         <service android:name="net.frju.flym.service.FetcherService" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="net.frju.flym.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

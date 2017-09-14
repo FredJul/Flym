@@ -25,6 +25,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.support.v4.content.FileProvider.getUriForFile
+import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -32,7 +34,6 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import net.fred.feedex.R
 import net.frju.flym.data.entities.EntryWithFeed
-import net.frju.flym.ui.views.NestedWebView
 import net.frju.flym.utils.FILE_SCHEME
 import net.frju.flym.utils.HtmlUtils
 import net.frju.flym.utils.UTF8
@@ -40,7 +41,8 @@ import net.frju.parentalcontrol.utils.PrefUtils
 import java.io.File
 import java.io.IOException
 
-class EntryDetailsView : NestedWebView {
+
+class EntryDetailsView : WebView {
 
     private val TEXT_HTML = "text/html"
     private val HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>"
@@ -68,6 +70,11 @@ class EntryDetailsView : NestedWebView {
             "</style><meta name='viewport' content='width=device-width'/></head>"
     private val BODY_START = "<body>"
     private val BODY_END = "</body>"
+    private val TITLE_START = "<h1><a href='"
+    private val TITLE_MIDDLE = "'>"
+    private val TITLE_END = "</a></h1>"
+    private val SUBTITLE_START = "<p class='subtitle'>"
+    private val SUBTITLE_END = "</p>"
 
     constructor(context: Context) : super(context) {
         init()
@@ -100,15 +107,12 @@ class EntryDetailsView : NestedWebView {
 
         webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                val context = context
                 try {
-                    //TODO
                     if (url.startsWith(FILE_SCHEME)) {
                         val file = File(url.replace(FILE_SCHEME, ""))
-                        val extTmpFile = File(context.externalCacheDir, "tmp_img.jpg")
-                        file.copyTo(extTmpFile, true)
+                        val contentUri = getUriForFile(context, "net.frju.flym.fileprovider", file)
                         val intent = Intent(Intent.ACTION_VIEW)
-                        intent.setDataAndType(Uri.fromFile(extTmpFile), "image/jpeg")
+                        intent.setDataAndType(contentUri, "image/jpeg")
                         context.startActivity(intent)
                     } else {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -143,8 +147,16 @@ class EntryDetailsView : NestedWebView {
                 settings.blockNetworkImage = true
             }
 
+            val subtitle = StringBuilder(DateFormat.getLongDateFormat(context).format(entry.publicationDate)).append(' ').append(
+                    DateFormat.getTimeFormat(context).format(entry.publicationDate))
+            if (entry.author?.isNotEmpty() == true) {
+                subtitle.append(" &mdash; ").append(entry.author)
+            }
+
             val html = StringBuilder(CSS)
                     .append(BODY_START)
+                    .append(TITLE_START).append(entry.link).append(TITLE_MIDDLE).append(entry.title).append(TITLE_END)
+                    .append(SUBTITLE_START).append(subtitle).append(SUBTITLE_END)
                     .append(contentText)
                     .append(BODY_END)
                     .toString()
