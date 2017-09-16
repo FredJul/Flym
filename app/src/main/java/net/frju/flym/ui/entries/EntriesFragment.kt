@@ -261,6 +261,9 @@ class EntriesFragment : LifecycleFragment() {
                 context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
             }
         }
+
+        // In case there is no internet, the service won't even start, let's quickly stop the refresh animation
+        refresh_layout.postDelayed({ refreshSwipeProgress() }, 500)
     }
 
     private fun setupToolbar() {
