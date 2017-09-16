@@ -10,18 +10,25 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <net.frju.flym.ui.main.CustomAppBar
-            android:id="@+id/custom_appbar"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:fitsSystemWindows="true"
+            android:stateListAnimator="@animator/appbar_always_elevated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            android:stateListAnimator="@animator/appbar_always_elevated" />
+            android:theme="@style/AppTheme.ActionBar">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.CardView
             android:id="@+id/frame_master"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/container_horizontal_padding_start"
             app:cardCornerRadius="0dp" />
 
     </LinearLayout>
@@ -31,8 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginEnd="@dimen/container_horizontal_padding_end"
-        android:layout_marginStart="@dimen/container_horizontal_padding_start"
-        android:layout_marginTop="?actionBarSize"
+        android:layout_marginTop="@dimen/container_details_top_margin"
         app:cardBackgroundColor="@color/colorBackground"
         app:cardElevation="3dp" />
 </FrameLayout>

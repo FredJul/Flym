@@ -18,7 +18,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.view_main_containers.view.*
-import kotlinx.android.synthetic.main.view_main_toolbar.view.*
 import net.fred.feedex.R
 import net.frju.flym.utils.onLaidOut
 
@@ -63,8 +62,8 @@ class ContainersLayout : FrameLayout {
     private fun singleColumnMaster() {
         if (hasTwoColumns()) {
             frame_details.visibility = View.GONE
-            frame_specific.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-            frame_specific.layoutParams = frame_specific.layoutParams
+            toolbar.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+            toolbar.layoutParams = toolbar.layoutParams
             frame_master.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
             frame_master.layoutParams = frame_master.layoutParams
         } else {
@@ -74,11 +73,6 @@ class ContainersLayout : FrameLayout {
     }
 
     private fun singleColumnDetails() {
-        if (hasTwoColumns()) {
-            val res = frame_master.context.resources
-            (frame_details.layoutParams as FrameLayout.LayoutParams).marginStart = res.getDimensionPixelSize(R.dimen.container_horizontal_padding_start)
-            frame_details.layoutParams = frame_details.layoutParams
-        }
         frame_master.visibility = View.GONE
         frame_details.visibility = View.VISIBLE
     }
@@ -87,12 +81,12 @@ class ContainersLayout : FrameLayout {
         if (hasTwoColumns()) {
             frame_details.visibility = View.VISIBLE
             val res = frame_master.context.resources
-            frame_specific.layoutParams.width = res.getDimensionPixelSize(R.dimen.container_max_width)
-            frame_specific.layoutParams = frame_specific.layoutParams
+            toolbar.layoutParams.width = res.getDimensionPixelSize(R.dimen.container_max_width)
+            toolbar.layoutParams = toolbar.layoutParams
             frame_master.layoutParams.width = res.getDimensionPixelSize(R.dimen.container_max_width)
             frame_master.layoutParams = frame_master.layoutParams
             frame_details.visibility = View.VISIBLE
-            (frame_details.layoutParams as FrameLayout.LayoutParams).marginStart = res.getDimensionPixelSize(R.dimen.container_horizontal_padding_start) + res.getDimensionPixelSize(R.dimen.container_max_width)
+            (frame_details.layoutParams as FrameLayout.LayoutParams).marginStart = res.getDimensionPixelSize(R.dimen.container_max_width)
             frame_details.layoutParams = frame_details.layoutParams
         } else {
             animateOutFrameDetails()
@@ -104,12 +98,12 @@ class ContainersLayout : FrameLayout {
         if (hasTwoColumns()) {
             frame_master.visibility = View.VISIBLE
             val res = frame_master.context.resources
-            frame_specific.layoutParams.width = res.getDimensionPixelSize(R.dimen.container_max_width)
-            frame_specific.layoutParams = frame_specific.layoutParams
+            toolbar.layoutParams.width = res.getDimensionPixelSize(R.dimen.container_max_width)
+            toolbar.layoutParams = toolbar.layoutParams
             frame_master.layoutParams.width = res.getDimensionPixelSize(R.dimen.container_max_width)
             frame_master.layoutParams = frame_master.layoutParams
             frame_details.visibility = View.VISIBLE
-            (frame_details.layoutParams as FrameLayout.LayoutParams).marginStart = res.getDimensionPixelSize(R.dimen.container_horizontal_padding_start) + res.getDimensionPixelSize(R.dimen.container_max_width)
+            (frame_details.layoutParams as FrameLayout.LayoutParams).marginStart = res.getDimensionPixelSize(R.dimen.container_max_width)
             frame_details.layoutParams = frame_details.layoutParams
         } else {
             animateInFrameDetails()

@@ -10,13 +10,12 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
 import ir.mirrajabi.searchdialog.core.BaseFilter
 import ir.mirrajabi.searchdialog.core.SearchResultListener
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.view_main_containers.view.*
+import kotlinx.android.synthetic.main.view_main_containers.*
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
@@ -146,7 +145,8 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
 
-        containers_layout.custom_appbar.setOnNavigationClickListener(View.OnClickListener { toggleDrawer() })
+        toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
+        toolbar.setNavigationOnClickListener({ toggleDrawer() })
 
         if (savedInstanceState == null) {
             closeDrawer()
@@ -238,14 +238,12 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun goToEntriesList(feed: Feed?) {
         clearDetails()
-        containers_layout.custom_appbar.setState(MainNavigator.State.TWO_COLUMNS_EMPTY)
         containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
         val master = EntriesFragment.newInstance(feed)
         supportFragmentManager.beginTransaction().replace(R.id.frame_master, master, TAG_MASTER).commit()
     }
 
     override fun goToEntryDetails(entry: EntryWithFeed) {
-        containers_layout.custom_appbar.setState(MainNavigator.State.TWO_COLUMNS_WITH_DETAILS)
         containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
         val fragment = EntryDetailsFragment.newInstance(entry)
         supportFragmentManager

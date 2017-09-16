@@ -17,9 +17,8 @@ import com.amulyakhare.textdrawable.util.ColorGenerator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_entries.*
-import kotlinx.android.synthetic.main.view_main_containers.view.*
+import kotlinx.android.synthetic.main.view_main_containers.*
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.GlideApp
@@ -265,9 +264,8 @@ class EntriesFragment : LifecycleFragment() {
     }
 
     private fun setupToolbar() {
-        val appBar = activity.containers_layout.custom_appbar
-        appBar.setTitle(R.string.fragment_people__title)
-        appBar.setMenuRes(R.menu.people_general, R.menu.people_specific, R.menu.people_merged)
+        activity?.toolbar?.setTitle(R.string.fragment_people__title)
+        activity?.toolbar?.inflateMenu(R.menu.fragment_entries)
     }
 
     fun setSelectedEntry(selectedEntry: EntryWithFeed) {

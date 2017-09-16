@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,12 +9,20 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <net.frju.flym.ui.main.CustomAppBar
-            android:id="@+id/custom_appbar"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
             android:fitsSystemWindows="true"
             android:stateListAnimator="@animator/appbar_always_elevated"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.ActionBar">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        </android.support.design.widget.AppBarLayout>
 
         <FrameLayout
             android:id="@+id/frame_master"
@@ -27,5 +36,6 @@
         android:id="@+id/frame_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorBackground" />
 </FrameLayout>
