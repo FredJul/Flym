@@ -209,6 +209,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
         HideButtonText(rootView, R.id.pageDownBtn);
         HideButtonText(rootView, R.id.pageUpBtn);
         HideButtonText(rootView, R.id.toggleFullScreenStatusBarBtn);
+        HideButtonText(rootView, R.id.toggleFullscreenBtn);
 
         rootView.findViewById(R.id.layoutBottom).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.statusText).setVisibility(View.VISIBLE);
@@ -835,34 +836,44 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                     newCursor = (Cursor) view.getTag(); // get the old one
                 }
 
-                if (newCursor != null && newCursor.moveToFirst()) {
-                    String contentText = newCursor.getString(mMobilizedHtmlPos);
-                    if (contentText == null || (forceUpdate && !mPreferFullText)) {
-                        mPreferFullText = false;
-                        contentText = newCursor.getString(mAbstractPos);
-                    } else {
-                        mPreferFullText = true;
-                    }
-                    if (contentText == null) {
-                        contentText = "";
-                    }
+                if (newCursor != null && newCursor.moveToFirst()  ) {
+                    String contentText = "";
+                    String author = "";
+                    long timestamp = 0;
+                    String link = "";
+                    String title = "";
+                    String enclosure = "";
+                    try {
+                        contentText = newCursor.getString(mMobilizedHtmlPos);
+                        if (contentText == null || (forceUpdate && !mPreferFullText)) {
+                            mPreferFullText = false;
+                            contentText = newCursor.getString(mAbstractPos);
+                        } else {
+                            mPreferFullText = true;
+                        }
+                        if (contentText == null) {
+                            contentText = "";
+                        }
 
-                    String author = newCursor.getString(mAuthorPos);
-                    long timestamp = newCursor.getLong(mDatePos);
-                    String link = newCursor.getString(mLinkPos);
-                    String title = newCursor.getString(mTitlePos);
-                    String enclosure = newCursor.getString(mEnclosurePos);
+                        author = newCursor.getString(mAuthorPos);
+                        timestamp = newCursor.getLong(mDatePos);
+                        link = newCursor.getString(mLinkPos);
+                        title = newCursor.getString(mTitlePos);
+                        enclosure = newCursor.getString(mEnclosurePos);
+                    } catch ( IllegalStateException e ) {
+                        contentText = "Context too large";
+                    }
 
                     //FetcherService.setCurrentEntryID( getCurrentEntryID() );
                     view.setHtml(mEntriesIds[pagerPos],
-                                 title,
-                                 link,
-                                 contentText,
-                                 enclosure,
-                                 author,
-                                 timestamp,
-                                 mPreferFullText,
-                                 ( EntryActivity )getActivity() );
+                            title,
+                            link,
+                            contentText,
+                            enclosure,
+                            author,
+                            timestamp,
+                            mPreferFullText,
+                            (EntryActivity) getActivity());
                     view.setTag(newCursor);
 
                     if (pagerPos == mCurrentPagerPos) {
@@ -870,9 +881,9 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
                         //PrefUtils.putString(PrefUtils.LAST_URI, uri.toString());
 
-                        if ( PrefUtils.getLong( PrefUtils.LAST_ENTRY_ID, 0 ) == mEntriesIds[pagerPos] ) {
-                            int dy = PrefUtils.getInt( PrefUtils.LAST_ENTRY_SCROLL_Y, 0 );
-                            if ( dy > view.getScrollY() )
+                        if (PrefUtils.getLong(PrefUtils.LAST_ENTRY_ID, 0) == mEntriesIds[pagerPos]) {
+                            int dy = PrefUtils.getInt(PrefUtils.LAST_ENTRY_SCROLL_Y, 0);
+                            if (dy > view.getScrollY())
                                 view.mScrollY = dy;
                         }
 
@@ -880,6 +891,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
                     UpdateProgress();
                     UpdateClock();
+
                 }
             }
         }

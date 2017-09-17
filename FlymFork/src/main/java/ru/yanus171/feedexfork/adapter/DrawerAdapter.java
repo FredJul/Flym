@@ -52,8 +52,10 @@ public class DrawerAdapter extends BaseAdapter {
     private static final int POS_LAST_UPDATE = 5;
     private static final int POS_ERROR = 6;
     private static final int POS_UNREAD = 7;
-    private static final int POS_IS_SHOW_TEXT_IN_ENTRY_LIST = 8;
-    private static final int POS_IS_GROUP_EXPANDED = 9;
+    private static final int POS_ALL = 8;
+    private static final int POS_IS_SHOW_TEXT_IN_ENTRY_LIST = 9;
+    private static final int POS_IS_GROUP_EXPANDED = 10;
+    private static final int POS_IS_AUTO_RESRESH = 11;
 
     private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
@@ -96,6 +98,8 @@ public class DrawerAdapter extends BaseAdapter {
             holder.titleTxt = (TextView) convertView.findViewById(android.R.id.text1);
             holder.stateTxt = (TextView) convertView.findViewById(android.R.id.text2);
             holder.unreadTxt = (TextView) convertView.findViewById(R.id.unread_count);
+            holder.allTxt = (TextView) convertView.findViewById(R.id.all_count);
+            holder.autoRefreshIcon = (ImageView) convertView.findViewById(R.id.auto_refresh_icon);
             holder.separator = convertView.findViewById(R.id.separator);
             convertView.setTag(R.id.holder, holder);
         }
@@ -109,8 +113,10 @@ public class DrawerAdapter extends BaseAdapter {
         holder.titleTxt.setAllCaps(false);
         holder.stateTxt.setVisibility(View.GONE);
         holder.unreadTxt.setText("");
+        holder.allTxt.setText("");
         convertView.setPadding(0, 0, 0, 0);
         holder.separator.setVisibility(View.GONE);
+        holder.autoRefreshIcon.setVisibility( View.GONE );
 
         if (position == 0 || position == 1 || position == 2) {
             switch (position) {
@@ -190,6 +196,11 @@ public class DrawerAdapter extends BaseAdapter {
                 if (unread != 0) {
                     holder.unreadTxt.setText(String.valueOf(unread));
                 }
+
+                int read = mFeedsCursor.getInt(POS_ALL) - mFeedsCursor.getInt(POS_UNREAD);
+                holder.allTxt.setText(read > 0 ? String.valueOf(read) : "");
+
+                holder.autoRefreshIcon.setVisibility( isAutoRefresh( position )  ? View.VISIBLE : View.GONE );
             }
         }
 
@@ -249,6 +260,11 @@ public class DrawerAdapter extends BaseAdapter {
 
     }
 
+    private boolean isAutoRefresh(int position) {
+        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3) && mFeedsCursor.getInt(POS_IS_AUTO_RESRESH) == 1;
+
+    }
+
     private void updateNumbers() {
         mAllUnreadNumber = mFavoritesNumber = 0;
 
@@ -268,6 +284,9 @@ public class DrawerAdapter extends BaseAdapter {
         public TextView titleTxt;
         public TextView stateTxt;
         public TextView unreadTxt;
+        public TextView allTxt;
+        public ImageView autoRefreshIcon;
+
         public View separator;
     }
 }

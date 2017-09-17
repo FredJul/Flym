@@ -212,6 +212,10 @@
     <string name="pageUp">page up</string>
     <string name="pageDown">page down</string>
     <string name="fullScreenToggle">full screen toggle</string>
+    <string name="auto_refresh_feed">auto refresh feed</string>
+    <string name="settings_refresh_only_selected">Only selected</string>
+    <string name="settings_refresh_only_selected_summary">auto refresh only checked feeds</string>
+    <string name="actionBarToggle">Toggle action bar</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new entry</item>

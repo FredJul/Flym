@@ -178,12 +178,10 @@
     <string name="settings_display_entries_fullscreen">Статьи на полный экран</string>
     <string name="settings_display_entries_fullscreen_description">Открывать текст статьи на полный экран</string>
     <string name="settings_refresh_on_open">Обновлять при запуске</string>
-    <string name="settings_refresh_on_open_description">Обновлять все ленты пии запуске приложения
+    <string name="settings_refresh_on_open_description">Обновлять все ленты при запуске приложения
     </string>
-    <string name="settings_refresh_wifi_only">Обновлять толькоа по WiFi</string>
-    <string name="settings_refresh_wifi_only_description">Автоматическое обновление будет
-        выполняться только при включенном WiFi
-    </string>
+    <string name="settings_refresh_wifi_only">Обновлять только по WiFi</string>
+    <string name="settings_refresh_wifi_only_description">Автоматическое обновление будет выполняться только при включенном WiFi</string>
     <string name="settings_visible_feeds">Видимые ленты</string>
     <string name="settings_widget_background">Фон</string>
     <string name="settings_widget_background_description">Цвета и прозрачность фона виджета</string>
@@ -347,5 +345,9 @@
     <string name="pageUp">Страница вверх</string>
     <string name="pageDown">Страница вниз</string>
     <string name="fullScreenToggle">Пркл. полный экран</string>
+    <string name="auto_refresh_feed">Автоматическое обновление</string>
+    <string name="settings_refresh_only_selected">Только выбранные</string>
+    <string name="settings_refresh_only_selected_summary">автоматическое обновление только выбранных лент</string>
+    <string name="actionBarToggle">Пркл. панель действий</string>
 
 </resources>

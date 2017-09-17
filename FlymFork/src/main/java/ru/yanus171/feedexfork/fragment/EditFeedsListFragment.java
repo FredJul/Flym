@@ -52,6 +52,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -73,20 +74,21 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.activity.AddGoogleNewsActivity;
+import ru.yanus171.feedexfork.activity.EditFeedActivity;
 import ru.yanus171.feedexfork.adapter.FeedsCursorAdapter;
 import ru.yanus171.feedexfork.parser.OPML;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.utils.UiUtils;
 import ru.yanus171.feedexfork.view.DragNDropExpandableListView;
 import ru.yanus171.feedexfork.view.DragNDropListener;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class EditFeedsListFragment extends ListFragment {
 
@@ -127,22 +129,7 @@ public class EditFeedsListFragment extends ListFragment {
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 case R.id.menu_delete:
-                    new AlertDialog.Builder(getActivity()) //
-                            .setIcon(android.R.drawable.ic_dialog_alert) //
-                            .setTitle(title) //
-                            .setMessage(R.string.question_delete_feed) //
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    new Thread() {
-                                        @Override
-                                        public void run() {
-                                            ContentResolver cr = getActivity().getContentResolver();
-                                            cr.delete(FeedColumns.CONTENT_URI(feedId), null, null);
-                                        }
-                                    }.start();
-                                }
-                            }).setNegativeButton(android.R.string.no, null).show();
+                    DeleteFeed(EditFeedsListFragment.this.getActivity(), FeedColumns.CONTENT_URI(feedId), title);
 
                     mode.finish(); // Action picked, so close the CAB
                     return true;
@@ -159,6 +146,28 @@ public class EditFeedsListFragment extends ListFragment {
             }
         }
     };
+
+    public static void DeleteFeed(final Activity activity,  final Uri feedUri, String title) {
+        new AlertDialog.Builder(activity) //
+                .setIcon(android.R.drawable.ic_dialog_alert) //
+                .setTitle(title) //
+                .setMessage(R.string.question_delete_feed) //
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                                cr.delete(feedUri, null, null);
+                            }
+                        }.start();
+                        if ( activity instanceof EditFeedActivity )
+                            activity.finish();
+                    }
+                }).setNegativeButton(android.R.string.no, null).show();
+    }
+
     private final ActionMode.Callback mGroupActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called

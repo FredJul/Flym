@@ -191,6 +191,8 @@ public class EntryView extends WebView implements Observer {
         mActivity = activity;
         mEntryId = entryId;
         //getSettings().setBlockNetworkLoads(true);
+        getSettings().setUseWideViewPort( true );
+        getSettings().setSupportZoom( false );
         getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
             contentText = HtmlUtils.replaceImageURLs(contentText, entryId);
@@ -264,7 +266,7 @@ public class EntryView extends WebView implements Observer {
         mImageDownloadObservable.addObserver(this);
         // For scrolling
         setHorizontalScrollBarEnabled(false);
-        getSettings().setUseWideViewPort(false);
+        getSettings().setUseWideViewPort(true);
 
         // For color
         setBackgroundColor(Color.parseColor(BACKGROUND_COLOR));

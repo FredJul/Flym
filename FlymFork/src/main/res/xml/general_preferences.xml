@@ -4,8 +4,6 @@
                   android:layout_height="wrap_content">
 
     <PreferenceScreen
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:title="@string/about_flym">
 
         <intent
@@ -15,21 +13,15 @@
     </PreferenceScreen>
 
     <PreferenceCategory
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:title="@string/settings_category_refresh">
 
         <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:defaultValue="true"
             android:key="refresh.enabled"
             android:summary="@string/settings_refresh_enabled_description"
             android:title="@string/settings_refresh_enabled"/>
 
         <ru.yanus171.feedexfork.view.AutoSummaryListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:defaultValue="1800000"
             android:dependency="refresh.enabled"
             android:entries="@array/settings_intervals"
@@ -39,16 +31,19 @@
             android:title="@string/settings_refresh_interval"/>
 
         <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="refresh.only_selected"
+            android:dependency="refresh.enabled"
+            android:summary="@string/settings_refresh_only_selected_summary"
+            android:title="@string/settings_refresh_only_selected"/>
+
+        <CheckBoxPreference
             android:defaultValue="false"
             android:key="refreshonopen.enabled"
             android:summary="@string/settings_refresh_on_open_description"
             android:title="@string/settings_refresh_on_open"/>
 
         <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:defaultValue="false"
             android:key="refreshwifionly.enabled"
             android:summary="@string/settings_refresh_wifi_only_description"
@@ -56,13 +51,9 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:title="@string/settings_category_content_presentation">
 
         <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:defaultValue="false"
             android:disableDependentsState="true"
             android:key="lighttheme"

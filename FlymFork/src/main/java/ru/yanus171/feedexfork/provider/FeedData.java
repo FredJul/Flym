@@ -107,6 +107,7 @@ public class FeedData {
         public static final String FETCH_MODE = "fetchmode";
         public static final String SHOW_TEXT_IN_ENTRY_LIST = "show_text_in_entry_list";
         public static final String IS_GROUP_EXPANDED = "is_group_expanded";
+        public static final String IS_AUTO_REFRESH = "is_auto_refresh";
         public static final String[] PROJECTION_ID = new String[]{FeedColumns._ID};
         public static final String[] PROJECTION_GROUP_ID = new String[]{FeedColumns.GROUP_ID};
         public static final String[] PROJECTION_PRIORITY = new String[]{FeedColumns.PRIORITY};

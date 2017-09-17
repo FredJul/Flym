@@ -55,7 +55,9 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.CancellationSignal;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -85,6 +87,13 @@ public class FeedDataContentProvider extends ContentProvider {
     public static final int URI_ENTRIES_FOR_FEED = 9;
     public static final int URI_ENTRY_FOR_FEED = 10;
     public static final int URI_ENTRIES_FOR_GROUP = 11;
+
+    @Nullable
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, CancellationSignal cancellationSignal) {
+        return super.query(uri, projection, selection, selectionArgs, sortOrder, cancellationSignal);
+    }
+
     public static final int URI_ENTRY_FOR_GROUP = 12;
     public static final int URI_ENTRIES = 13;
     public static final int URI_ENTRY = 14;

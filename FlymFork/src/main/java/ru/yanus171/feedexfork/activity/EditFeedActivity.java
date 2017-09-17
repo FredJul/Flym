@@ -84,12 +84,14 @@ import java.util.HashMap;
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.adapter.FiltersCursorAdapter;
+import ru.yanus171.feedexfork.fragment.EditFeedsListFragment;
 import ru.yanus171.feedexfork.loader.BaseLoader;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
 import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
 import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
+import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
 
 public class EditFeedActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -98,7 +100,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     static final String FEED_SEARCH_DESC = "description";//"contentSnippet";
     private static final String STATE_CURRENT_TAB = "STATE_CURRENT_TAB";
     private static final String[] FEED_PROJECTION =
-        new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.IS_GROUP, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST };
+        new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.IS_GROUP, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH };
     private final ActionMode.Callback mFilterActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -218,6 +220,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     private EditText mNameEditText, mUrlEditText;
     private CheckBox mRetrieveFulltextCb;
     private CheckBox mShowTextInEntryListCb;
+    private CheckBox mIsAutoRefreshCb;
     private ListView mFiltersListView;
     private FiltersCursorAdapter mFiltersCursorAdapter;
 
@@ -241,8 +244,11 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         mUrlEditText = (EditText) findViewById(R.id.feed_url);
         mRetrieveFulltextCb = (CheckBox) findViewById(R.id.retrieve_fulltext);
         mShowTextInEntryListCb = (CheckBox) findViewById(R.id.show_text_in_entry_list);
+        mIsAutoRefreshCb =  (CheckBox) findViewById(R.id.auto_refresh);
         mFiltersListView = (ListView) findViewById(android.R.id.list);
         View tabWidget = findViewById(android.R.id.tabs);
+
+        mIsAutoRefreshCb.setVisibility(  PrefUtils.getBoolean( PrefUtils.REFRESH_ONLY_SELECTED, false ) ? View.VISIBLE : View.GONE );
 
         mTabHost.setup();
         mTabHost.addTab(mTabHost.newTabSpec("feedTab").setIndicator(getString(R.string.tab_feed_title)).setContent(R.id.feed_tab));
@@ -297,6 +303,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     mUrlEditText.setText(cursor.getString(1));
                     mRetrieveFulltextCb.setChecked(cursor.getInt(2) == 1);
                     mShowTextInEntryListCb.setChecked(cursor.getInt(4) == 1);
+                    mIsAutoRefreshCb.setChecked(cursor.getInt(5) == 1);
                     if (cursor.getInt(3) == 1) { // if it's a group, we cannot edit it
                         finish();
                     }
@@ -344,6 +351,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     values.put(FeedColumns.NAME, name.trim().length() > 0 ? name : null);
                     values.put(FeedColumns.RETRIEVE_FULLTEXT, mRetrieveFulltextCb.isChecked() ? 1 : null);
                     values.put(FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, mShowTextInEntryListCb.isChecked() ? 1 : null);
+                    values.put(FeedColumns.IS_AUTO_REFRESH, mIsAutoRefreshCb.isChecked() ? 1 : null);
                     values.put(FeedColumns.FETCH_MODE, 0);
                     values.putNull(FeedColumns.ERROR);
 
@@ -501,7 +509,11 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                 }).show();
                 return true;
             }
+            case R.id.menu_delete_feed:
+                EditFeedsListFragment.DeleteFeed( this, getIntent().getData(), "" );
+                return true;
             default:
+
                 return super.onOptionsItemSelected(item);
         }
     }

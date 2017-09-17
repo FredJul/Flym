@@ -247,7 +247,7 @@ public class FetcherService extends IntentService {
 
                 String feedId = intent.getStringExtra(Constants.FEED_ID);
                 String groupId = intent.getStringExtra(Constants.GROUP_ID);
-                int newCount = (feedId == null ? refreshFeeds(keepDateBorderTime, groupId) : refreshFeed(feedId, keepDateBorderTime));
+                int newCount = (feedId == null ? refreshFeeds(keepDateBorderTime, groupId, isFromAutoRefresh) : refreshFeed(feedId, keepDateBorderTime));
 
                 if (newCount > 0) {
                     if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
@@ -615,14 +615,15 @@ public class FetcherService extends IntentService {
         }
     }
 
-    private int refreshFeeds(final long keepDateBorderTime, String groupID) {
+    private int refreshFeeds(final long keepDateBorderTime, String groupID, boolean isFromAutoRefresh) {
 
         ContentResolver cr = getContentResolver();
         final Cursor cursor;
+        String where = PrefUtils.getBoolean( PrefUtils.REFRESH_ONLY_SELECTED, false ) && isFromAutoRefresh ? FeedColumns.IS_AUTO_REFRESH + Constants.DB_IS_TRUE : null;
         if ( groupID != null )
             cursor = cr.query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupID), FeedColumns.PROJECTION_ID, null, null, null);
         else
-            cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
+            cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, where, null, null);
         int nbFeed = cursor.getCount();
 
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_NUMBER, new ThreadFactory() {

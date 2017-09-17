@@ -34,6 +34,7 @@ public class PrefUtils {
 
     public static final String REFRESH_INTERVAL = "refresh.interval";
     public static final String REFRESH_ENABLED = "refresh.enabled";
+    public static final String REFRESH_ONLY_SELECTED = "refresh.only_selected";
     public static final String REFRESH_ON_OPEN_ENABLED = "refreshonopen.enabled";
     public static final String REFRESH_WIFI_ONLY = "refreshwifionly.enabled";
 
