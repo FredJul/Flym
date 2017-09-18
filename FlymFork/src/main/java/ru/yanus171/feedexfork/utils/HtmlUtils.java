@@ -22,11 +22,6 @@ package ru.yanus171.feedexfork.utils;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import ru.yanus171.feedexfork.Constants;
-import ru.yanus171.feedexfork.MainApplication;
-import ru.yanus171.feedexfork.R;
-import ru.yanus171.feedexfork.service.FetcherService;
-
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
@@ -34,6 +29,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
+import ru.yanus171.feedexfork.R;
+import ru.yanus171.feedexfork.service.FetcherService;
 
 public class HtmlUtils {
 
@@ -47,6 +47,7 @@ public class HtmlUtils {
     public static final String URL_SPACE = "%20";
 
     private static final Pattern IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
+    private static final Pattern A_IMG_PATTERN = Pattern.compile("<a href([^>]+)>([^<]?)<img(.)*?</a>", Pattern.CASE_INSENSITIVE);
     private static final Pattern ADS_PATTERN = Pattern.compile("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", Pattern.CASE_INSENSITIVE);
     private static final Pattern LAZY_LOADING_PATTERN = Pattern.compile("\\s+src=[^>]+\\s+original[-]*src=(\"|')", Pattern.CASE_INSENSITIVE);
     private static final Pattern EMPTY_IMAGE_PATTERN = Pattern.compile("<img\\s+(height=['\"]1['\"]\\s+width=['\"]1['\"]|width=['\"]1['\"]\\s+height=['\"]1['\"])\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
@@ -105,12 +106,22 @@ public class HtmlUtils {
     }
 
     public static String replaceImageURLs(String content, final long entryId) {
+        // TODO <a href([^>]+)>([^<]+)<img(.)*?</a>
 
         if (!TextUtils.isEmpty(content)) {
+
+            // img in a tag
+            Matcher matcher = A_IMG_PATTERN.matcher(content);
+            while ( matcher.find()  ) {
+                String match = matcher.group();
+                String replace = match.replaceAll( "<a([^>]+)>", "" ).replaceAll( "</a>", "" );
+                content = content.replace( match, replace );
+            }
+
             boolean needDownloadPictures = PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true);//NetworkUtils.needDownloadPictures();
             final ArrayList<String> imagesToDl = new ArrayList<>();
 
-            Matcher matcher = IMG_PATTERN.matcher(content);
+            matcher = IMG_PATTERN.matcher(content);
             int index = 0;
             while ( matcher.find()  ) {
                 index++;
@@ -191,10 +202,7 @@ public class HtmlUtils {
     }
 
     private static boolean isCorrectImage(String imgUrl) {
-        if (!imgUrl.endsWith(".gif") && !imgUrl.endsWith(".GIF") && !imgUrl.endsWith(".img") && !imgUrl.endsWith(".IMG")) {
-            return true;
-        }
+        return !imgUrl.endsWith(".gif") && !imgUrl.endsWith(".GIF") && !imgUrl.endsWith(".img") && !imgUrl.endsWith(".IMG");
 
-        return false;
     }
 }
