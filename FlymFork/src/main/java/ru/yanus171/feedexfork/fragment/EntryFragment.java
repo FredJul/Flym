@@ -205,21 +205,23 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
         disableSwipe();
 
-        HideButtonText(rootView, R.id.pageDownBtnVert);
-        HideButtonText(rootView, R.id.pageDownBtn);
-        HideButtonText(rootView, R.id.pageUpBtn);
-        HideButtonText(rootView, R.id.toggleFullScreenStatusBarBtn);
-        HideButtonText(rootView, R.id.toggleFullscreenBtn);
+        HideButtonText(rootView, R.id.pageDownBtnVert, true);
+        HideButtonText(rootView, R.id.pageDownBtn, true);
+        HideButtonText(rootView, R.id.pageUpBtn, true);
+        HideButtonText(rootView, R.id.toggleFullScreenStatusBarBtn, !PrefUtils.getBoolean( PrefUtils.TAP_ZONES_VISIBLE, true ));
+        HideButtonText(rootView, R.id.toggleFullscreenBtn, !PrefUtils.getBoolean( PrefUtils.TAP_ZONES_VISIBLE, true ));
+
 
         rootView.findViewById(R.id.layoutBottom).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.statusText).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.statusText).setVisibility(View.GONE);
 
         return rootView;
     }
 
-    void HideButtonText(View rootView, int ID) {
+    void HideButtonText(View rootView, int ID, boolean transparent) {
         TextView btn = (TextView)rootView.findViewById(ID);
-        btn.setBackgroundColor(Color.TRANSPARENT);
+        if ( transparent )
+            btn.setBackgroundColor(Color.TRANSPARENT);
         btn.setText("");
     }
 
@@ -410,6 +412,12 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                     FetcherService.cancelRefresh();
                     break;
                 }
+                case R.id.menu_open_link: {
+                    Uri uri = Uri.parse( mEntryPagerAdapter.getCursor(mCurrentPagerPos).getString(mLinkPos) );
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri );
+                    getActivity().startActivity(intent);
+                }
+
                 case R.id.menu_reload_full_text: {
 
                     int status = FetcherService.getObservable().Start("Reload fulltext"); try {
@@ -831,7 +839,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
             Dog.d( "EntryPagerAdapter.displayEntry" + pagerPos);
 
             EntryView view = mEntryViews.get(pagerPos);
-            if (view != null) {
+            if (view != null ) {
                 if (newCursor == null) {
                     newCursor = (Cursor) view.getTag(); // get the old one
                 }
@@ -898,7 +906,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
         public Cursor getCursor(int pagerPos) {
             EntryView view = mEntryViews.get(pagerPos);
-            if (view != null) {
+            if (view != null && ( view.getTag() instanceof Cursor ) ) {
                 return (Cursor) view.getTag();
             }
             return null;
@@ -906,7 +914,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
         public void setUpdatedCursor(int pagerPos, Cursor newCursor) {
             EntryView view = mEntryViews.get(pagerPos);
-            if (view != null) {
+            if (view != null && ( view.getTag(R.id.updated_cursor) instanceof Cursor ) ) {
                 Cursor previousUpdatedOne = (Cursor) view.getTag(R.id.updated_cursor);
                 if (previousUpdatedOne != null) {
                     previousUpdatedOne.close();

@@ -49,6 +49,9 @@
         android:id="@+id/menu_load_all_images"
         android:title="@string/menu_load_all_images"/>
     <item
+        android:id="@+id/menu_open_link"
+        android:title="@string/open_link"/>
+    <item
         android:id="@+id/menu_cancel_refresh"
         android:icon="@drawable/ic_action_cancel"
         android:visible="true"

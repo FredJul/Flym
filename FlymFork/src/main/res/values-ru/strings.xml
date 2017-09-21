@@ -349,5 +349,7 @@
     <string name="settings_refresh_only_selected">Только выбранные</string>
     <string name="settings_refresh_only_selected_summary">автоматическое обновление только выбранных лент</string>
     <string name="actionBarToggle">Пркл. панель действий</string>
+    <string name="settings_show_tap_zones">Зоны нажатий видимы</string>
+    <string name="settings_show_tap_zone_description">полупрозрачные квадратики в окне чтения статьи</string>
 
 </resources>

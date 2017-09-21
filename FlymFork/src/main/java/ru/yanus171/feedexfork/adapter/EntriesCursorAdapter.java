@@ -232,7 +232,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         if ( mShowEntryText ) {
             holder.textTextView.setVisibility(View.VISIBLE);
-            holder.textTextView.setText( Html.fromHtml(cursor.getString(mAbstractPos).toString() ) );
+            holder.textTextView.setText(Html.fromHtml( cursor.getString(mAbstractPos) == null ? "" : cursor.getString(mAbstractPos).toString() ));
             if ( !holder.isRead ) {
                 //SetIsRead(entryId, true, 100 * 1000);
                 /*if ( entryID != -1 ){
@@ -247,10 +247,12 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
             }
             holder.textTextView.setEnabled(!holder.isRead);
+            holder.mainImgView.setVisibility(View.GONE);
         } else
             holder.textTextView.setVisibility(View.GONE);
 
     }
+
 
     private void UpdateStarImgView(ViewHolder holder) {
         int startID = PrefUtils.getBoolean( PrefUtils.LIGHT_THEME, false ) ? R.drawable.star_gray_solid : R.drawable.star_yellow;

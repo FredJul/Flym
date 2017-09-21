@@ -216,6 +216,8 @@
     <string name="settings_refresh_only_selected">Only selected</string>
     <string name="settings_refresh_only_selected_summary">auto refresh only checked feeds</string>
     <string name="actionBarToggle">Toggle action bar</string>
+    <string name="settings_show_tap_zones">Tap zones are visible</string>
+    <string name="settings_show_tap_zone_description">as transparent squares in entry view</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new entry</item>

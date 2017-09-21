@@ -145,6 +145,8 @@ public class HtmlUtils {
                 }
             }
 
+            content = content.replaceAll( "width=\\\"\\d+\\\"", "" );
+            content = content.replaceAll( "height=\\\"\\d+\\\"", "" );
             //FetcherService.mMaxImageDownloadCount = PrefUtils.getImageDownloadCount();
 
             // Download the images if needed

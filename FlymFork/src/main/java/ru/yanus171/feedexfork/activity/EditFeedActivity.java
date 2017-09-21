@@ -388,10 +388,10 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             menu.findItem(R.id.menu_add_filter).setVisible(true);
         }
 
-        if (getIntent() != null && getIntent().getAction().equals(Intent.ACTION_EDIT)) {
-            menu.findItem(R.id.menu_validate).setVisible(false); // only in insert mode
-            menu.findItem(R.id.menu_delete_feed).setVisible(false);
-        }
+        boolean edit = getIntent() != null && getIntent().getAction().equals(Intent.ACTION_EDIT);
+        boolean insert = getIntent() != null && getIntent().getAction().equals(Intent.ACTION_INSERT);
+        menu.findItem(R.id.menu_validate).setVisible(insert);
+        menu.findItem(R.id.menu_delete_feed).setVisible(edit);
 
         return super.onPrepareOptionsMenu(menu);
     }

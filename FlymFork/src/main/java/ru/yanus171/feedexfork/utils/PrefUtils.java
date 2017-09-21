@@ -55,6 +55,8 @@ public class PrefUtils {
     public static final String CONTENT_EXTRACT_RULES = "content_extract_rules";
     public static final String LOAD_COMMENTS = "load_comments";
     public static final String REMEBER_LAST_ENTRY = "remember_last_entry";
+    public static final String TAP_ZONES_VISIBLE = "settings_tap_zones_visible";
+
 
     public static final String LAST_ENTRY_URI = "last_entry_uri";
     public static final String LAST_ENTRY_SCROLL_Y = "last_entry_scroll_y";

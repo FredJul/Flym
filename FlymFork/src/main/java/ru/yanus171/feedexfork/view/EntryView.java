@@ -111,7 +111,8 @@ public class EntryView extends WebView implements Observer {
             + "h2 {font-size: 140%} "
             + "a {color: #0099CC}"
             + "h1 a {color: inherit; text-decoration: none}"
-            + "img {height: auto} "
+            + "img {display: inline;max-width: 100%;height: auto} "
+            + "iframe {allowfullscreen;position:relative;top:0;left:0;width:100%;height:100%;}"
             + "pre {white-space: pre-wrap;} "
             + "blockquote {border-left: thick solid " + QUOTE_LEFT_COLOR + "; background-color:" + QUOTE_BACKGROUND_COLOR + "; margin: 0.5em 0 0.5em 0em; padding: 0.5em} "
             + "p {margin: 0.8em 0 0.8em 0} "
@@ -120,7 +121,7 @@ public class EntryView extends WebView implements Observer {
             + "ul li, ol li {margin: 0 0 0.8em 0; padding: 0} "
             + "div.button-section {padding: 0.4cm 0; margin: 0; text-align: center} "
             + ".button-section p {margin: 0.1cm 0 0.2cm 0}"
-            + ".button-section p.marginfix {margin: 0.5cm 0 0.5cm 0}"
+            + ".button-section p.marginfix {margin: 0.2cm 0 0.2cm 0}"
             + ".button-section input, .button-section a {font-family: sans-serif-light; font-size: 100%; color: #FFFFFF; background-color: " + BUTTON_COLOR + "; text-decoration: none; border: none; border-radius:0.2cm; padding: 0.3cm} "
             + "</style><meta name='viewport' content='width=device-width'/></head>"; }
 
@@ -250,9 +251,9 @@ public class EntryView extends WebView implements Observer {
                     .append("injectedJSObject.onClickEnclosure();").append(BUTTON_END);
         }
 
-        if (link.length() > 0) {
+        /*if (link.length() > 0) {
             content.append(LINK_BUTTON_START).append(link).append(LINK_BUTTON_MIDDLE).append(context.getString(R.string.see_link)).append(LINK_BUTTON_END);
-        }
+        }*/
 
         content.append(BUTTON_SECTION_END).append(BODY_END);
 
@@ -389,7 +390,7 @@ public class EntryView extends WebView implements Observer {
         int webViewHeight = getMeasuredHeight();
         if(getScrollY() + webViewHeight >= height){
             //EntryActivity activity = (EntryActivity) getActivity();
-            mActivity.setFullScreen(false, mActivity.GetIsActionBarHidden());
+            mActivity.setFullScreen(false, EntryActivity.GetIsActionBarHidden());
         }
         mActivity.mEntryFragment.UpdateProgress();
         mActivity.mEntryFragment.UpdateClock();
@@ -401,6 +402,7 @@ public class EntryView extends WebView implements Observer {
         if ( ( data != null ) && ( (Long)data == mEntryId ) )  {
             if (getScrollY() != 0)
                 mScrollY = getScrollY();
+            //mData =    HtmlUtils.replaceImageURLs(mData, mEntryId);
             loadDataWithBaseURL("", mData, TEXT_HTML, Constants.UTF8, null);
         //setScrollY( y );
         }
