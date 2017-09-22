@@ -286,7 +286,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         val tasks = App.db.taskDao().downloadTasks
         for (task in tasks) {
             try {
-                downloadImage(task.entryId, task.imageLinkToDl!!)
+                downloadImage(task.entryId, task.imageLinkToDl)
 
                 // If we are here, everything is OK
                 App.db.taskDao().deleteAll(task)

@@ -15,7 +15,8 @@ import java.util.*
 @Entity(tableName = "entries")
 open class Entry : Parcelable {
 
-    @PrimaryKey var id: String = ""
+    @PrimaryKey
+    var id: String = ""
     var feedId: Long = 0L
     var link: String? = null
     var fetchDate: Date = Date()

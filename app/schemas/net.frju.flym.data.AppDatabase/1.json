@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "3751ee039c8ed38150a015898e72bc88",
+    "identityHash": "b58465922c8ebe6103ee1acc7d253fff",
     "entities": [
       {
         "tableName": "feeds",
@@ -170,7 +170,7 @@
       },
       {
         "tableName": "tasks",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryId` TEXT NOT NULL, `imageLinkToDl` TEXT, `numberAttempt` INTEGER NOT NULL, PRIMARY KEY(`entryId`, `imageLinkToDl`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryId` TEXT NOT NULL, `imageLinkToDl` TEXT NOT NULL, `numberAttempt` INTEGER NOT NULL, PRIMARY KEY(`entryId`, `imageLinkToDl`))",
         "fields": [
           {
             "fieldPath": "entryId",
@@ -182,7 +182,7 @@
             "fieldPath": "imageLinkToDl",
             "columnName": "imageLinkToDl",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "numberAttempt",
@@ -204,7 +204,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"3751ee039c8ed38150a015898e72bc88\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b58465922c8ebe6103ee1acc7d253fff\")"
     ]
   }
 }

@@ -9,7 +9,7 @@ import paperparcel.PaperParcel
 @Entity(tableName = "tasks", primaryKeys = arrayOf("entryId", "imageLinkToDl"))
 data class Task(
         var entryId: String = "",
-        var imageLinkToDl: String? = null,
+        var imageLinkToDl: String = "", // TODO try again with null when room will authorize it
         var numberAttempt: Int = 0) : Parcelable {
 
     companion object {

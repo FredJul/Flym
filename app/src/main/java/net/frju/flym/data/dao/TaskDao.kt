@@ -13,13 +13,13 @@ interface TaskDao {
     @get:Query("SELECT * FROM tasks")
     val observeAll: LiveData<List<Task>>
 
-    @get:Query("SELECT * FROM tasks WHERE imageLinkToDl IS NULL")
+    @get:Query("SELECT * FROM tasks WHERE imageLinkToDl = ''")
     val mobilizeTasks: List<Task>
 
-    @Query("SELECT COUNT(*) FROM tasks WHERE imageLinkToDl IS NULL AND entryId IS :arg0")
+    @Query("SELECT COUNT(*) FROM tasks WHERE imageLinkToDl = '' AND entryId = :arg0")
     fun countMobilizeTasks(itemId: String): Int
 
-    @get:Query("SELECT * FROM tasks WHERE imageLinkToDl IS NOT NULL")
+    @get:Query("SELECT * FROM tasks WHERE imageLinkToDl != ''")
     val downloadTasks: List<Task>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
