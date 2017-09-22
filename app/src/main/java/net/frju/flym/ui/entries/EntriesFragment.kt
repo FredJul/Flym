@@ -118,7 +118,7 @@ class EntriesFragment : Fragment() {
             bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreads(listDisplayDate)
             bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavorites(listDisplayDate)
             else -> App.db.entryDao().observeAll(listDisplayDate)
-        }.create(0, 50)
+        }.create(0, 30)
 
         entriesLiveData?.observe(this, Observer<PagedList<EntryWithFeed>> { pagedList ->
             empty_view_refresh_button.visibility = when (bottom_navigation.selectedItemId) {
@@ -201,7 +201,11 @@ class EntriesFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        activity?.toolbar?.setTitle(R.string.fragment_people__title)
+        if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
+            activity?.toolbar?.setTitle(R.string.all_entries)
+        } else {
+            activity?.toolbar?.title = feed?.title
+        }
         activity?.toolbar?.inflateMenu(R.menu.fragment_entries)
     }
 
