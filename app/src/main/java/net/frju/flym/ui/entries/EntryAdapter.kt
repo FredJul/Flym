@@ -79,14 +79,16 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
     }
 
     override fun onBindViewHolder(holder: EntryAdapter.ViewHolder, position: Int) {
-        val user = getItem(position)
-        if (user != null) {
-            holder.bind(user, globalClickListener, favoriteClickListener)
+        val entry = getItem(position)
+        if (entry != null) {
+            holder.bind(entry, globalClickListener, favoriteClickListener)
         } else {
             // Null defines a placeholder item - PagedListAdapter will automatically invalidate
             // this row when the actual object is loaded from the database
             holder.clear()
         }
+
+        holder.itemView.isSelected = (selectedEntryId == entry?.id)
     }
 
     var selectedEntryId: String? = null
