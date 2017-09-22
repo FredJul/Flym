@@ -28,31 +28,66 @@ class EntryDetailsFragment : Fragment() {
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
-    private var entry: EntryWithFeed? = null
+    private lateinit var entry: EntryWithFeed
+    private var allEntryIds = emptyList<String>()
+        set(value) {
+            field = value
+
+            val currentIdx = allEntryIds.indexOf(entry.id)
+
+            previousId = if (currentIdx == 0) {
+                null
+            } else {
+                allEntryIds[currentIdx - 1]
+            }
+
+            nextId = if (currentIdx >= allEntryIds.size - 1) {
+                null
+            } else {
+                allEntryIds[currentIdx + 1]
+            }
+        }
+    private var previousId: String? = null
+    private var nextId: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_entry_details, container, false)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         entry = arguments.getParcelable(ARG_ENTRY)
+        allEntryIds = arguments.getStringArrayList(ARG_ALL_ENTRIES_IDS)
 
         setupToolbar()
 
         swipe_view.swipeGestureListener = object : SwipeGestureListener {
             override fun onSwipedLeft(@NotNull swipeActionView: SwipeActionView): Boolean {
-                navigator.goToNextEntry()
+                nextId?.let { nextId ->
+                    doAsync {
+                        App.db.entryDao().findByIdWithFeed(nextId)?.let { newEntry ->
+                            uiThread {
+                                setEntry(newEntry, allEntryIds)
+                                navigator.setSelectedEntryId(newEntry.id)
+                            }
+                        }
+                    }
+                }
                 return true
             }
 
             override fun onSwipedRight(@NotNull swipeActionView: SwipeActionView): Boolean {
-                navigator.goToPreviousEntry()
+                previousId?.let { previousId ->
+                    doAsync {
+                        App.db.entryDao().findByIdWithFeed(previousId)?.let { newEntry ->
+                            uiThread {
+                                setEntry(newEntry, allEntryIds)
+                                navigator.setSelectedEntryId(newEntry.id)
+                            }
+                        }
+                    }
+                }
                 return true
             }
         }
@@ -61,11 +96,9 @@ class EntryDetailsFragment : Fragment() {
     }
 
     private fun updateUI() {
-        entry?.let { entry ->
-            doAsync {
-                entry.read = true
-                App.db.entryDao().insertAll(entry)
-            }
+        doAsync {
+            entry.read = true
+            App.db.entryDao().insertAll(entry)
         }
 
         entry_view.setEntry(entry)
@@ -95,7 +128,7 @@ class EntryDetailsFragment : Fragment() {
                                 rawHTML = body.string()
                             }
                         }
-                        val article = ArticleExtractor.with(entry!!.link, rawHTML)
+                        val article = ArticleExtractor.with(entry.link, rawHTML)
                                 .extractContent()  // If you only need metadata, you can skip `.extractorContent()`
                                 .article()
                         val html = article.document.html()
@@ -108,9 +141,11 @@ class EntryDetailsFragment : Fragment() {
         }
     }
 
-    fun setEntry(entry: EntryWithFeed) {
+    fun setEntry(entry: EntryWithFeed, allEntryIds: List<String>) {
         this.entry = entry
+        this.allEntryIds = allEntryIds
         arguments.putParcelable(ARG_ENTRY, entry)
+        arguments.putStringArrayList(ARG_ALL_ENTRIES_IDS, ArrayList(allEntryIds))
 
         updateUI()
     }
@@ -118,10 +153,11 @@ class EntryDetailsFragment : Fragment() {
     companion object {
 
         private val ARG_ENTRY = "ARG_ENTRY"
+        private val ARG_ALL_ENTRIES_IDS = "ARG_ALL_ENTRIES_IDS"
 
-        fun newInstance(entry: EntryWithFeed): EntryDetailsFragment {
+        fun newInstance(entry: EntryWithFeed, allEntryIds: List<String>): EntryDetailsFragment {
             val fragment = EntryDetailsFragment()
-            fragment.arguments = bundleOf(ARG_ENTRY to entry)
+            fragment.arguments = bundleOf(ARG_ENTRY to entry, ARG_ALL_ENTRIES_IDS to allEntryIds)
             return fragment
         }
     }

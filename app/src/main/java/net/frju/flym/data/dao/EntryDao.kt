@@ -82,6 +82,9 @@ interface EntryDao {
     @Query("SELECT * FROM entries WHERE id IS :arg0 LIMIT 1")
     fun findById(id: String): Entry?
 
+    @Query("SELECT * FROM entries INNER JOIN feeds ON entries.feedId = feeds.feedId WHERE id IS :arg0 LIMIT 1")
+    fun findByIdWithFeed(id: String): EntryWithFeed?
+
     @Query("SELECT id FROM entries WHERE feedId IS (:arg0)")
     fun idsForFeed(feedId: Long): List<String>
 

@@ -243,9 +243,9 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
         supportFragmentManager.beginTransaction().replace(R.id.frame_master, master, TAG_MASTER).commit()
     }
 
-    override fun goToEntryDetails(entry: EntryWithFeed) {
+    override fun goToEntryDetails(entry: EntryWithFeed, allEntryIds: List<String>) {
         containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
-        val fragment = EntryDetailsFragment.newInstance(entry)
+        val fragment = EntryDetailsFragment.newInstance(entry, allEntryIds)
         supportFragmentManager
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -253,29 +253,12 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
                 .commit()
 
         val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
-        listFragment.setSelectedEntry(entry)
+        listFragment.setSelectedEntryId(entry.id)
     }
 
-    override fun goToPreviousEntry() {
+    override fun setSelectedEntryId(selectedEntryId: String) {
         val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
-        val detailFragment = supportFragmentManager.findFragmentById(R.id.frame_details) as EntryDetailsFragment
-
-        val previousEntry = listFragment.getPreviousEntry()
-        if (previousEntry != null) {
-            listFragment.setSelectedEntry(previousEntry)
-            detailFragment.setEntry(previousEntry)
-        }
-    }
-
-    override fun goToNextEntry() {
-        val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
-        val detailFragment = supportFragmentManager.findFragmentById(R.id.frame_details) as EntryDetailsFragment
-
-        val nextEntry = listFragment.getNextEntry()
-        if (nextEntry != null) {
-            listFragment.setSelectedEntry(nextEntry)
-            detailFragment.setEntry(nextEntry)
-        }
+        listFragment.setSelectedEntryId(selectedEntryId)
     }
 
     override fun goToSettings() {

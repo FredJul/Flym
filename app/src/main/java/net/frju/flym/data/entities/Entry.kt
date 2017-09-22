@@ -59,7 +59,7 @@ open class Entry : Parcelable {
 fun SyndEntry.toDbFormat(feed: Feed): Entry {
     val itemId = (feed.id.toString() + "_" + (uri ?: link ?: title ?: UUID.randomUUID().toString())).sha1()
 
-    val item = App.db.entryDao().findById(itemId) ?: Entry()
+    val item = App.db.entryDao().findById(itemId) ?: Entry() // TODO possible to not do a db request?
     item.id = itemId
     item.feedId = feed.id
     item.title = title

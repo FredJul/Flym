@@ -34,7 +34,7 @@ class EntriesFragment : Fragment() {
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
     private val adapter = EntryAdapter({ entry ->
-        navigator.goToEntryDetails(entry)
+        navigator.goToEntryDetails(entry, entryIds!!)
     }, { entry ->
         entry.favorite = !entry.favorite
 
@@ -226,16 +226,8 @@ class EntriesFragment : Fragment() {
         activity?.toolbar?.inflateMenu(R.menu.fragment_entries)
     }
 
-    fun setSelectedEntry(selectedEntry: EntryWithFeed) {
-        adapter.selectedEntryId = selectedEntry.id
-    }
-
-    fun getPreviousEntry(): EntryWithFeed? {
-        return adapter.previousEntry
-    }
-
-    fun getNextEntry(): EntryWithFeed? {
-        return adapter.nextEntry
+    fun setSelectedEntryId(selectedEntryId: String) {
+        adapter.selectedEntryId = selectedEntryId
     }
 
     private fun refreshSwipeProgress() {

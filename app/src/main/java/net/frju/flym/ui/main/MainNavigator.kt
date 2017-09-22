@@ -11,14 +11,12 @@ interface MainNavigator {
 
     fun goToEntriesList(feed: Feed?)
 
-    fun goToEntryDetails(entry: EntryWithFeed)
+    fun goToEntryDetails(entry: EntryWithFeed, allEntryIds: List<String>)
 
     fun goToSettings()
 
     fun goToFeedback()
 
-    fun goToPreviousEntry()
-
-    fun goToNextEntry()
+    fun setSelectedEntryId(selectedEntryId: String)
 
 }
