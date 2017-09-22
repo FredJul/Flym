@@ -1,15 +1,13 @@
 package net.frju.flym.ui.main
 
-import android.arch.lifecycle.LifecycleActivity
 import android.arch.lifecycle.Observer
 import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.NavigationView
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
-import android.view.MenuItem
 import android.widget.Toast
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
 import ir.mirrajabi.searchdialog.core.BaseFilter
@@ -34,7 +32,7 @@ import java.net.URLEncoder
 import java.util.*
 
 
-class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelectedListener, MainNavigator {
+class MainActivity : AppCompatActivity(), MainNavigator {
 
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = FeedAdapter(feedGroups)
@@ -183,25 +181,6 @@ class MainActivity : LifecycleActivity(), NavigationView.OnNavigationItemSelecte
         } else if (drawer != null && !drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.openDrawer(GravityCompat.START)
         }
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_main_nav__settings -> {
-                closeDrawer()
-
-                goToSettings()
-            }
-
-            R.id.menu_main_nav__feedback -> {
-                closeDrawer()
-
-                goToFeedback()
-            }
-
-            else -> return false
-        }
-        return true
     }
 
     fun goBack(): Boolean {

@@ -83,6 +83,7 @@ dependencies {
     implementation 'com.github.Tunous:SwipeActionView:+'
     implementation 'com.bignerdranch.android:expandablerecyclerview:+'
     implementation 'com.github.mirrajabi:search-dialog:+'
+    implementation 'com.github.jrvansuita:MaterialAbout:+'
 
     implementation 'com.github.chimbori:crux:master'
 }

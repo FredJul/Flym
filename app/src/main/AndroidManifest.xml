@@ -26,6 +26,9 @@
             </intent-filter>
         </activity>
 
+
+        <activity android:name="net.frju.flym.ui.about.AboutActivity" />
+
         <service
             android:name="net.frju.flym.service.AutoRefreshService"
             android:permission="android.permission.BIND_JOB_SERVICE"

@@ -132,6 +132,7 @@
     <orderEntry type="library" name="paperparcel-2.0.4" level="project" />
     <orderEntry type="library" name="commons-lang3-3.5" level="project" />
     <orderEntry type="library" name="anko-support-v4-0.10.1" level="project" />
+    <orderEntry type="library" name="MaterialAbout-0.1.8" level="project" />
     <orderEntry type="library" name="transition-26.1.0" level="project" />
     <orderEntry type="library" name="rome-opml-1.7.4" level="project" />
     <orderEntry type="library" name="support-compat-26.1.0" level="project" />
@@ -144,6 +145,7 @@
     <orderEntry type="library" name="support-fragment-26.1.0" level="project" />
     <orderEntry type="library" name="anko-commons-0.10.1" level="project" />
     <orderEntry type="library" name="okhttp-3.9.0" level="project" />
+    <orderEntry type="library" name="IconHandler-v2.0.0" level="project" />
     <orderEntry type="library" name="common-1.0.0" level="project" />
     <orderEntry type="library" name="1_common-1.0.0" level="project" />
     <orderEntry type="library" name="design-26.1.0" level="project" />

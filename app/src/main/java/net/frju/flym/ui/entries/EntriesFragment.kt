@@ -20,12 +20,14 @@ import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.service.FetcherService
+import net.frju.flym.ui.about.AboutActivity
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.indefiniteSnackbar
 import net.frju.parentalcontrol.utils.PrefUtils
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk21.coroutines.onClick
+import org.jetbrains.anko.support.v4.startActivity
 import java.util.*
 
 
@@ -218,12 +220,23 @@ class EntriesFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
-            activity?.toolbar?.setTitle(R.string.all_entries)
-        } else {
-            activity?.toolbar?.title = feed?.title
+        activity?.toolbar?.apply {
+            if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
+                setTitle(R.string.all_entries)
+            } else {
+                title = feed?.title
+            }
+            inflateMenu(R.menu.fragment_entries)
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_entries__about -> {
+                        startActivity<AboutActivity>()
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
-        activity?.toolbar?.inflateMenu(R.menu.fragment_entries)
     }
 
     fun setSelectedEntryId(selectedEntryId: String) {
