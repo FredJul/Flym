@@ -1,52 +1,45 @@
 package net.frju.flym.ui.entries
 
-import android.arch.lifecycle.LifecycleFragment
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Observer
+import android.arch.paging.PagedList
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import com.amulyakhare.textdrawable.TextDrawable
-import com.amulyakhare.textdrawable.util.ColorGenerator
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_entries.*
 import kotlinx.android.synthetic.main.view_main_containers.*
 import net.fred.feedex.R
 import net.frju.flym.App
-import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.indefiniteSnackbar
-import net.frju.flym.utils.loadFavicon
 import net.frju.parentalcontrol.utils.PrefUtils
-import net.idik.lib.slimadapter.viewinjector.IViewInjector
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk21.coroutines.onClick
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
-class EntriesFragment : LifecycleFragment() {
+class EntriesFragment : Fragment() {
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
-    private var adapter: EntryAdapter? = null
+    private val adapter = EntryAdapter()
     private var feed: Feed? = null
-    private var unfilteredEntries: List<EntryWithFeed>? = null
     private var listDisplayDate = Date().time
-    private val disposables = CompositeDisposable()
     private var newEntriesSnackbar: Snackbar? = null
+    private var entriesLiveData: LiveData<PagedList<EntryWithFeed>>? = null
+    private var entryIdsLiveData: LiveData<List<String>>? = null
+    private var entryIds: List<String>? = null
+    private var newCountLiveData: LiveData<Long>? = null
 
     private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (PrefUtils.IS_REFRESHING == key) {
@@ -70,28 +63,22 @@ class EntriesFragment : LifecycleFragment() {
 
         bottom_navigation.setOnNavigationItemSelectedListener {
             recycler_view.post {
-                updateUI()
+                initDataObservers()
                 recycler_view.scrollToPosition(0)
             }
             true
         }
 
         read_all_fab.onClick {
-            unfilteredEntries?.let {
-                for (entry in it) {
-                    entry.read = true
-                }
-
-                updateUI()
-
-                doAsync {
-                    App.db.entryDao().insertAll(*it.toTypedArray())
+            doAsync {
+                entryIds?.withIndex()?.groupBy { it.index / 300 }?.map { it.value.map { it.value } }?.forEach {
+                    App.db.entryDao().markAsRead(it)
                 }
             }
         }
 
         if (savedInstanceState != null) {
-            adapter?.selectedEntryId = savedInstanceState.getString(STATE_SELECTED_ENTRY_ID)
+            adapter.selectedEntryId = savedInstanceState.getString(STATE_SELECTED_ENTRY_ID)
             listDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE)
         }
 
@@ -99,64 +86,68 @@ class EntriesFragment : LifecycleFragment() {
     }
 
     private fun initDataObservers() {
-        disposables.clear()
+        entryIdsLiveData?.removeObservers(this)
+        entryIdsLiveData = when {
+            feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByGroup(feed!!.id, listDisplayDate)
+            feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByGroup(feed!!.id, listDisplayDate)
+            feed?.isGroup == true -> App.db.entryDao().observeIdsByGroup(feed!!.id, listDisplayDate)
 
-        val entriesFlow = when {
-            feed?.isGroup == true -> App.db.entryDao().observeByGroup(feed!!.id, listDisplayDate)
-            feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeByFeed(feed!!.id, listDisplayDate)
-            else -> App.db.entryDao().observeAll(listDisplayDate)
+            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByFeed(feed!!.id, listDisplayDate)
+            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByFeed(feed!!.id, listDisplayDate)
+            feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeIdsByFeed(feed!!.id, listDisplayDate)
+
+            bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreadIds(listDisplayDate)
+            bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavoriteIds(listDisplayDate)
+            else -> App.db.entryDao().observeAllIds(listDisplayDate)
         }
 
-        disposables.add(
-                entriesFlow.subscribeOn(Schedulers.io())
-                        .debounce(100, TimeUnit.MILLISECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe {
-                            unfilteredEntries = it
-                            updateUI()
-                        })
+        entryIdsLiveData?.observe(this, Observer<List<String>> { list ->
+            entryIds = list
+        })
 
-        val newCountFlow = when {
+        entriesLiveData?.removeObservers(this)
+        entriesLiveData = when {
+            feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByGroup(feed!!.id, listDisplayDate)
+            feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByGroup(feed!!.id, listDisplayDate)
+            feed?.isGroup == true -> App.db.entryDao().observeByGroup(feed!!.id, listDisplayDate)
+
+            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByFeed(feed!!.id, listDisplayDate)
+            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByFeed(feed!!.id, listDisplayDate)
+            feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeByFeed(feed!!.id, listDisplayDate)
+
+            bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreads(listDisplayDate)
+            bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavorites(listDisplayDate)
+            else -> App.db.entryDao().observeAll(listDisplayDate)
+        }.create(0, 50)
+
+        entriesLiveData?.observe(this, Observer<PagedList<EntryWithFeed>> { pagedList ->
+            empty_view_refresh_button.visibility = when (bottom_navigation.selectedItemId) {
+                R.id.favorites -> View.GONE
+                else -> View.VISIBLE
+            }
+
+            adapter.setList(pagedList)
+        })
+
+        newCountLiveData?.removeObservers(this)
+        newCountLiveData = when {
             feed?.isGroup == true -> App.db.entryDao().observeNewEntriesCountByGroup(feed!!.id, listDisplayDate)
             feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeNewEntriesCountByFeed(feed!!.id, listDisplayDate)
             else -> App.db.entryDao().observeNewEntriesCount(listDisplayDate)
         }
 
-        disposables.add(
-                newCountFlow.subscribeOn(Schedulers.io())
-                        .debounce(100, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    if (it > 0) {
-                        if (newEntriesSnackbar?.isShown != true) {
-                            newEntriesSnackbar = coordinator.indefiniteSnackbar("$it new entries", "refresh") {
-                                listDisplayDate = Date().time
-                                initDataObservers()
-                            }
-                        } else {
-                            newEntriesSnackbar?.setText("$it new entries")
-                        }
+        newCountLiveData?.observe(this, Observer<Long> { count ->
+            if (count != null && count > 0L) {
+                if (newEntriesSnackbar?.isShown != true) {
+                    newEntriesSnackbar = coordinator.indefiniteSnackbar("$count new entries", "refresh") {
+                        listDisplayDate = Date().time
+                        initDataObservers()
                     }
-                })
-    }
-
-    override fun onDestroy() {
-        disposables.clear()
-        super.onDestroy()
-    }
-
-    private fun updateUI() {
-        empty_view_refresh_button.visibility = when (bottom_navigation.selectedItemId) {
-            R.id.favorites -> View.GONE
-            else -> View.VISIBLE
-        }
-
-        val entries = when (bottom_navigation.selectedItemId) {
-            R.id.unreads -> unfilteredEntries?.filter { !it.read }
-            R.id.favorites -> unfilteredEntries?.filter { it.favorite }
-            else -> unfilteredEntries
-        }
-        adapter?.updateData(entries)
+                } else {
+                    newEntriesSnackbar?.setText("$count new entries")
+                }
+            }
+        })
     }
 
     override fun onStart() {
@@ -171,7 +162,7 @@ class EntriesFragment : LifecycleFragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(STATE_SELECTED_ENTRY_ID, adapter?.selectedEntryId)
+        outState.putString(STATE_SELECTED_ENTRY_ID, adapter.selectedEntryId)
         outState.putLong(STATE_LIST_DISPLAY_DATE, listDisplayDate)
 
         super.onSaveInstanceState(outState)
@@ -182,64 +173,7 @@ class EntriesFragment : LifecycleFragment() {
 
         val layoutManager = LinearLayoutManager(activity)
         recycler_view.layoutManager = layoutManager
-        adapter = EntryAdapter().apply {
-            register<EntryWithFeed>(R.layout.view_entry) { entry, injector ->
-                injector
-                        .clicked(R.id.entry_container) {
-                            navigator.goToEntryDetails(entry)
-                        }
-                        .clicked(R.id.favorite_icon) { view ->
-                            entry.favorite = !entry.favorite
-
-                            (view as? ImageView)?.let {
-                                if (entry.favorite) {
-                                    it.setImageResource(R.drawable.ic_star_white_24dp)
-                                } else {
-                                    it.setImageResource(R.drawable.ic_star_border_white_24dp)
-                                }
-                            }
-
-                            doAsync {
-                                App.db.entryDao().insertAll(entry)
-                            }
-                        }
-                        .with(R.id.title, IViewInjector.Action<TextView> { view ->
-                            view.isEnabled = !entry.read
-                            view.text = entry.title
-                        })
-                        .with(R.id.feed_name, IViewInjector.Action<TextView> { view ->
-                            view.isEnabled = !entry.read
-                            view.text = entry.feedTitle ?: ""
-                        })
-                        .with(R.id.main_icon, IViewInjector.Action<ImageView> { view ->
-                            val feedName = entry.feedTitle ?: ""
-
-                            val mainImgUrl = if (TextUtils.isEmpty(entry.imageLink)) null else FetcherService.getDownloadedOrDistantImageUrl(entry.id, entry.imageLink!!)
-
-                            val color = ColorGenerator.DEFAULT.getColor(entry.feedId) // The color is specific to the feedId (which shouldn't change)
-                            val lettersForName = if (feedName.length < 2) feedName.toUpperCase() else feedName.substring(0, 2).toUpperCase()
-                            val letterDrawable = TextDrawable.builder().buildRect(lettersForName, color)
-                            if (mainImgUrl != null) {
-                                GlideApp.with(view.context).load(mainImgUrl).centerCrop().placeholder(letterDrawable).error(letterDrawable).into(view)
-                            } else {
-                                GlideApp.with(view.context).clear(view)
-                                view.setImageDrawable(letterDrawable)
-                            }
-                        })
-                        .with(R.id.feed_icon, IViewInjector.Action<ImageView> { view ->
-                            view.loadFavicon(entry.feedLink)
-                        })
-                        .with(R.id.favorite_icon, IViewInjector.Action<ImageView> { view ->
-                            if (entry.favorite) {
-                                view.setImageResource(R.drawable.ic_star_white_24dp)
-                            } else {
-                                view.setImageResource(R.drawable.ic_star_border_white_24dp)
-                            }
-                        })
-            }
-
-            attachTo(recycler_view)
-        }
+        recycler_view.adapter = adapter
 
         refresh_layout.setOnRefreshListener {
             startRefresh()
@@ -272,15 +206,15 @@ class EntriesFragment : LifecycleFragment() {
     }
 
     fun setSelectedEntry(selectedEntry: EntryWithFeed) {
-        adapter?.selectedEntryId = selectedEntry.id
+        adapter.selectedEntryId = selectedEntry.id
     }
 
     fun getPreviousEntry(): EntryWithFeed? {
-        return adapter?.previousEntry
+        return adapter.previousEntry
     }
 
     fun getNextEntry(): EntryWithFeed? {
-        return adapter?.nextEntry
+        return adapter.nextEntry
     }
 
     private fun refreshSwipeProgress() {

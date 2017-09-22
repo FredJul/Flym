@@ -39,6 +39,21 @@ class EmptyRecyclerView @JvmOverloads constructor(context: Context, attrs: Attri
             super.onItemRangeRemoved(positionStart, itemCount)
             checkIfEmpty()
         }
+
+        override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+            super.onItemRangeMoved(fromPosition, toPosition, itemCount)
+            checkIfEmpty()
+        }
+
+        override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
+            super.onItemRangeChanged(positionStart, itemCount)
+            checkIfEmpty()
+        }
+
+        override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
+            super.onItemRangeChanged(positionStart, itemCount, payload)
+            checkIfEmpty()
+        }
     }
 
     var emptyView: View? = null

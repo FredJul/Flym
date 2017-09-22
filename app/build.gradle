@@ -14,7 +14,6 @@ android {
         applicationId "net.frju.flym"
         minSdkVersion 21
         targetSdkVersion 26
-        multiDexEnabled true // TODO check if still useful
         versionCode 1
         versionName "1.0"
     }
@@ -53,8 +52,6 @@ dependencies {
     implementation "android.arch.paging:runtime:+"
     implementation "android.arch.persistence.room:runtime:+"
     kapt "android.arch.persistence.room:compiler:+"
-    implementation "android.arch.persistence.room:rxjava2:+"
-    implementation 'io.reactivex.rxjava2:rxandroid:+'
 
     // Support dependencies
     implementation 'com.android.support:appcompat-v7:+'
@@ -85,7 +82,6 @@ dependencies {
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:+'
     implementation 'com.github.Tunous:SwipeActionView:+'
     implementation 'com.bignerdranch.android:expandablerecyclerview:+'
-    implementation 'net.idik:slimadapter:+'
     implementation 'com.github.mirrajabi:search-dialog:+'
 
     implementation 'com.github.chimbori:crux:master'
