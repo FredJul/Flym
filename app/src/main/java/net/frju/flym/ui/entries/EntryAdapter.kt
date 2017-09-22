@@ -17,7 +17,7 @@ import net.frju.flym.service.FetcherService
 import net.frju.flym.utils.loadFavicon
 import org.jetbrains.anko.sdk21.coroutines.onClick
 
-class EntryAdapter : PagedListAdapter<EntryWithFeed, EntryAdapter.ViewHolder>(DIFF_CALLBACK) {
+class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, private val favoriteClickListener: (EntryWithFeed) -> Unit) : PagedListAdapter<EntryWithFeed, EntryAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
 
@@ -81,7 +81,7 @@ class EntryAdapter : PagedListAdapter<EntryWithFeed, EntryAdapter.ViewHolder>(DI
     override fun onBindViewHolder(holder: EntryAdapter.ViewHolder, position: Int) {
         val user = getItem(position)
         if (user != null) {
-            holder.bind(user, {}, {})
+            holder.bind(user, globalClickListener, favoriteClickListener)
         } else {
             // Null defines a placeholder item - PagedListAdapter will automatically invalidate
             // this row when the actual object is loaded from the database

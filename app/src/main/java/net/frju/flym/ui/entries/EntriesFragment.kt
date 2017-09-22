@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import kotlinx.android.synthetic.main.fragment_entries.*
 import kotlinx.android.synthetic.main.view_main_containers.*
 import net.fred.feedex.R
@@ -32,7 +33,23 @@ class EntriesFragment : Fragment() {
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
-    private val adapter = EntryAdapter()
+    private val adapter = EntryAdapter({ entry ->
+        navigator.goToEntryDetails(entry)
+    }, { entry ->
+        entry.favorite = !entry.favorite
+
+        (view as? ImageView)?.let {
+            if (entry.favorite) {
+                it.setImageResource(R.drawable.ic_star_white_24dp)
+            } else {
+                it.setImageResource(R.drawable.ic_star_border_white_24dp)
+            }
+        }
+
+        doAsync {
+            App.db.entryDao().insertAll(entry)
+        }
+    })
     private var feed: Feed? = null
     private var listDisplayDate = Date().time
     private var newEntriesSnackbar: Snackbar? = null
