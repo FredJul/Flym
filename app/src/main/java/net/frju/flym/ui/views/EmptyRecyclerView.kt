@@ -81,6 +81,7 @@ class EmptyRecyclerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun checkIfEmpty() {
-        emptyView?.visibility = if (adapter?.itemCount ?: 0 > 0) View.GONE else View.VISIBLE
+        // TODO This seems to be a bug due to the paging lib
+        emptyView?.post { emptyView?.visibility = if (adapter?.itemCount ?: 0 > 0) View.GONE else View.VISIBLE }
     }
 }
