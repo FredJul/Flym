@@ -38,7 +38,7 @@
             android:drawableTop="@drawable/ic_empty_gray_100dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="No items"
+            android:text="No items\nPlease pull down to refresh"
             android:textColor="@android:color/darker_gray" />
 
         <android.support.design.widget.FloatingActionButton
