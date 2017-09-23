@@ -9,8 +9,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.LinkedHashMap;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -125,8 +125,13 @@ public class StatusText implements Observer {
         }
         public void Clear() {
             synchronized ( mList ) {
-                if (mList.isEmpty())
-                    mBytesRecievedLast = 0;
+                mList.clear();
+                mProgressText = "";
+                mDBText = "";
+                mErrorText = "";
+                mBytesRecievedLast = 0;
+                //if (mList.isEmpty())
+                //    mBytesRecievedLast = 0;
             }
         }
         public int Start( final String text ) {
