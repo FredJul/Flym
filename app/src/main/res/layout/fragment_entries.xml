@@ -31,31 +31,15 @@
                 android:scrollbars="vertical" />
         </android.support.v4.widget.SwipeRefreshLayout>
 
-        <LinearLayout
+        <TextView
             android:id="@+id/empty_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_empty_gray_100dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_empty_gray_100dp"
-                android:gravity="center"
-                android:text="No items"
-                android:textColor="@android:color/darker_gray" />
-
-            <Button
-                android:id="@+id/empty_view_refresh_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:backgroundTint="@color/colorPrimary"
-                android:text="Refresh" />
-
-        </LinearLayout>
+            android:text="No items"
+            android:textColor="@android:color/darker_gray" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/read_all_fab"

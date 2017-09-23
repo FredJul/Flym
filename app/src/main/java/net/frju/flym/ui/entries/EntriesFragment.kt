@@ -140,11 +140,6 @@ class EntriesFragment : Fragment() {
         }.create(0, 30)
 
         entriesLiveData?.observe(this, Observer<PagedList<EntryWithFeed>> { pagedList ->
-            empty_view_refresh_button.visibility = when (bottom_navigation.selectedItemId) {
-                R.id.favorites -> View.GONE
-                else -> View.VISIBLE
-            }
-
             adapter.setList(pagedList)
         })
 
@@ -199,10 +194,6 @@ class EntriesFragment : Fragment() {
         }
 
         recycler_view.emptyView = empty_view
-
-        empty_view_refresh_button.onClick {
-            startRefresh()
-        }
     }
 
     private fun startRefresh() {
