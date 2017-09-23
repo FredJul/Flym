@@ -226,6 +226,8 @@ class EntriesFragment : Fragment() {
             } else {
                 title = feed?.title
             }
+
+            menu.clear()
             inflateMenu(R.menu.fragment_entries)
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {

@@ -105,35 +105,38 @@ class EntryDetailsFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        toolbar.inflateMenu(R.menu.fragment_entry_details)
+        toolbar.apply {
+            menu.clear()
+            inflateMenu(R.menu.fragment_entry_details)
 
-        if (!activity.containers_layout.hasTwoColumns()) {
-            toolbar.setNavigationIcon(R.drawable.ic_back_24dp)
-            toolbar.setNavigationOnClickListener { activity.onBackPressed() }
-        }
+            if (!activity.containers_layout.hasTwoColumns()) {
+                setNavigationIcon(R.drawable.ic_back_24dp)
+                setNavigationOnClickListener { activity.onBackPressed() }
+            }
 
-        toolbar.onMenuItemClick { item ->
-            when (item?.itemId) {
-                R.id.menu_person_details__fulltext -> {
-                    doAsync {
-                        var rawHTML = ""
-                        val request = Request.Builder()
-                                .url("http://www.lepoint.fr/economie/apres-le-fmi-l-ocde-apporte-a-son-tour-son-soutien-aux-reformes-de-macron-14-09-2017-2156904_28.php")
-                                .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
-                                .addHeader("accept", "*/*")
-                                .build()
+            onMenuItemClick { item ->
+                when (item?.itemId) {
+                    R.id.menu_person_details__fulltext -> {
+                        doAsync {
+                            var rawHTML = ""
+                            val request = Request.Builder()
+                                    .url("http://www.lepoint.fr/economie/apres-le-fmi-l-ocde-apporte-a-son-tour-son-soutien-aux-reformes-de-macron-14-09-2017-2156904_28.php")
+                                    .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
+                                    .addHeader("accept", "*/*")
+                                    .build()
 
-                        FetcherService.HTTP_CLIENT.newCall(request).execute().use {
-                            it.body()?.let { body ->
-                                rawHTML = body.string()
+                            FetcherService.HTTP_CLIENT.newCall(request).execute().use {
+                                it.body()?.let { body ->
+                                    rawHTML = body.string()
+                                }
                             }
-                        }
-                        val article = ArticleExtractor.with(entry.link, rawHTML)
-                                .extractContent()  // If you only need metadata, you can skip `.extractorContent()`
-                                .article()
-                        val html = article.document.html()
-                        uiThread {
-                            entry_view.loadDataWithBaseURL("", html, "text/html", UTF8, null)
+                            val article = ArticleExtractor.with(entry.link, rawHTML)
+                                    .extractContent()  // If you only need metadata, you can skip `.extractorContent()`
+                                    .article()
+                            val html = article.document.html()
+                            uiThread {
+                                entry_view.loadDataWithBaseURL("", html, "text/html", UTF8, null)
+                            }
                         }
                     }
                 }
