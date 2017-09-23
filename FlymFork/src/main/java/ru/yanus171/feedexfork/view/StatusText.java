@@ -104,6 +104,8 @@ public class StatusText implements Observer {
                         }
                         //if ( mList.size() > cRowcount )
                         //s = "... " + s;
+                        if ( !mErrorText.isEmpty() )
+                            s += " " + mErrorText;
                         if ( !mProgressText.isEmpty() )
                             s += " " + mProgressText;
                         if ( !mList.isEmpty() && !mDBText.isEmpty() )
@@ -157,6 +159,12 @@ public class StatusText implements Observer {
         public void ChangeProgress(String text) {
             synchronized ( mList ) {
                 mProgressText = text;
+            }
+            UpdateText();
+        }
+        public void SetError( String text ) {
+            synchronized ( mList ) {
+                mErrorText = text;
             }
             UpdateText();
         }

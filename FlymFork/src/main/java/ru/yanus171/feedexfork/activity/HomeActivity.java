@@ -42,6 +42,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -86,6 +87,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     private int mCurrentDrawerPos;
     private Handler mHandler = null;
     public static Boolean mFeedSetupChanged = false;
+    private int mFirstVisibleItem = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +129,19 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     return true;
                 }
                 return false;
+            }
+        });
+
+        mDrawerList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if ( scrollState == SCROLL_STATE_IDLE )
+                    mFirstVisibleItem = mDrawerList.getFirstVisiblePosition();
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
             }
         });
 
@@ -176,14 +191,12 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         mHandler = new Handler();
-        FetcherService.getObservable().setHandler(mHandler);
-
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        FetcherService.getStatusText().setHandler(mHandler);
     }
 
     @Override
     public void onPause() {
-        synchronized ( EntriesCursorAdapter.mMarkAsReadList ) {
+        synchronized (EntriesCursorAdapter.mMarkAsReadList) {
             EntriesCursorAdapter.mMarkAsReadList.clear();//SetIsReadMakredList();
         }
         super.onPause();
@@ -219,12 +232,12 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         // We reset the current drawer position
         // selectDrawerItem(0);
 
-        if ( intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEND) && intent.hasExtra(Intent.EXTRA_TEXT) ) {
+        if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEND) && intent.hasExtra(Intent.EXTRA_TEXT)) {
             String text = intent.getStringExtra(Intent.EXTRA_TEXT);
-            Pattern p = Pattern.compile( "(?<![\\>https?://|href=\"'])(?<http>(https?:[/][/]|www.)([a-z]|[-_%]|[A-Z]|[0-9]|[/.]|[~])*)" );
-            Matcher m = p.matcher( text );
-            if ( m.find() )
-                OpenExternalLink( text.substring(m.start(), m.end()), text.substring( 0, m.start() ) );
+            Pattern p = Pattern.compile("(?<![\\>https?://|href=\"'])(?<http>(https?:[/][/]|www.)([a-z]|[-_%]|[A-Z]|[0-9]|[/.]|[~])*)");
+            Matcher m = p.matcher(text);
+            if (m.find())
+                OpenExternalLink(text.substring(m.start(), m.end()), text.substring(0, m.start()));
 
         } else if (intent.getScheme() != null && intent.getScheme().startsWith("http"))
             OpenExternalLink(intent.getDataString(), intent.getDataString());
@@ -235,17 +248,17 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         new Thread() {
             @Override
             public void run() {
-                int status = FetcherService.getObservable().Start( getString(R.string.loadingLink) );
+                int status = FetcherService.getStatusText().Start(getString(R.string.loadingLink));
 
                 Uri entryUri;
 
-                Cursor cursor = getContentResolver().query( EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(GetExtrenalLinkFeedID()),
-                                            new String[] { EntryColumns._ID },
-                                            EntryColumns.LINK + "='" + url +"'",
-                                            null,
-                                            null);
-                if ( cursor.moveToFirst() ) {
-                    entryUri = EntryColumns.CONTENT_URI( cursor.getLong( 0 ) );
+                Cursor cursor = getContentResolver().query(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(GetExtrenalLinkFeedID()),
+                        new String[]{EntryColumns._ID},
+                        EntryColumns.LINK + "='" + url + "'",
+                        null,
+                        null);
+                if (cursor.moveToFirst()) {
+                    entryUri = EntryColumns.CONTENT_URI(cursor.getLong(0));
                 } else {
 
                     ContentValues values = new ContentValues();
@@ -266,9 +279,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 cursor.close();
 
                 //startActivity(new Intent(Intent.ACTION_VIEW, entryUri));
-                PrefUtils.putString( PrefUtils.LAST_ENTRY_URI, entryUri.toString() );
-                startActivity( new Intent( HomeActivity.this, HomeActivity.class ) );
-                FetcherService.getObservable().End( status );
+                PrefUtils.putString(PrefUtils.LAST_ENTRY_URI, entryUri.toString());
+                startActivity(new Intent(HomeActivity.this, HomeActivity.class));
+                FetcherService.getStatusText().End(status);
             }
 
         }.start();
@@ -277,20 +290,20 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     long GetExtrenalLinkFeedID() {
         long result = 0;
 
-        Cursor cursor = getContentResolver().query( FeedColumns.CONTENT_URI,
-                                                    FeedColumns.PROJECTION_ID,
-                                                    FeedColumns.FETCH_MODE + "=" + FetcherService.FETCHMODE_EXERNAL_LINK,
-                                                    null,
-                                                    null);
-        if ( cursor.moveToFirst() )
-            result = cursor.getLong( 0 );
+        Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI,
+                FeedColumns.PROJECTION_ID,
+                FeedColumns.FETCH_MODE + "=" + FetcherService.FETCHMODE_EXERNAL_LINK,
+                null,
+                null);
+        if (cursor.moveToFirst())
+            result = cursor.getLong(0);
         cursor.close();
 
-        if ( result == 0 ) {
+        if (result == 0) {
             ContentValues values = new ContentValues();
-            values.put( FeedColumns.FETCH_MODE, FetcherService.FETCHMODE_EXERNAL_LINK );
-            values.put( FeedColumns.NAME, getString(R.string.externalLinks) );
-            result = Long.parseLong( getContentResolver().insert(FeedColumns.CONTENT_URI, values).getLastPathSegment() );
+            values.put(FeedColumns.FETCH_MODE, FetcherService.FETCHMODE_EXERNAL_LINK);
+            values.put(FeedColumns.NAME, getString(R.string.externalLinks));
+            result = Long.parseLong(getContentResolver().insert(FeedColumns.CONTENT_URI, values).getLastPathSegment());
         }
         return result;
     }
@@ -308,6 +321,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     protected void onDestroy() {
         super.onDestroy();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
@@ -357,18 +371,18 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         CursorLoader cursorLoader =
                 new CursorLoader(this,
-                                 FeedColumns.GROUPED_FEEDS_CONTENT_URI,
-                                 new String[]{FeedColumns._ID, FeedColumns.URL, FeedColumns.NAME,
-                                              FeedColumns.IS_GROUP, FeedColumns.ICON, FeedColumns.LAST_UPDATE,
-                                              FeedColumns.ERROR, FEED_UNREAD_NUMBER, FEED_ALL_NUMBER, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST,
-                                              FeedColumns.IS_GROUP_EXPANDED, FeedColumns.IS_AUTO_REFRESH  },
-                                         FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR +
-                                         FeedColumns.GROUP_ID + Constants.DB_IS_NULL  + Constants.DB_OR +
-                                         FeedColumns.GROUP_ID + " IN (SELECT " + FeedColumns._ID +
-                                                                     " FROM " + FeedColumns.TABLE_NAME +
-                                                                     " WHERE " + FeedColumns.IS_GROUP_EXPANDED + Constants.DB_IS_TRUE + ")",
-                                 null,
-                                 null );
+                        FeedColumns.GROUPED_FEEDS_CONTENT_URI,
+                        new String[]{FeedColumns._ID, FeedColumns.URL, FeedColumns.NAME,
+                                FeedColumns.IS_GROUP, FeedColumns.ICON, FeedColumns.LAST_UPDATE,
+                                FeedColumns.ERROR, FEED_UNREAD_NUMBER, FEED_ALL_NUMBER, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST,
+                                FeedColumns.IS_GROUP_EXPANDED, FeedColumns.IS_AUTO_REFRESH},
+                        FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR +
+                                FeedColumns.GROUP_ID + Constants.DB_IS_NULL + Constants.DB_OR +
+                                FeedColumns.GROUP_ID + " IN (SELECT " + FeedColumns._ID +
+                                " FROM " + FeedColumns.TABLE_NAME +
+                                " WHERE " + FeedColumns.IS_GROUP_EXPANDED + Constants.DB_IS_TRUE + ")",
+                        null,
+                        null);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
     }
@@ -389,8 +403,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 mDrawerList.post(new Runnable() {
                     @Override
                     public void run() {
-                            selectDrawerItem(mCurrentDrawerPos);
-                        }
+                        selectDrawerItem(mCurrentDrawerPos);
+                    }
                 });
             }
         }
@@ -422,7 +436,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 break;
             default:
                 long feedOrGroupId = mDrawerAdapter.getItemId(position);
-                if ( feedOrGroupId != -1 ) {
+                if (feedOrGroupId != -1) {
                     if (mDrawerAdapter.isItemAGroup(position)) {
                         newUri = EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
                     } else {
@@ -437,13 +451,14 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         //if (!newUri.equals(mEntriesFragment.getUri()))
-             mEntriesFragment.setData(newUri,
-                                      showFeedInfo,
-                                      false,
-                                      mDrawerAdapter == null ? false : mDrawerAdapter.isShowTextInEntryList(position));
+        mEntriesFragment.setData(newUri,
+                showFeedInfo,
+                false,
+                mDrawerAdapter == null ? false : mDrawerAdapter.isShowTextInEntryList(position));
 
-
+        //mDrawerList.setSelection( position );
         mDrawerList.setItemChecked(position, true);
+        mDrawerList.smoothScrollToPositionFromTop(mFirstVisibleItem, 0, 0);
 
         // First open => we open the drawer for you
         if (PrefUtils.getBoolean(PrefUtils.FIRST_OPEN, true)) {
@@ -516,5 +531,15 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 return;
             }
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 }

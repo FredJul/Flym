@@ -385,7 +385,7 @@ public class EntryView extends WebView implements Observer {
 
     @Override
     protected void onScrollChanged (int l, int t, int oldl, int oldt) {
-        FetcherService.getObservable().HideByScroll();
+        FetcherService.getStatusText().HideByScroll();
         int height = (int) Math.floor(getContentHeight() * getScale());
         int webViewHeight = getMeasuredHeight();
         if(getScrollY() + webViewHeight >= height){

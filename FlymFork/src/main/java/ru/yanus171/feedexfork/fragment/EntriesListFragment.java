@@ -251,7 +251,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     //public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_entry_list, container, true);
         new StatusText( (TextView)rootView.findViewById( R.id.statusText1 ),
-                        FetcherService.getObservable()/*,
+                        FetcherService.getStatusText()/*,
                         this*/);
 
         mListView = (AbsListView) rootView.findViewById(android.R.id.list);

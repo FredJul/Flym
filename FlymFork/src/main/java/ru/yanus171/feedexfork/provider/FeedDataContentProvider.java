@@ -61,6 +61,8 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import java.util.Date;
+
 import ru.yanus171.feedexfork.BuildConfig;
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.R;
@@ -71,8 +73,6 @@ import ru.yanus171.feedexfork.provider.FeedData.TaskColumns;
 import ru.yanus171.feedexfork.service.FetcherService;
 import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
-
-import java.util.Date;
 
 public class FeedDataContentProvider extends ContentProvider {
 
@@ -234,7 +234,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        FetcherService.getObservable().ChangeDB("query DB");
+        FetcherService.getStatusText().ChangeDB("query DB");
 
         long time = new Date().getTime();
         // This is a debug code to allow to visualize the task with the ContentProviderHelper app
@@ -242,7 +242,7 @@ public class FeedDataContentProvider extends ContentProvider {
             SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
             queryBuilder.setTables(TaskColumns.TABLE_NAME);
             SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
-            FetcherService.getObservable().ChangeDB("");
+            FetcherService.getStatusText().ChangeDB("");
             return queryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
         }
 
@@ -369,13 +369,13 @@ public class FeedDataContentProvider extends ContentProvider {
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         Dog.v("query " + (new Date().getTime() - time) + " uri = " + uri);
 
-        FetcherService.getObservable().ChangeDB("");
+        FetcherService.getStatusText().ChangeDB("");
         return cursor;
     }
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        FetcherService.getObservable().ChangeDB("insert DB");
+        FetcherService.getStatusText().ChangeDB("insert DB");
         long newId;
 
         int matchCode = URI_MATCHER.match(uri);
@@ -427,7 +427,7 @@ public class FeedDataContentProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Illegal insert. Match code=" + matchCode + "; uri=" + uri);
         }
-        FetcherService.getObservable().ChangeDB("");
+        FetcherService.getStatusText().ChangeDB("");
         if (newId > -1) {
             notifyChangeOnAllUris(matchCode, uri);
             return ContentUris.withAppendedId(uri, newId);
@@ -442,7 +442,7 @@ public class FeedDataContentProvider extends ContentProvider {
             throw new IllegalArgumentException("Illegal update. Uri=" + uri + "; values=" + values);
         }
 
-        FetcherService.getObservable().ChangeDB("update DB");
+        FetcherService.getStatusText().ChangeDB("update DB");
         int matchCode = URI_MATCHER.match(uri);
 
         String table;
@@ -595,7 +595,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 && (values.containsKey(FeedColumns.NAME) || values.containsKey(FeedColumns.URL) || values.containsKey(FeedColumns.PRIORITY))) {
             mDatabaseHelper.exportToOPML();
         }
-        FetcherService.getObservable().ChangeDB("");
+        FetcherService.getStatusText().ChangeDB("");
         if (count > 0) {
             notifyChangeOnAllUris(matchCode, uri);
         }
@@ -604,7 +604,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        FetcherService.getObservable().ChangeDB("delete DB");
+        FetcherService.getStatusText().ChangeDB("delete DB");
         int matchCode = URI_MATCHER.match(uri);
 
         String table;
@@ -793,7 +793,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
             notifyChangeOnAllUris(matchCode, uri);
         }
-        FetcherService.getObservable().ChangeDB("");
+        FetcherService.getStatusText().ChangeDB("");
         return count;
     }
 

@@ -147,14 +147,14 @@ public class FetcherService extends IntentService {
 
     private final Handler mHandler;
 
-    public static StatusText.FetcherObservable getObservable() {
-        if ( mObservable == null ) {
-            mObservable = new StatusText.FetcherObservable();
+    public static StatusText.FetcherObservable getStatusText() {
+        if ( mStatusText == null ) {
+            mStatusText = new StatusText.FetcherObservable();
         }
-        return mObservable;
+        return mStatusText;
     }
 
-    private static StatusText.FetcherObservable mObservable = null;
+    private static StatusText.FetcherObservable mStatusText = null;
 
     public FetcherService() {
         super(FetcherService.class.getSimpleName());
@@ -201,6 +201,8 @@ public class FetcherService extends IntentService {
             return;
         }
 
+        getStatusText().Clear();
+
         boolean isFromAutoRefresh = intent.getBooleanExtra(Constants.FROM_AUTO_REFRESH, false);
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -235,7 +237,7 @@ public class FetcherService extends IntentService {
 
             startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( "" ) );
 
-            int status = getObservable().Start(getString(R.string.RefreshFeeds) + ": "); try {
+            int status = getStatusText().Start(getString(R.string.RefreshFeeds) + ": "); try {
 
                 PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);
                 mCancelRefresh = false;
@@ -301,7 +303,7 @@ public class FetcherService extends IntentService {
                 downloadAllImages();
 
             } finally {
-                getObservable().End( status );
+                getStatusText().End( status );
             }
 
             PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false);
@@ -358,16 +360,16 @@ public class FetcherService extends IntentService {
     }
 
     private void mobilizeAllEntries() {
-        int status = getObservable().Start(getString(R.string.mobilizeAll)); try {
+        int status = getStatusText().Start(getString(R.string.mobilizeAll)); try {
             ContentResolver cr = getContentResolver();
-            //getObservable().ChangeProgress("query DB");
+            //getStatusText().ChangeProgress("query DB");
             Cursor cursor = cr.query(TaskColumns.CONTENT_URI, new String[]{TaskColumns._ID, TaskColumns.ENTRY_ID, TaskColumns.NUMBER_ATTEMPT},
                     TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
-            getObservable().ChangeProgress("");
+            getStatusText().ChangeProgress("");
             ArrayList<ContentProviderOperation> operations = new ArrayList<>();
 
             while (cursor.moveToNext() && !isCancelRefresh()) {
-                int status1 = getObservable().Start(String.format("%d/%d", cursor.getPosition(), cursor.getCount())); try {
+                int status1 = getStatusText().Start(String.format("%d/%d", cursor.getPosition(), cursor.getCount())); try {
                     long taskId = cursor.getLong(0);
                     long entryId = cursor.getLong(1);
                     int nbAttempt = 0;
@@ -390,20 +392,20 @@ public class FetcherService extends IntentService {
                     }
 
                 } finally {
-                    getObservable().End( status1 );
+                    getStatusText().End( status1 );
                 }
             }
 
             cursor.close();
 
             if (!operations.isEmpty()) {
-                getObservable().ChangeProgress(R.string.applyOperations);
+                getStatusText().ChangeProgress(R.string.applyOperations);
                 try {
                     cr.applyBatch(FeedData.AUTHORITY, operations);
                 } catch (Throwable ignored) {
                 }
             }
-        } finally { getObservable().End( status ); }
+        } finally { getStatusText().End( status ); }
 
 
     }
@@ -436,7 +438,7 @@ public class FetcherService extends IntentService {
                     connection = NetworkUtils.setupConnection(link);
 
                     String mobilizedHtml = "";
-                    getObservable().ChangeProgress(R.string.extractContent);
+                    getStatusText().ChangeProgress(R.string.extractContent);
 
                     Document doc = Jsoup.parse(connection.getInputStream(), null, "");
 
@@ -449,12 +451,12 @@ public class FetcherService extends IntentService {
 
                     mobilizedHtml = ArticleTextExtractor.extractContent(doc, contentIndicator);
 
-                    getObservable().ChangeProgress("");
+                    getStatusText().ChangeProgress("");
 
                     if (mobilizedHtml != null) {
-                        getObservable().ChangeProgress(R.string.improveHtmlContent);
+                        getStatusText().ChangeProgress(R.string.improveHtmlContent);
                         mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link));
-                        getObservable().ChangeProgress("");
+                        getStatusText().ChangeProgress("");
                         ContentValues values = new ContentValues();
                         values.put(EntryColumns.MOBILIZED_HTML, mobilizedHtml);
                         if ( title != null )
@@ -500,7 +502,7 @@ public class FetcherService extends IntentService {
     }
 
     public static void downloadAllImages() {
-        StatusText.FetcherObservable obs = getObservable();
+        StatusText.FetcherObservable obs = getStatusText();
         int status = obs.Start(MainApplication.getContext().getString(R.string.AllImages)); try {
 
             ContentResolver cr = MainApplication.getContext().getContentResolver();
@@ -559,7 +561,7 @@ public class FetcherService extends IntentService {
     }
 
     public static void downloadEntryImages( long entryId, ArrayList<String> imageList ) {
-        StatusText.FetcherObservable obs = getObservable();
+        StatusText.FetcherObservable obs = getStatusText();
         int status = obs.Start(MainApplication.getContext().getString(R.string.EntryImages)); try {
             for( String imgPath: imageList ) {
                 if (isCancelRefresh() || !isEntryIDActive( entryId ) )
@@ -584,13 +586,13 @@ public class FetcherService extends IntentService {
                     new Thread() {
                         @Override
                         public void run() {
-                            int status = getObservable().Start(MainApplication.getContext().getString(R.string.deleteOldEntries)); try {
+                            int status = getStatusText().Start(MainApplication.getContext().getString(R.string.deleteOldEntries)); try {
                                 mIsDeletingOld = true;
                                     String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
                                 // Delete the entries, the cache files will be deleted by the content provider
                                 MainApplication.getContext().getContentResolver().delete(EntryColumns.CONTENT_URI, where, null);
 
-                                getObservable().ChangeProgress(R.string.deleteImages);
+                                getStatusText().ChangeProgress(R.string.deleteImages);
                                 File[] files = FileUtils.GetImagesFolder().listFiles(new FileFilter() {//NetworkUtils.IMAGE_FOLDER_FILE.listFiles(new FileFilter() {
                                     @Override
                                     public boolean accept(File pathname) {
@@ -601,13 +603,13 @@ public class FetcherService extends IntentService {
                                     int i = 0;
                                     for( File file: files ) {
                                         i++;
-                                        getObservable().ChangeProgress(getString(R.string.deleteImages) + String.format( " %d/%d", i, files.length ) );
+                                        getStatusText().ChangeProgress(getString(R.string.deleteImages) + String.format( " %d/%d", i, files.length ) );
                                         file.delete();
                                     }
                                 }
-                                getObservable().ChangeProgress("");
+                                getStatusText().ChangeProgress("");
                             } finally {
-                                getObservable().End( status );
+                                getStatusText().End( status );
                                 mIsDeletingOld = false;
                             }
                         }
@@ -637,7 +639,7 @@ public class FetcherService extends IntentService {
 
         CompletionService<Integer> completionService = new ExecutorCompletionService<>(executor);
         while (cursor.moveToNext()) {
-            //getObservable().Start(String.format("%d from %d", cursor.getPosition(), cursor.getCount()));
+            //getStatusText().Start(String.format("%d from %d", cursor.getPosition(), cursor.getCount()));
             final String feedId = cursor.getString(0);
             completionService.submit(new Callable<Integer>() {
                 @Override
@@ -651,7 +653,7 @@ public class FetcherService extends IntentService {
                     return result;
                 }
             });
-            //getObservable().End();
+            //getStatusText().End();
         }
         cursor.close();
 
@@ -689,7 +691,7 @@ public class FetcherService extends IntentService {
             String id = cursor.getString(idPosition);
             HttpURLConnection connection = null;
 
-            int status = getObservable().Start(cursor.getString(titlePosition));
+            int status = getStatusText().Start(cursor.getString(titlePosition));
             try {
 
                 String feedUrl = cursor.getString(urlPosition);
@@ -713,7 +715,7 @@ public class FetcherService extends IntentService {
                         int posStart = -1;
 
                         while ((line = reader.readLine()) != null) {
-                            FetcherService.getObservable().AddBytes( line.length() );
+                            FetcherService.getStatusText().AddBytes( line.length() );
                             if (line.contains(HTML_BODY)) {
                                 break;
                             } else {
@@ -781,7 +783,7 @@ public class FetcherService extends IntentService {
 
                         int length = bufferedReader.read(chars);
 
-                        FetcherService.getObservable().AddBytes( length );
+                        FetcherService.getStatusText().AddBytes( length );
 
                         String xmlDescription = new String(chars, 0, length);
 
@@ -836,7 +838,7 @@ public class FetcherService extends IntentService {
 
                         int n;
                         while ((n = inputStream.read(byteBuffer)) > 0) {
-                            FetcherService.getObservable().AddBytes( n );
+                            FetcherService.getStatusText().AddBytes( n );
                             outputStream.write(byteBuffer, 0, n);
                         }
 
@@ -883,6 +885,7 @@ public class FetcherService extends IntentService {
 
                     values.put(FeedColumns.ERROR, getString(R.string.error_feed_error));
                     cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
+                    FetcherService.getStatusText().SetError( getString(R.string.error_feed_error) );
                 }
             } catch (Throwable e) {
                 if (handler == null || (!handler.isDone() && !handler.isCancelled())) {
@@ -893,6 +896,8 @@ public class FetcherService extends IntentService {
 
                     values.put(FeedColumns.ERROR, e.getMessage() != null ? e.getMessage() : getString(R.string.error_feed_process));
                     cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
+
+                    FetcherService.getStatusText().SetError( e.getMessage() );
                 }
             } finally {
 
@@ -912,7 +917,7 @@ public class FetcherService extends IntentService {
                 if (connection != null) {
                     connection.disconnect();
                 }
-                getObservable().End( status );
+                getStatusText().End( status );
             }
         }
 
@@ -923,17 +928,17 @@ public class FetcherService extends IntentService {
 
     private static void parseXml(InputStream in, Xml.Encoding encoding,
                              ContentHandler contentHandler) throws IOException, SAXException {
-        getObservable().ChangeProgress( R.string.parseXml );
+        getStatusText().ChangeProgress( R.string.parseXml );
         Xml.parse(in, encoding, contentHandler);
-        getObservable().ChangeProgress( "" );
-        getObservable().AddBytes(contentHandler.toString().length());
+        getStatusText().ChangeProgress( "" );
+        getStatusText().AddBytes(contentHandler.toString().length());
     }
     private static void parseXml(Reader reader,
                                  ContentHandler contentHandler) throws IOException, SAXException {
-        getObservable().ChangeProgress( R.string.parseXml );
+        getStatusText().ChangeProgress( R.string.parseXml );
         Xml.parse(reader, contentHandler);
-        getObservable().ChangeProgress( "" );
-        getObservable().AddBytes(contentHandler.toString().length() );
+        getStatusText().ChangeProgress( "" );
+        getStatusText().AddBytes(contentHandler.toString().length() );
     }
 
     public static void cancelRefresh() {
@@ -945,7 +950,7 @@ public class FetcherService extends IntentService {
     }
 
     public static void deleteAllFeedEntries( String feedID ) {
-        int status = getObservable().Start("deleteAllFeedEntries");
+        int status = getStatusText().Start("deleteAllFeedEntries");
         try {
             ContentResolver cr = MainApplication.getContext().getContentResolver();
             cr.delete(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedID), EntryColumns.WHERE_NOT_FAVORITE, null);
@@ -954,13 +959,13 @@ public class FetcherService extends IntentService {
             values.putNull( FeedColumns.REAL_LAST_UPDATE );
             cr.update(FeedColumns.CONTENT_URI( feedID ), values, null, null );
         } finally {
-            getObservable().End(status);
+            getStatusText().End(status);
         }
 
     }
 
     public static void createTestData() {
-        int status = getObservable().Start("createTestData");
+        int status = getStatusText().Start("createTestData");
         try {
             {
                 final String testFeedID = "10000";
@@ -1021,7 +1026,7 @@ public class FetcherService extends IntentService {
                 }
             }
         } finally {
-            getObservable().End(status);
+            getStatusText().End(status);
         }
 
     }

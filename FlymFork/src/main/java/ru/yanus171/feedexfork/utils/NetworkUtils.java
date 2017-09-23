@@ -32,13 +32,6 @@ import android.text.Html;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
 
-import ru.yanus171.feedexfork.Constants;
-import ru.yanus171.feedexfork.MainApplication;
-import ru.yanus171.feedexfork.R;
-import ru.yanus171.feedexfork.provider.FeedData;
-import ru.yanus171.feedexfork.service.FetcherService;
-import ru.yanus171.feedexfork.view.EntryView;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -50,6 +43,13 @@ import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Pattern;
+
+import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
+import ru.yanus171.feedexfork.R;
+import ru.yanus171.feedexfork.provider.FeedData;
+import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.view.EntryView;
 
 public class NetworkUtils {
 
@@ -108,17 +108,17 @@ public class NetworkUtils {
                 final int cStep = 1024 * 10;
                 byte[] buffer = new byte[2048];
                 int bufferLength;
-                FetcherService.getObservable().ChangeProgress(getProgressText(bytesRecieved));
+                FetcherService.getStatusText().ChangeProgress(getProgressText(bytesRecieved));
                 while (!FetcherService.isCancelRefresh() && (bufferLength = inputStream.read(buffer)) > 0) {
                     fileOutput.write(buffer, 0, bufferLength);
                     bytesRecieved += bufferLength;
                     progressBytes += bufferLength;
                     if (progressBytes >= cStep) {
                         progressBytes = 0;
-                        FetcherService.getObservable().ChangeProgress(getProgressText(bytesRecieved));
+                        FetcherService.getStatusText().ChangeProgress(getProgressText(bytesRecieved));
                     }
                 }
-                FetcherService.getObservable().AddBytes( bytesRecieved );
+                FetcherService.getStatusText().AddBytes( bytesRecieved );
                 fileOutput.flush();
                 fileOutput.close();
                 inputStream.close();
@@ -197,7 +197,7 @@ public class NetworkUtils {
 
         int n;
         while ((n = inputStream.read(buffer)) > 0) {
-            FetcherService.getObservable().AddBytes( n );
+            FetcherService.getStatusText().AddBytes( n );
             output.write(buffer, 0, n);
         }
 
@@ -249,7 +249,7 @@ public class NetworkUtils {
 
     public static HttpURLConnection setupConnection(URL url) throws IOException {
         HttpURLConnection connection;
-        FetcherService.getObservable().ChangeProgress(R.string.setupConnection);
+        FetcherService.getStatusText().ChangeProgress(R.string.setupConnection);
 
         connection = new OkUrlFactory(new OkHttpClient()).open(url);
 
@@ -264,7 +264,7 @@ public class NetworkUtils {
 
         COOKIE_MANAGER.getCookieStore().removeAll(); // Cookie is important for some sites, but we clean them each times
         connection.connect();
-        FetcherService.getObservable().ChangeProgress("");
+        FetcherService.getStatusText().ChangeProgress("");
         return connection;
     }
 

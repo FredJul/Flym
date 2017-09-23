@@ -59,7 +59,7 @@ public class ArticleTextExtractor {
         if (doc == null)
             throw new NullPointerException("missing document");
 
-        FetcherService.getObservable().AddBytes( doc.html().length() );
+        FetcherService.getStatusText().AddBytes( doc.html().length() );
         // now remove the clutter
         prepareDocument(doc);
 

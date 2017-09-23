@@ -117,7 +117,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
         View rootView = inflater.inflate(R.layout.fragment_entry, container, true);
 
         mStatusText = new StatusText( (TextView)rootView.findViewById( R.id.statusText ),
-                                      FetcherService.getObservable()/*,
+                                      FetcherService.getStatusText()/*,
                                       this*/);
         mToggleFullscreenBtn = rootView.findViewById(R.id.toggleFullscreenBtn);
         mToggleFullscreenBtn.setOnClickListener(new View.OnClickListener() {
@@ -252,7 +252,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
     @Override
     public void onDestroy() {
-        FetcherService.getObservable().deleteObserver(mStatusText);
+        FetcherService.getStatusText().deleteObserver(mStatusText);
         super.onDestroy();
     }
     @Override
@@ -420,7 +420,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
                 case R.id.menu_reload_full_text: {
 
-                    int status = FetcherService.getObservable().Start("Reload fulltext"); try {
+                    int status = FetcherService.getStatusText().Start("Reload fulltext"); try {
 
                         /*final Uri uri = ContentUris.withAppendedId(mBaseUri, mEntriesIds[mCurrentPagerPos]);
                         new Thread() {
@@ -441,7 +441,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                             LoadFullText();
                         //}
 
-                    } finally { FetcherService.getObservable().End( status ); }
+                    } finally { FetcherService.getStatusText().End( status ); }
                     break;
                 }
             }
@@ -619,9 +619,9 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
             new Thread() {
                 @Override
                 public void run() {
-                    int status = FetcherService.getObservable().Start(getActivity().getString(R.string.loadFullText));
+                    int status = FetcherService.getStatusText().Start(getActivity().getString(R.string.loadFullText));
                     FetcherService.mobilizeEntry(getContext().getContentResolver(), getCurrentEntryID());
-                    FetcherService.getObservable().End( status );
+                    FetcherService.getStatusText().End( status );
                 }
             }.start();
 
@@ -708,9 +708,9 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                 public void run() {
                     try {
                         FetcherService.mCancelRefresh = false;
-                        int status = FetcherService.getObservable().Start( getString(R.string.downloadImage) );
+                        int status = FetcherService.getStatusText().Start( getString(R.string.downloadImage) );
                         NetworkUtils.downloadImage(getCurrentEntryID(), url/*, true*/ );
-                        FetcherService.getObservable().End( status );
+                        FetcherService.getStatusText().End( status );
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
