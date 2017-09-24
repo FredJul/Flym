@@ -37,10 +37,5 @@ Feedback and suggestions are welcome
 PlayStore link:
 https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork
 
-<img src="/images/FFEntryListEn.png" width="10%">
-<img src="/images/FFEditFeedFilter.png" width="10%">
-<img src="/images/FFEntryFullScreen.png" width="10%">
-<img src="/images/FFEntryContextMenu.png" width="10%">
-<img src="/images/FFEntryWithActionBar.png" width="10%">
-<img src="/images/FFShowEntryText.png" width="10%">
+<img src="/images/FFEntryListEn.png" width="10%"><img src="/images/FFEditFeedFilter.png" width="10%"><img src="/images/FFEntryFullScreen.png" width="10%"><img src="/images/FFEntryContextMenu.png" width="10%"><img src="/images/FFEntryWithActionBar.png" width="10%"><img src="/images/FFShowEntryText.png" width="10%">
 
