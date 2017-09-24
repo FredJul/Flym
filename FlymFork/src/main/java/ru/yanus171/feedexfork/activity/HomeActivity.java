@@ -87,7 +87,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     private int mCurrentDrawerPos;
     private Handler mHandler = null;
     public static Boolean mFeedSetupChanged = false;
-    private int mFirstVisibleItem = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,19 +128,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     return true;
                 }
                 return false;
-            }
-        });
-
-        mDrawerList.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                if ( scrollState == SCROLL_STATE_IDLE )
-                    mFirstVisibleItem = mDrawerList.getFirstVisiblePosition();
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
             }
         });
 
@@ -391,22 +377,27 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 
         synchronized (mFeedSetupChanged) {
-            if (mDrawerAdapter != null && !mFeedSetupChanged) {
+            boolean needSelect = false;
+            if (mDrawerAdapter != null ) {
                 mDrawerAdapter.setCursor(cursor);
             } else {
-                mFeedSetupChanged = false;
-
                 mDrawerAdapter = new DrawerAdapter(this, cursor);
                 mDrawerList.setAdapter(mDrawerAdapter);
                 // We don't have any menu yet, we need to display it
+                needSelect = true;
+            }
+            if ( mFeedSetupChanged ) {
+                mFeedSetupChanged = false;
+                needSelect = true;
+            }
 
+            if ( needSelect )
                 mDrawerList.post(new Runnable() {
                     @Override
                     public void run() {
                         selectDrawerItem(mCurrentDrawerPos);
                     }
                 });
-            }
         }
 
     }
@@ -458,7 +449,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         //mDrawerList.setSelection( position );
         mDrawerList.setItemChecked(position, true);
-        mDrawerList.smoothScrollToPositionFromTop(mFirstVisibleItem, 0, 0);
+        //mDrawerList.smoothScrollToPositionFromTop(mFirstVisibleItem, 0, 0);
 
         // First open => we open the drawer for you
         if (PrefUtils.getBoolean(PrefUtils.FIRST_OPEN, true)) {
