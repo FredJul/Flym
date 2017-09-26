@@ -138,7 +138,7 @@
     <string name="file">File</string>
     <string name="download_and_save">Загрузить и сохранить</string>
     <string name="open_link">Открыть ссылку</string>
-    <string name="tip_sentence">Подсказка: свайп влево помечает статью как прочитанную</string>
+    <string name="tip_sentence">Подсказка: свайп влево помечает статью как прочитанную, свайп вправо - как избранную</string>
     <string name="undo">Отменить</string>
     <string name="marked_as_read">Отмечено как прочитанное</string>
 

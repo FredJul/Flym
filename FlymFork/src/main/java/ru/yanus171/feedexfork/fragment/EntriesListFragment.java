@@ -290,7 +290,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             header.setText(R.string.tip_sentence);
             header.setGravity(Gravity.CENTER_VERTICAL);
             header.setCompoundDrawablePadding(UiUtils.dpToPixel(5));
-            header.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_about, 0, R.drawable.ic_action_cancel, 0);
+            header.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_about, 0, R.drawable.ic_action_cancel_gray, 0);
             header.setClickable(true);
             header.setOnClickListener(new View.OnClickListener() {
                 @Override

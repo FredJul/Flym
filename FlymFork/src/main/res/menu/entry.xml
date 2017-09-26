@@ -53,7 +53,7 @@
         android:title="@string/open_link"/>
     <item
         android:id="@+id/menu_cancel_refresh"
-        android:icon="@drawable/ic_action_cancel"
+        android:icon="@drawable/ic_action_cancel_gray"
         android:visible="true"
         android:title="@string/menu_cancel_refresh"/>
 </menu>
