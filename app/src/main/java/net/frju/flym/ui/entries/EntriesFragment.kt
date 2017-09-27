@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -91,7 +92,9 @@ class EntriesFragment : Fragment() {
         }
 
         unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
-            setGravityOffset(30F, 0F, true)
+            setGravityOffset(35F, 0F, true)
+            isShowShadow = false
+            badgeBackgroundColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
         }
 
         read_all_fab.onClick {
