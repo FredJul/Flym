@@ -6,7 +6,6 @@ import android.arch.paging.PagedList
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -22,12 +21,14 @@ import net.frju.flym.data.entities.Feed
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.about.AboutActivity
 import net.frju.flym.ui.main.MainNavigator
-import net.frju.flym.utils.indefiniteSnackbar
 import net.frju.parentalcontrol.utils.PrefUtils
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk21.coroutines.onClick
 import org.jetbrains.anko.support.v4.startActivity
+import q.rorbin.badgeview.Badge
+import q.rorbin.badgeview.QBadgeView
 import java.util.*
 
 
@@ -54,11 +55,11 @@ class EntriesFragment : Fragment() {
     })
     private var feed: Feed? = null
     private var listDisplayDate = Date().time
-    private var newEntriesSnackbar: Snackbar? = null
     private var entriesLiveData: LiveData<PagedList<EntryWithFeed>>? = null
     private var entryIdsLiveData: LiveData<List<String>>? = null
     private var entryIds: List<String>? = null
     private var newCountLiveData: LiveData<Long>? = null
+    private var unreadBadge: Badge? = null
 
     private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (PrefUtils.IS_REFRESHING == key) {
@@ -82,16 +83,35 @@ class EntriesFragment : Fragment() {
 
         bottom_navigation.setOnNavigationItemSelectedListener {
             recycler_view.post {
+                listDisplayDate = Date().time
                 initDataObservers()
                 recycler_view.scrollToPosition(0)
             }
             true
         }
 
+        unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
+            setGravityOffset(30F, 0F, true)
+        }
+
         read_all_fab.onClick {
-            doAsync {
-                entryIds?.withIndex()?.groupBy { it.index / 300 }?.map { it.value.map { it.value } }?.forEach {
-                    App.db.entryDao().markAsRead(it)
+            entryIds?.let { entryIds ->
+                if (entryIds.isNotEmpty()) {
+                    doAsync {
+                        // TODO check if limit still needed
+                        entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
+                            App.db.entryDao().markAsRead(it)
+                        }
+                    }
+
+                    longSnackbar(coordinator, "Marked as read", "Undo") {
+                        doAsync {
+                            // TODO check if limit still needed
+                            entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
+                                App.db.entryDao().markAsUnread(it)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -152,14 +172,9 @@ class EntriesFragment : Fragment() {
 
         newCountLiveData?.observe(this, Observer<Long> { count ->
             if (count != null && count > 0L) {
-                if (newEntriesSnackbar?.isShown != true) {
-                    newEntriesSnackbar = coordinator.indefiniteSnackbar("$count new entries", "refresh") {
-                        listDisplayDate = Date().time
-                        initDataObservers()
-                    }
-                } else {
-                    newEntriesSnackbar?.setText("$count new entries")
-                }
+                unreadBadge?.badgeNumber = count.toInt()
+            } else {
+                unreadBadge?.hide(false)
             }
         })
     }

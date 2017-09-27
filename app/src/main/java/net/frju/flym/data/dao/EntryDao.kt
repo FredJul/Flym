@@ -91,6 +91,9 @@ interface EntryDao {
     @Query("UPDATE entries SET read = 1 WHERE id IN (:arg0)")
     fun markAsRead(ids: List<String>)
 
+    @Query("UPDATE entries SET read = 0 WHERE id IN (:arg0)")
+    fun markAsUnread(ids: List<String>)
+
     @Query("DELETE FROM entries WHERE fetchDate < :arg0 AND favorite = 0")
     fun deleteOlderThan(keepDateBorderTime: Long)
 

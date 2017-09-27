@@ -84,6 +84,7 @@ dependencies {
     implementation 'com.bignerdranch.android:expandablerecyclerview:+'
     implementation 'com.github.mirrajabi:search-dialog:+'
     implementation 'com.github.jrvansuita:MaterialAbout:+'
+    implementation 'q.rorbin:badgeview:+'
 
     implementation 'com.github.chimbori:crux:master'
 }

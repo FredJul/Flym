@@ -1,6 +1,5 @@
 package net.frju.flym.utils
 
-import android.support.design.widget.Snackbar
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
@@ -42,27 +41,3 @@ fun ImageView.loadFavicon(feedLink: String) {
         GlideApp.with(context).load(R.mipmap.ic_launcher).into(this)
     }
 }
-
-/**
- * Display Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
- *
- * @param message the message text resource.
- */
-fun View.indefiniteSnackbar(message: Int, actionText: Int, action: (View) -> Unit) = Snackbar
-        .make(this, message, Snackbar.LENGTH_INDEFINITE)
-        .apply {
-            setAction(actionText, action)
-            show()
-        }
-
-/**
- * Display Snackbar with the [Snackbar.LENGTH_INDEFINITE] duration.
- *
- * @param message the message text.
- */
-fun View.indefiniteSnackbar(message: String, actionText: String, action: (View) -> Unit) = Snackbar
-        .make(this, message, Snackbar.LENGTH_INDEFINITE)
-        .apply {
-            setAction(actionText, action)
-            show()
-        }
