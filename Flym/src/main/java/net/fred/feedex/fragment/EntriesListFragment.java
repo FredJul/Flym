@@ -180,7 +180,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             } else {
                 mAutoRefreshDisplayDate = true; // We will try to update the list after if necessary
             }
-
             restartLoaders();
         }
     }

@@ -275,6 +275,12 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             case 2:
                 newUri = EntryColumns.FAVORITES_CONTENT_URI;
                 break;
+            case 3:
+                newUri = EntryColumns.FAVORITES_CONTENT_URI; //todo change this, replace with method call to sopen new activity
+                break;
+
+            //TODO case 3: newUri = MagazineColumn.Magazine_URI; break;
+
             default:
                 long feedOrGroupId = mDrawerAdapter.getItemId(position);
                 if (mDrawerAdapter.isItemAGroup(position)) {
