@@ -54,6 +54,11 @@ class EntryDetailsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_entry_details, container, false)
     }
 
+    override fun onDestroyView() {
+        entry_view.destroy()
+        super.onDestroyView()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
