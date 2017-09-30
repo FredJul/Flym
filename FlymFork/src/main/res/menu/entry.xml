@@ -46,6 +46,10 @@
         android:icon="@drawable/refresh"
         android:title="@string/menu_reload_full_text"/>
     <item
+        android:id="@+id/menu_reload_full_text_without_mobilizer"
+        android:icon="@drawable/refresh"
+        android:title="@string/menu_reload_full_text_without_mobilizer"/>
+    <item
         android:id="@+id/menu_load_all_images"
         android:title="@string/menu_load_all_images"/>
     <item

@@ -379,7 +379,7 @@ public class FetcherService extends IntentService {
 
                     //boolean success = ;
 
-                    if (mobilizeEntry(cr, entryId)) {
+                    if (mobilizeEntry(cr, entryId, true)) {
                         cr.delete(TaskColumns.CONTENT_URI(taskId), null, null);//operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
                     } else {
                         if (nbAttempt + 1 > MAX_TASK_ATTEMPT) {
@@ -410,7 +410,7 @@ public class FetcherService extends IntentService {
 
     }
 
-    public static boolean mobilizeEntry(ContentResolver cr, long entryId) {
+    public static boolean mobilizeEntry(ContentResolver cr, long entryId, boolean mobilize) {
         boolean success = false;
 
         Uri entryUri = EntryColumns.CONTENT_URI(entryId);
@@ -449,7 +449,7 @@ public class FetcherService extends IntentService {
                             title = titleEls.first().text();
                     }
 
-                    mobilizedHtml = ArticleTextExtractor.extractContent(doc, contentIndicator);
+                    mobilizedHtml = ArticleTextExtractor.extractContent(doc, contentIndicator, mobilize);
 
                     getStatusText().ChangeProgress("");
 
@@ -522,7 +522,7 @@ public class FetcherService extends IntentService {
                     }
 
                     try {
-                        NetworkUtils.downloadImage(entryId, imgPath/*, false*/);
+                        NetworkUtils.downloadImage(entryId, imgPath, true);
 
                         // If we are here, everything is OK
                         operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
@@ -568,7 +568,7 @@ public class FetcherService extends IntentService {
                     break;
                 int status1 = obs.Start(String.format("%d/%d", imageList.indexOf(imgPath) + 1, imageList.size()));
                 try {
-                    NetworkUtils.downloadImage(entryId, imgPath/*, false*/);
+                    NetworkUtils.downloadImage(entryId, imgPath, true);
                 } catch (Exception e) {
 
                 } finally {

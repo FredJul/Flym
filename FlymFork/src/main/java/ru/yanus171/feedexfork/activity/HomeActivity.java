@@ -42,7 +42,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -260,7 +259,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     //values.put(EntryColumns.ENCLOSURE, enclosureString);
                     entryUri = getContentResolver().insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(GetExtrenalLinkFeedID()), values);
 
-                    FetcherService.mobilizeEntry(getContentResolver(), Long.parseLong(entryUri.getLastPathSegment()));
+                    FetcherService.mobilizeEntry(getContentResolver(), Long.parseLong(entryUri.getLastPathSegment()), true);
                 }
                 cursor.close();
 

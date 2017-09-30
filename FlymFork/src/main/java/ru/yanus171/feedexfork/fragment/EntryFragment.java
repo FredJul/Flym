@@ -421,26 +421,17 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                 case R.id.menu_reload_full_text: {
 
                     int status = FetcherService.getStatusText().Start("Reload fulltext"); try {
+                        DeleteMobilized();
+                        LoadFullText( true );
+                    } finally { FetcherService.getStatusText().End( status ); }
+                    break;
+                }
 
-                        /*final Uri uri = ContentUris.withAppendedId(mBaseUri, mEntriesIds[mCurrentPagerPos]);
-                        new Thread() {
-                            @Override
-                            public void run() {
+                case R.id.menu_reload_full_text_without_mobilizer: {
 
-                            }
-                        }.start();*/
-
-
-                        ContentValues values = new ContentValues();
-                        values.putNull(EntryColumns.MOBILIZED_HTML);
-                        ContentResolver cr = MainApplication.getContext().getContentResolver();
-                        final Uri uri = ContentUris.withAppendedId(mBaseUri, getCurrentEntryID());
-                        cr.update(uri, values, null, null);
-
-                        //if (!isRefreshing()) {
-                            LoadFullText();
-                        //}
-
+                    int status = FetcherService.getStatusText().Start("Reload fulltext"); try {
+                        DeleteMobilized();
+                        LoadFullText( false );
                     } finally { FetcherService.getStatusText().End( status ); }
                     break;
                 }
@@ -448,6 +439,14 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
         }
 
         return true;
+    }
+
+    void DeleteMobilized() {
+        ContentValues values = new ContentValues();
+        values.putNull(EntryColumns.MOBILIZED_HTML);
+        ContentResolver cr = MainApplication.getContext().getContentResolver();
+        final Uri uri = ContentUris.withAppendedId(mBaseUri, getCurrentEntryID());
+        cr.update(uri, values, null, null);
     }
 
     void CloseEntry() {
@@ -602,11 +601,11 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                 }
             });
         } else /*--if (!isRefreshing())*/ {
-            LoadFullText();
+            LoadFullText( true );
         }
     }
 
-    private void LoadFullText() {
+    private void LoadFullText( final boolean mobilize ) {
         final BaseActivity activity = (BaseActivity) getActivity();
         ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -620,7 +619,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                 @Override
                 public void run() {
                     int status = FetcherService.getStatusText().Start(getActivity().getString(R.string.loadFullText));
-                    FetcherService.mobilizeEntry(getContext().getContentResolver(), getCurrentEntryID());
+                    FetcherService.mobilizeEntry(getContext().getContentResolver(), getCurrentEntryID(), mobilize);
                     FetcherService.getStatusText().End( status );
                 }
             }.start();
@@ -709,7 +708,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                     try {
                         FetcherService.mCancelRefresh = false;
                         int status = FetcherService.getStatusText().Start( getString(R.string.downloadImage) );
-                        NetworkUtils.downloadImage(getCurrentEntryID(), url/*, true*/ );
+                        NetworkUtils.downloadImage(getCurrentEntryID(), url, false );
                         FetcherService.getStatusText().End( status );
                     } catch (IOException e) {
                         e.printStackTrace();

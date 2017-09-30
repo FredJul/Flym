@@ -164,7 +164,7 @@ public class StatusText implements Observer {
         }
         public void SetError( String text ) {
             synchronized ( mList ) {
-                mErrorText = text;
+                mErrorText = mErrorText == null ? "" : text;
             }
             UpdateText();
         }

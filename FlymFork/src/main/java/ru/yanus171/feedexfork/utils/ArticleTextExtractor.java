@@ -51,91 +51,93 @@ public class ArticleTextExtractor {
      * @param contentIndicator a text which should be included into the extracted content, or null
      * @return extracted article, all HTML tags stripped
      */
-    public static String extractContent(InputStream input, String contentIndicator) throws Exception {
-        return extractContent(Jsoup.parse(input, null, ""), contentIndicator);
+    public static String extractContent(InputStream input, String contentIndicator, boolean mobilize) throws Exception {
+        return extractContent(Jsoup.parse(input, null, ""), contentIndicator, mobilize);
     }
 
-    public static String extractContent(Document doc, String contentIndicator) {
+    public static String extractContent(Document doc, String contentIndicator, boolean mobilize) {
         if (doc == null)
             throw new NullPointerException("missing document");
 
         FetcherService.getStatusText().AddBytes( doc.html().length() );
         // now remove the clutter
-        prepareDocument(doc);
+        prepareDocument(doc, mobilize);
 
-        // init elements
-        Collection<Element> nodes = getNodes(doc);
-        int maxWeight = 0;
-        Element bestMatchElement = null;
+        if ( mobilize ) {
+            // init elements
+            Collection<Element> nodes = getNodes(doc);
+            int maxWeight = 0;
+            Element bestMatchElement = null;
 
-        bestMatchElement = getBestElementFromFile(doc);
-        if (bestMatchElement == null) {
-            for (Element entry : nodes) {
-                int currentWeight = getWeight(entry, contentIndicator);
-                if (currentWeight > maxWeight) {
-                    maxWeight = currentWeight;
-                    bestMatchElement = entry;
+            bestMatchElement = getBestElementFromFile(doc);
+            if (bestMatchElement == null) {
+                for (Element entry : nodes) {
+                    int currentWeight = getWeight(entry, contentIndicator);
+                    if (currentWeight > maxWeight) {
+                        maxWeight = currentWeight;
+                        bestMatchElement = entry;
 
-                    if (maxWeight > 300) {
-                        break;
+                        if (maxWeight > 300) {
+                            break;
+                        }
                     }
                 }
             }
-        }
-        Collection<Element> metas = getMetas(doc);
-        String ogImage = null;
-        for (Element entry : metas) {
-            if (entry.hasAttr("property") && "og:image".equals(entry.attr("property"))) {
-                ogImage = entry.attr("content");
-                break;
-            }
-        }
-
-        if (bestMatchElement != null) {
-
-            Elements title = bestMatchElement.getElementsByClass("title");
-            for (Element entry : title)
-                if ( entry.tagName().toLowerCase().equals( "h1" ) ) {
-                    title.first().remove();
+            Collection<Element> metas = getMetas(doc);
+            String ogImage = null;
+            for (Element entry : metas) {
+                if (entry.hasAttr("property") && "og:image".equals(entry.attr("property"))) {
+                    ogImage = entry.attr("content");
                     break;
                 }
-
-            String ret = bestMatchElement.toString();
-            if (ogImage != null && !ret.contains(ogImage)) {
-                ret = "<img src=\""+ogImage+"\"><br>\n"+ret;
             }
 
+            if (bestMatchElement != null) {
 
-            if ( PrefUtils.getBoolean( PrefUtils.LOAD_COMMENTS, false ) ) {
-              Element comments = doc.getElementById("comments");
-              if ( comments != null ) {
-                  Elements li = comments.getElementsByTag( "li" );
-                  for (Element entry : li) {
-                      entry.tagName( "p" );
-                  }
-                  Elements ul = comments.getElementsByTag( "ul" );
-                  for (Element entry : ul) {
-                      entry.tagName( "p" );
-                  }
-                  ret += comments;
-              }
+                Elements title = bestMatchElement.getElementsByClass("title");
+                for (Element entry : title)
+                    if (entry.tagName().toLowerCase().equals("h1")) {
+                        title.first().remove();
+                        break;
+                    }
+
+                String ret = bestMatchElement.toString();
+                if (ogImage != null && !ret.contains(ogImage)) {
+                    ret = "<img src=\"" + ogImage + "\"><br>\n" + ret;
+                }
+
+
+                if (PrefUtils.getBoolean(PrefUtils.LOAD_COMMENTS, false)) {
+                    Element comments = doc.getElementById("comments");
+                    if (comments != null) {
+                        Elements li = comments.getElementsByTag("li");
+                        for (Element entry : li) {
+                            entry.tagName("p");
+                        }
+                        Elements ul = comments.getElementsByTag("ul");
+                        for (Element entry : ul) {
+                            entry.tagName("p");
+                        }
+                        ret += comments;
+                    }
+                }
+
+                ret = ret.replaceAll("<table(.)*?>", "<p>");
+                ret = ret.replaceAll("</table>", "</p>");
+
+                ret = ret.replaceAll("<tr(.)*?>", "<p>");
+                ret = ret.replaceAll("</tr>", "</p>");
+
+                ret = ret.replaceAll("<td(.)*?>", "<p>");
+                ret = ret.replaceAll("</td>", "</p>");
+
+                ret = ret.replaceAll("<th(.)*?>", "<p>");
+                ret = ret.replaceAll("</th>", "</p>");
+
+                return ret;
             }
-
-            ret = ret.replaceAll("<table(.)*?>", "<p>");
-            ret = ret.replaceAll("</table>", "</p>");
-
-            ret = ret.replaceAll("<tr(.)*?>", "<p>");
-            ret = ret.replaceAll("</tr>", "</p>");
-
-            ret = ret.replaceAll("<td(.)*?>", "<p>");
-            ret = ret.replaceAll("</td>", "</p>");
-
-            ret = ret.replaceAll("<th(.)*?>", "<p>");
-            ret = ret.replaceAll("</th>", "</p>");
-
-            return ret;
-        }
-
+        } else
+            return doc.toString();
 
         return null;
     }
@@ -295,9 +297,10 @@ public class ArticleTextExtractor {
      * @param doc document to prepare. Passed as reference, and changed inside
      *            of function
      */
-    private static void prepareDocument(Document doc) {
+    private static void prepareDocument(Document doc, boolean mobilize) {
         // stripUnlikelyCandidates(doc);
-        removeSelectsAndOptions(doc);
+        if ( mobilize )
+            removeSelectsAndOptions(doc);
         removeScriptsAndStyles(doc);
     }
 

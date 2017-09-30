@@ -57,6 +57,9 @@ public class HtmlUtils {
     private static final Pattern END_BR_PATTERN = Pattern.compile("(\\s*<br\\s*[/]*>\\s*)*$", Pattern.CASE_INSENSITIVE);
     private static final Pattern MULTIPLE_BR_PATTERN = Pattern.compile("(\\s*<br\\s*[/]*>\\s*){3,}", Pattern.CASE_INSENSITIVE);
     private static final Pattern EMPTY_LINK_PATTERN = Pattern.compile("<a\\s+[^>]*></a>", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REF_REPLY_PATTERN = Pattern.compile("<a[^>]+(reply|thread|comment|user)[^>]+(.)*?/a>", Pattern.CASE_INSENSITIVE);
+    private static final Pattern IMG_USER_PATTERN = Pattern.compile("<img[^>]+(user)[^>]+(.)*?>", Pattern.CASE_INSENSITIVE);
+
     //public static boolean mIsDownloadingImagesForEntryView = false;
 
 
@@ -83,6 +86,9 @@ public class HtmlUtils {
             content = START_BR_PATTERN.matcher(content).replaceAll("");
             content = END_BR_PATTERN.matcher(content).replaceAll("");
             content = MULTIPLE_BR_PATTERN.matcher(content).replaceAll("<br><br>");
+            content = REF_REPLY_PATTERN.matcher(content).replaceAll("");
+            content = IMG_USER_PATTERN.matcher(content).replaceAll("");
+
         }
 
         return content;
@@ -124,23 +130,27 @@ public class HtmlUtils {
             matcher = IMG_PATTERN.matcher(content);
             int index = 0;
             while ( matcher.find()  ) {
-                index++;
-                String match = matcher.group(1);
+                String srcText = matcher.group(1);
                 //String match1 = matcher.group(1).replace(" ", URL_SPACE);
-                String imgPath = NetworkUtils.getDownloadedImagePath(entryId, match);
+                if ( srcText.startsWith( Constants.FILE_SCHEME ) ) {
+                    content = content.replace( getDownloadImageHtml(srcText), "" );
+                } else {
+                    String imgPath = NetworkUtils.getDownloadedImagePath(entryId, srcText);
+                    index++;
+                    if (new File(imgPath).exists()) {
+                        content = content.replace(srcText, Constants.FILE_SCHEME + imgPath);
 
-                if (new File(imgPath).exists()) {
-                    content = content.replace(match, Constants.FILE_SCHEME + imgPath);
-                } else if (needDownloadPictures) {
-                    if ( ( index < FetcherService.mMaxImageDownloadCount ) || ( FetcherService.mMaxImageDownloadCount == 0 ) ) {
-                        imagesToDl.add(match);
-                        content = content.replace(match, Constants.FILE_SCHEME + imgPath);
-                    } else {
-                        String match0 = matcher.group(0);
-                        String html = getButtonHtml("downloadImage('" + match + "')" , getString( R.string.downloadOneImage ) ) +
-                                      getButtonHtml("downloadNextImages()" , getString( R.string.downloadNext ) + PrefUtils.getImageDownloadCount() ) + "<br/>";
+                    } else if (needDownloadPictures) {
+                        String imgTagText = matcher.group(0);
+                        if ( ( index < FetcherService.mMaxImageDownloadCount ) || ( FetcherService.mMaxImageDownloadCount == 0 ) ) {
+                            imagesToDl.add(srcText);
+                            content = content.replace(imgTagText, getDownloadImageHtml(srcText) + imgTagText.replace(srcText, Constants.FILE_SCHEME + imgPath) );
+                        } else {
+                            String htmlButtons = getDownloadImageHtml(srcText) +
+                                          getButtonHtml("downloadNextImages()" , getString( R.string.downloadNext ) + PrefUtils.getImageDownloadCount() ) + "<br/>";
 
-                        content = content.replace(match0, html + match0.replace(match, Constants.FILE_SCHEME + imgPath));
+                            content = content.replace(imgTagText, htmlButtons + imgTagText.replace(srcText, Constants.FILE_SCHEME + imgPath));
+                        }
                     }
                 }
             }
@@ -163,6 +173,10 @@ public class HtmlUtils {
         }
 
         return content;
+    }
+
+    static String getDownloadImageHtml(String match) {
+        return getButtonHtml("downloadImage('" + match + "')" , getString( R.string.downloadOneImage ) );
     }
 
     private static String getString( int id ) {

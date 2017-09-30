@@ -168,7 +168,7 @@ public class EntryActivity extends BaseActivity {
         return PrefUtils.getBoolean(STATE_IS_ACTIONBAR_HIDDEN, false);
     }
 
-    public void setFullScreen(boolean statusBarHidden, boolean actionBarHidden ) {
+    public void setFullScreen( boolean statusBarHidden, boolean actionBarHidden ) {
         //mIsStatusBarHidden = statusBarHidden;
         //mIsActionBarHidden = actionBarHidden;
         PrefUtils.putBoolean(STATE_IS_STATUSBAR_HIDDEN, statusBarHidden);
@@ -196,6 +196,18 @@ public class EntryActivity extends BaseActivity {
             mEntryFragment.UpdateProgress();
             mEntryFragment.UpdateClock();
         }
+    }
+
+    public void setFullScreenWithNavBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mDecorView.setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE |
+                    //View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+
+        } else {
+            setFullScreenOld( true );
+        }
+
     }
 
     private void setFullScreenOld(boolean fullScreen ) {

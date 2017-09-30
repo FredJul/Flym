@@ -52,6 +52,8 @@ public class PrefUtils {
     public static final String ENTRY_FONT_BOLD = "entry_font_bold";
     public static final String TEXT_COLOR_BRIGHTNESS = "text_color_brightness";
     public static final String MAX_IMAGE_DOWNLOAD_COUNT = "max_image_download_count";
+    public static final String MAX_IMAGE_DOWNLOAD_SIZE = "settings_max_image_download_size_kb";
+
     public static final String CONTENT_EXTRACT_RULES = "content_extract_rules";
     public static final String LOAD_COMMENTS = "load_comments";
     public static final String REMEBER_LAST_ENTRY = "remember_last_entry";
@@ -77,6 +79,13 @@ public class PrefUtils {
         }
     }
 
+    public static int getImageMaxDownloadSizeInKb() {
+        try {
+            return Integer.parseInt(PrefUtils.getString(PrefUtils.MAX_IMAGE_DOWNLOAD_SIZE, "2048"));
+        } catch ( NumberFormatException e ) {
+            return 2048;
+        }
+    }
 
     public static boolean getBoolean(String key, boolean defValue) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());

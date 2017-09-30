@@ -383,14 +383,23 @@ public class EntryView extends WebView implements Observer {
 
     }
 
+    /*@Override
+    public void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
+        super.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
+        if ( scrollY > 50 && clampedY ) {
+            mActivity.setFullScreen(false, EntryActivity.GetIsActionBarHidden());
+        }
+
+    }*/
+
     @Override
     protected void onScrollChanged (int l, int t, int oldl, int oldt) {
         FetcherService.getStatusText().HideByScroll();
         int height = (int) Math.floor(getContentHeight() * getScale());
         int webViewHeight = getMeasuredHeight();
         if(getScrollY() + webViewHeight >= height){
-            //EntryActivity activity = (EntryActivity) getActivity();
-            mActivity.setFullScreen(false, EntryActivity.GetIsActionBarHidden());
+            if ( EntryActivity.GetIsStatusBarHidden() )
+                mActivity.setFullScreenWithNavBar();//setFullScreen(false, EntryActivity.GetIsActionBarHidden());
         }
         mActivity.mEntryFragment.UpdateProgress();
         mActivity.mEntryFragment.UpdateClock();
@@ -402,7 +411,7 @@ public class EntryView extends WebView implements Observer {
         if ( ( data != null ) && ( (Long)data == mEntryId ) )  {
             if (getScrollY() != 0)
                 mScrollY = getScrollY();
-            //mData =    HtmlUtils.replaceImageURLs(mData, mEntryId);
+            mData = HtmlUtils.replaceImageURLs(mData, mEntryId);
             loadDataWithBaseURL("", mData, TEXT_HTML, Constants.UTF8, null);
         //setScrollY( y );
         }

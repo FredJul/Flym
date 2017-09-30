@@ -83,7 +83,7 @@ public class NetworkUtils {
         return FileUtils.GetImagesFolder().getAbsolutePath() + "/" + TEMP_PREFIX + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
     }
 
-    public static void downloadImage(final long entryId, String imgUrl/*, boolean updateGUI*/ ) throws IOException {
+    public static void downloadImage(final long entryId, String imgUrl, boolean isSizeLimit ) throws IOException {
         if ( FetcherService.isCancelRefresh() )
             return;
         String tempImgPath = getTempDownloadedImagePath(entryId, imgUrl);
@@ -98,33 +98,43 @@ public class NetworkUtils {
                 String realUrl = Html.fromHtml(imgUrl).toString();
                 imgURLConnection = setupConnection(realUrl);
 
+                int size = imgURLConnection.getContentLength();
+                int maxImageDownloadSize = PrefUtils.getImageMaxDownloadSizeInKb() * 1024;
+                if ( !isSizeLimit || size <= maxImageDownloadSize ) {
 
+                    FileOutputStream fileOutput = new FileOutputStream(tempImgPath);
+                    InputStream inputStream = imgURLConnection.getInputStream();
 
-                FileOutputStream fileOutput = new FileOutputStream(tempImgPath);
-                InputStream inputStream = imgURLConnection.getInputStream();
-
-                int bytesRecieved = 0;
-                int progressBytes = 0;
-                final int cStep = 1024 * 10;
-                byte[] buffer = new byte[2048];
-                int bufferLength;
-                FetcherService.getStatusText().ChangeProgress(getProgressText(bytesRecieved));
-                while (!FetcherService.isCancelRefresh() && (bufferLength = inputStream.read(buffer)) > 0) {
-                    fileOutput.write(buffer, 0, bufferLength);
-                    bytesRecieved += bufferLength;
-                    progressBytes += bufferLength;
-                    if (progressBytes >= cStep) {
-                        progressBytes = 0;
-                        FetcherService.getStatusText().ChangeProgress(getProgressText(bytesRecieved));
+                    int bytesRecieved = 0;
+                    int progressBytes = 0;
+                    final int cStep = 1024 * 10;
+                    byte[] buffer = new byte[2048];
+                    int bufferLength;
+                    boolean abort = false;
+                    FetcherService.getStatusText().ChangeProgress(getProgressText(bytesRecieved));
+                    while ( !FetcherService.isCancelRefresh() && (bufferLength = inputStream.read(buffer)) > 0) {
+                        if ( isSizeLimit && size > maxImageDownloadSize ) {
+                            abort = true;
+                            break;
+                        }
+                        fileOutput.write(buffer, 0, bufferLength);
+                        bytesRecieved += bufferLength;
+                        progressBytes += bufferLength;
+                        if (progressBytes >= cStep) {
+                            progressBytes = 0;
+                            FetcherService.getStatusText().ChangeProgress(getProgressText(bytesRecieved));
+                        }
                     }
+                    FetcherService.getStatusText().AddBytes(bytesRecieved);
+                    fileOutput.flush();
+                    fileOutput.close();
+                    inputStream.close();
+
+                    if ( !abort )
+                        new File(tempImgPath).renameTo(new File(finalImgPath));
+                    else
+                        new File(tempImgPath).delete();
                 }
-                FetcherService.getStatusText().AddBytes( bytesRecieved );
-                fileOutput.flush();
-                fileOutput.close();
-                inputStream.close();
-
-                new File(tempImgPath).renameTo(new File(finalImgPath));
-
             } catch (IOException e) {
                 new File(tempImgPath).delete();
                 throw e;

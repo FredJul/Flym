@@ -120,6 +120,7 @@
     <string name="menu_mark_as_unfavorite">Mark as favorite</string>
     <string name="menu_mark_as_unread">Mark as unread</string>
     <string name="menu_reload_full_text">Reload full text</string>
+    <string name="menu_reload_full_text_without_mobilizer">Reload without mobilizer</string>
     <string name="share_favorites_title">Flym: starred entries</string>
     <string name="copied_clipboard">Link copied</string>
     <string name="get_full_text">Retrieve the full text</string>
@@ -218,6 +219,8 @@
     <string name="actionBarToggle">Toggle action bar</string>
     <string name="settings_show_tap_zones">Tap zones are visible</string>
     <string name="settings_show_tap_zone_description">as transparent squares in entry view</string>
+    <string name="settings_max_image_download_size_kb">Max image size</string>
+    <string name="settings_max_image_download_size_kb_summary">(in kb). Do not auto load images larger than</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new entry</item>

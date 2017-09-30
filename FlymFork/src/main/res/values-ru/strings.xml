@@ -125,6 +125,7 @@
     <string name="menu_mark_as_unfavorite">Убрать из избранного</string>
     <string name="menu_mark_as_unread">Отметить как непрочитанное</string>
     <string name="menu_reload_full_text">Перезагрузить весь текст</string>
+    <string name="menu_reload_full_text_without_mobilizer">Перезагрузить без мобилайзера</string>
     <string name="menu_toogle_unread_all">Прочитанные|Все</string>
     <string name="share_favorites_title">Избранные новости</string>
     <string name="copied_clipboard">Ссылка скопирована</string>
@@ -351,5 +352,7 @@
     <string name="actionBarToggle">Пркл. панель действий</string>
     <string name="settings_show_tap_zones">Зоны нажатий видимы</string>
     <string name="settings_show_tap_zone_description">полупрозрачные квадратики в окне чтения статьи</string>
+    <string name="settings_max_image_download_size_kb">Max размер изображения</string>
+    <string name="settings_max_image_download_size_kb_summary">(в kb). Не загружать автоматически изображения, имеющие больший размер</string>
 
 </resources>
