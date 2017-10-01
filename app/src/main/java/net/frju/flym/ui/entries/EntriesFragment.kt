@@ -175,7 +175,13 @@ class EntriesFragment : Fragment() {
 
         newCountLiveData?.observe(this, Observer<Long> { count ->
             if (count != null && count > 0L) {
-                unreadBadge?.badgeNumber = count.toInt()
+                // If we have an empty list, let's immediately display the new items
+                if (entryIds?.isEmpty() == true && bottom_navigation.selectedItemId != R.id.favorites) {
+                    listDisplayDate = Date().time
+                    initDataObservers()
+                } else {
+                    unreadBadge?.badgeNumber = count.toInt()
+                }
             } else {
                 unreadBadge?.hide(false)
             }
