@@ -89,6 +89,13 @@ public class HtmlUtils {
             content = REF_REPLY_PATTERN.matcher(content).replaceAll("");
             content = IMG_USER_PATTERN.matcher(content).replaceAll("");
 
+            // xml
+            content = content.replace( "&lt;", "<" );
+            content = content.replace( "&gt;", ">" );
+            content = content.replace( "&amp;", "&" );
+            content = content.replace( "&quot;", "\"" );
+            content = content.replace( "&#39;", "'" );
+
         }
 
         return content;
@@ -144,11 +151,14 @@ public class HtmlUtils {
                         String imgTagText = matcher.group(0);
                         if ( ( index < FetcherService.mMaxImageDownloadCount ) || ( FetcherService.mMaxImageDownloadCount == 0 ) ) {
                             imagesToDl.add(srcText);
-                            content = content.replace(imgTagText, getDownloadImageHtml(srcText) + imgTagText.replace(srcText, Constants.FILE_SCHEME + imgPath) );
+                            content = content.replace(imgTagText, //getDownloadImageHtml(srcText) +
+                                                                  imgTagText.replace(srcText, Constants.FILE_SCHEME + imgPath)
+                                                                            .replaceAll( "alt=\"[^\"]+?\"", "alt=\"" + getString( R.string.downloadOneImage ) + "\" " )
+                                                                            .replace( "alt=\"\"", "alt=\"" + getString( R.string.downloadOneImage ) + "\" " ));
                         } else {
-                            String htmlButtons = getDownloadImageHtml(srcText) +
-                                          getButtonHtml("downloadNextImages()" , getString( R.string.downloadNext ) + PrefUtils.getImageDownloadCount() ) + "<br/>";
-
+                            String htmlButtons = getDownloadImageHtml(srcText) + "<br/>";
+                            if ( index == FetcherService.mMaxImageDownloadCount + 1 )
+                                htmlButtons += getButtonHtml("downloadNextImages()" , getString( R.string.downloadNext ) + PrefUtils.getImageDownloadCount() );
                             content = content.replace(imgTagText, htmlButtons + imgTagText.replace(srcText, Constants.FILE_SCHEME + imgPath));
                         }
                     }
@@ -187,7 +197,7 @@ public class HtmlUtils {
     private static String getButtonHtml(String methodName, String caption) {
         final String BUTTON_START = "<i onclick=\"";
         //final String BUTTON_MIDDLE = " onclick=\"";
-        final String BUTTON_END = "\">" + caption + "   </i>";
+        final String BUTTON_END = "\" align=\"left\">" + caption + "   </i>";
         //String html = BUTTON_SECTION_START + BUTTON_START + "Download image" + BUTTON_MIDDLE + "ImageDownloadJavaScriptObject.downloadImage('" + match + "');" + BUTTON_END + BUTTON_SECTION_END;
         return BUTTON_START + "ImageDownloadJavaScriptObject." + methodName + ";" + BUTTON_END;
     }
