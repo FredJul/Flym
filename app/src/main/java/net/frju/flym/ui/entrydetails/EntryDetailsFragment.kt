@@ -67,8 +67,8 @@ class EntryDetailsFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        entry_view.destroy()
         super.onDestroyView()
+        entry_view.destroy()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
