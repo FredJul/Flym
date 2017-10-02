@@ -26,6 +26,18 @@ import org.jetbrains.annotations.NotNull
 
 class EntryDetailsFragment : Fragment() {
 
+    companion object {
+
+        private val ARG_ENTRY = "ARG_ENTRY"
+        private val ARG_ALL_ENTRIES_IDS = "ARG_ALL_ENTRIES_IDS"
+
+        fun newInstance(entry: EntryWithFeed, allEntryIds: List<String>): EntryDetailsFragment {
+            val fragment = EntryDetailsFragment()
+            fragment.arguments = bundleOf(ARG_ENTRY to entry, ARG_ALL_ENTRIES_IDS to allEntryIds)
+            return fragment
+        }
+    }
+
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
     private lateinit var entry: EntryWithFeed
@@ -156,17 +168,5 @@ class EntryDetailsFragment : Fragment() {
         arguments.putStringArrayList(ARG_ALL_ENTRIES_IDS, ArrayList(allEntryIds))
 
         updateUI()
-    }
-
-    companion object {
-
-        private val ARG_ENTRY = "ARG_ENTRY"
-        private val ARG_ALL_ENTRIES_IDS = "ARG_ALL_ENTRIES_IDS"
-
-        fun newInstance(entry: EntryWithFeed, allEntryIds: List<String>): EntryDetailsFragment {
-            val fragment = EntryDetailsFragment()
-            fragment.arguments = bundleOf(ARG_ENTRY to entry, ARG_ALL_ENTRIES_IDS to allEntryIds)
-            return fragment
-        }
     }
 }

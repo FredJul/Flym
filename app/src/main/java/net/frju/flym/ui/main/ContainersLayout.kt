@@ -23,6 +23,14 @@ import net.frju.flym.utils.onLaidOut
 
 class ContainersLayout : FrameLayout {
 
+    companion object {
+
+        val ANIM_DURATION = 250
+
+        private val STATE_SUPER = "state_super"
+        private val STATE_CONTAINERS_STATE = "state_containers_state"
+    }
+
     var state: MainNavigator.State? = null
         set(state) {
             field = state
@@ -167,13 +175,5 @@ class ContainersLayout : FrameLayout {
             superParcelable = parcelable.getParcelable<Parcelable>(STATE_SUPER)
         }
         super.onRestoreInstanceState(superParcelable)
-    }
-
-    companion object {
-
-        val ANIM_DURATION = 250
-
-        private val STATE_SUPER = "state_super"
-        private val STATE_CONTAINERS_STATE = "state_containers_state"
     }
 }

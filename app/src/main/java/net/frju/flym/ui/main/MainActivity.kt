@@ -34,13 +34,19 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), MainNavigator {
 
+    companion object {
+
+        private const val TAG_DETAILS = "TAG_DETAILS"
+        private const val TAG_MASTER = "TAG_MASTER"
+
+        private const val FEED_SEARCH_TITLE = "title"
+        private const val FEED_SEARCH_URL = "feedId"
+        private const val FEED_SEARCH_DESC = "description"
+        private val DEFAULT_FEEDS = arrayListOf(SearchFeedResult("http://www.nytimes.com/services/xml/rss/nyt/World.xml", "NY Times", "Word news"))
+    }
+
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = FeedAdapter(feedGroups)
-    val FEED_SEARCH_TITLE = "title"
-    val FEED_SEARCH_URL = "feedId"
-    val FEED_SEARCH_DESC = "description"
-    val DEFAULT_FEEDS = arrayListOf(SearchFeedResult("http://www.nytimes.com/services/xml/rss/nyt/World.xml", "NY Times", "Word news"))
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -246,11 +252,5 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
     override fun goToFeedback() {
         //start new activity
-    }
-
-    companion object {
-
-        private val TAG_DETAILS = "TAG_DETAILS"
-        private val TAG_MASTER = "TAG_MASTER"
     }
 }

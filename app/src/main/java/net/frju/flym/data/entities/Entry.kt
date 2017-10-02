@@ -14,6 +14,11 @@ import java.util.*
 @Entity(tableName = "entries")
 open class Entry : Parcelable {
 
+    companion object {
+        @JvmField
+        val CREATOR = PaperParcelEntry.CREATOR
+    }
+
     @PrimaryKey
     var id: String = ""
     var feedId: Long = 0L
@@ -27,11 +32,6 @@ open class Entry : Parcelable {
     var author: String? = null
     var read: Boolean = false
     var favorite: Boolean = false
-
-    companion object {
-        @JvmField
-        val CREATOR = PaperParcelEntry.CREATOR
-    }
 
     override fun describeContents() = 0
 

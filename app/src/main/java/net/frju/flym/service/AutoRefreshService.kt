@@ -65,18 +65,6 @@ import net.frju.parentalcontrol.utils.PrefUtils
 
 class AutoRefreshService : JobService() {
 
-    override fun onStartJob(params: JobParameters): Boolean {
-        if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            baseContext.startService(Intent(baseContext, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.FROM_AUTO_REFRESH, true))
-        }
-
-        return false
-    }
-
-    override fun onStopJob(params: JobParameters): Boolean {
-        return false
-    }
-
     companion object {
         val SIXTY_MINUTES = "3600000"
         val JOB_ID = 0
@@ -102,5 +90,17 @@ class AutoRefreshService : JobService() {
                 tm.cancel(JOB_ID)
             }
         }
+    }
+
+    override fun onStartJob(params: JobParameters): Boolean {
+        if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+            baseContext.startService(Intent(baseContext, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.FROM_AUTO_REFRESH, true))
+        }
+
+        return false
+    }
+
+    override fun onStopJob(params: JobParameters): Boolean {
+        return false
     }
 }

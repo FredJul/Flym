@@ -131,6 +131,7 @@
     <orderEntry type="library" name="annotations-4.1.1" level="project" />
     <orderEntry type="library" name="paperparcel-2.0.4" level="project" />
     <orderEntry type="library" name="commons-lang3-3.5" level="project" />
+    <orderEntry type="library" name="okhttp-urlconnection-3.9.0" level="project" />
     <orderEntry type="library" name="anko-support-v4-0.10.1" level="project" />
     <orderEntry type="library" name="MaterialAbout-0.1.8" level="project" />
     <orderEntry type="library" name="transition-26.1.0" level="project" />

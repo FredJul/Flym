@@ -11,11 +11,11 @@ data class SearchFeedResult(
         var name: String = "",
         var desc: String = "") : Parcelable, Searchable {
 
-    override fun getTitle() = name
-
     companion object {
         @JvmField val CREATOR = PaperParcelSearchFeedResult.CREATOR
     }
+
+    override fun getTitle() = name
 
     override fun describeContents() = 0
 

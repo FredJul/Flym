@@ -9,15 +9,6 @@ import net.frju.parentalcontrol.utils.PrefUtils
 
 class App : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
-
-        context = applicationContext
-        db = AppDatabase.createDatabase(context)
-
-        PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false) // init
-    }
-
     companion object {
         @SuppressLint("StaticFieldLeak")
         @JvmStatic
@@ -27,5 +18,14 @@ class App : Application() {
         @JvmStatic
         lateinit var db: AppDatabase
             private set
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        context = applicationContext
+        db = AppDatabase.createDatabase(context)
+
+        PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false) // init
     }
 }

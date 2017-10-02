@@ -25,10 +25,6 @@ import java.io.File
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun feedDao(): FeedDao
-    abstract fun entryDao(): EntryDao
-    abstract fun taskDao(): TaskDao
-
     companion object {
         private const val DATABASE_NAME = "db"
         private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
@@ -91,4 +87,8 @@ abstract class AppDatabase : RoomDatabase() {
                     .build()
         }
     }
+
+    abstract fun feedDao(): FeedDao
+    abstract fun entryDao(): EntryDao
+    abstract fun taskDao(): TaskDao
 }

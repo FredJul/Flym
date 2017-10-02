@@ -76,6 +76,7 @@ dependencies {
 
     implementation 'com.rometools:rome-opml:+'
     implementation 'com.squareup.okhttp3:okhttp:+'
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:+"
     implementation 'org.jsoup:jsoup:+'
     implementation 'com.github.bumptech.glide:glide:4.1.1'
     kapt 'com.github.bumptech.glide:compiler:4.1.1'

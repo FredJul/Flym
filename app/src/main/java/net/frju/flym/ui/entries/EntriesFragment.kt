@@ -12,8 +12,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import kotlinx.android.synthetic.main.fragment_entries.*
+import kotlinx.android.synthetic.main.view_entry.view.*
 import kotlinx.android.synthetic.main.view_main_containers.*
 import net.fred.feedex.R
 import net.frju.flym.App
@@ -35,6 +35,21 @@ import java.util.*
 
 class EntriesFragment : Fragment() {
 
+    companion object {
+
+        private val ARG_FEED = "feed"
+        private val STATE_SELECTED_ENTRY_ID = "STATE_SELECTED_ENTRY_ID"
+        private val STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE"
+
+        fun newInstance(feed: Feed?): EntriesFragment {
+            val fragment = EntriesFragment()
+            feed?.let {
+                fragment.arguments = bundleOf(ARG_FEED to feed)
+            }
+            return fragment
+        }
+    }
+
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
     private val adapter = EntryAdapter({ entry ->
@@ -42,7 +57,7 @@ class EntriesFragment : Fragment() {
     }, { entry ->
         entry.favorite = !entry.favorite
 
-        (view as? ImageView)?.let {
+        view?.favorite_icon?.let {
             if (entry.favorite) {
                 it.setImageResource(R.drawable.ic_star_white_24dp)
             } else {
@@ -124,7 +139,7 @@ class EntriesFragment : Fragment() {
             listDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE)
         }
 
-        initDataObservers()
+        bottom_navigation.post { initDataObservers() } // Needed to retrieve the correct selected position
     }
 
     private fun initDataObservers() {
@@ -262,20 +277,5 @@ class EntriesFragment : Fragment() {
 
     private fun refreshSwipeProgress() {
         refresh_layout.isRefreshing = PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)
-    }
-
-    companion object {
-
-        private val ARG_FEED = "feed"
-        private val STATE_SELECTED_ENTRY_ID = "STATE_SELECTED_ENTRY_ID"
-        private val STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE"
-
-        fun newInstance(feed: Feed?): EntriesFragment {
-            val fragment = EntriesFragment()
-            feed?.let {
-                fragment.arguments = bundleOf(ARG_FEED to feed)
-            }
-            return fragment
-        }
     }
 }

@@ -81,23 +81,114 @@ import net.frju.flym.utils.ArticleTextExtractor
 import net.frju.flym.utils.HtmlUtils
 import net.frju.flym.utils.sha1
 import net.frju.parentalcontrol.utils.PrefUtils
+import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
+import org.jetbrains.anko.error
 import org.jetbrains.anko.warn
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.net.CookieHandler
 import java.net.CookieManager
+import java.net.CookiePolicy
 import java.util.concurrent.ExecutorCompletionService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 
 class FetcherService : IntentService(FetcherService::class.java.simpleName), AnkoLogger {
+
+    companion object {
+        const val EXTRA_FEED_ID = "EXTRA_FEED_ID"
+
+        val COOKIE_MANAGER = CookieManager().apply {
+            setCookiePolicy(CookiePolicy.ACCEPT_ALL)
+        }
+
+        val HTTP_CLIENT: OkHttpClient = OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .cookieJar(JavaNetCookieJar(COOKIE_MANAGER))
+                .build()
+
+        const val FROM_AUTO_REFRESH = "FROM_AUTO_REFRESH"
+
+        const val ACTION_REFRESH_FEEDS = "net.frju.flym.REFRESH"
+        const val ACTION_MOBILIZE_FEEDS = "net.frju.flym.MOBILIZE_FEEDS"
+        const val ACTION_DOWNLOAD_IMAGES = "net.frju.flym.DOWNLOAD_IMAGES"
+
+        private const val THREAD_NUMBER = 3
+        private const val MAX_TASK_ATTEMPT = 3
+
+        val IMAGE_FOLDER_FILE = File(App.context.cacheDir, "images/")
+        val IMAGE_FOLDER = IMAGE_FOLDER_FILE.absolutePath + '/'
+        const val TEMP_PREFIX = "TEMP__"
+        const val ID_SEPARATOR = "__"
+
+        fun shouldDownloadPictures(): Boolean {
+            val fetchPictureMode = PrefUtils.getString(PrefUtils.PRELOAD_IMAGE_MODE, PrefUtils.PRELOAD_IMAGE_MODE__WIFI_ONLY)
+
+            var downloadPictures = false
+            if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
+                if (PrefUtils.PRELOAD_IMAGE_MODE__ALWAYS == fetchPictureMode) {
+                    downloadPictures = true
+                } else if (PrefUtils.PRELOAD_IMAGE_MODE__WIFI_ONLY == fetchPictureMode) {
+                    val ni = (App.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
+                    if (ni != null && ni.type == ConnectivityManager.TYPE_WIFI) {
+                        downloadPictures = true
+                    }
+                }
+            }
+            return downloadPictures
+        }
+
+        fun getDownloadedImagePath(entryId: String, imgUrl: String): String {
+            return IMAGE_FOLDER + entryId + ID_SEPARATOR + imgUrl.sha1()
+        }
+
+        fun getTempDownloadedImagePath(entryId: String, imgUrl: String): String {
+            return IMAGE_FOLDER + TEMP_PREFIX + entryId + ID_SEPARATOR + imgUrl.sha1()
+        }
+
+        fun getDownloadedOrDistantImageUrl(entryId: String, imgUrl: String): String {
+            val dlImgFile = File(getDownloadedImagePath(entryId, imgUrl))
+            return if (dlImgFile.exists()) {
+                Uri.fromFile(dlImgFile).toString()
+            } else {
+                imgUrl
+            }
+        }
+
+        fun addImagesToDownload(imgUrlsToDownload: Map<String, List<String>>) {
+            if (imgUrlsToDownload.isNotEmpty()) {
+                val newTasks = mutableListOf<Task>()
+                for ((key, value) in imgUrlsToDownload) {
+                    for (img in value) {
+                        val task = Task()
+                        task.entryId = key
+                        task.imageLinkToDl = img
+                        newTasks.add(task)
+                    }
+                }
+
+                App.db.taskDao().insertAll(*newTasks.toTypedArray())
+            }
+        }
+
+        fun addEntriesToMobilize(entryIds: List<String>) {
+            val newTasks = mutableListOf<Task>()
+            for (id in entryIds) {
+                val task = Task()
+                task.entryId = id
+                newTasks.add(task)
+            }
+
+            App.db.taskDao().insertAll(*newTasks.toTypedArray())
+        }
+    }
 
     private val handler = Handler()
     private val notifMgr by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
@@ -129,6 +220,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         }
 
         downloadPictures = shouldDownloadPictures()
+
+        //return testMobilize()
 
         when {
             ACTION_MOBILIZE_FEEDS == intent.action -> {
@@ -209,6 +302,29 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         }
     }
 
+    private fun testMobilize() {
+        error("start test mobilizing")
+
+        val testUrl = "http://www.lavoixdunord.fr/232449/article/2017-10-02/la-romanciere-anne-bert-fer-de-lance-du-combat-pour-l-euthanasie-en-france-est"
+        val request = Request.Builder()
+                .url(testUrl)
+                .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
+                .addHeader("accept", "*/*")
+                .build()
+        try {
+            HTTP_CLIENT.newCall(request).execute().use {
+                it.body()?.let { body ->
+                    ArticleTextExtractor.extractContent(body.byteStream(), null)?.let {
+                        val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(testUrl))
+                        error(mobilizedHtml)
+                    }
+                }
+            }
+        } catch (t: Throwable) {
+            error("can't mobilize", t)
+        }
+    }
+
     private fun mobilizeAllEntries() {
 
         val tasks = App.db.taskDao().mobilizeTasks
@@ -220,7 +336,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
 
             App.db.entryDao().findById(task.entryId)?.let { entry ->
                 warn("mobilizing entry ${entry.id}")
-                if (entry.link != null) {
+                entry.link?.let { link ->
                     // Try to find a text indicator for better content extraction
                     var contentIndicator: String? = null
                     if (!TextUtils.isEmpty(entry.description)) {
@@ -231,16 +347,15 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                     }
 
                     val request = Request.Builder()
-                            .url(entry.link)
+                            .url(link)
                             .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
                             .addHeader("accept", "*/*")
                             .build()
                     try {
                         HTTP_CLIENT.newCall(request).execute().use {
                             it.body()?.let { body ->
-                                var mobilizedHtml = ArticleTextExtractor.extractContent(body.byteStream(), contentIndicator)
-                                if (mobilizedHtml != null) {
-                                    mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, getBaseUrl(entry.link!!))
+                                ArticleTextExtractor.extractContent(body.byteStream(), contentIndicator)?.let {
+                                    val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(link))
 
                                     if (downloadPictures) {
                                         val imagesList = HtmlUtils.getImageURLs(mobilizedHtml)
@@ -491,95 +606,5 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         }
 
         return baseUrl
-    }
-
-    companion object {
-        const val EXTRA_FEED_ID = "EXTRA_FEED_ID"
-
-        val HTTP_CLIENT: OkHttpClient = OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(10, TimeUnit.SECONDS)
-                .build()
-
-        const val FROM_AUTO_REFRESH = "FROM_AUTO_REFRESH"
-
-        const val ACTION_REFRESH_FEEDS = "net.frju.flym.REFRESH"
-        const val ACTION_MOBILIZE_FEEDS = "net.frju.flym.MOBILIZE_FEEDS"
-        const val ACTION_DOWNLOAD_IMAGES = "net.frju.flym.DOWNLOAD_IMAGES"
-
-        private const val THREAD_NUMBER = 3
-        private const val MAX_TASK_ATTEMPT = 3
-
-        val IMAGE_FOLDER_FILE = File(App.context.cacheDir, "images/")
-        val IMAGE_FOLDER = IMAGE_FOLDER_FILE.absolutePath + '/'
-        const val TEMP_PREFIX = "TEMP__"
-        const val ID_SEPARATOR = "__"
-
-        private val COOKIE_MANAGER = object : CookieManager() {
-            init {
-                CookieHandler.setDefault(this)
-            }
-        }
-
-        fun shouldDownloadPictures(): Boolean {
-            val fetchPictureMode = PrefUtils.getString(PrefUtils.PRELOAD_IMAGE_MODE, PrefUtils.PRELOAD_IMAGE_MODE__WIFI_ONLY)
-
-            var downloadPictures = false
-            if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
-                if (PrefUtils.PRELOAD_IMAGE_MODE__ALWAYS == fetchPictureMode) {
-                    downloadPictures = true
-                } else if (PrefUtils.PRELOAD_IMAGE_MODE__WIFI_ONLY == fetchPictureMode) {
-                    val ni = (App.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
-                    if (ni != null && ni.type == ConnectivityManager.TYPE_WIFI) {
-                        downloadPictures = true
-                    }
-                }
-            }
-            return downloadPictures
-        }
-
-        fun getDownloadedImagePath(entryId: String, imgUrl: String): String {
-            return IMAGE_FOLDER + entryId + ID_SEPARATOR + imgUrl.sha1()
-        }
-
-        fun getTempDownloadedImagePath(entryId: String, imgUrl: String): String {
-            return IMAGE_FOLDER + TEMP_PREFIX + entryId + ID_SEPARATOR + imgUrl.sha1()
-        }
-
-        fun getDownloadedOrDistantImageUrl(entryId: String, imgUrl: String): String {
-            val dlImgFile = File(getDownloadedImagePath(entryId, imgUrl))
-            return if (dlImgFile.exists()) {
-                Uri.fromFile(dlImgFile).toString()
-            } else {
-                imgUrl
-            }
-        }
-
-        fun addImagesToDownload(imgUrlsToDownload: Map<String, List<String>>) {
-            if (imgUrlsToDownload.isNotEmpty()) {
-                val newTasks = mutableListOf<Task>()
-                for ((key, value) in imgUrlsToDownload) {
-                    for (img in value) {
-                        val task = Task()
-                        task.entryId = key
-                        task.imageLinkToDl = img
-                        newTasks.add(task)
-                    }
-                }
-
-                App.db.taskDao().insertAll(*newTasks.toTypedArray())
-            }
-        }
-
-        fun addEntriesToMobilize(entryIds: List<String>) {
-            val newTasks = mutableListOf<Task>()
-            for (id in entryIds) {
-                val task = Task()
-                task.entryId = id
-                newTasks.add(task)
-            }
-
-            App.db.taskDao().insertAll(*newTasks.toTypedArray())
-        }
     }
 }
