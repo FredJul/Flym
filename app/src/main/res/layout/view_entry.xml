@@ -6,13 +6,15 @@
     android:layout_height="wrap_content"
     android:background="@drawable/selected_item_background"
     android:foreground="?selectableItemBackground"
-    android:minHeight="90dp">
+    android:minHeight="100dp"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="81dp">
 
     <ImageView
         android:id="@+id/main_icon"
         android:layout_width="@dimen/entry_img_width"
         android:layout_height="@dimen/entry_img_height"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="6dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
@@ -27,26 +29,25 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:drawablePadding="3dp"
         android:ellipsize="end"
         android:gravity="top"
-        android:maxLines="4"
+        android:maxLines="3"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/read_state"
         android:textIsSelectable="false"
         app:layout_constraintBottom_toTopOf="@+id/feed_name"
+        app:layout_constraintEnd_toStartOf="@+id/favorite_icon"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/main_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="long title"
-        app:layout_constraintEnd_toStartOf="@+id/favorite_icon" />
+        tools:text="long title" />
 
     <TextView
         android:id="@+id/feed_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -54,11 +55,12 @@
         android:drawablePadding="3dp"
         android:maxLines="1"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/read_state"
+        android:textColor="@color/colored_read_state"
         android:textIsSelectable="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/feed_icon"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/main_icon"
         app:layout_constraintTop_toBottomOf="@+id/title"
         tools:text="feed name" />
 
@@ -69,20 +71,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
+        android:padding="5dp"
         android:src="@drawable/ic_star_white_24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:padding="5dp" />
-
-    <ImageView
-        android:id="@+id/feed_icon"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/feed_name"
-        app:layout_constraintStart_toEndOf="@+id/main_icon"
-        app:layout_constraintTop_toTopOf="@+id/feed_name"
-        tools:background="@color/colorPrimaryDark" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

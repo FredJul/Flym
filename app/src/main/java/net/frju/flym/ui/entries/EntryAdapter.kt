@@ -14,7 +14,6 @@ import net.fred.feedex.R
 import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.service.FetcherService
-import net.frju.flym.utils.loadFavicon
 import org.jetbrains.anko.sdk21.coroutines.onClick
 
 class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, private val favoriteClickListener: (EntryWithFeed) -> Unit) : PagedListAdapter<EntryWithFeed, EntryAdapter.ViewHolder>(DIFF_CALLBACK) {
@@ -55,8 +54,6 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
                 GlideApp.with(context).clear(main_icon)
                 main_icon.setImageDrawable(letterDrawable)
             }
-
-            feed_icon.loadFavicon(entry.feedLink)
 
             if (entry.favorite) {
                 favorite_icon.setImageResource(R.drawable.ic_star_white_24dp)

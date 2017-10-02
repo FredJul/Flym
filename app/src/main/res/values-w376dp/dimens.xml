@@ -3,6 +3,6 @@
     <!-- NavigationDrawer -->
     <dimen name="nav_drawer_width">320dp</dimen>
 
-    <dimen name="entry_img_width">60dp</dimen>
-    <dimen name="entry_img_height">60dp</dimen>
+    <dimen name="entry_img_width">90dp</dimen>
+    <dimen name="entry_img_height">90dp</dimen>
 </resources>
