@@ -311,7 +311,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         if (newUri != null && !newUri.equals(mEntriesFragment.getUri())) {
-            mEntriesFragment.setData(this, newUri, showFeedInfo);
+            mEntriesFragment.setData(newUri, showFeedInfo);
         }
 
         mDrawerList.setItemChecked(position, true);
