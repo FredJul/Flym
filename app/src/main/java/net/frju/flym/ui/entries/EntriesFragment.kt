@@ -192,8 +192,11 @@ class EntriesFragment : Fragment() {
             if (count != null && count > 0L) {
                 // If we have an empty list, let's immediately display the new items
                 if (entryIds?.isEmpty() == true && bottom_navigation.selectedItemId != R.id.favorites) {
-                    listDisplayDate = Date().time
-                    initDataObservers()
+                    bottom_navigation.postDelayed({
+                        // just delay it a bit to have more entries
+                        listDisplayDate = Date().time
+                        initDataObservers()
+                    }, 500)
                 } else {
                     unreadBadge?.badgeNumber = count.toInt()
                 }
