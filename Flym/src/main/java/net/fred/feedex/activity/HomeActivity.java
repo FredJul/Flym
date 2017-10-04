@@ -32,6 +32,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -47,6 +48,9 @@ import net.fred.feedex.Constants;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.DrawerAdapter;
 import net.fred.feedex.fragment.EntriesListFragment;
+import net.fred.feedex.fragment.EntryFragment;
+import net.fred.feedex.fragment.GeneralPrefsFragment;
+import net.fred.feedex.fragment.MagazineFragment;
 import net.fred.feedex.parser.OPML;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
@@ -68,6 +72,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     private static final int PERMISSIONS_REQUEST_IMPORT_FROM_OPML = 1;
 
     private EntriesListFragment mEntriesFragment;
+    private MagazineFragment mMagazineFragment;
     private DrawerLayout mDrawerLayout;
     private View mLeftDrawer;
     private ListView mDrawerList;
@@ -83,7 +88,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         setContentView(R.layout.activity_home);
 
-        mEntriesFragment = (EntriesListFragment) getSupportFragmentManager().findFragmentById(R.id.entries_list_fragment);
+        mMagazineFragment = new MagazineFragment();
+        mEntriesFragment = new EntriesListFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.home_fragment_frame, mEntriesFragment).commit();
 
         mTitle = getTitle();
 
@@ -264,6 +271,18 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         Uri newUri;
         boolean showFeedInfo = true;
+        //boolean magazineFragment = false; //this value will be set to true if moving from magazine to entry list
+
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.home_fragment_frame);
+        if(currentFragment instanceof EntriesListFragment && position == 3) { //load magazine fragment
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mMagazineFragment).commit();
+            currentFragment = mMagazineFragment;
+        }
+        else if(currentFragment instanceof MagazineFragment && position != 3) { //load entries fragment
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mEntriesFragment).commit();
+            currentFragment = mEntriesFragment;
+        }
+
 
         switch (position) {
             case 0:
@@ -276,10 +295,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 newUri = EntryColumns.FAVORITES_CONTENT_URI;
                 break;
             case 3:
-                newUri = EntryColumns.FAVORITES_CONTENT_URI; //todo change this, replace with method call to sopen new activity
+                newUri = null;
                 break;
-
-            //TODO case 3: newUri = MagazineColumn.Magazine_URI; break;
 
             default:
                 long feedOrGroupId = mDrawerAdapter.getItemId(position);
@@ -293,8 +310,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 break;
         }
 
-        if (!newUri.equals(mEntriesFragment.getUri())) {
-            mEntriesFragment.setData(newUri, showFeedInfo);
+        if (newUri != null && !newUri.equals(mEntriesFragment.getUri())) {
+            mEntriesFragment.setData(this, newUri, showFeedInfo);
         }
 
         mDrawerList.setItemChecked(position, true);
