@@ -475,6 +475,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                 feed.update(romeFeed)
             }
         } catch (t: Throwable) {
+            error("error while fetching feed: ${feed.title}", t)
             feed.fetchError = true
         }
 

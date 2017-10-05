@@ -48,5 +48,8 @@ data class Feed(
         if (feed.image?.url != null) {
             imageLink = feed.image?.url
         }
+
+        // no error anymore since we just got a feed
+        fetchError = false
     }
 }
