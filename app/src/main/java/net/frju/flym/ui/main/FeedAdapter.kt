@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.view_feed.view.*
 import net.fred.feedex.R
 import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.Feed
-import net.frju.flym.utils.loadFavicon
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sdk21.coroutines.onClick
 
@@ -86,7 +85,7 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
                     GlideApp.with(itemView.context).clear(itemView.icon)
                     itemView.icon.setImageDrawable(null)
                 } else {
-                    itemView.icon.loadFavicon(group.feed.link)
+                    itemView.icon.setImageDrawable(group.feed.getLetterDrawable(true))
                 }
             }
             itemView.isSelected = selectedItemId == group.feed.id
@@ -120,7 +119,7 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
                 itemView.title.setTextColor(Color.WHITE)
             }
             itemView.icon.isClickable = false
-            itemView.icon.loadFavicon(feed.link)
+            itemView.icon.setImageDrawable(feed.getLetterDrawable(true))
             itemView.setPadding(itemView.dip(30), 0, 0, 0)
             itemView.onClick {
                 selectedItemId = feed.id

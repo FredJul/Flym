@@ -6,6 +6,8 @@ import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
+import com.amulyakhare.textdrawable.TextDrawable
+import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.rometools.rome.feed.synd.SyndFeed
 import paperparcel.PaperParcel
 
@@ -32,6 +34,18 @@ data class Feed(
 
         @JvmField
         val ALL_ENTRIES_ID = -1L
+
+        fun getLetterDrawable(feedId: Long, feedTitle: String?, rounded: Boolean = false): TextDrawable {
+            val feedName = feedTitle ?: ""
+
+            val color = ColorGenerator.DEFAULT.getColor(feedId) // The color is specific to the feedId (which shouldn't change)
+            val lettersForName = if (feedName.length < 2) feedName.toUpperCase() else feedName.substring(0, 2).toUpperCase()
+            return if (rounded) {
+                TextDrawable.builder().buildRound(lettersForName, color)
+            } else {
+                TextDrawable.builder().buildRect(lettersForName, color)
+            }
+        }
     }
 
     override fun describeContents() = 0
@@ -51,5 +65,9 @@ data class Feed(
 
         // no error anymore since we just got a feed
         fetchError = false
+    }
+
+    fun getLetterDrawable(rounded: Boolean = false): TextDrawable {
+        return getLetterDrawable(id, title, rounded)
     }
 }

@@ -7,12 +7,11 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.amulyakhare.textdrawable.TextDrawable
-import com.amulyakhare.textdrawable.util.ColorGenerator
 import kotlinx.android.synthetic.main.view_entry.view.*
 import net.fred.feedex.R
 import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.EntryWithFeed
+import net.frju.flym.data.entities.Feed
 import net.frju.flym.service.FetcherService
 import org.jetbrains.anko.sdk21.coroutines.onClick
 
@@ -41,13 +40,9 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
             feed_name.isEnabled = !entry.read
             feed_name.text = entry.feedTitle ?: ""
 
-            val feedName = entry.feedTitle ?: ""
-
             val mainImgUrl = if (TextUtils.isEmpty(entry.imageLink)) null else FetcherService.getDownloadedOrDistantImageUrl(entry.id, entry.imageLink!!)
 
-            val color = ColorGenerator.DEFAULT.getColor(entry.feedId) // The color is specific to the feedId (which shouldn't change)
-            val lettersForName = if (feedName.length < 2) feedName.toUpperCase() else feedName.substring(0, 2).toUpperCase()
-            val letterDrawable = TextDrawable.builder().buildRect(lettersForName, color)
+            val letterDrawable = Feed.getLetterDrawable(entry.feedId, entry.feedTitle)
             if (mainImgUrl != null) {
                 GlideApp.with(context).load(mainImgUrl).centerCrop().placeholder(letterDrawable).error(letterDrawable).into(main_icon)
             } else {
