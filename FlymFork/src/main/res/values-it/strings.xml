@@ -208,14 +208,8 @@
         <item>3 mesi</item>
         <item>Per sempre</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Standard</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">Standard</string>
+
     <string-array name="settings_preload_image_modes">
         <item>Mai</item>
         <item>Solo con Wi-Fi</item>

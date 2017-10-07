@@ -221,6 +221,9 @@
     <string name="settings_show_tap_zone_description">as transparent squares in entry view</string>
     <string name="settings_max_image_download_size_kb">Max image size</string>
     <string name="settings_max_image_download_size_kb_summary">(in kb). Do not auto load images larger than</string>
+    <string name="standard">Standard</string>
+    <string name="fontsize_entrylist">Font size in entry list</string>
+
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new entry</item>
@@ -252,10 +255,12 @@
     <string-array name="settings_font_sizes">
         <item>-2</item>
         <item>-1</item>
-        <item>Standard</item>
+        <item>@string/standard</item>
         <item>+1</item>
         <item>+2</item>
         <item>+3</item>
+        <item>+4</item>
+        <item>+5</item>
     </string-array>
     <string-array name="settings_preload_image_modes">
         <item>Never</item>

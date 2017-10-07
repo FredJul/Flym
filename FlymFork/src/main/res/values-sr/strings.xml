@@ -194,14 +194,8 @@
         <item>3 месеца</item>
         <item>Заувек</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Стандардна</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">Стандардна</string>
+
     <string-array name="settings_preload_image_modes">
         <item>Никад</item>
         <item>Само преко бежичног</item>

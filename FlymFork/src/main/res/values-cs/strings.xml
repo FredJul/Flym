@@ -212,14 +212,8 @@
         <item>3 měsíce</item>
         <item>Navždy</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Standartní</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">Standartní</string>
+
     <string-array name="settings_preload_image_modes">
         <item>Nikdy</item>
         <item>Pouze přes Wi-Fi</item>

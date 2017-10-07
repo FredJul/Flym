@@ -80,6 +80,16 @@
             android:key="fontsize"
             android:title="@string/settings_font_size"/>
 
+        <ru.yanus171.feedexfork.view.AutoSummaryListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="0"
+            android:entries="@array/settings_font_sizes"
+            android:entryValues="@array/settings_font_size_values"
+            android:inputType="number"
+            android:key="fontsize_entrylist"
+            android:title="@string/fontsize_entrylist"/>
+
         <CheckBoxPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

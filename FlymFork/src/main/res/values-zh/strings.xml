@@ -191,14 +191,8 @@
         <item>3 月</item>
         <item>永远</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>标准</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">标准</string>
+
     <string-array name="settings_preload_image_modes">
         <item>从不</item>
         <item>仅限Wi-Fi</item>

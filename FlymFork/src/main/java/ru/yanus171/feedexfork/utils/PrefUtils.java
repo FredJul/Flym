@@ -69,7 +69,13 @@ public class PrefUtils {
 
     public static final String KEEP_TIME = "keeptime";
 
-    public static final String FONT_SIZE = "fontsize";
+
+    public static int getFontSize() {
+        return Integer.parseInt(PrefUtils.getString("fontsize", "0"));
+    }
+    public static int getFontSizeEntryList() {
+        return Integer.parseInt(PrefUtils.getString("fontsize_entrylist", "0"));
+    }
 
     public static int getImageDownloadCount() {
         try {

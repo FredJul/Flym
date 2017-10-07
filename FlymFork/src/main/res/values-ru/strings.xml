@@ -247,14 +247,8 @@
         <item>3 месяца</item>
         <item>Не удалять</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Стандартно</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">Стандартно</string>
+
     <string-array name="settings_preload_image_modes">
         <item>Never</item>
         <item>Only over Wi-Fi</item>
@@ -354,5 +348,6 @@
     <string name="settings_show_tap_zone_description">полупрозрачные квадратики в окне чтения статьи</string>
     <string name="settings_max_image_download_size_kb">Max размер изображения</string>
     <string name="settings_max_image_download_size_kb_summary">(в kb). Не загружать автоматически изображения, имеющие больший размер</string>
+    <string name="fontsize_entrylist">Размер текста в списке статей</string>
 
 </resources>

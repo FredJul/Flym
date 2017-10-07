@@ -198,14 +198,8 @@
         <item>3 kuukautta</item>
         <item>Ikuisesti</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Normaali</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">Normaali</string>
+
     <string-array name="settings_preload_image_modes">
         <item>Ei koskaan</item>
         <item>Vain Wi-Fi -yhteyden kautta</item>

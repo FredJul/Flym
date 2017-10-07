@@ -273,7 +273,7 @@ public class EntryView extends WebView implements Observer {
         setBackgroundColor(Color.parseColor(BACKGROUND_COLOR));
 
         // Text zoom level from preferences
-        int fontSize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"));
+        int fontSize = PrefUtils.getFontSize();
         if (fontSize != 0) {
             getSettings().setTextZoom(100 + (fontSize * 20));
         }
@@ -382,6 +382,7 @@ public class EntryView extends WebView implements Observer {
 
 
     }
+
 
     /*@Override
     public void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {

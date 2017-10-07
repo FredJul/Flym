@@ -188,14 +188,8 @@
         <item>3 månader</item>
         <item>För alltid</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Normal</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">Normal</string>
+
     <string-array name="settings_preload_image_modes">
         <item>Aldrig</item>
         <item>Endast via Wi-Fi</item>

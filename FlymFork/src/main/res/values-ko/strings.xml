@@ -192,14 +192,8 @@
         <item>3달</item>
         <item>계속</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>표준 크기</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">표준 크기</string>
+
     <string-array name="settings_preload_image_modes">
         <item>안 함</item>
         <item>Wi-Fi를 통해서만</item>

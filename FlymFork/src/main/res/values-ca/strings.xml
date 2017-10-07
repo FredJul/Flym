@@ -207,14 +207,7 @@
         <item>3 mesos</item>
         <item>Infinit</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Normal</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">Normal</string>
     <string-array name="settings_preload_image_modes">
         <item>Never</item>
         <item>Only over Wi-Fi</item>

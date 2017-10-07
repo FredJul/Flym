@@ -138,7 +138,7 @@ public class HtmlUtils {
             int index = 0;
             while ( matcher.find()  ) {
                 String srcText = matcher.group(1);
-                //String match1 = matcher.group(1).replace(" ", URL_SPACE);
+                srcText = srcText.replace(" ", URL_SPACE);
                 if ( srcText.startsWith( Constants.FILE_SCHEME ) ) {
                     content = content.replace( getDownloadImageHtml(srcText), "" );
                 } else {
@@ -154,7 +154,8 @@ public class HtmlUtils {
                             content = content.replace(imgTagText, //getDownloadImageHtml(srcText) +
                                                                   imgTagText.replace(srcText, Constants.FILE_SCHEME + imgPath)
                                                                             .replaceAll( "alt=\"[^\"]+?\"", "alt=\"" + getString( R.string.downloadOneImage ) + "\" " )
-                                                                            .replace( "alt=\"\"", "alt=\"" + getString( R.string.downloadOneImage ) + "\" " ));
+                                                                            .replace( "alt=\"\"", "alt=\"" + getString( R.string.downloadOneImage ) + "\" " )
+                                                                            .replace( "<img ", "<img onclick=\"downloadImage('" + srcText + "')\" " ) );
                         } else {
                             String htmlButtons = getDownloadImageHtml(srcText) + "<br/>";
                             if ( index == FetcherService.mMaxImageDownloadCount + 1 )
