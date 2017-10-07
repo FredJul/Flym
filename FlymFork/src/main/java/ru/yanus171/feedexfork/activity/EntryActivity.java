@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -224,5 +225,29 @@ public class EntryActivity extends BaseActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        boolean accepted = true;
+        String pref = PrefUtils.getString( "volume_buttons_action", PrefUtils.VOLUME_BUTTONS_ACTION_DEFAULT );
+        if ( pref.equals( PrefUtils.VOLUME_BUTTONS_ACTION_PAGE_UP_DOWN ) ) {
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+                mEntryFragment.PageDown();
+            else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP)
+                mEntryFragment.PageUp();
+            else
+                accepted = false;
+        } else if ( pref.equals( PrefUtils.VOLUME_BUTTONS_ACTION_SWITCH_ENTRY ) ) {
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+                mEntryFragment.NextEntry();
+            else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP)
+                mEntryFragment.PreviousEntry();
+            else
+                accepted = false;
+        } else
+            accepted = false;
+        return accepted ? true : super.onKeyDown(keyCode, event);
+
     }
 }

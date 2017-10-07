@@ -181,12 +181,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
             @Override
             public void onClick(View view) {
                 //EntryView entryView = (EntryView) mEntryPager.findViewWithTag("EntryView" + mEntryPager.getCurrentItem());
-                EntryView entryView = mEntryPagerAdapter.mEntryViews.get(mEntryPager.getCurrentItem());
-                //Toast.makeText(getContext(), "pageDown onclick", Toast.LENGTH_LONG ).show();
-                if (entryView != null) {
-                    //Toast.makeText(getContext(), "pageDown onclick not null", Toast.LENGTH_LONG ).show();
-                    entryView.pageDown(false);
-                }
+                PageDown();
             }
         };
 
@@ -196,10 +191,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
         rootView.findViewById(R.id.pageUpBtn).setOnClickListener(new TextView.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EntryView entryView = mEntryPagerAdapter.mEntryViews.get(mEntryPager.getCurrentItem());
-                if (entryView != null) {
-                    entryView.pageUp(false);
-                }
+                PageUp();
             }
         });
 
@@ -216,6 +208,31 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
         rootView.findViewById(R.id.statusText).setVisibility(View.GONE);
 
         return rootView;
+    }
+
+    public void PageUp() {
+        EntryView entryView = mEntryPagerAdapter.mEntryViews.get(mEntryPager.getCurrentItem());
+        if (entryView != null) {
+            entryView.pageUp(false);
+        }
+    }
+
+    public void PageDown() {
+        EntryView entryView = mEntryPagerAdapter.mEntryViews.get(mEntryPager.getCurrentItem());
+        //Toast.makeText(getContext(), "pageDown onclick", Toast.LENGTH_LONG ).show();
+        if (entryView != null) {
+            //Toast.makeText(getContext(), "pageDown onclick not null", Toast.LENGTH_LONG ).show();
+            entryView.pageDown(false);
+        }
+    }
+
+    public void NextEntry() {
+        if ( mEntryPager.getCurrentItem() < mEntryPager.getAdapter().getCount() - 1  )
+            mEntryPager.setCurrentItem( mEntryPager.getCurrentItem() + 1 );
+    }
+    public void PreviousEntry() {
+        if ( mEntryPager.getCurrentItem() > 0  )
+            mEntryPager.setCurrentItem( mEntryPager.getCurrentItem() - 1 );
     }
 
     void HideButtonText(View rootView, int ID, boolean transparent) {
@@ -305,6 +322,8 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                 case R.id.menu_star: {
                     mFavorite = !mFavorite;
 
+
+
                     if (mFavorite) {
                         item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
                     } else {
@@ -326,6 +345,9 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                             mEntryPagerAdapter.setUpdatedCursor(mCurrentPagerPos, updatedCursor);
                         }
                     }.start();
+
+                    if ( EntryActivity.GetIsStatusBarHidden() )
+                        ( (EntryActivity)getActivity() ).setFullScreen( true, true );
                     break;
                 }
                 case R.id.menu_share: {

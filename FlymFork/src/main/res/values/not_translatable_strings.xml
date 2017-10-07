@@ -88,7 +88,15 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
+        <item>4</item>
+        <item>5</item>
     </string-array>
+    <string-array name="settings_volume_buttons_action_values" translatable="false">
+        <item>Default</item>
+        <item>SwithEntry</item>
+        <item>PageUpDown</item>
+    </string-array>
+
     <string-array name="settings_preload_image_modes_values" translatable="false">
         <item>NEVER_DISPLAYED</item>
         <item>WIFI_ONLY_PRELOAD</item>

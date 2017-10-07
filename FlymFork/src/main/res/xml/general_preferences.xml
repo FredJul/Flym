@@ -205,11 +205,21 @@
             android:summary="@string/settings_tap_zones_description"
             android:title="@string/settings_tapZones"/>
 
+        <ru.yanus171.feedexfork.view.AutoSummaryListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="Default"
+            android:entries="@array/settings_volume_buttons_action"
+            android:entryValues="@array/settings_volume_buttons_action_values"
+            android:key="volume_buttons_action"
+            android:title="@string/settings_volume_buttons_action"/>
+
         <CheckBoxPreference
             android:key="settings_tap_zones_visible"
             android:defaultValue="true"
             android:title="@string/settings_show_tap_zones"
             android:summary="@string/settings_show_tap_zone_description"/>
+
 
         <EditTextPreference
             android:key="content_extract_rules"
