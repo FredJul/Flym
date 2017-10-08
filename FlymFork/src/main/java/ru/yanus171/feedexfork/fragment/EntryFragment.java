@@ -640,9 +640,9 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
             new Thread() {
                 @Override
                 public void run() {
-                    int status = FetcherService.getStatusText().Start(getActivity().getString(R.string.loadFullText));
-                    FetcherService.mobilizeEntry(getContext().getContentResolver(), getCurrentEntryID(), mobilize);
-                    FetcherService.getStatusText().End( status );
+                    int status = FetcherService.getStatusText().Start(getActivity().getString(R.string.loadFullText)); try {
+                        FetcherService.mobilizeEntry(getContext().getContentResolver(), getCurrentEntryID(), mobilize);
+                    } finally { FetcherService.getStatusText().End( status ); }
                 }
             }.start();
 
@@ -728,9 +728,10 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                 @Override
                 public void run() {
                     FetcherService.mCancelRefresh = false;
-                    int status = FetcherService.getStatusText().Start( getString(R.string.downloadImage) );
-                    try {
-                        NetworkUtils.downloadImage(getCurrentEntryID(), url, false );
+                    int status = FetcherService.getStatusText().Start( getString(R.string.downloadImage) ); try {
+                        NetworkUtils.downloadImage(getCurrentEntryID(), url, false);
+                    } finally {
+                        FetcherService.getStatusText().End( status );
                     } catch (IOException e) {
                         FetcherService.getStatusText().End( status );
                         e.printStackTrace();

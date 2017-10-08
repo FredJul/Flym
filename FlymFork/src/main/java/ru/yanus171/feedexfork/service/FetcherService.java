@@ -691,8 +691,7 @@ public class FetcherService extends IntentService {
             String id = cursor.getString(idPosition);
             HttpURLConnection connection = null;
 
-            int status = getStatusText().Start(cursor.getString(titlePosition));
-            try {
+            int status = getStatusText().Start(cursor.getString(titlePosition)); try {
 
                 String feedUrl = cursor.getString(urlPosition);
                 connection = NetworkUtils.setupConnection(feedUrl);
@@ -885,9 +884,9 @@ public class FetcherService extends IntentService {
 
                     values.put(FeedColumns.ERROR, getString(R.string.error_feed_error));
                     cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
-                    FetcherService.getStatusText().SetError( getString(R.string.error_feed_error) );
+                    FetcherService.getStatusText().SetError( getString(R.string.error_feed_error), e );
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 if (handler == null || (!handler.isDone() && !handler.isCancelled())) {
                     ContentValues values = new ContentValues();
 
@@ -897,7 +896,7 @@ public class FetcherService extends IntentService {
                     values.put(FeedColumns.ERROR, e.getMessage() != null ? e.getMessage() : getString(R.string.error_feed_process));
                     cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
 
-                    FetcherService.getStatusText().SetError( e.getMessage() );
+                    FetcherService.getStatusText().SetError( e.getMessage(), e );
                 }
             } finally {
 
@@ -950,23 +949,19 @@ public class FetcherService extends IntentService {
     }
 
     public static void deleteAllFeedEntries( String feedID ) {
-        int status = getStatusText().Start("deleteAllFeedEntries");
-        try {
+        int status = getStatusText().Start("deleteAllFeedEntries"); try {
             ContentResolver cr = MainApplication.getContext().getContentResolver();
             cr.delete(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedID), EntryColumns.WHERE_NOT_FAVORITE, null);
             ContentValues values = new ContentValues();
             values.putNull( FeedColumns.LAST_UPDATE );
             values.putNull( FeedColumns.REAL_LAST_UPDATE );
             cr.update(FeedColumns.CONTENT_URI( feedID ), values, null, null );
-        } finally {
-            getStatusText().End(status);
-        }
+        } finally { getStatusText().End(status); }
 
     }
 
     public static void createTestData() {
-        int status = getStatusText().Start("createTestData");
-        try {
+        int status = getStatusText().Start("createTestData");  try {
             {
                 final String testFeedID = "10000";
                 final String testAbstract1 = "safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd ";
@@ -1025,9 +1020,7 @@ public class FetcherService extends IntentService {
                     cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(testFeedID), values);
                 }
             }
-        } finally {
-            getStatusText().End(status);
-        }
+        } finally { getStatusText().End(status);  }
 
     }
 }

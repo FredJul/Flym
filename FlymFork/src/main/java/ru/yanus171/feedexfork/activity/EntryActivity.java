@@ -34,6 +34,7 @@ import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.fragment.EntryFragment;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
 
@@ -45,6 +46,7 @@ public class EntryActivity extends BaseActivity {
     public EntryFragment mEntryFragment = null;
 
     private static final String STATE_IS_STATUSBAR_HIDDEN = "STATE_IS_STATUSBAR_HIDDEN";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         UiUtils.setPreferenceTheme(this);
@@ -87,8 +89,8 @@ public class EntryActivity extends BaseActivity {
     }
 
     @Override
-    public void onWindowFocusChanged (boolean hasFocus) {
-        if ( hasFocus )
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus)
             setFullScreen();
     }
 
@@ -133,12 +135,13 @@ public class EntryActivity extends BaseActivity {
             public void run() {
                 ContentResolver cr = getContentResolver();
                 cr.delete(FeedData.TaskColumns.CONTENT_URI, FeedData.TaskColumns.ENTRY_ID + " = " + mEntryFragment.getCurrentEntryID(), null);
-                FetcherService.setDownloadImageCursorNeedsRequery( true );
+                FetcherService.setDownloadImageCursorNeedsRequery(true);
             }
         }.start();
 
         super.onBackPressed();
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
@@ -147,6 +150,7 @@ public class EntryActivity extends BaseActivity {
 
         super.onSaveInstanceState(outState);
     }
+
     @Override
     //protected void onRestoreInstanceState(Bundle savedInstanceState) {
     protected void onResume() {
@@ -165,11 +169,12 @@ public class EntryActivity extends BaseActivity {
     static public boolean GetIsStatusBarHidden() {
         return PrefUtils.getBoolean(STATE_IS_STATUSBAR_HIDDEN, false);
     }
+
     static public boolean GetIsActionBarHidden() {
         return PrefUtils.getBoolean(STATE_IS_ACTIONBAR_HIDDEN, false);
     }
 
-    public void setFullScreen( boolean statusBarHidden, boolean actionBarHidden ) {
+    public void setFullScreen(boolean statusBarHidden, boolean actionBarHidden) {
         //mIsStatusBarHidden = statusBarHidden;
         //mIsActionBarHidden = actionBarHidden;
         PrefUtils.putBoolean(STATE_IS_STATUSBAR_HIDDEN, statusBarHidden);
@@ -184,16 +189,16 @@ public class EntryActivity extends BaseActivity {
                 mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
             }
         } else {
-            setFullScreenOld( statusBarHidden );
+            setFullScreenOld(statusBarHidden);
         }
 
         if (getSupportActionBar() != null) {
-            if ( actionBarHidden )
+            if (actionBarHidden)
                 getSupportActionBar().hide();
             else
                 getSupportActionBar().show();
         }
-        if ( mEntryFragment != null ) {
+        if (mEntryFragment != null) {
             mEntryFragment.UpdateProgress();
             mEntryFragment.UpdateClock();
         }
@@ -201,17 +206,17 @@ public class EntryActivity extends BaseActivity {
 
     public void setFullScreenWithNavBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mDecorView.setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE |
+            mDecorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE |
                     //View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
         } else {
-            setFullScreenOld( true );
+            setFullScreenOld(true);
         }
 
     }
 
-    private void setFullScreenOld(boolean fullScreen ) {
+    private void setFullScreenOld(boolean fullScreen) {
         if (fullScreen) {
 
             if (GetIsStatusBarHidden()) {
@@ -229,16 +234,17 @@ public class EntryActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Dog.d("onKeyDown isTracking = " + event.isTracking());
         boolean accepted = true;
-        String pref = PrefUtils.getString( "volume_buttons_action", PrefUtils.VOLUME_BUTTONS_ACTION_DEFAULT );
-        if ( pref.equals( PrefUtils.VOLUME_BUTTONS_ACTION_PAGE_UP_DOWN ) ) {
+        String pref = PrefUtils.getString("volume_buttons_action", PrefUtils.VOLUME_BUTTONS_ACTION_DEFAULT);
+        if (pref.equals(PrefUtils.VOLUME_BUTTONS_ACTION_PAGE_UP_DOWN)) {
             if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
                 mEntryFragment.PageDown();
             else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP)
                 mEntryFragment.PageUp();
             else
                 accepted = false;
-        } else if ( pref.equals( PrefUtils.VOLUME_BUTTONS_ACTION_SWITCH_ENTRY ) ) {
+        } else if (pref.equals(PrefUtils.VOLUME_BUTTONS_ACTION_SWITCH_ENTRY)) {
             if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
                 mEntryFragment.NextEntry();
             else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP)
@@ -247,7 +253,15 @@ public class EntryActivity extends BaseActivity {
                 accepted = false;
         } else
             accepted = false;
+        if (accepted)
+            event.startTracking();
         return accepted ? true : super.onKeyDown(keyCode, event);
 
+    }
+
+    @Override
+    public boolean  onKeyLongPress(int keyCode, KeyEvent event) {
+        Dog.d("onKeyDown isTracking = " + event.isTracking());
+        return false;
     }
 }

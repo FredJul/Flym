@@ -13,6 +13,7 @@
     </PreferenceScreen>
 
     <PreferenceCategory
+        style="@style/PrefCat"
         android:title="@string/settings_category_refresh">
 
         <CheckBoxPreference
@@ -48,17 +49,6 @@
             android:key="refreshwifionly.enabled"
             android:summary="@string/settings_refresh_wifi_only_description"
             android:title="@string/settings_refresh_wifi_only"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/settings_category_content_presentation">
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:disableDependentsState="true"
-            android:key="lighttheme"
-            android:summary="@string/settings_light_theme_description"
-            android:title="@string/settings_light_theme"/>
 
         <ru.yanus171.feedexfork.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
@@ -69,6 +59,47 @@
             android:inputType="number"
             android:key="keeptime"
             android:title="@string/settings_keep_time"/>
+
+        <ru.yanus171.feedexfork.view.AutoSummaryListPreference
+            android:defaultValue="ALWAYS_PRELOAD"
+            android:dependency="display_images"
+            android:entries="@array/settings_preload_image_modes"
+            android:entryValues="@array/settings_preload_image_modes_values"
+            android:inputType="text"
+            android:key="preload_image_mode"
+            android:title="@string/settings_preload_image_mode"/>
+
+        <EditTextPreference
+            android:key="max_image_download_count"
+            android:inputType="number"
+            android:defaultValue="10"
+            android:title="@string/settings_max_image_download_count"
+            android:summary="@string/settings_max_image_download_count_description"/>
+
+        <EditTextPreference
+            android:key="settings_max_image_download_size_kb"
+            android:inputType="number"
+            android:defaultValue="2048"
+            android:title="@string/settings_max_image_download_size_kb"
+            android:summary="@string/settings_max_image_download_size_kb_summary"/>
+
+        <CheckBoxPreference
+            android:key="load_comments"
+            android:title="@string/settings_load_comments"
+            android:summary="@string/settings_load_comments_description"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        style="@style/PrefCat"
+        android:title="@string/settings_category_content_presentation">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:disableDependentsState="true"
+            android:key="lighttheme"
+            android:summary="@string/settings_light_theme_description"
+            android:title="@string/settings_light_theme"/>
 
         <ru.yanus171.feedexfork.view.AutoSummaryListPreference
             android:layout_width="wrap_content"
@@ -97,28 +128,11 @@
             android:key="display_images"
             android:summary="@string/settings_display_images_description"
             android:title="@string/settings_display_images"/>
-
-        <ru.yanus171.feedexfork.view.AutoSummaryListPreference
-            android:defaultValue="ALWAYS_PRELOAD"
-            android:dependency="display_images"
-            android:entries="@array/settings_preload_image_modes"
-            android:entryValues="@array/settings_preload_image_modes_values"
-            android:inputType="text"
-            android:key="preload_image_mode"
-            android:title="@string/settings_preload_image_mode"/>
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="remember_last_entry"
-            android:summary="@string/settings_remeber_last_entry_description"
-            android:title="@string/settings_remember_last_entry"/>
-
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="display_oldest_first"
             android:summary="@string/settings_display_oldest_first_description"
             android:title="@string/settings_display_oldest_first"/>
-
         <CheckBoxPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -133,24 +147,38 @@
             android:title="@string/settings_display_text_color"
             android:summary="@string/settings_display_text_color_description"/>
 
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        style="@style/PrefCat"
+        android:title="@string/behaviour">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="remember_last_entry"
+            android:summary="@string/settings_remeber_last_entry_description"
+            android:title="@string/settings_remember_last_entry"/>
+
         <EditTextPreference
-            android:key="max_image_download_count"
-            android:inputType="number"
-            android:defaultValue="10"
-            android:title="@string/settings_max_image_download_count"
-            android:summary="@string/settings_max_image_download_count_description"/>
-        <EditTextPreference
-            android:key="settings_max_image_download_size_kb"
-            android:inputType="number"
-            android:defaultValue="2048"
-            android:title="@string/settings_max_image_download_size_kb"
-            android:summary="@string/settings_max_image_download_size_kb_summary"/>
+            android:key="settings_tap_zones"
+            android:inputType="none"
+            android:dialogLayout="@layout/fragment_entry"
+            android:dialogTitle="@string/settings_tap_zones_dialogtitle"
+            android:summary="@string/settings_tap_zones_description"
+            android:title="@string/settings_tapZones"/>
+
+        <ru.yanus171.feedexfork.view.AutoSummaryListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="Default"
+            android:entries="@array/settings_volume_buttons_action"
+            android:entryValues="@array/settings_volume_buttons_action_values"
+            android:key="volume_buttons_action"
+            android:title="@string/settings_volume_buttons_action"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/PrefCat"
         android:title="@string/settings_category_notifications">
 
         <CheckBoxPreference
@@ -188,31 +216,8 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/PrefCat"
         android:title="@string/settings_additional">
-
-        <CheckBoxPreference
-            android:key="load_comments"
-            android:title="@string/settings_load_comments"
-            android:summary="@string/settings_load_comments_description"/>
-
-        <EditTextPreference
-            android:key="settings_tap_zones"
-            android:inputType="none"
-            android:dialogLayout="@layout/fragment_entry"
-            android:dialogTitle="@string/settings_tap_zones_dialogtitle"
-            android:summary="@string/settings_tap_zones_description"
-            android:title="@string/settings_tapZones"/>
-
-        <ru.yanus171.feedexfork.view.AutoSummaryListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="Default"
-            android:entries="@array/settings_volume_buttons_action"
-            android:entryValues="@array/settings_volume_buttons_action_values"
-            android:key="volume_buttons_action"
-            android:title="@string/settings_volume_buttons_action"/>
 
         <CheckBoxPreference
             android:key="settings_tap_zones_visible"

@@ -28,4 +28,9 @@
         <item name="android:background">@drawable/round_background</item>
         <item name="android:visibility">visible</item>
     </style>
+
+    <style name="PrefCat" >
+        <item name="android:background">#55AAAAAA</item>
+
+    </style>
 </resources>

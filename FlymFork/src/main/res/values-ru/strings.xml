@@ -355,5 +355,6 @@
     <string name="settings_max_image_download_size_kb_summary">(в kb). Не загружать автоматически изображения, имеющие больший размер</string>
     <string name="fontsize_entrylist">Размер текста в списке статей</string>
     <string name="settings_volume_buttons_action">Действие кнопок громкости</string>
+    <string name="behaviour">Поведение</string>
 
 </resources>

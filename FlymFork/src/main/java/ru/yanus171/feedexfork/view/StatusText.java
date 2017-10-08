@@ -162,7 +162,9 @@ public class StatusText implements Observer {
             }
             UpdateText();
         }
-        public void SetError( String text ) {
+        public void SetError( String text, Exception e ) {
+            if ( e != null )
+                e.printStackTrace();
             synchronized ( mList ) {
                 mErrorText = mErrorText == null ? "" : text;
             }

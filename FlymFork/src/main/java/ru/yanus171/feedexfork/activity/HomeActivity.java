@@ -233,40 +233,42 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         new Thread() {
             @Override
             public void run() {
-                int status = FetcherService.getStatusText().Start(getString(R.string.loadingLink));
+                int status = FetcherService.getStatusText().Start(getString(R.string.loadingLink)); try {
 
-                Uri entryUri;
+                    Uri entryUri;
 
-                Cursor cursor = getContentResolver().query(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(GetExtrenalLinkFeedID()),
-                        new String[]{EntryColumns._ID},
-                        EntryColumns.LINK + "='" + url + "'",
-                        null,
-                        null);
-                if (cursor.moveToFirst()) {
-                    entryUri = EntryColumns.CONTENT_URI(cursor.getLong(0));
-                } else {
+                    Cursor cursor = getContentResolver().query(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(GetExtrenalLinkFeedID()),
+                            new String[]{EntryColumns._ID},
+                            EntryColumns.LINK + "='" + url + "'",
+                            null,
+                            null);
+                    if (cursor.moveToFirst()) {
+                        entryUri = EntryColumns.CONTENT_URI(cursor.getLong(0));
+                    } else {
 
-                    ContentValues values = new ContentValues();
-                    values.put(EntryColumns.TITLE, title);
-                    //values.put(EntryColumns.ABSTRACT, NULL);
-                    //values.put(EntryColumns.IMAGE_URL, NULL);
-                    //values.put(EntryColumns.AUTHOR, NULL);
-                    //values.put(EntryColumns.ENCLOSURE, NULL);
-                    values.put(EntryColumns.DATE, (new Date()).getTime());
-                    values.put(EntryColumns.LINK, url);
+                        ContentValues values = new ContentValues();
+                        values.put(EntryColumns.TITLE, title);
+                        //values.put(EntryColumns.ABSTRACT, NULL);
+                        //values.put(EntryColumns.IMAGE_URL, NULL);
+                        //values.put(EntryColumns.AUTHOR, NULL);
+                        //values.put(EntryColumns.ENCLOSURE, NULL);
+                        values.put(EntryColumns.DATE, (new Date()).getTime());
+                        values.put(EntryColumns.LINK, url);
 
-                    //values.put(EntryColumns.MOBILIZED_HTML, enclosureString);
-                    //values.put(EntryColumns.ENCLOSURE, enclosureString);
-                    entryUri = getContentResolver().insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(GetExtrenalLinkFeedID()), values);
+                        //values.put(EntryColumns.MOBILIZED_HTML, enclosureString);
+                        //values.put(EntryColumns.ENCLOSURE, enclosureString);
+                        entryUri = getContentResolver().insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(GetExtrenalLinkFeedID()), values);
 
-                    FetcherService.mobilizeEntry(getContentResolver(), Long.parseLong(entryUri.getLastPathSegment()), true);
+                        FetcherService.mobilizeEntry(getContentResolver(), Long.parseLong(entryUri.getLastPathSegment()), true);
+                    }
+                    cursor.close();
+
+                    //startActivity(new Intent(Intent.ACTION_VIEW, entryUri));
+                    PrefUtils.putString(PrefUtils.LAST_ENTRY_URI, entryUri.toString());
+                    startActivity(new Intent(HomeActivity.this, HomeActivity.class));
+                } finally {
+                    FetcherService.getStatusText().End(status);
                 }
-                cursor.close();
-
-                //startActivity(new Intent(Intent.ACTION_VIEW, entryUri));
-                PrefUtils.putString(PrefUtils.LAST_ENTRY_URI, entryUri.toString());
-                startActivity(new Intent(HomeActivity.this, HomeActivity.class));
-                FetcherService.getStatusText().End(status);
             }
 
         }.start();
