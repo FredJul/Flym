@@ -730,11 +730,11 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                     FetcherService.mCancelRefresh = false;
                     int status = FetcherService.getStatusText().Start( getString(R.string.downloadImage) ); try {
                         NetworkUtils.downloadImage(getCurrentEntryID(), url, false);
+                    } catch (IOException e) {
+                        //FetcherService.getStatusText().End( status );
+                        e.printStackTrace();
                     } finally {
                         FetcherService.getStatusText().End( status );
-                    } catch (IOException e) {
-                        FetcherService.getStatusText().End( status );
-                        e.printStackTrace();
                     }
 
                 }
