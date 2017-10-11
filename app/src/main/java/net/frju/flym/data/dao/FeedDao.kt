@@ -13,7 +13,7 @@ interface FeedDao {
     @get:Query("SELECT * FROM feeds ORDER BY isGroup DESC, groupId DESC, displayPriority ASC, feedId ASC")
     val observeAll: LiveData<List<Feed>>
 
-    @Query("SELECT * FROM feeds WHERE feedId IS :arg0 LIMIT 1")
+    @Query("SELECT * FROM feeds WHERE feedId IS :id LIMIT 1")
     fun findById(id: Long): Feed?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

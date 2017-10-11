@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-//apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-kapt'
 
 androidExtensions {
     experimental = true
@@ -35,7 +35,6 @@ android {
 }
 
 kapt {
-    generateStubs = true
     arguments {
         arg("room.schemaLocation", "$projectDir/schemas")
     }
@@ -46,7 +45,6 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    implementation "android.arch.lifecycle:runtime:+"
     implementation "android.arch.lifecycle:extensions:+"
     kapt "android.arch.lifecycle:compiler:+"
     implementation "android.arch.paging:runtime:+"
