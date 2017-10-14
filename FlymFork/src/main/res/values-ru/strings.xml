@@ -214,6 +214,7 @@
     <string name="downloadNext">"Загрузить следующие "</string>
     <string name="loadingLink">Загрузка ссылки</string>
     <string name="loadLink">Читать</string>
+    <string name="loadLinkLater">Читать позже</string>
     <string name="addFeed">Добавить канал</string>
     <string name="externalLinks">Внешние ссылки</string>
     <string name="markAllAsRead">Отметить все как прочитанные</string>

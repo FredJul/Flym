@@ -58,6 +58,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Xml;
@@ -104,7 +105,6 @@ import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.provider.FeedData.TaskColumns;
 import ru.yanus171.feedexfork.utils.ArticleTextExtractor;
-import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.FileUtils;
 import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
@@ -116,6 +116,7 @@ public class FetcherService extends IntentService {
 
     public static final String ACTION_REFRESH_FEEDS = FeedData.PACKAGE_NAME + ".REFRESH";
     public static final String ACTION_MOBILIZE_FEEDS = FeedData.PACKAGE_NAME + ".MOBILIZE_FEEDS";
+    public static final String ACTION_LOAD_LINK = FeedData.PACKAGE_NAME + ".LOAD_LINK";
     public static final String ACTION_DOWNLOAD_IMAGES = FeedData.PACKAGE_NAME + ".DOWNLOAD_IMAGES";
 
     private static final int THREAD_NUMBER = 3;
@@ -204,6 +205,7 @@ public class FetcherService extends IntentService {
         getStatusText().Clear();
 
         boolean isFromAutoRefresh = intent.getBooleanExtra(Constants.FROM_AUTO_REFRESH, false);
+        //boolean isOpenActivity = intent.getBooleanExtra(Constants.OPEN_ACTIVITY, false);
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -231,11 +233,16 @@ public class FetcherService extends IntentService {
         if (ACTION_MOBILIZE_FEEDS.equals(intent.getAction())) {
             mobilizeAllEntries();
             downloadAllImages();
+        } else if (ACTION_LOAD_LINK.equals(intent.getAction())) {
+            startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( getString(R.string.loadingLink) ) );
+            OpenExternalLink( intent.getStringExtra( Constants.URL_TO_LOAD ), intent.getStringExtra( Constants.TITLE_TO_LOAD ), null  );
+            downloadAllImages();
+            stopForeground( true );
         } else if (ACTION_DOWNLOAD_IMAGES.equals(intent.getAction())) {
             downloadAllImages();
         } else { // == Constants.ACTION_REFRESH_FEEDS
 
-            startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( "" ) );
+            startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( getString(R.string.loading) ) );
 
             int status = getStatusText().Start(getString(R.string.RefreshFeeds) + ": "); try {
 
@@ -485,8 +492,9 @@ public class FetcherService extends IntentService {
                             addImagesToDownload(String.valueOf(entryId), imgUrlsToDownload);
                         }
                     }
-                } catch (Throwable e) {
-                    Dog.e("Mobilize error", e);
+                } catch (Exception e) {
+                    //Dog.e("Mobilize error", e);
+                    getStatusText().SetError( e.getLocalizedMessage(), e );
                 } finally {
                     if (connection != null) {
                         connection.disconnect();
@@ -499,6 +507,81 @@ public class FetcherService extends IntentService {
         }
         entryCursor.close();
         return success;
+    }
+
+    public static void StartServiceOpenExternalLink( final String url, final String title) {
+        MainApplication.getContext().startService( new Intent(MainApplication.getContext(), FetcherService.class)
+                .setAction( ACTION_LOAD_LINK )
+                .putExtra(Constants.URL_TO_LOAD, url)
+                .putExtra(Constants.TITLE_TO_LOAD, url));
+    }
+
+    public static void OpenExternalLink(final String url, final String title, final AppCompatActivity activity ) {
+                //MainApplication.getContext().startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( "" ) );
+
+        int status = FetcherService.getStatusText().Start(MainApplication.getContext().getString(R.string.loadingLink)); try {
+
+            Uri entryUri;
+            ContentResolver cr = MainApplication.getContext().getContentResolver();
+            Cursor cursor = cr.query(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(GetExtrenalLinkFeedID()),
+                    new String[]{EntryColumns._ID},
+                    EntryColumns.LINK + "='" + url + "'",
+                    null,
+                    null);
+            if (cursor.moveToFirst()) {
+                entryUri = EntryColumns.CONTENT_URI(cursor.getLong(0));
+            } else {
+
+                ContentValues values = new ContentValues();
+                values.put(EntryColumns.TITLE, title);
+                //values.put(EntryColumns.ABSTRACT, NULL);
+                //values.put(EntryColumns.IMAGE_URL, NULL);
+                //values.put(EntryColumns.AUTHOR, NULL);
+                //values.put(EntryColumns.ENCLOSURE, NULL);
+                values.put(EntryColumns.DATE, (new Date()).getTime());
+                values.put(EntryColumns.LINK, url);
+
+                //values.put(EntryColumns.MOBILIZED_HTML, enclosureString);
+                //values.put(EntryColumns.ENCLOSURE, enclosureString);
+                entryUri = cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(GetExtrenalLinkFeedID()), values);
+
+                mobilizeEntry(cr, Long.parseLong(entryUri.getLastPathSegment()), true);
+
+            }
+            cursor.close();
+
+            if ( activity != null ) {
+                PrefUtils.putString(PrefUtils.LAST_ENTRY_URI, entryUri.toString());
+                Intent intent = new Intent(MainApplication.getContext(), HomeActivity.class);
+                activity.startActivity( intent );
+            }
+        } finally {
+            FetcherService.getStatusText().End(status);
+        }
+        //stopForeground( true );
+
+    }
+
+    private static long GetExtrenalLinkFeedID() {
+        long result = 0;
+
+        ContentResolver cr = MainApplication.getContext().getContentResolver();
+        Cursor cursor = cr.query(FeedColumns.CONTENT_URI,
+                FeedColumns.PROJECTION_ID,
+                FeedColumns.FETCH_MODE + "=" + FetcherService.FETCHMODE_EXERNAL_LINK,
+                null,
+                null);
+        if (cursor.moveToFirst())
+            result = cursor.getLong(0);
+        cursor.close();
+
+        if (result == 0) {
+            ContentValues values = new ContentValues();
+            values.put(FeedColumns.FETCH_MODE, FetcherService.FETCHMODE_EXERNAL_LINK);
+            values.put(FeedColumns.NAME, MainApplication.getContext().getString(R.string.externalLinks));
+            result = Long.parseLong(cr.insert(FeedColumns.CONTENT_URI, values).getLastPathSegment());
+        }
+        return result;
     }
 
     public static void downloadAllImages() {
@@ -925,10 +1008,28 @@ public class FetcherService extends IntentService {
         return handler != null ? handler.getNewCount() : 0;
     }
 
+
+    private static String ToString( InputStream inputStream, Xml.Encoding encoding ) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        //InputStream inputStream = connection.getInputStream();
+
+        byte[] byteBuffer = new byte[4096];
+
+        int n;
+        while ((n = inputStream.read(byteBuffer)) > 0) {
+            FetcherService.getStatusText().AddBytes(n);
+            outputStream.write(byteBuffer, 0, n);
+        }
+
+        return outputStream.toString( encoding.name() ).replace( " & ", " &amp; " );
+    }
+
+
     private static void parseXml(InputStream in, Xml.Encoding encoding,
                              ContentHandler contentHandler) throws IOException, SAXException {
         getStatusText().ChangeProgress( R.string.parseXml );
-        Xml.parse(in, encoding, contentHandler);
+        //Xml.parse(in, encoding, contentHandler);
+        Xml.parse( ToString( in, encoding ), contentHandler );
         getStatusText().ChangeProgress( "" );
         getStatusText().AddBytes(contentHandler.toString().length());
     }
@@ -936,6 +1037,7 @@ public class FetcherService extends IntentService {
                                  ContentHandler contentHandler) throws IOException, SAXException {
         getStatusText().ChangeProgress( R.string.parseXml );
         Xml.parse(reader, contentHandler);
+        //Xml.parse( ToString( in, encoding ), contentHandler );
         getStatusText().ChangeProgress( "" );
         getStatusText().AddBytes(contentHandler.toString().length() );
     }

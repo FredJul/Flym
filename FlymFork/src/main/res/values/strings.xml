@@ -204,7 +204,8 @@
     <string name="settings_max_image_download_count_description">per one entity</string>
     <string name="downloadNext">"Download next "</string>
     <string name="loadingLink">Loading link</string>
-    <string name="loadLink">Mobilize</string>
+    <string name="loadLink">Reed</string>
+    <string name="loadLinkLater">Read later</string>
     <string name="addFeed">Add feed</string>
     <string name="externalLinks">External links</string>
     <string name="markAllAsRead">Mark all as read</string>
