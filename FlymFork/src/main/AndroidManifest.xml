@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="ru.yanus171.feedexfork"
-          xmlns:tools="http://schemas.android.com/tools"
-          android:installLocation="auto">
+    package="ru.yanus171.feedexfork"
+    android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -45,6 +44,13 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
+            <intent-filter android:label="@string/loadLink" >
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
+
             <intent-filter android:label="@string/loadLink" >
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -52,13 +58,9 @@
                 <data android:scheme="http"/>
                 <data android:scheme="https"/>
             </intent-filter>
-            <intent-filter android:label="@string/loadLink" >
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/plain"/>
-            </intent-filter>
 
         </activity>
+
         <activity
             android:name=".activity.AddGoogleNewsActivity"
             android:label="@string/google_news_title"
@@ -72,6 +74,22 @@
             android:name=".activity.EditFeedsListActivity"
             android:label="@string/feeds"
             android:launchMode="singleTask"/>
+
+        <activity
+            android:name=".activity.LoadLinkLaterActivity"
+            android:label="@string/feeds"
+            android:noHistory="true"
+            android:clearTaskOnLaunch="true"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter android:label="@string/loadLinkLater" >
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
+        </activity>
+
+
         <activity
             android:name=".activity.EntryActivity"
             android:configChanges="orientation|screenSize"
@@ -82,6 +100,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="vnd.android.cursor.item/vnd.flymfork.entry"/>
             </intent-filter>
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -99,21 +118,25 @@
         <activity
             android:name=".activity.EditFeedActivity"
             android:windowSoftInputMode="stateVisible|adjustResize">
+
             <intent-filter>
                 <action android:name="android.intent.action.EDIT"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="vnd.android.cursor.item/vnd.flymfork.feed"/>
             </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.INSERT"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="vnd.android.cursor.dir/vnd.flymfork.feed"/>
             </intent-filter>
+
             <intent-filter  android:label="@string/addFeed">
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="text/plain"/>
             </intent-filter>
+
             <intent-filter android:label="@string/addFeed" >
                 <action android:name="android.intent.action.VIEW" />
 
@@ -128,6 +151,7 @@
                 <data android:pathPattern=".*/feed" />
                 <data android:pathPattern=".*feed/*" />
             </intent-filter>
+
             <intent-filter  android:label="@string/addFeed">
                 <action android:name="android.intent.action.VIEW" />
 

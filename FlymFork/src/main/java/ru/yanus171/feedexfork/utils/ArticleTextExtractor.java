@@ -155,19 +155,23 @@ public class ArticleTextExtractor {
 
                             if ( ( line == null ) || line.isEmpty() )
                                 break;
-                            String[] list1 = line.split(":");
-                            String keyWord = list1[0];
-                            String[] list2 = list1[1].split("=");
-                            String elementType = list2[0].toLowerCase();
-                            String elementValue = list2[1];
-                            if ( doc.head().html().contains(keyWord) ) {
-                                if ( elementType.equals( "id" ) )
-                                    result = doc.getElementById( elementValue );
-                                else if ( elementType.equals( "class" ) ) {
-                                    Elements elements = doc.getElementsByClass( elementValue );
-                                    if ( !elements.isEmpty() )
-                                        result = elements.first();
+                            try {
+                                String[] list1 = line.split(":");
+                                String keyWord = list1[0];
+                                String[] list2 = list1[1].split("=");
+                                String elementType = list2[0].toLowerCase();
+                                String elementValue = list2[1];
+                                if (doc.head().html().contains(keyWord)) {
+                                    if (elementType.equals("id"))
+                                        result = doc.getElementById(elementValue);
+                                    else if (elementType.equals("class")) {
+                                        Elements elements = doc.getElementsByClass(elementValue);
+                                        if (!elements.isEmpty())
+                                            result = elements.first();
+                                    }
                                 }
+                            } catch ( Exception e ) {
+                                Dog.e( e.getMessage() );
                             }
 
                     }

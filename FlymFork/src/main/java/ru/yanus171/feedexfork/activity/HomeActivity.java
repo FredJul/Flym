@@ -22,7 +22,6 @@ package ru.yanus171.feedexfork.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
-import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,9 +45,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.io.File;
-import java.util.Date;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.R;
@@ -60,6 +57,7 @@ import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.service.AutoRefreshService;
 import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
 
@@ -92,7 +90,10 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_home);
+        if ( getIntent().hasCategory( "LoadLinkLater" ) )
+            finish();
+        else
+            setContentView(R.layout.activity_home);
 
         mEntriesFragment = (EntriesListFragment) getSupportFragmentManager().findFragmentById(R.id.entries_list_fragment);
 
@@ -216,84 +217,25 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         super.onNewIntent(intent);
         // We reset the current drawer position
         // selectDrawerItem(0);
-
+        //boolean openActivity = !intent.hasCategory( "LoadLinkLater" );
         if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEND) && intent.hasExtra(Intent.EXTRA_TEXT)) {
-            String text = intent.getStringExtra(Intent.EXTRA_TEXT);
-            Pattern p = Pattern.compile("(?<![\\>https?://|href=\"'])(?<http>(https?:[/][/]|www.)([a-z]|[-_%]|[A-Z]|[0-9]|[/.]|[~])*)");
-            Matcher m = p.matcher(text);
-            if (m.find())
-                OpenExternalLink(text.substring(m.start(), m.end()), text.substring(0, m.start()));
-
-        } else if (intent.getScheme() != null && intent.getScheme().startsWith("http"))
-            OpenExternalLink(intent.getDataString(), intent.getDataString());
-
-    }
-
-    private void OpenExternalLink(final String url, final String title) {
-        new Thread() {
-            @Override
-            public void run() {
-                int status = FetcherService.getStatusText().Start(getString(R.string.loadingLink)); try {
-
-                    Uri entryUri;
-
-                    Cursor cursor = getContentResolver().query(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(GetExtrenalLinkFeedID()),
-                            new String[]{EntryColumns._ID},
-                            EntryColumns.LINK + "='" + url + "'",
-                            null,
-                            null);
-                    if (cursor.moveToFirst()) {
-                        entryUri = EntryColumns.CONTENT_URI(cursor.getLong(0));
-                    } else {
-
-                        ContentValues values = new ContentValues();
-                        values.put(EntryColumns.TITLE, title);
-                        //values.put(EntryColumns.ABSTRACT, NULL);
-                        //values.put(EntryColumns.IMAGE_URL, NULL);
-                        //values.put(EntryColumns.AUTHOR, NULL);
-                        //values.put(EntryColumns.ENCLOSURE, NULL);
-                        values.put(EntryColumns.DATE, (new Date()).getTime());
-                        values.put(EntryColumns.LINK, url);
-
-                        //values.put(EntryColumns.MOBILIZED_HTML, enclosureString);
-                        //values.put(EntryColumns.ENCLOSURE, enclosureString);
-                        entryUri = getContentResolver().insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(GetExtrenalLinkFeedID()), values);
-
-                        FetcherService.mobilizeEntry(getContentResolver(), Long.parseLong(entryUri.getLastPathSegment()), true);
+            final String text = intent.getStringExtra(Intent.EXTRA_TEXT);
+            final Matcher m = HtmlUtils.HTTP_PATTERN.matcher(text);
+            if (m.find()) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FetcherService.OpenExternalLink(text.substring(m.start(), m.end()), text.substring(0, m.start()), HomeActivity.this);
                     }
-                    cursor.close();
+                }).start();
 
-                    //startActivity(new Intent(Intent.ACTION_VIEW, entryUri));
-                    PrefUtils.putString(PrefUtils.LAST_ENTRY_URI, entryUri.toString());
-                    startActivity(new Intent(HomeActivity.this, HomeActivity.class));
-                } finally {
-                    FetcherService.getStatusText().End(status);
-                }
             }
-
-        }.start();
+        } else if (intent.getScheme() != null && intent.getScheme().startsWith("http"))
+            FetcherService.OpenExternalLink(intent.getDataString(), intent.getDataString(), this);
     }
 
-    long GetExtrenalLinkFeedID() {
-        long result = 0;
 
-        Cursor cursor = getContentResolver().query(FeedColumns.CONTENT_URI,
-                FeedColumns.PROJECTION_ID,
-                FeedColumns.FETCH_MODE + "=" + FetcherService.FETCHMODE_EXERNAL_LINK,
-                null,
-                null);
-        if (cursor.moveToFirst())
-            result = cursor.getLong(0);
-        cursor.close();
 
-        if (result == 0) {
-            ContentValues values = new ContentValues();
-            values.put(FeedColumns.FETCH_MODE, FetcherService.FETCHMODE_EXERNAL_LINK);
-            values.put(FeedColumns.NAME, getString(R.string.externalLinks));
-            result = Long.parseLong(getContentResolver().insert(FeedColumns.CONTENT_URI, values).getLastPathSegment());
-        }
-        return result;
-    }
 
     public void onBackPressed() {
         // Before exiting from app the navigation drawer is opened

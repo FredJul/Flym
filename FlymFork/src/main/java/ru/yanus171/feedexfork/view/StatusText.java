@@ -104,7 +104,7 @@ public class StatusText implements Observer {
                         }
                         //if ( mList.size() > cRowcount )
                         //s = "... " + s;
-                        if ( !mErrorText.isEmpty() )
+                        if ( mErrorText != null && !mErrorText.isEmpty() )
                             s += " " + mErrorText;
                         if ( !mProgressText.isEmpty() )
                             s += " " + mProgressText;
@@ -163,6 +163,7 @@ public class StatusText implements Observer {
             UpdateText();
         }
         public void SetError( String text, Exception e ) {
+            Dog.e( "Error", e );
             if ( e != null )
                 e.printStackTrace();
             synchronized ( mList ) {
