@@ -55,6 +55,7 @@ import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.provider.FeedData.FilterColumns;
 import net.fred.feedex.provider.FeedData.TaskColumns;
+import net.fred.feedex.provider.FeedData.MagazineColumns;
 
 import java.io.File;
 
@@ -79,6 +80,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(createTable(FilterColumns.TABLE_NAME, FilterColumns.COLUMNS));
         database.execSQL(createTable(EntryColumns.TABLE_NAME, EntryColumns.COLUMNS));
         database.execSQL(createTable(TaskColumns.TABLE_NAME, TaskColumns.COLUMNS));
+        database.execSQL(createTable(MagazineColumns.TABLE_NAME, MagazineColumns.COLUMNS));
 
         // Check if we need to import the backup
         if (new File(OPML.BACKUP_OPML).exists()) {

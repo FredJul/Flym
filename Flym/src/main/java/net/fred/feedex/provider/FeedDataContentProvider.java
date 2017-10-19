@@ -93,7 +93,8 @@ public class FeedDataContentProvider extends ContentProvider {
     public static final int URI_TASK = 20;
     public static final int URI_SEARCH = 21;
     public static final int URI_SEARCH_ENTRY = 22;
-
+    public static final int URI_MAGAZINES = 23;
+    public static final int URI_MAGAZINE = 24;
     public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
@@ -111,6 +112,8 @@ public class FeedDataContentProvider extends ContentProvider {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/filters", URI_FILTERS_FOR_FEED);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "entries", URI_ENTRIES);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/#", URI_ENTRY);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "magazines", URI_MAGAZINES);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "magazines/#", URI_MAGAZINE);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "unread_entries", URI_UNREAD_ENTRIES);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "unread_entries/#", URI_UNREAD_ENTRIES_ENTRY);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites", URI_FAVORITES);
@@ -286,6 +289,20 @@ public class FeedDataContentProvider extends ContentProvider {
                 queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
                 break;
             }
+            case URI_ENTRY: {
+                queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
+                queryBuilder.appendWhere(new StringBuilder(EntryColumns._ID).append('=').append(uri.getPathSegments().get(1)));
+                break;
+            }
+            case URI_MAGAZINES: {
+                queryBuilder.setTables(FeedData.MAGAZINES_TABLE);
+                break;
+            }
+            case URI_MAGAZINE: {
+                queryBuilder.setTables(FeedData.MAGAZINES_TABLE);
+                queryBuilder.appendWhere(new StringBuilder(FeedData.MagazineColumns._ID).append('=').append(uri.getPathSegments().get(1)));
+                break;
+            }
             case URI_UNREAD_ENTRIES: {
                 queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
                 queryBuilder.appendWhere(EntryColumns.WHERE_UNREAD);
@@ -298,11 +315,6 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             case URI_FAVORITES_ENTRY:
             case URI_UNREAD_ENTRIES_ENTRY:
-            case URI_ENTRY: {
-                queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
-                queryBuilder.appendWhere(new StringBuilder(EntryColumns._ID).append('=').append(uri.getPathSegments().get(1)));
-                break;
-            }
             case URI_FAVORITES: {
                 queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
                 queryBuilder.appendWhere(new StringBuilder(EntryColumns.IS_FAVORITE).append(Constants.DB_IS_TRUE));
@@ -377,6 +389,10 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             case URI_TASKS: {
                 newId = database.insert(TaskColumns.TABLE_NAME, null, values);
+                break;
+            }
+            case URI_MAGAZINES: {
+                newId = database.insert(FeedData.MagazineColumns.TABLE_NAME, null, values);
                 break;
             }
             default:

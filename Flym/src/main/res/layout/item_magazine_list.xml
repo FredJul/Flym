@@ -1,53 +1,70 @@
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:rowCount="3"
-                android:columnCount="2"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:minHeight="80dp">
+<!--<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:rowCount="3"-->
+                <!--android:columnCount="2"-->
+                <!--android:paddingLeft="25dp"-->
+                <!--android:paddingRight="25dp"-->
+                <!--android:minHeight="80dp">-->
 
-    <ImageView
-        android:id="@+id/mosaic_1"
-        android:layout_column="0"
-        android:layout_row="0"
-        android:layout_width="150dp"
-        android:layout_height="150dp"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/mosaic_1"-->
+        <!--android:layout_column="0"-->
+        <!--android:layout_row="0"-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="150dp"/>-->
 
-    <ImageView
-        android:id="@+id/mosaic_2"
-        android:layout_column="1"
-        android:layout_row="0"
-        android:layout_width="150dp"
-        android:layout_height="150dp"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/mosaic_2"-->
+        <!--android:layout_column="1"-->
+        <!--android:layout_row="0"-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="150dp"/>-->
 
-    <ImageView
-        android:id="@+id/mosaic_3"
-        android:layout_column="0"
-        android:layout_row="1"
-        android:layout_width="150dp"
-        android:layout_height="150dp"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/mosaic_3"-->
+        <!--android:layout_column="0"-->
+        <!--android:layout_row="1"-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="150dp"/>-->
 
-    <ImageView
-        android:id="@+id/mosaic_4"
-        android:layout_column="1"
-        android:layout_row="1"
-        android:layout_width="150dp"
-        android:layout_height="150dp"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/mosaic_4"-->
+        <!--android:layout_column="1"-->
+        <!--android:layout_row="1"-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="150dp"/>-->
 
-    <ImageView
-        android:id="@+id/mosaic_5"
-        android:layout_column="0"
-        android:layout_row="2"
-        android:layout_width="150dp"
-        android:layout_height="150dp"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/mosaic_5"-->
+        <!--android:layout_column="0"-->
+        <!--android:layout_row="2"-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="150dp"/>-->
 
-    <ImageView
-        android:id="@+id/mosaic_6"
-        android:layout_column="1"
-        android:layout_row="2"
-        android:layout_width="150dp"
-        android:layout_height="150dp"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/mosaic_6"-->
+        <!--android:layout_column="1"-->
+        <!--android:layout_row="2"-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="150dp"/>-->
 
-</GridLayout>
+<!--</GridLayout>-->
 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/activatedBackgroundIndicator"
+    android:paddingBottom="7dip"
+    android:paddingTop="5dip">
+
+    <TextView
+        android:id="@+id/magazine_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/entry_ids"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

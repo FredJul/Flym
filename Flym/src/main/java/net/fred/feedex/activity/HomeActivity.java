@@ -22,6 +22,9 @@ package net.fred.feedex.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -45,13 +48,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import net.fred.feedex.Constants;
+import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.DrawerAdapter;
 import net.fred.feedex.fragment.EntriesListFragment;
-import net.fred.feedex.fragment.EntryFragment;
-import net.fred.feedex.fragment.GeneralPrefsFragment;
-import net.fred.feedex.fragment.MagazineFragment;
+import net.fred.feedex.fragment.MagazineListFragment;
 import net.fred.feedex.parser.OPML;
+import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.service.AutoRefreshService;
@@ -72,7 +75,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     private static final int PERMISSIONS_REQUEST_IMPORT_FROM_OPML = 1;
 
     private EntriesListFragment mEntriesFragment;
-    private MagazineFragment mMagazineFragment;
+    private MagazineListFragment mMagazineFragment;
     private DrawerLayout mDrawerLayout;
     private View mLeftDrawer;
     private ListView mDrawerList;
@@ -88,7 +91,18 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         setContentView(R.layout.activity_home);
 
-        mMagazineFragment = new MagazineFragment();
+        mMagazineFragment = new MagazineListFragment();
+        new Thread() {
+            @Override
+            public void run() {
+                ContentValues values = new ContentValues();
+                values.put(FeedData.MagazineColumns.TITLE, "a");
+                values.put(FeedData.MagazineColumns.ENTRY_IDS, "b");
+
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                cr.insert(FeedData.MagazineColumns.CONTENT_URI, values);
+            }
+        }.start();
         mEntriesFragment = new EntriesListFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.home_fragment_frame, mEntriesFragment).commit();
 
@@ -278,7 +292,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mMagazineFragment).commit();
             currentFragment = mMagazineFragment;
         }
-        else if(currentFragment instanceof MagazineFragment && position != 3) { //load entries fragment
+        else if(currentFragment instanceof MagazineListFragment && position != 3) { //load entries fragment
             getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mEntriesFragment).commit();
             currentFragment = mEntriesFragment;
         }

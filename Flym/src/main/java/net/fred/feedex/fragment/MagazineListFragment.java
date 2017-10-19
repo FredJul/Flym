@@ -1,5 +1,6 @@
 package net.fred.feedex.fragment;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -11,16 +12,18 @@ import net.fred.feedex.Constants;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.MagazineCursorAdapter;
 import net.fred.feedex.provider.FeedData;
+import net.fred.feedex.provider.FeedDataContentProvider;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MagazineFragment extends ListFragment {
+public class MagazineListFragment extends ListFragment {
     private MagazineCursorAdapter mMagazineCursorAdapter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        //TODO get entries for selected magazine
+
         mMagazineCursorAdapter = new MagazineCursorAdapter(getActivity(), FeedData.MagazineColumns.CONTENT_URI, Constants.EMPTY_CURSOR, false);
         super.onCreate(savedInstanceState);
     }
