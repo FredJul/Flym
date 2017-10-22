@@ -63,11 +63,11 @@ public class ArticleTextExtractor {
         // now remove the clutter
         prepareDocument(doc, mobilize);
 
+        Element bestMatchElement = doc;
         if ( mobilize ) {
             // init elements
             Collection<Element> nodes = getNodes(doc);
             int maxWeight = 0;
-            Element bestMatchElement = null;
 
             bestMatchElement = getBestElementFromFile(doc);
             if (bestMatchElement == null) {
@@ -83,63 +83,62 @@ public class ArticleTextExtractor {
                     }
                 }
             }
-            Collection<Element> metas = getMetas(doc);
-            String ogImage = null;
-            for (Element entry : metas) {
-                if (entry.hasAttr("property") && "og:image".equals(entry.attr("property"))) {
-                    ogImage = entry.attr("content");
-                    break;
-                }
+        }
+        if ( bestMatchElement == null )
+            bestMatchElement = doc;
+
+
+        Collection<Element> metas = getMetas(doc);
+        String ogImage = null;
+        for (Element entry : metas) {
+            if (entry.hasAttr("property") && "og:image".equals(entry.attr("property"))) {
+                ogImage = entry.attr("content");
+                break;
+            }
+        }
+
+
+        Elements title = bestMatchElement.getElementsByClass("title");
+        for (Element entry : title)
+            if (entry.tagName().toLowerCase().equals("h1")) {
+                title.first().remove();
+                break;
             }
 
-            if (bestMatchElement != null) {
+        String ret = bestMatchElement.toString();
+        if (ogImage != null && !ret.contains(ogImage)) {
+            ret = "<img src=\"" + ogImage + "\"><br>\n" + ret;
+        }
 
-                Elements title = bestMatchElement.getElementsByClass("title");
-                for (Element entry : title)
-                    if (entry.tagName().toLowerCase().equals("h1")) {
-                        title.first().remove();
-                        break;
-                    }
 
-                String ret = bestMatchElement.toString();
-                if (ogImage != null && !ret.contains(ogImage)) {
-                    ret = "<img src=\"" + ogImage + "\"><br>\n" + ret;
+        if ( mobilize && PrefUtils.getBoolean(PrefUtils.LOAD_COMMENTS, false)) {
+            Element comments = doc.getElementById("comments");
+            if (comments != null) {
+                Elements li = comments.getElementsByTag("li");
+                for (Element entry : li) {
+                    entry.tagName("p");
                 }
-
-
-                if (PrefUtils.getBoolean(PrefUtils.LOAD_COMMENTS, false)) {
-                    Element comments = doc.getElementById("comments");
-                    if (comments != null) {
-                        Elements li = comments.getElementsByTag("li");
-                        for (Element entry : li) {
-                            entry.tagName("p");
-                        }
-                        Elements ul = comments.getElementsByTag("ul");
-                        for (Element entry : ul) {
-                            entry.tagName("p");
-                        }
-                        ret += comments;
-                    }
+                Elements ul = comments.getElementsByTag("ul");
+                for (Element entry : ul) {
+                    entry.tagName("p");
                 }
-
-                ret = ret.replaceAll("<table(.)*?>", "<p>");
-                ret = ret.replaceAll("</table>", "</p>");
-
-                ret = ret.replaceAll("<tr(.)*?>", "<p>");
-                ret = ret.replaceAll("</tr>", "</p>");
-
-                ret = ret.replaceAll("<td(.)*?>", "<p>");
-                ret = ret.replaceAll("</td>", "</p>");
-
-                ret = ret.replaceAll("<th(.)*?>", "<p>");
-                ret = ret.replaceAll("</th>", "</p>");
-
-                return ret;
+                ret += comments;
             }
-        } else
-            return doc.toString();
+        }
 
-        return null;
+        ret = ret.replaceAll("<table(.)*?>", "<p>");
+        ret = ret.replaceAll("</table>", "</p>");
+
+        ret = ret.replaceAll("<tr(.)*?>", "<p>");
+        ret = ret.replaceAll("</tr>", "</p>");
+
+        ret = ret.replaceAll("<td(.)*?>", "<p>");
+        ret = ret.replaceAll("</td>", "</p>");
+
+        ret = ret.replaceAll("<th(.)*?>", "<p>");
+        ret = ret.replaceAll("</th>", "</p>");
+
+        return ret;
     }
 
     private static Element getBestElementFromFile(Document doc) {

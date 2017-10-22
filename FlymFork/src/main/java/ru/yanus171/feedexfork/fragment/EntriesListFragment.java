@@ -19,9 +19,11 @@
 
 package ru.yanus171.feedexfork.fragment;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -334,6 +336,34 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             }
         });
 
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long id) {
+                if (id > 0) {
+                    //mListView.setSelection( position );
+
+                    new AlertDialog.Builder(EntriesListFragment.this.getActivity()) //
+                    .setIcon(android.R.drawable.ic_dialog_alert) //
+                    .setTitle( R.string.question_delete_entry ) //
+                    .setMessage( mEntriesCursorAdapter.GetTitle( mListView, position )) //
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            new Thread() {
+                                @Override
+                                public void run() {
+                                    ContentResolver cr = MainApplication.getContext().getContentResolver();
+                                    cr.delete(EntryColumns.CONTENT_URI(id), null, null);
+                                            }
+                            }.start();
+                                    }
+                            }).setNegativeButton(android.R.string.no, null).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         TextView emptyView = new TextView( getContext() );
         emptyView.setText( getString( R.string.no_entries ) );
         mListView.setEmptyView( emptyView );
@@ -492,6 +522,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                     Uri uri = mShowUnRead ? EntryColumns.UNREAD_ENTRIES_FOR_GROUP_CONTENT_URI(groupID) : EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(groupID);
                     setData( uri, mShowFeedInfo, false, mShowTextInEntryList );
                 }
+                UpdateActions();
                 return true;
             }
         }

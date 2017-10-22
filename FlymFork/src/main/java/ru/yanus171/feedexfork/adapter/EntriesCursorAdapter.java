@@ -55,6 +55,7 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ResourceCursorAdapter;
@@ -105,7 +106,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     }
 
     public Uri EntryUri( long id ) {
-        return ContentUris.withAppendedId(mUri, id);
+        return EntryColumns.CONTENT_URI( id ); //ContentUris.withAppendedId(mUri, id);
     }
     @Override
     public void bindView(final View view, final Context context, Cursor cursor) {
@@ -285,6 +286,10 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
             SetIsRead(EntryUri(id), holder.isRead, 0);
         }
+    }
+
+    public String GetTitle( AbsListView lv, int position ) {
+        return ( ( Cursor )lv.getItemAtPosition( position ) ).getString( mTitlePos );
     }
 
     static public void SetIsRead(final Uri entryUri, final boolean isRead, final int sleepMsec ) {

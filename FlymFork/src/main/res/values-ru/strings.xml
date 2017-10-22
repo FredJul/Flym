@@ -357,5 +357,6 @@
     <string name="fontsize_entrylist">Размер текста в списке статей</string>
     <string name="settings_volume_buttons_action">Действие кнопок громкости</string>
     <string name="behaviour">Поведение</string>
+    <string name="question_delete_entry">Удалить статью?</string>
 
 </resources>

@@ -29,6 +29,10 @@ import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +52,7 @@ import java.io.File;
 import java.util.regex.Matcher;
 
 import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.adapter.DrawerAdapter;
 import ru.yanus171.feedexfork.adapter.EntriesCursorAdapter;
@@ -312,7 +317,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                                 FeedColumns.GROUP_ID + Constants.DB_IS_NULL + Constants.DB_OR +
                                 FeedColumns.GROUP_ID + " IN (SELECT " + FeedColumns._ID +
                                 " FROM " + FeedColumns.TABLE_NAME +
-                                " WHERE " + FeedColumns.IS_GROUP_EXPANDED + Constants.DB_IS_TRUE + ")",
+                                " WHERE " + FeedColumns.IS_GROUP_EXPANDED + Constants.DB_IS_TRUE + ")" +
+                                Constants.DB_AND + "(" + FeedColumns._ID + "<>" + FetcherService.GetExtrenalLinkFeedID() + ")",
                         null,
                         null);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
@@ -371,6 +377,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             case 2:
                 newUri = EntryColumns.FAVORITES_CONTENT_URI;
                 break;
+            case 3:
+                newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI( FetcherService.GetExtrenalLinkFeedID() );
+                break;
             default:
                 long feedOrGroupId = mDrawerAdapter.getItemId(position);
                 if (feedOrGroupId != -1) {
@@ -426,6 +435,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         // Set title & icon
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
+            getSupportActionBar().setHomeAsUpIndicator( 0 );
             switch (mCurrentDrawerPos) {
                 case 0:
                     getSupportActionBar().setTitle(R.string.unread_entries);
@@ -435,9 +445,22 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     break;
                 case 2:
                     getSupportActionBar().setTitle(R.string.favorites);
+                    Bitmap original = BitmapFactory.decodeResource(getResources(), R.drawable.rating_important);
+                    int size = UiUtils.dpToPixel( 32 );
+                    Bitmap b = Bitmap.createScaledBitmap( original, size, size, false);
+                    Drawable d = new BitmapDrawable(getResources(), b);
+                    getSupportActionBar().setHomeAsUpIndicator( d );
+                    break;
+                case 3:
+                    getSupportActionBar().setTitle(R.string.externalLinks);
                     break;
                 default:
                     getSupportActionBar().setTitle(mTitle);
+                    Drawable image = mDrawerAdapter.getItemIcon( position ) == null ?
+                                     null :
+                                     new BitmapDrawable( MainApplication.getContext().getResources(),
+                                                         UiUtils.getScaledBitmap( mDrawerAdapter.getItemIcon( position ), 32 ) );
+                    getSupportActionBar().setHomeAsUpIndicator( image );
                     break;
             }
         }

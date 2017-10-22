@@ -226,6 +226,7 @@
     <string name="fontsize_entrylist">Font size in entry list</string>
     <string name="settings_volume_buttons_action">Action by volume buttons</string>
     <string name="behaviour">Behaviour</string>
+    <string name="question_delete_entry">Delete article ?</string>
 
 
     <plurals name="number_of_new_entries">

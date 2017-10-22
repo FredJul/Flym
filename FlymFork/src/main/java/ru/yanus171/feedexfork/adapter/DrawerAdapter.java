@@ -32,15 +32,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.utils.StringUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class DrawerAdapter extends BaseAdapter {
 
@@ -56,6 +56,8 @@ public class DrawerAdapter extends BaseAdapter {
     private static final int POS_IS_SHOW_TEXT_IN_ENTRY_LIST = 9;
     private static final int POS_IS_GROUP_EXPANDED = 10;
     private static final int POS_IS_AUTO_RESRESH = 11;
+
+    private static final int FIRST_ENTRY_POS = 3;
 
     private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
@@ -118,7 +120,7 @@ public class DrawerAdapter extends BaseAdapter {
         holder.separator.setVisibility(View.GONE);
         holder.autoRefreshIcon.setVisibility( View.GONE );
 
-        if (position == 0 || position == 1 || position == 2) {
+        if (position == 0 || position == 1 || position == 2 || position == 3 ) {
             switch (position) {
                 case 0:
                     holder.titleTxt.setText(R.string.unread_entries);
@@ -138,9 +140,13 @@ public class DrawerAdapter extends BaseAdapter {
                         holder.unreadTxt.setText(String.valueOf(mFavoritesNumber));
                     }
                     break;
+                case 3:
+                    holder.titleTxt.setText(R.string.externalLinks);
+                    holder.iconView.setImageResource(R.drawable.ic_statusbar_rss);
+                    break;
             }
         }
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - FIRST_ENTRY_POS - 1)) {
             holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
 
             if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
