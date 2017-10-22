@@ -313,11 +313,11 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                                 FeedColumns.IS_GROUP, FeedColumns.ICON, FeedColumns.LAST_UPDATE,
                                 FeedColumns.ERROR, FEED_UNREAD_NUMBER, FEED_ALL_NUMBER, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST,
                                 FeedColumns.IS_GROUP_EXPANDED, FeedColumns.IS_AUTO_REFRESH},
-                        FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR +
+                        "(" + FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR +
                                 FeedColumns.GROUP_ID + Constants.DB_IS_NULL + Constants.DB_OR +
                                 FeedColumns.GROUP_ID + " IN (SELECT " + FeedColumns._ID +
                                 " FROM " + FeedColumns.TABLE_NAME +
-                                " WHERE " + FeedColumns.IS_GROUP_EXPANDED + Constants.DB_IS_TRUE + ")" +
+                                " WHERE " + FeedColumns.IS_GROUP_EXPANDED + Constants.DB_IS_TRUE + "))" +
                                 Constants.DB_AND + "(" + FeedColumns._ID + "<>" + FetcherService.GetExtrenalLinkFeedID() + ")",
                         null,
                         null);

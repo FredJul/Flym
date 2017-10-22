@@ -62,6 +62,7 @@ import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.activity.BaseActivity;
 import ru.yanus171.feedexfork.activity.EntryActivity;
+import ru.yanus171.feedexfork.adapter.DrawerAdapter;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
@@ -572,7 +573,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
     private void showEnclosure(Uri uri, String enclosure, int position1, int position2) {
         try {
-            startActivityForResult(new Intent(Intent.ACTION_VIEW).setDataAndType(uri, enclosure.substring(position1 + 3, position2)), 0);
+            startActivityForResult(new Intent(Intent.ACTION_VIEW).setDataAndType(uri, enclosure.substring(position1 + DrawerAdapter.FIRST_ENTRY_POS, position2)), 0);
         } catch (Exception e) {
             try {
                 startActivityForResult(new Intent(Intent.ACTION_VIEW, uri), 0); // fallbackmode - let the browser handle this
@@ -672,7 +673,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                 final String enclosure = mEntryPagerAdapter.getCursor(mCurrentPagerPos).getString(mEnclosurePos);
 
                 final int position1 = enclosure.indexOf(Constants.ENCLOSURE_SEPARATOR);
-                final int position2 = enclosure.indexOf(Constants.ENCLOSURE_SEPARATOR, position1 + 3);
+                final int position2 = enclosure.indexOf(Constants.ENCLOSURE_SEPARATOR, position1 + DrawerAdapter.FIRST_ENTRY_POS);
 
                 final Uri uri = Uri.parse(enclosure.substring(0, position1));
                 final String filename = uri.getLastPathSegment();

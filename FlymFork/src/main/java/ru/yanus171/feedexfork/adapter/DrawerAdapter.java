@@ -57,7 +57,7 @@ public class DrawerAdapter extends BaseAdapter {
     private static final int POS_IS_GROUP_EXPANDED = 10;
     private static final int POS_IS_AUTO_RESRESH = 11;
 
-    private static final int FIRST_ENTRY_POS = 3;
+    public static final int FIRST_ENTRY_POS = 4;
 
     private static final int NORMAL_TEXT_COLOR = Color.parseColor("#EEEEEE");
     private static final int GROUP_TEXT_COLOR = Color.parseColor("#BBBBBB");
@@ -146,7 +146,7 @@ public class DrawerAdapter extends BaseAdapter {
                     break;
             }
         }
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - FIRST_ENTRY_POS - 1)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - FIRST_ENTRY_POS)) {
             holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
 
             if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
@@ -216,7 +216,7 @@ public class DrawerAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         if (mFeedsCursor != null) {
-            return mFeedsCursor.getCount() + 3;
+            return mFeedsCursor.getCount() + FIRST_ENTRY_POS;
         }
         return 0;
     }
@@ -228,7 +228,7 @@ public class DrawerAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - FIRST_ENTRY_POS)) {
             return mFeedsCursor.getLong(POS_ID);
         }
 
@@ -236,7 +236,7 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public byte[] getItemIcon(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - FIRST_ENTRY_POS)) {
             return mFeedsCursor.getBlob(POS_ICON);
         }
 
@@ -244,7 +244,7 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public String getItemName(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - FIRST_ENTRY_POS)) {
             return mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME);
         }
 
@@ -252,22 +252,22 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public boolean isItemAGroup(int position) {
-        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3) && mFeedsCursor.getInt(POS_IS_GROUP) == 1;
+        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - FIRST_ENTRY_POS) && mFeedsCursor.getInt(POS_IS_GROUP) == 1;
 
     }
 
     public boolean isShowTextInEntryList(int position) {
-        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3) && mFeedsCursor.getInt(POS_IS_SHOW_TEXT_IN_ENTRY_LIST) == 1;
+        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - FIRST_ENTRY_POS) && mFeedsCursor.getInt(POS_IS_SHOW_TEXT_IN_ENTRY_LIST) == 1;
 
     }
 
     private boolean isGroupExpanded(int position) {
-        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3) && mFeedsCursor.getInt(POS_IS_GROUP_EXPANDED) == 1;
+        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - FIRST_ENTRY_POS) && mFeedsCursor.getInt(POS_IS_GROUP_EXPANDED) == 1;
 
     }
 
     private boolean isAutoRefresh(int position) {
-        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3) && mFeedsCursor.getInt(POS_IS_AUTO_RESRESH) == 1;
+        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - FIRST_ENTRY_POS) && mFeedsCursor.getInt(POS_IS_AUTO_RESRESH) == 1;
 
     }
 
