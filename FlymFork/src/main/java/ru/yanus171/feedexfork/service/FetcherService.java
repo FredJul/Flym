@@ -562,24 +562,26 @@ public class FetcherService extends IntentService {
 
     }
 
+    private static long mExtrenalLinkFeedID = -1;
     public static long GetExtrenalLinkFeedID() {
-        long result = 0;
+        if ( mExtrenalLinkFeedID == -1 ) {
 
-        ContentResolver cr = MainApplication.getContext().getContentResolver();
-        Cursor cursor = cr.query(FeedColumns.CONTENT_URI,
-                                 FeedColumns.PROJECTION_ID,
-                                 FeedColumns.FETCH_MODE + "=" + FetcherService.FETCHMODE_EXERNAL_LINK, null, null);
-        if (cursor.moveToFirst())
-            result = cursor.getLong(0);
-        cursor.close();
+            ContentResolver cr = MainApplication.getContext().getContentResolver();
+            Cursor cursor = cr.query(FeedColumns.CONTENT_URI,
+                    FeedColumns.PROJECTION_ID,
+                    FeedColumns.FETCH_MODE + "=" + FetcherService.FETCHMODE_EXERNAL_LINK, null, null);
+            if (cursor.moveToFirst())
+                mExtrenalLinkFeedID = cursor.getLong(0);
+            cursor.close();
 
-        if (result == 0) {
-            ContentValues values = new ContentValues();
-            values.put(FeedColumns.FETCH_MODE, FetcherService.FETCHMODE_EXERNAL_LINK);
-            values.put(FeedColumns.NAME, MainApplication.getContext().getString(R.string.externalLinks));
-            result = Long.parseLong(cr.insert(FeedColumns.CONTENT_URI, values).getLastPathSegment());
+            if (mExtrenalLinkFeedID == -1) {
+                ContentValues values = new ContentValues();
+                values.put(FeedColumns.FETCH_MODE, FetcherService.FETCHMODE_EXERNAL_LINK);
+                values.put(FeedColumns.NAME, MainApplication.getContext().getString(R.string.externalLinks));
+                mExtrenalLinkFeedID = Long.parseLong(cr.insert(FeedColumns.CONTENT_URI, values).getLastPathSegment());
+            }
         }
-        return result;
+        return mExtrenalLinkFeedID;
     }
 
     public static void downloadAllImages() {
