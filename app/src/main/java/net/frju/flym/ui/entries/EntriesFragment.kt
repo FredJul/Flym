@@ -91,7 +91,7 @@ class EntriesFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         if (arguments?.containsKey(ARG_FEED) == true) {
-            feed = arguments.getParcelable(ARG_FEED)
+            feed = arguments?.getParcelable(ARG_FEED)
         }
 
         setupToolbar()
@@ -109,7 +109,7 @@ class EntriesFragment : Fragment() {
         unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
             setGravityOffset(35F, 0F, true)
             isShowShadow = false
-            badgeBackgroundColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
+            badgeBackgroundColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
         }
 
         read_all_fab.onClick {
@@ -238,10 +238,10 @@ class EntriesFragment : Fragment() {
     private fun startRefresh() {
         if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
             if (feed?.isGroup == false && feed?.id != Feed.ALL_ENTRIES_ID) {
-                context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.EXTRA_FEED_ID,
+                context?.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.EXTRA_FEED_ID,
                         feed?.id))
             } else {
-                context.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
+                context?.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
             }
         }
 

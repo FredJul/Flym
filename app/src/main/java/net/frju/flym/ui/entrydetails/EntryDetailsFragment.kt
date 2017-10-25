@@ -74,8 +74,8 @@ class EntryDetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        entry = arguments.getParcelable(ARG_ENTRY)
-        allEntryIds = arguments.getStringArrayList(ARG_ALL_ENTRIES_IDS)
+        entry = arguments?.getParcelable(ARG_ENTRY)!!
+        allEntryIds = arguments?.getStringArrayList(ARG_ALL_ENTRIES_IDS)!!
 
         setupToolbar()
 
@@ -126,9 +126,9 @@ class EntryDetailsFragment : Fragment() {
             menu.clear()
             inflateMenu(R.menu.fragment_entry_details)
 
-            if (!activity.containers_layout.hasTwoColumns()) {
+            if (activity?.containers_layout?.hasTwoColumns() == false) {
                 setNavigationIcon(R.drawable.ic_back_24dp)
-                setNavigationOnClickListener { activity.onBackPressed() }
+                setNavigationOnClickListener { activity?.onBackPressed() }
             }
 
             onMenuItemClick { item ->
@@ -164,8 +164,8 @@ class EntryDetailsFragment : Fragment() {
     fun setEntry(entry: EntryWithFeed, allEntryIds: List<String>) {
         this.entry = entry
         this.allEntryIds = allEntryIds
-        arguments.putParcelable(ARG_ENTRY, entry)
-        arguments.putStringArrayList(ARG_ALL_ENTRIES_IDS, ArrayList(allEntryIds))
+        arguments?.putParcelable(ARG_ENTRY, entry)
+        arguments?.putStringArrayList(ARG_ALL_ENTRIES_IDS, ArrayList(allEntryIds))
 
         updateUI()
     }
