@@ -514,6 +514,15 @@ public class FeedDataContentProvider extends ContentProvider {
                 table = EntryColumns.TABLE_NAME;
                 break;
             }
+            case URI_MAGAZINES: {
+                table = FeedData.MagazineColumns.TABLE_NAME;
+                break;
+            }
+            case URI_MAGAZINE: {
+                table = FeedData.MagazineColumns.TABLE_NAME;
+                where.append(FeedData.MagazineColumns._ID).append('=').append(uri.getPathSegments().get(1));
+                break;
+            }
             case URI_UNREAD_ENTRIES: {
                 table = EntryColumns.TABLE_NAME;
                 where.append(EntryColumns.WHERE_UNREAD);
@@ -703,6 +712,15 @@ public class FeedDataContentProvider extends ContentProvider {
                         delete(TaskColumns.CONTENT_URI, null, null);
                     }
                 }.start();
+                break;
+            }
+            case URI_MAGAZINES: {
+                table = FeedData.MagazineColumns.TABLE_NAME;
+                break;
+            }
+            case URI_MAGAZINE: {
+                table = FeedData.MagazineColumns.TABLE_NAME;
+                where.append(FeedData.MagazineColumns._ID).append('=').append(uri.getPathSegments().get(1));
                 break;
             }
             case URI_FAVORITES_ENTRY:

@@ -111,6 +111,7 @@
     <string name="menu_full_screen">Full screen</string>
     <string name="menu_copy_clipboard">Copy link</string>
     <string name="menu_mark_as_unread">Mark as unread</string>
+    <string name="menu_add_to_magazine">Add To Magazine</string>
     <string name="share_favorites_title">Flym: starred entries</string>
     <string name="copied_clipboard">Link copied</string>
     <string name="get_full_text">Retrieve the full text</string>

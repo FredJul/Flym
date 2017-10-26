@@ -92,17 +92,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         setContentView(R.layout.activity_home);
 
         mMagazineFragment = new MagazineListFragment();
-        new Thread() {
-            @Override
-            public void run() {
-                ContentValues values = new ContentValues();
-                values.put(FeedData.MagazineColumns.TITLE, "a");
-                values.put(FeedData.MagazineColumns.ENTRY_IDS, "b");
-
-                ContentResolver cr = MainApplication.getContext().getContentResolver();
-                cr.insert(FeedData.MagazineColumns.CONTENT_URI, values);
-            }
-        }.start();
         mEntriesFragment = new EntriesListFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.home_fragment_frame, mEntriesFragment).commit();
 

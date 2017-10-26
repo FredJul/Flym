@@ -44,29 +44,14 @@
 
 package net.fred.feedex.adapter;
 
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
-
-import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.bumptech.glide.Glide;
-
-import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.provider.FeedData;
-import net.fred.feedex.provider.FeedData.EntryColumns;
-import net.fred.feedex.provider.FeedData.FeedColumns;
-import net.fred.feedex.utils.NetworkUtils;
-import net.fred.feedex.utils.StringUtils;
 
 public class MagazineCursorAdapter extends ResourceCursorAdapter {
 
@@ -86,14 +71,13 @@ public class MagazineCursorAdapter extends ResourceCursorAdapter {
     public void bindView(View view, final Context context, Cursor cursor) {
         if (view.getTag(R.id.holder) == null) {
             ViewHolder holder = new ViewHolder();
-//            holder.titleTextView = (TextView) view.findViewById(android.R.id.);
-//            holder.entryIds = (TextView) view.findViewById(android.R.id.entry);
+            holder.titleTextView = (TextView) view.findViewById(R.id.magazine_title);
             view.setTag(R.id.holder, holder);
         }
 
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
-
-
+        String titleText = cursor.getString(mTitlePos);
+        holder.titleTextView.setText(titleText);
     }
 
     @Override
@@ -129,6 +113,5 @@ public class MagazineCursorAdapter extends ResourceCursorAdapter {
 
     private static class ViewHolder {
         public TextView titleTextView;
-        public TextView entryIds;
     }
 }
