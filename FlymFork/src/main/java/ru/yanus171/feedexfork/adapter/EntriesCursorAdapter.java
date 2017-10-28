@@ -50,6 +50,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -82,17 +84,19 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     private final Uri mUri;
     private final Context mContext;
     private final boolean mShowFeedInfo;
-    private final boolean mShowEntryText;
+    private final boolean mShowEntryText, mShowUnread;
+
     public static final ArrayList<Uri> mMarkAsReadList = new ArrayList<Uri>();
 
     private int mIdPos, mTitlePos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mMobilizedPos, mFeedIdPos, mFeedNamePos, mAbstractPos ;
 
-    public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo, boolean showEntryText) {
+    public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo, boolean showEntryText, boolean showUnread) {
         super(context, R.layout.item_entry_list, cursor, 0);
         mContext = context;
         mUri = uri;
         mShowFeedInfo = showFeedInfo;
         mShowEntryText = showEntryText;
+        mShowUnread = showUnread;
         //SetIsReadMakredList();
 
         mMarkAsReadList.clear();
@@ -283,8 +287,19 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             UpdateReadImgView( holder );
             UpdateStarImgView( holder );
 
-
             SetIsRead(EntryUri(id), holder.isRead, 0);
+            if ( holder.isRead && mShowUnread ) {
+                Snackbar snackbar = Snackbar.make(view.getRootView().findViewById(R.id.coordinator_layout), R.string.marked_as_read, Snackbar.LENGTH_LONG)
+                        .setActionTextColor(ContextCompat.getColor(view.getContext(), R.color.light_theme_color_primary))
+                        .setAction(R.string.undo, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                SetIsRead(EntryUri(id), false, 0);
+                            }
+                        });
+                snackbar.getView().setBackgroundResource(R.color.material_grey_900);
+                snackbar.show();
+            }
         }
     }
 
@@ -305,7 +320,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 }
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
                 //Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                Cursor cur = cr.query( entryUri, new String[]{ EntryColumns.IS_READ }, EntryColumns.WHERE_UNREAD, null, null );
+                Cursor cur = cr.query( entryUri, new String[]{ EntryColumns.IS_READ }, isRead ? EntryColumns.WHERE_UNREAD : null, null, null );
                 if ( cur.moveToFirst()  )
                     cr.update(entryUri, isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
                 cur.close();

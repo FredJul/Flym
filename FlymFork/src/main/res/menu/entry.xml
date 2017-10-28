@@ -53,6 +53,9 @@
         android:id="@+id/menu_load_all_images"
         android:title="@string/menu_load_all_images"/>
     <item
+        android:id="@+id/menu_share_all_text"
+        android:title="@string/share_all_text"/>
+    <item
         android:id="@+id/menu_open_link"
         android:title="@string/open_link"/>
     <item

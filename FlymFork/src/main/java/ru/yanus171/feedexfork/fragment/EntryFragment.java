@@ -42,6 +42,9 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -429,6 +432,20 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                 case R.id.menu_load_all_images: {
                     FetcherService.mMaxImageDownloadCount = 0;
                     mEntryPagerAdapter.displayEntry(mCurrentPagerPos, null, true);
+                    break;
+                }
+                case R.id.menu_share_all_text: {
+                    if ( mCurrentPagerPos != -1 ) {
+                        Spanned spanned = Html.fromHtml(mEntryPagerAdapter.mEntryViews.get(mCurrentPagerPos).mData);
+                        char[] chars = new char[spanned.length()];
+                        TextUtils.getChars(spanned, 0, spanned.length(), chars, 0);
+                        String plainText = new String(chars);
+                        plainText = plainText.replaceAll( "body(.)*", "" );
+                        startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND)
+                                        .putExtra(Intent.EXTRA_TEXT, plainText)
+                                        .setType(Constants.MIMETYPE_TEXT_PLAIN),
+                                getString(R.string.menu_share)));
+                    }
                     break;
                 }
                 case R.id.menu_cancel_refresh: {

@@ -108,6 +108,7 @@ public class FeedDataContentProvider extends ContentProvider {
     public static final int URI_UNREAD_ENTRIES_FOR_FEED = 23;
     public static final int URI_UNREAD_ENTRY_FOR_FEED = 24;
     public static final int URI_UNREAD_ENTRIES_FOR_GROUP = 25;
+    public static final int URI_UNREAD_ENTRY_FOR_GROUP = 26;
 
     public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -122,6 +123,7 @@ public class FeedDataContentProvider extends ContentProvider {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/entries/#", URI_ENTRY_FOR_FEED);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/unread_entries", URI_UNREAD_ENTRIES_FOR_FEED);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/unread_entries/#", URI_UNREAD_ENTRY_FOR_FEED);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#/unread_entries/#", URI_UNREAD_ENTRY_FOR_GROUP);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#/entries", URI_ENTRIES_FOR_GROUP);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#/unread_entries", URI_UNREAD_ENTRIES_FOR_GROUP);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#/entries/#", URI_ENTRY_FOR_GROUP);
@@ -129,6 +131,7 @@ public class FeedDataContentProvider extends ContentProvider {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/filters", URI_FILTERS_FOR_FEED);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "entries", URI_ENTRIES);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/#", URI_ENTRY);
+        //URI_MATCHER.addURI(FeedData.AUTHORITY, "unread_entries/#", URI_UNREAD_ENTRY);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "unread_entries", URI_UNREAD_ENTRIES);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "unread_entries/#", URI_UNREAD_ENTRIES_ENTRY);
 
@@ -214,6 +217,7 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_ENTRY_FOR_FEED:
             case URI_ENTRY_FOR_GROUP:
             case URI_UNREAD_ENTRY_FOR_FEED:
+            case URI_UNREAD_ENTRY_FOR_GROUP:
             case URI_SEARCH_ENTRY:
                 return "vnd.android.cursor.item/vnd.flymfork.entry";
             case URI_TASKS:
@@ -293,6 +297,7 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             case URI_ENTRY_FOR_FEED:
             case URI_UNREAD_ENTRY_FOR_FEED:
+            case URI_UNREAD_ENTRY_FOR_GROUP:
             case URI_ENTRY_FOR_GROUP:
             case URI_SEARCH_ENTRY: {
                 queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
@@ -525,6 +530,7 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             case URI_ENTRY_FOR_FEED:
             case URI_UNREAD_ENTRY_FOR_FEED:
+            case URI_UNREAD_ENTRY_FOR_GROUP:
             case URI_ENTRY_FOR_GROUP:
             case URI_SEARCH_ENTRY: {
                 table = EntryColumns.TABLE_NAME;

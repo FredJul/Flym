@@ -21,6 +21,7 @@ package ru.yanus171.feedexfork.fragment;
 
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -214,7 +215,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
             if ( mShowTextInEntryList )
                 mNeedSetSelection = true;
-            mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo, mShowTextInEntryList);
+            mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo, mShowTextInEntryList, mShowUnRead);
         }
 
     }
@@ -330,7 +331,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
                 if (id >= 0) { // should not happen, but I had a crash with this on PlayStore...
-                    startActivity(new Intent(Intent.ACTION_VIEW, EntryColumns.CONTENT_URI(id) ) );// ContentUris.withAppendedId(mCurrentUri, id)));
+                    //startActivity(new Intent(Intent.ACTION_VIEW, EntryColumns.CONTENT_URI(id) ) );
+                    startActivity(new Intent(Intent.ACTION_VIEW,  ContentUris.withAppendedId(mCurrentUri, id)));
                 }
             }
         });
@@ -618,7 +620,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         if ( mShowTextInEntryList )
             mNeedSetSelection = true;
-        mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo, mShowTextInEntryList);
+        mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo, mShowTextInEntryList, mShowUnRead);
         mListView.setAdapter(mEntriesCursorAdapter);
 
         mListDisplayDate = new Date().getTime();

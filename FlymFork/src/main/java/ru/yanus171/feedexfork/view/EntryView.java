@@ -103,7 +103,7 @@ public class EntryView extends WebView implements Observer {
     private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#52A7DF" : "#1A5A81";
     private static final String SUBTITLE_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#666666" : "#8c8c8c";
     private static final String SUBTITLE_BORDER_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "solid #ddd" : "solid #303030";
-    private static String GetCSS() { return "<head><style type='text/css'> "
+    public static String GetCSS() { return "<head><style type='text/css'> "
             + "body {max-width: 100%; margin: 0.1cm; text-align:justify; font-weight: " + getFontBold() + " color: " + GetTextColor() + "; background-color:" + BACKGROUND_COLOR + "; line-height: 120%} "
             + "* {max-width: 100%; word-break: break-word}"
             + "h1, h2 {font-weight: normal; line-height: 130%} "
@@ -155,7 +155,7 @@ public class EntryView extends WebView implements Observer {
     public static final ImageDownloadObservable mImageDownloadObservable = new ImageDownloadObservable();
     private EntryViewManager mEntryViewMgr;
     public static Handler mHandler = null;
-    String mData = "";
+    public String mData = "";
     public int mScrollY = 0;
 
     private EntryActivity mActivity;

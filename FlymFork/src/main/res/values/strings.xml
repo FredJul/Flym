@@ -227,6 +227,7 @@
     <string name="settings_volume_buttons_action">Action by volume buttons</string>
     <string name="behaviour">Behaviour</string>
     <string name="question_delete_entry">Delete article ?</string>
+    <string name="share_all_text">Share all text</string>
 
 
     <plurals name="number_of_new_entries">
