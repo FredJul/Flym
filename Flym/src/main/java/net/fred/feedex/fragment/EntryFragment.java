@@ -69,6 +69,8 @@ import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 import net.fred.feedex.view.EntryView;
 
+import java.util.Arrays;
+
 public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<Cursor>, EntryView.EntryViewManager {
 
     private static final String STATE_BASE_URI = "STATE_BASE_URI";
@@ -318,8 +320,8 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                     chooseMagazineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Cursor temp = (Cursor) typAdapter.getItem(position);
-                            String magazineId = temp.getString(temp.getColumnIndex(FeedData.MagazineColumns._ID));
+                            Cursor magazineItem = (Cursor) typAdapter.getItem(position);
+                            String magazineId = magazineItem.getString(magazineItem.getColumnIndex(FeedData.MagazineColumns._ID));
 
                             ContentResolver cr = MainApplication.getContext().getContentResolver();
                             String [] requestedColumns = {
@@ -335,18 +337,22 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                                     existingEntries = entry.getString(entry.getColumnIndex(FeedData.MagazineColumns.ENTRY_IDS));
                                 }
                             }
-                            String updatedEntries;
+                            String updatedEntries = existingEntries;
                             if (existingEntries == null) {
-                                // TODO Get entry id
                                 updatedEntries = "" +  mEntriesIds[mCurrentPagerPos];
                             }
                             else {
-                                updatedEntries = existingEntries + "," +  mEntriesIds[mCurrentPagerPos];
+                                String[] existingEntryIds = existingEntries.split(",");
+                                if (!Arrays.asList(existingEntryIds).contains(mEntriesIds[mCurrentPagerPos] + "")) {
+                                    updatedEntries = existingEntries + "," +  mEntriesIds[mCurrentPagerPos];
+                                }
                             }
                             ContentValues values = new ContentValues();
                             values.put(FeedData.MagazineColumns.ENTRY_IDS, updatedEntries);
                             cr.update(FeedData.MagazineColumns.CONTENT_URI, values, FeedData.MagazineColumns._ID + "=" + magazineId, null);
-
+                            builder.dismiss();
+                            magazineItem.close();
+                            entry.close();
                         }
                     });
 

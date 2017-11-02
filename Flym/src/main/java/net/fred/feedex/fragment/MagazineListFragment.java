@@ -1,7 +1,7 @@
 package net.fred.feedex.fragment;
 
+import android.content.ContentResolver;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -11,12 +11,12 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
-import net.fred.feedex.Constants;
+import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.MagazineCursorAdapter;
 import net.fred.feedex.provider.FeedData;
-import net.fred.feedex.provider.FeedDataContentProvider;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,10 +57,37 @@ public class MagazineListFragment extends ListFragment implements LoaderManager.
             mMagazineCursorAdapter.swapCursor(data);
         }
         setListAdapter(mMagazineCursorAdapter);
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Cursor magazineItem = (Cursor) mMagazineCursorAdapter.getItem(i);
+                String magazineId = magazineItem.getString(magazineItem.getColumnIndex(FeedData.MagazineColumns._ID));
+
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                String [] requestedColumns = {
+                        FeedData.MagazineColumns.ENTRY_IDS,
+                };
+                Cursor entry = cr.query(FeedData.MagazineColumns.CONTENT_URI,
+                        requestedColumns,
+                        FeedData.MagazineColumns._ID + "=" + magazineId + "",
+                        null, null);
+                String existingEntries;
+                if(entry != null) {
+                    if (entry.moveToFirst()) {
+                        existingEntries = entry.getString(entry.getColumnIndex(FeedData.MagazineColumns.ENTRY_IDS));
+                        String[] existingEntryIds = existingEntries.split(",");
+                        EntriesListFragment mEntriesFragment = new EntriesListFragment();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mEntriesFragment).commit();
+                    }
+                }
+                magazineItem.close();
+                entry.close();
+            }
+        });
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        String a = "";
     }
 }

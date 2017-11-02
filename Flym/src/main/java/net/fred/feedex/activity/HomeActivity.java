@@ -75,7 +75,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     private static final int PERMISSIONS_REQUEST_IMPORT_FROM_OPML = 1;
 
     private EntriesListFragment mEntriesFragment;
-    private MagazineListFragment mMagazineFragment;
     private DrawerLayout mDrawerLayout;
     private View mLeftDrawer;
     private ListView mDrawerList;
@@ -91,7 +90,6 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         setContentView(R.layout.activity_home);
 
-        mMagazineFragment = new MagazineListFragment();
         mEntriesFragment = new EntriesListFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.home_fragment_frame, mEntriesFragment).commit();
 
@@ -278,15 +276,11 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.home_fragment_frame);
         if(currentFragment instanceof EntriesListFragment && position == 3) { //load magazine fragment
-            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mMagazineFragment).commit();
-            currentFragment = mMagazineFragment;
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, new MagazineListFragment()).commit();
         }
         else if(currentFragment instanceof MagazineListFragment && position != 3) { //load entries fragment
-            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mEntriesFragment).commit();
-            currentFragment = mEntriesFragment;
+
         }
-
-
         switch (position) {
             case 0:
                 newUri = EntryColumns.UNREAD_ENTRIES_CONTENT_URI;
