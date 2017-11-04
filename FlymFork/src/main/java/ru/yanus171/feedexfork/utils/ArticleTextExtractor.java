@@ -126,18 +126,19 @@ public class ArticleTextExtractor {
             }
         }
 
-        ret = ret.replaceAll("<table(.)*?>", "<p>");
-        ret = ret.replaceAll("</table>", "</p>");
+        if ( !mobilize ) {
+            ret = ret.replaceAll("<table(.)*?>", "<p>");
+            ret = ret.replaceAll("</table>", "</p>");
 
-        ret = ret.replaceAll("<tr(.)*?>", "<p>");
-        ret = ret.replaceAll("</tr>", "</p>");
+            ret = ret.replaceAll("<tr(.)*?>", "<p>");
+            ret = ret.replaceAll("</tr>", "</p>");
 
-        ret = ret.replaceAll("<td(.)*?>", "<p>");
-        ret = ret.replaceAll("</td>", "</p>");
+            ret = ret.replaceAll("<td(.)*?>", "<p>");
+            ret = ret.replaceAll("</td>", "</p>");
 
-        ret = ret.replaceAll("<th(.)*?>", "<p>");
-        ret = ret.replaceAll("</th>", "</p>");
-
+            ret = ret.replaceAll("<th(.)*?>", "<p>");
+            ret = ret.replaceAll("</th>", "</p>");
+        }
         return ret;
     }
 

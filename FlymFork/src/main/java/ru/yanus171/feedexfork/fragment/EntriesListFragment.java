@@ -22,7 +22,6 @@ package ru.yanus171.feedexfork.fragment;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,16 +39,12 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.ContextMenu;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -80,6 +75,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private static final String STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE";
     private static final String STATE_SHOW_TEXT_IN_ENTRY_LIST = "STATE_SHOW_TEXT_IN_ENTRY_LIST";
     private static final String STATE_ORIGINAL_URI_SHOW_TEXT_IN_ENTRY_LIST = "STATE_ORIGINAL_URI_SHOW_TEXT_IN_ENTRY_LIST";
+    private static final String STATE_SHOW_UNREAD = "STATE_SHOW_UNREAD";
 
     private static final int ENTRIES_LOADER_ID = 1;
     private static final int NEW_ENTRIES_NUMBER_LOADER_ID = 2;
@@ -212,6 +208,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             mShowFeedInfo = savedInstanceState.getBoolean(STATE_SHOW_FEED_INFO);
             mListDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE);
             mShowTextInEntryList = savedInstanceState.getBoolean(STATE_SHOW_TEXT_IN_ENTRY_LIST);
+            mShowUnRead = savedInstanceState.getBoolean(STATE_SHOW_UNREAD);
 
             if ( mShowTextInEntryList )
                 mNeedSetSelection = true;
@@ -263,7 +260,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                         this*/);
 
         mListView = (AbsListView) rootView.findViewById(android.R.id.list);
-        mListView.setOnTouchListener(new SwipeGestureListener(mListView.getContext()));
+        //mListView.setOnTouchListener(new SwipeGestureListener(mListView.getContext()));
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -396,6 +393,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         outState.putBoolean(STATE_SHOW_FEED_INFO, mShowFeedInfo);
         outState.putBoolean(STATE_SHOW_TEXT_IN_ENTRY_LIST, mShowTextInEntryList);
         outState.putLong(STATE_LIST_DISPLAY_DATE, mListDisplayDate);
+        outState.putBoolean(STATE_SHOW_UNREAD, mShowUnRead);
 
         super.onSaveInstanceState(outState);
     }
@@ -657,7 +655,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     }
 
 
-    private class SwipeGestureListener extends SimpleOnGestureListener implements OnTouchListener {
+    /*private class SwipeGestureListener extends SimpleOnGestureListener implements OnTouchListener {
         static final int SWIPE_MIN_DISTANCE = 120;
         static final int SWIPE_MAX_OFF_PATH = 150;
         static final int SWIPE_THRESHOLD_VELOCITY = 150;
@@ -705,7 +703,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         public boolean onTouch(View v, MotionEvent event) {
             return mGestureDetector.onTouchEvent(event);
         }
-    }
+    }*/
 
 
 }

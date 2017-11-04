@@ -34,7 +34,7 @@ public class LoadLinkLaterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEND) && intent.hasExtra(Intent.EXTRA_TEXT)) {
             String text = intent.getStringExtra(Intent.EXTRA_TEXT);
             //Pattern p = Pattern.compile("(?<![\\>https?://|href=\"'])(?\\<http\\>(https?:[/][/]|www.)([a-z]|[-_%]|[A-Z]|[0-9]|[/.]|[~])*)");
@@ -43,7 +43,10 @@ public class LoadLinkLaterActivity extends AppCompatActivity {
             if (m.find())
                 FetcherService.StartServiceOpenExternalLink(text.substring(m.start(), m.end()), text.substring(0, m.start()) );
 
-        }
+        } else if (intent.getScheme() != null && intent.getScheme().startsWith("http"))
+            FetcherService.StartServiceOpenExternalLink( intent.getDataString(), intent.getDataString() );
+
+
 
         finish();
 

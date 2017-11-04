@@ -48,6 +48,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
@@ -55,6 +56,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -75,6 +77,7 @@ import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
+import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.StringUtils;
@@ -118,8 +121,11 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         view.findViewById(R.id.text2hor).setVisibility(View.GONE);
         view.findViewById(android.R.id.text2).setVisibility(View.GONE);
 
+        final long feedId = cursor.getLong(mFeedIdPos);
+        //final long entryID = cursor.getLong(mIdPos);
+
         if (view.getTag(R.id.holder) == null) {
-            ViewHolder holder = new ViewHolder();
+            final ViewHolder holder = new ViewHolder();
             holder.titleTextView = (TextView) view.findViewById(android.R.id.text1);
             holder.textTextView = (TextView) view.findViewById(R.id.textSource);
             if ( mShowEntryText )
@@ -131,11 +137,99 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.mobilizedImgView = (ImageView) view.findViewById(R.id.mobilized_icon);
             holder.readImgView = (ImageView) view.findViewById(R.id.read_icon);
             holder.textLayout = (LinearLayout)view.findViewById(R.id.textLayout);
+            holder.readToggleSwypeBtnView = view.findViewById(R.id.swype_btn_toggle_read);
+            holder.starToggleSwypeBtnView = view.findViewById(R.id.swype_btn_toggle_star);
 
             view.setTag(R.id.holder, holder);
+
+            view.findViewById( R.id.layout_root ).setOnTouchListener( new View.OnTouchListener() {
+                private int padding = 0;
+                private int initialx = 0;
+                private int initialy = 0;
+                private int currentx = 0;
+                private boolean wasMove = false;
+                //private  ViewHolder viewHolder;
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    final int min = 40;
+
+                    ViewHolder holder = (ViewHolder) ( (ViewGroup)v.getParent() ).getTag(R.id.holder);
+                    if ( event.getAction() == MotionEvent.ACTION_DOWN) {
+                        Dog.v( "onTouch ACTION_DOWN" );
+                        padding = 0;
+                        initialx = (int) event.getX();
+                        initialy = (int) event.getY();
+                        currentx = (int) event.getX();
+                        wasMove = false;
+                        //viewHolder = ((ViewHolder) v.getTag());
+                        view.getParent().requestDisallowInterceptTouchEvent(true);
+                    }
+                    if ( event.getAction() == MotionEvent.ACTION_MOVE) {
+                        Dog.v( "onTouch ACTION_MOVE" );
+                        currentx = (int) event.getX();
+                        padding = currentx - initialx;
+                        wasMove = true;
+
+                        if ( Math.abs( initialy - event.getY() ) > min && view.getParent() != null )
+                            view.getParent().requestDisallowInterceptTouchEvent(false);
+
+                    }
+
+                    holder.readToggleSwypeBtnView.setVisibility( View.GONE );
+                    holder.starToggleSwypeBtnView.setVisibility( View.GONE );
+
+                    int overlap = holder.readToggleSwypeBtnView.getWidth() / 2;
+                    int threshold = holder.readToggleSwypeBtnView.getWidth();
+                    int max = threshold + overlap;// + holder.readToggleSwypeBtnView.getPaddingLeft() + holder.readToggleSwypeBtnView.getPaddingRight();
+
+                    if ( event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL ) {
+                        if ( event.getAction() == MotionEvent.ACTION_UP ) {
+                            Dog.v("onTouch ACTION_UP");
+                            if (!wasMove)
+                                v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, holder.entryID)));
+                            else if (padding >= threshold)
+                                toggleReadState(holder.entryID, view);
+                            else if (padding <= -threshold)
+                                toggleFavoriteState( holder.entryID, view );
+                            //else if ( padding == 0 )
+                            //    v.getContext().startActivity(new Intent(Intent.ACTION_VIEW,  ContentUris.withAppendedId(mUri, entryId)));
+                        } else {
+                            Dog.v("onTouch ACTION_CANCEL");
+                        }
+                        padding = 0;
+                        initialx = 0;
+                        initialx = 0;
+                        currentx = 0;
+
+                        if ( view.getParent() != null )
+                            view.getParent().requestDisallowInterceptTouchEvent(false);
+                    }
+                    if( padding >= threshold)
+                        holder.readToggleSwypeBtnView.setVisibility( View.VISIBLE );
+
+                    if( padding <= -threshold )
+                        holder.starToggleSwypeBtnView.setVisibility( View.VISIBLE );
+
+
+                    if ( padding > max )
+                        padding = max;
+
+                    if ( padding < -max )
+                        padding = -max;
+
+                    if ( Math.abs( padding ) < min )
+                        padding = 0;
+
+                    v.setPadding(padding > 0 ? padding : 0, 0, padding < 0 ? -padding : 0, 0);
+                    //}
+
+                    return true;
+                }
+            } );
         }
 
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
+        holder.entryID = cursor.getLong(mIdPos);
 
 
 
@@ -145,8 +239,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         holder.titleTextView.setText(titleText);
         holder.titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18 + PrefUtils.getFontSizeEntryList() );
 
-        final long feedId = cursor.getLong(mFeedIdPos);
-        final long entryID = cursor.getLong(mIdPos);
 
         /*if ( mShowEntryText && ( holder.entryID != -1 ) && !holder.isRead ) {
             SetIsRead(holder.entryID, true, 0);
@@ -155,13 +247,11 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                     mMarkAsReadList.remove( holder.entryID );
             }
         }*/
-        holder.entryID = entryID;
-
 
         String feedName = cursor.getString(mFeedNamePos);
 
         String mainImgUrl = cursor.getString(mMainImgPos);
-        mainImgUrl = TextUtils.isEmpty(mainImgUrl) ? null : NetworkUtils.getDownloadedOrDistantImageUrl(entryID, mainImgUrl);
+        mainImgUrl = TextUtils.isEmpty(mainImgUrl) ? null : NetworkUtils.getDownloadedOrDistantImageUrl(holder.entryID, mainImgUrl);
 
         ColorGenerator generator = ColorGenerator.DEFAULT;
         int color = generator.getColor(feedId); // The color is specific to the feedId (which shouldn't change)
@@ -210,20 +300,20 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             @Override
             public void onClick(View v) {
                 if (feedId >= 0) { // should not happen, but I had a crash with this on PlayStore...
-                    mContext.startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, entryId)));
+                    mContext.startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, entryID)));
                 }
             }
         };
 
         holder.textLayout.setOnClickListener( listener );
-        //holder.textTextView.setOnClickListener( listener );
-        */
+        holder.textTextView.setOnClickListener( listener );*/
+
         //holder.starImgView.setVisibility(holder.isFavorite ? View.VISIBLE : View.INVISIBLE);
         UpdateStarImgView(holder);
         holder.starImgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleFavoriteState(entryID, view);
+                toggleFavoriteState(holder.entryID, view);
             }
         });
 
@@ -233,7 +323,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         holder.readImgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleReadState(entryID, view);
+                toggleReadState(holder.entryID, view);
             }
         });
 
@@ -341,7 +431,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         if (holder != null) { // should not happen, but I had a crash with this on PlayStore...
             holder.isFavorite = !holder.isFavorite;
-            //UpdateStarImgView(holder);
+
+            UpdateStarImgView(holder);
 
             new Thread() {
                 @Override
@@ -409,6 +500,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         public ImageView starImgView;
         public ImageView mobilizedImgView;
         public ImageView readImgView;
+        public View readToggleSwypeBtnView;
+        public View starToggleSwypeBtnView;
         public LinearLayout textLayout;
         public boolean isRead, isFavorite, isMobilized;
         public long entryID = -1;
