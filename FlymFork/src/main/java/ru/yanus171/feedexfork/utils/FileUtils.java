@@ -20,17 +20,14 @@
 package ru.yanus171.feedexfork.utils;
 
 import android.os.Environment;
-import android.widget.Toast;
-
-import ru.yanus171.feedexfork.MainApplication;
-import ru.yanus171.feedexfork.R;
-import ru.yanus171.feedexfork.service.FetcherService;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+
+import ru.yanus171.feedexfork.MainApplication;
 
 public class FileUtils {
 
@@ -61,12 +58,15 @@ public class FileUtils {
         return result;
     }
 
+    private static File mGetImagesFolder = null;
     public static File GetImagesFolder() {
-        File result = new File(GetFolder(), "images/");
-        if ( !result.exists() )
-             result.mkdirs();
+        if ( mGetImagesFolder == null ) {
+            mGetImagesFolder = new File(GetFolder(), "images/");
+            if (!mGetImagesFolder.exists())
+                mGetImagesFolder.mkdirs();
+        }
                 //Toast.makeText(MainApplication.getContext(), "Cannot create dir " + result.getAbsolutePath(), Toast.LENGTH_LONG ).show();
-        return result;
+        return mGetImagesFolder;
     }
 
 }

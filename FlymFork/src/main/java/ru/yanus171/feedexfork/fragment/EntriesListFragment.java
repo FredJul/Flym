@@ -22,6 +22,7 @@ package ru.yanus171.feedexfork.fragment;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -340,22 +341,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 if (id > 0) {
                     //mListView.setSelection( position );
 
-                    new AlertDialog.Builder(EntriesListFragment.this.getActivity()) //
-                    .setIcon(android.R.drawable.ic_dialog_alert) //
-                    .setTitle( R.string.question_delete_entry ) //
-                    .setMessage( mEntriesCursorAdapter.GetTitle( mListView, position )) //
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            new Thread() {
-                                @Override
-                                public void run() {
-                                    ContentResolver cr = MainApplication.getContext().getContentResolver();
-                                    cr.delete(EntryColumns.CONTENT_URI(id), null, null);
-                                            }
-                            }.start();
-                                    }
-                            }).setNegativeButton(android.R.string.no, null).show();
+                    ShowDeleteDialog(EntriesListFragment.this.getActivity(), mEntriesCursorAdapter.GetTitle( mListView, position ), id);
                     return true;
                 }
                 return false;
@@ -371,6 +357,26 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         return rootView;
     }
+
+    public static void ShowDeleteDialog(Context context, final String title, final long id) {
+        new AlertDialog.Builder(context) //
+                .setIcon(android.R.drawable.ic_dialog_alert) //
+                .setTitle( R.string.question_delete_entry ) //
+                .setMessage( title ) //
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                                cr.delete(EntryColumns.CONTENT_URI(id), null, null);
+                            }
+                        }.start();
+                    }
+                }).setNegativeButton(android.R.string.no, null).show();
+    }
+
 
     @Override
     public void onStop() {

@@ -51,6 +51,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
@@ -58,6 +59,7 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageView;
@@ -74,6 +76,7 @@ import java.util.ArrayList;
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
+import ru.yanus171.feedexfork.fragment.EntriesListFragment;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
@@ -115,6 +118,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     public Uri EntryUri( long id ) {
         return EntryColumns.CONTENT_URI( id ); //ContentUris.withAppendedId(mUri, id);
     }
+
+
     @Override
     public void bindView(final View view, final Context context, Cursor cursor) {
 
@@ -140,6 +145,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.readToggleSwypeBtnView = view.findViewById(R.id.swype_btn_toggle_read);
             holder.starToggleSwypeBtnView = view.findViewById(R.id.swype_btn_toggle_star);
 
+            holder.titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18 + PrefUtils.getFontSizeEntryList() );
+
             view.setTag(R.id.holder, holder);
 
             view.findViewById( R.id.layout_root ).setOnTouchListener( new View.OnTouchListener() {
@@ -147,13 +154,14 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 private int initialx = 0;
                 private int initialy = 0;
                 private int currentx = 0;
+                private boolean isLongPress = false;
                 private boolean wasMove = false;
                 //private  ViewHolder viewHolder;
 
                 public boolean onTouch(View v, MotionEvent event) {
                     final int min = 40;
 
-                    ViewHolder holder = (ViewHolder) ( (ViewGroup)v.getParent() ).getTag(R.id.holder);
+                    final ViewHolder holder = (ViewHolder) ( (ViewGroup)v.getParent() ).getTag(R.id.holder);
                     if ( event.getAction() == MotionEvent.ACTION_DOWN) {
                         Dog.v( "onTouch ACTION_DOWN" );
                         padding = 0;
@@ -161,18 +169,27 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                         initialy = (int) event.getY();
                         currentx = (int) event.getX();
                         wasMove = false;
-                        //viewHolder = ((ViewHolder) v.getTag());
                         view.getParent().requestDisallowInterceptTouchEvent(true);
+
+                        isLongPress = true;
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (isLongPress) {
+                                    wasMove = true;
+                                    EntriesListFragment.ShowDeleteDialog(view.getContext(), holder.titleTextView.getText().toString(), holder.entryID);
+                                }
+                            }
+                        }, ViewConfiguration.getLongPressTimeout());
                     }
                     if ( event.getAction() == MotionEvent.ACTION_MOVE) {
-                        Dog.v( "onTouch ACTION_MOVE" );
+                        isLongPress = false;
                         currentx = (int) event.getX();
                         padding = currentx - initialx;
+                        Dog.v( "onTouch ACTION_MOVE " + padding );
                         wasMove = true;
-
                         if ( Math.abs( initialy - event.getY() ) > min && view.getParent() != null )
                             view.getParent().requestDisallowInterceptTouchEvent(false);
-
                     }
 
                     holder.readToggleSwypeBtnView.setVisibility( View.GONE );
@@ -180,19 +197,18 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
                     int overlap = holder.readToggleSwypeBtnView.getWidth() / 2;
                     int threshold = holder.readToggleSwypeBtnView.getWidth();
-                    int max = threshold + overlap;// + holder.readToggleSwypeBtnView.getPaddingLeft() + holder.readToggleSwypeBtnView.getPaddingRight();
+                    int max = threshold + overlap;
 
                     if ( event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL ) {
+                        isLongPress = false;
                         if ( event.getAction() == MotionEvent.ACTION_UP ) {
-                            Dog.v("onTouch ACTION_UP");
+                            Dog.v("onTouch ACTION_UP" );
                             if (!wasMove)
                                 v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, holder.entryID)));
                             else if (padding >= threshold)
                                 toggleReadState(holder.entryID, view);
                             else if (padding <= -threshold)
                                 toggleFavoriteState( holder.entryID, view );
-                            //else if ( padding == 0 )
-                            //    v.getContext().startActivity(new Intent(Intent.ACTION_VIEW,  ContentUris.withAppendedId(mUri, entryId)));
                         } else {
                             Dog.v("onTouch ACTION_CANCEL");
                         }
@@ -204,24 +220,22 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                         if ( view.getParent() != null )
                             view.getParent().requestDisallowInterceptTouchEvent(false);
                     }
-                    if( padding >= threshold)
-                        holder.readToggleSwypeBtnView.setVisibility( View.VISIBLE );
-
-                    if( padding <= -threshold )
-                        holder.starToggleSwypeBtnView.setVisibility( View.VISIBLE );
-
-
                     if ( padding > max )
                         padding = max;
 
                     if ( padding < -max )
                         padding = -max;
 
-                    if ( Math.abs( padding ) < min )
+                    if ( initialx < min || Math.abs( padding ) < min )
                         padding = 0;
 
+                    if( padding >= threshold)
+                        holder.readToggleSwypeBtnView.setVisibility( View.VISIBLE );
+
+                    if( padding <= -threshold )
+                        holder.starToggleSwypeBtnView.setVisibility( View.VISIBLE );
+
                     v.setPadding(padding > 0 ? padding : 0, 0, padding < 0 ? -padding : 0, 0);
-                    //}
 
                     return true;
                 }
@@ -231,22 +245,14 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
         holder.entryID = cursor.getLong(mIdPos);
 
-
+        holder.readToggleSwypeBtnView.setVisibility( View.GONE );
+        holder.starToggleSwypeBtnView.setVisibility( View.GONE );
 
         holder.dateTextView.setVisibility(View.VISIBLE);
 
         String titleText = cursor.getString(mTitlePos);
         holder.titleTextView.setText(titleText);
-        holder.titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18 + PrefUtils.getFontSizeEntryList() );
 
-
-        /*if ( mShowEntryText && ( holder.entryID != -1 ) && !holder.isRead ) {
-            SetIsRead(holder.entryID, true, 0);
-            synchronized ( mMarkAsReadList ) {
-                if ( mMarkAsReadList.contains( holder.entryID ) )
-                    mMarkAsReadList.remove( holder.entryID );
-            }
-        }*/
 
         String feedName = cursor.getString(mFeedNamePos);
 
@@ -288,13 +294,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.isRead = true;
         }
 
-        /*synchronized ( mMarkAsReadList ) {
-            if ( !holder.isRead && !mMarkAsReadList.contains(holder.entryID)) {
-                mMarkAsReadList.add( EntryUri( holder.entryID ) );
-                Dog.i("mMarkAsReadList.add " +  EntryUri( holder.entryID ));
-            }
-        }*/
-
 
         /*View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -308,7 +307,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         holder.textLayout.setOnClickListener( listener );
         holder.textTextView.setOnClickListener( listener );*/
 
-        //holder.starImgView.setVisibility(holder.isFavorite ? View.VISIBLE : View.INVISIBLE);
         UpdateStarImgView(holder);
         holder.starImgView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -330,25 +328,13 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         if ( mShowEntryText ) {
             holder.textTextView.setVisibility(View.VISIBLE);
             holder.textTextView.setText(Html.fromHtml( cursor.getString(mAbstractPos) == null ? "" : cursor.getString(mAbstractPos).toString() ));
-            if ( !holder.isRead ) {
-                //SetIsRead(entryId, true, 100 * 1000);
-                /*if ( entryID != -1 ){
-                    synchronized ( mMarkAsReadList ) {
-                        if ( !mMarkAsReadList.contains(EntryUri( entryID ))) {
-                            mMarkAsReadList.add(EntryUri( entryID ));
-                            Dog.d("mMarkAsReadList.add " + EntryUri( entryID ));
-                        }
-                    }
-                }*/
-                //holder.entryID = entryId;
-
-            }
             holder.textTextView.setEnabled(!holder.isRead);
             holder.mainImgView.setVisibility(View.GONE);
         } else
             holder.textTextView.setVisibility(View.GONE);
 
     }
+
 
 
     private void UpdateStarImgView(ViewHolder holder) {

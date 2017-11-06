@@ -359,5 +359,6 @@
     <string name="behaviour">Поведение</string>
     <string name="question_delete_entry">Удалить статью?</string>
     <string name="share_all_text">Поделиться текстом</string>
+    <string name="group">Группа</string>
 
 </resources>

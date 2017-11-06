@@ -74,12 +74,32 @@
                         android:hint="@string/optional"
                         android:singleLine="true"/>
 
+                    <LinearLayout
+                        android:id="@+id/layout_group"
+                        android:orientation="horizontal"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/feed_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <CheckBox
+                            android:id="@+id/has_group"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:text="@string/group"/>
+                        <Spinner
+                            android:id="@+id/spin_group"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:choiceMode="singleChoice"
+                            android:visibility="visible" />
+                    </LinearLayout>
                     <CheckBox
                         android:id="@+id/retrieve_fulltext"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_below="@+id/feed_title"
+                        android:layout_below="@+id/layout_group"
                         android:layout_marginRight="10dp"
                         android:text="@string/get_full_text"/>
                     <CheckBox

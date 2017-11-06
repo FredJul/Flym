@@ -266,8 +266,8 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             case URI_GROUPS: {
                 queryBuilder.setTables(FeedColumns.TABLE_NAME);
-                queryBuilder.appendWhere(new StringBuilder(FeedColumns.IS_GROUP).append(Constants.DB_IS_TRUE).append(Constants.DB_OR)
-                        .append(FeedColumns.GROUP_ID).append(Constants.DB_IS_NULL));
+                queryBuilder.appendWhere(new StringBuilder(FeedColumns.IS_GROUP).append(Constants.DB_IS_TRUE) );//.append(Constants.DB_OR)
+                        //.append(FeedColumns.GROUP_ID).append(Constants.DB_IS_NULL));
                 break;
             }
             case URI_FEEDS_FOR_GROUPS: {

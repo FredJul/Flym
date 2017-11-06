@@ -398,10 +398,10 @@ public class EntryView extends WebView implements Observer {
         FetcherService.getStatusText().HideByScroll();
         int height = (int) Math.floor(getContentHeight() * getScale());
         int webViewHeight = getMeasuredHeight();
-        if(getScrollY() + webViewHeight >= height){
-            if ( EntryActivity.GetIsStatusBarHidden() )
-                mActivity.setFullScreenWithNavBar();//setFullScreen(false, EntryActivity.GetIsActionBarHidden());
-        }
+        //if(getScrollY() + webViewHeight >= height){
+        //    if ( EntryActivity.GetIsStatusBarHidden() )
+        //        mActivity.setFullScreenWithNavBar();//setFullScreen(false, EntryActivity.GetIsActionBarHidden());
+        //}
         mActivity.mEntryFragment.UpdateProgress();
         mActivity.mEntryFragment.UpdateClock();
     }

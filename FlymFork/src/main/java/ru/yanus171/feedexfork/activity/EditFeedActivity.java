@@ -66,11 +66,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.ResourceCursorAdapter;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -100,7 +104,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     static final String FEED_SEARCH_DESC = "description";//"contentSnippet";
     private static final String STATE_CURRENT_TAB = "STATE_CURRENT_TAB";
     private static final String[] FEED_PROJECTION =
-        new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.IS_GROUP, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH };
+        new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.IS_GROUP, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH, FeedColumns.GROUP_ID };
     private final ActionMode.Callback mFilterActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -222,6 +226,8 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     private CheckBox mShowTextInEntryListCb;
     private CheckBox mIsAutoRefreshCb;
     private ListView mFiltersListView;
+    private Spinner mGroupSpinner;
+    private CheckBox mHasGroupCb;
     private FiltersCursorAdapter mFiltersCursorAdapter;
 
     @Override
@@ -246,6 +252,14 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         mShowTextInEntryListCb = (CheckBox) findViewById(R.id.show_text_in_entry_list);
         mIsAutoRefreshCb =  (CheckBox) findViewById(R.id.auto_refresh);
         mFiltersListView = (ListView) findViewById(android.R.id.list);
+        mGroupSpinner = (Spinner) findViewById(R.id.spin_group);
+        mHasGroupCb = (CheckBox) findViewById(R.id.has_group);
+        mHasGroupCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                UpdateSpinnerGroup();
+            }
+        });
         View tabWidget = findViewById(android.R.id.tabs);
 
         mIsAutoRefreshCb.setVisibility(  PrefUtils.getBoolean( PrefUtils.REFRESH_ONLY_SELECTED, false ) ? View.VISIBLE : View.GONE );
@@ -264,6 +278,21 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         if (savedInstanceState != null) {
             mTabHost.setCurrentTab(savedInstanceState.getInt(STATE_CURRENT_TAB));
         }
+
+        ResourceCursorAdapter adapter =
+                new ResourceCursorAdapter( this,
+                                           android.R.layout.simple_spinner_item,
+                                           getContentResolver().query( FeedColumns.GROUPS_CONTENT_URI, new String[] { FeedColumns._ID, FeedColumns.NAME }, null, null, FeedColumns.NAME ),
+                                           0 ) {
+            @Override
+            public void bindView(View view, Context context, Cursor cursor) {
+                TextView nameTextView = (TextView) view.findViewById(android.R.id.text1);
+                nameTextView.setText(cursor.getString(1));
+            }
+        };
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mGroupSpinner.setAdapter( adapter );
+
 
         if (intent.getAction().equals(Intent.ACTION_INSERT) || intent.getAction().equals(Intent.ACTION_SEND)) {
             setTitle(R.string.new_feed_title);
@@ -304,6 +333,15 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     mRetrieveFulltextCb.setChecked(cursor.getInt(2) == 1);
                     mShowTextInEntryListCb.setChecked(cursor.getInt(4) == 1);
                     mIsAutoRefreshCb.setChecked(cursor.getInt(5) == 1);
+                    mGroupSpinner.setSelection( -1);
+                    mHasGroupCb.setChecked(!cursor.isNull(6));
+                    UpdateSpinnerGroup();
+                    if ( !cursor.isNull(6) )
+                        for ( int i = 0; i < mGroupSpinner.getCount(); i ++ )
+                            if ( mGroupSpinner.getItemIdAtPosition( i ) == cursor.getInt(6) ) {
+                                mGroupSpinner.setSelection( i );
+                                break;
+                            }
                     if (cursor.getInt(3) == 1) { // if it's a group, we cannot edit it
                         finish();
                     }
@@ -317,6 +355,10 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                 }
             }
         }
+    }
+
+    private void UpdateSpinnerGroup() {
+        mGroupSpinner.setVisibility( mHasGroupCb.isChecked() ? View.VISIBLE : View.GONE );
     }
 
     @Override
@@ -353,6 +395,11 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     values.put(FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, mShowTextInEntryListCb.isChecked() ? 1 : null);
                     values.put(FeedColumns.IS_AUTO_REFRESH, mIsAutoRefreshCb.isChecked() ? 1 : null);
                     values.put(FeedColumns.FETCH_MODE, 0);
+                    if ( mHasGroupCb.isChecked() && mGroupSpinner.getSelectedItemId() != AdapterView.INVALID_ROW_ID )
+                        values.put(FeedColumns.GROUP_ID, mGroupSpinner.getSelectedItemId() );
+                    else
+                        values.putNull(FeedColumns.GROUP_ID);
+
                     values.putNull(FeedColumns.ERROR);
 
                     synchronized (HomeActivity.mFeedSetupChanged ) {
