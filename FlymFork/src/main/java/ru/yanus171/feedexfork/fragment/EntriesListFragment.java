@@ -21,7 +21,6 @@ package ru.yanus171.feedexfork.fragment;
 
 import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -48,7 +47,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -325,7 +323,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             }
         });
 
-        mListView.setOnItemClickListener( new AbsListView.OnItemClickListener() {
+        /*mListView.setOnItemClickListener( new AbsListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
                 if (id >= 0) { // should not happen, but I had a crash with this on PlayStore...
@@ -333,9 +331,9 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                     startActivity(new Intent(Intent.ACTION_VIEW,  ContentUris.withAppendedId(mCurrentUri, id)));
                 }
             }
-        });
+        });*/
 
-        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        /*mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long id) {
                 if (id > 0) {
@@ -346,7 +344,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
                 }
                 return false;
             }
-        });
+        });*/
 
         TextView emptyView = new TextView( getContext() );
         emptyView.setText( getString( R.string.no_entries ) );

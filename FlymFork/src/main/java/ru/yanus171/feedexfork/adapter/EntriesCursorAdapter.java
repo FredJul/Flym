@@ -154,8 +154,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 private int initialx = 0;
                 private int initialy = 0;
                 private int currentx = 0;
-                private boolean isLongPress = false;
-                private boolean wasMove = false;
+                private boolean isPress = false;
+                //private boolean wasMove = false;
                 //private  ViewHolder viewHolder;
 
                 public boolean onTouch(View v, MotionEvent event) {
@@ -168,26 +168,26 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                         initialx = (int) event.getX();
                         initialy = (int) event.getY();
                         currentx = (int) event.getX();
-                        wasMove = false;
+                        //wasMove = false;
                         view.getParent().requestDisallowInterceptTouchEvent(true);
 
-                        isLongPress = true;
+                        isPress = true;
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                if (isLongPress) {
-                                    wasMove = true;
+                                if (isPress) {
+                                    //wasMove = true;
                                     EntriesListFragment.ShowDeleteDialog(view.getContext(), holder.titleTextView.getText().toString(), holder.entryID);
                                 }
                             }
                         }, ViewConfiguration.getLongPressTimeout());
                     }
                     if ( event.getAction() == MotionEvent.ACTION_MOVE) {
-                        isLongPress = false;
+                        isPress = false;
                         currentx = (int) event.getX();
                         padding = currentx - initialx;
                         Dog.v( "onTouch ACTION_MOVE " + padding );
-                        wasMove = true;
+                        //wasMove = true;
                         if ( Math.abs( initialy - event.getY() ) > min && view.getParent() != null )
                             view.getParent().requestDisallowInterceptTouchEvent(false);
                     }
@@ -197,13 +197,16 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
                     int overlap = holder.readToggleSwypeBtnView.getWidth() / 2;
                     int threshold = holder.readToggleSwypeBtnView.getWidth();
+                    if ( threshold < min )
+                        threshold = min;
                     int max = threshold + overlap;
 
                     if ( event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL ) {
-                        isLongPress = false;
+                        isPress = false;
                         if ( event.getAction() == MotionEvent.ACTION_UP ) {
                             Dog.v("onTouch ACTION_UP" );
-                            if (!wasMove)
+                            if ( Math.abs( padding ) < min )
+                                 //&& android.os.SystemClock.elapsedRealtime() - event.getDownTime() < ViewConfiguration.getLongPressTimeout() )
                                 v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, holder.entryID)));
                             else if (padding >= threshold)
                                 toggleReadState(holder.entryID, view);
@@ -229,9 +232,13 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                     if ( initialx < min || Math.abs( padding ) < min )
                         padding = 0;
 
-                    if( padding >= threshold)
-                        holder.readToggleSwypeBtnView.setVisibility( View.VISIBLE );
-
+                    if( padding >= threshold ) {
+                        //
+                        //
+                        //
+                        // Dog.v("padding >= threshold " + padding + " >= " + threshold );
+                        holder.readToggleSwypeBtnView.setVisibility(View.VISIBLE);
+                    }
                     if( padding <= -threshold )
                         holder.starToggleSwypeBtnView.setVisibility( View.VISIBLE );
 
