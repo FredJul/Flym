@@ -9,7 +9,7 @@ androidExtensions {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.0"
+    buildToolsVersion "27.0.1"
     defaultConfig {
         applicationId "net.frju.flym"
         minSdkVersion 21
@@ -76,8 +76,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:+'
     implementation "com.squareup.okhttp3:okhttp-urlconnection:+"
     implementation 'org.jsoup:jsoup:+'
-    implementation 'com.github.bumptech.glide:glide:4.2.0'
-    kapt 'com.github.bumptech.glide:compiler:4.2.0'
+    implementation 'com.github.bumptech.glide:glide:4.3.1'
+    kapt 'com.github.bumptech.glide:compiler:4.3.1'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:+'
     implementation 'com.github.Tunous:SwipeActionView:+'
     implementation 'com.bignerdranch.android:expandablerecyclerview:+'
