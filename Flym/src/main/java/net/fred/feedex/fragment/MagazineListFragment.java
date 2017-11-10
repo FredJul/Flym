@@ -63,25 +63,35 @@ public class MagazineListFragment extends ListFragment implements LoaderManager.
                 Cursor magazineItem = (Cursor) mMagazineCursorAdapter.getItem(i);
                 String magazineId = magazineItem.getString(magazineItem.getColumnIndex(FeedData.MagazineColumns._ID));
 
-                ContentResolver cr = MainApplication.getContext().getContentResolver();
-                String [] requestedColumns = {
-                        FeedData.MagazineColumns.ENTRY_IDS,
-                };
-                Cursor entry = cr.query(FeedData.MagazineColumns.CONTENT_URI,
-                        requestedColumns,
-                        FeedData.MagazineColumns._ID + "=" + magazineId + "",
-                        null, null);
-                String existingEntries;
-                if(entry != null) {
-                    if (entry.moveToFirst()) {
-                        existingEntries = entry.getString(entry.getColumnIndex(FeedData.MagazineColumns.ENTRY_IDS));
-                        String[] existingEntryIds = existingEntries.split(",");
-                        EntriesListFragment mEntriesFragment = new EntriesListFragment();
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mEntriesFragment).commit();
-                    }
-                }
+//                ContentResolver cr = MainApplication.getContext().getContentResolver();
+//                String [] requestedColumns = {
+//                        FeedData.MagazineColumns.ENTRY_IDS,
+//                };
+//                Cursor entry = cr.query(FeedData.MagazineColumns.CONTENT_URI,
+//                        requestedColumns,
+//                        FeedData.MagazineColumns._ID + "=" + magazineId + "",
+//                        null, null);
+//                if(entry != null) {
+//
+//
+//
+//                    if (entry.moveToFirst()) {
+//                        String existingEntries = entry.getString(entry.getColumnIndex(FeedData.MagazineColumns.ENTRY_IDS));
+//                        String[] existingEntryIds = existingEntries.split(",");
+////
+////
+////                        EntriesListFragment mEntriesFragment = new EntriesListFragment();
+////                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mEntriesFragment).commit();
+//                    }
+//                }
+
+                EntriesListFragment mEntriesListFragment = new EntriesListFragment();
+                mEntriesListFragment.setDataValues(FeedData.EntryColumns.ENTRIES_FOR_MAGAZINE_URI(Long.parseLong(magazineId)), false);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mEntriesListFragment).commit();
+
+
+                //entry.close();
                 magazineItem.close();
-                entry.close();
             }
         });
     }

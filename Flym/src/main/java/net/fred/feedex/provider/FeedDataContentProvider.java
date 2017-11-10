@@ -95,6 +95,8 @@ public class FeedDataContentProvider extends ContentProvider {
     public static final int URI_SEARCH_ENTRY = 22;
     public static final int URI_MAGAZINES = 23;
     public static final int URI_MAGAZINE = 24;
+    public static final int URI_ENTRIES_FOR_MAGAZINE = 25;
+    public static final int URI_ENTRY_FOR_MAGAZINE = 26;
     public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
@@ -108,6 +110,8 @@ public class FeedDataContentProvider extends ContentProvider {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/entries/#", URI_ENTRY_FOR_FEED);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#/entries", URI_ENTRIES_FOR_GROUP);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#/entries/#", URI_ENTRY_FOR_GROUP);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "magazines/#/entries", URI_ENTRIES_FOR_MAGAZINE);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "magazines/#/entries/#", URI_ENTRY_FOR_MAGAZINE);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "filters", URI_FILTERS);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds/#/filters", URI_FILTERS_FOR_FEED);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "entries", URI_ENTRIES);
@@ -194,6 +198,7 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_ENTRY:
             case URI_UNREAD_ENTRIES_ENTRY:
             case URI_ENTRY_FOR_FEED:
+            case URI_ENTRY_FOR_MAGAZINE:
             case URI_ENTRY_FOR_GROUP:
             case URI_SEARCH_ENTRY:
                 return "vnd.android.cursor.item/vnd.flym.entry";
@@ -230,6 +235,8 @@ public class FeedDataContentProvider extends ContentProvider {
         if ((matchCode == URI_FEEDS || matchCode == URI_GROUPS || matchCode == URI_FEEDS_FOR_GROUPS) && sortOrder == null) {
             sortOrder = FeedColumns.PRIORITY;
         }
+
+        SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
 
         switch (matchCode) {
             case URI_GROUPED_FEEDS: {
@@ -268,6 +275,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 queryBuilder.appendWhere(new StringBuilder(FilterColumns.FEED_ID).append('=').append(uri.getPathSegments().get(1)));
                 break;
             }
+            case URI_ENTRY_FOR_MAGAZINE:
             case URI_ENTRY_FOR_FEED:
             case URI_ENTRY_FOR_GROUP:
             case URI_SEARCH_ENTRY: {
@@ -303,6 +311,26 @@ public class FeedDataContentProvider extends ContentProvider {
                 queryBuilder.appendWhere(new StringBuilder(FeedData.MagazineColumns._ID).append('=').append(uri.getPathSegments().get(1)));
                 break;
             }
+            case URI_ENTRIES_FOR_MAGAZINE: {
+//                SQLiteQueryBuilder entriesQuery = new SQLiteQueryBuilder();
+//                entriesQuery.setTables(FeedData.MAGAZINES_TABLE);
+//                entriesQuery.appendWhere(new StringBuilder(FeedData.MagazineColumns._ID).append('=').append(uri.getPathSegments().get(1)));
+//                String [] requestedColumns = {
+//                        FeedData.MagazineColumns.ENTRY_IDS,
+//                };
+                String existingEntries = "45";
+//                Cursor magazine = entriesQuery.query(database, requestedColumns, selection, selectionArgs, null, null, sortOrder);
+//                if(magazine != null) {
+//                    if (magazine.moveToFirst()) {
+//                        existingEntries = magazine.getString(magazine.getColumnIndex(FeedData.MagazineColumns.ENTRY_IDS));
+//                    }
+//                }
+//                magazine.close();
+
+                queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
+                queryBuilder.appendWhere(new StringBuilder(FeedData.EntryColumns._ID).append(" in (").append(existingEntries).append(")"));
+                break;
+            }
             case URI_UNREAD_ENTRIES: {
                 queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
                 queryBuilder.appendWhere(EntryColumns.WHERE_UNREAD);
@@ -332,8 +360,6 @@ public class FeedDataContentProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Illegal query. Match code=" + matchCode + "; uri=" + uri);
         }
-
-        SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
 
         Cursor cursor = queryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
 

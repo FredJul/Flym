@@ -301,6 +301,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                                     if (!magazineTitle.equals("")) {
                                         ContentValues values = new ContentValues();
                                         values.put(FeedData.MagazineColumns.TITLE, magazineTitle);
+                                        values.put(FeedData.MagazineColumns.ENTRY_IDS, "" + mEntriesIds[mCurrentPagerPos]);
                                         ContentResolver cr = MainApplication.getContext().getContentResolver();
                                         cr.insert(FeedData.MagazineColumns.CONTENT_URI, values);
                                         builderCreateMagazine.dismiss();
@@ -312,7 +313,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                                 }
                             });
                             builder.dismiss();
-                            builderCreateMagazine.show();
+                            //builderCreateMagazine.show();
                         }
                     });
                     ListView chooseMagazineListView = (ListView) builder.findViewById(R.id.dialog_select_magazine_lv);
