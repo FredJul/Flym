@@ -59,7 +59,7 @@ import net.fred.feedex.provider.FeedData.MagazineColumns;
 
 import java.io.File;
 
-class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "FeedEx.db";
     private static final int DATABASE_VERSION = 8;

@@ -123,9 +123,13 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            data.moveToFirst();
-            mNewEntriesNumber = data.getInt(0);
-            mOldUnreadEntriesNumber = data.getInt(1);
+            if (data.moveToFirst()) {
+                mNewEntriesNumber = data.getInt(0);
+                mOldUnreadEntriesNumber = data.getInt(1);
+            }
+            else {
+                return;
+            }
 
             if (mAutoRefreshDisplayDate && mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
                 mListDisplayDate = new Date().getTime();

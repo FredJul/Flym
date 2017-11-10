@@ -71,17 +71,12 @@ public class MagazineListFragment extends ListFragment implements LoaderManager.
 //                        requestedColumns,
 //                        FeedData.MagazineColumns._ID + "=" + magazineId + "",
 //                        null, null);
+//
+                String entryList = "7";
+//
 //                if(entry != null) {
-//
-//
-//
 //                    if (entry.moveToFirst()) {
-//                        String existingEntries = entry.getString(entry.getColumnIndex(FeedData.MagazineColumns.ENTRY_IDS));
-//                        String[] existingEntryIds = existingEntries.split(",");
-////
-////
-////                        EntriesListFragment mEntriesFragment = new EntriesListFragment();
-////                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mEntriesFragment).commit();
+//                        entryList = entry.getString(entry.getColumnIndex(FeedData.MagazineColumns.ENTRY_IDS)).replace(',', '.');
 //                    }
 //                }
 
@@ -91,7 +86,7 @@ public class MagazineListFragment extends ListFragment implements LoaderManager.
 
 
                 //entry.close();
-                magazineItem.close();
+//                magazineItem.close();
             }
         });
     }

@@ -200,9 +200,13 @@ public class FeedData {
             return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId + "/entries");
         }
 
-        public static Uri ENTRIES_FOR_MAGAZINE_URI(long magazineId) {
+        public static Uri ENTRIES_FOR_MAGAZINE_URI(Long magazineId) {
             return Uri.parse(CONTENT_AUTHORITY + "/magazines/" + magazineId + "/entries");
         }
+
+//        public static Uri ENTRIES_FOR_MAGAZINE_URI(String idList) {
+//            return Uri.parse(CONTENT_AUTHORITY + "/magazines/" + idList + "/entries");
+//        }
 
         public static Uri UNREAD_ENTRIES_CONTENT_URI(String entryId) {
             return Uri.parse(CONTENT_AUTHORITY + "/unread_entries/" + entryId);
