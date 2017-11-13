@@ -51,11 +51,6 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Xml;
 
-import ru.yanus171.feedexfork.Constants;
-import ru.yanus171.feedexfork.MainApplication;
-import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
-import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -67,6 +62,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
+import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
+import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
 
 public class OPML {
 
@@ -117,7 +117,7 @@ public class OPML {
         }
 
         Cursor cursor = MainApplication.getContext().getContentResolver()
-                .query(FeedColumns.GROUPS_CONTENT_URI, FEEDS_PROJECTION, null, null, null);
+                .query(FeedColumns.GROUPS_AND_ROOT_CONTENT_URI, FEEDS_PROJECTION, null, null, null);
 
         StringBuilder builder = new StringBuilder(START);
         builder.append(System.currentTimeMillis());

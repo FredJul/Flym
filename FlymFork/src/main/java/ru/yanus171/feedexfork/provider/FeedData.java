@@ -50,6 +50,7 @@ import android.provider.BaseColumns;
 import android.text.TextUtils;
 
 import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.service.FetcherService;
 
 public class FeedData {
     public static final String PACKAGE_NAME = "ru.yanus171.feedexfork";
@@ -147,6 +148,8 @@ public class FeedData {
         public static final Uri GROUPED_FEEDS_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/grouped_feeds");
 
         public static final Uri GROUPS_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/groups");
+
+        public static final Uri GROUPS_AND_ROOT_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/groups_and_root");
     }
 
     public static class FilterColumns implements BaseColumns {
@@ -273,4 +276,9 @@ public class FeedData {
 
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/tasks");
     }
+
+    public static String getWhereNotExternal() {
+        return Constants.DB_AND + "(" + FeedColumns.FETCH_MODE + "<>" + FetcherService.FETCHMODE_EXERNAL_LINK + Constants.DB_OR + FeedColumns.FETCH_MODE + Constants.DB_IS_NULL + ")";
+    }
+
 }

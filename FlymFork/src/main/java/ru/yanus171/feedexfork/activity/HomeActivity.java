@@ -58,6 +58,7 @@ import ru.yanus171.feedexfork.adapter.DrawerAdapter;
 import ru.yanus171.feedexfork.adapter.EntriesCursorAdapter;
 import ru.yanus171.feedexfork.fragment.EntriesListFragment;
 import ru.yanus171.feedexfork.parser.OPML;
+import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.service.AutoRefreshService;
@@ -313,17 +314,17 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                                 FeedColumns.IS_GROUP, FeedColumns.ICON, FeedColumns.LAST_UPDATE,
                                 FeedColumns.ERROR, FEED_UNREAD_NUMBER, FEED_ALL_NUMBER, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST,
                                 FeedColumns.IS_GROUP_EXPANDED, FeedColumns.IS_AUTO_REFRESH},
-                                "(" + FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR +
+                        "(" + FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR +
                                 FeedColumns.GROUP_ID + Constants.DB_IS_NULL + Constants.DB_OR +
                                 FeedColumns.GROUP_ID + " IN (SELECT " + FeedColumns._ID +
                                 " FROM " + FeedColumns.TABLE_NAME +
-                                " WHERE " + FeedColumns.IS_GROUP_EXPANDED + Constants.DB_IS_TRUE + "))" +
-                                Constants.DB_AND + "(" + FeedColumns.FETCH_MODE + "<>" + FetcherService.FETCHMODE_EXERNAL_LINK + Constants.DB_OR + FeedColumns.FETCH_MODE + Constants.DB_IS_NULL + ")",
+                                " WHERE " + FeedColumns.IS_GROUP_EXPANDED + Constants.DB_IS_TRUE + "))" + FeedData.getWhereNotExternal(),
                         null,
                         null);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
     }
+
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {

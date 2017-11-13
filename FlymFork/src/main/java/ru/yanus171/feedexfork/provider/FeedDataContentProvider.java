@@ -109,12 +109,14 @@ public class FeedDataContentProvider extends ContentProvider {
     public static final int URI_UNREAD_ENTRY_FOR_FEED = 24;
     public static final int URI_UNREAD_ENTRIES_FOR_GROUP = 25;
     public static final int URI_UNREAD_ENTRY_FOR_GROUP = 26;
+    public static final int URI_GROUPS_AND_ROOT_FEEDS = 27;
 
     public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "grouped_feeds", URI_GROUPED_FEEDS);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "groups", URI_GROUPS);
+        URI_MATCHER.addURI(FeedData.AUTHORITY, "groups_and_root", URI_GROUPS_AND_ROOT_FEEDS);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#", URI_GROUP);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "groups/#/feeds", URI_FEEDS_FOR_GROUPS);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "feeds", URI_FEEDS);
@@ -195,6 +197,7 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_GROUPED_FEEDS:
             case URI_GROUPS:
             case URI_FEEDS_FOR_GROUPS:
+            case URI_GROUPS_AND_ROOT_FEEDS:
             case URI_FEEDS:
                 return "vnd.android.cursor.dir/vnd.flymfork.feed";
             case URI_GROUP:
@@ -254,7 +257,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
         int matchCode = URI_MATCHER.match(uri);
 
-        if ((matchCode == URI_FEEDS || matchCode == URI_GROUPS || matchCode == URI_FEEDS_FOR_GROUPS) && sortOrder == null) {
+        if ((matchCode == URI_FEEDS || matchCode == URI_GROUPS || matchCode == URI_GROUPS_AND_ROOT_FEEDS || matchCode == URI_FEEDS_FOR_GROUPS) && sortOrder == null) {
             sortOrder = FeedColumns.PRIORITY;
         }
 
@@ -268,6 +271,12 @@ public class FeedDataContentProvider extends ContentProvider {
                 queryBuilder.setTables(FeedColumns.TABLE_NAME);
                 queryBuilder.appendWhere(new StringBuilder(FeedColumns.IS_GROUP).append(Constants.DB_IS_TRUE) );//.append(Constants.DB_OR)
                         //.append(FeedColumns.GROUP_ID).append(Constants.DB_IS_NULL));
+                break;
+            }
+            case URI_GROUPS_AND_ROOT_FEEDS: {
+                queryBuilder.setTables(FeedColumns.TABLE_NAME);
+                queryBuilder.appendWhere(new StringBuilder(FeedColumns.IS_GROUP).append(Constants.DB_IS_TRUE).append(Constants.DB_OR)
+                .append(FeedColumns.GROUP_ID).append(Constants.DB_IS_NULL).append(FeedData.getWhereNotExternal()));
                 break;
             }
             case URI_FEEDS_FOR_GROUPS: {
@@ -815,6 +824,9 @@ public class FeedDataContentProvider extends ContentProvider {
             cr.notifyChange(EntryColumns.FAVORITES_CONTENT_URI, null);
             cr.notifyChange(FeedColumns.CONTENT_URI, null);
             cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+            cr.notifyChange(FeedColumns.GROUPS_AND_ROOT_CONTENT_URI, null);
         }
     }
+
+
 }

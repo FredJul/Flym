@@ -302,6 +302,8 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             if (intent.hasExtra(Intent.EXTRA_TEXT)) {
                 mUrlEditText.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
             }
+            mHasGroupCb.setChecked(false);
+            UpdateSpinnerGroup();
         } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
             setTitle(R.string.new_feed_title);
 

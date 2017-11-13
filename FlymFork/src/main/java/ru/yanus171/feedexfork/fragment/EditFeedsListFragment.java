@@ -313,7 +313,7 @@ public class EditFeedsListFragment extends ListFragment {
             }
         });
 
-        mListView.setAdapter(new FeedsCursorAdapter(getActivity(), FeedColumns.GROUPS_CONTENT_URI));
+        mListView.setAdapter(new FeedsCursorAdapter(getActivity(), FeedColumns.GROUPS_AND_ROOT_CONTENT_URI));
 
         mListView.setDragNDropListener(new DragNDropListener() {
             boolean fromHasGroupIndicator = false;
@@ -353,7 +353,7 @@ public class EditFeedsListFragment extends ListFragment {
 
                                     ContentResolver cr = getActivity().getContentResolver();
                                     cr.update(FeedColumns.CONTENT_URI(mListView.getItemIdAtPosition(flatPosFrom)), values, null, null);
-                                    cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+                                    cr.notifyChange(FeedColumns.GROUPS_AND_ROOT_CONTENT_URI, null);
                                 }
                             }).setNegativeButton(R.string.to_group_above, new DialogInterface.OnClickListener() {
                         @Override
