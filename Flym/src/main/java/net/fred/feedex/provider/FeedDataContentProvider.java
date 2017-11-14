@@ -69,8 +69,6 @@ import net.fred.feedex.provider.FeedData.TaskColumns;
 
 import java.util.Date;
 
-import static junit.framework.Assert.assertEquals;
-
 public class FeedDataContentProvider extends ContentProvider {
 
     public static final int URI_GROUPED_FEEDS = 1;
@@ -232,7 +230,6 @@ public class FeedDataContentProvider extends ContentProvider {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
-
         int matchCode = URI_MATCHER.match(uri);
 
         if ((matchCode == URI_FEEDS || matchCode == URI_GROUPS || matchCode == URI_FEEDS_FOR_GROUPS) && sortOrder == null) {
@@ -321,8 +318,14 @@ public class FeedDataContentProvider extends ContentProvider {
 //                String [] requestedColumns = {
 //                        FeedData.MagazineColumns.ENTRY_IDS,
 //                };
-                String existingEntries = "45, 56";
-                //String existingEntries = "SELECT " + FeedData.MagazineColumns.ENTRY_IDS + " FROM " + FeedData.MagazineColumns.TABLE_NAME + " WHERE " + FeedData.MagazineColumns._ID + " = 7";
+                //String existingEntries = "45";
+                String existingEntries = "";
+                Cursor c2 = database.rawQuery("SELECT " + FeedData.MagazineColumns.ENTRY_IDS +
+                        " FROM " + FeedData.MagazineColumns.TABLE_NAME + " WHERE " + FeedData.MagazineColumns.TABLE_NAME + "." + FeedData.MagazineColumns._ID +
+                        " = " + uri.getPathSegments().get(1), new String[] {});
+                if(c2.moveToFirst()) {
+                    existingEntries = c2.getString(0);
+                }
 //                Cursor magazine = entriesQuery.query(database, requestedColumns, selection, selectionArgs, null, null, sortOrder);
 //                if(magazine != null) {
 //                    if (magazine.moveToFirst()) {
@@ -330,35 +333,10 @@ public class FeedDataContentProvider extends ContentProvider {
 //                    }
 //                }
 //                magazine.close();
-                String columns = "*";
-                //if(projection != null) {
-                //    columns = projection.toString();
-                //    columns = columns.substring(1, columns.length() - 1);
-                //}
-                //String[] values = {FeedData.ENTRIES_TABLE_WITH_FEED_INFO, EntryColumns._ID,
-                //        FeedData.MagazineColumns.ENTRY_IDS, FeedData.MagazineColumns.TABLE_NAME, FeedData.MagazineColumns._ID,
-                //       uri.getPathSegments().get(1), selection, sortOrder};
 
-                Cursor c4 = database.rawQuery("SELECT " + FeedData.MagazineColumns.ENTRY_IDS +
-                        " FROM " + FeedData.MagazineColumns.TABLE_NAME + " WHERE " + FeedData.MagazineColumns.TABLE_NAME + "." + FeedData.MagazineColumns._ID +
-                        " = " + uri.getPathSegments().get(1), new String[] {});
-                c4.moveToFirst();
-                Cursor c3 = database.rawQuery("SELECT " + columns + " FROM (" + FeedData.ENTRIES_TABLE_WITH_FEED_INFO +
-                        ") WHERE ((" + FeedData.EntryColumns.TABLE_NAME + "." + FeedData.EntryColumns._ID + " IN (" + c4.getString(0) + ")) AND " + selection + ") ORDER BY " + sortOrder, new String[] {});
-
-                Cursor c2 = database.rawQuery("SELECT " + columns + " FROM (" + FeedData.ENTRIES_TABLE_WITH_FEED_INFO +
-                        ") WHERE ((" + EntryColumns.TABLE_NAME + "." + EntryColumns._ID + " IN (SELECT " + FeedData.MagazineColumns.ENTRY_IDS +
-                        " FROM " + FeedData.MagazineColumns.TABLE_NAME + " WHERE " + FeedData.MagazineColumns.TABLE_NAME + "." + FeedData.MagazineColumns._ID +
-                        " = " + uri.getPathSegments().get(1) + ")) AND " + selection + ") ORDER BY " + sortOrder, new String[] {});
-                //Cursor c2 = database.rawQuery("SELECT " + columns + " FROM ? WHERE (? IN (SELECT ? FROM ? WHERE ? = ?)) AND ? ORDER BY ?", values);
-                //Cursor c2 = database.rawQuery("SELECT " + columns + " FROM (" + FeedData.ENTRIES_TABLE_WITH_FEED_INFO +
-                //        ") WHERE ((" + EntryColumns.TABLE_NAME + "." + EntryColumns._ID + " IN (45,56)) AND " + selection + ") ORDER BY " + sortOrder, new String[] {});
-                c2.close();
-                //c2.setNotificationUri(getContext().getContentResolver(), uri);
-                return c3;
-                //queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
-                //queryBuilder.appendWhere(new StringBuilder(FeedData.EntryColumns._ID).append(" IN (").append(existingEntries).append(")"));
-                //queryBuilder.appendWhere(new StringBuilder(FeedData.EntryColumns._ID).append(" in (").append(uri.getPathSegments().get(1).replace('.',',')).append(")"));
+                queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
+                queryBuilder.appendWhere(new StringBuilder(FeedData.EntryColumns._ID).append(" in (").append(existingEntries).append(")"));
+                break;
             }
             case URI_UNREAD_ENTRIES: {
                 queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
