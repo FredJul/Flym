@@ -277,17 +277,13 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         boolean showFeedInfo = true;
         //boolean magazineFragment = false; //this value will be set to true if moving from magazine to entry list
 
-        //todo: possibly related to of the error going from: magazine > magazine entries > feed entries
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.home_fragment_frame);
-        if(currentFragment == null) {
-            //todo: error code?
-        }
-        else if(!currentFragment.equals(mMagazineFragment) && position == 3) { //load magazine fragment
+        if((currentFragment == null || !currentFragment.equals(mMagazineFragment)) && position == 3) { //load magazine fragment
             mMagazineFragment = new MagazineListFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mMagazineFragment).commit();
             Log.d("Loaded Frag", "Loading Magazine");
         }
-        else if(!currentFragment.equals(mEntriesFragment) && position != 3) { //load entries fragment
+        else if((currentFragment == null || !currentFragment.equals(mEntriesFragment)) && position != 3) { //load entries fragment
             mEntriesFragment = new EntriesListFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mEntriesFragment).commit();
             Log.d("Loaded Frag", "Loading Entries");

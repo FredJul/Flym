@@ -312,30 +312,15 @@ public class FeedDataContentProvider extends ContentProvider {
                 break;
             }
             case URI_ENTRIES_FOR_MAGAZINE: {
-//                SQLiteQueryBuilder entriesQuery = new SQLiteQueryBuilder();
-//                entriesQuery.setTables(FeedData.MAGAZINES_TABLE);
-//                entriesQuery.appendWhere(new StringBuilder(FeedData.MagazineColumns._ID).append('=').append(uri.getPathSegments().get(1)));
-//                String [] requestedColumns = {
-//                        FeedData.MagazineColumns.ENTRY_IDS,
-//                };
-                //String existingEntries = "45";
-                String existingEntries = "";
+                String entries = "";
                 Cursor c2 = database.rawQuery("SELECT " + FeedData.MagazineColumns.ENTRY_IDS +
                         " FROM " + FeedData.MagazineColumns.TABLE_NAME + " WHERE " + FeedData.MagazineColumns.TABLE_NAME + "." + FeedData.MagazineColumns._ID +
                         " = " + uri.getPathSegments().get(1), new String[] {});
                 if(c2.moveToFirst()) {
-                    existingEntries = c2.getString(0);
+                    entries = c2.getString(0);
                 }
-//                Cursor magazine = entriesQuery.query(database, requestedColumns, selection, selectionArgs, null, null, sortOrder);
-//                if(magazine != null) {
-//                    if (magazine.moveToFirst()) {
-//                        existingEntries = magazine.getString(magazine.getColumnIndex(FeedData.MagazineColumns.ENTRY_IDS));
-//                    }
-//                }
-//                magazine.close();
-
                 queryBuilder.setTables(FeedData.ENTRIES_TABLE_WITH_FEED_INFO);
-                queryBuilder.appendWhere(new StringBuilder(FeedData.EntryColumns._ID).append(" in (").append(existingEntries).append(")"));
+                queryBuilder.appendWhere(new StringBuilder(FeedData.EntryColumns._ID).append(" in (").append(entries).append(")"));
                 break;
             }
             case URI_UNREAD_ENTRIES: {

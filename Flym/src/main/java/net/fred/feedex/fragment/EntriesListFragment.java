@@ -201,8 +201,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         mListView = (ListView) rootView.findViewById(android.R.id.list);
         mListView.setOnTouchListener(new SwipeGestureListener(mListView.getContext()));
 
-        //todo: call setData in this method instead?
-
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_TIP, true)) {
             final TextView header = new TextView(mListView.getContext());
             header.setMinimumHeight(UiUtils.dpToPixel(70));
@@ -440,7 +438,6 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         mShowFeedInfo = showFeedInfo;
 
-        //todo getActivity null?
         mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo);
         setListAdapter(mEntriesCursorAdapter);
 
