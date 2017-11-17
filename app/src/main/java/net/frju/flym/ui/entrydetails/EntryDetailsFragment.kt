@@ -74,42 +74,47 @@ class EntryDetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        entry = arguments?.getParcelable(ARG_ENTRY)!!
-        allEntryIds = arguments?.getStringArrayList(ARG_ALL_ENTRIES_IDS)!!
+        doAsync {
+            // getting the parcelable on UI thread can make it sluggish
+            entry = arguments?.getParcelable(ARG_ENTRY)!!
+            allEntryIds = arguments?.getStringArrayList(ARG_ALL_ENTRIES_IDS)!!
 
-        setupToolbar()
+            uiThread {
+                setupToolbar()
 
-        swipe_view.swipeGestureListener = object : SwipeGestureListener {
-            override fun onSwipedLeft(@NotNull swipeActionView: SwipeActionView): Boolean {
-                nextId?.let { nextId ->
-                    doAsync {
-                        App.db.entryDao().findByIdWithFeed(nextId)?.let { newEntry ->
-                            uiThread {
-                                setEntry(newEntry, allEntryIds)
-                                navigator.setSelectedEntryId(newEntry.id)
+                swipe_view.swipeGestureListener = object : SwipeGestureListener {
+                    override fun onSwipedLeft(@NotNull swipeActionView: SwipeActionView): Boolean {
+                        nextId?.let { nextId ->
+                            doAsync {
+                                App.db.entryDao().findByIdWithFeed(nextId)?.let { newEntry ->
+                                    uiThread {
+                                        setEntry(newEntry, allEntryIds)
+                                        navigator.setSelectedEntryId(newEntry.id)
+                                    }
+                                }
                             }
                         }
+                        return true
                     }
-                }
-                return true
-            }
 
-            override fun onSwipedRight(@NotNull swipeActionView: SwipeActionView): Boolean {
-                previousId?.let { previousId ->
-                    doAsync {
-                        App.db.entryDao().findByIdWithFeed(previousId)?.let { newEntry ->
-                            uiThread {
-                                setEntry(newEntry, allEntryIds)
-                                navigator.setSelectedEntryId(newEntry.id)
+                    override fun onSwipedRight(@NotNull swipeActionView: SwipeActionView): Boolean {
+                        previousId?.let { previousId ->
+                            doAsync {
+                                App.db.entryDao().findByIdWithFeed(previousId)?.let { newEntry ->
+                                    uiThread {
+                                        setEntry(newEntry, allEntryIds)
+                                        navigator.setSelectedEntryId(newEntry.id)
+                                    }
+                                }
                             }
                         }
+                        return true
                     }
                 }
-                return true
+
+                updateUI()
             }
         }
-
-        updateUI()
     }
 
     private fun updateUI() {
