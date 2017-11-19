@@ -26,6 +26,7 @@ import net.frju.parentalcontrol.utils.PrefUtils
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.coroutines.onClick
 import org.jetbrains.anko.support.v4.startActivity
 import q.rorbin.badgeview.Badge
@@ -130,6 +131,10 @@ class EntriesFragment : Fragment() {
                             }
                         }
                     }
+                }
+
+                if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
+                    activity?.notificationManager?.cancel(0)
                 }
             }
         }

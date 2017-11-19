@@ -25,6 +25,7 @@ import net.frju.flym.ui.entrydetails.EntryDetailsFragment
 import okhttp3.Request
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.hintTextColor
+import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.coroutines.onClick
 import org.jetbrains.anko.textColor
 import org.json.JSONObject
@@ -157,6 +158,12 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
             goToEntriesList(null)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        notificationManager.cancel(0)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
