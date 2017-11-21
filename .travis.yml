@@ -4,9 +4,6 @@ notifications:
   email:
     - powersc5@nku.edu
 
-env:
-  matrix:
-    - ANDROID_TARGET=android-25 ANDROID_ABI=armeabi-v7a ANDROID_TAG=google_apis
 
 android:
   components:
@@ -15,8 +12,9 @@ android:
     - platform-tools
     - tools
 
-    - build-tools-25.0.2
-    - sys-img-armeabi-v7a-android-24
+    - build-tools-26.0.2
+    #- sys-img-armeabi-v7a-android-24
+    - sys-img-armeabi-v7a-google_apis-25
 
     #android sdk version
     - android-25
@@ -27,7 +25,7 @@ before_script:
     - chmod +x gradlew
     - android list targets
     #change android-25
-    - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a --skin 480x800
+    - echo no | android create avd --force -n test -t android-21 --abi google_apis/armeabi-v7a --skin 480x800
     - emulator -avd test #-no-skin -no-window &
     - android-wait-for-emulator
 
