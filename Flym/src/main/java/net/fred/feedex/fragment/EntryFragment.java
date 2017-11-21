@@ -43,6 +43,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -289,6 +290,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                     addMagazineButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            Log.d("MAGAZINE", "onClick: new magazine button clicked");
                             final Dialog builderCreateMagazine = new Dialog(getActivity());
                             builderCreateMagazine.setTitle("Create Magazine");
                             builderCreateMagazine.setContentView(R.layout.dialog_create_magazine);
@@ -313,7 +315,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                                 }
                             });
                             builder.dismiss();
-                            //builderCreateMagazine.show();
+                            builderCreateMagazine.show();
                         }
                     });
                     ListView chooseMagazineListView = (ListView) builder.findViewById(R.id.dialog_select_magazine_lv);

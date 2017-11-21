@@ -46,18 +46,32 @@ package net.fred.feedex.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
+
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.bumptech.glide.Glide;
+
 import net.fred.feedex.R;
+import net.fred.feedex.provider.DatabaseHelper;
 import net.fred.feedex.provider.FeedData;
+import net.fred.feedex.utils.StringUtils;
+
+import static android.content.ContentValues.TAG;
 
 public class MagazineCursorAdapter extends ResourceCursorAdapter {
 
     private final Uri mUri;
     private final boolean mShowFeedInfo;
-    private int mTitlePos, mEntryIdsPos;
+    private int mTitlePos, mEntryIdsPos, mMagazineID;
+    DatabaseHelper mDatabaseHelper;
 
     public MagazineCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo) {
         super(context, R.layout.item_magazine_list, cursor, 0);
@@ -69,11 +83,55 @@ public class MagazineCursorAdapter extends ResourceCursorAdapter {
 
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
+        ImageView[] imageViews = new ImageView[5];
         if (view.getTag(R.id.holder) == null) {
             ViewHolder holder = new ViewHolder();
             holder.titleTextView = (TextView) view.findViewById(R.id.magazine_title);
+            imageViews[0] = (ImageView) view.findViewById(R.id.image_1);
+            imageViews[1] = (ImageView) view.findViewById(R.id.image_2);
+            imageViews[2] = (ImageView) view.findViewById(R.id.image_3);
+            imageViews[3] = (ImageView) view.findViewById(R.id.image_4);
+            imageViews[4] = (ImageView) view.findViewById(R.id.image_5);
+
             view.setTag(R.id.holder, holder);
         }
+
+        mDatabaseHelper = new DatabaseHelper(new Handler(), context);
+        SQLiteDatabase db = mDatabaseHelper.getReadableDatabase();
+
+        String query = "SELECT " + FeedData.MagazineColumns.ENTRY_IDS + " FROM " + FeedData.MagazineColumns.TABLE_NAME +
+                " WHERE " + FeedData.MagazineColumns._ID + " = " + cursor.getString(cursor.getColumnIndex(FeedData.MagazineColumns._ID));
+        Cursor mCursor = db.rawQuery(query, null);
+        Cursor uCursor = null;
+
+        if (mCursor.moveToFirst()){
+            StringBuilder sb = new StringBuilder();
+            String s = mCursor.getString(0);
+
+            String[] columns = s.split(",");
+            for (int i = 0; i < columns.length; i++){
+                if (i != columns.length-1)
+                    sb.append("'"+columns[i]+"',");
+                else
+                    sb.append("'"+columns[i]+"'");
+            }
+
+            uCursor = db.rawQuery("SELECT " + FeedData.EntryColumns.IMAGE_URL + " FROM " + FeedData.EntryColumns.TABLE_NAME + " WHERE " +
+                    FeedData.EntryColumns._ID + " IN ( " + sb.toString() + ")",null);
+
+
+        }
+
+        int k = 0;
+        while (uCursor.moveToNext()){
+            if (k < imageViews.length) {
+                Glide.with(context).load(uCursor.getString(0)).centerCrop().into(imageViews[k]);
+                k++;
+            }
+            else
+                break;
+        }
+
 
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
         String titleText = cursor.getString(mTitlePos);
@@ -106,6 +164,7 @@ public class MagazineCursorAdapter extends ResourceCursorAdapter {
 
     private void reinit(Cursor cursor) {
         if (cursor != null && cursor.getCount() > 0) {
+            mMagazineID = cursor.getColumnIndex(FeedData.MagazineColumns._ID);
             mTitlePos = cursor.getColumnIndex(FeedData.MagazineColumns.TITLE);
             mEntryIdsPos = cursor.getColumnIndex(FeedData.MagazineColumns.ENTRY_IDS);
         }
