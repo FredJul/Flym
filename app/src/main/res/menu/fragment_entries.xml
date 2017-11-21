@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_entries__search"
-        android:title="@string/menu_people__search"
+        android:title="@string/feed_search"
         android:icon="@drawable/ic_search_24dp"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_entries__settings"
-        android:title="@string/menu_people__settings"
+        android:title="@string/menu_settings"
         app:showAsAction="never" />
 
     <item

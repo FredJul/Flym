@@ -1,5 +1,6 @@
 package net.frju.flym.ui.entrydetails
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -62,9 +63,8 @@ class EntryDetailsFragment : Fragment() {
     private var previousId: String? = null
     private var nextId: String? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_entry_details, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_entry_details, container, false)
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -80,8 +80,6 @@ class EntryDetailsFragment : Fragment() {
             allEntryIds = arguments?.getStringArrayList(ARG_ALL_ENTRIES_IDS)!!
 
             uiThread {
-                setupToolbar()
-
                 swipe_view.swipeGestureListener = object : SwipeGestureListener {
                     override fun onSwipedLeft(@NotNull swipeActionView: SwipeActionView): Boolean {
                         nextId?.let { nextId ->
@@ -124,6 +122,8 @@ class EntryDetailsFragment : Fragment() {
         }
 
         entry_view.setEntry(entry)
+
+        setupToolbar()
     }
 
     private fun setupToolbar() {
@@ -136,9 +136,33 @@ class EntryDetailsFragment : Fragment() {
                 setNavigationOnClickListener { activity?.onBackPressed() }
             }
 
+            if (entry.favorite) {
+                val item = menu.findItem(R.id.menu_entry_details__favorite)
+                item.setTitle(R.string.menu_unstar).setIcon(R.drawable.ic_star_white_24dp)
+            }
+
             onMenuItemClick { item ->
                 when (item?.itemId) {
-                    R.id.menu_person_details__fulltext -> {
+                    R.id.menu_entry_details__favorite -> {
+                        entry.favorite = !entry.favorite
+
+                        if (entry.favorite) {
+                            item.setTitle(R.string.menu_unstar).setIcon(R.drawable.ic_star_white_24dp)
+                        } else {
+                            item.setTitle(R.string.menu_star).setIcon(R.drawable.ic_star_border_white_24dp)
+                        }
+
+                        doAsync {
+                            App.db.entryDao().insertAll(entry)
+                        }
+                    }
+                    R.id.menu_entry_details__share -> {
+                        startActivity(Intent.createChooser(
+                                Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, entry.link)
+                                        .setType("text/plain"), getString(R.string.menu_share)
+                        ))
+                    }
+                    R.id.menu_entry_details__fulltext -> {
                         doAsync {
                             var rawHTML = ""
                             val request = Request.Builder()

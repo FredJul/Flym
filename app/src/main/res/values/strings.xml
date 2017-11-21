@@ -7,28 +7,6 @@
     <string name="menu_main_nav__settings">Settings</string>
     <string name="menu_main_nav__feedback">Feedback</string>
 
-    <string name="view_main_header__email">yourname@gmail.com</string>
-
-    <string name="fragment_homefeed__title">Home Feed</string>
-    <string name="menu_homefeed__settings">Settings</string>
-    <string name="menu_homefeed__filters">Filters</string>
-
-    <string name="fragment_people__title">Friends</string>
-    <string name="fragment_people__lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ex eorum enim scriptis et institutis cum omnis doctrina liberalis, omnis historia. Haec dicuntur inconstantissime. Ut in voluptate sit, qui epuletur, in dolore, qui torqueatur. Hoc etsi multimodis reprehendi potest, tamen accipio, quod dant. Non dolere, inquam, istud quam vim habeat postea videro.</string>
-    <string name="menu_people__settings">Settings</string>
-    <string name="menu_people__search">Search</string>
-
-    <string name="fragment_favorites__title">Favorites</string>
-    <string name="menu_favorites__settings">Settings</string>
-    <string name="menu_favorites__heart">Favorite</string>
-
-    <string name="fragment_map__title">Map</string>
-    <string name="fragment_map__search">Search…</string>
-
-    <string name="menu_person_details__share">Share</string>
-    <string name="menu_person_details__favorite">Favorite</string>
-
-
     <!-- GENERAL -->
     <string name="app_name">Flym</string>
     <string name="about_flym">About Flym</string>
