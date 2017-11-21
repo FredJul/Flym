@@ -4,6 +4,9 @@ notifications:
   email:
     - powersc5@nku.edu
 
+env:
+  matrix:
+    - ANROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
 
 android:
   components:
@@ -18,25 +21,24 @@ android:
     - sys-img-armeabi-v7a-addon-google_apis-google-21
 
     #android sdk version
-    - android-25
-    - android-21
+    - android-22
     - extra-google-google_play_services
 
 before_script:
     - chmod +x gradlew
     - android list targets
     #change android-25
-    - echo no | android create avd --force -n test -t android-21 --abi google_apis/armeabi-v7a --skin 480x800
-    - emulator -avd test #-no-skin -no-window &
+    - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+    - emulator -avd test -no-skin -no-audio -no-window &
     - android-wait-for-emulator
+    - adb shell input keyevent 82 &
 
 script:
     - ./gradlew assembleDebug jacocoTestReport assembleAndroidTest
     - echo "Travis branch is $TRAVIS_BRANCH"    #Print out which branch it is.
     - echo "Travis branch is in pull request $TRAVIS_PULL+REQUEST"    #Print out pull request number.
-    - android-wait-for-emulator             #Run wait for the emulator script.
-    - adb devices                           #Display list of devices
-    - adb shell input keyevent 82 &
+    #- android-wait-for-emulator             #Run wait for the emulator script.
+    #- adb devices                           #Display list of devices
     - ./gradlew connectedAndroidTest -PdisablePreDex --stacktrace
 
 before_install:
