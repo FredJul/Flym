@@ -20,7 +20,7 @@ android:
 
     #android sdk version
     - android-25
-    - android-24
+    - android-21
     - extra-google-google_play_services
 
 before_script:
