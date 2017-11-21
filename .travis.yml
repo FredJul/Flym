@@ -12,9 +12,10 @@ android:
     - platform-tools
     - tools
 
-    - build-tools-25.2.3
+    - build-tools-26.0.1
     #- sys-img-armeabi-v7a-android-24
-    - sys-img-armeabi-v7a-google_apis-25
+    #- sys-img-armeabi-v7a-google_apis-25
+    - sys-img-x86_64-android-21
 
     #android sdk version
     - android-25
