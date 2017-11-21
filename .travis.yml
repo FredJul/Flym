@@ -1,0 +1,50 @@
+language: android
+
+notifications:
+  email:
+    - powersc5@nku.edu
+
+env:
+  matrix:
+    - ANDROID_TARGET=android-25 ANDROID_ABI=armeabi-v7a ANDROID_TAG=google_apis
+
+android:
+  components:
+    # tools is required twice
+    - tools
+    - platform-tools
+    - tools
+
+    - build-tools-25.0.2
+    - sys-img-armeabi-v7a-android-24
+
+    #android sdk version
+    - android-25
+    - android-24
+    - extra-google-google_play_services
+
+before_script:
+    - chmod +x gradlew
+    - android list targets
+    #change android-25
+    - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a --skin 480x800
+    - emulator -avd test #-no-skin -no-window &
+    - android-wait-for-emulator
+
+script:
+    - ./gradlew assembleDebug jacocoTestReport assembleAndroidTest
+    - echo "Travis branch is $TRAVIS_BRANCH"    #Print out which branch it is.
+    - echo "Travis branch is in pull request $TRAVIS_PULL+REQUEST"    #Print out pull request number.
+    - android-wait-for-emulator             #Run wait for the emulator script.
+    - adb devices                           #Display list of devices
+    - adb shell input keyevent 82 &
+    - ./gradlew connectedAndroidTest -PdisablePreDex --stacktrace
+
+before_install:
+    - pip install --user codecov
+
+after_sucess:
+    - codecov
+
+after_failure:
+    - "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"

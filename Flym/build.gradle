@@ -6,6 +6,7 @@ android {
 
     defaultConfig {
         applicationId "net.fred.feedex"
+        compileSdkVersion 25
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 64
@@ -22,34 +23,37 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-    signingConfigs {
-        debug {
-            if (properties.getProperty("KEYSTORE_PATH") != null) {
-                storeFile file(properties.getProperty("KEYSTORE_PATH"))
-                storePassword properties.getProperty("KEYSTORE_PASSWORD")
-                keyAlias properties.getProperty("KEY_ALIAS")
-                keyPassword properties.getProperty("KEY_PASSWORD")
-            }
-        }
-        release {
-            if (properties.getProperty("KEYSTORE_PATH") != null) {
-                storeFile file(properties.getProperty("KEYSTORE_PATH"))
-                storePassword properties.getProperty("KEYSTORE_PASSWORD")
-                keyAlias properties.getProperty("KEY_ALIAS")
-                keyPassword properties.getProperty("KEY_PASSWORD")
-            }
-        }
-    }
+//    Properties properties = new Properties()
+//    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+//
+//    signingConfigs {
+//        debug {
+//            if (properties.getProperty("KEYSTORE_PATH") != null) {
+//                storeFile file(properties.getProperty("KEYSTORE_PATH"))
+//                storePassword properties.getProperty("KEYSTORE_PASSWORD")
+//                keyAlias properties.getProperty("KEY_ALIAS")
+//                keyPassword properties.getProperty("KEY_PASSWORD")
+//            }
+//        }
+//        release {
+//            if (properties.getProperty("KEYSTORE_PATH") != null) {
+//                storeFile file(properties.getProperty("KEYSTORE_PATH"))
+//                storePassword properties.getProperty("KEYSTORE_PASSWORD")
+//                keyAlias properties.getProperty("KEY_ALIAS")
+//                keyPassword properties.getProperty("KEY_PASSWORD")
+//            }
+//        }
+//    }
 
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
     }
 }
