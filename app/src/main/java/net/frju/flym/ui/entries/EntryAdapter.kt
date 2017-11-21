@@ -7,6 +7,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import kotlinx.android.synthetic.main.view_entry.view.*
 import net.fred.feedex.R
 import net.frju.flym.GlideApp
@@ -44,7 +45,7 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
 
             val letterDrawable = Feed.getLetterDrawable(entry.feedId, entry.feedTitle)
             if (mainImgUrl != null) {
-                GlideApp.with(context).load(mainImgUrl).centerCrop().placeholder(letterDrawable).error(letterDrawable).into(main_icon)
+                GlideApp.with(context).load(mainImgUrl).centerCrop().transition(withCrossFade()).placeholder(letterDrawable).error(letterDrawable).into(main_icon)
             } else {
                 GlideApp.with(context).clear(main_icon)
                 main_icon.setImageDrawable(letterDrawable)
