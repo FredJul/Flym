@@ -22,6 +22,11 @@ android:
 
     #android sdk version
     - android-22
+    - android-15
+    - android-16
+    - android-17
+    - android-18
+    - android-19
     - extra-google-google_play_services
 
 before_script:
