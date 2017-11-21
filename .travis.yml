@@ -6,7 +6,7 @@ notifications:
 
 env:
   matrix:
-    - ANROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
 
 android:
   components:
@@ -18,7 +18,7 @@ android:
     - build-tools-26.0.1
     #- sys-img-armeabi-v7a-android-24
     #- sys-img-armeabi-v7a-google_apis-25
-    - sys-img-armeabi-v7a-addon-google_apis-google-21
+    - sys-img-armeabi-v7a-android-21
 
     #android sdk version
     - android-22
