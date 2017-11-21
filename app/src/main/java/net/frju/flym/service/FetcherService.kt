@@ -55,6 +55,7 @@
 package net.frju.flym.service
 
 import android.app.IntentService
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -63,6 +64,7 @@ import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.support.v4.app.NotificationCompat
 import android.text.Html
@@ -85,10 +87,7 @@ import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
-import org.jetbrains.anko.error
-import org.jetbrains.anko.warn
+import org.jetbrains.anko.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -145,13 +144,11 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
             return downloadPictures
         }
 
-        fun getDownloadedImagePath(entryId: String, imgUrl: String): String {
-            return IMAGE_FOLDER + entryId + ID_SEPARATOR + imgUrl.sha1()
-        }
+        fun getDownloadedImagePath(entryId: String, imgUrl: String): String =
+                IMAGE_FOLDER + entryId + ID_SEPARATOR + imgUrl.sha1()
 
-        fun getTempDownloadedImagePath(entryId: String, imgUrl: String): String {
-            return IMAGE_FOLDER + TEMP_PREFIX + entryId + ID_SEPARATOR + imgUrl.sha1()
-        }
+        fun getTempDownloadedImagePath(entryId: String, imgUrl: String): String =
+                IMAGE_FOLDER + TEMP_PREFIX + entryId + ID_SEPARATOR + imgUrl.sha1()
 
         fun getDownloadedOrDistantImageUrl(entryId: String, imgUrl: String): String {
             val dlImgFile = File(getDownloadedImagePath(entryId, imgUrl))
@@ -191,7 +188,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
     }
 
     private val handler = Handler()
-    private val notifMgr by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
     private var downloadPictures = false
 
     public override fun onHandleIntent(intent: Intent?) {
@@ -260,7 +256,13 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                             val contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
                                     PendingIntent.FLAG_UPDATE_CURRENT)
 
-                            val notifBuilder = NotificationCompat.Builder(this, "notif")
+                            val channelId = "notif_channel"
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                val channel = NotificationChannel(channelId, getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH)
+                                notificationManager.createNotificationChannel(channel)
+                            }
+
+                            val notifBuilder = NotificationCompat.Builder(this, channelId)
                                     .setContentIntent(contentIntent) //
                                     .setSmallIcon(R.drawable.ic_statusbar_rss) //
                                     .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)) //
@@ -284,10 +286,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                                 notifBuilder.setLights(0xffffffff.toInt(), 300, 1000)
                             }
 
-                            notifMgr.notify(0, notifBuilder.build())
+                            notificationManager.notify(0, notifBuilder.build())
                         }
                     } else {
-                        notifMgr.cancel(0)
+                        notificationManager.cancel(0)
                     }
                 }
 
