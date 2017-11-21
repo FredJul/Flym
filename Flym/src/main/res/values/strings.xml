@@ -104,6 +104,7 @@
     <string name="all_entries">All entries</string>
     <string name="no_entries">No entries</string>
     <string name="favorites">Starred</string>
+    <string name="magazines">Magazines</string>
     <string name="context_menu_share_starred">Share starred entries</string>
     <string name="menu_star">Star</string>
     <string name="menu_unstar">Unstar</string>
@@ -111,6 +112,7 @@
     <string name="menu_full_screen">Full screen</string>
     <string name="menu_copy_clipboard">Copy link</string>
     <string name="menu_mark_as_unread">Mark as unread</string>
+    <string name="menu_add_to_magazine">Add To Magazine</string>
     <string name="share_favorites_title">Flym: starred entries</string>
     <string name="copied_clipboard">Link copied</string>
     <string name="get_full_text">Retrieve the full text</string>
@@ -207,5 +209,4 @@
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>
-
 </resources>

@@ -22,6 +22,9 @@ package net.fred.feedex.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,22 +35,27 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import net.fred.feedex.Constants;
+import net.fred.feedex.MainApplication;
 import net.fred.feedex.R;
 import net.fred.feedex.adapter.DrawerAdapter;
 import net.fred.feedex.fragment.EntriesListFragment;
+import net.fred.feedex.fragment.MagazineListFragment;
 import net.fred.feedex.parser.OPML;
+import net.fred.feedex.provider.FeedData;
 import net.fred.feedex.provider.FeedData.EntryColumns;
 import net.fred.feedex.provider.FeedData.FeedColumns;
 import net.fred.feedex.service.AutoRefreshService;
@@ -68,6 +76,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     private static final int PERMISSIONS_REQUEST_IMPORT_FROM_OPML = 1;
 
     private EntriesListFragment mEntriesFragment;
+    private MagazineListFragment mMagazineFragment;
     private DrawerLayout mDrawerLayout;
     private View mLeftDrawer;
     private ListView mDrawerList;
@@ -83,7 +92,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         setContentView(R.layout.activity_home);
 
-        mEntriesFragment = (EntriesListFragment) getSupportFragmentManager().findFragmentById(R.id.entries_list_fragment);
+        mEntriesFragment = new EntriesListFragment();
+        mMagazineFragment = new MagazineListFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mEntriesFragment).commit();
 
         mTitle = getTitle();
 
@@ -264,6 +275,19 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         Uri newUri;
         boolean showFeedInfo = true;
+        //boolean magazineFragment = false; //this value will be set to true if moving from magazine to entry list
+
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.home_fragment_frame);
+        if((currentFragment == null || !currentFragment.equals(mMagazineFragment)) && position == 3) { //load magazine fragment
+            mMagazineFragment = new MagazineListFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mMagazineFragment).commit();
+            Log.d("Loaded Frag", "Loading Magazine");
+        }
+        else if((currentFragment == null || !currentFragment.equals(mEntriesFragment)) && position != 3) { //load entries fragment
+            mEntriesFragment = new EntriesListFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment_frame, mEntriesFragment).commit();
+            Log.d("Loaded Frag", "Loading Entries");
+        }
 
         switch (position) {
             case 0:
@@ -275,6 +299,10 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             case 2:
                 newUri = EntryColumns.FAVORITES_CONTENT_URI;
                 break;
+            case 3:
+                newUri = null;
+                break;
+
             default:
                 long feedOrGroupId = mDrawerAdapter.getItemId(position);
                 if (mDrawerAdapter.isItemAGroup(position)) {
@@ -287,8 +315,13 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 break;
         }
 
-        if (!newUri.equals(mEntriesFragment.getUri())) {
-            mEntriesFragment.setData(newUri, showFeedInfo);
+        if (newUri != null && !newUri.equals(mEntriesFragment.getUri())) {
+            if(getSupportFragmentManager().findFragmentById(R.id.home_fragment_frame).equals(mEntriesFragment)) {
+                mEntriesFragment.setData(newUri, showFeedInfo);
+            }
+            else {
+                mEntriesFragment.setDataValues(newUri, showFeedInfo);
+            }
         }
 
         mDrawerList.setItemChecked(position, true);
@@ -332,11 +365,15 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 case 2:
                     getSupportActionBar().setTitle(R.string.favorites);
                     break;
+                case 3:
+                    getSupportActionBar().setTitle(R.string.magazines);
+                    break;
                 default:
                     getSupportActionBar().setTitle(mTitle);
                     break;
             }
         }
+        Log.d("Loaded Frag", "entries loaded? - " + getSupportFragmentManager().findFragmentById(R.id.home_fragment_frame).equals(mEntriesFragment));
 
         // Put the good menu
         invalidateOptionsMenu();

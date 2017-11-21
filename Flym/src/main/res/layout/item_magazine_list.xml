@@ -1,0 +1,69 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/activatedBackgroundIndicator"
+    android:paddingBottom="7dip"
+    android:paddingTop="5dip">
+
+    <TextView
+        android:id="@+id/magazine_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"/>
+
+    <RelativeLayout
+        android:layout_below="@id/magazine_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:id="@+id/image_1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"/>
+
+        <ImageView
+            android:id="@+id/image_2"
+            android:layout_toRightOf="@id/image_1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"/>
+
+        <ImageView
+            android:id="@+id/image_3"
+            android:layout_toRightOf="@id/image_2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"/>
+
+        <ImageView
+            android:id="@+id/image_4"
+            android:layout_toRightOf="@id/image_3"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"/>
+
+        <ImageView
+            android:id="@+id/image_5"
+            android:layout_toRightOf="@id/image_4"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

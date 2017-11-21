@@ -23,6 +23,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +84,8 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+        //TODO remove log.i
+        Log.i("INFO","Drawer ListItem " + position + " inflated");
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item_drawer_list, parent, false);
@@ -108,7 +111,8 @@ public class DrawerAdapter extends BaseAdapter {
         convertView.setPadding(0, 0, 0, 0);
         holder.separator.setVisibility(View.GONE);
 
-        if (position == 0 || position == 1 || position == 2) {
+        //TODO remove check for position == 3
+        if (position == 0 || position == 1 || position == 2 || position == 3) {
             switch (position) {
                 case 0:
                     holder.titleTxt.setText(R.string.unread_entries);
@@ -128,9 +132,16 @@ public class DrawerAdapter extends BaseAdapter {
                         holder.unreadTxt.setText(String.valueOf(mFavoritesNumber));
                     }
                     break;
+                case 3://TODO remove this section
+                    holder.titleTxt.setText("Magazines");
+                    holder.iconView.setImageResource(R.drawable.content_copy);
+                    break;
             }
         }
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+
+        //TODO change the following line back to position - 3
+
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 4)) {
             holder.titleTxt.setText((mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME)));
 
             if (mFeedsCursor.getInt(POS_IS_GROUP) == 1) {
@@ -185,7 +196,7 @@ public class DrawerAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         if (mFeedsCursor != null) {
-            return mFeedsCursor.getCount() + 3;
+            return mFeedsCursor.getCount() + 4;
         }
         return 0;
     }
@@ -197,7 +208,7 @@ public class DrawerAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 4)) {
             return mFeedsCursor.getLong(POS_ID);
         }
 
@@ -205,7 +216,7 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public byte[] getItemIcon(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 4)) {
             return mFeedsCursor.getBlob(POS_ICON);
         }
 
@@ -213,7 +224,7 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public String getItemName(int position) {
-        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3)) {
+        if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 4)) {
             return mFeedsCursor.isNull(POS_NAME) ? mFeedsCursor.getString(POS_URL) : mFeedsCursor.getString(POS_NAME);
         }
 
@@ -221,7 +232,7 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public boolean isItemAGroup(int position) {
-        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 3) && mFeedsCursor.getInt(POS_IS_GROUP) == 1;
+        return mFeedsCursor != null && mFeedsCursor.moveToPosition(position - 4) && mFeedsCursor.getInt(POS_IS_GROUP) == 1;
 
     }
 

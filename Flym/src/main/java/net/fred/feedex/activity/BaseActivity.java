@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.facebook.stetho.Stetho;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -47,6 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         updateAndroidSecurityProvider(this);
         mDecorView = getWindow().getDecorView();
+        Stetho.initializeWithDefaults(this);
 
         // For immersive mode
         if (android.os.Build.VERSION.SDK_INT >= 19) {

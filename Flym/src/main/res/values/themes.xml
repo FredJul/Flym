@@ -18,4 +18,5 @@
         <item name="colorAccent">@color/light_theme_color_primary</item>
         <item name="colorReadState">@color/dark_read_state</item>
     </style>
+
 </resources>

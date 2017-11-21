@@ -123,9 +123,13 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            data.moveToFirst();
-            mNewEntriesNumber = data.getInt(0);
-            mOldUnreadEntriesNumber = data.getInt(1);
+            if (data.moveToFirst()) {
+                mNewEntriesNumber = data.getInt(0);
+                mOldUnreadEntriesNumber = data.getInt(1);
+            }
+            else {
+                return;
+            }
 
             if (mAutoRefreshDisplayDate && mNewEntriesNumber != 0 && mOldUnreadEntriesNumber == 0) {
                 mListDisplayDate = new Date().getTime();
@@ -180,9 +184,10 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             } else {
                 mAutoRefreshDisplayDate = true; // We will try to update the list after if necessary
             }
-
             restartLoaders();
         }
+
+        setData(mCurrentUri, mShowFeedInfo);
     }
 
     @Override
@@ -469,6 +474,11 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         } else {
             hideSwipeProgress();
         }
+    }
+
+    public void setDataValues(Uri newUri, boolean showFeedInfo) {
+        mCurrentUri = newUri;
+        mShowFeedInfo = showFeedInfo;
     }
 
     private class SwipeGestureListener extends SimpleOnGestureListener implements OnTouchListener {

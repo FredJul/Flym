@@ -21,6 +21,7 @@ package net.fred.feedex.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DownloadManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -41,6 +42,8 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -48,7 +51,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 
 import net.fred.feedex.Constants;
 import net.fred.feedex.MainApplication;
@@ -61,6 +69,8 @@ import net.fred.feedex.service.FetcherService;
 import net.fred.feedex.utils.PrefUtils;
 import net.fred.feedex.utils.UiUtils;
 import net.fred.feedex.view.EntryView;
+
+import java.util.Arrays;
 
 public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.OnFullScreenListener, LoaderManager.LoaderCallbacks<Cursor>, EntryView.EntryViewManager {
 
@@ -265,6 +275,91 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
                         }
                     }.start();
                     activity.finish();
+                    break;
+                }
+                case R.id.menu_add_to_magazine: {
+                   Cursor cursor = MainApplication.getContext().getContentResolver().query(FeedData.MagazineColumns.CONTENT_URI, null, null, null, null);
+
+                    final SimpleCursorAdapter typAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, cursor,
+                            new String[] { FeedData.MagazineColumns.TITLE }, new int[] { android.R.id.text1 });
+
+                    final Dialog builder = new Dialog(getActivity());
+                    builder.setTitle("Select Magazine");
+                    builder.setContentView(R.layout.dialog_select_magazine);
+                    Button addMagazineButton = (Button) builder.findViewById(R.id.dialog_select_magazine_btn);
+                    addMagazineButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d("MAGAZINE", "onClick: new magazine button clicked");
+                            final Dialog builderCreateMagazine = new Dialog(getActivity());
+                            builderCreateMagazine.setTitle("Create Magazine");
+                            builderCreateMagazine.setContentView(R.layout.dialog_create_magazine);
+                            final EditText createMagazineEditText = (EditText) builderCreateMagazine.findViewById(R.id.dialog_create_magazine_edt);
+                            Button createMagazineButton = (Button) builderCreateMagazine.findViewById(R.id.dialog_create_magazine_btn);
+                            createMagazineButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    final String magazineTitle = createMagazineEditText.getText().toString();
+                                    if (!magazineTitle.equals("")) {
+                                        ContentValues values = new ContentValues();
+                                        values.put(FeedData.MagazineColumns.TITLE, magazineTitle);
+                                        values.put(FeedData.MagazineColumns.ENTRY_IDS, "" + mEntriesIds[mCurrentPagerPos]);
+                                        ContentResolver cr = MainApplication.getContext().getContentResolver();
+                                        cr.insert(FeedData.MagazineColumns.CONTENT_URI, values);
+                                        builderCreateMagazine.dismiss();
+                                        builder.show();
+                                    }
+                                    else {
+                                        createMagazineEditText.setText("Add Title");
+                                    }
+                                }
+                            });
+                            builder.dismiss();
+                            builderCreateMagazine.show();
+                        }
+                    });
+                    ListView chooseMagazineListView = (ListView) builder.findViewById(R.id.dialog_select_magazine_lv);
+                    chooseMagazineListView.setAdapter(typAdapter);
+                    chooseMagazineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Cursor magazineItem = (Cursor) typAdapter.getItem(position);
+                            String magazineId = magazineItem.getString(magazineItem.getColumnIndex(FeedData.MagazineColumns._ID));
+
+                            ContentResolver cr = MainApplication.getContext().getContentResolver();
+                            String [] requestedColumns = {
+                                    FeedData.MagazineColumns.ENTRY_IDS,
+                            };
+                            Cursor entry = cr.query(FeedData.MagazineColumns.CONTENT_URI,
+                                    requestedColumns,
+                                    FeedData.MagazineColumns._ID + "=" + magazineId + "",
+                                    null, null);
+                            String existingEntries = "";
+                            if(entry != null) {
+                                if (entry.moveToFirst()) {
+                                    existingEntries = entry.getString(entry.getColumnIndex(FeedData.MagazineColumns.ENTRY_IDS));
+                                }
+                            }
+                            String updatedEntries = existingEntries;
+                            if (existingEntries == null) {
+                                updatedEntries = "" +  mEntriesIds[mCurrentPagerPos];
+                            }
+                            else {
+                                String[] existingEntryIds = existingEntries.split(",");
+                                if (!Arrays.asList(existingEntryIds).contains(mEntriesIds[mCurrentPagerPos] + "")) {
+                                    updatedEntries = existingEntries + "," +  mEntriesIds[mCurrentPagerPos];
+                                }
+                            }
+                            ContentValues values = new ContentValues();
+                            values.put(FeedData.MagazineColumns.ENTRY_IDS, updatedEntries);
+                            cr.update(FeedData.MagazineColumns.CONTENT_URI, values, FeedData.MagazineColumns._ID + "=" + magazineId, null);
+                            builder.dismiss();
+                            magazineItem.close();
+                            entry.close();
+                        }
+                    });
+
+                    builder.show();
                     break;
                 }
             }
@@ -488,6 +583,7 @@ public class EntryFragment extends SwipeRefreshFragment implements BaseActivity.
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        loader.getId();
         if (mBaseUri != null && cursor != null) { // can be null if we do a setData(null) before
             cursor.moveToFirst();
 

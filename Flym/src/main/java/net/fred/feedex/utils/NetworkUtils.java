@@ -246,7 +246,7 @@ public class NetworkUtils {
 
         COOKIE_MANAGER.getCookieStore().removeAll(); // Cookie is important for some sites, but we clean them each times
         connection.connect();
-
+        System.out.println(connection.toString());
         return connection;
     }
 }

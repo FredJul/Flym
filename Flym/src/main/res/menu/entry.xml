@@ -28,5 +28,8 @@
     <item
         android:id="@+id/menu_mark_as_unread"
         android:title="@string/menu_mark_as_unread"/>
+    <item
+        android:id="@+id/menu_add_to_magazine"
+        android:title="@string/menu_add_to_magazine"/>
 
 </menu>
