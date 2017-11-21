@@ -55,7 +55,6 @@
 package net.frju.flym.service
 
 import android.app.IntentService
-import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -65,6 +64,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Handler
+import android.support.v4.app.NotificationCompat
 import android.text.Html
 import android.text.TextUtils
 import android.widget.Toast
@@ -260,7 +260,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                             val contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
                                     PendingIntent.FLAG_UPDATE_CURRENT)
 
-                            val notifBuilder = Notification.Builder(this) //
+                            val notifBuilder = NotificationCompat.Builder(this, "notif")
                                     .setContentIntent(contentIntent) //
                                     .setSmallIcon(R.drawable.ic_statusbar_rss) //
                                     .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)) //
