@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                 val subFeedMap = it.groupBy { it.groupId }
 
                 feedGroups.addAll(
-                        subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.id] ?: listOf()) } ?: listOf()
+                        subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.id].orEmpty()) }.orEmpty()
                 )
 
                 feedAdapter.notifyParentDataSetChanged(true)

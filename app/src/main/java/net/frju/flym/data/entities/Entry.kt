@@ -50,9 +50,7 @@ open class Entry : Parcelable {
         return true
     }
 
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+    override fun hashCode(): Int = id.hashCode()
 }
 
 fun SyndEntry.toDbFormat(feed: Feed): Entry {

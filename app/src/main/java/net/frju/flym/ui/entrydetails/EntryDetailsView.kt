@@ -42,7 +42,7 @@ import java.io.File
 import java.io.IOException
 
 
-class EntryDetailsView : WebView {
+class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : WebView(context, attrs, defStyleAttr) {
 
     private val TEXT_HTML = "text/html"
     private val HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>"
@@ -76,24 +76,13 @@ class EntryDetailsView : WebView {
     private val SUBTITLE_START = "<p class='subtitle'>"
     private val SUBTITLE_END = "</p>"
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
-        init()
-    }
-
-    @SuppressLint("SetJavaScriptEnabled")
-    private fun init() {
+    init {
         // For scrolling
         isHorizontalScrollBarEnabled = false
         settings.useWideViewPort = false
         settings.cacheMode = WebSettings.LOAD_NO_CACHE
+
+        @SuppressLint("SetJavaScriptEnabled")
         settings.javaScriptEnabled = true
 
         // For color
@@ -134,7 +123,7 @@ class EntryDetailsView : WebView {
             loadDataWithBaseURL("", "", TEXT_HTML, UTF8, null)
         } else {
             // TODO dynamic switch
-            var contentText = entry.mobilizedContent ?: entry.description ?: ""
+            var contentText = entry.mobilizedContent ?: entry.description.orEmpty()
             if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
                 contentText = HtmlUtils.replaceImageURLs(contentText, entry.id)
                 if (settings.blockNetworkImage) {

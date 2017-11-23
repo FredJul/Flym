@@ -10,13 +10,12 @@ import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter
 import com.bignerdranch.expandablerecyclerview.ParentViewHolder
 import kotlinx.android.synthetic.main.view_feed.view.*
 import net.fred.feedex.R
-import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.Feed
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sdk21.coroutines.onClick
 
 
-private val STATE_SELECTED_ID = "STATE_SELECTED_ID"
+private const val STATE_SELECTED_ID = "STATE_SELECTED_ID"
 
 class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup, Feed, FeedAdapter.FeedGroupViewHolder, FeedAdapter.FeedViewHolder>(groups) {
 
@@ -62,7 +61,6 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
 
         fun bindItem(group: FeedGroup) {
             if (group.feed.isGroup) {
-                GlideApp.with(itemView.context).clear(itemView.icon)
                 if (isExpanded) {
                     itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_up_white_24dp)
                 } else {
@@ -81,9 +79,8 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
                 }
             } else {
                 itemView.icon.isClickable = false
-                if (group.feed.link.isEmpty()) {
-                    GlideApp.with(itemView.context).clear(itemView.icon)
-                    itemView.icon.setImageDrawable(null)
+                if (group.feed.id == Feed.ALL_ENTRIES_ID) {
+                    itemView.icon.setImageResource(R.drawable.ic_list_white_24dp)
                 } else {
                     itemView.icon.setImageDrawable(group.feed.getLetterDrawable(true))
                 }
@@ -102,9 +99,7 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
             }
         }
 
-        override fun shouldItemViewClickToggleExpansion(): Boolean {
-            return false
-        }
+        override fun shouldItemViewClickToggleExpansion(): Boolean = false
     }
 
     inner class FeedViewHolder(itemView: View)
