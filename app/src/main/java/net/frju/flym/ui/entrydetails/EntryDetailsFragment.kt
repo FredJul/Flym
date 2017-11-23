@@ -118,7 +118,7 @@ class EntryDetailsFragment : Fragment() {
     private fun updateUI() {
         doAsync {
             entry.read = true
-            App.db.entryDao().insertAll(entry)
+            App.db.entryDao().insert(entry)
         }
 
         entry_view.setEntry(entry)
@@ -153,7 +153,7 @@ class EntryDetailsFragment : Fragment() {
                         }
 
                         doAsync {
-                            App.db.entryDao().insertAll(entry)
+                            App.db.entryDao().insert(entry)
                         }
                     }
                     R.id.menu_entry_details__share -> {

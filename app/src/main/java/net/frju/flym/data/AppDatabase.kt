@@ -78,7 +78,7 @@ abstract class AppDatabase : RoomDatabase() {
                                     }
 
                                     if (feedList.isNotEmpty()) {
-                                        App.db.feedDao().insertAll(*feedList.toTypedArray())
+                                        App.db.feedDao().insert(*feedList.toTypedArray())
                                     }
                                 }
                             }

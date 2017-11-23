@@ -17,8 +17,8 @@ interface FeedDao {
     fun findById(id: Long): Feed?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg feeds: Feed)
+    fun insert(vararg feeds: Feed)
 
     @Delete
-    fun deleteAll(feeds: Feed)
+    fun delete(vararg feeds: Feed)
 }

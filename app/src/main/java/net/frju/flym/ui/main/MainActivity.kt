@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                         Toast.makeText(this@MainActivity, "Added",
                                 Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
-                        doAsync { App.db.feedDao().insertAll(Feed(link = item.link, title = item.name)) }
+                        doAsync { App.db.feedDao().insert(Feed(link = item.link, title = item.name)) }
                     })
 
             val apiFilter = object : BaseFilter<SearchFeedResult>() {

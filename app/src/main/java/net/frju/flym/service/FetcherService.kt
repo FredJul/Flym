@@ -171,7 +171,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                     }
                 }
 
-                App.db.taskDao().insertAll(*newTasks.toTypedArray())
+                App.db.taskDao().insert(*newTasks.toTypedArray())
             }
         }
 
@@ -183,7 +183,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                 newTasks.add(task)
             }
 
-            App.db.taskDao().insertAll(*newTasks.toTypedArray())
+            App.db.taskDao().insert(*newTasks.toTypedArray())
         }
     }
 
@@ -373,10 +373,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
 
                                     success = true
 
-                                    App.db.taskDao().deleteAll(task)
+                                    App.db.taskDao().delete(task)
 
                                     entry.mobilizedContent = mobilizedHtml
-                                    App.db.entryDao().insertAll(entry)
+                                    App.db.entryDao().insert(entry)
                                 }
                             }
                         }
@@ -387,10 +387,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
 
             if (!success) {
                 if (task.numberAttempt + 1 > MAX_TASK_ATTEMPT) {
-                    App.db.taskDao().deleteAll(task)
+                    App.db.taskDao().delete(task)
                 } else {
                     task.numberAttempt += 1
-                    App.db.taskDao().insertAll(task)
+                    App.db.taskDao().insert(task)
                 }
             }
         }
@@ -406,13 +406,13 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                 downloadImage(task.entryId, task.imageLinkToDl)
 
                 // If we are here, everything is OK
-                App.db.taskDao().deleteAll(task)
+                App.db.taskDao().delete(task)
             } catch (ignored: Exception) {
                 if (task.numberAttempt + 1 > MAX_TASK_ATTEMPT) {
-                    App.db.taskDao().deleteAll(task)
+                    App.db.taskDao().delete(task)
                 } else {
                     task.numberAttempt += 1
-                    App.db.taskDao().insertAll(task)
+                    App.db.taskDao().insert(task)
                 }
             }
         }
@@ -483,7 +483,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
 
         warn("fetch done ${feed.title}")
 
-        App.db.feedDao().insertAll(feed)
+        App.db.feedDao().insert(feed)
 
         // First we remove the entries that we already have in db (no update to save data)
         val existingIds = App.db.entryDao().idsForFeed(feed.id)
@@ -527,7 +527,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         }
 
         // Update everything
-        App.db.entryDao().insertAll(*(entriesToInsert.toTypedArray()))
+        App.db.entryDao().insert(*(entriesToInsert.toTypedArray()))
 
         if (feed.retrieveFullText) {
             FetcherService.addEntriesToMobilize(entries.map { it.id })

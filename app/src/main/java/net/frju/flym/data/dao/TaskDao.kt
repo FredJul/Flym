@@ -23,8 +23,8 @@ interface TaskDao {
     val downloadTasks: List<Task>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg tasks: Task)
+    fun insert(vararg tasks: Task)
 
     @Delete
-    fun deleteAll(tasks: Task)
+    fun delete(vararg tasks: Task)
 }
