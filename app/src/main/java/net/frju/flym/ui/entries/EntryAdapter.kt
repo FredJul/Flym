@@ -23,13 +23,11 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
         @JvmField
         val DIFF_CALLBACK = object : DiffCallback<EntryWithFeed>() {
 
-            override fun areItemsTheSame(oldItem: EntryWithFeed, newItem: EntryWithFeed): Boolean {
-                return oldItem.id == newItem.id
-            }
+            override fun areItemsTheSame(oldItem: EntryWithFeed, newItem: EntryWithFeed): Boolean =
+                    oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: EntryWithFeed, newItem: EntryWithFeed): Boolean {
-                return oldItem.id == newItem.id && oldItem.read == newItem.read && oldItem.favorite == newItem.favorite // no need to do more complex in our case
-            }
+            override fun areContentsTheSame(oldItem: EntryWithFeed, newItem: EntryWithFeed): Boolean =
+                    oldItem.id == newItem.id && oldItem.read == newItem.read && oldItem.favorite == newItem.favorite // no need to do more complex in our case
         }
     }
 

@@ -31,255 +31,260 @@ import org.jetbrains.anko.sdk21.coroutines.onClick
 import org.jetbrains.anko.support.v4.startActivity
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
-import java.util.*
+import java.util.Date
 
 
 class EntriesFragment : Fragment() {
 
-    companion object {
+	companion object {
 
-        private val ARG_FEED = "feed"
-        private val STATE_SELECTED_ENTRY_ID = "STATE_SELECTED_ENTRY_ID"
-        private val STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE"
+		private val ARG_FEED = "feed"
+		private val STATE_SELECTED_ENTRY_ID = "STATE_SELECTED_ENTRY_ID"
+		private val STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE"
 
-        fun newInstance(feed: Feed?): EntriesFragment {
-            val fragment = EntriesFragment()
-            feed?.let {
-                fragment.arguments = bundleOf(ARG_FEED to feed)
-            }
-            return fragment
-        }
-    }
+		fun newInstance(feed: Feed?): EntriesFragment {
+			val fragment = EntriesFragment()
+			feed?.let {
+				fragment.arguments = bundleOf(ARG_FEED to feed)
+			}
+			return fragment
+		}
+	}
 
-    private val navigator: MainNavigator by lazy { activity as MainNavigator }
+	private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
-    private val adapter = EntryAdapter({ entry ->
-        navigator.goToEntryDetails(entry, entryIds!!)
-    }, { entry ->
-        entry.favorite = !entry.favorite
+	private val adapter = EntryAdapter({ entry ->
+		navigator.goToEntryDetails(entry, entryIds!!)
+	}, { entry ->
+		entry.favorite = !entry.favorite
 
-        view?.favorite_icon?.let {
-            if (entry.favorite) {
-                it.setImageResource(R.drawable.ic_star_white_24dp)
-            } else {
-                it.setImageResource(R.drawable.ic_star_border_white_24dp)
-            }
-        }
+		view?.favorite_icon?.let {
+			if (entry.favorite) {
+				it.setImageResource(R.drawable.ic_star_white_24dp)
+			} else {
+				it.setImageResource(R.drawable.ic_star_border_white_24dp)
+			}
+		}
 
-        doAsync {
-            App.db.entryDao().insert(entry)
-        }
-    })
-    private var feed: Feed? = null
-    private var listDisplayDate = Date().time
-    private var entriesLiveData: LiveData<PagedList<EntryWithFeed>>? = null
-    private var entryIdsLiveData: LiveData<List<String>>? = null
-    private var entryIds: List<String>? = null
-    private var newCountLiveData: LiveData<Long>? = null
-    private var unreadBadge: Badge? = null
+		doAsync {
+			App.db.entryDao().insert(entry)
+		}
+	})
+	private var feed: Feed? = null
+	private var listDisplayDate = Date().time
+	private var entriesLiveData: LiveData<PagedList<EntryWithFeed>>? = null
+	private var entryIdsLiveData: LiveData<List<String>>? = null
+	private var entryIds: List<String>? = null
+	private var newCountLiveData: LiveData<Long>? = null
+	private var unreadBadge: Badge? = null
 
-    private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
-        if (PrefUtils.IS_REFRESHING == key) {
-            refreshSwipeProgress()
-        }
-    }
+	private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
+		if (PrefUtils.IS_REFRESHING == key) {
+			refreshSwipeProgress()
+		}
+	}
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_entries, container, false)
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+			inflater.inflate(R.layout.fragment_entries, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+	override fun onActivityCreated(savedInstanceState: Bundle?) {
+		super.onActivityCreated(savedInstanceState)
 
-        if (arguments?.containsKey(ARG_FEED) == true) {
-            feed = arguments?.getParcelable(ARG_FEED)
-        }
+		if (arguments?.containsKey(ARG_FEED) == true) {
+			feed = arguments?.getParcelable(ARG_FEED)
+		}
 
-        setupToolbar()
-        setupRecyclerView()
+		setupToolbar()
+		setupRecyclerView()
 
-        bottom_navigation.setOnNavigationItemSelectedListener {
-            recycler_view.post {
-                listDisplayDate = Date().time
-                initDataObservers()
-                recycler_view.scrollToPosition(0)
-            }
-            true
-        }
+		bottom_navigation.setOnNavigationItemSelectedListener {
+			recycler_view.post {
+				listDisplayDate = Date().time
+				initDataObservers()
+				recycler_view.scrollToPosition(0)
+			}
+			true
+		}
 
-        unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
-            setGravityOffset(35F, 0F, true)
-            isShowShadow = false
-            badgeBackgroundColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
-        }
+		unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
+			setGravityOffset(35F, 0F, true)
+			isShowShadow = false
+			badgeBackgroundColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
+		}
 
-        read_all_fab.onClick {
-            entryIds?.let { entryIds ->
-                if (entryIds.isNotEmpty()) {
-                    doAsync {
-                        // TODO check if limit still needed
-                        entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
-                            App.db.entryDao().markAsRead(it)
-                        }
-                    }
+		read_all_fab.onClick {
+			entryIds?.let { entryIds ->
+				if (entryIds.isNotEmpty()) {
+					doAsync {
+						// TODO check if limit still needed
+						entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
+							App.db.entryDao().markAsRead(it)
+						}
+					}
 
-                    longSnackbar(coordinator, "Marked as read", "Undo") {
-                        doAsync {
-                            // TODO check if limit still needed
-                            entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
-                                App.db.entryDao().markAsUnread(it)
-                            }
-                        }
-                    }
-                }
+					longSnackbar(coordinator, "Marked as read", "Undo") {
+						doAsync {
+							// TODO check if limit still needed
+							entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
+								App.db.entryDao().markAsUnread(it)
+							}
+						}
+					}
+				}
 
-                if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
-                    activity?.notificationManager?.cancel(0)
-                }
-            }
-        }
+				if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
+					activity?.notificationManager?.cancel(0)
+				}
+			}
+		}
 
-        if (savedInstanceState != null) {
-            adapter.selectedEntryId = savedInstanceState.getString(STATE_SELECTED_ENTRY_ID)
-            listDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE)
-        }
+		if (savedInstanceState != null) {
+			adapter.selectedEntryId = savedInstanceState.getString(STATE_SELECTED_ENTRY_ID)
+			listDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE)
+		}
 
-        bottom_navigation.post { initDataObservers() } // Needed to retrieve the correct selected position
-    }
+		bottom_navigation.post { initDataObservers() } // Needed to retrieve the correct selected position
+	}
 
-    private fun initDataObservers() {
-        entryIdsLiveData?.removeObservers(this)
-        entryIdsLiveData = when {
-            feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByGroup(feed!!.id, listDisplayDate)
-            feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByGroup(feed!!.id, listDisplayDate)
-            feed?.isGroup == true -> App.db.entryDao().observeIdsByGroup(feed!!.id, listDisplayDate)
+	private fun initDataObservers() {
+		entryIdsLiveData?.removeObservers(this)
+		entryIdsLiveData = when {
+			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByGroup(feed!!.id, listDisplayDate)
+			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByGroup(feed!!.id, listDisplayDate)
+			feed?.isGroup == true -> App.db.entryDao().observeIdsByGroup(feed!!.id, listDisplayDate)
 
-            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByFeed(feed!!.id, listDisplayDate)
-            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByFeed(feed!!.id, listDisplayDate)
-            feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeIdsByFeed(feed!!.id, listDisplayDate)
+			feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByFeed(feed!!.id, listDisplayDate)
+			feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByFeed(feed!!.id, listDisplayDate)
+			feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeIdsByFeed(feed!!.id, listDisplayDate)
 
-            bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreadIds(listDisplayDate)
-            bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavoriteIds(listDisplayDate)
-            else -> App.db.entryDao().observeAllIds(listDisplayDate)
-        }
+			bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreadIds(listDisplayDate)
+			bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavoriteIds(listDisplayDate)
+			else -> App.db.entryDao().observeAllIds(listDisplayDate)
+		}
 
-        entryIdsLiveData?.observe(this, Observer<List<String>> { list ->
-            entryIds = list
-        })
+		entryIdsLiveData?.observe(this, Observer<List<String>> { list ->
+			entryIds = list
+		})
 
-        entriesLiveData?.removeObservers(this)
-        entriesLiveData = when {
-            feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByGroup(feed!!.id, listDisplayDate)
-            feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByGroup(feed!!.id, listDisplayDate)
-            feed?.isGroup == true -> App.db.entryDao().observeByGroup(feed!!.id, listDisplayDate)
+		entriesLiveData?.removeObservers(this)
+		entriesLiveData = when {
+			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByGroup(feed!!.id, listDisplayDate)
+			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByGroup(feed!!.id, listDisplayDate)
+			feed?.isGroup == true -> App.db.entryDao().observeByGroup(feed!!.id, listDisplayDate)
 
-            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByFeed(feed!!.id, listDisplayDate)
-            feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByFeed(feed!!.id, listDisplayDate)
-            feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeByFeed(feed!!.id, listDisplayDate)
+			feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByFeed(feed!!.id, listDisplayDate)
+			feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByFeed(feed!!.id, listDisplayDate)
+			feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeByFeed(feed!!.id, listDisplayDate)
 
-            bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreads(listDisplayDate)
-            bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavorites(listDisplayDate)
-            else -> App.db.entryDao().observeAll(listDisplayDate)
-        }.create(0, 30)
+			bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreads(listDisplayDate)
+			bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavorites(listDisplayDate)
+			else -> App.db.entryDao().observeAll(listDisplayDate)
+		}.create(0, 30)
 
-        entriesLiveData?.observe(this, Observer<PagedList<EntryWithFeed>> { pagedList ->
-            adapter.setList(pagedList)
-        })
+		entriesLiveData?.observe(this, Observer<PagedList<EntryWithFeed>> { pagedList ->
+			adapter.setList(pagedList)
+		})
 
-        newCountLiveData?.removeObservers(this)
-        newCountLiveData = when {
-            feed?.isGroup == true -> App.db.entryDao().observeNewEntriesCountByGroup(feed!!.id, listDisplayDate)
-            feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeNewEntriesCountByFeed(feed!!.id, listDisplayDate)
-            else -> App.db.entryDao().observeNewEntriesCount(listDisplayDate)
-        }
+		newCountLiveData?.removeObservers(this)
+		newCountLiveData = when {
+			feed?.isGroup == true -> App.db.entryDao().observeNewEntriesCountByGroup(feed!!.id, listDisplayDate)
+			feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeNewEntriesCountByFeed(feed!!.id, listDisplayDate)
+			else -> App.db.entryDao().observeNewEntriesCount(listDisplayDate)
+		}
 
-        newCountLiveData?.observe(this, Observer<Long> { count ->
-            if (count != null && count > 0L) {
-                // If we have an empty list, let's immediately display the new items
-                if (entryIds?.isEmpty() == true && bottom_navigation.selectedItemId != R.id.favorites) {
-                    listDisplayDate = Date().time
-                    initDataObservers()
-                } else {
-                    unreadBadge?.badgeNumber = count.toInt()
-                }
-            } else {
-                unreadBadge?.hide(false)
-            }
-        })
-    }
+		newCountLiveData?.observe(this, Observer<Long> { count ->
+			if (count != null && count > 0L) {
+				// If we have an empty list, let's immediately display the new items
+				if (entryIds?.isEmpty() == true && bottom_navigation.selectedItemId != R.id.favorites) {
+					listDisplayDate = Date().time
+					initDataObservers()
+				} else {
+					unreadBadge?.badgeNumber = count.toInt()
+				}
+			} else {
+				unreadBadge?.hide(false)
+			}
+		})
+	}
 
-    override fun onStart() {
-        super.onStart()
-        PrefUtils.registerOnPrefChangeListener(prefListener)
-        refreshSwipeProgress()
-    }
+	override fun onStart() {
+		super.onStart()
+		PrefUtils.registerOnPrefChangeListener(prefListener)
+		refreshSwipeProgress()
+	}
 
-    override fun onStop() {
-        super.onStop()
-        PrefUtils.unregisterOnPrefChangeListener(prefListener)
-    }
+	override fun onStop() {
+		super.onStop()
+		PrefUtils.unregisterOnPrefChangeListener(prefListener)
+	}
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(STATE_SELECTED_ENTRY_ID, adapter.selectedEntryId)
-        outState.putLong(STATE_LIST_DISPLAY_DATE, listDisplayDate)
+	override fun onSaveInstanceState(outState: Bundle) {
+		outState.putString(STATE_SELECTED_ENTRY_ID, adapter.selectedEntryId)
+		outState.putLong(STATE_LIST_DISPLAY_DATE, listDisplayDate)
 
-        super.onSaveInstanceState(outState)
-    }
+		super.onSaveInstanceState(outState)
+	}
 
-    private fun setupRecyclerView() {
-        recycler_view.setHasFixedSize(true)
+	private fun setupRecyclerView() {
+		recycler_view.setHasFixedSize(true)
 
-        val layoutManager = LinearLayoutManager(activity)
-        recycler_view.layoutManager = layoutManager
-        recycler_view.adapter = adapter
+		val layoutManager = LinearLayoutManager(activity)
+		recycler_view.layoutManager = layoutManager
+		recycler_view.adapter = adapter
 
-        refresh_layout.setOnRefreshListener {
-            startRefresh()
-        }
+		refresh_layout.setColorScheme(R.color.colorAccent,
+				R.color.colorPrimaryDark,
+				R.color.colorAccent,
+				R.color.colorPrimaryDark)
 
-        recycler_view.emptyView = empty_view
-    }
+		refresh_layout.setOnRefreshListener {
+			startRefresh()
+		}
 
-    private fun startRefresh() {
-        if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            if (feed?.isGroup == false && feed?.id != Feed.ALL_ENTRIES_ID) {
-                context?.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.EXTRA_FEED_ID,
-                        feed?.id))
-            } else {
-                context?.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
-            }
-        }
+		recycler_view.emptyView = empty_view
+	}
 
-        // In case there is no internet, the service won't even start, let's quickly stop the refresh animation
-        refresh_layout.postDelayed({ refreshSwipeProgress() }, 500)
-    }
+	private fun startRefresh() {
+		if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+			if (feed?.isGroup == false && feed?.id != Feed.ALL_ENTRIES_ID) {
+				context?.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.EXTRA_FEED_ID,
+						feed?.id))
+			} else {
+				context?.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS))
+			}
+		}
 
-    private fun setupToolbar() {
-        activity?.toolbar?.apply {
-            if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
-                setTitle(R.string.all_entries)
-            } else {
-                title = feed?.title
-            }
+		// In case there is no internet, the service won't even start, let's quickly stop the refresh animation
+		refresh_layout.postDelayed({ refreshSwipeProgress() }, 500)
+	}
 
-            menu.clear()
-            inflateMenu(R.menu.fragment_entries)
-            setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.menu_entries__about -> {
-                        startActivity<AboutActivity>()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }
-    }
+	private fun setupToolbar() {
+		activity?.toolbar?.apply {
+			if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
+				setTitle(R.string.all_entries)
+			} else {
+				title = feed?.title
+			}
 
-    fun setSelectedEntryId(selectedEntryId: String) {
-        adapter.selectedEntryId = selectedEntryId
-    }
+			menu.clear()
+			inflateMenu(R.menu.fragment_entries)
+			setOnMenuItemClickListener { item ->
+				when (item.itemId) {
+					R.id.menu_entries__about -> {
+						startActivity<AboutActivity>()
+						true
+					}
+					else -> false
+				}
+			}
+		}
+	}
 
-    private fun refreshSwipeProgress() {
-        refresh_layout.isRefreshing = PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)
-    }
+	fun setSelectedEntryId(selectedEntryId: String) {
+		adapter.selectedEntryId = selectedEntryId
+	}
+
+	private fun refreshSwipeProgress() {
+		refresh_layout.isRefreshing = PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)
+	}
 }
