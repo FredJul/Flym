@@ -121,5 +121,5 @@ dependencies {
     implementation 'com.github.jrvansuita:MaterialAbout:+'
     implementation 'q.rorbin:badgeview:+'
 
-    implementation 'com.github.chimbori:crux:master'
+    implementation 'com.github.FredJul:crux:master'
 }

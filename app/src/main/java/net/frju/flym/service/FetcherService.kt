@@ -70,6 +70,7 @@ import android.support.v4.app.NotificationCompat
 import android.text.Html
 import android.text.TextUtils
 import android.widget.Toast
+import com.chimbori.crux.articles.ArticleExtractor
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
 import net.fred.feedex.R
@@ -356,7 +357,9 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                     try {
                         HTTP_CLIENT.newCall(request).execute().use {
                             it.body()?.let { body ->
-                                ArticleTextExtractor.extractContent(body.byteStream(), contentIndicator)?.let {
+                                ArticleExtractor.with(entry.link, body.string())
+                                        .extractContent()
+                                        .article().document.html()?.let {
                                     val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(link))
 
                                     if (downloadPictures) {
