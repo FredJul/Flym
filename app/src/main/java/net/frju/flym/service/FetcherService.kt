@@ -80,6 +80,7 @@ import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.Task
 import net.frju.flym.data.entities.toDbFormat
 import net.frju.flym.ui.main.MainActivity
+import net.frju.flym.utils.ArticleTextExtractor
 import net.frju.flym.utils.HtmlUtils
 import net.frju.flym.utils.sha1
 import net.frju.parentalcontrol.utils.PrefUtils
@@ -217,6 +218,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
 
         downloadPictures = shouldDownloadPictures()
 
+        //return testMobilize()
+
         when {
             ACTION_MOBILIZE_FEEDS == intent.action -> {
                 mobilizeAllEntries()
@@ -302,6 +305,29 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
         }
     }
 
+    private fun testMobilize() {
+        error("start test mobilizing")
+
+        val testUrl = "http://www.lavoixdunord.fr/232449/article/2017-10-02/la-romanciere-anne-bert-fer-de-lance-du-combat-pour-l-euthanasie-en-france-est"
+        val request = Request.Builder()
+                .url(testUrl)
+                .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
+                .addHeader("accept", "*/*")
+                .build()
+        try {
+            HTTP_CLIENT.newCall(request).execute().use {
+                it.body()?.let { body ->
+                    ArticleTextExtractor.extractContent(body.byteStream(), null)?.let {
+                        val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(testUrl))
+                        error(mobilizedHtml)
+                    }
+                }
+            }
+        } catch (t: Throwable) {
+            error("can't mobilize", t)
+        }
+    }
+
     private fun mobilizeAllEntries() {
 
         val tasks = App.db.taskDao().mobilizeTasks
@@ -331,12 +357,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
                     try {
                         HTTP_CLIENT.newCall(request).execute().use {
                             it.body()?.let { body ->
-                                val cleanedHtml = HtmlUtils.cleanHtml(body.string(), getBaseUrl(link))
-
-                                ArticleExtractor.with(entry.link, cleanedHtml)
+                                ArticleExtractor.with(entry.link, body.string())
                                         .extractContent()
                                         .article().document.html()?.let {
-                                    val mobilizedHtml = HtmlUtils.removeUnwantedContent(it)
+                                    val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(link))
 
                                     if (downloadPictures) {
                                         val imagesList = HtmlUtils.getImageURLs(mobilizedHtml)
@@ -483,7 +507,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
 
                     entry.description?.let { desc ->
                         // Improve the description
-                        val improvedContent = HtmlUtils.removeUnwantedContent(HtmlUtils.cleanHtml(desc, feedBaseUrl))
+                        val improvedContent = HtmlUtils.improveHtmlContent(desc, feedBaseUrl)
 
                         if (downloadPictures) {
                             val imagesList = HtmlUtils.getImageURLs(improvedContent)

@@ -143,6 +143,7 @@
     <orderEntry type="library" name="com.android.support:animated-vector-drawable-27.0.1" level="project" />
     <orderEntry type="library" name="q.rorbin:badgeview-1.1.3" level="project" />
     <orderEntry type="library" name="nz.bradcampbell:paperparcel-api:2.0.4@jar" level="project" />
+    <orderEntry type="library" name="com.rometools:rome-opml:1.8.0@jar" level="project" />
     <orderEntry type="library" name="org.jetbrains.kotlinx:kotlinx-coroutines-android:0.15@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-core-utils-27.0.1" level="project" />
     <orderEntry type="library" name="org.jdom:jdom2:2.0.6@jar" level="project" />
@@ -153,10 +154,9 @@
     <orderEntry type="library" name="com.github.bumptech.glide:disklrucache:4.3.1@jar" level="project" />
     <orderEntry type="library" name="com.github.jrvansuita:IconHandler-v2.0.0" level="project" />
     <orderEntry type="library" name="com.squareup.okhttp3:okhttp-urlconnection:3.9.1@jar" level="project" />
+    <orderEntry type="library" name="com.rometools:rome:1.8.0@jar" level="project" />
     <orderEntry type="library" name="android.arch.lifecycle:runtime-1.0.3" level="project" />
     <orderEntry type="library" name="com.android.support:support-vector-drawable-27.0.1" level="project" />
-    <orderEntry type="library" name="com.rometools:rome:1.9.0@jar" level="project" />
-    <orderEntry type="library" name="com.rometools:rome-utils:1.9.0@jar" level="project" />
     <orderEntry type="library" name="com.android.support:cardview-v7-27.0.1" level="project" />
     <orderEntry type="library" name="org.hamcrest:hamcrest-core:1.3@jar" level="project" />
     <orderEntry type="library" name="org.jetbrains.anko:anko-sdk21-coroutines:0.10.2@jar" level="project" />
@@ -168,7 +168,6 @@
     <orderEntry type="library" name="android.arch.paging:common:1.0.0-alpha3@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-core-ui-27.0.1" level="project" />
     <orderEntry type="library" name="org.jetbrains.anko:anko-design:0.10.2@jar" level="project" />
-    <orderEntry type="library" name="com.rometools:rome-opml:1.9.0@jar" level="project" />
     <orderEntry type="library" name="org.jetbrains.anko:anko-commons:0.10.2@jar" level="project" />
     <orderEntry type="library" name="org.jetbrains.anko:anko-appcompat-v7-coroutines:0.10.2@jar" level="project" />
     <orderEntry type="library" name="com.github.Tunous:SwipeActionView-1.1.0" level="project" />
@@ -186,6 +185,7 @@
     <orderEntry type="library" name="org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.1.51@jar" level="project" />
     <orderEntry type="library" name="com.android.support:design-27.0.1" level="project" />
     <orderEntry type="library" name="org.jetbrains.anko:anko-design-coroutines:0.10.2@jar" level="project" />
+    <orderEntry type="library" name="com.rometools:rome-utils:1.8.0@jar" level="project" />
     <orderEntry type="library" name="com.android.support:transition-27.0.1" level="project" />
     <orderEntry type="library" name="com.android.support:recyclerview-v7-27.0.1" level="project" />
     <orderEntry type="library" name="org.jetbrains.anko:anko-support-v4-commons:0.10.2@jar" level="project" />
