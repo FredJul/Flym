@@ -59,29 +59,26 @@ object HtmlUtils {
     fun improveHtmlContent(content: String, baseUri: String): String {
         @Suppress("NAME_SHADOWING")
         var content = content
+
+        // remove some ads
         content = ADS_PATTERN.matcher(content).replaceAll("")
+        // remove lazy loading images stuff
+        content = LAZY_LOADING_PATTERN.matcher(content).replaceAll(" src=$2")
 
-        if (content != null) {
-            // remove some ads
-            content = ADS_PATTERN.matcher(content).replaceAll("")
-            // remove lazy loading images stuff
-            content = LAZY_LOADING_PATTERN.matcher(content).replaceAll(" src=$2")
+        // clean by JSoup
+        content = Jsoup.clean(content, baseUri, JSOUP_WHITELIST)
 
-            // clean by JSoup
-            content = Jsoup.clean(content, baseUri, JSOUP_WHITELIST)
-
-            // remove empty or bad images
-            content = EMPTY_IMAGE_PATTERN.matcher(content).replaceAll("")
-            content = BAD_IMAGE_PATTERN.matcher(content).replaceAll("")
-            // remove empty links
-            content = EMPTY_LINK_PATTERN.matcher(content).replaceAll("")
-            // fix non http image paths
-            content = NON_HTTP_IMAGE_PATTERN.matcher(content).replaceAll(" $1=$2http://")
-            // remove trailing BR & too much BR
-            content = START_BR_PATTERN.matcher(content).replaceAll("")
-            content = END_BR_PATTERN.matcher(content).replaceAll("")
-            content = MULTIPLE_BR_PATTERN.matcher(content).replaceAll("<br><br>")
-        }
+        // remove empty or bad images
+        content = EMPTY_IMAGE_PATTERN.matcher(content).replaceAll("")
+        content = BAD_IMAGE_PATTERN.matcher(content).replaceAll("")
+        // remove empty links
+        content = EMPTY_LINK_PATTERN.matcher(content).replaceAll("")
+        // fix non http image paths
+        content = NON_HTTP_IMAGE_PATTERN.matcher(content).replaceAll(" $1=$2http://")
+        // remove trailing BR & too much BR
+        content = START_BR_PATTERN.matcher(content).replaceAll("")
+        content = END_BR_PATTERN.matcher(content).replaceAll("")
+        content = MULTIPLE_BR_PATTERN.matcher(content).replaceAll("<br><br>")
 
         return content
     }
