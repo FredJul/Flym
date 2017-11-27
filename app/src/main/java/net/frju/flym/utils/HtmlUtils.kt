@@ -56,7 +56,11 @@ object HtmlUtils {
     private val EMPTY_LINK_PATTERN = Pattern.compile("<a\\s+[^>]*></a>", Pattern.CASE_INSENSITIVE)
 
 
-    fun improveHtmlContent(content: String, baseUri: String): String {
+    fun cleanHtml(content: String, baseUri: String): String {
+        return Jsoup.clean(content, baseUri, JSOUP_WHITELIST)
+    }
+
+    fun removeUnwantedContent(content: String): String {
         @Suppress("NAME_SHADOWING")
         var content = content
         content = ADS_PATTERN.matcher(content).replaceAll("")
@@ -66,9 +70,6 @@ object HtmlUtils {
             content = ADS_PATTERN.matcher(content).replaceAll("")
             // remove lazy loading images stuff
             content = LAZY_LOADING_PATTERN.matcher(content).replaceAll(" src=$2")
-
-            // clean by JSoup
-            content = Jsoup.clean(content, baseUri, JSOUP_WHITELIST)
 
             // remove empty or bad images
             content = EMPTY_IMAGE_PATTERN.matcher(content).replaceAll("")
