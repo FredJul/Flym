@@ -51,11 +51,13 @@ public class ArticleTextExtractor {
      * @param contentIndicator a text which should be included into the extracted content, or null
      * @return extracted article, all HTML tags stripped
      */
-    public static String extractContent(InputStream input, String contentIndicator, boolean mobilize) throws Exception {
+    public enum Mobilize {Yes, No}
+
+    public static String extractContent(InputStream input, String contentIndicator, Mobilize mobilize) throws Exception {
         return extractContent(Jsoup.parse(input, null, ""), contentIndicator, mobilize);
     }
 
-    public static String extractContent(Document doc, String contentIndicator, boolean mobilize) {
+    public static String extractContent(Document doc, String contentIndicator, Mobilize mobilize) {
         if (doc == null)
             throw new NullPointerException("missing document");
 
@@ -64,7 +66,7 @@ public class ArticleTextExtractor {
         prepareDocument(doc, mobilize);
 
         Element bestMatchElement = doc;
-        if ( mobilize ) {
+        if ( mobilize == Mobilize.Yes ) {
             // init elements
             Collection<Element> nodes = getNodes(doc);
             int maxWeight = 0;
@@ -111,7 +113,7 @@ public class ArticleTextExtractor {
         }
 
 
-        if ( mobilize && PrefUtils.getBoolean(PrefUtils.LOAD_COMMENTS, false)) {
+        if ( mobilize == Mobilize.Yes && PrefUtils.getBoolean(PrefUtils.LOAD_COMMENTS, false)) {
             Element comments = doc.getElementById("comments");
             if (comments != null) {
                 Elements li = comments.getElementsByTag("li");
@@ -126,7 +128,7 @@ public class ArticleTextExtractor {
             }
         }
 
-        if ( !mobilize ) {
+        if ( mobilize == Mobilize.No ) {
             ret = ret.replaceAll("<table(.)*?>", "<p>");
             ret = ret.replaceAll("</table>", "</p>");
 
@@ -301,9 +303,9 @@ public class ArticleTextExtractor {
      * @param doc document to prepare. Passed as reference, and changed inside
      *            of function
      */
-    private static void prepareDocument(Document doc, boolean mobilize) {
+    private static void prepareDocument(Document doc, Mobilize mobilize) {
         // stripUnlikelyCandidates(doc);
-        if ( mobilize )
+        if ( mobilize == Mobilize.Yes )
             removeSelectsAndOptions(doc);
         removeScriptsAndStyles(doc);
     }

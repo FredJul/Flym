@@ -27,13 +27,13 @@ import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import ru.yanus171.feedexfork.R;
-import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
-import ru.yanus171.feedexfork.utils.UiUtils;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Locale;
+
+import ru.yanus171.feedexfork.R;
+import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
+import ru.yanus171.feedexfork.utils.UiUtils;
 
 public class AddGoogleNewsActivity extends BaseActivity {
 
@@ -79,7 +79,7 @@ public class AddGoogleNewsActivity extends BaseActivity {
                 for (int topic = 0; topic < TOPIC_NAME.length; topic++) {
                     if (((CheckBox) findViewById(CB_IDS[topic])).isChecked() && TOPIC_CODES[topic] != null) {
                         String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss&topic=" + TOPIC_CODES[topic];
-                        FeedDataContentProvider.addFeed(this, url, getString(TOPIC_NAME[topic]), true, false);
+                        FeedDataContentProvider.addFeed(this, url, getString(TOPIC_NAME[topic]), null, true, false);
                     }
                 }
 
@@ -88,7 +88,7 @@ public class AddGoogleNewsActivity extends BaseActivity {
                 {
                     try {
                         String url = "http://news.google.com/news?hl=" + Locale.getDefault().getLanguage() + "&output=rss&q=" + URLEncoder.encode(custom_topic, "UTF-8");
-                        FeedDataContentProvider.addFeed(this, url, custom_topic, true, false);
+                        FeedDataContentProvider.addFeed(this, url, custom_topic, null,  true, false);
                     } catch (UnsupportedEncodingException ignored) {
                     }
                 }

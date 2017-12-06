@@ -63,6 +63,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CheckBox;
@@ -104,7 +105,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     static final String FEED_SEARCH_DESC = "description";//"contentSnippet";
     private static final String STATE_CURRENT_TAB = "STATE_CURRENT_TAB";
     private static final String[] FEED_PROJECTION =
-        new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.IS_GROUP, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH, FeedColumns.GROUP_ID };
+        new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.IS_GROUP, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH, FeedColumns.GROUP_ID, FeedColumns.IS_IMAGE_AUTO_LOAD };
     private final ActionMode.Callback mFilterActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -224,7 +225,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     private EditText mNameEditText, mUrlEditText;
     private CheckBox mRetrieveFulltextCb;
     private CheckBox mShowTextInEntryListCb;
-    private CheckBox mIsAutoRefreshCb;
+    private CheckBox mIsAutoRefreshCb, mIsAutoImageLoadCb;
     private ListView mFiltersListView;
     private Spinner mGroupSpinner;
     private CheckBox mHasGroupCb;
@@ -251,6 +252,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         mRetrieveFulltextCb = (CheckBox) findViewById(R.id.retrieve_fulltext);
         mShowTextInEntryListCb = (CheckBox) findViewById(R.id.show_text_in_entry_list);
         mIsAutoRefreshCb =  (CheckBox) findViewById(R.id.auto_refresh);
+        mIsAutoImageLoadCb =  (CheckBox) findViewById(R.id.auto_image_load);
         mFiltersListView = (ListView) findViewById(android.R.id.list);
         mGroupSpinner = (Spinner) findViewById(R.id.spin_group);
         mHasGroupCb = (CheckBox) findViewById(R.id.has_group);
@@ -293,6 +295,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mGroupSpinner.setAdapter( adapter );
 
+        mIsAutoImageLoadCb.setVisibility( PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true) ? View.VISIBLE : View.GONE );
 
         if (intent.getAction().equals(Intent.ACTION_INSERT) || intent.getAction().equals(Intent.ACTION_SEND)) {
             setTitle(R.string.new_feed_title);
@@ -303,7 +306,11 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                 mUrlEditText.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
             }
             mHasGroupCb.setChecked(false);
+            mIsAutoImageLoadCb.setChecked( true );
+
             UpdateSpinnerGroup();
+
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
             setTitle(R.string.new_feed_title);
 
@@ -326,6 +333,8 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
 
             getLoaderManager().initLoader(0, null, this);
 
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
             if (savedInstanceState == null) {
                 Cursor cursor = getContentResolver().query(intent.getData(), FEED_PROJECTION, null, null, null);
 
@@ -335,6 +344,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     mRetrieveFulltextCb.setChecked(cursor.getInt(2) == 1);
                     mShowTextInEntryListCb.setChecked(cursor.getInt(4) == 1);
                     mIsAutoRefreshCb.setChecked(cursor.getInt(5) == 1);
+                    mIsAutoImageLoadCb.setChecked(cursor.isNull(7) || cursor.getInt(7) == 1);
                     mGroupSpinner.setSelection( -1);
                     mHasGroupCb.setChecked(!cursor.isNull(6));
                     UpdateSpinnerGroup();
@@ -396,6 +406,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     values.put(FeedColumns.RETRIEVE_FULLTEXT, mRetrieveFulltextCb.isChecked() ? 1 : null);
                     values.put(FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, mShowTextInEntryListCb.isChecked() ? 1 : null);
                     values.put(FeedColumns.IS_AUTO_REFRESH, mIsAutoRefreshCb.isChecked() ? 1 : null);
+                    values.put(FeedColumns.IS_IMAGE_AUTO_LOAD, mIsAutoImageLoadCb.isChecked() ? 1 : 0);
                     values.put(FeedColumns.FETCH_MODE, 0);
                     if ( mHasGroupCb.isChecked() && mGroupSpinner.getSelectedItemId() != AdapterView.INVALID_ROW_ID )
                         values.put(FeedColumns.GROUP_ID, mGroupSpinner.getSelectedItemId() );
@@ -503,6 +514,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                                         FeedDataContentProvider.addFeed(EditFeedActivity.this,
                                                                         data.get(which).get(FEED_SEARCH_URL),
                                                                         name.isEmpty() ? data.get(which).get(FEED_SEARCH_TITLE) : name,
+                                                                        mHasGroupCb.isChecked() ? mGroupSpinner.getSelectedItemId() : null,
                                                                         mRetrieveFulltextCb.isChecked(),
                                                                         mShowTextInEntryListCb.isChecked());
 
@@ -522,6 +534,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     FeedDataContentProvider.addFeed(EditFeedActivity.this,
                                                     urlOrSearch,
                                                     name,
+                                                    mHasGroupCb.isChecked() ? mGroupSpinner.getSelectedItemId() : null,
                                                     mRetrieveFulltextCb.isChecked(),
                                                     mShowTextInEntryListCb.isChecked());
 

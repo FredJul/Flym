@@ -120,6 +120,14 @@
                         android:layout_below="@+id/show_text_in_entry_list"
                         android:layout_marginRight="10dp"
                         android:text="@string/auto_refresh_feed"/>
+                    <CheckBox
+                        android:id="@+id/auto_image_load"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/auto_refresh"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/auto_image_load"/>
                 </RelativeLayout>
 
                 <RelativeLayout

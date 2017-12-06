@@ -37,6 +37,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -70,6 +71,7 @@ import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.utils.ArticleTextExtractor;
 import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
@@ -81,16 +83,16 @@ import static ru.yanus171.feedexfork.utils.PrefUtils.DISPLAY_ENTRIES_FULLSCREEN;
 import static ru.yanus171.feedexfork.utils.PrefUtils.getBoolean;
 
 
-public class EntryFragment extends SwipeRefreshFragment implements LoaderManager.LoaderCallbacks<Cursor>, EntryView.EntryViewManager {
+public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderManager.LoaderCallbacks<Cursor>, EntryView.EntryViewManager {
 
     private static final String STATE_BASE_URI = "STATE_BASE_URI";
     private static final String STATE_CURRENT_PAGER_POS = "STATE_CURRENT_PAGER_POS";
     private static final String STATE_ENTRIES_IDS = "STATE_ENTRIES_IDS";
     private static final String STATE_INITIAL_ENTRY_ID = "STATE_INITIAL_ENTRY_ID";
 
-    private int mTitlePos = -1, mDatePos, mMobilizedHtmlPos, mAbstractPos, mLinkPos, mIsFavoritePos, mIsReadPos, mEnclosurePos, mAuthorPos, mFeedNamePos, mFeedUrlPos, mFeedIconPos;
+    private int mTitlePos = -1, mDatePos, mMobilizedHtmlPos, mAbstractPos, mLinkPos, mIsFavoritePos, mIsReadPos, mEnclosurePos, mAuthorPos, mFeedNamePos, mFeedUrlPos, mFeedIconPos, mScrollPosPos;
 
-    private int mCurrentPagerPos = -1;
+    private int mCurrentPagerPos = -1, mLastPagerPos = -1;
     private Uri mBaseUri;
     private long mInitialEntryId = -1;
     private long[] mEntriesIds;
@@ -113,11 +115,15 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
         mEntryPagerAdapter = new EntryPagerAdapter();
 
+
         super.onCreate(savedInstanceState);
     }
 
+    //@Override
+    //public View inflateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     @Override
-    public View inflateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_entry, container, true);
 
         mStatusText = new StatusText( (TextView)rootView.findViewById( R.id.statusText ),
@@ -174,6 +180,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                 PrefUtils.putString(PrefUtils.LAST_ENTRY_URI, ContentUris.withAppendedId(mBaseUri, getCurrentEntryID()).toString());
 
                 refreshUI(mEntryPagerAdapter.getCursor(i));
+                mLastPagerPos = i;
             }
 
             @Override
@@ -199,7 +206,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
             }
         });
 
-        disableSwipe();
+        //disableSwipe();
 
         HideButtonText(rootView, R.id.pageDownBtnVert, true);
         HideButtonText(rootView, R.id.pageDownBtn, true);
@@ -295,7 +302,8 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
         super.onPause();
         EntryView entryView = mEntryPagerAdapter.mEntryViews.get(mEntryPager.getCurrentItem());
         if (entryView != null) {
-            PrefUtils.putInt(PrefUtils.LAST_ENTRY_SCROLL_Y, entryView.getScrollY());
+            //PrefUtils.putInt(PrefUtils.LAST_ENTRY_SCROLL_Y, entryView.getScrollY());
+            mEntryPagerAdapter.SaveScrollPos();
             PrefUtils.putLong(PrefUtils.LAST_ENTRY_ID, getCurrentEntryID());
 
         }
@@ -462,7 +470,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
                     int status = FetcherService.getStatusText().Start("Reload fulltext"); try {
                         DeleteMobilized();
-                        LoadFullText( true );
+                        LoadFullText( ArticleTextExtractor.Mobilize.Yes );
                     } finally { FetcherService.getStatusText().End( status ); }
                     break;
                 }
@@ -471,7 +479,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
                     int status = FetcherService.getStatusText().Start("Reload fulltext"); try {
                         DeleteMobilized();
-                        LoadFullText( false );
+                        LoadFullText( ArticleTextExtractor.Mobilize.No );
                     } finally { FetcherService.getStatusText().End( status ); }
                     break;
                 }
@@ -503,11 +511,14 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
     }
 
     public void setData(Uri uri) {
+        //Dog.v( String.format( "EntryFragment.setData( %s )", uri.toString() ) );
+
         mCurrentPagerPos = -1;
 
         //PrefUtils.putString( PrefUtils.LAST_URI, uri.toString() );
 
         mBaseUri = FeedData.EntryColumns.PARENT_URI(uri.getPath());
+        Dog.v( String.format( "EntryFragment.setData( %s ) baseUri = %s", uri.toString(), mBaseUri ) );
         try {
             mInitialEntryId = Long.parseLong(uri.getLastPathSegment());
         } catch (Exception unused) {
@@ -537,7 +548,6 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
         } else {
             mEntriesIds = null;
         }
-
         mEntryPagerAdapter.notifyDataSetChanged();
         if (mCurrentPagerPos != -1) {
             mEntryPager.setCurrentItem(mCurrentPagerPos);
@@ -567,11 +577,12 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
             } else {
                 //--hideSwipeProgress();
             }
-            refreshSwipeProgress();
+            //refreshSwipeProgress();
 
-            // Mark the article as read
-            if (entryCursor.getInt(mIsReadPos) != 1) {
-                final Uri uri = ContentUris.withAppendedId(mBaseUri, getCurrentEntryID());
+            // Mark the previous opened article as read
+            //if (entryCursor.getInt(mIsReadPos) != 1) {
+            if ( mLastPagerPos != -1 && mEntryPagerAdapter.getCursor(mLastPagerPos).getInt(mIsReadPos) != 1 ) {
+                final Uri uri = ContentUris.withAppendedId(mBaseUri, mEntriesIds[mLastPagerPos]);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -581,7 +592,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                         // Update the cursor
                         Cursor updatedCursor = cr.query(uri, null, null, null, null);
                         updatedCursor.moveToFirst();
-                        mEntryPagerAdapter.setUpdatedCursor(mCurrentPagerPos, updatedCursor);
+                        mEntryPagerAdapter.setUpdatedCursor(mLastPagerPos, updatedCursor);
                     }
                 }).start();
             }
@@ -641,11 +652,11 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                 }
             });
         } else /*--if (!isRefreshing())*/ {
-            LoadFullText( true );
+            LoadFullText( ArticleTextExtractor.Mobilize.Yes );
         }
     }
 
-    private void LoadFullText( final boolean mobilize ) {
+    private void LoadFullText(final ArticleTextExtractor.Mobilize mobilize ) {
         final BaseActivity activity = (BaseActivity) getActivity();
         ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -659,19 +670,19 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                 @Override
                 public void run() {
                     int status = FetcherService.getStatusText().Start(getActivity().getString(R.string.loadFullText)); try {
-                        FetcherService.mobilizeEntry(getContext().getContentResolver(), getCurrentEntryID(), mobilize);
+                        FetcherService.mobilizeEntry(getContext().getContentResolver(), getCurrentEntryID(), mobilize, FetcherService.AutoDownloadEntryImages.Yes);
                     } finally { FetcherService.getStatusText().End( status ); }
                 }
             }.start();
 
 
 
-            activity.runOnUiThread(new Runnable() {
+            /*activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     refreshSwipeProgress();
                 }
-            });
+            });*/
         } else {
             activity.runOnUiThread(new Runnable() {
                 @Override
@@ -795,6 +806,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                 mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
                 mEnclosurePos = cursor.getColumnIndex(EntryColumns.ENCLOSURE);
                 mAuthorPos = cursor.getColumnIndex(EntryColumns.AUTHOR);
+                mScrollPosPos = cursor.getColumnIndex(EntryColumns.SCROLL_POS);
                 mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
                 mFeedUrlPos = cursor.getColumnIndex(FeedColumns.URL);
                 mFeedIconPos = cursor.getColumnIndex(FeedColumns.ICON);
@@ -819,10 +831,10 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
 
 
 
-    @Override
+    /*@Override
     public void onRefresh() {
         // Nothing to do
-    }
+    }*/
 
     public class EntryPagerAdapter extends PagerAdapter {
 
@@ -837,13 +849,32 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        public void destroyItem(ViewGroup container, final int position, Object object) {
             Dog.d( "EntryPagerAdapter.destroyItem " + position );
             FetcherService.removeActiveEntryID( mEntriesIds[position] );
             getLoaderManager().destroyLoader(position);
             container.removeView((View) object);
             EntryView.mImageDownloadObservable.deleteObserver(mEntryViews.get(position));
+            SaveScrollPos();
             mEntryViews.delete(position);
+        }
+
+        private void SaveScrollPos() {
+            final long entryID = getCurrentEntryID();
+            new Thread() {
+                @Override
+                public void run() {
+                    ContentValues values = new ContentValues();
+                    EntryView view = mEntryViews.get(mCurrentPagerPos);
+                    if ( view != null ) {
+                        final int scroll = view.getScrollY();
+                        values.put(EntryColumns.SCROLL_POS, scroll);
+                        ContentResolver cr = MainApplication.getContext().getContentResolver();
+                        cr.update(EntryColumns.CONTENT_URI(entryID), values, EntryColumns.SCROLL_POS + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.SCROLL_POS + " < " + scroll, null);
+                        Dog.v(String.format("EntryPagerAdapter.SaveScrollPos (entry %d) update scrollPos = %d", entryID, scroll));
+                    }
+                }
+            }.start();
         }
 
         @Override
@@ -891,6 +922,7 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                     String link = "";
                     String title = "";
                     String enclosure = "";
+                    int scrollPos = 0;
                     try {
                         contentText = newCursor.getString(mMobilizedHtmlPos);
                         if (contentText == null || (forceUpdate && !mPreferFullText)) {
@@ -908,6 +940,8 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                         link = newCursor.getString(mLinkPos);
                         title = newCursor.getString(mTitlePos);
                         enclosure = newCursor.getString(mEnclosurePos);
+                        if ( !newCursor.isNull(mScrollPosPos) )
+                            scrollPos = newCursor.getInt(mScrollPosPos);
                     } catch ( IllegalStateException e ) {
                         contentText = "Context too large";
                     }
@@ -927,13 +961,14 @@ public class EntryFragment extends SwipeRefreshFragment implements LoaderManager
                     if (pagerPos == mCurrentPagerPos) {
                         refreshUI(newCursor);
 
-                        //PrefUtils.putString(PrefUtils.LAST_URI, uri.toString());
+                        //if (PrefUtils.getLong(PrefUtils.LAST_ENTRY_ID, 0) == mEntriesIds[pagerPos]) {
+                            //int dy = mScrollPosPos;
+                            //if (dy > view.getScrollY())
+                        view.mScrollY = view.getScrollY() >  scrollPos ? view.getScrollY() : scrollPos;
+                        Dog.v( String.format( "displayEntry view.mScrollY  (entry %s) view.mScrollY = %d", getCurrentEntryID(),  view.mScrollY ) );
+                        //Dog.v( "displayEntry view.mScrollY = " + view.mScrollY );
+                        //}
 
-                        if (PrefUtils.getLong(PrefUtils.LAST_ENTRY_ID, 0) == mEntriesIds[pagerPos]) {
-                            int dy = PrefUtils.getInt(PrefUtils.LAST_ENTRY_SCROLL_Y, 0);
-                            if (dy > view.getScrollY())
-                                view.mScrollY = dy;
-                        }
 
                     }
 

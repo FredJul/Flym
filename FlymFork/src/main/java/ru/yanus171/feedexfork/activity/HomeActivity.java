@@ -385,9 +385,11 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 long feedOrGroupId = mDrawerAdapter.getItemId(position);
                 if (feedOrGroupId != -1) {
                     if (mDrawerAdapter.isItemAGroup(position)) {
-                        newUri = EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
+                        //newUri = EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
+                        newUri = mEntriesFragment.mShowUnRead ? EntryColumns.UNREAD_ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId) : EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
                     } else {
-                        newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
+                        //newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
+                        newUri = mEntriesFragment.mShowUnRead ? EntryColumns.UNREAD_ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId) : EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
                         showFeedInfo = false;
                     }
                 } else

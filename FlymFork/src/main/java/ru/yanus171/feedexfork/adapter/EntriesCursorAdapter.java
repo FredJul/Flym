@@ -98,6 +98,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo, boolean showEntryText, boolean showUnread) {
         super(context, R.layout.item_entry_list, cursor, 0);
+        //Dog.v( String.format( "new EntriesCursorAdapter( %s, showUnread = %b )", uri.toString() ,showUnread ) );
         mContext = context;
         mUri = uri;
         mShowFeedInfo = showFeedInfo;
@@ -150,25 +151,30 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             view.setTag(R.id.holder, holder);
 
             view.findViewById( R.id.layout_root ).setOnTouchListener( new View.OnTouchListener() {
-                private int padding = 0;
+                private int paddingX = 0;
+                private int paddingY = 0;
                 private int initialx = 0;
                 private int initialy = 0;
                 private int currentx = 0;
+                private int currenty = 0;
                 private boolean isPress = false;
                 private long downTime = 0;
                 //private boolean wasMove = false;
                 //private  ViewHolder viewHolder;
 
                 public boolean onTouch(View v, MotionEvent event) {
-                    final int min = 40;
+                    final int minX = 40;
+                    final int minY = 20;
 
                     final ViewHolder holder = (ViewHolder) ( (ViewGroup)v.getParent() ).getTag(R.id.holder);
                     if ( event.getAction() == MotionEvent.ACTION_DOWN) {
                         Dog.v( "onTouch ACTION_DOWN" );
-                        padding = 0;
+                        paddingX = 0;
+                        paddingY = 0;
                         initialx = (int) event.getX();
                         initialy = (int) event.getY();
                         currentx = (int) event.getX();
+                        currenty = (int) event.getY();
                         downTime = android.os.SystemClock.elapsedRealtime();
                         //wasMove = false;
                         view.getParent().requestDisallowInterceptTouchEvent(true);
@@ -187,13 +193,17 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                     if ( event.getAction() == MotionEvent.ACTION_MOVE) {
 
                         currentx = (int) event.getX();
-                        padding = currentx - initialx;
-                        Dog.v( "onTouch ACTION_MOVE " + padding );
+                        currenty = (int) event.getY();
+                        paddingX = currentx - initialx;
+                        paddingY = currenty - initialy;
+                        Dog.v( "onTouch ACTION_MOVE " + paddingX + ", " + paddingY );
 
                         //allow vertical scrolling
-                        if ( Math.abs( initialy - event.getY() ) > min && view.getParent() != null )
+                        if ( ( initialx < minX * 2 || Math.abs( paddingY ) > Math.abs( paddingX ) ) &&
+                             Math.abs( initialy - event.getY() ) > minY &&
+                             view.getParent() != null )
                             view.getParent().requestDisallowInterceptTouchEvent(false);
-                        if ( Math.abs( initialy - event.getY() ) > min  )
+                        if ( Math.abs( initialy - event.getY() ) > minY  )
                             isPress = false;
                     }
 
@@ -202,25 +212,27 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
                     int overlap = holder.readToggleSwypeBtnView.getWidth() / 2;
                     int threshold = holder.readToggleSwypeBtnView.getWidth();
-                    if ( threshold < min )
-                        threshold = min + 5;
+                    if ( threshold < minX )
+                        threshold = minX + 5;
                     int max = threshold + overlap;
 
                     if ( event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL ) {
                         isPress = false;
                         if ( event.getAction() == MotionEvent.ACTION_UP ) {
                             Dog.v("onTouch ACTION_UP" );
-                            if ( Math.abs( padding ) < min
-                                 && android.os.SystemClock.elapsedRealtime() - downTime < ViewConfiguration.getLongPressTimeout() )
+                            if ( Math.abs( paddingX ) < minX &&
+                                 Math.abs( paddingY ) < minY &&
+                                 android.os.SystemClock.elapsedRealtime() - downTime < ViewConfiguration.getLongPressTimeout() )
                                 v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, holder.entryID)));
-                            else if (padding >= threshold)
+                            else if ( Math.abs( paddingX ) > Math.abs( paddingY ) && paddingX >= threshold)
                                 toggleReadState(holder.entryID, view);
-                            else if (padding <= -threshold)
+                            else if ( Math.abs( paddingX ) > Math.abs( paddingY ) && paddingX <= -threshold)
                                 toggleFavoriteState( holder.entryID, view );
                         } else {
                             Dog.v("onTouch ACTION_CANCEL");
                         }
-                        padding = 0;
+                        paddingX = 0;
+                        paddingY = 0;
                         initialx = 0;
                         initialx = 0;
                         currentx = 0;
@@ -229,37 +241,40 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                             view.getParent().requestDisallowInterceptTouchEvent(false);
                     }
 
-                    if ( padding > max )
-                        padding = max;
-                    if ( padding < -max )
-                        padding = -max;
+                    if ( paddingX > max )
+                        paddingX = max;
+                    if ( paddingX < -max )
+                        paddingX = -max;
 
                     // block left drawable area
-                    if ( initialx < min * 2 ) {
+                    if ( initialx < minX * 2 ) {
                         isPress = false;
-                        padding = 0;
+                        paddingX = 0;
                     }
 
-                    if ( Math.abs( padding ) < min )
-                        padding = 0;
+                    if ( Math.abs( paddingX ) < minX )
+                        paddingX = 0;
+
+                    if ( Math.abs( paddingY ) < minY )
+                        paddingY = 0;
 
                     // no long tap when large move
-                    if( Math.abs( padding ) > min )
+                    if( Math.abs( paddingX ) > minX || Math.abs( paddingY ) > minY )
                         isPress = false;
 
-                    if( padding >= threshold ) {
+                    if( Math.abs( paddingX ) > Math.abs( paddingY ) && paddingX >= threshold ) {
                         //
                         //
                         //
                         holder.readToggleSwypeBtnView.setVisibility(View.VISIBLE);
                     }
-                    if( padding <= -threshold ) {
+                    if( Math.abs( paddingX ) > Math.abs( paddingY ) && paddingX <= -threshold ) {
                         holder.starToggleSwypeBtnView.setVisibility( View.VISIBLE );
                     }
 
-                    v.setPadding(padding > 0 ? padding : 0, 0, padding < 0 ? -padding : 0, 0);
+                    v.setPadding(paddingX > 0 ? paddingX : 0, 0, paddingX < 0 ? -paddingX : 0, 0);
 
-                    Dog.v(" onTouch padding = " + padding + ", min= " + min + ", isPress = " + isPress + ", threshold = " + threshold );
+                    Dog.v(" onTouch paddingX = " + paddingX + ", paddingY= " + paddingY + ", minX= " + minX + ", minY= " + minY + ", isPress = " + isPress + ", threshold = " + threshold );
                     return true;
                 }
             } );

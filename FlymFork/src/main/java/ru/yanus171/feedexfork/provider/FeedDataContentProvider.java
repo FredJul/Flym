@@ -149,7 +149,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
     private DatabaseHelper mDatabaseHelper;
 
-    public static void addFeed(Context context, String url, String name, boolean retrieveFullText, boolean showTextInEntryList) {
+    public static void addFeed(Context context, String url, String name, Long groupID, boolean retrieveFullText, boolean showTextInEntryList) {
         ContentResolver cr = context.getContentResolver();
 
         if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME)) {
@@ -174,6 +174,11 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             values.put(FeedColumns.RETRIEVE_FULLTEXT, retrieveFullText ? 1 : null);
             values.put(FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, showTextInEntryList ? 1 : null);
+            if ( groupID != null )
+                values.put(FeedColumns.GROUP_ID, groupID );
+            else
+                values.putNull( FeedColumns.GROUP_ID );
+
             cr.insert(FeedColumns.CONTENT_URI, values);
         }
     }
@@ -400,12 +405,13 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_GROUPS:
             case URI_FEEDS: {
                 Cursor cursor;
-                if (values.containsKey(FeedColumns.GROUP_ID)) {
+                if ( matchCode == URI_GROUPS  ) {
+                    cursor = query(FeedColumns.GROUPS_CONTENT_URI, MAX_PRIORITY, null, null, null);
+                } else if ( matchCode == URI_FEEDS && values.getAsInteger( FeedColumns.GROUP_ID ) != null ) {//values.containsKey(FeedColumns.GROUP_ID)  ) {
                     String groupId = values.getAsString(FeedColumns.GROUP_ID);
                     cursor = query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupId), MAX_PRIORITY, null, null, null);
-                } else {
-                    cursor = query(FeedColumns.GROUPS_CONTENT_URI, MAX_PRIORITY, null, null, null);
-                }
+                } else
+                    cursor = query(FeedColumns.CONTENT_URI, MAX_PRIORITY, FeedColumns.GROUP_ID + Constants.DB_IS_NULL, null, null);
 
                 if (cursor.moveToFirst()) { // normally this is always the case with MAX()
                     values.put(FeedColumns.PRIORITY, cursor.getInt(0) + 1);

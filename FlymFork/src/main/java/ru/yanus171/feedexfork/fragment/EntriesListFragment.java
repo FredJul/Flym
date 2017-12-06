@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
@@ -62,11 +63,12 @@ import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
 import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
 import ru.yanus171.feedexfork.view.StatusText;
 
-public class EntriesListFragment extends SwipeRefreshListFragment {
+public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
 
     private static final String STATE_CURRENT_URI = "STATE_CURRENT_URI";
     private static final String STATE_ORIGINAL_URI = "STATE_ORIGINAL_URI";
@@ -87,7 +89,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     private Cursor mJustMarkedAsReadEntries;
     private FloatingActionButton mFab;
     private AbsListView mListView;
-    private boolean mShowUnRead = false;
+    public boolean mShowUnRead = false;
     private boolean mNeedSetSelection = false;
     private Menu mMenu = null;
     private long mListDisplayDate = new Date().getTime();
@@ -123,7 +125,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (PrefUtils.IS_REFRESHING.equals(key)) {
-                refreshSwipeProgress();
+                //refreshSwipeProgress();
                 UpdateActions();
             }
         }
@@ -198,6 +200,9 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+
+        Dog.v( "EntriesListFragment.onCreate" );
+
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
@@ -207,12 +212,15 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             mShowFeedInfo = savedInstanceState.getBoolean(STATE_SHOW_FEED_INFO);
             mListDisplayDate = savedInstanceState.getLong(STATE_LIST_DISPLAY_DATE);
             mShowTextInEntryList = savedInstanceState.getBoolean(STATE_SHOW_TEXT_IN_ENTRY_LIST);
-            mShowUnRead = savedInstanceState.getBoolean(STATE_SHOW_UNREAD);
+            mShowUnRead = savedInstanceState.getBoolean(STATE_SHOW_UNREAD, PrefUtils.getBoolean( STATE_SHOW_UNREAD, false ));
+            Dog.v( String.format( "EntriesListFragment.onCreate mShowUnRead = %b", mShowUnRead ) );
 
             if ( mShowTextInEntryList )
                 mNeedSetSelection = true;
             mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo, mShowTextInEntryList, mShowUnRead);
-        }
+        } else
+            mShowUnRead = PrefUtils.getBoolean( STATE_SHOW_UNREAD, false );
+
 
     }
 
@@ -220,7 +228,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     public void onStart() {
         super.onStart();
         refreshUI(); // Should not be useful, but it's a security
-        refreshSwipeProgress();
+        //refreshSwipeProgress();
         PrefUtils.registerOnPrefChangeListener(mPrefListener);
 
         mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
@@ -250,9 +258,9 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
-    @Override
-    public View inflateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    //public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    //@Override
+    //public View inflateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_entry_list, container, true);
         new StatusText( (TextView)rootView.findViewById( R.id.statusText1 ),
                         FetcherService.getStatusText()/*,
@@ -351,7 +359,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         mListView.setEmptyView( emptyView );
 
 
-        disableSwipe();
+        //disableSwipe();
 
         return rootView;
     }
@@ -380,6 +388,8 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     public void onStop() {
         PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
 
+        PrefUtils.putBoolean( STATE_SHOW_UNREAD, mShowUnRead );
+
         if (mJustMarkedAsReadEntries != null && !mJustMarkedAsReadEntries.isClosed()) {
             mJustMarkedAsReadEntries.close();
         }
@@ -402,10 +412,10 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
         super.onSaveInstanceState(outState);
     }
 
-    @Override
+    /*@Override
     public void onRefresh() {
         startRefresh();
-    }
+    }*/
 
     /*@Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
@@ -602,7 +612,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
             }
         }
 
-        refreshSwipeProgress();
+        //refreshSwipeProgress();
     }
 
     public Uri getUri() {
@@ -610,7 +620,7 @@ public class EntriesListFragment extends SwipeRefreshListFragment {
     }
 
     public void setData(Uri uri, boolean showFeedInfo, boolean isSearchUri, boolean showTextInEntryList) {
-
+        Dog.v( String.format( "EntriesListFragment.setData( %s )", uri.toString() ) );
         mCurrentUri = uri;
         if (!isSearchUri) {
             mOriginalUri = mCurrentUri;

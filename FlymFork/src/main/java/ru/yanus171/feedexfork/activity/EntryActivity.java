@@ -33,6 +33,7 @@ import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.fragment.EntryFragment;
 import ru.yanus171.feedexfork.provider.FeedData;
+import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.service.FetcherService;
 import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.PrefUtils;
@@ -136,6 +137,9 @@ public class EntryActivity extends BaseActivity {
                 ContentResolver cr = getContentResolver();
                 cr.delete(FeedData.TaskColumns.CONTENT_URI, FeedData.TaskColumns.ENTRY_ID + " = " + mEntryFragment.getCurrentEntryID(), null);
                 FetcherService.setDownloadImageCursorNeedsRequery(true);
+
+                //mark as read
+                cr.update(EntryColumns.CONTENT_URI(  mEntryFragment.getCurrentEntryID() ), FeedData.getReadContentValues(), null, null);
             }
         }.start();
 

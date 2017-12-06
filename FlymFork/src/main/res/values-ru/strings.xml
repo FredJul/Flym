@@ -346,7 +346,7 @@
     <string name="pageUp">Страница вверх</string>
     <string name="pageDown">Страница вниз</string>
     <string name="fullScreenToggle">Пркл. полный экран</string>
-    <string name="auto_refresh_feed">Автоматическое обновление</string>
+    <string name="auto_refresh_feed">Обновлять автоматически</string>
     <string name="settings_refresh_only_selected">Только выбранные</string>
     <string name="settings_refresh_only_selected_summary">автоматическое обновление только выбранных лент</string>
     <string name="actionBarToggle">Пркл. панель действий</string>
@@ -360,5 +360,6 @@
     <string name="question_delete_entry">Удалить статью?</string>
     <string name="share_all_text">Поделиться текстом</string>
     <string name="group">Группа</string>
+    <string name="auto_image_load">Загружать изображения при автоматической загрузке</string>
 
 </resources>

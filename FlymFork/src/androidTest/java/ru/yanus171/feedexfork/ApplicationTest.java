@@ -29,7 +29,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         String link = "http://www.20minutes.fr/societe/1556095-20150305-sivens-prefet-tarn-interdit-toute-manifestation-albi-vendredi";
         HttpURLConnection connection = NetworkUtils.setupConnection(link);
 
-        String mobilizedHtml = ArticleTextExtractor.extractContent(connection.getInputStream(), "ou rassemblement ayant pour objet le projet de construction d", true);
+        String mobilizedHtml = ArticleTextExtractor.extractContent(connection.getInputStream(), "ou rassemblement ayant pour objet le projet de construction d",  ArticleTextExtractor.Mobilize.Yes);
         mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link));
         if (mobilizedHtml.contains("Doit se conformer")) {
             throw new Exception("got comment part");
@@ -40,7 +40,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         String link = "http://www.thairath.co.th/content/544335";
         HttpURLConnection connection = NetworkUtils.setupConnection(link);
 
-        String mobilizedHtml = ArticleTextExtractor.extractContent(connection.getInputStream(), "ฝนฟ้าคะนอง ฝนหนักบาง", true);
+        String mobilizedHtml = ArticleTextExtractor.extractContent(connection.getInputStream(), "ฝนฟ้าคะนอง ฝนหนักบาง",  ArticleTextExtractor.Mobilize.Yes);
         System.out.println(mobilizedHtml);
         mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link));
         if (!mobilizedHtml.contains("http://www.thairath.co.th/media/NjpUs24nCQKx5e1D74racLG80eobXUM1FQb68fZ0eH7.jpg")) {
@@ -52,7 +52,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         String link = "http://www.niceoppai.net/bleach/654/?all";
         HttpURLConnection connection = NetworkUtils.setupConnection(link);
 
-        String mobilizedHtml = ArticleTextExtractor.extractContent(connection.getInputStream(), "Ch. 654 Dec 04, 2015", true);
+        String mobilizedHtml = ArticleTextExtractor.extractContent(connection.getInputStream(), "Ch. 654 Dec 04, 2015", ArticleTextExtractor.Mobilize.Yes);
         System.out.println(mobilizedHtml);
         mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link));
     }

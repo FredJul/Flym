@@ -50,18 +50,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.os.Handler;
 
+import java.io.File;
+
 import ru.yanus171.feedexfork.parser.OPML;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
 import ru.yanus171.feedexfork.provider.FeedData.TaskColumns;
 
-import java.io.File;
-
 class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "FeedEx.db";
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 12;
 
     private static final String ALTER_TABLE = "ALTER TABLE ";
     private static final String ADD = " ADD ";
@@ -161,6 +161,11 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
         if (oldVersion < 11)
             executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.IS_AUTO_REFRESH + ' ' + FeedData.TYPE_BOOLEAN);
+
+        if (oldVersion < 12) {
+            executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.IS_IMAGE_AUTO_LOAD + ' ' + FeedData.TYPE_BOOLEAN);
+            executeCatchedSQL(database, ALTER_TABLE + EntryColumns.TABLE_NAME + ADD + EntryColumns.SCROLL_POS + ' ' + FeedData.TYPE_INT);
+        }
     }
 
     private void executeCatchedSQL(SQLiteDatabase database, String query) {
