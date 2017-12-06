@@ -6,11 +6,11 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.chimbori.crux.articles.ArticleExtractor
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_entry_details.*
 import me.thanel.swipeactionview.SwipeActionView
 import me.thanel.swipeactionview.SwipeGestureListener
+import net.dankito.readability4j.Readability4J
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
@@ -176,10 +176,8 @@ class EntryDetailsFragment : Fragment() {
                                     rawHTML = body.string()
                                 }
                             }
-                            val article = ArticleExtractor.with(entry.link, rawHTML)
-                                    .extractContent()  // If you only need metadata, you can skip `.extractorContent()`
-                                    .article()
-                            val html = article.document.html()
+
+                            val html = Readability4J(entry.link!!, rawHTML).parse().articleContent?.html()
                             uiThread {
                                 entry_view.loadDataWithBaseURL("", html, "text/html", UTF8, null)
                             }
