@@ -132,6 +132,9 @@ class EntriesFragment : Fragment() {
 					}
 				}
 
+				listDisplayDate = Date().time
+				initDataObservers()
+
 				if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
 					activity?.notificationManager?.cancel(0)
 				}

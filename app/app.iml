@@ -32,8 +32,8 @@
           <option name="jvmTarget" value="1.8" />
           <option name="addCompilerBuiltIns" value="true" />
           <option name="loadBuiltInsFromDependencies" value="true" />
-          <option name="languageVersion" value="1.2" />
-          <option name="apiVersion" value="1.2" />
+          <option name="languageVersion" value="1.1" />
+          <option name="apiVersion" value="1.1" />
           <option name="pluginOptions">
             <array>
               <option value="plugin:org.jetbrains.kotlin.android:experimental=true" />
@@ -43,8 +43,8 @@
           </option>
           <option name="pluginClasspaths">
             <array>
-              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-android-extensions/1.2.0/41b2a2ff56ce9abefb0d0d9d9750cdae749e9143/kotlin-android-extensions-1.2.0.jar" />
-              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-annotation-processing-gradle/1.2.0/d2cd3266a0bba63d34e9a7176e554571739c85d3/kotlin-annotation-processing-gradle-1.2.0.jar" />
+              <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/jetbrains/kotlin/kotlin-android-extensions/1.1.51/kotlin-android-extensions-1.1.51.jar" />
+              <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/jetbrains/kotlin/kotlin-annotation-processing/1.1.51/kotlin-annotation-processing-1.1.51.jar" />
             </array>
           </option>
         </compilerArguments>
@@ -146,7 +146,6 @@
     <orderEntry type="library" name="org.jetbrains.kotlinx:kotlinx-coroutines-android:0.15@jar" level="project" />
     <orderEntry type="library" name="org.jdom:jdom2:2.0.6@jar" level="project" />
     <orderEntry type="library" name="android.arch.lifecycle:extensions-1.0.0" level="project" />
-    <orderEntry type="library" name="org.jetbrains.kotlin:kotlin-stdlib:1.2.0@jar" level="project" />
     <orderEntry type="library" name="com.amulyakhare:com.amulyakhare.textdrawable-1.0.1" level="project" />
     <orderEntry type="library" name="org.jetbrains.anko:anko-appcompat-v7-commons:0.10.2@jar" level="project" />
     <orderEntry type="library" name="com.github.bumptech.glide:disklrucache:4.3.1@jar" level="project" />
@@ -164,24 +163,26 @@
     <orderEntry type="library" name="android.arch.core:common:1.0.0@jar" level="project" />
     <orderEntry type="library" name="android.arch.persistence:db-framework-1.0.0" level="project" />
     <orderEntry type="library" name="com.android.support:support-core-ui-27.0.2" level="project" />
-    <orderEntry type="library" name="android.arch.paging:common:1.0.0-alpha3@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-compat-27.0.2" level="project" />
+    <orderEntry type="library" name="org.jetbrains.kotlin:kotlin-stdlib:1.1.60@jar" level="project" />
     <orderEntry type="library" name="org.jetbrains.anko:anko-design:0.10.2@jar" level="project" />
     <orderEntry type="library" name="com.rometools:rome-opml:1.9.0@jar" level="project" />
     <orderEntry type="library" name="org.jetbrains.anko:anko-commons:0.10.2@jar" level="project" />
     <orderEntry type="library" name="org.jetbrains.anko:anko-appcompat-v7-coroutines:0.10.2@jar" level="project" />
+    <orderEntry type="library" name="android.arch.paging:common:1.0.0-alpha4@jar" level="project" />
+    <orderEntry type="library" name="android.arch.paging:runtime-1.0.0-alpha4" level="project" />
     <orderEntry type="library" name="com.github.Tunous:SwipeActionView-1.1.0" level="project" />
     <orderEntry type="library" name="nz.bradcampbell:paperparcel-2.0.4" level="project" />
     <orderEntry type="library" name="com.android.support:support-fragment-27.0.2" level="project" />
     <orderEntry type="library" name="com.android.support:support-media-compat-27.0.2" level="project" />
     <orderEntry type="library" name="com.github.jrvansuita:MaterialAbout-0.1.9" level="project" />
     <orderEntry type="library" name="org.jetbrains.anko:anko-appcompat-v7:0.10.2@jar" level="project" />
-    <orderEntry type="library" name="android.arch.paging:runtime-1.0.0-alpha3" level="project" />
     <orderEntry type="library" name="com.github.bumptech.glide:annotations:4.3.1@jar" level="project" />
     <orderEntry type="library" name="android.arch.core:runtime-1.0.0" level="project" />
     <orderEntry type="library" name="com.github.mirrajabi:search-dialog-1.2.1" level="project" />
     <orderEntry type="library" name="com.android.support:support-v4-27.0.2" level="project" />
     <orderEntry type="library" name="com.android.support:appcompat-v7-27.0.2" level="project" />
+    <orderEntry type="library" name="org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.1.51@jar" level="project" />
     <orderEntry type="library" name="org.jetbrains.anko:anko-design-coroutines:0.10.2@jar" level="project" />
     <orderEntry type="library" name="com.android.support:support-annotations:27.0.2@jar" level="project" />
     <orderEntry type="library" name="com.android.support:design-27.0.2" level="project" />
@@ -194,7 +195,6 @@
     <orderEntry type="library" name="com.squareup.okio:okio:1.13.0@jar" level="project" />
     <orderEntry type="library" name="com.bignerdranch.android:expandablerecyclerview-3.0.0-RC1" level="project" />
     <orderEntry type="library" name="org.slf4j:slf4j-api:1.7.25@jar" level="project" />
-    <orderEntry type="library" name="org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.2.0@jar" level="project" />
     <orderEntry type="library" name="android.arch.lifecycle:common:1.0.3@jar" level="project" />
     <orderEntry type="library" name="nz.bradcampbell:paperparcel-kotlin-2.0.4" level="project" />
     <orderEntry type="library" name="org.jetbrains.anko:anko-sdk21:0.10.2@jar" level="project" />
