@@ -118,12 +118,11 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    fun setEntry(entry: EntryWithFeed?) {
+    fun setEntry(entry: EntryWithFeed?, preferFullText: Boolean) {
         if (entry == null) {
             loadDataWithBaseURL("", "", TEXT_HTML, UTF8, null)
         } else {
-            // TODO dynamic switch
-            var contentText = entry.mobilizedContent ?: entry.description.orEmpty()
+            var contentText = if (preferFullText) entry.mobilizedContent ?: entry.description.orEmpty() else entry.description.orEmpty()
             if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
                 contentText = HtmlUtils.replaceImageURLs(contentText, entry.id)
                 if (settings.blockNetworkImage) {
