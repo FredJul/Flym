@@ -8,13 +8,20 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/menu_entry_details__fulltext"
+        android:title="@string/get_full_text"
+        android:icon="@drawable/ic_fulltext_white_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_entry_details__original_text"
+        android:title="@string/original_text"
+        android:icon="@drawable/ic_original_text_white_24dp"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/menu_entry_details__share"
         android:title="@string/menu_share"
         android:icon="@drawable/ic_share_24dp"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/menu_entry_details__fulltext"
-        android:title="@string/get_full_text"
-        android:icon="@drawable/ic_home_24dp"
         app:showAsAction="always" />
 </menu>

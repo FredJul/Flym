@@ -231,8 +231,15 @@ class MainActivity : AppCompatActivity(), MainNavigator {
     override fun goToEntriesList(feed: Feed?) {
         clearDetails()
         containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
-        val master = EntriesFragment.newInstance(feed)
-        supportFragmentManager.beginTransaction().replace(R.id.frame_master, master, TAG_MASTER).commit()
+
+        // We try to reuse the fragment to avoid loosing the bottom tab position
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_master)
+        if (currentFragment is EntriesFragment) {
+            currentFragment.feed = feed
+        } else {
+            val master = EntriesFragment.newInstance(feed)
+            supportFragmentManager.beginTransaction().replace(R.id.frame_master, master, TAG_MASTER).commit()
+        }
     }
 
     override fun goToEntryDetails(entry: EntryWithFeed, allEntryIds: List<String>) {

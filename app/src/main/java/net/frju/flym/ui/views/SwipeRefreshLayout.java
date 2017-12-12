@@ -286,8 +286,8 @@ public class SwipeRefreshLayout extends ViewGroup {
 						"SwipeRefreshLayout can host only one direct child");
 			}
 			mTarget = getChildAt(0);
-			mOriginalOffsetTop = mTarget.getTop() + getPaddingTop();
-		}
+            mOriginalOffsetTop = (mTarget != null ? mTarget.getTop() : 0) + getPaddingTop();
+        }
 		if (mDistanceToTriggerSync == -1) {
 			if (getParent() != null && ((View) getParent()).getHeight() > 0) {
 				final DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -434,8 +434,10 @@ public class SwipeRefreshLayout extends ViewGroup {
 		removeCallbacks(mCancel);
 		mReturnToStartPosition.run();
 		setRefreshing(true);
-		mListener.onRefresh();
-	}
+        if (mListener != null) {
+            mListener.onRefresh();
+        }
+    }
 
 	private void updateContentOffsetTop(int targetTop) {
 		final int currentTop = mTarget.getTop();
