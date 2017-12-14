@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.PopupMenu
 import android.text.Html
 import android.widget.Toast
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
@@ -146,6 +147,26 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                 feedAdapter.onFeedClick { view, feed ->
                     goToEntriesList(feed)
                     closeDrawer()
+                }
+
+                feedAdapter.onFeedLongClick { view, feed ->
+                    if (feed.isGroup) {
+                        return@onFeedLongClick
+                    }
+
+                    PopupMenu(this, view).apply {
+                        setOnMenuItemClickListener { item ->
+                            when (item.itemId) {
+                                R.id.mark_all_as_read -> doAsync { App.db.entryDao().markAsRead(feed.id) }
+                                R.id.edit -> {
+                                }//TODO
+                            }
+                            true
+                        }
+                        inflate(R.menu.drawer_feed)
+
+                        show()
+                    }
                 }
             }
         })

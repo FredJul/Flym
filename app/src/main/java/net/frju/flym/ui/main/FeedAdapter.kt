@@ -13,6 +13,7 @@ import net.fred.feedex.R
 import net.frju.flym.data.entities.Feed
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sdk21.coroutines.onClick
+import org.jetbrains.anko.sdk21.coroutines.onLongClick
 
 
 private const val STATE_SELECTED_ID = "STATE_SELECTED_ID"
@@ -20,6 +21,7 @@ private const val STATE_SELECTED_ID = "STATE_SELECTED_ID"
 class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup, Feed, FeedAdapter.FeedGroupViewHolder, FeedAdapter.FeedViewHolder>(groups) {
 
     var feedClickListener: ((View, Feed) -> Unit)? = null
+    var feedLongClickListener: ((View, Feed) -> Unit)? = null
     var selectedItemId = Feed.ALL_ENTRIES_ID
         set(newValue) {
             notifyParentDataSetChanged(true)
@@ -28,6 +30,10 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
 
     fun onFeedClick(listener: (View, Feed) -> Unit) {
         feedClickListener = listener
+    }
+
+    fun onFeedLongClick(listener: (View, Feed) -> Unit) {
+        feedLongClickListener = listener
     }
 
     override fun onCreateParentViewHolder(parentViewGroup: ViewGroup, viewType: Int): FeedGroupViewHolder {
@@ -97,6 +103,9 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
                 selectedItemId = group.feed.id
                 feedClickListener?.invoke(itemView, group.feed)
             }
+            itemView.onLongClick {
+                feedLongClickListener?.invoke(itemView, group.feed)
+            }
         }
 
         override fun shouldItemViewClickToggleExpansion(): Boolean = false
@@ -119,6 +128,9 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
             itemView.onClick {
                 selectedItemId = feed.id
                 feedClickListener?.invoke(itemView, feed)
+            }
+            itemView.onLongClick {
+                feedLongClickListener?.invoke(itemView, feed)
             }
         }
     }

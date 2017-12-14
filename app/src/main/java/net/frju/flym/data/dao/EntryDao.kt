@@ -2,11 +2,7 @@ package net.frju.flym.data.dao
 
 import android.arch.lifecycle.LiveData
 import android.arch.paging.LivePagedListProvider
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import net.frju.flym.data.entities.Entry
 import net.frju.flym.data.entities.EntryWithFeed
 
@@ -105,6 +101,9 @@ interface EntryDao {
 
 	@Query("UPDATE entries SET read = 0 WHERE id IN (:ids)")
 	fun markAsUnread(ids: List<String>)
+
+	@Query("UPDATE entries SET read = 1 WHERE feedId = :feedId")
+	fun markAsRead(feedId: Long)
 
 	@Query("DELETE FROM entries WHERE fetchDate < :keepDateBorderTime AND favorite = 0 AND read = 0")
 	fun deleteOlderThan(keepDateBorderTime: Long)

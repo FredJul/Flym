@@ -127,8 +127,7 @@ class EntryDetailsFragment : Fragment() {
 
     private fun updateUI() {
         doAsync {
-            entry.read = true
-            App.db.entryDao().insert(entry)
+            App.db.entryDao().markAsRead(listOf(entry.id))
         }
 
         preferFullText = true
@@ -241,6 +240,11 @@ class EntryDetailsFragment : Fragment() {
                         entry_view.setEntry(entry, preferFullText)
 
                         setupToolbar()
+                    }
+                    R.id.menu_entry_details__mark_as_unread -> {
+                        doAsync {
+                            App.db.entryDao().markAsUnread(listOf(entry.id))
+                        }
                     }
                 }
             }
