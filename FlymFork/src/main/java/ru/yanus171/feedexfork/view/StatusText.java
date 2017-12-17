@@ -27,11 +27,11 @@ import ru.yanus171.feedexfork.utils.PrefUtils;
 
 
 public class StatusText implements Observer {
-    TextView mView;
+    private TextView mView;
     //SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
     static int MaxID = 0;
 
-    public StatusText(TextView view, final Observable observable/*, SwipeRefreshLayout.OnRefreshListener onRefreshListener*/ ) {
+    public StatusText(final TextView view, final Observable observable /*, SwipeRefreshLayout.OnRefreshListener onRefreshListener*/ ) {
         //mOnRefreshListener = onRefreshListener;
         observable.addObserver( this );
         mView = view;
@@ -41,10 +41,8 @@ public class StatusText implements Observer {
             @Override
             public void onClick(View v) {
                 FetcherObservable status = (FetcherObservable)observable;
-
-                    status.Clear();
-
-                    v.setVisibility(View.GONE);
+                status.Clear();
+                v.setVisibility(View.GONE);
 
             }
         });
@@ -56,7 +54,7 @@ public class StatusText implements Observer {
         mView.post(new Runnable() {
             @Override
             public void run() {
-            if ( text.trim().isEmpty() )
+            if ( !PrefUtils.getBoolean( PrefUtils.SHOW_PROGRESS_INFO, false ) || text.trim().isEmpty() )
                 mView.setVisibility(View.GONE);
             else {
                 mView.setText(text);

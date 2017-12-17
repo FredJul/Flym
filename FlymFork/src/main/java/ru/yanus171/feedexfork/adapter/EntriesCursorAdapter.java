@@ -52,6 +52,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
@@ -124,6 +125,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     @Override
     public void bindView(final View view, final Context context, Cursor cursor) {
 
+        final Vibrator vibrator = (Vibrator) view.getContext().getSystemService( Context.VIBRATOR_SERVICE );
+
         view.findViewById(R.id.text2hor).setVisibility(View.GONE);
         view.findViewById(android.R.id.text2).setVisibility(View.GONE);
 
@@ -157,6 +160,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 private int initialy = 0;
                 private int currentx = 0;
                 private int currenty = 0;
+                private boolean wasVibrateRead = false, wasVibrateStar = false;
                 private boolean isPress = false;
                 private long downTime = 0;
                 //private boolean wasMove = false;
@@ -165,6 +169,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 public boolean onTouch(View v, MotionEvent event) {
                     final int minX = 40;
                     final int minY = 20;
+                    final int VIBRATE_DURATION = 50;
 
                     final ViewHolder holder = (ViewHolder) ( (ViewGroup)v.getParent() ).getTag(R.id.holder);
                     if ( event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -207,8 +212,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                             isPress = false;
                     }
 
-                    holder.readToggleSwypeBtnView.setVisibility( View.GONE );
-                    holder.starToggleSwypeBtnView.setVisibility( View.GONE );
+                    holder.readToggleSwypeBtnView.setVisibility( View.VISIBLE );
+                    holder.starToggleSwypeBtnView.setVisibility( View.VISIBLE );
 
                     int overlap = holder.readToggleSwypeBtnView.getWidth() / 2;
                     int threshold = holder.readToggleSwypeBtnView.getWidth();
@@ -236,6 +241,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                         initialx = 0;
                         initialx = 0;
                         currentx = 0;
+                        wasVibrateRead = false;
+                        wasVibrateStar = false;
 
                         if ( view.getParent() != null )
                             view.getParent().requestDisallowInterceptTouchEvent(false);
@@ -263,14 +270,22 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                         isPress = false;
 
                     if( Math.abs( paddingX ) > Math.abs( paddingY ) && paddingX >= threshold ) {
-                        //
-                        //
-                        //
-                        holder.readToggleSwypeBtnView.setVisibility(View.VISIBLE);
-                    }
+                        if ( !wasVibrateRead ) {
+                            vibrator.vibrate( VIBRATE_DURATION );
+                            wasVibrateRead = true;
+                        }
+                        //holder.readToggleSwypeBtnView.setVisibility(View.VISIBLE);
+                    } else
+                        wasVibrateRead = false;
+
                     if( Math.abs( paddingX ) > Math.abs( paddingY ) && paddingX <= -threshold ) {
-                        holder.starToggleSwypeBtnView.setVisibility( View.VISIBLE );
-                    }
+                        if ( !wasVibrateStar ) {
+                            vibrator.vibrate( VIBRATE_DURATION );
+                            wasVibrateStar = true;
+                        }
+                        //holder.starToggleSwypeBtnView.setVisibility( View.VISIBLE );
+                    } else
+                        wasVibrateStar = false;
 
                     v.setPadding(paddingX > 0 ? paddingX : 0, 0, paddingX < 0 ? -paddingX : 0, 0);
 

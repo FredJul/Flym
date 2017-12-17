@@ -89,7 +89,10 @@ public class NetworkUtils {
         String tempImgPath = getTempDownloadedImagePath(entryId, imgUrl);
         String finalImgPath = getDownloadedImagePath(entryId, imgUrl);
 
+
         if (!new File(tempImgPath).exists() && !new File(finalImgPath).exists()) {
+            boolean abort = false;
+            boolean success = false;
             HttpURLConnection imgURLConnection = null;
             try {
                 //IMAGE_FOLDER_FILE.mkdir(); // create images dir
@@ -102,33 +105,38 @@ public class NetworkUtils {
                 int maxImageDownloadSize = PrefUtils.getImageMaxDownloadSizeInKb() * 1024;
                 if ( !isSizeLimit || size <= maxImageDownloadSize ) {
 
-                    FileOutputStream fileOutput = new FileOutputStream(tempImgPath);
-                    InputStream inputStream = imgURLConnection.getInputStream();
+                    FileOutputStream fileOutput = new FileOutputStream(tempImgPath); try {
+                        InputStream inputStream = imgURLConnection.getInputStream(); try {
 
-                    int bytesRecieved = 0;
-                    int progressBytes = 0;
-                    final int cStep = 1024 * 10;
-                    byte[] buffer = new byte[2048];
-                    int bufferLength;
-                    boolean abort = false;
-                    FetcherService.getStatusText().ChangeProgress(getProgressText(bytesRecieved));
-                    while ( !FetcherService.isCancelRefresh() && (bufferLength = inputStream.read(buffer)) > 0) {
-                        if ( isSizeLimit && size > maxImageDownloadSize ) {
-                            abort = true;
-                            break;
-                        }
-                        fileOutput.write(buffer, 0, bufferLength);
-                        bytesRecieved += bufferLength;
-                        progressBytes += bufferLength;
-                        if (progressBytes >= cStep) {
-                            progressBytes = 0;
+                            int bytesRecieved = 0;
+                            int progressBytes = 0;
+                            final int cStep = 1024 * 10;
+                            byte[] buffer = new byte[2048];
+                            int bufferLength;
                             FetcherService.getStatusText().ChangeProgress(getProgressText(bytesRecieved));
+                            while (!FetcherService.isCancelRefresh() && (bufferLength = inputStream.read(buffer)) > 0) {
+                                if (isSizeLimit && size > maxImageDownloadSize) {
+                                    abort = true;
+                                    break;
+                                }
+                                fileOutput.write(buffer, 0, bufferLength);
+                                bytesRecieved += bufferLength;
+                                progressBytes += bufferLength;
+                                if (progressBytes >= cStep) {
+                                    progressBytes = 0;
+                                    FetcherService.getStatusText().ChangeProgress(getProgressText(bytesRecieved));
+                                }
+                            }
+                            success = true;
+                            FetcherService.getStatusText().AddBytes(bytesRecieved);
+
+                        } finally {
+                            inputStream.close();
                         }
+                    } finally {
+                        fileOutput.flush();
+                        fileOutput.close();
                     }
-                    FetcherService.getStatusText().AddBytes(bytesRecieved);
-                    fileOutput.flush();
-                    fileOutput.close();
-                    inputStream.close();
 
                     if ( !abort )
                         new File(tempImgPath).renameTo(new File(finalImgPath));
@@ -143,9 +151,11 @@ public class NetworkUtils {
                     imgURLConnection.disconnect();
                 }
             }
+
+            if ( success && !abort )
+                EntryView.NotifyToUpdate( entryId );
         }
         //if ( updateGUI )
-            EntryView.NotifyToUpdate( entryId );
     }
 
     private static String getProgressText(int bytesRecieved) {

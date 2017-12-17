@@ -225,6 +225,11 @@
             android:title="@string/settings_show_tap_zones"
             android:summary="@string/settings_show_tap_zone_description"/>
 
+        <CheckBoxPreference
+            android:key="settings_show_progress_info"
+            android:defaultValue="false"
+            android:title="@string/show_progress_info"
+            android:summary="@string/show_progress_info_descr"/>
 
         <EditTextPreference
             android:key="content_extract_rules"

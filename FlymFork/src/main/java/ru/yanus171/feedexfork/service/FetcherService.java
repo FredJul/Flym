@@ -244,6 +244,7 @@ public class FetcherService extends IntentService {
 
             startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( getString(R.string.loading) ) );
 
+
             int status = getStatusText().Start(getString(R.string.RefreshFeeds) + ": "); try {
 
                 PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);

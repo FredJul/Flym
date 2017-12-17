@@ -361,5 +361,7 @@
     <string name="share_all_text">Поделиться текстом</string>
     <string name="group">Группа</string>
     <string name="auto_image_load">Загружать изображения при автоматической загрузке</string>
+    <string name="show_progress_info">Подробная информация процесса</string>
+    <string name="show_progress_info_descr">Показывать подробную информацию о текущих действиях в процессе загрузки лент</string>
 
 </resources>

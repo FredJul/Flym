@@ -50,6 +50,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -89,6 +90,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     private Cursor mJustMarkedAsReadEntries;
     private FloatingActionButton mFab;
     private AbsListView mListView;
+    private ProgressBar mProgressBar = null;
     public boolean mShowUnRead = false;
     private boolean mNeedSetSelection = false;
     private Menu mMenu = null;
@@ -160,6 +162,13 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         boolean isRefresh = PrefUtils.getBoolean( PrefUtils.IS_REFRESHING, false );
         mMenu.findItem(R.id.menu_cancel_refresh).setVisible( isRefresh );
         mMenu.findItem(R.id.menu_refresh).setVisible( !isRefresh );
+
+        if ( mProgressBar != null ) {
+            if (isRefresh)
+                mProgressBar.setVisibility(View.VISIBLE);
+            else
+                mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     private int mNewEntriesNumber, mOldUnreadEntriesNumber = -1;
@@ -265,6 +274,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         new StatusText( (TextView)rootView.findViewById( R.id.statusText1 ),
                         FetcherService.getStatusText()/*,
                         this*/);
+
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
         mListView = (AbsListView) rootView.findViewById(android.R.id.list);
         //mListView.setOnTouchListener(new SwipeGestureListener(mListView.getContext()));

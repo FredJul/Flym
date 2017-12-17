@@ -870,7 +870,8 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                         final int scroll = view.getScrollY();
                         values.put(EntryColumns.SCROLL_POS, scroll);
                         ContentResolver cr = MainApplication.getContext().getContentResolver();
-                        cr.update(EntryColumns.CONTENT_URI(entryID), values, EntryColumns.SCROLL_POS + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.SCROLL_POS + " < " + scroll, null);
+                        //cr.update(EntryColumns.CONTENT_URI(entryID), values, EntryColumns.SCROLL_POS + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.SCROLL_POS + " < " + scroll, null);
+                        cr.update(EntryColumns.CONTENT_URI(entryID), values, null, null);
                         Dog.v(String.format("EntryPagerAdapter.SaveScrollPos (entry %d) update scrollPos = %d", entryID, scroll));
                     }
                 }

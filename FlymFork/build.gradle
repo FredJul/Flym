@@ -7,15 +7,15 @@ android {
         //incremental true
     }*/
 
-    compileSdkVersion 23
+    compileSdkVersion 25
     buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId 'ru.yanus171.feedexfork'
         //applicationId 'net.fred.feedex'
         minSdkVersion 14
-        targetSdkVersion 23
-        versionCode 84
-        versionName '0.6.6'
+        targetSdkVersion 25
+        versionCode 87
+        versionName '0.6.9'
         }
     lintOptions {
         checkReleaseBuilds false
