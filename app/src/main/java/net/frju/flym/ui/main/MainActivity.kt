@@ -20,6 +20,7 @@ import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.SearchFeedResult
+import net.frju.flym.service.AutoRefreshJobService
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.entries.EntriesFragment
 import net.frju.flym.ui.entrydetails.EntryDetailsFragment
@@ -31,7 +32,7 @@ import org.jetbrains.anko.sdk21.coroutines.onClick
 import org.jetbrains.anko.textColor
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.*
+import java.util.ArrayList
 
 
 class MainActivity : AppCompatActivity(), MainNavigator {
@@ -179,6 +180,8 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
             goToEntriesList(null)
         }
+
+        AutoRefreshJobService.initAutoRefresh(this)
     }
 
     override fun onResume() {

@@ -63,7 +63,7 @@ import android.content.Context
 import android.content.Intent
 import net.frju.parentalcontrol.utils.PrefUtils
 
-class AutoRefreshService : JobService() {
+class AutoRefreshJobService : JobService() {
 
     companion object {
         val SIXTY_MINUTES = "3600000"
@@ -71,14 +71,14 @@ class AutoRefreshService : JobService() {
 
         fun initAutoRefresh(context: Context) {
 
-            var time = 3600L
+            var time = 3600000L
             try {
                 time = Math.max(60L, java.lang.Long.parseLong(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, SIXTY_MINUTES)) / 1000)
             } catch (ignored: Exception) {
             }
 
             if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
-                val builder = JobInfo.Builder(JOB_ID, ComponentName(context, AutoRefreshService::class.java))
+                val builder = JobInfo.Builder(JOB_ID, ComponentName(context, AutoRefreshJobService::class.java))
                         .setPeriodic(time)
                         .setPersisted(true)
                         .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
