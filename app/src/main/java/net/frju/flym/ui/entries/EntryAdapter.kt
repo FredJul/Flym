@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import kotlinx.android.synthetic.main.view_entry.view.*
 import net.fred.feedex.R
 import net.frju.flym.GlideApp
@@ -15,6 +16,7 @@ import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.service.FetcherService
 import org.jetbrains.anko.sdk21.coroutines.onClick
+
 
 class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, private val favoriteClickListener: (EntryWithFeed) -> Unit) : PagedListAdapter<EntryWithFeed, EntryAdapter.ViewHolder>(DIFF_CALLBACK) {
 
@@ -29,6 +31,9 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
             override fun areContentsTheSame(oldItem: EntryWithFeed, newItem: EntryWithFeed): Boolean =
                     oldItem.id == newItem.id && oldItem.read == newItem.read && oldItem.favorite == newItem.favorite // no need to do more complex in our case
         }
+
+        @JvmField
+        val CROSS_FADE_FACTORY = DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -43,7 +48,7 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
 
             val letterDrawable = Feed.getLetterDrawable(entry.feedId, entry.feedTitle)
             if (mainImgUrl != null) {
-                GlideApp.with(context).load(mainImgUrl).centerCrop().transition(withCrossFade()).placeholder(letterDrawable).error(letterDrawable).into(main_icon)
+                GlideApp.with(context).load(mainImgUrl).centerCrop().transition(withCrossFade(CROSS_FADE_FACTORY)).placeholder(letterDrawable).error(letterDrawable).into(main_icon)
             } else {
                 GlideApp.with(context).clear(main_icon)
                 main_icon.setImageDrawable(letterDrawable)
