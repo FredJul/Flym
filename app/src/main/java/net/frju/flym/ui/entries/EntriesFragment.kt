@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_entries.*
@@ -160,7 +161,7 @@ class EntriesFragment : Fragment() {
 	private fun initDataObservers() {
 		entryIdsLiveData?.removeObservers(this)
 		entryIdsLiveData = when {
-			searchText != null -> null // TODO better?
+			searchText != null -> App.db.entryDao().observeIdsBySearch(searchText!!)
 			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByGroup(feed!!.id, listDisplayDate)
 			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByGroup(feed!!.id, listDisplayDate)
 			feed?.isGroup == true -> App.db.entryDao().observeIdsByGroup(feed!!.id, listDisplayDate)
@@ -306,11 +307,19 @@ class EntriesFragment : Fragment() {
 					return false
 				}
 			})
-			searchView.setOnCloseListener {
-				searchText = null
-				initDataObservers()
-				false
-			}
+			searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+				override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+					searchText = ""
+					initDataObservers()
+					return true
+				}
+
+				override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+					searchText = null
+					initDataObservers()
+					return true
+				}
+			})
 
 			setOnMenuItemClickListener { item ->
 				when (item.itemId) {

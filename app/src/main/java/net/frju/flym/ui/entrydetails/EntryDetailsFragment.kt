@@ -47,18 +47,18 @@ class EntryDetailsFragment : Fragment() {
         set(value) {
             field = value
 
-            val currentIdx = allEntryIds.indexOf(entry.id)
+            val currentIdx = value.indexOf(entry.id)
 
-            previousId = if (currentIdx == 0) {
+            previousId = if (currentIdx <= 0) {
                 null
             } else {
-                allEntryIds[currentIdx - 1]
+                value[currentIdx - 1]
             }
 
-            nextId = if (currentIdx >= allEntryIds.size - 1) {
+            nextId = if (currentIdx < 0 || currentIdx >= value.size - 1) {
                 null
             } else {
-                allEntryIds[currentIdx + 1]
+                value[currentIdx + 1]
             }
         }
     private var previousId: String? = null

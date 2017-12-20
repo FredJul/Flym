@@ -2,7 +2,11 @@ package net.frju.flym.data.dao
 
 import android.arch.lifecycle.LiveData
 import android.arch.paging.LivePagedListProvider
-import android.arch.persistence.room.*
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Delete
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.OnConflictStrategy
+import android.arch.persistence.room.Query
 import net.frju.flym.data.entities.Entry
 import net.frju.flym.data.entities.EntryWithFeed
 
@@ -44,6 +48,9 @@ interface EntryDao {
 
 	@Query("SELECT * FROM $JOIN WHERE $FEED_ID AND $OLDER AND favorite = 1 $ORDER_BY")
 	fun observeFavoritesByFeed(feedId: Long, maxDate: Long): LivePagedListProvider<Int, EntryWithFeed>
+
+	@Query("SELECT id FROM $JOIN WHERE title $LIKE_SEARCH OR description $LIKE_SEARCH OR mobilizedContent $LIKE_SEARCH $ORDER_BY")
+	fun observeIdsBySearch(searchText: String): LiveData<List<String>>
 
 	@Query("SELECT id FROM entries WHERE feedId IS :feedId AND $OLDER $ORDER_BY")
 	fun observeIdsByFeed(feedId: Long, maxDate: Long): LiveData<List<String>>
