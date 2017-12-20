@@ -6,6 +6,7 @@ import android.arch.paging.PagedList
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
@@ -89,6 +90,7 @@ class EntriesFragment : Fragment() {
 	private var newCountLiveData: LiveData<Long>? = null
 	private var unreadBadge: Badge? = null
 	private var searchText: String? = null
+	private val handler = Handler()
 
 	private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
 		if (PrefUtils.IS_REFRESHING == key) {
@@ -302,8 +304,15 @@ class EntriesFragment : Fragment() {
 				}
 
 				override fun onQueryTextChange(newText: String): Boolean {
-					searchText = newText
-					initDataObservers()
+					if (searchText != null) { // needed because it can actually be called after the onMenuItemActionCollapse event
+						searchText = newText
+
+						// In order to avoid plenty of request, we add a small throttle time
+						handler.removeCallbacksAndMessages(null)
+						handler.postDelayed({
+							initDataObservers()
+						}, 700)
+					}
 					return false
 				}
 			})
