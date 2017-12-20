@@ -49,7 +49,7 @@ interface EntryDao {
 	@Query("SELECT * FROM $JOIN WHERE $FEED_ID AND $OLDER AND favorite = 1 $ORDER_BY")
 	fun observeFavoritesByFeed(feedId: Long, maxDate: Long): LivePagedListProvider<Int, EntryWithFeed>
 
-	@Query("SELECT id FROM $JOIN WHERE title $LIKE_SEARCH OR description $LIKE_SEARCH OR mobilizedContent $LIKE_SEARCH $ORDER_BY")
+	@Query("SELECT id FROM entries WHERE title $LIKE_SEARCH OR description $LIKE_SEARCH OR mobilizedContent $LIKE_SEARCH $ORDER_BY")
 	fun observeIdsBySearch(searchText: String): LiveData<List<String>>
 
 	@Query("SELECT id FROM entries WHERE feedId IS :feedId AND $OLDER $ORDER_BY")

@@ -7,7 +7,8 @@ import android.os.Parcelable
 import com.rometools.rome.feed.synd.SyndEntry
 import net.frju.flym.utils.sha1
 import paperparcel.PaperParcel
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 
 @PaperParcel
@@ -58,7 +59,7 @@ fun SyndEntry.toDbFormat(feed: Feed): Entry {
     item.id = (feed.id.toString() + "_" + (uri ?: link ?: title ?: UUID.randomUUID().toString())).sha1()
     item.feedId = feed.id
     item.title = title
-    item.description = description?.value ?: contents.getOrNull(0)?.value
+    item.description = contents.getOrNull(0)?.value ?: description?.value
     item.link = link
     //TODO item.imageLink = null
     item.author = author
