@@ -90,7 +90,7 @@ class EntriesFragment : Fragment() {
 	private var newCountLiveData: LiveData<Long>? = null
 	private var unreadBadge: Badge? = null
 	private var searchText: String? = null
-	private val handler = Handler()
+	private val searchHandler = Handler()
 
 	private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
 		if (PrefUtils.IS_REFRESHING == key) {
@@ -308,8 +308,8 @@ class EntriesFragment : Fragment() {
 						searchText = newText
 
 						// In order to avoid plenty of request, we add a small throttle time
-						handler.removeCallbacksAndMessages(null)
-						handler.postDelayed({
+						searchHandler.removeCallbacksAndMessages(null)
+						searchHandler.postDelayed({
 							initDataObservers()
 						}, 700)
 					}
