@@ -72,7 +72,7 @@ import android.text.Html
 import android.widget.Toast
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
-import net.dankito.readability4j.Readability4J
+import net.dankito.readability4j.extended.Readability4JExtended
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Entry
@@ -327,7 +327,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName), Ank
 					try {
 						HTTP_CLIENT.newCall(request).execute().use {
 							it.body()?.let { body ->
-								Readability4J(link, body.string()).parse().articleContent?.html()?.let {
+								Readability4JExtended(link, body.string()).parse().articleContent?.html()?.let {
 									val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(link))
 
 									if (downloadPictures) {

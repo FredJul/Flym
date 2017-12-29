@@ -9,7 +9,7 @@ androidExtensions {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.1"
+    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "net.frju.flym"
         minSdkVersion 21
@@ -27,11 +27,6 @@ android {
     lintOptions {
         // if true, stop the gradle build if errors are found
         abortOnError true
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
     }
 
     Properties properties = new Properties()
@@ -100,7 +95,7 @@ dependencies {
     implementation 'nz.bradcampbell:paperparcel-kotlin:+'
     kapt 'nz.bradcampbell:paperparcel-compiler:+'
 
-    ext.anko_version = '0.10.3'
+    ext.anko_version = '0.10.4'
     implementation "org.jetbrains.anko:anko-sdk21:$anko_version"
     implementation "org.jetbrains.anko:anko-sdk21-coroutines:$anko_version"
     implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
@@ -121,5 +116,5 @@ dependencies {
     implementation 'com.github.jrvansuita:MaterialAbout:+'
     implementation 'q.rorbin:badgeview:+'
 
-    implementation 'com.github.dankito:Readability4J:master'
+    implementation 'net.dankito.readability4j:readability4j:+'
 }
