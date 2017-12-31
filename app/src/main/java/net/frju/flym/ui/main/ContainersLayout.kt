@@ -67,8 +67,8 @@ class ContainersLayout @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     private fun twoColumnsEmpty() {
+        frame_master.visibility = View.VISIBLE
         if (hasTwoColumns()) {
-            frame_details.visibility = View.VISIBLE
             val res = frame_master.context.resources
             toolbar.layoutParams.width = res.getDimensionPixelSize(R.dimen.container_max_width)
             toolbar.layoutParams = toolbar.layoutParams
@@ -80,7 +80,6 @@ class ContainersLayout @JvmOverloads constructor(context: Context, attrs: Attrib
         } else {
             animateOutFrameDetails()
         }
-        frame_master.visibility = View.VISIBLE
     }
 
     private fun twoColumnsWithDetails() {

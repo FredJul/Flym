@@ -34,7 +34,7 @@ import org.jetbrains.anko.sdk21.coroutines.onClick
 import org.jetbrains.anko.textColor
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.ArrayList
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainNavigator {
@@ -228,16 +228,15 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 	}
 
 	fun toggleDrawer() {
-		if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
-			drawer.closeDrawer(GravityCompat.START)
-		} else if (drawer != null && !drawer.isDrawerOpen(GravityCompat.START)) {
-			drawer.openDrawer(GravityCompat.START)
+		if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
+			drawer?.closeDrawer(GravityCompat.START)
+		} else {
+			drawer?.openDrawer(GravityCompat.START)
 		}
 	}
 
 	fun goBack(): Boolean {
-		val state = containers_layout.state
-		if (state == MainNavigator.State.TWO_COLUMNS_WITH_DETAILS && !containers_layout.hasTwoColumns()) {
+		if (containers_layout.state == MainNavigator.State.TWO_COLUMNS_WITH_DETAILS && !containers_layout.hasTwoColumns()) {
 			if (clearDetails()) {
 				containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
 				return true
@@ -247,20 +246,19 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 	}
 
 	override fun onBackPressed() {
-		if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
-			drawer.closeDrawer(GravityCompat.START)
+		if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
+			drawer?.closeDrawer(GravityCompat.START)
 		} else if (!goBack()) {
 			super.onBackPressed()
 		}
 	}
 
 	private fun clearDetails(): Boolean {
-		val details = supportFragmentManager.findFragmentByTag(TAG_DETAILS)
-		if (details != null) {
+		supportFragmentManager.findFragmentByTag(TAG_DETAILS)?.let {
 			supportFragmentManager
 					.beginTransaction()
 					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-					.remove(details)
+					.remove(it)
 					.commit()
 			return true
 		}
