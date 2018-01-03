@@ -60,8 +60,8 @@ import android.app.job.JobScheduler
 import android.app.job.JobService
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import net.frju.parentalcontrol.utils.PrefUtils
+import org.jetbrains.anko.doAsync
 
 class AutoRefreshJobService : JobService() {
 
@@ -94,7 +94,11 @@ class AutoRefreshJobService : JobService() {
 
     override fun onStartJob(params: JobParameters): Boolean {
         if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            baseContext.startService(Intent(baseContext, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.FROM_AUTO_REFRESH, true))
+            doAsync {
+                FetcherService.fetch(this@AutoRefreshJobService, true, FetcherService.ACTION_REFRESH_FEEDS)
+                jobFinished(params, false)
+            }
+            return true
         }
 
         return false
