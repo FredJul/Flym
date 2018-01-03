@@ -26,6 +26,7 @@ import net.frju.flym.service.AutoRefreshJobService
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.entries.EntriesFragment
 import net.frju.flym.ui.entrydetails.EntryDetailsFragment
+import net.frju.flym.utils.closeKeyboard
 import okhttp3.Request
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.hintTextColor
@@ -34,7 +35,7 @@ import org.jetbrains.anko.sdk21.coroutines.onClick
 import org.jetbrains.anko.textColor
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.*
+import java.util.ArrayList
 
 
 class MainActivity : AppCompatActivity(), MainNavigator {
@@ -280,6 +281,8 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 	}
 
 	override fun goToEntryDetails(entry: EntryWithFeed, allEntryIds: List<String>) {
+		closeKeyboard()
+
 		containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
 		val fragment = EntryDetailsFragment.newInstance(entry, allEntryIds)
 		supportFragmentManager
