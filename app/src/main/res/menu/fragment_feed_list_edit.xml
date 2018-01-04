@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:app="http://schemas.android.com/apk/res-auto"
+	  xmlns:tools="http://schemas.android.com/tools"
+	  tools:context="net.frju.flym.ui.feeds.FeedListEditActivity">
+	<item
+		android:id="@+id/import_feeds"
+		android:orderInCategory="100"
+		android:title="@string/menu_import"
+		app:showAsAction="never"/>
+
+	<item
+		android:id="@+id/export_feeds"
+		android:orderInCategory="100"
+		android:title="@string/menu_export"
+		app:showAsAction="never"/>
+</menu>

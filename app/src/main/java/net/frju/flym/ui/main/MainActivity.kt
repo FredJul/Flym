@@ -26,12 +26,14 @@ import net.frju.flym.service.AutoRefreshJobService
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.entries.EntriesFragment
 import net.frju.flym.ui.entrydetails.EntryDetailsFragment
+import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.utils.closeKeyboard
 import okhttp3.Request
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.hintTextColor
 import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.coroutines.onClick
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.textColor
 import org.json.JSONObject
 import java.net.URLEncoder
@@ -63,6 +65,11 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
 		nav.layoutManager = LinearLayoutManager(this)
 		nav.adapter = feedAdapter
+
+		edit_feeds_fab.onClick {
+			startActivity<FeedListEditActivity>()
+		}
+
 		add_feed_fab.onClick {
 			val searchDialog = SimpleSearchDialogCompat(this@MainActivity, "Search...",
 					"What are you looking for...?", null, DEFAULT_FEEDS,
