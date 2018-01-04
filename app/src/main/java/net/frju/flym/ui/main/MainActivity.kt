@@ -50,6 +50,8 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 		private const val FEED_SEARCH_URL = "feedId"
 		private const val FEED_SEARCH_DESC = "description"
 		private val DEFAULT_FEEDS = arrayListOf(SearchFeedResult("http://www.nytimes.com/services/xml/rss/nyt/World.xml", "NY Times", "Word news"))
+
+		var isInForeground = false
 	}
 
 	private val feedGroups = mutableListOf<FeedGroup>()
@@ -203,7 +205,13 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 	override fun onResume() {
 		super.onResume()
 
+		isInForeground = true
 		notificationManager.cancel(0)
+	}
+
+	override fun onPause() {
+		super.onPause()
+		isInForeground = false
 	}
 
 	override fun onRestoreInstanceState(savedInstanceState: Bundle?) {

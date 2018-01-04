@@ -128,6 +128,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		const val ID_SEPARATOR = "__"
 
 		fun fetch(context: Context, isFromAutoRefresh: Boolean, action: String, feedId: Long = 0L) {
+			if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+				return
+			}
+
 			val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 			val networkInfo = connectivityManager.activeNetworkInfo
 			// Connectivity issue, we quit
@@ -167,7 +171,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 					}
 
 					if (newCount > 0) {
-						if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
+						if (!MainActivity.isInForeground && PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
 							val unread = App.db.entryDao().countUnread
 
 							if (unread > 0) {
