@@ -23,8 +23,8 @@
 
     <!-- GENERAL -->
     <string name="app_name">Flym</string>
-    <string name="about_flym">About Flym</string>
-    <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
+    <string name="about_flym">Quant a Flym</string>
+    <string name="welcome_title">Benvingut a Flym. Voleu afegir un feed?</string>
     <string name="never">mai</string>
     <string name="update">Actualitza</string>
     <string name="colon">:u00A0</string>
@@ -36,8 +36,8 @@
     <string name="network_error">No hi ha connectivitat</string>
     <string name="loading">S\'està carregant.</string>
     <string name="no_result">No hi ha resultats</string>
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_open">Obrir el calaix de navegaciór</string>
+    <string name="drawer_close">Tancar el calaix de navegació</string>
 
     <!-- FEEDS -->
     <string name="feeds">Canals</string>
@@ -51,7 +51,7 @@
     <string name="menu_add_group">Afegir un grup</string>
     <string name="menu_import">Importa des de OPML</string>
     <string name="menu_export">Exporta a OPML</string>
-    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
+    <string name="storage_request_explanation">Per poder importar o exportar els feeds des d'un arxiu haureu de permetre que l'aplicació accedeixi a la memòria d'emmagatzematge.</string>
     <string name="error_feed_error">No es pot accedir al canal.</string>
     <string name="error_feed_process">No s\'ha pogut processar el canal.</string>
     <string name="error_feed_url_exists">Ja existeix aquesta adreça.</string>
@@ -59,8 +59,8 @@
     <string name="error_feed_export">No s\'ha pogut exportar el fitxer. Comproveu la memòria
         externa.
     </string>
-    <string name="error_external_storage_not_available">The external storage (e.g. SD-card) is not
-        available.
+    <string name="error_external_storage_not_available">L\'emmagatzematge extern (SD-card) no està 
+        disponible.
     </string>
     <string name="feed_url">Adreça URL</string>
     <string name="optional">(opcional)</string>
@@ -75,8 +75,8 @@
     <string name="filter_is_regex">és una expresió regular</string>
     <string name="filter_apply_to_title">Aplica al títol</string>
     <string name="filter_apply_to_content">Aplica al contingut</string>
-    <string name="accept">ACCEPT</string>
-    <string name="reject">REJECT</string>
+    <string name="accept">ACCEPTAR</string>
+    <string name="reject">DENEGAR</string>
     <string name="feed_search">Cerca canals</string>
     <string name="select_file">Esculliu un fitxer (arrel de la targeta SD)</string>
     <string name="question_delete_feed">Voleu eliminar aquest canal?</string>
@@ -91,22 +91,22 @@
     </string>
     <string name="to_group_above">Situa a sobre del grup</string>
     <string name="to_group_into">Afegeix al grup</string>
-    <string name="add_custom_feed">Add a custom feed or search for one</string>
-    <string name="google_news_title">Google News topics</string>
-    <string name="google_news_indicator">Select one or several topics to add. Some of them may not be provided by Google for your language.</string>
-    <string name="google_news_top_stories">Top Stories</string>
-    <string name="google_news_world">World</string>
-    <string name="google_news_business">Business</string>
-    <string name="google_news_technology">Technology</string>
-    <string name="google_news_entertainment">Entertainment</string>
-    <string name="google_news_sports">Sports</string>
-    <string name="google_news_science">Science</string>
-    <string name="google_news_health">Health</string>
-    <string name="google_news_custom_topic">Enter custom topic</string>
+    <string name="add_custom_feed">Afegiu un canal personalitzat o cerqueu-ne un</string>
+    <string name="google_news_title">Temes de Google News</string>
+    <string name="google_news_indicator">Seleccioneu un o diversos temes per afegir. Alguns d'ells no poden ser proporcionats per Google pel vostre idioma.</string>
+    <string name="google_news_top_stories">Històries principals</string>
+    <string name="google_news_world">Món</string>
+    <string name="google_news_business">Negocis</string>
+    <string name="google_news_technology">Tecnologia</string>
+    <string name="google_news_entertainment">Entreteniment</string>
+    <string name="google_news_sports">Esports</string>
+    <string name="google_news_science">Ciencia</string>
+    <string name="google_news_health">Salut</string>
+    <string name="google_news_custom_topic">Introduïu un tema personalitzat</string>
 
     <!-- ENTRIES -->
-    <string name="unread_entries">Unread</string>
-    <string name="all_entries">All entries</string>
+    <string name="unread_entries">No llegit</string>
+    <string name="all_entries">Totes les entrades</string>
     <string name="no_entries">No hi ha entrades</string>
     <string name="favorites">Destacats</string>
     <string name="context_menu_share_starred">Comparteix entrades destacades</string>
@@ -123,13 +123,13 @@
     <string name="see_enclosure">Mostra el fitxer adjunt</string>
     <string name="see_link">Mostra al navegador</string>
     <string name="cant_open_link">No s\'ha trobat una aplicació\'per aquest enllaç.</string>
-    <string name="open_enclosure">Open enclosure</string>
-    <string name="file">File</string>
-    <string name="download_and_save">Download and save</string>
-    <string name="open_link">Open link</string>
-    <string name="tip_sentence">Tip: slide left to mark as read and slide right to mark as favorite</string>
-    <string name="undo">Undo</string>
-    <string name="marked_as_read">Marked as read</string>
+    <string name="open_enclosure">Obrir l\'adjunt</string>
+    <string name="file">Fitxer</string>
+    <string name="download_and_save">Descarrega i desa</string>
+    <string name="open_link">Obrir l\'enllaç</string>
+    <string name="tip_sentence">Consell: llisca cap a l'esquerra per marcar com a llegit i llisca cap a la dreta per marcar com a favorit</string>
+    <string name="undo">Desfer</string>
+    <string name="marked_as_read">Marcar com a llegit</string>
 
     <!-- WIDGET -->
     <string name="red">Vermell</string>
@@ -153,20 +153,20 @@
     <string name="settings_notifications_vibrate_description">Vibra el terminal al mostrar la
         notificació.
     </string>
-    <string name="settings_notifications_light">Light</string>
-    <string name="settings_notifications_light_description">Enable notification light on new entries</string>
+    <string name="settings_notifications_light">Llum</string>
+    <string name="settings_notifications_light_description">Habiliteu la llum de notificació en les noves entrades</string>
     <string name="settings_category_content_presentation">Presentació del contingut</string>
     <string name="settings_light_theme">Tema clar</string>
     <string name="settings_light_theme_description">Utilitza el tema clar</string>
     <string name="settings_keep_time">Temps de conservació d\'entrades</string>
-    <string name="settings_display_images">Display images</string>
-    <string name="settings_display_images_description">Display images in entries</string>
-    <string name="settings_preload_image_mode">Preload images</string>
+    <string name="settings_display_images">Mostra imatges</string>
+    <string name="settings_display_images_description">Mostra imatges a les entrades</string>
+    <string name="settings_preload_image_mode">Precàrrega d\'imatges</string>
     <string name="settings_font_size">Mida del text</string>
-    <string name="settings_display_oldest_first">Entries order</string>
-    <string name="settings_display_oldest_first_description">Display oldest entries first</string>
-    <string name="settings_display_entries_fullscreen">Auto-fullscreen entries</string>
-    <string name="settings_display_entries_fullscreen_description">Automatically display entries in fullscreen</string>
+    <string name="settings_display_oldest_first">Ordre de les entrades</string>
+    <string name="settings_display_oldest_first_description">Mostra les entrades més antigues primer</string>
+    <string name="settings_display_entries_fullscreen">Entrades a pantalla completa automàtiques</string>
+    <string name="settings_display_entries_fullscreen_description">Mostra automàticament les entrades a pantalla completa</string>
     <string name="settings_refresh_on_open">Actualitza els canals a l\'inici</string>
     <string name="settings_refresh_on_open_description">Descarregarà nous continguts dels canals a
         l\'inici de l\'aplicació.
@@ -182,8 +182,8 @@
     <string name="all_feeds">Tots els canals (futurs inclosos)</string>
 
     <plurals name="number_of_new_entries">
-        <item quantity="one">One new entry</item>
-        <item quantity="other">%d new entries</item>
+        <item quantity="one">Una entrada nova</item>
+        <item quantity="other">%d noves entrades</item>
     </plurals>
 
     <string-array name="settings_intervals">
@@ -217,9 +217,9 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_preload_image_modes">
-        <item>Never</item>
-        <item>Only over Wi-Fi</item>
-        <item>Always</item>
+        <item>Mai</item>
+        <item>Només amb Wi-Fi</item>
+        <item>Sempre</item>
     </string-array>
 
 </resources>
