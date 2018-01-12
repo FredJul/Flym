@@ -645,6 +645,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             mNeedSetSelection = true;
         mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo, mShowTextInEntryList, mShowUnRead);
         mListView.setAdapter(mEntriesCursorAdapter);
+        if ( mListView instanceof ListView )
+            ( ( ListView )mListView ).setDividerHeight( mShowTextInEntryList ? 10 : 0 );
 
         mListDisplayDate = new Date().getTime();
         if (mCurrentUri != null) {

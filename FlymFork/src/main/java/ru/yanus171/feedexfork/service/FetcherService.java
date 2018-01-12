@@ -445,6 +445,7 @@ public class FetcherService extends IntentService {
             if (entryCursor.isNull(entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML))) { // If we didn't already mobilized it
                 int linkPos = entryCursor.getColumnIndex(EntryColumns.LINK);
                 int abstractHtmlPos = entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
+                int titlePos = entryCursor.getColumnIndex(EntryColumns.TITLE);
                 HttpURLConnection connection = null;
 
                 try {
@@ -467,8 +468,8 @@ public class FetcherService extends IntentService {
 
                     Document doc = Jsoup.parse(connection.getInputStream(), null, "");
 
-                    String title = null;
-                    if ( !entryCursor.isNull( entryCursor.getColumnIndex( EntryColumns.TITLE ) ) ) {
+                    String title = entryCursor.getString(titlePos);
+                    if ( entryCursor.isNull( titlePos ) || title == null || title.isEmpty() || title.startsWith("http")  ) {
                         Elements titleEls = doc.getElementsByTag("title");
                         if (!titleEls.isEmpty())
                             title = titleEls.first().text();

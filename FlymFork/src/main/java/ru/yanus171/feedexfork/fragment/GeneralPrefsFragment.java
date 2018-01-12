@@ -78,6 +78,7 @@ public class GeneralPrefsFragment extends PreferenceFragment {
 
         addPreferencesFromResource(R.xml.general_preferences);
 
+
         setRingtoneSummary();
 
 
@@ -100,6 +101,12 @@ public class GeneralPrefsFragment extends PreferenceFragment {
                 return true;
             }
         });
+
+//        for(  int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++ ) {
+//            Preference pref = getPreferenceScreen().getPreference( i );
+//            if ( pref instanceof PreferenceCategory )
+//                pref.setLayoutResource( PrefUtils.IsLightTheme() ? R.layout.preference_category_light : R.layout.preference_category);
+//        }
     }
 
     @Override

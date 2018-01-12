@@ -24,7 +24,7 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">O aplikaci</string>
+    <string name="about_flym">O aplikaci / Help / Contact developer </string>
     <string name="welcome_title">Vítejte v aplikaci Flym. Chcete přidat nový zdroj?</string>
     <string name="never">nikdy</string>
     <string name="update">aktualizováno</string>
@@ -74,7 +74,7 @@
     <string name="filter_delete_title">Smazat pravidlo</string>
     <string name="filter_edit_title">Upravit pravidlo</string>
     <string name="filter_is_regex">regulární výraz</string>
-    <string name="filter_apply_to_title">Použít pro nadpis</string>
+    <string name="filter_apply_to_title">Použít pro nadpis (or link adress)</string>
     <string name="filter_apply_to_content">Použít pro obsah</string>
     <string name="accept">POVOLIT</string>
     <string name="reject">VYŘADIT</string>

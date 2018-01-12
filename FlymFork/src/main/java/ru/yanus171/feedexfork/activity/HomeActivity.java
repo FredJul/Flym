@@ -110,6 +110,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mLeftDrawer = findViewById(R.id.left_drawer);
+        //mLeftDrawer.setBackgroundColor(ContextCompat.getColor( this, PrefUtils.IsLightTheme() ?  R.color.light_background : R.color.dark_background));
+
         mDrawerList = (ListView) findViewById(R.id.drawer_list);
         mDrawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mDrawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
@@ -224,7 +226,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(lastUri)));
         }
 
-        //getLoaderManager().restartLoader(LOADER_ID, null, this);
+        if ( mFeedSetupChanged )
+            getLoaderManager().restartLoader(LOADER_ID, null, this);
         //if ( mDrawerAdapter != null  )
         //    selectDrawerItem( mCurrentDrawerPos );
     }
@@ -380,6 +383,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 break;
             case 3:
                 newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI( FetcherService.GetExtrenalLinkFeedID() );
+                showFeedInfo = false;
                 break;
             default:
                 long feedOrGroupId = mDrawerAdapter.getItemId(position);

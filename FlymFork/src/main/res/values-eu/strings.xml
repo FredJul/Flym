@@ -23,7 +23,6 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">About app</string>
     <string name="welcome_title">Ongi etorri Flymera. Jario bat gehitu nahiko al zenuke?</string>
     <string name="never">inoiz</string>
     <string name="update">Eguneraketa</string>
@@ -73,7 +72,7 @@
     <string name="filter_delete_title">Araua ezabatu</string>
     <string name="filter_edit_title">Araua editatu</string>
     <string name="filter_is_regex">adierazpen erregular bat da</string>
-    <string name="filter_apply_to_title">Izenburura aplikatu</string>
+    <string name="filter_apply_to_title">Izenburura aplikatu (or link adress)</string>
     <string name="filter_apply_to_content">Edukira aplikatu</string>
     <string name="accept">ONARTU</string>
     <string name="reject">BAZTERTU</string>

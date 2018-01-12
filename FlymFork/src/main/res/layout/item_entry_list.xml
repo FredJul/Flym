@@ -29,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout
+                    android:id="@+id/layout_with_background"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/dark_background"
@@ -92,6 +93,17 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="?attr/colorReadState"
                     android:text="info"
+                    android:textIsSelectable="false"/>
+                <TextView
+                    android:id="@+id/textUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.7"
+                    android:drawablePadding="3dp"
+                    android:singleLine="false"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?attr/colorReadState"
+                    android:text="url url url url url url url url url url url url url url url url url url url url url url url url  "
                     android:textIsSelectable="false"/>
                 <TextView
                     android:id="@+id/textSource"

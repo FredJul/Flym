@@ -65,6 +65,7 @@ import java.util.Date;
 
 import ru.yanus171.feedexfork.BuildConfig;
 import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
@@ -145,7 +146,7 @@ public class FeedDataContentProvider extends ContentProvider {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/search/*/#", URI_SEARCH_ENTRY);
     }
 
-    private final String[] MAX_PRIORITY = new String[]{"MAX(" + FeedColumns.PRIORITY + ")"};
+    private static final String[] MAX_PRIORITY = new String[]{"MAX(" + FeedColumns.PRIORITY + ")"};
 
     private DatabaseHelper mDatabaseHelper;
 
@@ -392,6 +393,15 @@ public class FeedDataContentProvider extends ContentProvider {
         return cursor;
     }
 
+    public static int getNewGroupPriority( long groupID ) {
+        int result = 1;
+        Cursor cursor = MainApplication.getContext().getContentResolver().query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupID), MAX_PRIORITY, null, null, null);
+        if ( cursor.moveToFirst() && !cursor.isNull( 0 ) )
+            result = cursor.getInt( 0 ) + 1;
+        cursor.close();
+        return result;
+    }
+
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         FetcherService.getStatusText().ChangeDB("insert DB");
@@ -406,7 +416,7 @@ public class FeedDataContentProvider extends ContentProvider {
             case URI_FEEDS: {
                 Cursor cursor;
                 if ( matchCode == URI_GROUPS  ) {
-                    cursor = query(FeedColumns.GROUPS_CONTENT_URI, MAX_PRIORITY, null, null, null);
+                    cursor = query(FeedColumns.GROUPS_AND_ROOT_CONTENT_URI, MAX_PRIORITY, null, null, null);
                 } else if ( matchCode == URI_FEEDS && values.getAsInteger( FeedColumns.GROUP_ID ) != null ) {//values.containsKey(FeedColumns.GROUP_ID)  ) {
                     String groupId = values.getAsString(FeedColumns.GROUP_ID);
                     cursor = query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupId), MAX_PRIORITY, null, null, null);
@@ -456,6 +466,7 @@ public class FeedDataContentProvider extends ContentProvider {
         }
     }
 
+    public static boolean mPriorityManagement = true;
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         if (uri == null || values == null) {
@@ -478,7 +489,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 long feedId = Long.parseLong(uri.getPathSegments().get(1));
                 where.append(FeedColumns._ID).append('=').append(feedId);
 
-                if (values.containsKey(FeedColumns.PRIORITY)) {
+                if (values.containsKey(FeedColumns.PRIORITY) && mPriorityManagement ) {
                     Cursor priorityCursor = database.query(FeedColumns.TABLE_NAME, new String[]{FeedColumns.PRIORITY, FeedColumns.GROUP_ID},
                             FeedColumns._ID + "=" + feedId, null, null, null, null);
                     if (priorityCursor.moveToNext()) {
@@ -612,8 +623,8 @@ public class FeedDataContentProvider extends ContentProvider {
 
         int count = database.update(table, values, where.toString(), selectionArgs);
 
-        if (FeedColumns.TABLE_NAME.equals(table)
-                && (values.containsKey(FeedColumns.NAME) || values.containsKey(FeedColumns.URL) || values.containsKey(FeedColumns.PRIORITY))) {
+        if ( mPriorityManagement && ( FeedColumns.TABLE_NAME.equals(table)
+                && (values.containsKey(FeedColumns.NAME) || values.containsKey(FeedColumns.URL) || values.containsKey(FeedColumns.PRIORITY)) ) ) {
             mDatabaseHelper.exportToOPML();
         }
         FetcherService.getStatusText().ChangeDB("");

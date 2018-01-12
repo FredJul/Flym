@@ -165,4 +165,9 @@ public class PrefUtils {
         } catch (Exception ignored) { // Seems to be possible to have a NPE here... Why??
         }
     }
+
+    public static boolean IsLightTheme() {
+        return getBoolean(LIGHT_THEME, false);
+    }
+
 }

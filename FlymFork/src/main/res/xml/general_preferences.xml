@@ -13,7 +13,7 @@
     </PreferenceScreen>
 
     <PreferenceCategory
-        style="@style/PrefCat"
+        android:layout="@layout/preference_category"
         android:title="@string/settings_category_refresh">
 
         <CheckBoxPreference
@@ -91,7 +91,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        style="@style/PrefCat"
+        android:layout="@layout/preference_category"
         android:title="@string/settings_category_content_presentation">
 
         <CheckBoxPreference
@@ -122,6 +122,12 @@
             android:title="@string/fontsize_entrylist"/>
 
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="setting_show_article_icon"
+            android:title="@string/show_article_icon"
+            android:summary="@string/show_article_icon_descr"/>
+
+        <CheckBoxPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="true"
@@ -150,7 +156,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        style="@style/PrefCat"
+        android:layout="@layout/preference_category"
         android:title="@string/behaviour">
         <CheckBoxPreference
             android:defaultValue="true"
@@ -178,7 +184,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        style="@style/PrefCat"
+        android:layout="@layout/preference_category"
         android:title="@string/settings_category_notifications">
 
         <CheckBoxPreference
@@ -216,7 +222,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        style="@style/PrefCat"
+        android:layout="@layout/preference_category"
         android:title="@string/settings_additional">
 
         <CheckBoxPreference
@@ -230,6 +236,12 @@
             android:defaultValue="false"
             android:title="@string/show_progress_info"
             android:summary="@string/show_progress_info_descr"/>
+
+        <CheckBoxPreference
+            android:key="settings_show_article_url"
+            android:defaultValue="false"
+            android:title="@string/show_article_url"
+            android:summary="@string/show_article_url_descr"/>
 
         <EditTextPreference
             android:key="content_extract_rules"

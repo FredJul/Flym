@@ -57,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/filter_apply_to_content"/>
+
     </RadioGroup>
 
 </LinearLayout>

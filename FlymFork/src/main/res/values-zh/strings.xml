@@ -22,7 +22,7 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">关于Flym</string>
+    <string name="about_flym">关于Flym / Help / Contact developer</string>
     <string name="welcome_title">欢迎使用Flym。需要添加一个源吗？</string>
     <string name="never">从未</string>
     <string name="update">更新</string>
@@ -68,7 +68,7 @@
     <string name="filter_delete_title">删除规则</string>
     <string name="filter_edit_title">编辑规则</string>
     <string name="filter_is_regex">是一个正则表达式</string>
-    <string name="filter_apply_to_title">应用到标题</string>
+    <string name="filter_apply_to_title">应用到标题 (or link adress)</string>
     <string name="filter_apply_to_content">应用到内容</string>
     <string name="accept">通过</string>
     <string name="reject">排除</string>

@@ -39,7 +39,7 @@ public class UiUtils {
     static private final LongSparseArray<Bitmap> FAVICON_CACHE = new LongSparseArray<>();
 
     static public void setPreferenceTheme(Activity a) {
-        if (!PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false)) {
+        if (!PrefUtils.IsLightTheme()) {
             a.setTheme(R.style.Theme_Dark);
         }
     }

@@ -47,14 +47,18 @@ package ru.yanus171.feedexfork.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
@@ -76,6 +80,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -85,7 +90,9 @@ import ru.yanus171.feedexfork.activity.AddGoogleNewsActivity;
 import ru.yanus171.feedexfork.activity.EditFeedActivity;
 import ru.yanus171.feedexfork.adapter.FeedsCursorAdapter;
 import ru.yanus171.feedexfork.parser.OPML;
+import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
+import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
 import ru.yanus171.feedexfork.utils.UiUtils;
 import ru.yanus171.feedexfork.view.DragNDropExpandableListView;
 import ru.yanus171.feedexfork.view.DragNDropListener;
@@ -489,6 +496,69 @@ public class EditFeedsListFragment extends ListFragment {
                         importFromOpml();
                     }
                 }
+
+                return true;
+            }
+            case R.id.menu_fix_order: {
+                FeedDataContentProvider.mPriorityManagement = false;
+
+                final ProgressDialog pd = new ProgressDialog(getContext());
+                pd.setMessage(getString(R.string.applyOperations));
+                //pd.setCancelable(true);
+                //pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                pd.setIndeterminate(true);
+                pd.show();
+
+                final Handler handler = new Handler();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+                        ContentResolver cr = MainApplication.getContext().getContentResolver();
+                        try {
+                            int order = 0;
+                            {
+                                final Cursor cur = cr.query(FeedColumns.GROUPS_AND_ROOT_CONTENT_URI, new String[]{FeedColumns._ID}, null, null, FeedColumns.PRIORITY + ", " + FeedColumns._ID);
+                                while (cur.moveToNext()) {
+                                    order++;
+                                    operations.add(ContentProviderOperation.newUpdate(FeedColumns.CONTENT_URI(cur.getLong(0))).withValue(FeedColumns.PRIORITY, order).build());
+                                }
+                                cur.close();
+                            }
+
+                            {
+                                final Cursor cur = cr.query(FeedColumns.GROUPS_CONTENT_URI, new String[]{FeedColumns._ID}, null, null, FeedColumns.PRIORITY + ", " + FeedColumns._ID);
+                                while (cur.moveToNext()) {
+                                    order = 0;
+                                    Cursor curGroupFeeds = cr.query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(cur.getLong(0)), new String[]{FeedColumns._ID}, null, null, FeedColumns.PRIORITY + ", " + FeedColumns._ID);
+                                    while (curGroupFeeds.moveToNext()) {
+                                        order++;
+                                        operations.add(ContentProviderOperation.newUpdate(FeedColumns.CONTENT_URI(curGroupFeeds.getLong(0))).withValue(FeedColumns.PRIORITY, order).build());
+                                    }
+                                    curGroupFeeds.close();
+
+                                }
+                                cur.close();
+                            }
+                            try {
+                                cr.applyBatch(FeedData.AUTHORITY, operations);
+                            } catch (Throwable ignored) {
+                                ignored.printStackTrace();
+                            }
+                        } finally {
+                            FeedDataContentProvider.mPriorityManagement = true;
+                        }
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                pd.cancel();
+                            }
+                        });
+
+                    }
+                }).start();
+
 
                 return true;
             }

@@ -22,7 +22,7 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">О приложении / Помощь</string>
+    <string name="about_flym">О приложении / Помощь / Связь с разработчиком </string>
     <string name="welcome_title">Добавить канал?</string>
     <string name="never">никогда</string>
     <string name="update">Обновление</string>
@@ -72,7 +72,7 @@
     <string name="filter_delete_title">Удалить фильтр</string>
     <string name="filter_edit_title">Редактировать фильтр</string>
     <string name="filter_is_regex">это регулярное выражение</string>
-    <string name="filter_apply_to_title">Применить к заголовкам</string>
+    <string name="filter_apply_to_title">Применить к заголовкам или адресам</string>
     <string name="filter_apply_to_content">Применить к содержанию</string>
     <string name="accept">ACCEPT</string>
     <string name="reject">REJECT</string>
@@ -363,5 +363,11 @@
     <string name="auto_image_load">Загружать изображения при автоматической загрузке</string>
     <string name="show_progress_info">Подробная информация процесса</string>
     <string name="show_progress_info_descr">Показывать подробную информацию о текущих действиях в процессе загрузки лент</string>
+    <string name="filter_apply_to_url">Применить к адресу</string>
+    <string name="show_article_url">Показывать адрес статьи</string>
+    <string name="show_article_url_descr">в списке статей</string>
+    <string name="show_article_icon">Показывать иконки статей</string>
+    <string name="show_article_icon_descr">в списке статей (отключите для экономии места на экране)</string>
+    <string name="menu_fix_order">Починить порядок статей</string>
 
 </resources>

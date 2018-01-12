@@ -54,6 +54,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="fill"
+            android:divider="#66888888"
+            android:dividerHeight="5dp"
             android:footerDividersEnabled="false"/>
     </FrameLayout>
 </LinearLayout>

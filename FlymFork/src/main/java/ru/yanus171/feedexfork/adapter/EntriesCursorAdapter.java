@@ -81,6 +81,7 @@ import ru.yanus171.feedexfork.fragment.EntriesListFragment;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
+import ru.yanus171.feedexfork.service.FetcherService;
 import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
@@ -92,10 +93,11 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     private final Context mContext;
     private final boolean mShowFeedInfo;
     private final boolean mShowEntryText, mShowUnread;
+    private boolean mBackgroundColorLight = false;
 
     public static final ArrayList<Uri> mMarkAsReadList = new ArrayList<Uri>();
 
-    private int mIdPos, mTitlePos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mMobilizedPos, mFeedIdPos, mFeedNamePos, mAbstractPos ;
+    private int mIdPos, mTitlePos, mUrlPos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mMobilizedPos, mFeedIdPos, mFeedNamePos, mAbstractPos ;
 
     public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo, boolean showEntryText, boolean showUnread) {
         super(context, R.layout.item_entry_list, cursor, 0);
@@ -125,6 +127,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     @Override
     public void bindView(final View view, final Context context, Cursor cursor) {
 
+
         final Vibrator vibrator = (Vibrator) view.getContext().getSystemService( Context.VIBRATOR_SERVICE );
 
         view.findViewById(R.id.text2hor).setVisibility(View.GONE);
@@ -136,6 +139,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         if (view.getTag(R.id.holder) == null) {
             final ViewHolder holder = new ViewHolder();
             holder.titleTextView = (TextView) view.findViewById(android.R.id.text1);
+            holder.urlTextView = (TextView) view.findViewById(R.id.textUrl);
             holder.textTextView = (TextView) view.findViewById(R.id.textSource);
             if ( mShowEntryText )
                 holder.dateTextView = (TextView) view.findViewById(R.id.text2hor);
@@ -298,6 +302,15 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
         holder.entryID = cursor.getLong(mIdPos);
 
+        //mBackgroundColorLight = mShowEntryText && cursor.getPosition() % 2 == 1;
+        final int backgroundColor;
+        //if ( mBackgroundColorLight )
+        //    backgroundColor = PrefUtils.IsLightTheme() ?  R.color.light_background_light : R.color.dark_background_ligth;
+        //else
+            backgroundColor = PrefUtils.IsLightTheme() ?  R.color.light_background : R.color.dark_background;
+        view.findViewById(R.id.layout_with_background).setBackgroundColor(ContextCompat.getColor( context, backgroundColor ));
+
+
         holder.readToggleSwypeBtnView.setVisibility( View.GONE );
         holder.starToggleSwypeBtnView.setVisibility( View.GONE );
 
@@ -306,22 +319,27 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         String titleText = cursor.getString(mTitlePos);
         holder.titleTextView.setText(titleText);
 
+        holder.urlTextView.setText(cursor.getString(mUrlPos));
 
         String feedName = cursor.getString(mFeedNamePos);
 
-        String mainImgUrl = cursor.getString(mMainImgPos);
-        mainImgUrl = TextUtils.isEmpty(mainImgUrl) ? null : NetworkUtils.getDownloadedOrDistantImageUrl(holder.entryID, mainImgUrl);
+        if ( !mShowEntryText && PrefUtils.getBoolean( "setting_show_article_icon", true ) ) {
+            holder.mainImgView.setVisibility( View.VISIBLE );
+            String mainImgUrl = cursor.getString(mMainImgPos);
+            mainImgUrl = TextUtils.isEmpty(mainImgUrl) ? null : NetworkUtils.getDownloadedOrDistantImageUrl(holder.entryID, mainImgUrl);
 
-        ColorGenerator generator = ColorGenerator.DEFAULT;
-        int color = generator.getColor(feedId); // The color is specific to the feedId (which shouldn't change)
-        String lettersForName = feedName != null ? (feedName.length() < 2 ? feedName.toUpperCase() : feedName.substring(0, 2).toUpperCase()) : "";
-        TextDrawable letterDrawable = TextDrawable.builder().buildRect(lettersForName, color);
-        if (mainImgUrl != null) {
-            Glide.with(context).load(mainImgUrl).centerCrop().placeholder(letterDrawable).error(letterDrawable).into(holder.mainImgView);
-        } else {
-            Glide.clear(holder.mainImgView);
-            holder.mainImgView.setImageDrawable(letterDrawable);
-        }
+            ColorGenerator generator = ColorGenerator.DEFAULT;
+            int color = generator.getColor(feedId); // The color is specific to the feedId (which shouldn't change)
+            String lettersForName = feedName != null ? (feedName.length() < 2 ? feedName.toUpperCase() : feedName.substring(0, 2).toUpperCase()) : "";
+            TextDrawable letterDrawable = TextDrawable.builder().buildRect(lettersForName, color);
+            if (mainImgUrl != null) {
+                Glide.with(context).load(mainImgUrl).centerCrop().placeholder(letterDrawable).error(letterDrawable).into(holder.mainImgView);
+            } else {
+                Glide.clear(holder.mainImgView);
+                holder.mainImgView.setImageDrawable(letterDrawable);
+            }
+        } else
+            holder.mainImgView.setVisibility( View.GONE );
 
         holder.isFavorite = cursor.getInt(mFavoritePos) == 1;
 
@@ -337,16 +355,15 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.dateTextView.setText(StringUtils.getDateTimeString(cursor.getLong(mDatePos)));
         }
 
-        if (cursor.isNull(mIsReadPos)) {
-            holder.titleTextView.setEnabled(true);
-            holder.dateTextView.setEnabled(true);
-            holder.isRead = false;
-        } else {
-            holder.titleTextView.setEnabled(false);
-            holder.dateTextView.setEnabled(false);
-            holder.isRead = true;
-        }
+        final boolean isUnread = cursor.isNull(mIsReadPos);
+        holder.titleTextView.setEnabled(isUnread);
+        holder.dateTextView.setEnabled(isUnread);
+        holder.urlTextView.setEnabled(isUnread);
 
+        final boolean showUrl = PrefUtils.getBoolean( "settings_show_article_url", false ) || feedId == FetcherService.GetExtrenalLinkFeedID();
+        holder.urlTextView.setVisibility( showUrl ? View.VISIBLE : View.GONE );
+
+        holder.isRead = !isUnread;
 
         /*View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -382,16 +399,13 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.textTextView.setVisibility(View.VISIBLE);
             holder.textTextView.setText(Html.fromHtml( cursor.getString(mAbstractPos) == null ? "" : cursor.getString(mAbstractPos).toString() ));
             holder.textTextView.setEnabled(!holder.isRead);
-            holder.mainImgView.setVisibility(View.GONE);
         } else
             holder.textTextView.setVisibility(View.GONE);
 
     }
 
-
-
     private void UpdateStarImgView(ViewHolder holder) {
-        int startID = PrefUtils.getBoolean( PrefUtils.LIGHT_THEME, false ) ? R.drawable.star_gray_solid : R.drawable.star_yellow;
+        int startID = PrefUtils.IsLightTheme() ? R.drawable.star_gray_solid : R.drawable.star_yellow;
         holder.starImgView.setImageResource(holder.isFavorite ? startID : R.drawable.star_empty_gray );
     }
     private void UpdateReadImgView(ViewHolder holder) {
@@ -519,6 +533,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         if (cursor != null && cursor.getCount() > 0) {
             mIdPos = cursor.getColumnIndex(EntryColumns._ID);
             mTitlePos = cursor.getColumnIndex(EntryColumns.TITLE);
+            mUrlPos = cursor.getColumnIndex(EntryColumns.LINK);
             mMainImgPos = cursor.getColumnIndex(EntryColumns.IMAGE_URL);
             mDatePos = cursor.getColumnIndex(EntryColumns.DATE);
             mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
@@ -533,6 +548,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     private static class ViewHolder {
         public TextView titleTextView;
+        public TextView urlTextView;
         public TextView textTextView;
         public TextView dateTextView;
         public ImageView mainImgView;

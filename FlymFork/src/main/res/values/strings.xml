@@ -24,7 +24,7 @@
 
     <!-- GENERAL -->
     <string name="app_name">Flym Fork</string>
-    <string name="about_flym">About app / Help</string>
+    <string name="about_flym">About app / Help / Contact developer </string>
     <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
     <string name="never">never</string>
     <string name="update">Update</string>
@@ -70,7 +70,7 @@
     <string name="filter_delete_title">Delete rule</string>
     <string name="filter_edit_title">Edit rule</string>
     <string name="filter_is_regex">is a regular expression</string>
-    <string name="filter_apply_to_title">Apply to title</string>
+    <string name="filter_apply_to_title">Apply to title or link adress</string>
     <string name="filter_apply_to_content">Apply to content</string>
     <string name="accept">ACCEPT</string>
     <string name="reject">REJECT</string>
@@ -232,6 +232,12 @@
     <string name="auto_image_load">Auto images load</string>
     <string name="show_progress_info">Detailed progress info</string>
     <string name="show_progress_info_descr">Show detailed info about current operation</string>
+    <string name="filter_apply_to_url">Apply to url</string>
+    <string name="show_article_url">Show article url</string>
+    <string name="show_article_url_descr">in article list</string>
+    <string name="show_article_icon">Show article icon</string>
+    <string name="show_article_icon_descr">in article list (turn off for screen space economy)</string>
+    <string name="menu_fix_order">Fix feeds order</string>
 
 
     <plurals name="number_of_new_entries">

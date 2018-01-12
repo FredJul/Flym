@@ -22,7 +22,6 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">About app</string>
     <string name="welcome_title">Benvenuto in Flym. Vorresti aggiungere un feed?</string>
     <string name="never">mai</string>
     <string name="update">Aggiornamento</string>
@@ -72,7 +71,7 @@
     <string name="filter_delete_title">Elimina filtro</string>
     <string name="filter_edit_title">Modifica filtro</string>
     <string name="filter_is_regex">è un\'espressione regolare</string>
-    <string name="filter_apply_to_title">Applica al titolo</string>
+    <string name="filter_apply_to_title">Applica al titolo (or link adress)</string>
     <string name="filter_apply_to_content">Applica al contenuto</string>
     <string name="accept">ACCETTA</string>
     <string name="reject">BLOCCA</string>

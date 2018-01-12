@@ -412,8 +412,19 @@ public class RssAtomParser extends DefaultHandler {
                     String improvedAuthor = "";
                     if ( mAuthor != null )
                         improvedAuthor = mAuthor.toString();
+
+                    String entryLinkString = ""; // don't set this to null as we need *some* value
+
+                    if (mEntryLink != null && mEntryLink.length() > 0) {
+                        entryLinkString = mEntryLink.toString().trim();
+                        if (mFeedBaseUrl != null && !entryLinkString.startsWith(Constants.HTTP_SCHEME) && !entryLinkString.startsWith(Constants.HTTPS_SCHEME)) {
+                            entryLinkString = mFeedBaseUrl
+                                    + (entryLinkString.startsWith(Constants.SLASH) ? entryLinkString : Constants.SLASH + entryLinkString);
+                        }
+                    }
+
                     // Try to find if the entry is not filtered and need to be processed
-                    if (!mFilters.isEntryFiltered(improvedTitle, improvedAuthor, improvedContent)) {
+                    if (!mFilters.isEntryFiltered(improvedTitle, improvedAuthor, entryLinkString, improvedContent)) {
 
                         if (mAuthor != null) {
                             values.put(EntryColumns.AUTHOR, mAuthor.toString());
@@ -436,15 +447,6 @@ public class RssAtomParser extends DefaultHandler {
                             existenceStringBuilder.append(Constants.DB_AND).append(EntryColumns.GUID).append(Constants.DB_ARG);
                         }
 
-                        String entryLinkString = ""; // don't set this to null as we need *some* value
-
-                        if (mEntryLink != null && mEntryLink.length() > 0) {
-                            entryLinkString = mEntryLink.toString().trim();
-                            if (mFeedBaseUrl != null && !entryLinkString.startsWith(Constants.HTTP_SCHEME) && !entryLinkString.startsWith(Constants.HTTPS_SCHEME)) {
-                                entryLinkString = mFeedBaseUrl
-                                        + (entryLinkString.startsWith(Constants.SLASH) ? entryLinkString : Constants.SLASH + entryLinkString);
-                            }
-                        }
 
                         String[] existenceValues = enclosureString != null ? (guidString != null ? new String[]{entryLinkString, enclosureString,
                                 guidString} : new String[]{entryLinkString, enclosureString}) : (guidString != null ? new String[]{entryLinkString,
@@ -692,7 +694,7 @@ public class RssAtomParser extends DefaultHandler {
 
         }
 
-        public boolean isEntryFiltered(String title, String author, String content) {
+        public boolean isEntryFiltered(String title, String author, String url, String content) {
 
             boolean isFiltered = false;
 
@@ -704,12 +706,13 @@ public class RssAtomParser extends DefaultHandler {
                     if (r.isAppliedToTitle) {
                         Matcher mT = p.matcher(title);
                         Matcher mA = p.matcher(author);
-                        isMatch = mT.find() || mA.find();
+                        Matcher mU = p.matcher(url);
+                        isMatch = mT.find() || mA.find() || mU.find();
                     } else if (content != null) {
                         Matcher m = p.matcher(content);
                         isMatch = m.find();
                     }
-                } else if ((r.isAppliedToTitle && ( title.contains(r.filterText) || author.contains(r.filterText) )) ||
+                } else if ((r.isAppliedToTitle && ( title.contains(r.filterText) || author.contains(r.filterText) || url.contains(r.filterText) )) ||
                            (!r.isAppliedToTitle && content != null && content.contains(r.filterText))) {
                     isMatch = true;
                 }

@@ -109,6 +109,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
     private StatusText mStatusText = null;
 
+    public boolean mMarkAsUnreadOnFinish = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -287,6 +288,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
     public void onResume() {
         super.onResume();
         mEntryPagerAdapter.onResume();
+        mMarkAsUnreadOnFinish = false;
 
 //        if (((BaseActivity) getActivity()).isFullScreen()) {
 //            mToggleFullscreenBtn.setVisibility(View.VISIBLE);
@@ -393,6 +395,8 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                     break;
                 }
                 case R.id.menu_mark_as_unread: {
+                    mMarkAsUnreadOnFinish = true;
+                    CloseEntry();
                     final Uri uri = ContentUris.withAppendedId(mBaseUri, getCurrentEntryID());
                     new Thread() {
                         @Override
@@ -401,7 +405,6 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                             cr.update(uri, FeedData.getUnreadContentValues(), null, null);
                         }
                     }.start();
-                    CloseEntry();
                     break;
                 }
                 case R.id.menu_mark_as_favorite: {
@@ -581,7 +584,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
             // Mark the previous opened article as read
             //if (entryCursor.getInt(mIsReadPos) != 1) {
-            if ( mLastPagerPos != -1 && mEntryPagerAdapter.getCursor(mLastPagerPos).getInt(mIsReadPos) != 1 ) {
+            if ( !mMarkAsUnreadOnFinish && mLastPagerPos != -1 && mEntryPagerAdapter.getCursor(mLastPagerPos).getInt(mIsReadPos) != 1 ) {
                 final Uri uri = ContentUris.withAppendedId(mBaseUri, mEntriesIds[mLastPagerPos]);
                 new Thread(new Runnable() {
                     @Override

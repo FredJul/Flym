@@ -138,8 +138,9 @@ public class EntryActivity extends BaseActivity {
                 cr.delete(FeedData.TaskColumns.CONTENT_URI, FeedData.TaskColumns.ENTRY_ID + " = " + mEntryFragment.getCurrentEntryID(), null);
                 FetcherService.setDownloadImageCursorNeedsRequery(true);
 
-                //mark as read
-                cr.update(EntryColumns.CONTENT_URI(  mEntryFragment.getCurrentEntryID() ), FeedData.getReadContentValues(), null, null);
+                if ( !mEntryFragment.mMarkAsUnreadOnFinish )
+                    //mark as read
+                    cr.update(EntryColumns.CONTENT_URI(  mEntryFragment.getCurrentEntryID() ), FeedData.getReadContentValues(), null, null);
             }
         }.start();
 

@@ -81,13 +81,15 @@ public class EntryView extends WebView implements Observer {
 
     private static final String TEXT_HTML = "text/html";
     private static final String HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>";
-    private static final String BACKGROUND_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#f6f6f6" : "#181b1f";
-    private static final String QUOTE_BACKGROUND_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#e6e6e6" : "#383b3f";
-    private static final String QUOTE_LEFT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#a6a6a6" : "#686b6f";
+    private static final String BACKGROUND_COLOR = PrefUtils.IsLightTheme() ? "#f6f6f6" : "#181b1f";
+    private static final String QUOTE_BACKGROUND_COLOR = PrefUtils.IsLightTheme() ? "#e6e6e6" : "#383b3f";
+    private static final String QUOTE_LEFT_COLOR = PrefUtils.IsLightTheme() ? "#a6a6a6" : "#686b6f";
+
+
     private long mEntryId = -1;
 
     //private static final String TEXT_COLOR_BRIGHTNESS = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#000000" : "#C0C0C0";
-    private static String GetTextColor() {return PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#000000" : getTextColorDarkTheme();}
+    private static String GetTextColor() {return PrefUtils.IsLightTheme() ? "#000000" : getTextColorDarkTheme();}
 
     private static String getTextColorDarkTheme() {
 
@@ -100,9 +102,9 @@ public class EntryView extends WebView implements Observer {
         return "#" + Integer.toHexString( Color.argb( 255, b, b, b ) ).substring( 2 );
     }
 
-    private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#52A7DF" : "#1A5A81";
-    private static final String SUBTITLE_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#666666" : "#8c8c8c";
-    private static final String SUBTITLE_BORDER_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "solid #ddd" : "solid #303030";
+    private static final String BUTTON_COLOR = PrefUtils.IsLightTheme() ? "#52A7DF" : "#1A5A81";
+    private static final String SUBTITLE_COLOR = PrefUtils.IsLightTheme() ? "#666666" : "#8c8c8c";
+    private static final String SUBTITLE_BORDER_COLOR = PrefUtils.IsLightTheme() ? "solid #ddd" : "solid #303030";
     public static String GetCSS() { return "<head><style type='text/css'> "
             + "body {max-width: 100%; margin: 0.1cm; text-align:justify; font-weight: " + getFontBold() + " color: " + GetTextColor() + "; background-color:" + BACKGROUND_COLOR + "; line-height: 120%} "
             + "* {max-width: 100%; word-break: break-word}"
