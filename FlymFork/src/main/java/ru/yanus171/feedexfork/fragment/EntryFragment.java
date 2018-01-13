@@ -165,6 +165,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
             mCurrentPagerPos = savedInstanceState.getInt(STATE_CURRENT_PAGER_POS);
             mEntryPager.getAdapter().notifyDataSetChanged();
             mEntryPager.setCurrentItem(mCurrentPagerPos);
+            mLastPagerPos = mCurrentPagerPos;
         }
 
         mEntryPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -542,6 +543,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                     mEntriesIds[i] = entriesCursor.getLong(0);
                     if (mEntriesIds[i] == mInitialEntryId) {
                         mCurrentPagerPos = i; // To immediately display the good entry
+                        mLastPagerPos = i;
                     }
                     i++;
                 }
