@@ -28,5 +28,5 @@
     <item
         android:id="@+id/menu_entry_details__mark_as_unread"
         android:title="@string/menu_mark_as_unread"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 </menu>
