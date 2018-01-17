@@ -236,8 +236,10 @@
     <string name="show_article_url">Show article url</string>
     <string name="show_article_url_descr">in article list</string>
     <string name="show_article_icon">Show article icon</string>
-    <string name="show_article_icon_descr">in article list (turn off for screen space economy)</string>
+    <string name="show_article_icon_descr">turn off for screen space economy</string>
     <string name="menu_fix_order">Fix feeds order</string>
+    <string name="settings_category_article_list">Article list</string>
+    <string name="settings_category_article_text">Article text</string>
 
 
     <plurals name="number_of_new_entries">

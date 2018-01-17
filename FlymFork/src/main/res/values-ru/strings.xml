@@ -164,8 +164,8 @@
     <string name="settings_notifications_vibrate">Вибрация</string>
     <string name="settings_notifications_vibrate_description">Включить вибрацию при новых записях
     </string>
-    <string name="settings_notifications_light">Light</string>
-    <string name="settings_notifications_light_description">Enable notification light on new entries</string>
+    <string name="settings_notifications_light">Светодиод</string>
+    <string name="settings_notifications_light_description">Мигание светодиода при появлении новых статей</string>
     <string name="settings_category_content_presentation">Представление содержания</string>
     <string name="settings_light_theme">Светлая тема</string>
     <string name="settings_light_theme_description">Использовать светлую тему</string>
@@ -367,7 +367,9 @@
     <string name="show_article_url">Показывать адрес статьи</string>
     <string name="show_article_url_descr">в списке статей</string>
     <string name="show_article_icon">Показывать иконки статей</string>
-    <string name="show_article_icon_descr">в списке статей (отключите для экономии места на экране)</string>
+    <string name="show_article_icon_descr">отключите для экономии места на экране</string>
     <string name="menu_fix_order">Починить порядок статей</string>
+    <string name="settings_category_article_list">Список статей</string>
+    <string name="settings_category_article_text">Текст статьи</string>
 
 </resources>

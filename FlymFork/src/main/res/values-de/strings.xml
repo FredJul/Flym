@@ -167,6 +167,7 @@
     <string name="settings_widget_background">Hintergrund</string>
     <string name="settings_widget_background_description">Farbe und Transparenz des Widget-Hintergrundes</string>
     <string name="all_feeds">Alle Feeds (auch zukünftige)</string>
+    <string name="settings_category_article_list">Artikel Liste</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Eintrag</item>
