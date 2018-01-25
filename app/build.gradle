@@ -76,11 +76,11 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    implementation "android.arch.lifecycle:extensions:+"
-    kapt "android.arch.lifecycle:compiler:+"
-    implementation "android.arch.paging:runtime:+"
-    implementation "android.arch.persistence.room:runtime:+"
-    kapt "android.arch.persistence.room:compiler:+"
+    implementation "android.arch.lifecycle:extensions:1.1.0"
+    kapt "android.arch.lifecycle:compiler:1.1.0"
+    implementation "android.arch.paging:runtime:1.0.0-alpha5"
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    kapt "android.arch.persistence.room:compiler:1.0.0"
 
     // Support dependencies
     implementation 'com.android.support:appcompat-v7:+'
