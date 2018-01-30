@@ -1,12 +1,20 @@
 package net.frju.flym.data.entities
 
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.Index
 import android.os.Parcel
 import android.os.Parcelable
 import paperparcel.PaperParcel
 
 @PaperParcel
-@Entity(tableName = "tasks", primaryKeys = arrayOf("entryId", "imageLinkToDl"))
+@Entity(tableName = "tasks",
+        primaryKeys = arrayOf("entryId", "imageLinkToDl"),
+        indices = arrayOf(Index(value = "entryId")),
+        foreignKeys = arrayOf(ForeignKey(entity = Entry::class,
+                parentColumns = arrayOf("id"),
+                childColumns = arrayOf("entryId"),
+                onDelete = ForeignKey.CASCADE)))
 data class Task(
         var entryId: String = "",
         var imageLinkToDl: String = "", // TODO try again with null when room will authorize it

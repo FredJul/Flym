@@ -1,9 +1,6 @@
 package net.frju.flym.data.entities
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Index
-import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.*
 import android.os.Parcel
 import android.os.Parcelable
 import com.amulyakhare.textdrawable.TextDrawable
@@ -12,7 +9,13 @@ import com.rometools.rome.feed.synd.SyndFeed
 import paperparcel.PaperParcel
 
 @PaperParcel
-@Entity(tableName = "feeds", indices = arrayOf(Index(value = *arrayOf("feedId", "feedLink"), unique = true)))
+@Entity(tableName = "feeds",
+        indices = arrayOf(Index(value = "groupId"),
+                Index(value = *arrayOf("feedId", "feedLink"), unique = true)),
+        foreignKeys = arrayOf(ForeignKey(entity = Feed::class,
+                parentColumns = arrayOf("feedId"),
+                childColumns = arrayOf("groupId"),
+                onDelete = ForeignKey.CASCADE)))
 data class Feed(
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "feedId")

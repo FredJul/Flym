@@ -1,18 +1,24 @@
 package net.frju.flym.data.entities
 
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
 import com.rometools.rome.feed.synd.SyndEntry
 import net.frju.flym.utils.sha1
 import paperparcel.PaperParcel
-import java.util.Date
-import java.util.UUID
+import java.util.*
 
 
 @PaperParcel
-@Entity(tableName = "entries")
+@Entity(tableName = "entries",
+        indices = arrayOf(Index(value = "feedId")),
+        foreignKeys = arrayOf(ForeignKey(entity = Feed::class,
+                parentColumns = arrayOf("feedId"),
+                childColumns = arrayOf("feedId"),
+                onDelete = ForeignKey.CASCADE)))
 open class Entry : Parcelable {
 
     companion object {
