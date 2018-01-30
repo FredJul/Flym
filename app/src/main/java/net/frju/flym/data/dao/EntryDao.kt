@@ -1,7 +1,7 @@
 package net.frju.flym.data.dao
 
 import android.arch.lifecycle.LiveData
-import android.arch.paging.LivePagedListProvider
+import android.arch.paging.DataSource
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
@@ -20,16 +20,16 @@ private const val LIKE_SEARCH = "LIKE '%' || :searchText || '%'"
 interface EntryDao {
 
 	@Query("SELECT * FROM $JOIN WHERE title $LIKE_SEARCH OR description $LIKE_SEARCH OR mobilizedContent $LIKE_SEARCH $ORDER_BY")
-	fun observeSearch(searchText: String): LivePagedListProvider<Int, EntryWithFeed>
+	fun observeSearch(searchText: String): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT * FROM $JOIN WHERE $OLDER $ORDER_BY")
-	fun observeAll(maxDate: Long): LivePagedListProvider<Int, EntryWithFeed>
+	fun observeAll(maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT * FROM $JOIN WHERE $OLDER AND read = 0 $ORDER_BY")
-	fun observeAllUnreads(maxDate: Long): LivePagedListProvider<Int, EntryWithFeed>
+	fun observeAllUnreads(maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT * FROM $JOIN WHERE $OLDER AND favorite = 1 $ORDER_BY")
-	fun observeAllFavorites(maxDate: Long): LivePagedListProvider<Int, EntryWithFeed>
+	fun observeAllFavorites(maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT id FROM entries WHERE $OLDER $ORDER_BY")
 	fun observeAllIds(maxDate: Long): LiveData<List<String>>
@@ -41,13 +41,13 @@ interface EntryDao {
 	fun observeAllFavoriteIds(maxDate: Long): LiveData<List<String>>
 
 	@Query("SELECT * FROM $JOIN WHERE $FEED_ID AND $OLDER $ORDER_BY")
-	fun observeByFeed(feedId: Long, maxDate: Long): LivePagedListProvider<Int, EntryWithFeed>
+	fun observeByFeed(feedId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT * FROM $JOIN WHERE $FEED_ID AND $OLDER AND read = 0 $ORDER_BY")
-	fun observeUnreadsByFeed(feedId: Long, maxDate: Long): LivePagedListProvider<Int, EntryWithFeed>
+	fun observeUnreadsByFeed(feedId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT * FROM $JOIN WHERE $FEED_ID AND $OLDER AND favorite = 1 $ORDER_BY")
-	fun observeFavoritesByFeed(feedId: Long, maxDate: Long): LivePagedListProvider<Int, EntryWithFeed>
+	fun observeFavoritesByFeed(feedId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT id FROM entries WHERE title $LIKE_SEARCH OR description $LIKE_SEARCH OR mobilizedContent $LIKE_SEARCH $ORDER_BY")
 	fun observeIdsBySearch(searchText: String): LiveData<List<String>>
@@ -62,13 +62,13 @@ interface EntryDao {
 	fun observeFavoriteIdsByFeed(feedId: Long, maxDate: Long): LiveData<List<String>>
 
 	@Query("SELECT * FROM $JOIN WHERE groupId IS :groupId AND $OLDER $ORDER_BY")
-	fun observeByGroup(groupId: Long, maxDate: Long): LivePagedListProvider<Int, EntryWithFeed>
+	fun observeByGroup(groupId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT * FROM $JOIN WHERE groupId IS :groupId AND $OLDER AND read = 0 $ORDER_BY")
-	fun observeUnreadsByGroup(groupId: Long, maxDate: Long): LivePagedListProvider<Int, EntryWithFeed>
+	fun observeUnreadsByGroup(groupId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT * FROM $JOIN WHERE groupId IS :groupId AND $OLDER AND favorite = 1 $ORDER_BY")
-	fun observeFavoritesByGroup(groupId: Long, maxDate: Long): LivePagedListProvider<Int, EntryWithFeed>
+	fun observeFavoritesByGroup(groupId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT id FROM $JOIN WHERE groupId IS :groupId AND $OLDER $ORDER_BY")
 	fun observeIdsByGroup(groupId: Long, maxDate: Long): LiveData<List<String>>

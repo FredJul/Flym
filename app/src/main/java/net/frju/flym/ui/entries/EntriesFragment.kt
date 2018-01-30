@@ -2,6 +2,7 @@ package net.frju.flym.ui.entries
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
+import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
@@ -182,7 +183,7 @@ class EntriesFragment : Fragment() {
 		})
 
 		entriesLiveData?.removeObservers(this)
-		entriesLiveData = when {
+		entriesLiveData = LivePagedListBuilder(when {
 			searchText != null -> App.db.entryDao().observeSearch(searchText!!)
 			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByGroup(feed!!.id, listDisplayDate)
 			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByGroup(feed!!.id, listDisplayDate)
@@ -195,7 +196,7 @@ class EntriesFragment : Fragment() {
 			bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreads(listDisplayDate)
 			bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavorites(listDisplayDate)
 			else -> App.db.entryDao().observeAll(listDisplayDate)
-		}.create(0, 30)
+		}, 30).build()
 
 		entriesLiveData?.observe(this, Observer<PagedList<EntryWithFeed>> { pagedList ->
 			adapter.setList(pagedList)
