@@ -9,7 +9,8 @@ import android.os.Parcelable
 import com.rometools.rome.feed.synd.SyndEntry
 import net.frju.flym.utils.sha1
 import paperparcel.PaperParcel
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 
 @PaperParcel

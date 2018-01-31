@@ -25,15 +25,15 @@ import java.io.File
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
-    companion object {
-        private const val DATABASE_NAME = "db"
-        private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
+	companion object {
+		private const val DATABASE_NAME = "db"
+		private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
 
-        fun createDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, DATABASE_NAME)
-                    .addCallback(object : Callback() {
-                        override fun onCreate(db: SupportSQLiteDatabase) {
-                            super.onCreate(db)
+		fun createDatabase(context: Context): AppDatabase {
+			return Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, DATABASE_NAME)
+					.addCallback(object : Callback() {
+						override fun onCreate(db: SupportSQLiteDatabase) {
+							super.onCreate(db)
 
 //                            val values = ContentValues()
 //                            values.put("feedTitle", "Google News")
@@ -44,51 +44,51 @@ abstract class AppDatabase : RoomDatabase() {
 //                            values.put("displayPriority", 0)
 //                            db.insert("feeds", SQLiteDatabase.CONFLICT_REPLACE, values)
 
-                            // TODO permisions request in activity
-                            // Import the OPML backup if possible
-                            doAsync {
-                                if (BACKUP_OPML.exists()) {
-                                    var id = 1L
-                                    val feedList = mutableListOf<Feed>()
-                                    val opml = WireFeedInput().build(BACKUP_OPML) as Opml
-                                    opml.outlines.forEach {
-                                        if (it.xmlUrl != null || it.children.isNotEmpty()) {
-                                            val topLevelFeed = Feed()
-                                            topLevelFeed.id = id++
-                                            topLevelFeed.title = it.title
-                                            feedList.add(topLevelFeed)
+							// TODO permisions request in activity
+							// Import the OPML backup if possible
+							doAsync {
+								if (BACKUP_OPML.exists()) {
+									var id = 1L
+									val feedList = mutableListOf<Feed>()
+									val opml = WireFeedInput().build(BACKUP_OPML) as Opml
+									opml.outlines.forEach {
+										if (it.xmlUrl != null || it.children.isNotEmpty()) {
+											val topLevelFeed = Feed()
+											topLevelFeed.id = id++
+											topLevelFeed.title = it.title
+											feedList.add(topLevelFeed)
 
-                                            if (it.xmlUrl != null) {
-                                                topLevelFeed.link = it.xmlUrl
-                                                topLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
-                                            } else {
-                                                topLevelFeed.isGroup = true
+											if (it.xmlUrl != null) {
+												topLevelFeed.link = it.xmlUrl
+												topLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
+											} else {
+												topLevelFeed.isGroup = true
 
-                                                it.children.filter { it.xmlUrl != null }.forEach {
-                                                    val subLevelFeed = Feed()
-                                                    subLevelFeed.id = id++
-                                                    subLevelFeed.title = it.title
-                                                    subLevelFeed.link = it.xmlUrl
-                                                    subLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
-                                                    subLevelFeed.groupId = topLevelFeed.id
-                                                    feedList.add(subLevelFeed)
-                                                }
-                                            }
-                                        }
-                                    }
+												it.children.filter { it.xmlUrl != null }.forEach {
+													val subLevelFeed = Feed()
+													subLevelFeed.id = id++
+													subLevelFeed.title = it.title
+													subLevelFeed.link = it.xmlUrl
+													subLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
+													subLevelFeed.groupId = topLevelFeed.id
+													feedList.add(subLevelFeed)
+												}
+											}
+										}
+									}
 
-                                    if (feedList.isNotEmpty()) {
-                                        App.db.feedDao().insert(*feedList.toTypedArray())
-                                    }
-                                }
-                            }
-                        }
-                    })
-                    .build()
-        }
-    }
+									if (feedList.isNotEmpty()) {
+										App.db.feedDao().insert(*feedList.toTypedArray())
+									}
+								}
+							}
+						}
+					})
+					.build()
+		}
+	}
 
-    abstract fun feedDao(): FeedDao
-    abstract fun entryDao(): EntryDao
-    abstract fun taskDao(): TaskDao
+	abstract fun feedDao(): FeedDao
+	abstract fun entryDao(): EntryDao
+	abstract fun taskDao(): TaskDao
 }

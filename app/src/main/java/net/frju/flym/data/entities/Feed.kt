@@ -1,6 +1,10 @@
 package net.frju.flym.data.entities
 
-import android.arch.persistence.room.*
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.Index
+import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
 import com.amulyakhare.textdrawable.TextDrawable
@@ -35,8 +39,7 @@ data class Feed(
     companion object {
         @JvmField val CREATOR = PaperParcelFeed.CREATOR
 
-        @JvmField
-        val ALL_ENTRIES_ID = -1L
+        const val ALL_ENTRIES_ID = -1L
 
         fun getLetterDrawable(feedId: Long, feedTitle: String?, rounded: Boolean = false): TextDrawable {
             val feedName = feedTitle.orEmpty()

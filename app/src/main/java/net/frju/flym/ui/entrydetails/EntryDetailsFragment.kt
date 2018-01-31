@@ -207,7 +207,7 @@ class EntryDetailsFragment : Fragment() {
                         }
 
                         doAsync {
-                            App.db.entryDao().insert(entry)
+                            App.db.entryDao().update(entry)
                         }
                     }
                     R.id.menu_entry_details__share -> {

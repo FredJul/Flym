@@ -122,10 +122,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		private const val THREAD_NUMBER = 3
 		private const val MAX_TASK_ATTEMPT = 3
 
-		val IMAGE_FOLDER_FILE = File(App.context.cacheDir, "images/")
-		val IMAGE_FOLDER = IMAGE_FOLDER_FILE.absolutePath + '/'
-		const val TEMP_PREFIX = "TEMP__"
-		const val ID_SEPARATOR = "__"
+		private val IMAGE_FOLDER_FILE = File(App.context.cacheDir, "images/")
+		private val IMAGE_FOLDER = IMAGE_FOLDER_FILE.absolutePath + '/'
+		private const val TEMP_PREFIX = "TEMP__"
+		private const val ID_SEPARATOR = "__"
 
 		fun fetch(context: Context, isFromAutoRefresh: Boolean, action: String, feedId: Long = 0L) {
 			if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
@@ -317,7 +317,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 												if (entry.imageLink == null) {
 													entry.imageLink = HtmlUtils.getMainImageURL(imagesList)
 												}
-												imgUrlsToDownload.put(entry.id, imagesList)
+												imgUrlsToDownload[entry.id] = imagesList
 											}
 										} else if (entry.imageLink == null) {
 											entry.imageLink = HtmlUtils.getMainImageURL(mobilizedHtml)
@@ -328,7 +328,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 										App.db.taskDao().delete(task)
 
 										entry.mobilizedContent = mobilizedHtml
-										App.db.entryDao().insert(entry)
+										App.db.entryDao().update(entry)
 									}
 								}
 							}
@@ -431,7 +431,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				feed.fetchError = true
 			}
 
-			App.db.feedDao().insert(feed)
+			App.db.feedDao().update(feed)
 
 			// First we remove the entries that we already have in db (no update to save data)
 			val existingIds = App.db.entryDao().idsForFeed(feed.id)
