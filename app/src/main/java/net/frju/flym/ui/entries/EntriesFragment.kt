@@ -35,7 +35,7 @@ import org.jetbrains.anko.sdk21.coroutines.onClick
 import org.jetbrains.anko.support.v4.startActivity
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
-import java.util.Date
+import java.util.*
 
 
 class EntriesFragment : Fragment() {
@@ -135,18 +135,12 @@ class EntriesFragment : Fragment() {
 			entryIds?.let { entryIds ->
 				if (entryIds.isNotEmpty()) {
 					doAsync {
-						// TODO check if limit still needed
-						entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
-							App.db.entryDao().markAsRead(it)
-						}
+						App.db.entryDao().markAsRead(entryIds)
 					}
 
 					longSnackbar(coordinator, "Marked as read", "Undo") {
 						doAsync {
-							// TODO check if limit still needed
-							entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
-								App.db.entryDao().markAsUnread(it)
-							}
+							App.db.entryDao().markAsUnread(entryIds)
 						}
 					}
 				}
