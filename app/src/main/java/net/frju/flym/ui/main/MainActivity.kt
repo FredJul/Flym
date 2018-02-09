@@ -29,15 +29,11 @@ import net.frju.flym.ui.entrydetails.EntryDetailsFragment
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.utils.closeKeyboard
 import okhttp3.Request
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.hintTextColor
-import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.coroutines.onClick
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.textColor
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.ArrayList
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainNavigator {
@@ -108,12 +104,12 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 																Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString(),
 																Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString()))
 											}
-										} catch (ignored: Exception) {
+										} catch (ignored: Throwable) {
 										}
 									}
 								}
 							}
-						} catch (_: Exception) {
+						} catch (ignored: Throwable) {
 						}
 					} else {
 						array.addAll(DEFAULT_FEEDS)
@@ -251,7 +247,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 		}
 	}
 
-	fun goBack(): Boolean {
+	private fun goBack(): Boolean {
 		if (containers_layout.state == MainNavigator.State.TWO_COLUMNS_WITH_DETAILS && !containers_layout.hasTwoColumns()) {
 			if (clearDetails()) {
 				containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
@@ -264,6 +260,8 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 	override fun onBackPressed() {
 		if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
 			drawer?.closeDrawer(GravityCompat.START)
+		} else if (toolbar.hasExpandedActionView()) {
+			toolbar.collapseActionView()
 		} else if (!goBack()) {
 			super.onBackPressed()
 		}
