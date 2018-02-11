@@ -118,14 +118,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectDrawerItem(position);
-                if (mDrawerLayout != null) {
-                    mDrawerLayout.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mDrawerLayout.closeDrawer(mLeftDrawer);
-                        }
-                    }, 50);
-                }
+                CloseDrawer();
             }
         });
         mDrawerList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -186,6 +179,17 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         mHandler = new Handler();
         FetcherService.getStatusText().setHandler(mHandler);
+    }
+
+    private void CloseDrawer() {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mDrawerLayout.closeDrawer(mLeftDrawer);
+                }
+            }, 50);
+        }
     }
 
     @Override
@@ -309,6 +313,11 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         CursorLoader cursorLoader =
                 new CursorLoader(this,
@@ -329,6 +338,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
 
+    public static Uri mNewFeedUri = Uri.EMPTY;
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 
@@ -345,6 +355,14 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             if ( mFeedSetupChanged ) {
                 mFeedSetupChanged = false;
                 needSelect = true;
+            }
+
+            if ( !mNewFeedUri.equals( Uri.EMPTY ) ) {
+                mCurrentDrawerPos = mDrawerAdapter.getItemPosition( Long.parseLong( mNewFeedUri.getLastPathSegment() ) );
+                needSelect = true;
+                mDrawerList.smoothScrollToPosition( mCurrentDrawerPos );
+                CloseDrawer();
+                mNewFeedUri = Uri.EMPTY;
             }
 
             if ( needSelect )

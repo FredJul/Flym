@@ -47,8 +47,6 @@
             android:text="@string/no_entries"
             android:visibility="gone"/>
 
-
-
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
@@ -57,5 +55,6 @@
             android:divider="#66888888"
             android:dividerHeight="5dp"
             android:footerDividersEnabled="false"/>
+
     </FrameLayout>
 </LinearLayout>

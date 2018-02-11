@@ -247,7 +247,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
                 markAllAsRead();
             }
         });
-        mFab.hide();
+        if ( !PrefUtils.getBoolean("show_mark_all_as_read_button", true) )
+            mFab.hide();
 
         if (mCurrentUri != null) {
             // If the list is empty when we are going back here, try with the last display date
@@ -265,6 +266,11 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     //@Override

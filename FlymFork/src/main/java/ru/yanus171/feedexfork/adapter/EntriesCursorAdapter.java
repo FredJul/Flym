@@ -273,7 +273,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                     if( Math.abs( paddingX ) > minX || Math.abs( paddingY ) > minY )
                         isPress = false;
 
-                    if( Math.abs( paddingX ) > Math.abs( paddingY ) && paddingX >= threshold ) {
+                    if( PrefUtils.getBoolean("vibrate_on_article_list_entry_swype", true) &&
+                        Math.abs( paddingX ) > Math.abs( paddingY ) && paddingX >= threshold ) {
                         if ( !wasVibrateRead ) {
                             vibrator.vibrate( VIBRATE_DURATION );
                             wasVibrateRead = true;
@@ -401,6 +402,13 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.textTextView.setEnabled(!holder.isRead);
         } else
             holder.textTextView.setVisibility(View.GONE);
+
+        /*Display display = ((WindowManager) context.getSystemService( Context.WINDOW_SERVICE ) ).getDefaultDisplay();
+        int or = display.getOrientation();
+        if (or == Configuration.ORIENTATION_LANDSCAPE) {
+            holder.titleTextView.setSingleLine();
+            holder.mainImgView.setMaxHeight(  );
+        }*/
 
     }
 

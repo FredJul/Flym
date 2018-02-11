@@ -235,6 +235,13 @@ public class DrawerAdapter extends BaseAdapter {
         return -1;
     }
 
+    public int getItemPosition( long feedID ) {
+        for( int i = 0; i < getCount(); i++ )
+            if ( getItemId( i ) == feedID )
+                return i;
+        return -1;
+    }
+
     public byte[] getItemIcon(int position) {
         if (mFeedsCursor != null && mFeedsCursor.moveToPosition(position - FIRST_ENTRY_POS)) {
             return mFeedsCursor.getBlob(POS_ICON);

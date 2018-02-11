@@ -124,6 +124,18 @@
             android:summary="@string/settings_display_oldest_first_description"
             android:title="@string/settings_display_oldest_first"/>
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="vibrate_on_article_list_entry_swype"
+            android:summary="@string/vibrate_on_article_list_entry_swype_summary"
+            android:title="@string/vibrate_on_article_list_entry_swype"/>
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="show_mark_all_as_read_button"
+            android:summary="@string/show_mark_all_as_read_button_summary"
+            android:title="@string/show_mark_all_as_read_button"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory

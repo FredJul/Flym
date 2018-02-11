@@ -150,7 +150,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
     private DatabaseHelper mDatabaseHelper;
 
-    public static void addFeed(Context context, String url, String name, Long groupID, boolean retrieveFullText, boolean showTextInEntryList) {
+    public static Uri addFeed(Context context, String url, String name, Long groupID, boolean retrieveFullText, boolean showTextInEntryList) {
         ContentResolver cr = context.getContentResolver();
 
         if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME)) {
@@ -160,6 +160,7 @@ public class FeedDataContentProvider extends ContentProvider {
         Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, FeedColumns.URL + Constants.DB_ARG,
                 new String[]{url}, null);
 
+        Uri result = Uri.EMPTY;
         if (cursor.moveToFirst()) {
             cursor.close();
             Toast.makeText(context, R.string.error_feed_url_exists, Toast.LENGTH_SHORT).show();
@@ -175,13 +176,15 @@ public class FeedDataContentProvider extends ContentProvider {
             }
             values.put(FeedColumns.RETRIEVE_FULLTEXT, retrieveFullText ? 1 : null);
             values.put(FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, showTextInEntryList ? 1 : null);
-            if ( groupID != null )
-                values.put(FeedColumns.GROUP_ID, groupID );
-            else
+            if ( groupID != null ) {
+                values.put(FeedColumns.GROUP_ID, groupID);
+                values.put(FeedColumns.IS_GROUP_EXPANDED, 1);
+            } else
                 values.putNull( FeedColumns.GROUP_ID );
 
-            cr.insert(FeedColumns.CONTENT_URI, values);
+            result = cr.insert(FeedColumns.CONTENT_URI, values);
         }
+        return result;
     }
 
     private static String getSearchWhereClause(String uriSearchParam) {

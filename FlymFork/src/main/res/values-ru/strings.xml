@@ -371,5 +371,9 @@
     <string name="menu_fix_order">Починить порядок статей</string>
     <string name="settings_category_article_list">Список статей</string>
     <string name="settings_category_article_text">Текст статьи</string>
+    <string name="vibrate_on_article_list_entry_swype">Вибрация при свайпе</string>
+    <string name="vibrate_on_article_list_entry_swype_summary">элемента списка статей</string>
+    <string name="show_mark_all_as_read_button">Кнопка пометить все как прочитанное</string>
+    <string name="show_mark_all_as_read_button_summary">Показывать кнопку Пометить все статьи, как прочитанные. Иначе это действие доступно через меню </string>
 
 </resources>

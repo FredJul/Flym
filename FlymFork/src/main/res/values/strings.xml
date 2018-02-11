@@ -240,6 +240,10 @@
     <string name="menu_fix_order">Fix feeds order</string>
     <string name="settings_category_article_list">Article list</string>
     <string name="settings_category_article_text">Article text</string>
+    <string name="vibrate_on_article_list_entry_swype">vibrate on swype</string>
+    <string name="vibrate_on_article_list_entry_swype_summary">on article list entry</string>
+    <string name="show_mark_all_as_read_button">Mark all as read button</string>
+    <string name="show_mark_all_as_read_button_summary">Show button Mark all articles as read. Overwise this action is accessible through menu</string>
 
 
     <plurals name="number_of_new_entries">
