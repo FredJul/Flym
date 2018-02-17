@@ -29,8 +29,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.text.Html;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.OkUrlFactory;
+import okhttp3.OkHttpClient;
+import okhttp3.OkUrlFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

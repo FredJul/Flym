@@ -56,6 +56,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -341,8 +342,10 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
                     if (mFavorite) {
                         item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
+                        Toast.makeText( getContext(), R.string.entry_marked_favourite, Toast.LENGTH_LONG ).show();
                     } else {
                         item.setTitle(R.string.menu_star).setIcon(R.drawable.rating_not_important);
+                        Toast.makeText( getContext(), R.string.entry_marked_unfavourite, Toast.LENGTH_LONG ).show();
                     }
 
                     final Uri uri = ContentUris.withAppendedId(mBaseUri, getCurrentEntryID());
@@ -392,7 +395,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                     ClipData clip = ClipData.newPlainText("Copied Text 1", link);
                     clipboard.setPrimaryClip(clip);
 
-                    UiUtils.showMessage(getActivity(), R.string.copied_clipboard);
+                    UiUtils.toast( getActivity(), R.string.copied_clipboard);
                     break;
                 }
                 case R.id.menu_mark_as_unread: {
@@ -406,6 +409,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                             cr.update(uri, FeedData.getUnreadContentValues(), null, null);
                         }
                     }.start();
+                    UiUtils.toast( getActivity(), R.string.entry_marked_unread );
                     break;
                 }
                 case R.id.menu_mark_as_favorite: {
@@ -418,6 +422,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                             //cr.update(uri, FeedData.getUnreadContentValues(), null, null);
                         }
                     }.start();
+                    UiUtils.toast( getActivity(), R.string.entry_marked_favourite );
                     //activity.finish();
                     break;
                 }
@@ -430,6 +435,8 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                             cr.update(uri, FeedData.getFavoriteContentValues(false), null, null);
                         }
                     }.start();
+
+                    UiUtils.toast( getActivity(), R.string.entry_marked_unfavourite );
 
                     CloseEntry();
 

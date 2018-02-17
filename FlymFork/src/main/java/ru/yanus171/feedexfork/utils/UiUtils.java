@@ -20,6 +20,7 @@
 package ru.yanus171.feedexfork.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,6 +31,7 @@ import android.support.v4.util.LongSparseArray;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
@@ -57,6 +59,10 @@ public class UiUtils {
 
     static public void showMessage(@NonNull Activity activity, @StringRes int messageId) {
         showMessage(activity, activity.getString(messageId));
+    }
+
+    static public void toast(@NonNull Context context, @StringRes int messageId) {
+        Toast.makeText(context, messageId, Toast.LENGTH_LONG).show();
     }
 
     static public void showMessage(@NonNull Activity activity, @NonNull String message) {

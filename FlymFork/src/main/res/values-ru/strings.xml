@@ -375,5 +375,9 @@
     <string name="vibrate_on_article_list_entry_swype_summary">элемента списка статей</string>
     <string name="show_mark_all_as_read_button">Кнопка пометить все как прочитанное</string>
     <string name="show_mark_all_as_read_button_summary">Показывать кнопку Пометить все статьи, как прочитанные. Иначе это действие доступно через меню </string>
+    <string name="entry_marked_unfavourite">Статья убрана из избранного</string>
+    <string name="entry_marked_favourite">Статья добавлена в избранное</string>
+    <string name="new_feed_was_added">Добавлена новая лента</string>
+    <string name="entry_marked_unread">Статья отмечена как непрочитанная</string>
 
 </resources>

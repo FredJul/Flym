@@ -77,6 +77,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -421,6 +422,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                         HomeActivity.mFeedSetupChanged = true;
                         cr.update(getIntent().getData(), values, null, null);
                     }
+
                 }
             } catch (Exception ignored) {
             } finally {
@@ -519,6 +521,8 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                                                                                 mHasGroupCb.isChecked() ? mGroupSpinner.getSelectedItemId() : null,
                                                                                 mRetrieveFulltextCb.isChecked(),
                                                                                 mShowTextInEntryListCb.isChecked());
+                                        UiUtils.toast( EditFeedActivity.this, R.string.new_feed_was_added);
+
                                         EditFeedActivity.this.startService(new Intent(EditFeedActivity.this, FetcherService.class)
                                                 .setAction(FetcherService.ACTION_REFRESH_FEEDS)
                                                 .putExtra(Constants.FEED_ID, newFeedUri.getLastPathSegment()) );
