@@ -107,8 +107,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:+'
     implementation "com.squareup.okhttp3:okhttp-urlconnection:+"
     implementation 'org.jsoup:jsoup:+'
-    implementation 'com.github.bumptech.glide:glide:4.5.0'
-    kapt 'com.github.bumptech.glide:compiler:4.5.0'
+    implementation 'com.github.bumptech.glide:glide:4.6.1'
+    kapt 'com.github.bumptech.glide:compiler:4.6.1'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:+'
     implementation 'com.github.Tunous:SwipeActionView:+'
     implementation 'com.bignerdranch.android:expandablerecyclerview:+'

@@ -19,6 +19,7 @@
 
 package net.frju.flym.ui.entrydetails
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -95,6 +96,8 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
 
         webViewClient = object : WebViewClient() {
+
+            @Suppress("OverridingDeprecatedMember")
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 try {
                     if (url.startsWith(FILE_SCHEME)) {
@@ -122,7 +125,8 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
         if (entry == null) {
             loadDataWithBaseURL("", "", TEXT_HTML, UTF8, null)
         } else {
-            var contentText = if (preferFullText) entry.mobilizedContent ?: entry.description.orEmpty() else entry.description.orEmpty()
+            var contentText = if (preferFullText) entry.mobilizedContent
+                    ?: entry.description.orEmpty() else entry.description.orEmpty()
             if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
                 contentText = HtmlUtils.replaceImageURLs(contentText, entry.id)
                 if (settings.blockNetworkImage) {
@@ -151,6 +155,9 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
 
             // do not put 'null' to the base url...
             loadDataWithBaseURL("", html, TEXT_HTML, UTF8, null)
+
+            // display top of article
+            ObjectAnimator.ofInt(this@EntryDetailsView, "scrollY", scrollY, 0).setDuration(500).start()
         }
     }
 }
