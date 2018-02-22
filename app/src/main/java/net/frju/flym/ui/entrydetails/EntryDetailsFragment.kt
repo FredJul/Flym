@@ -176,7 +176,7 @@ class EntryDetailsFragment : Fragment() {
             inflateMenu(R.menu.fragment_entry_details)
 
             if (activity?.containers_layout?.hasTwoColumns() == false) {
-                setNavigationIcon(R.drawable.ic_back_24dp)
+                setNavigationIcon(R.drawable.ic_back_white_24dp)
                 setNavigationOnClickListener { activity?.onBackPressed() }
             }
 

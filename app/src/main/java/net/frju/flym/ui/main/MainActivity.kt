@@ -26,18 +26,16 @@ import net.frju.flym.service.AutoRefreshJobService
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.entries.EntriesFragment
 import net.frju.flym.ui.entrydetails.EntryDetailsFragment
+import net.frju.flym.ui.feeds.FeedAdapter
+import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.utils.closeKeyboard
 import okhttp3.Request
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.hintTextColor
-import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.coroutines.onClick
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.textColor
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.ArrayList
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainNavigator {

@@ -1,4 +1,4 @@
-package net.frju.flym.ui.main
+package net.frju.flym.ui.feeds
 
 import com.bignerdranch.expandablerecyclerview.model.Parent
 import net.frju.flym.data.entities.Feed

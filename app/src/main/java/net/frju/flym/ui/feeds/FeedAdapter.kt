@@ -1,4 +1,4 @@
-package net.frju.flym.ui.main
+package net.frju.flym.ui.feeds
 
 import android.graphics.Color
 import android.os.Bundle
@@ -18,7 +18,7 @@ import org.jetbrains.anko.sdk21.coroutines.onLongClick
 
 private const val STATE_SELECTED_ID = "STATE_SELECTED_ID"
 
-class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup, Feed, FeedAdapter.FeedGroupViewHolder, FeedAdapter.FeedViewHolder>(groups) {
+open class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup, Feed, FeedAdapter.FeedGroupViewHolder, FeedAdapter.FeedViewHolder>(groups) {
 
     var feedClickListener: ((View, Feed) -> Unit)? = null
     var feedLongClickListener: ((View, Feed) -> Unit)? = null
@@ -27,6 +27,14 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
             notifyParentDataSetChanged(true)
             field = newValue
         }
+
+    open val layoutId = R.layout.view_feed
+
+    open fun bindItem(itemView: View, feed: Feed) {
+    }
+
+    open fun bindItem(itemView: View, group: FeedGroup) {
+    }
 
     fun onFeedClick(listener: (View, Feed) -> Unit) {
         feedClickListener = listener
@@ -37,12 +45,12 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
     }
 
     override fun onCreateParentViewHolder(parentViewGroup: ViewGroup, viewType: Int): FeedGroupViewHolder {
-        val view = LayoutInflater.from(parentViewGroup.context).inflate(R.layout.view_feed, parentViewGroup, false)
+        val view = LayoutInflater.from(parentViewGroup.context).inflate(layoutId, parentViewGroup, false)
         return FeedGroupViewHolder(view)
     }
 
     override fun onCreateChildViewHolder(childViewGroup: ViewGroup, viewType: Int): FeedViewHolder {
-        val view = LayoutInflater.from(childViewGroup.context).inflate(R.layout.view_feed, childViewGroup, false)
+        val view = LayoutInflater.from(childViewGroup.context).inflate(layoutId, childViewGroup, false)
         return FeedViewHolder(view)
     }
 
@@ -106,6 +114,8 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
             itemView.onLongClick {
                 feedLongClickListener?.invoke(itemView, group.feed)
             }
+
+            bindItem(itemView, group)
         }
 
         override fun shouldItemViewClickToggleExpansion(): Boolean = false
@@ -132,6 +142,8 @@ class FeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup
             itemView.onLongClick {
                 feedLongClickListener?.invoke(itemView, feed)
             }
+
+            bindItem(itemView, feed)
         }
     }
 }
