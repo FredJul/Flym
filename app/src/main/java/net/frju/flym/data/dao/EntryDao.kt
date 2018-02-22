@@ -113,7 +113,7 @@ interface EntryDao {
 	@Query("UPDATE entries SET read = 1 WHERE feedId = :feedId")
 	fun markAsRead(feedId: Long)
 
-	@Query("DELETE FROM entries WHERE fetchDate < :keepDateBorderTime AND favorite = 0 AND read = 0")
+	@Query("DELETE FROM entries WHERE fetchDate < :keepDateBorderTime AND favorite = 0 AND read = 1")
 	fun deleteOlderThan(keepDateBorderTime: Long)
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
