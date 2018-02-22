@@ -29,11 +29,15 @@ import net.frju.flym.ui.entrydetails.EntryDetailsFragment
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.utils.closeKeyboard
 import okhttp3.Request
-import org.jetbrains.anko.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.hintTextColor
+import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.coroutines.onClick
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.textColor
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.*
+import java.util.ArrayList
 
 
 class MainActivity : AppCompatActivity(), MainNavigator {
@@ -54,6 +58,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
 	private val feedGroups = mutableListOf<FeedGroup>()
 	private val feedAdapter = FeedAdapter(feedGroups)
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
@@ -61,10 +66,6 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
 		nav.layoutManager = LinearLayoutManager(this)
 		nav.adapter = feedAdapter
-
-		edit_feeds_fab.onClick {
-			startActivity<FeedListEditActivity>()
-		}
 
 		add_feed_fab.onClick {
 			val searchDialog = SimpleSearchDialogCompat(this@MainActivity, "Search...",
@@ -169,7 +170,16 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 						setOnMenuItemClickListener { item ->
 							when (item.itemId) {
 								R.id.mark_all_as_read -> doAsync { App.db.entryDao().markAsRead(feed.id) }
-								R.id.edit -> {
+								R.id.rename -> {
+								}
+								R.id.reorder -> {
+									startActivity<FeedListEditActivity>()
+								}
+								R.id.delete -> {
+								}
+								R.id.enable_full_text_retrieval -> {
+								}
+								R.id.disable_full_text_retrieval -> {
 								}//TODO
 							}
 							true

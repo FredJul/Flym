@@ -3,12 +3,26 @@
 
     <item
         android:id="@+id/mark_all_as_read"
-        android:icon="@drawable/ic_read_all_white_24dp"
         android:title="@string/menu_all_read" />
 
     <item
-        android:id="@+id/edit"
-        android:icon="@drawable/ic_edit_white_24dp"
-        android:title="@string/edit_feed_title" />
+        android:id="@+id/rename"
+        android:title="@string/menu_rename_feed"/>
+
+    <item
+        android:id="@+id/reorder"
+        android:title="@string/menu_reorder"/>
+
+    <item
+        android:id="@+id/delete"
+        android:title="@string/menu_delete"/>
+
+    <item
+        android:id="@+id/enable_full_text_retrieval"
+        android:title="@string/menu_enable_full_text_retrieval"/>
+
+    <item
+        android:id="@+id/disable_full_text_retrieval"
+        android:title="@string/menu_disable_full_text_retrieval"/>
 
 </menu>
