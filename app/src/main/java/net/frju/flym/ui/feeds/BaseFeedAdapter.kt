@@ -17,6 +17,12 @@ import org.jetbrains.anko.sdk21.coroutines.onLongClick
 
 abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup, Feed, BaseFeedAdapter.FeedGroupViewHolder, BaseFeedAdapter.FeedViewHolder>(groups) {
 
+	companion object {
+		const val TYPE_GROUP = 0
+		const val TYPE_FEED_TOP_LEVEL = 1
+		const val TYPE_FEED = 2
+	}
+
 	var feedClickListener: ((View, Feed) -> Unit)? = null
 	var feedLongClickListener: ((View, Feed) -> Unit)? = null
 
@@ -34,6 +40,14 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 
 	fun onFeedLongClick(listener: (View, Feed) -> Unit) {
 		feedLongClickListener = listener
+	}
+
+	override fun getParentViewType(parentPosition: Int): Int {
+		return if (parentList[parentPosition].feed.isGroup) TYPE_GROUP else TYPE_FEED_TOP_LEVEL
+	}
+
+	override fun getChildViewType(parentPosition: Int, childPosition: Int): Int {
+		return TYPE_FEED
 	}
 
 	override fun onCreateParentViewHolder(parentViewGroup: ViewGroup, viewType: Int): FeedGroupViewHolder {

@@ -29,7 +29,6 @@ class FeedListEditFragment : Fragment() {
 				var fromHasGroupIndicator = false
 
 				override fun onStartDrag(itemView: View) {
-//					fromHasGroupIndicator = itemView.indicator.getVisibility() == View.VISIBLE
 				}
 
 				override fun onDrag(x: Float, y: Float) {
@@ -39,11 +38,11 @@ class FeedListEditFragment : Fragment() {
 				}
 
 				override fun onDrop(flatPosFrom: Int, flatPosTo: Int) {
-//					val fromIsGroup = ExpandableListView.getPackedPositionType(mListView.getExpandableListPosition(flatPosFrom)) == ExpandableListView.PACKED_POSITION_TYPE_GROUP
-//					val toIsGroup = ExpandableListView.getPackedPositionType(mListView.getExpandableListPosition(flatPosTo)) == ExpandableListView.PACKED_POSITION_TYPE_GROUP
-//
-//					val fromIsFeedWithoutGroup = fromIsGroup && !fromHasGroupIndicator
-//
+					val fromIsGroup = feedAdapter.getItemViewType(flatPosFrom) == BaseFeedAdapter.TYPE_GROUP || feedAdapter.getItemViewType(flatPosFrom) == BaseFeedAdapter.TYPE_FEED_TOP_LEVEL
+					val toIsGroup = feedAdapter.getItemViewType(flatPosTo) == BaseFeedAdapter.TYPE_GROUP
+
+					val fromIsFeedWithoutGroup = fromIsGroup && feedAdapter.getItemViewType(flatPosFrom) == BaseFeedAdapter.TYPE_FEED_TOP_LEVEL
+
 //					val toView = mListView.getChildAt(flatPosTo - mListView.getFirstVisiblePosition())
 //					val toIsFeedWithoutGroup = toIsGroup && toView.findViewById(R.id.indicator).getVisibility() != View.VISIBLE
 //
