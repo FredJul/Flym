@@ -17,14 +17,14 @@ import org.jetbrains.anko.windowManager
 
 class DragNDropRecyclerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : RecyclerView(context, attrs, defStyle) {
 
+    var dragNDropListener: DragNDropListener? = null
+
     private var dragMode: Boolean = false
 
     private var startPosition = 0
     private var dragPointOffset = 0F // Used to adjust drag view location
 
     private var dragView: ImageView? = null
-
-    var dragNDropListener: DragNDropListener? = null
 
     override fun onTouchEvent(ev: MotionEvent): Boolean {
         if (ev.actionIndex != 0) {
@@ -120,7 +120,7 @@ class DragNDropRecyclerView @JvmOverloads constructor(context: Context, attrs: A
             val bitmap = Bitmap.createBitmap(item.drawingCache)
             item.isDrawingCacheEnabled = false
 
-            setBackgroundResource(R.color.colorAccent)
+            setBackgroundResource(R.color.colorPrimaryDark)
             setImageBitmap(bitmap)
         }
 

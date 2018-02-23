@@ -14,31 +14,31 @@ import net.frju.flym.ui.views.DragNDropListener
 
 class FeedListEditFragment : Fragment() {
 
-    private val feedGroups = mutableListOf<FeedGroup>()
-    private val feedAdapter = EditFeedAdapter(feedGroups)
+	private val feedGroups = mutableListOf<FeedGroup>()
+	private val feedAdapter = EditFeedAdapter(feedGroups)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_feed_list_edit, container, false)
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+		val view = inflater.inflate(R.layout.fragment_feed_list_edit, container, false)
 
-        view.feedsList.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = feedAdapter
+		view.feedsList.apply {
+			layoutManager = LinearLayoutManager(context)
+			adapter = feedAdapter
 
-            dragNDropListener = object : DragNDropListener {
+			dragNDropListener = object : DragNDropListener {
 
-                var fromHasGroupIndicator = false
+				var fromHasGroupIndicator = false
 
-                override fun onStartDrag(itemView: View) {
+				override fun onStartDrag(itemView: View) {
 //					fromHasGroupIndicator = itemView.indicator.getVisibility() == View.VISIBLE
-                }
+				}
 
-                override fun onDrag(x: Float, y: Float) {
-                }
+				override fun onDrag(x: Float, y: Float) {
+				}
 
-                override fun onStopDrag(itemView: View) {
-                }
+				override fun onStopDrag(itemView: View) {
+				}
 
-                override fun onDrop(flatPosFrom: Int, flatPosTo: Int) {
+				override fun onDrop(flatPosFrom: Int, flatPosTo: Int) {
 //					val fromIsGroup = ExpandableListView.getPackedPositionType(mListView.getExpandableListPosition(flatPosFrom)) == ExpandableListView.PACKED_POSITION_TYPE_GROUP
 //					val toIsGroup = ExpandableListView.getPackedPositionType(mListView.getExpandableListPosition(flatPosTo)) == ExpandableListView.PACKED_POSITION_TYPE_GROUP
 //
@@ -66,21 +66,21 @@ class FeedListEditFragment : Fragment() {
 //					} else {
 //						moveItem(fromIsGroup, toIsGroup, fromIsFeedWithoutGroup, packedPosTo, packedGroupPosTo, flatPosFrom)
 //					}
-                }
-            }
-        }
+				}
+			}
+		}
 
-        App.db.feedDao().observeAll.observe(this, Observer {
-            it?.let {
-                feedGroups.clear()
+		App.db.feedDao().observeAll.observe(this, Observer {
+			it?.let {
+				feedGroups.clear()
 
-                val subFeedMap = it.groupBy { it.groupId }
+				val subFeedMap = it.groupBy { it.groupId }
 
-                feedGroups.addAll(
-                        subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.id].orEmpty()) }.orEmpty()
-                )
+				feedGroups.addAll(
+						subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.id].orEmpty()) }.orEmpty()
+				)
 
-                feedAdapter.notifyParentDataSetChanged(true)
+				feedAdapter.notifyParentDataSetChanged(true)
 
 //				feedAdapter.onFeedClick { view, feed ->
 //					goToEntriesList(feed)
@@ -110,9 +110,9 @@ class FeedListEditFragment : Fragment() {
 //						show()
 //					}
 //				}
-            }
-        })
+			}
+		})
 
-        return view
-    }
+		return view
+	}
 }
