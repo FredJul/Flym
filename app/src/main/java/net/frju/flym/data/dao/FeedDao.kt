@@ -1,12 +1,7 @@
 package net.frju.flym.data.dao
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
-import android.arch.persistence.room.Update
+import android.arch.persistence.room.*
 import net.frju.flym.data.entities.Feed
 
 
@@ -20,6 +15,12 @@ interface FeedDao {
 
     @Query("SELECT * FROM feeds WHERE feedId IS :id LIMIT 1")
     fun findById(id: Long): Feed?
+
+    @Query("UPDATE feeds SET retrieveFullText = 1 WHERE feedId = :feedId")
+    fun enableFullTextRetrieval(feedId: Long)
+
+    @Query("UPDATE feeds SET retrieveFullText = 0 WHERE feedId = :feedId")
+    fun disableFullTextRetrieval(feedId: Long)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg feeds: Feed)
