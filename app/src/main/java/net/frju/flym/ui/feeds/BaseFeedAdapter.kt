@@ -19,8 +19,7 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 
 	companion object {
 		const val TYPE_GROUP = 0
-		const val TYPE_FEED_TOP_LEVEL = 1
-		const val TYPE_FEED = 2
+		const val TYPE_FEED = 1
 	}
 
 	var feedClickListener: ((View, Feed) -> Unit)? = null
@@ -43,7 +42,7 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 	}
 
 	override fun getParentViewType(parentPosition: Int): Int {
-		return if (parentList[parentPosition].feed.isGroup) TYPE_GROUP else TYPE_FEED_TOP_LEVEL
+		return TYPE_GROUP
 	}
 
 	override fun getChildViewType(parentPosition: Int, childPosition: Int): Int {

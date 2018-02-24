@@ -38,11 +38,11 @@ class FeedListEditFragment : Fragment() {
 				}
 
 				override fun onDrop(flatPosFrom: Int, flatPosTo: Int) {
-					val fromIsGroup = feedAdapter.getItemViewType(flatPosFrom) == BaseFeedAdapter.TYPE_GROUP || feedAdapter.getItemViewType(flatPosFrom) == BaseFeedAdapter.TYPE_FEED_TOP_LEVEL
-					val toIsGroup = feedAdapter.getItemViewType(flatPosTo) == BaseFeedAdapter.TYPE_GROUP
-
-					val fromIsFeedWithoutGroup = fromIsGroup && feedAdapter.getItemViewType(flatPosFrom) == BaseFeedAdapter.TYPE_FEED_TOP_LEVEL
-
+//					val fromIsGroup = feedAdapter.getItemViewType(flatPosFrom) == BaseFeedAdapter.TYPE_GROUP || feedAdapter.getItemViewType(flatPosFrom) == BaseFeedAdapter.TYPE_FEED_TOP_LEVEL
+//					val toIsGroup = feedAdapter.getItemViewType(flatPosTo) == BaseFeedAdapter.TYPE_GROUP
+//
+//					val fromIsFeedWithoutGroup = fromIsGroup && feedAdapter.getItemViewType(flatPosFrom) == BaseFeedAdapter.TYPE_FEED_TOP_LEVEL
+//
 //					val toView = mListView.getChildAt(flatPosTo - mListView.getFirstVisiblePosition())
 //					val toIsFeedWithoutGroup = toIsGroup && toView.findViewById(R.id.indicator).getVisibility() != View.VISIBLE
 //
