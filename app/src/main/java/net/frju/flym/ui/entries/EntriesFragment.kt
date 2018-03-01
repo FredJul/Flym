@@ -26,12 +26,11 @@ import net.frju.flym.data.entities.Feed
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.about.AboutActivity
 import net.frju.flym.ui.main.MainNavigator
-import net.frju.parentalcontrol.utils.PrefUtils
+import net.frju.flym.data.utils.PrefUtils
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.notificationManager
-import org.jetbrains.anko.sdk21.coroutines.onClick
 import org.jetbrains.anko.support.v4.startActivity
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
@@ -131,7 +130,7 @@ class EntriesFragment : Fragment() {
 			badgeBackgroundColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
 		}
 
-		read_all_fab.onClick {
+		read_all_fab.setOnClickListener {
 			entryIds?.let { entryIds ->
 				if (entryIds.isNotEmpty()) {
 					doAsync {
@@ -199,7 +198,7 @@ class EntriesFragment : Fragment() {
 		}, 30).build()
 
 		entriesLiveData?.observe(this, Observer<PagedList<EntryWithFeed>> { pagedList ->
-			adapter.setList(pagedList)
+			adapter.submitList(pagedList)
 		})
 
 		newCountLiveData?.removeObservers(this)

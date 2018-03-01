@@ -82,7 +82,7 @@ import net.frju.flym.data.entities.toDbFormat
 import net.frju.flym.ui.main.MainActivity
 import net.frju.flym.utils.HtmlUtils
 import net.frju.flym.utils.sha1
-import net.frju.parentalcontrol.utils.PrefUtils
+import net.frju.flym.data.utils.PrefUtils
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Request

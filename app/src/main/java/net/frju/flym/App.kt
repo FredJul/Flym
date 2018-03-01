@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import net.frju.flym.data.AppDatabase
-import net.frju.parentalcontrol.utils.PrefUtils
+import net.frju.flym.data.utils.PrefUtils
 
 
 class App : Application() {

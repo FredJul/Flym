@@ -3,7 +3,6 @@ package net.frju.flym.ui.feeds
 import android.os.Bundle
 import android.view.View
 import net.frju.flym.data.entities.Feed
-import org.jetbrains.anko.sdk21.coroutines.onClick
 
 
 private const val STATE_SELECTED_ID = "STATE_SELECTED_ID"
@@ -19,7 +18,7 @@ open class FeedAdapter(groups: List<FeedGroup>) : BaseFeedAdapter(groups) {
 	override fun bindItem(itemView: View, feed: Feed) {
 		itemView.isSelected = selectedItemId == feed.id
 
-		itemView.onClick {
+		itemView.setOnClickListener {
 			selectedItemId = feed.id
 			feedClickListener?.invoke(itemView, feed)
 		}
@@ -28,7 +27,7 @@ open class FeedAdapter(groups: List<FeedGroup>) : BaseFeedAdapter(groups) {
 	override fun bindItem(itemView: View, group: FeedGroup) {
 		itemView.isSelected = selectedItemId == group.feed.id
 
-		itemView.onClick {
+		itemView.setOnClickListener {
 			selectedItemId = group.feed.id
 			feedClickListener?.invoke(itemView, group.feed)
 		}

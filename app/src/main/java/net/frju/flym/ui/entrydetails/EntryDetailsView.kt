@@ -38,7 +38,7 @@ import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.utils.FILE_SCHEME
 import net.frju.flym.utils.HtmlUtils
 import net.frju.flym.utils.UTF8
-import net.frju.parentalcontrol.utils.PrefUtils
+import net.frju.flym.data.utils.PrefUtils
 import java.io.File
 import java.io.IOException
 

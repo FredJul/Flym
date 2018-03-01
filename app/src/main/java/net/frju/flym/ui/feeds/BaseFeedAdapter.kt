@@ -11,8 +11,6 @@ import kotlinx.android.synthetic.main.view_feed.view.*
 import net.fred.feedex.R
 import net.frju.flym.data.entities.Feed
 import org.jetbrains.anko.dip
-import org.jetbrains.anko.sdk21.coroutines.onClick
-import org.jetbrains.anko.sdk21.coroutines.onLongClick
 
 
 abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup, Feed, BaseFeedAdapter.FeedGroupViewHolder, BaseFeedAdapter.FeedViewHolder>(groups) {
@@ -79,7 +77,7 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 				}
 
 				itemView.icon.isClickable = true
-				itemView.icon.onClick {
+				itemView.icon.setOnClickListener {
 					if (isExpanded) {
 						itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_down_white_24dp)
 						collapseView()
@@ -103,11 +101,12 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 				itemView.title.setTextColor(Color.WHITE)
 			}
 			itemView.setPadding(0, 0, 0, 0)
-			itemView.onClick {
+			itemView.setOnClickListener {
 				feedClickListener?.invoke(itemView, group.feed)
 			}
-			itemView.onLongClick {
+			itemView.setOnLongClickListener {
 				feedLongClickListener?.invoke(itemView, group.feed)
+				true
 			}
 
 			bindItem(itemView, group)
@@ -129,11 +128,12 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 			itemView.icon.isClickable = false
 			itemView.icon.setImageDrawable(feed.getLetterDrawable(true))
 			itemView.setPadding(itemView.dip(30), 0, 0, 0)
-			itemView.onClick {
+			itemView.setOnClickListener {
 				feedClickListener?.invoke(itemView, feed)
 			}
-			itemView.onLongClick {
+			itemView.setOnLongClickListener {
 				feedLongClickListener?.invoke(itemView, feed)
+				true
 			}
 
 			bindItem(itemView, feed)

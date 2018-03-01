@@ -5,75 +5,66 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
-import android.os.Parcel
 import android.os.Parcelable
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.rometools.rome.feed.synd.SyndFeed
-import paperparcel.PaperParcel
+import kotlinx.android.parcel.Parcelize
 
-@PaperParcel
+@Parcelize
 @Entity(tableName = "feeds",
-        indices = arrayOf(Index(value = "groupId"),
-                Index(value = *arrayOf("feedId", "feedLink"), unique = true)),
-        foreignKeys = arrayOf(ForeignKey(entity = Feed::class,
-                parentColumns = arrayOf("feedId"),
-                childColumns = arrayOf("groupId"),
-                onDelete = ForeignKey.CASCADE)))
+		indices = [(Index(value = ["groupId"])), (Index(value = ["feedId", "feedLink"], unique = true))],
+		foreignKeys = [(ForeignKey(entity = Feed::class,
+				parentColumns = ["feedId"],
+				childColumns = ["groupId"],
+				onDelete = ForeignKey.CASCADE))])
 data class Feed(
-        @PrimaryKey(autoGenerate = true)
-        @ColumnInfo(name = "feedId")
-        var id: Long = 0L,
-        @ColumnInfo(name = "feedLink")
-        var link: String = "",
-        @ColumnInfo(name = "feedTitle")
-        var title: String? = null,
-        @ColumnInfo(name = "feedImageLink")
-        var imageLink: String? = null,
-        var fetchError: Boolean = false,
-        var retrieveFullText: Boolean = false,
-        var isGroup: Boolean = false,
-        var groupId: Long? = null,
-        var displayPriority: Int = 0) : Parcelable {
+		@PrimaryKey(autoGenerate = true)
+		@ColumnInfo(name = "feedId")
+		var id: Long = 0L,
+		@ColumnInfo(name = "feedLink")
+		var link: String = "",
+		@ColumnInfo(name = "feedTitle")
+		var title: String? = null,
+		@ColumnInfo(name = "feedImageLink")
+		var imageLink: String? = null,
+		var fetchError: Boolean = false,
+		var retrieveFullText: Boolean = false,
+		var isGroup: Boolean = false,
+		var groupId: Long? = null,
+		var displayPriority: Int = 0) : Parcelable {
 
-    companion object {
-        @JvmField val CREATOR = PaperParcelFeed.CREATOR
+	companion object {
 
-        const val ALL_ENTRIES_ID = -1L
+		const val ALL_ENTRIES_ID = -1L
 
-        fun getLetterDrawable(feedId: Long, feedTitle: String?, rounded: Boolean = false): TextDrawable {
-            val feedName = feedTitle.orEmpty()
+		fun getLetterDrawable(feedId: Long, feedTitle: String?, rounded: Boolean = false): TextDrawable {
+			val feedName = feedTitle.orEmpty()
 
-            val color = ColorGenerator.DEFAULT.getColor(feedId) // The color is specific to the feedId (which shouldn't change)
-            val lettersForName = if (feedName.length < 2) feedName.toUpperCase() else feedName.substring(0, 2).toUpperCase()
-            return if (rounded) {
-                TextDrawable.builder().buildRound(lettersForName, color)
-            } else {
-                TextDrawable.builder().buildRect(lettersForName, color)
-            }
-        }
-    }
+			val color = ColorGenerator.DEFAULT.getColor(feedId) // The color is specific to the feedId (which shouldn't change)
+			val lettersForName = if (feedName.length < 2) feedName.toUpperCase() else feedName.substring(0, 2).toUpperCase()
+			return if (rounded) {
+				TextDrawable.builder().buildRound(lettersForName, color)
+			} else {
+				TextDrawable.builder().buildRect(lettersForName, color)
+			}
+		}
+	}
 
-    override fun describeContents() = 0
+	fun update(feed: SyndFeed) {
+		if (title == null) {
+			title = feed.title
+		}
 
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        PaperParcelFeed.writeToParcel(this, dest, flags)
-    }
+		if (feed.image?.url != null) {
+			imageLink = feed.image?.url
+		}
 
-    fun update(feed: SyndFeed) {
-        if (title == null) {
-            title = feed.title
-        }
+		// no error anymore since we just got a feed
+		fetchError = false
+	}
 
-        if (feed.image?.url != null) {
-            imageLink = feed.image?.url
-        }
-
-        // no error anymore since we just got a feed
-        fetchError = false
-    }
-
-    fun getLetterDrawable(rounded: Boolean = false): TextDrawable {
-        return getLetterDrawable(id, title, rounded)
-    }
+	fun getLetterDrawable(rounded: Boolean = false): TextDrawable {
+		return getLetterDrawable(id, title, rounded)
+	}
 }
