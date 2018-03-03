@@ -1068,6 +1068,7 @@ public class FetcherService extends IntentService {
     //if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
         synchronized (mCancelRefresh) {
             mCancelRefresh = true;
+
         }
     //}
     }

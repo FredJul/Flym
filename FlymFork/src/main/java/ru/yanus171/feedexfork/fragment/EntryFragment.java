@@ -30,6 +30,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -71,6 +72,7 @@ import ru.yanus171.feedexfork.adapter.DrawerAdapter;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
+import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
 import ru.yanus171.feedexfork.service.FetcherService;
 import ru.yanus171.feedexfork.utils.ArticleTextExtractor;
 import ru.yanus171.feedexfork.utils.Dog;
@@ -90,6 +92,8 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
     private static final String STATE_CURRENT_PAGER_POS = "STATE_CURRENT_PAGER_POS";
     private static final String STATE_ENTRIES_IDS = "STATE_ENTRIES_IDS";
     private static final String STATE_INITIAL_ENTRY_ID = "STATE_INITIAL_ENTRY_ID";
+    private static final String STATE_LOCK_LAND_ORIENTATION = "STATE_LOCK_LAND_ORIENTATION";
+
 
     private int mTitlePos = -1, mDatePos, mMobilizedHtmlPos, mAbstractPos, mLinkPos, mIsFavoritePos, mIsReadPos, mEnclosurePos, mAuthorPos, mFeedNamePos, mFeedUrlPos, mFeedIconPos, mScrollPosPos;
 
@@ -109,6 +113,8 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
     TextView mLabelClock;
 
     private StatusText mStatusText = null;
+
+    private boolean mLockLandOrientation = false;
 
     public boolean mMarkAsUnreadOnFinish = false;
     @Override
@@ -221,7 +227,16 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         rootView.findViewById(R.id.layoutBottom).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.statusText).setVisibility(View.GONE);
 
+        mLockLandOrientation = PrefUtils.getBoolean(STATE_LOCK_LAND_ORIENTATION, false );
+        SetOrientation();
+
         return rootView;
+    }
+
+    private void SetOrientation() {
+        getActivity().setRequestedOrientation( mLockLandOrientation ?
+                                               ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE :
+                                               ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED  );
     }
 
     public void PageUp() {
@@ -309,7 +324,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
             //PrefUtils.putInt(PrefUtils.LAST_ENTRY_SCROLL_Y, entryView.getScrollY());
             mEntryPagerAdapter.SaveScrollPos();
             PrefUtils.putLong(PrefUtils.LAST_ENTRY_ID, getCurrentEntryID());
-
+            PrefUtils.putBoolean(STATE_LOCK_LAND_ORIENTATION, mLockLandOrientation);
         }
         mEntryPagerAdapter.onPause();
     }
@@ -326,7 +341,9 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         menu.findItem(R.id.menu_mark_as_favorite).setVisible( !mFavorite );
         menu.findItem(R.id.menu_mark_as_unfavorite).setVisible(mFavorite);
 
-            super.onCreateOptionsMenu(menu, inflater);
+        menu.findItem(R.id.menu_lock_land_orientation).setChecked(mLockLandOrientation);
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -493,6 +510,12 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                         LoadFullText( ArticleTextExtractor.Mobilize.No );
                     } finally { FetcherService.getStatusText().End( status ); }
                     break;
+                }
+
+                case R.id.menu_lock_land_orientation: {
+                    mLockLandOrientation = !mLockLandOrientation;
+                    item.setChecked(mLockLandOrientation);
+                    SetOrientation();
                 }
             }
         }
@@ -873,21 +896,24 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
         private void SaveScrollPos() {
             final long entryID = getCurrentEntryID();
-            new Thread() {
-                @Override
-                public void run() {
-                    ContentValues values = new ContentValues();
-                    EntryView view = mEntryViews.get(mCurrentPagerPos);
-                    if ( view != null ) {
-                        final int scroll = view.getScrollY();
-                        values.put(EntryColumns.SCROLL_POS, scroll);
+            final EntryView view = mEntryViews.get(mCurrentPagerPos);
+            if ( view != null ) {
+                final float scrollPart = view.GetViewScrollPartY();
+                Dog.v(String.format("EntryPagerAdapter.SaveScrollPos (entry %d) getScrollY() = %d, view.getContentHeight() = %f", entryID, view.getScrollY(), view.GetContentHeight() ));
+                new Thread() {
+                    @Override
+                    public void run() {
+                        ContentValues values = new ContentValues();
+                        values.put(EntryColumns.SCROLL_POS, scrollPart);
                         ContentResolver cr = MainApplication.getContext().getContentResolver();
                         //cr.update(EntryColumns.CONTENT_URI(entryID), values, EntryColumns.SCROLL_POS + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.SCROLL_POS + " < " + scroll, null);
+                        FeedDataContentProvider.mNotifyEnabled = false;
                         cr.update(EntryColumns.CONTENT_URI(entryID), values, null, null);
-                        Dog.v(String.format("EntryPagerAdapter.SaveScrollPos (entry %d) update scrollPos = %d", entryID, scroll));
+                        FeedDataContentProvider.mNotifyEnabled = true;
+                        Dog.v(String.format("EntryPagerAdapter.SaveScrollPos (entry %d) update scrollPos = %f", entryID, scrollPart));
                     }
-                }
-            }.start();
+                }.start();
+            }
         }
 
         @Override
@@ -935,7 +961,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                     String link = "";
                     String title = "";
                     String enclosure = "";
-                    int scrollPos = 0;
+                    float scrollPart = 0;
                     try {
                         contentText = newCursor.getString(mMobilizedHtmlPos);
                         if (contentText == null || (forceUpdate && !mPreferFullText)) {
@@ -954,7 +980,8 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                         title = newCursor.getString(mTitlePos);
                         enclosure = newCursor.getString(mEnclosurePos);
                         if ( !newCursor.isNull(mScrollPosPos) )
-                            scrollPos = newCursor.getInt(mScrollPosPos);
+                            scrollPart = newCursor.getFloat(mScrollPosPos);
+
                     } catch ( IllegalStateException e ) {
                         contentText = "Context too large";
                     }
@@ -977,8 +1004,9 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                         //if (PrefUtils.getLong(PrefUtils.LAST_ENTRY_ID, 0) == mEntriesIds[pagerPos]) {
                             //int dy = mScrollPosPos;
                             //if (dy > view.getScrollY())
-                        view.mScrollY = view.getScrollY() >  scrollPos ? view.getScrollY() : scrollPos;
-                        Dog.v( String.format( "displayEntry view.mScrollY  (entry %s) view.mScrollY = %d", getCurrentEntryID(),  view.mScrollY ) );
+                        if ( view.GetViewScrollPartY() < scrollPart )
+                            view.mScrollPartY = scrollPart;
+                        Dog.v( String.format( "displayEntry view.mScrollY  (entry %s) view.mScrollY = %f", getCurrentEntryID(),  view.mScrollPartY ) );
                         //Dog.v( "displayEntry view.mScrollY = " + view.mScrollY );
                         //}
 

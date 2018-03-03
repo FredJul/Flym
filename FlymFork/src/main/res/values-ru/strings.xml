@@ -379,5 +379,6 @@
     <string name="entry_marked_favourite">Статья добавлена в избранное</string>
     <string name="new_feed_was_added">Добавлена новая лента</string>
     <string name="entry_marked_unread">Статья отмечена как непрочитанная</string>
+    <string name="lock_orientation">Горизонтальная ориентацию</string>
 
 </resources>

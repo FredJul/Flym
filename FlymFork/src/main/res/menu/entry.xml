@@ -63,4 +63,9 @@
         android:icon="@drawable/ic_action_cancel_gray"
         android:visible="true"
         android:title="@string/menu_cancel_refresh"/>
+    <item
+        android:id="@+id/menu_lock_land_orientation"
+        android:title="@string/lock_orientation"
+        android:checkable="true"/>
 </menu>
+

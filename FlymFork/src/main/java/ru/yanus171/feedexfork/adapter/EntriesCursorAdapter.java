@@ -173,7 +173,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 public boolean onTouch(View v, MotionEvent event) {
                     final int minX = 40;
                     final int minY = 20;
-                    final int VIBRATE_DURATION = 50;
+                    final int VIBRATE_DURATION = 25;
 
                     final ViewHolder holder = (ViewHolder) ( (ViewGroup)v.getParent() ).getTag(R.id.holder);
                     if ( event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -273,8 +273,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                     if( Math.abs( paddingX ) > minX || Math.abs( paddingY ) > minY )
                         isPress = false;
 
-                    if( PrefUtils.getBoolean("vibrate_on_article_list_entry_swype", true) &&
-                        Math.abs( paddingX ) > Math.abs( paddingY ) && paddingX >= threshold ) {
+                    boolean prefVibrate = PrefUtils.getBoolean("vibrate_on_article_list_entry_swype", true);
+                    if( prefVibrate && Math.abs( paddingX ) > Math.abs( paddingY ) && paddingX >= threshold ) {
                         if ( !wasVibrateRead ) {
                             vibrator.vibrate( VIBRATE_DURATION );
                             wasVibrateRead = true;
@@ -283,7 +283,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                     } else
                         wasVibrateRead = false;
 
-                    if( Math.abs( paddingX ) > Math.abs( paddingY ) && paddingX <= -threshold ) {
+                    if( prefVibrate && Math.abs( paddingX ) > Math.abs( paddingY ) && paddingX <= -threshold ) {
                         if ( !wasVibrateStar ) {
                             vibrator.vibrate( VIBRATE_DURATION );
                             wasVibrateStar = true;

@@ -53,7 +53,6 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -73,6 +72,7 @@ import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.activity.EntryActivity;
 import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.FileUtils;
 import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
@@ -158,7 +158,7 @@ public class EntryView extends WebView implements Observer {
     private EntryViewManager mEntryViewMgr;
     public static Handler mHandler = null;
     public String mData = "";
-    public int mScrollY = 0;
+    public float mScrollPartY = 0;
 
     private EntryActivity mActivity;
 
@@ -218,8 +218,6 @@ public class EntryView extends WebView implements Observer {
         // }
         // do not put 'null' to the base url...
         mData = generateHtmlContent(title, link, contentText, enclosure, author, timestamp, preferFullText);
-        if ( getScrollY() != 0 )
-            mScrollY = getScrollY();
         loadDataWithBaseURL("", mData, TEXT_HTML, Constants.UTF8, null);
     }
 
@@ -338,7 +336,6 @@ public class EntryView extends WebView implements Observer {
             }
         });
 
-
         setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -363,18 +360,15 @@ public class EntryView extends WebView implements Observer {
                 return true;
             }
 
+
             @Override
             public void onPageFinished(WebView view, String url) {
-                Log.v("main", "EntryView.this.scrollTo " + mScrollY);
-                if (mScrollY != 0) {
-                    //EntryView.this.scrollTo(0, mScrollY);
+                Dog.v("main", "EntryView.this.scrollTo " + mScrollPartY);
+                if (mScrollPartY != 0 /*&& getContentHeight() != getScrollY()*/ ) {
                     view.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            //float webviewsize = mWebView.getContentHeight() - mWebView.getTop();
-                            //float positionInWV = webviewsize * mProgressToRestore;
-                            //int positionY = Math.round(mWebView.getTop() + positionInWV);
-                            EntryView.this.scrollTo(0, mScrollY);
+                            EntryView.this.scrollTo(0, GetScrollY() );
                         }
                         // Delay the scrollTo to make it work
                     }, 150);
@@ -398,12 +392,8 @@ public class EntryView extends WebView implements Observer {
     @Override
     protected void onScrollChanged (int l, int t, int oldl, int oldt) {
         FetcherService.getStatusText().HideByScroll();
-        int height = (int) Math.floor(getContentHeight() * getScale());
+        int height = (int) Math.floor(GetContentHeight());
         int webViewHeight = getMeasuredHeight();
-        //if(getScrollY() + webViewHeight >= height){
-        //    if ( EntryActivity.GetIsStatusBarHidden() )
-        //        mActivity.setFullScreenWithNavBar();//setFullScreen(false, EntryActivity.GetIsActionBarHidden());
-        //}
         mActivity.mEntryFragment.UpdateProgress();
         mActivity.mEntryFragment.UpdateClock();
     }
@@ -413,7 +403,7 @@ public class EntryView extends WebView implements Observer {
     public void update(Observable observable, Object data) {
         if ( ( data != null ) && ( (Long)data == mEntryId ) )  {
             if (getScrollY() != 0)
-                mScrollY = getScrollY();
+                mScrollPartY = GetViewScrollPartY();
             mData = HtmlUtils.replaceImageURLs(mData, mEntryId);
             loadDataWithBaseURL("", mData, TEXT_HTML, Constants.UTF8, null);
         //setScrollY( y );
@@ -500,6 +490,19 @@ public class EntryView extends WebView implements Observer {
         public boolean hasChanged () {
             return true;
         }
+    }
+
+
+    public int GetScrollY() {
+        return GetContentHeight() * mScrollPartY != 0 ? ( int )( GetContentHeight() * mScrollPartY ) : 0;
+    }
+
+    public float GetContentHeight() {
+        return getContentHeight() * getScale();
+    }
+
+    public float GetViewScrollPartY() {
+        return getContentHeight() != 0 ? getScrollY() / GetContentHeight() : 0 ;
     }
 
 

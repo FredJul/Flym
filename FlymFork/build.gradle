@@ -8,7 +8,7 @@ android {
     }*/
 
     compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId 'ru.yanus171.feedexfork'
         //applicationId 'net.fred.feedex'
@@ -36,8 +36,9 @@ android {
             def buildType = variant.buildType // e. g. debug
             def variantName = variant.name // e. g. freeDebug
 
-            def apkName = appId + '_' + /*variantName + '_' +*/ versionName + '_' + versionCode + '.apk';
-            output.outputFile = new File(output.outputFile.parentFile, apkName)
+            def apkName = appId + '_' + /*variantName + '_' +*/ versionName + '_' + versionCode + '.apk'
+            //output.outputFileName  = new File(output.outputFile.parentFile, apkName)
+            output.outputFileName  = new File(apkName)
         }
     }
 

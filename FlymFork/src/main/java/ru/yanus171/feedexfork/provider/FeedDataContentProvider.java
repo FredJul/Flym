@@ -114,6 +114,8 @@ public class FeedDataContentProvider extends ContentProvider {
 
     public static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
+    public static boolean  mNotifyEnabled = true;
+
     static {
         URI_MATCHER.addURI(FeedData.AUTHORITY, "grouped_feeds", URI_GROUPED_FEEDS);
         URI_MATCHER.addURI(FeedData.AUTHORITY, "groups", URI_GROUPS);
@@ -631,7 +633,7 @@ public class FeedDataContentProvider extends ContentProvider {
             mDatabaseHelper.exportToOPML();
         }
         FetcherService.getStatusText().ChangeDB("");
-        if (count > 0) {
+        if (count > 0 && mNotifyEnabled ) {
             notifyChangeOnAllUris(matchCode, uri);
         }
         return count;

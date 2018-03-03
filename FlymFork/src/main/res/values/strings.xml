@@ -248,6 +248,7 @@
     <string name="entry_marked_favourite">The article was added to favourities</string>
     <string name="new_feed_was_added">New feed was added</string>
     <string name="entry_marked_unread">The article was marked as unread</string>
+    <string name="lock_orientation">Landscape orientation</string>
 
 
     <plurals name="number_of_new_entries">

@@ -140,7 +140,8 @@ public class EntryActivity extends BaseActivity {
 
                 if ( !mEntryFragment.mMarkAsUnreadOnFinish )
                     //mark as read
-                    cr.update(EntryColumns.CONTENT_URI(  mEntryFragment.getCurrentEntryID() ), FeedData.getReadContentValues(), null, null);
+                    if ( mEntryFragment.getCurrentEntryID() != -1 )
+                        cr.update(EntryColumns.CONTENT_URI(  mEntryFragment.getCurrentEntryID() ), FeedData.getReadContentValues(), null, null);
             }
         }.start();
 
@@ -260,7 +261,7 @@ public class EntryActivity extends BaseActivity {
             accepted = false;
         if (accepted)
             event.startTracking();
-        return accepted ? true : super.onKeyDown(keyCode, event);
+        return accepted || super.onKeyDown(keyCode, event);
 
     }
 
