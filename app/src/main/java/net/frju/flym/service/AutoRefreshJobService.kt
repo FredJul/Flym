@@ -60,6 +60,7 @@ import android.app.job.JobScheduler
 import android.app.job.JobService
 import android.content.ComponentName
 import android.content.Context
+import androidx.content.systemService
 import net.frju.flym.data.utils.PrefUtils
 import org.jetbrains.anko.doAsync
 
@@ -70,6 +71,8 @@ class AutoRefreshJobService : JobService() {
         val JOB_ID = 0
 
         fun initAutoRefresh(context: Context) {
+
+            val jobSchedulerService = context.systemService<JobScheduler>()
 
             var time = 3600000L
             try {
@@ -83,11 +86,9 @@ class AutoRefreshJobService : JobService() {
                         .setPersisted(true)
                         .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
 
-                val tm = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-                tm.schedule(builder.build())
+                jobSchedulerService.schedule(builder.build())
             } else {
-                val tm = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-                tm.cancel(JOB_ID)
+                jobSchedulerService.cancel(JOB_ID)
             }
         }
     }
