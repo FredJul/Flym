@@ -8,6 +8,9 @@ Flym News Reader
 
 Light and modern Android feed reader (Atom/RSS), based on Sparse rss.
 
+F-Droid link:
+https://f-droid.org/packages/net.fred.feedex/
+
 PlayStore link:
 https://play.google.com/store/apps/details?id=net.fred.feedex
 
