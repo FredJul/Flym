@@ -16,8 +16,8 @@ import org.jetbrains.anko.dip
 abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup, Feed, BaseFeedAdapter.FeedGroupViewHolder, BaseFeedAdapter.FeedViewHolder>(groups) {
 
 	companion object {
-		const val TYPE_GROUP = 0
-		const val TYPE_FEED = 1
+		const val TYPE_TOP_LEVEL = 0
+		const val TYPE_CHILD = 1
 	}
 
 	var feedClickListener: ((View, Feed) -> Unit)? = null
@@ -39,12 +39,24 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 		feedLongClickListener = listener
 	}
 
+	override fun getItemId(position: Int) =
+			getFeedAtPos(position).id
+
+	fun getFeedAtPos(position: Int): Feed {
+		val item = mFlatItemList[position]
+		return if (item.isParent) {
+			mFlatItemList[position].parent.feed
+		} else {
+			mFlatItemList[position].child
+		}
+	}
+
 	override fun getParentViewType(parentPosition: Int): Int {
-		return TYPE_GROUP
+		return TYPE_TOP_LEVEL
 	}
 
 	override fun getChildViewType(parentPosition: Int, childPosition: Int): Int {
-		return TYPE_FEED
+		return TYPE_CHILD
 	}
 
 	override fun onCreateParentViewHolder(parentViewGroup: ViewGroup, viewType: Int): FeedGroupViewHolder {

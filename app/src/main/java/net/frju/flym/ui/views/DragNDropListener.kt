@@ -33,8 +33,8 @@ interface DragNDropListener {
     /**
      * Called when an item is to be dropped.
      *
-     * @param flatPosFrom index item started at.
-     * @param flatPosTo   index to place item at.
+     * @param posFrom index item started at.
+     * @param posTo   index to place item at.
      */
-    fun onDrop(flatPosFrom: Int, flatPosTo: Int)
+    fun onDrop(posFrom: Int, posTo: Int)
 }

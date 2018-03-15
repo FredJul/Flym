@@ -1,5 +1,6 @@
 package net.frju.flym.ui.feeds
 
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -11,6 +12,8 @@ import kotlinx.android.synthetic.main.fragment_feed_list_edit.view.*
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.ui.views.DragNDropListener
+import org.jetbrains.anko.doAsync
+
 
 class FeedListEditFragment : Fragment() {
 
@@ -37,34 +40,36 @@ class FeedListEditFragment : Fragment() {
 				override fun onStopDrag(itemView: View) {
 				}
 
-				override fun onDrop(flatPosFrom: Int, flatPosTo: Int) {
-//					val fromIsGroup = feedAdapter.getItemViewType(flatPosFrom) == BaseFeedAdapter.TYPE_GROUP || feedAdapter.getItemViewType(flatPosFrom) == BaseFeedAdapter.TYPE_FEED_TOP_LEVEL
-//					val toIsGroup = feedAdapter.getItemViewType(flatPosTo) == BaseFeedAdapter.TYPE_GROUP
-//
-//					val fromIsFeedWithoutGroup = fromIsGroup && feedAdapter.getItemViewType(flatPosFrom) == BaseFeedAdapter.TYPE_FEED_TOP_LEVEL
-//
-//					val toView = mListView.getChildAt(flatPosTo - mListView.getFirstVisiblePosition())
-//					val toIsFeedWithoutGroup = toIsGroup && toView.findViewById(R.id.indicator).getVisibility() != View.VISIBLE
-//
-//					val packedPosTo = mListView.getExpandableListPosition(flatPosTo)
-//					val packedGroupPosTo = ExpandableListView.getPackedPositionGroup(packedPosTo)
-//
-//					if ((fromIsFeedWithoutGroup || !fromIsGroup) && toIsGroup && !toIsFeedWithoutGroup) {
-//						AlertDialog.Builder(activity) //
-//								.setTitle(R.string.to_group_title) //
-//								.setMessage(R.string.to_group_message) //
-//								.setPositiveButton(R.string.to_group_into) { dialog, which ->
-//									val values = ContentValues()
-//									values.put(FeedColumns.PRIORITY, 1)
-//									values.put(FeedColumns.GROUP_ID, mListView.getItemIdAtPosition(flatPosTo))
-//
-//									val cr = activity!!.contentResolver
-//									cr.update(FeedColumns.CONTENT_URI(mListView.getItemIdAtPosition(flatPosFrom)), values, null, null)
-//									cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null)
-//								}.setNegativeButton(R.string.to_group_above) { dialog, which -> moveItem(fromIsGroup, toIsGroup, fromIsFeedWithoutGroup, packedPosTo, packedGroupPosTo, flatPosFrom) }.show()
-//					} else {
-//						moveItem(fromIsGroup, toIsGroup, fromIsFeedWithoutGroup, packedPosTo, packedGroupPosTo, flatPosFrom)
-//					}
+				override fun onDrop(posFrom: Int, posTo: Int) {
+
+					val fromIsTopLevel = feedAdapter.getItemViewType(posFrom) == BaseFeedAdapter.TYPE_TOP_LEVEL
+					val toIsTopLevel = feedAdapter.getItemViewType(posTo) == BaseFeedAdapter.TYPE_TOP_LEVEL
+
+					val fromFeed = feedAdapter.getFeedAtPos(posFrom)
+					val fromIsFeedWithoutGroup = fromIsTopLevel && !fromFeed.isGroup
+
+					val toFeed = feedAdapter.getFeedAtPos(posTo)
+					val toIsFeedWithoutGroup = toIsTopLevel && !toFeed.isGroup
+
+//					val packedPosTo = view.feedsList.getExpandableListPosition(flatPosTo)
+//					val packedGroupPosTo = getPackedPositionGroup(packedPosTo)
+
+					if ((fromIsFeedWithoutGroup || !fromIsTopLevel) && toIsTopLevel && !toIsFeedWithoutGroup) {
+						AlertDialog.Builder(activity) //
+								.setTitle(R.string.to_group_title) //
+								.setMessage(R.string.to_group_message) //
+								.setPositiveButton(R.string.to_group_into) { dialog, which ->
+									fromFeed.groupId = toFeed.id
+									fromFeed.displayPriority = 1
+									doAsync {
+										App.db.feedDao().update(fromFeed)
+									}
+								}.setNegativeButton(R.string.to_group_above) { dialog, which ->
+									//moveItem(fromIsGroup, toIsGroup, fromIsFeedWithoutGroup, packedPosTo, packedGroupPosTo, flatPosFrom)
+								}.show()
+					} else {
+						//moveItem(fromIsGroup, toIsGroup, fromIsFeedWithoutGroup, packedPosTo, packedGroupPosTo, flatPosFrom)
+					}
 				}
 			}
 		}
@@ -80,38 +85,27 @@ class FeedListEditFragment : Fragment() {
 				)
 
 				feedAdapter.notifyParentDataSetChanged(true)
-
-//				feedAdapter.onFeedClick { view, feed ->
-//					goToEntriesList(feed)
-//					closeDrawer()
-//				}
-//
-//				feedAdapter.onFeedLongClick { view, feed ->
-//					if (feed.isGroup) {
-//						return@onFeedLongClick
-//					}
-//
-//					PopupMenu(this, view).apply {
-//						setOnMenuItemClickListener { item ->
-//							when (item.itemId) {
-//								R.id.mark_all_as_read -> doAsync { App.db.entryDao().markAsRead(feed.id) }
-//								R.id.rename -> {
-//								}
-//								R.id.enable_full_text_retrieval -> {
-//								}
-//								R.id.disable_full_text_retrieval -> {
-//								}//TODO
-//							}
-//							true
-//						}
-//						inflate(R.menu.drawer_feed)
-//
-//						show()
-//					}
-//				}
 			}
 		})
 
 		return view
 	}
+
+//	private fun moveItem(fromIsGroup: Boolean, toIsGroup: Boolean, fromIsFeedWithoutGroup: Boolean, packedPosTo: Long, packedGroupPosTo: Int, flatPosFrom: Int) {
+//		if (fromIsGroup && toIsGroup) {
+//			values.put(FeedColumns.PRIORITY, packedGroupPosTo + 1)
+//			cr.update(FeedColumns.CONTENT_URI(mListView.getItemIdAtPosition(flatPosFrom)), values, null, null)
+//		} else if (!fromIsGroup && toIsGroup) {
+//			values.put(FeedColumns.PRIORITY, packedGroupPosTo + 1)
+//			values.putNull(FeedColumns.GROUP_ID)
+//			cr.update(FeedColumns.CONTENT_URI(mListView.getItemIdAtPosition(flatPosFrom)), values, null, null)
+//		} else if (!fromIsGroup && !toIsGroup || fromIsFeedWithoutGroup && !toIsGroup) {
+//			val groupPrio = ExpandableListView.getPackedPositionChild(packedPosTo) + 1
+//			values.put(FeedColumns.PRIORITY, groupPrio)
+//
+//			val flatGroupPosTo = mListView.getFlatListPosition(ExpandableListView.getPackedPositionForGroup(packedGroupPosTo))
+//			values.put(FeedColumns.GROUP_ID, mListView.getItemIdAtPosition(flatGroupPosTo))
+//			cr.update(FeedColumns.CONTENT_URI(mListView.getItemIdAtPosition(flatPosFrom)), values, null, null)
+//		}
+//	}
 }
