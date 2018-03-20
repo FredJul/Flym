@@ -94,7 +94,7 @@
     <string name="to_group_into">Внутрь группы</string>
     <string name="add_custom_feed">Добавить ленту по адресу или по названию</string>
     <string name="google_news_title">Google News topics</string>
-    <string name="google_news_indicator">Выберите один или несколько категорий.</string>
+    <string name="google_news_indicator">Выберите одну или несколько категорий.</string>
     <string name="google_news_top_stories">Top Stories</string>
     <string name="google_news_world">Мир</string>
     <string name="google_news_business">Бизнес</string>
@@ -106,7 +106,7 @@
     <string name="google_news_custom_topic">Своя тема</string>
 
     <!-- ENTRIES -->
-    <string name="unread_entries">Непрочитаное</string>
+    <string name="unread_entries">Непрочитанное</string>
     <string name="all_entries">Все</string>
     <string name="no_entries">Нет новостей</string>
     <string name="favorites">Избранное</string>
@@ -209,7 +209,7 @@
     <string name="settings_load_comments_description">в полных текстах статей</string>
     <string name="settings_tap_zones_description">на экране чтения статьи</string>
     <string name="settings_tap_zones_dialogtitle">Для информации, изменение невозможно</string>
-    <string name="settings_max_image_download_count">Max число картинок при загрузке</string>
+    <string name="settings_max_image_download_count">Макс. число картинок при загрузке</string>
     <string name="settings_max_image_download_count_description">на одну статью</string>
     <string name="downloadNext">"Загрузить следующие "</string>
     <string name="loadingLink">Загрузка ссылки</string>
@@ -276,7 +276,7 @@
     <br/>
     <b>Основные функции:</b> <br/>
     - загрузка RSS лент статей  <br/>
-    - поиск им добавление ленты по ключевому слову <br/>
+    - поиск и добавление ленты по ключевому слову <br/>
     - загрузка оффлайн полнотекстовых версий статей с изображениями <br/>
     - импорт/экспорт списка каналов из OPML <br/>
     - фильтр статей по ключевым словам или регулярным выражениям <br/>
@@ -352,7 +352,7 @@
     <string name="actionBarToggle">Пркл. панель действий</string>
     <string name="settings_show_tap_zones">Зоны нажатий видимы</string>
     <string name="settings_show_tap_zone_description">полупрозрачные квадратики в окне чтения статьи</string>
-    <string name="settings_max_image_download_size_kb">Max размер изображения</string>
+    <string name="settings_max_image_download_size_kb">Макс. размер изображения</string>
     <string name="settings_max_image_download_size_kb_summary">(в kb). Не загружать автоматически изображения, имеющие больший размер</string>
     <string name="fontsize_entrylist">Размер текста в списке статей</string>
     <string name="settings_volume_buttons_action">Действие кнопок громкости</string>
