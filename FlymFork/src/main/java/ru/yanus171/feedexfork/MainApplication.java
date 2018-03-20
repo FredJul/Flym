@@ -21,7 +21,12 @@ package ru.yanus171.feedexfork;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
+import android.os.StrictMode;
 
+import java.lang.reflect.Method;
+
+import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 
 public class MainApplication extends Application {
@@ -37,6 +42,14 @@ public class MainApplication extends Application {
         super.onCreate();
         mContext = getApplicationContext();
 
+        if (Build.VERSION.SDK_INT >= 24) {
+            try {
+                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                m.invoke(null);
+            } catch (Exception e) {
+                Dog.e("disableDeathOnFileUriExposure", e);
+            }
+        }
         PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false); // init
     }
 }

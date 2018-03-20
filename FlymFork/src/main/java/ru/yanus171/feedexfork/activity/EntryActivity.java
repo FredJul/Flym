@@ -142,8 +142,12 @@ public class EntryActivity extends BaseActivity {
                     //mark as read
                     if ( mEntryFragment.getCurrentEntryID() != -1 )
                         cr.update(EntryColumns.CONTENT_URI(  mEntryFragment.getCurrentEntryID() ), FeedData.getReadContentValues(), null, null);
+
+
             }
         }.start();
+
+        mEntryFragment.mEntryPagerAdapter.SaveScrollPos( true );
 
         super.onBackPressed();
     }

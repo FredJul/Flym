@@ -402,7 +402,7 @@ public class EntryView extends WebView implements Observer {
     @Override
     public void update(Observable observable, Object data) {
         if ( ( data != null ) && ( (Long)data == mEntryId ) )  {
-            if (getScrollY() != 0)
+            if ( GetViewScrollPartY() < mScrollPartY )
                 mScrollPartY = GetViewScrollPartY();
             mData = HtmlUtils.replaceImageURLs(mData, mEntryId);
             loadDataWithBaseURL("", mData, TEXT_HTML, Constants.UTF8, null);

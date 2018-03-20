@@ -105,7 +105,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
     private boolean mFavorite, mPreferFullText = true;
 
     private ViewPager mEntryPager;
-    private EntryPagerAdapter mEntryPagerAdapter;
+    public EntryPagerAdapter mEntryPagerAdapter;
 
     private View mToggleFullscreenBtn;
     private View mToggleStatusBarVisbleBtn;
@@ -322,7 +322,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         EntryView entryView = mEntryPagerAdapter.mEntryViews.get(mEntryPager.getCurrentItem());
         if (entryView != null) {
             //PrefUtils.putInt(PrefUtils.LAST_ENTRY_SCROLL_Y, entryView.getScrollY());
-            mEntryPagerAdapter.SaveScrollPos();
+            mEntryPagerAdapter.SaveScrollPos( false );
             PrefUtils.putLong(PrefUtils.LAST_ENTRY_ID, getCurrentEntryID());
             PrefUtils.putBoolean(STATE_LOCK_LAND_ORIENTATION, mLockLandOrientation);
         }
@@ -354,8 +354,6 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
             switch (item.getItemId()) {
                 case R.id.menu_star: {
                     mFavorite = !mFavorite;
-
-
 
                     if (mFavorite) {
                         item.setTitle(R.string.menu_unstar).setIcon(R.drawable.rating_important);
@@ -436,11 +434,9 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                         public void run() {
                             ContentResolver cr = MainApplication.getContext().getContentResolver();
                             cr.update(uri, FeedData.getFavoriteContentValues(true), null, null);
-                            //cr.update(uri, FeedData.getUnreadContentValues(), null, null);
                         }
                     }.start();
                     UiUtils.toast( getActivity(), R.string.entry_marked_favourite );
-                    //activity.finish();
                     break;
                 }
                 case R.id.menu_mark_as_unfavorite: {
@@ -890,11 +886,11 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
             getLoaderManager().destroyLoader(position);
             container.removeView((View) object);
             EntryView.mImageDownloadObservable.deleteObserver(mEntryViews.get(position));
-            SaveScrollPos();
+            SaveScrollPos( false );
             mEntryViews.delete(position);
         }
 
-        private void SaveScrollPos() {
+        public void SaveScrollPos(final boolean force ) {
             final long entryID = getCurrentEntryID();
             final EntryView view = mEntryViews.get(mCurrentPagerPos);
             if ( view != null ) {
@@ -908,7 +904,8 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                         ContentResolver cr = MainApplication.getContext().getContentResolver();
                         //cr.update(EntryColumns.CONTENT_URI(entryID), values, EntryColumns.SCROLL_POS + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.SCROLL_POS + " < " + scroll, null);
                         FeedDataContentProvider.mNotifyEnabled = false;
-                        cr.update(EntryColumns.CONTENT_URI(entryID), values, null, null);
+                        String where = EntryColumns.SCROLL_POS + " < " + scrollPart + Constants.DB_OR + EntryColumns.SCROLL_POS + Constants.DB_IS_NULL;
+                        cr.update(EntryColumns.CONTENT_URI(entryID), values, force ? "" : where, null);
                         FeedDataContentProvider.mNotifyEnabled = true;
                         Dog.v(String.format("EntryPagerAdapter.SaveScrollPos (entry %d) update scrollPos = %f", entryID, scrollPart));
                     }
