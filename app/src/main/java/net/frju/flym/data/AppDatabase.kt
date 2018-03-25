@@ -21,19 +21,75 @@ import org.jetbrains.anko.doAsync
 import java.io.File
 
 
-@Database(entities = arrayOf(Feed::class, Entry::class, Task::class), version = 1)
+@Database(entities = [Feed::class, Entry::class, Task::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
-	companion object {
-		private const val DATABASE_NAME = "db"
-		private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
+    companion object {
+        private const val DATABASE_NAME = "db"
+        private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
 
-		fun createDatabase(context: Context): AppDatabase {
-			return Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, DATABASE_NAME)
-					.addCallback(object : Callback() {
-						override fun onCreate(db: SupportSQLiteDatabase) {
-							super.onCreate(db)
+        fun createDatabase(context: Context): AppDatabase {
+            return Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, DATABASE_NAME)
+                    .addCallback(object : Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+
+                            doAsync {
+                                // insert => add max priority for the group
+                                db.execSQL("""
+                                CREATE TRIGGER feed_insert_priority
+                                    AFTER INSERT
+                                    ON feeds
+                                BEGIN
+                                   UPDATE feeds SET displayPriority = IFNULL((SELECT MAX(displayPriority) FROM feeds WHERE groupId = NEW.groupId) + 1, 0) WHERE feedId = NEW.feedId;
+                                END;
+                                """.trimIndent())
+
+                                // groupId changed => decrease priority of feeds from old group
+                                db.execSQL("""
+                                CREATE TRIGGER feed_update_decrease_priority
+                                    BEFORE UPDATE
+                                    ON feeds
+                                    WHEN OLD.groupId != NEW.groupId
+                                BEGIN
+                                   UPDATE feeds SET displayPriority = displayPriority - 1 WHERE displayPriority > NEW.displayPriority AND groupId = OLD.groupId;
+                                END;
+                                """.trimIndent())
+
+                                // groupId changed => increase priority of feeds from new group
+                                db.execSQL("""
+                                CREATE TRIGGER feed_update_increase_priority
+                                    BEFORE UPDATE
+                                    ON feeds
+                                    WHEN OLD.groupId != NEW.groupId
+                                BEGIN
+                                   UPDATE feeds SET displayPriority = displayPriority + 1 WHERE displayPriority > NEW.displayPriority - 1 AND groupId = NEW.groupId;
+                                END;
+                                """.trimIndent())
+
+                                // same groupId => decrease priority of some group's feeds
+                                db.execSQL("""
+                                CREATE TRIGGER feed_update_decrease_priority_same_group
+                                    BEFORE UPDATE
+                                    ON feeds
+                                    WHEN OLD.groupId = NEW.groupId AND NEW.displayPriority > OLD.displayPriority
+                                BEGIN
+                                   UPDATE feeds SET displayPriority = displayPriority - 1 WHERE (displayPriority BETWEEN OLD.displayPriority + 1 AND NEW.displayPriority) AND groupId = OLD.groupId;
+                                END;
+                                """.trimIndent())
+
+                                // same groupId => increase priority of some group's feeds
+                                db.execSQL("""
+                                CREATE TRIGGER feed_update_increase_priority_same_group
+                                    BEFORE UPDATE
+                                    ON feeds
+                                    WHEN OLD.groupId = NEW.groupId AND NEW.displayPriority < OLD.displayPriority
+                                BEGIN
+                                   UPDATE feeds SET displayPriority = displayPriority + 1 WHERE (displayPriority BETWEEN NEW.displayPriority AND OLD.displayPriority - 1) AND groupId = OLD.groupId;
+                                END;
+                                """.trimIndent())
+
 
 //                            val values = ContentValues()
 //                            values.put("feedTitle", "Google News")
@@ -44,51 +100,51 @@ abstract class AppDatabase : RoomDatabase() {
 //                            values.put("displayPriority", 0)
 //                            db.insert("feeds", SQLiteDatabase.CONFLICT_REPLACE, values)
 
-							// TODO permisions request in activity
-							// Import the OPML backup if possible
-							doAsync {
-								if (BACKUP_OPML.exists()) {
-									var id = 1L
-									val feedList = mutableListOf<Feed>()
-									val opml = WireFeedInput().build(BACKUP_OPML) as Opml
-									opml.outlines.forEach {
-										if (it.xmlUrl != null || it.children.isNotEmpty()) {
-											val topLevelFeed = Feed()
-											topLevelFeed.id = id++
-											topLevelFeed.title = it.title
-											feedList.add(topLevelFeed)
 
-											if (it.xmlUrl != null) {
-												topLevelFeed.link = it.xmlUrl
-												topLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
-											} else {
-												topLevelFeed.isGroup = true
+                                // TODO permisions request in activity
+                                // Import the OPML backup if possible
+                                if (BACKUP_OPML.exists()) {
+                                    var id = 1L
+                                    val feedList = mutableListOf<Feed>()
+                                    val opml = WireFeedInput().build(BACKUP_OPML) as Opml
+                                    opml.outlines.forEach {
+                                        if (it.xmlUrl != null || it.children.isNotEmpty()) {
+                                            val topLevelFeed = Feed()
+                                            topLevelFeed.id = id++
+                                            topLevelFeed.title = it.title
+                                            feedList.add(topLevelFeed)
 
-												it.children.filter { it.xmlUrl != null }.forEach {
-													val subLevelFeed = Feed()
-													subLevelFeed.id = id++
-													subLevelFeed.title = it.title
-													subLevelFeed.link = it.xmlUrl
-													subLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
-													subLevelFeed.groupId = topLevelFeed.id
-													feedList.add(subLevelFeed)
-												}
-											}
-										}
-									}
+                                            if (it.xmlUrl != null) {
+                                                topLevelFeed.link = it.xmlUrl
+                                                topLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
+                                            } else {
+                                                topLevelFeed.isGroup = true
 
-									if (feedList.isNotEmpty()) {
-										App.db.feedDao().insert(*feedList.toTypedArray())
-									}
-								}
-							}
-						}
-					})
-					.build()
-		}
-	}
+                                                it.children.filter { it.xmlUrl != null }.forEach {
+                                                    val subLevelFeed = Feed()
+                                                    subLevelFeed.id = id++
+                                                    subLevelFeed.title = it.title
+                                                    subLevelFeed.link = it.xmlUrl
+                                                    subLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
+                                                    subLevelFeed.groupId = topLevelFeed.id
+                                                    feedList.add(subLevelFeed)
+                                                }
+                                            }
+                                        }
+                                    }
 
-	abstract fun feedDao(): FeedDao
-	abstract fun entryDao(): EntryDao
-	abstract fun taskDao(): TaskDao
+                                    if (feedList.isNotEmpty()) {
+                                        App.db.feedDao().insert(*feedList.toTypedArray())
+                                    }
+                                }
+                            }
+                        }
+                    })
+                    .build()
+        }
+    }
+
+    abstract fun feedDao(): FeedDao
+    abstract fun entryDao(): EntryDao
+    abstract fun taskDao(): TaskDao
 }
