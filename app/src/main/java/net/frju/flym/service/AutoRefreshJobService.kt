@@ -67,18 +67,14 @@ import org.jetbrains.anko.doAsync
 class AutoRefreshJobService : JobService() {
 
     companion object {
-        val SIXTY_MINUTES = "3600000"
-        val JOB_ID = 0
+        private const val TWO_HOURS = 7200L
+        private const val JOB_ID = 0
 
         fun initAutoRefresh(context: Context) {
 
             val jobSchedulerService = context.systemService<JobScheduler>()
 
-            var time = 3600000L
-            try {
-                time = Math.max(60L, java.lang.Long.parseLong(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, SIXTY_MINUTES)) / 1000)
-            } catch (ignored: Exception) {
-            }
+            val time = Math.max(600L, PrefUtils.getLong(PrefUtils.REFRESH_INTERVAL, TWO_HOURS))
 
             if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
                 val builder = JobInfo.Builder(JOB_ID, ComponentName(context, AutoRefreshJobService::class.java))

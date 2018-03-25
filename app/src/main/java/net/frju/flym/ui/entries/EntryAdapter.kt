@@ -1,7 +1,7 @@
 package net.frju.flym.ui.entries
 
 import android.arch.paging.PagedListAdapter
-import android.support.v7.recyclerview.extensions.DiffCallback
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -22,7 +22,7 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
     companion object {
 
         @JvmField
-        val DIFF_CALLBACK = object : DiffCallback<EntryWithFeed>() {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<EntryWithFeed>() {
 
             override fun areItemsTheSame(oldItem: EntryWithFeed, newItem: EntryWithFeed): Boolean =
                     oldItem.id == newItem.id

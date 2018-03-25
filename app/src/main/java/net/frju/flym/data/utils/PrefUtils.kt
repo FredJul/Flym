@@ -13,7 +13,7 @@ object PrefUtils {
 
 	val IS_REFRESHING = "IS_REFRESHING"
 
-	val REFRESH_INTERVAL = "refresh.interval"
+	val REFRESH_INTERVAL = "REFRESH_INTERVAL"
 	val REFRESH_ENABLED = "refresh.enabled"
 	val REFRESH_ON_OPEN_ENABLED = "refreshonopen.enabled"
 	val REFRESH_WIFI_ONLY = "refreshwifionly.enabled"
