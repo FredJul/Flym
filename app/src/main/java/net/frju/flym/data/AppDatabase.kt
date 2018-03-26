@@ -42,7 +42,7 @@ abstract class AppDatabase : RoomDatabase() {
                                     AFTER INSERT
                                     ON feeds
                                 BEGIN
-                                   UPDATE feeds SET displayPriority = IFNULL((SELECT MAX(displayPriority) FROM feeds WHERE groupId = NEW.groupId) + 1, 0) WHERE feedId = NEW.feedId;
+                                   UPDATE feeds SET displayPriority = IFNULL((SELECT MAX(displayPriority) FROM feeds WHERE groupId IS NEW.groupId), 0) + 1 WHERE feedId = NEW.feedId;
                                 END;
                                 """.trimIndent())
 
@@ -51,9 +51,9 @@ abstract class AppDatabase : RoomDatabase() {
                                 CREATE TRIGGER feed_update_decrease_priority
                                     BEFORE UPDATE
                                     ON feeds
-                                    WHEN OLD.groupId != NEW.groupId
+                                    WHEN OLD.groupId IS NOT NEW.groupId
                                 BEGIN
-                                   UPDATE feeds SET displayPriority = displayPriority - 1 WHERE displayPriority > NEW.displayPriority AND groupId = OLD.groupId;
+                                   UPDATE feeds SET displayPriority = displayPriority - 1 WHERE displayPriority > NEW.displayPriority AND groupId IS OLD.groupId AND feedId != NEW.feedId;
                                 END;
                                 """.trimIndent())
 
@@ -62,9 +62,9 @@ abstract class AppDatabase : RoomDatabase() {
                                 CREATE TRIGGER feed_update_increase_priority
                                     BEFORE UPDATE
                                     ON feeds
-                                    WHEN OLD.groupId != NEW.groupId
+                                    WHEN OLD.groupId IS NOT NEW.groupId
                                 BEGIN
-                                   UPDATE feeds SET displayPriority = displayPriority + 1 WHERE displayPriority > NEW.displayPriority - 1 AND groupId = NEW.groupId;
+                                   UPDATE feeds SET displayPriority = displayPriority + 1 WHERE displayPriority > NEW.displayPriority - 1 AND groupId IS NEW.groupId AND feedId != NEW.feedId;
                                 END;
                                 """.trimIndent())
 
@@ -73,9 +73,9 @@ abstract class AppDatabase : RoomDatabase() {
                                 CREATE TRIGGER feed_update_decrease_priority_same_group
                                     BEFORE UPDATE
                                     ON feeds
-                                    WHEN OLD.groupId = NEW.groupId AND NEW.displayPriority > OLD.displayPriority
+                                    WHEN OLD.groupId IS NEW.groupId AND NEW.displayPriority > OLD.displayPriority
                                 BEGIN
-                                   UPDATE feeds SET displayPriority = displayPriority - 1 WHERE (displayPriority BETWEEN OLD.displayPriority + 1 AND NEW.displayPriority) AND groupId = OLD.groupId;
+                                   UPDATE feeds SET displayPriority = displayPriority - 1 WHERE (displayPriority BETWEEN OLD.displayPriority + 1 AND NEW.displayPriority) AND groupId IS OLD.groupId AND feedId != NEW.feedId;
                                 END;
                                 """.trimIndent())
 
@@ -84,9 +84,9 @@ abstract class AppDatabase : RoomDatabase() {
                                 CREATE TRIGGER feed_update_increase_priority_same_group
                                     BEFORE UPDATE
                                     ON feeds
-                                    WHEN OLD.groupId = NEW.groupId AND NEW.displayPriority < OLD.displayPriority
+                                    WHEN OLD.groupId IS NEW.groupId AND NEW.displayPriority < OLD.displayPriority
                                 BEGIN
-                                   UPDATE feeds SET displayPriority = displayPriority + 1 WHERE (displayPriority BETWEEN NEW.displayPriority AND OLD.displayPriority - 1) AND groupId = OLD.groupId;
+                                   UPDATE feeds SET displayPriority = displayPriority + 1 WHERE (displayPriority BETWEEN NEW.displayPriority AND OLD.displayPriority - 1) AND groupId IS OLD.groupId AND feedId != NEW.feedId;
                                 END;
                                 """.trimIndent())
 
