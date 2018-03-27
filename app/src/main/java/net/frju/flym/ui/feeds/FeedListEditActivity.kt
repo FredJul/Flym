@@ -20,6 +20,6 @@ class FeedListEditActivity : AppCompatActivity() {
 			android.R.id.home -> onBackPressed()
 		}
 
-		return true
+		return false
 	}
 }

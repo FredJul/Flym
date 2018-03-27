@@ -6,8 +6,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import kotlinx.android.synthetic.main.fragment_feed_list_edit.view.*
 import net.fred.feedex.R
 import net.frju.flym.App
@@ -84,7 +88,46 @@ class FeedListEditFragment : Fragment() {
 			}
 		})
 
+		setHasOptionsMenu(true)
+
 		return view
+	}
+
+	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+		super.onCreateOptionsMenu(menu, inflater)
+
+		inflater.inflate(R.menu.fragment_feed_list_edit, menu)
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+		when (item?.itemId) {
+			R.id.add_group -> {
+				val input = EditText(activity).apply {
+					setSingleLine(true)
+				}
+
+				AlertDialog.Builder(activity)
+						.setTitle(R.string.add_group_title)
+						.setView(input)
+						.setPositiveButton(android.R.string.ok) { dialog, which ->
+							doAsync {
+								val groupName = input.text.toString()
+								if (!groupName.isEmpty()) {
+									val newGroup = Feed().apply {
+										title = groupName
+										isGroup = true
+									}
+									App.db.feedDao().insert(newGroup)
+								}
+							}
+						}
+						.setNegativeButton(android.R.string.cancel, null)
+						.show()
+				return true
+			}
+		}
+
+		return false
 	}
 
 	private fun changeItemPriority(fromFeed: Feed, newDisplayPriority: Int) {
