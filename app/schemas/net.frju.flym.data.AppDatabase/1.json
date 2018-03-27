@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "462379499e718db6a97630bcee955118",
+	"identityHash": "dd7e9e52effd15fd1349c5cb84e150cd",
     "entities": [
       {
         "tableName": "feeds",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`feedId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `feedLink` TEXT NOT NULL, `feedTitle` TEXT, `feedImageLink` TEXT, `fetchError` INTEGER NOT NULL, `retrieveFullText` INTEGER NOT NULL, `isGroup` INTEGER NOT NULL, `groupId` INTEGER, `displayPriority` INTEGER NOT NULL, FOREIGN KEY(`groupId`) REFERENCES `feeds`(`feedId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+		"createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`feedId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `feedLink` TEXT NOT NULL, `feedTitle` TEXT, `feedImageLink` TEXT, `fetchError` INTEGER NOT NULL, `retrieveFullText` INTEGER NOT NULL, `isGroup` INTEGER NOT NULL, `groupId` INTEGER, `displayPriority` INTEGER NOT NULL, `lastManualActionUid` TEXT NOT NULL, FOREIGN KEY(`groupId`) REFERENCES `feeds`(`feedId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -61,6 +61,12 @@
             "columnName": "displayPriority",
             "affinity": "INTEGER",
             "notNull": true
+		  },
+		  {
+			"fieldPath": "lastManualActionUid",
+			"columnName": "lastManualActionUid",
+			"affinity": "TEXT",
+			"notNull": true
           }
         ],
         "primaryKey": {
@@ -266,7 +272,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"462379499e718db6a97630bcee955118\")"
+	  "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"dd7e9e52effd15fd1349c5cb84e150cd\")"
     ]
   }
 }

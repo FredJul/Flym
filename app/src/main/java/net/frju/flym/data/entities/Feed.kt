@@ -32,7 +32,8 @@ data class Feed(
 		var retrieveFullText: Boolean = false,
 		var isGroup: Boolean = false,
 		var groupId: Long? = null,
-		var displayPriority: Int = 0) : Parcelable {
+		var displayPriority: Int = 0,
+		var lastManualActionUid: String = "") : Parcelable {
 
 	companion object {
 

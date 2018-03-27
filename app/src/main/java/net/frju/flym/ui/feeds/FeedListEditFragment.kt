@@ -14,6 +14,7 @@ import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.ui.views.DragNDropListener
 import org.jetbrains.anko.doAsync
+import java.util.UUID
 
 
 class FeedListEditFragment : Fragment() {
@@ -56,16 +57,14 @@ class FeedListEditFragment : Fragment() {
 								.setMessage(R.string.to_group_message)
 								.setPositiveButton(R.string.to_group_into) { dialog, which ->
 									fromFeed.groupId = toFeed.id
-									fromFeed.displayPriority = 1 // TODO would be better at the end instead of beginning
-
-									doAsync {
-										App.db.feedDao().update(fromFeed)
-									}
+									changeItemPriority(fromFeed, 1) // TODO would be better at the end instead of beginning
 								}.setNegativeButton(R.string.to_group_above) { dialog, which ->
-									moveItem(fromFeed, toFeed)
+									fromFeed.groupId = toFeed.groupId
+									changeItemPriority(fromFeed, toFeed.displayPriority)
 								}.show()
 					} else {
-						moveItem(fromFeed, toFeed)
+						fromFeed.groupId = toFeed.groupId
+						changeItemPriority(fromFeed, toFeed.displayPriority)
 					}
 				}
 			}
@@ -88,9 +87,9 @@ class FeedListEditFragment : Fragment() {
 		return view
 	}
 
-	private fun moveItem(fromFeed: Feed, toFeed: Feed) {
-		fromFeed.groupId = toFeed.groupId
-		fromFeed.displayPriority = toFeed.displayPriority
+	private fun changeItemPriority(fromFeed: Feed, newDisplayPriority: Int) {
+		fromFeed.lastManualActionUid = UUID.randomUUID().toString() // Needed hack to avoid recursive trigger
+		fromFeed.displayPriority = newDisplayPriority
 
 		doAsync {
 			App.db.feedDao().update(fromFeed)

@@ -80,8 +80,8 @@ dependencies {
 	implementation "android.arch.lifecycle:extensions:+"
 	kapt "android.arch.lifecycle:compiler:+"
 	implementation "android.arch.paging:runtime:+"
-	implementation "android.arch.persistence.room:runtime:1.1.0-alpha2"
-	kapt "android.arch.persistence.room:compiler:1.1.0-alpha2"
+	implementation "android.arch.persistence.room:runtime:+"
+	kapt "android.arch.persistence.room:compiler:+"
 
 	// Support dependencies
 	ext.support_version = '27.1.0'

@@ -49,7 +49,7 @@ abstract class AppDatabase : RoomDatabase() {
                                 // groupId changed => decrease priority of feeds from old group
                                 db.execSQL("""
                                 CREATE TRIGGER feed_update_decrease_priority
-                                    BEFORE UPDATE
+                                    BEFORE UPDATE OF lastManualActionUid
                                     ON feeds
                                     WHEN OLD.groupId IS NOT NEW.groupId
                                 BEGIN
@@ -60,7 +60,7 @@ abstract class AppDatabase : RoomDatabase() {
                                 // groupId changed => increase priority of feeds from new group
                                 db.execSQL("""
                                 CREATE TRIGGER feed_update_increase_priority
-                                    BEFORE UPDATE
+                                    BEFORE UPDATE OF lastManualActionUid
                                     ON feeds
                                     WHEN OLD.groupId IS NOT NEW.groupId
                                 BEGIN
@@ -71,7 +71,7 @@ abstract class AppDatabase : RoomDatabase() {
                                 // same groupId => decrease priority of some group's feeds
                                 db.execSQL("""
                                 CREATE TRIGGER feed_update_decrease_priority_same_group
-                                    BEFORE UPDATE
+                                    BEFORE UPDATE OF lastManualActionUid
                                     ON feeds
                                     WHEN OLD.groupId IS NEW.groupId AND NEW.displayPriority > OLD.displayPriority
                                 BEGIN
@@ -82,7 +82,7 @@ abstract class AppDatabase : RoomDatabase() {
                                 // same groupId => increase priority of some group's feeds
                                 db.execSQL("""
                                 CREATE TRIGGER feed_update_increase_priority_same_group
-                                    BEFORE UPDATE
+                                    BEFORE UPDATE OF lastManualActionUid
                                     ON feeds
                                     WHEN OLD.groupId IS NEW.groupId AND NEW.displayPriority < OLD.displayPriority
                                 BEGIN
