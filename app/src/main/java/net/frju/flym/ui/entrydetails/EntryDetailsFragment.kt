@@ -198,6 +198,7 @@ class EntryDetailsFragment : Fragment() {
 				when (item?.itemId) {
 					R.id.menu_entry_details__favorite -> {
 						entry.favorite = !entry.favorite
+						entry.read = true // otherwise it marked it as unread again
 
 						if (entry.favorite) {
 							item.setTitle(R.string.menu_unstar).setIcon(R.drawable.ic_star_white_24dp)
@@ -243,6 +244,9 @@ class EntryDetailsFragment : Fragment() {
 					R.id.menu_entry_details__mark_as_unread -> {
 						doAsync {
 							App.db.entryDao().markAsUnread(listOf(entry.id))
+						}
+						if (activity?.containers_layout?.hasTwoColumns() != true) {
+							activity?.onBackPressed()
 						}
 					}
 					else -> {
