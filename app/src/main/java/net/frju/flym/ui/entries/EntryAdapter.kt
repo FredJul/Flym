@@ -15,6 +15,7 @@ import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.service.FetcherService
+import org.jetbrains.anko.sdk21.listeners.onClick
 
 
 class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, private val favoriteClickListener: (EntryWithFeed) -> Unit) : PagedListAdapter<EntryWithFeed, EntryAdapter.ViewHolder>(DIFF_CALLBACK) {
@@ -58,9 +59,9 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
             } else {
                 favorite_icon.setImageResource(R.drawable.ic_star_border_white_24dp)
             }
-            favorite_icon.setOnClickListener { favoriteClickListener(entry) }
+            favorite_icon.onClick { favoriteClickListener(entry) }
 
-            setOnClickListener { globalClickListener(entry) }
+            onClick { globalClickListener(entry) }
         }
 
         fun clear() = with(itemView) {
