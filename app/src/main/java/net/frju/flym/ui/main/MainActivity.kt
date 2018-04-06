@@ -26,16 +26,21 @@ import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.service.AutoRefreshJobService
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.entries.EntriesFragment
+import net.frju.flym.ui.entrydetails.EntryDetailsActivity
 import net.frju.flym.ui.entrydetails.EntryDetailsFragment
 import net.frju.flym.ui.feeds.FeedAdapter
 import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.utils.closeKeyboard
 import okhttp3.Request
-import org.jetbrains.anko.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.hintTextColor
+import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.textColor
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.*
+import java.util.ArrayList
 
 
 class MainActivity : AppCompatActivity(), MainNavigator {
@@ -315,16 +320,20 @@ class MainActivity : AppCompatActivity(), MainNavigator {
     override fun goToEntryDetails(entry: EntryWithFeed, allEntryIds: List<String>) {
         closeKeyboard()
 
-        containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
-        val fragment = EntryDetailsFragment.newInstance(entry, allEntryIds)
-        supportFragmentManager
-                .beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.frame_details, fragment, TAG_DETAILS)
-                .commit()
+        if (containers_layout.hasTwoColumns()) {
+            containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
+            val fragment = EntryDetailsFragment.newInstance(entry, allEntryIds)
+            supportFragmentManager
+                    .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .replace(R.id.frame_details, fragment, TAG_DETAILS)
+                    .commit()
 
-        val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
-        listFragment.setSelectedEntryId(entry.id)
+            val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
+            listFragment.setSelectedEntryId(entry.id)
+        } else {
+            startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY to entry, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds)
+        }
     }
 
     override fun setSelectedEntryId(selectedEntryId: String) {

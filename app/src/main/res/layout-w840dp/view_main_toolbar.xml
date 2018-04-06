@@ -5,21 +5,21 @@
     android:fitsSystemWindows="true">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_general"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+		android:id="@+id/toolbar_general"
+		android:layout_width="match_parent"
+		android:layout_height="?android:attr/actionBarSize"/>
 
 
     <FrameLayout
-        android:id="@+id/frame_specific"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_marginStart="@dimen/container_horizontal_padding_start">
+		android:id="@+id/frame_specific"
+		android:layout_width="match_parent"
+		android:layout_height="?android:attr/actionBarSize"
+		android:layout_marginStart="@dimen/container_horizontal_padding_start">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_specific"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+			android:id="@+id/toolbar_specific"
+			android:layout_width="match_parent"
+			android:layout_height="?android:attr/actionBarSize"/>
     </FrameLayout>
 
 </merge>

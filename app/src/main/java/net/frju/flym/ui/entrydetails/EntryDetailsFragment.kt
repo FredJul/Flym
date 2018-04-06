@@ -15,10 +15,10 @@ import me.thanel.swipeactionview.SwipeGestureListener
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
+import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.isOnline
-import net.frju.flym.data.utils.PrefUtils
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -29,8 +29,8 @@ class EntryDetailsFragment : Fragment() {
 
 	companion object {
 
-		private val ARG_ENTRY = "ARG_ENTRY"
-		private val ARG_ALL_ENTRIES_IDS = "ARG_ALL_ENTRIES_IDS"
+		const val ARG_ENTRY = "ARG_ENTRY"
+		const val ARG_ALL_ENTRIES_IDS = "ARG_ALL_ENTRIES_IDS"
 
 		fun newInstance(entry: EntryWithFeed, allEntryIds: List<String>): EntryDetailsFragment {
 			val fragment = EntryDetailsFragment()
@@ -39,7 +39,7 @@ class EntryDetailsFragment : Fragment() {
 		}
 	}
 
-	private val navigator: MainNavigator by lazy { activity as MainNavigator }
+	private val navigator: MainNavigator? by lazy { activity as? MainNavigator }
 
 	private lateinit var entry: EntryWithFeed
 	private var allEntryIds = emptyList<String>()
@@ -96,7 +96,7 @@ class EntryDetailsFragment : Fragment() {
 								App.db.entryDao().findByIdWithFeed(nextId)?.let { newEntry ->
 									uiThread {
 										setEntry(newEntry, allEntryIds)
-										navigator.setSelectedEntryId(newEntry.id)
+										navigator?.setSelectedEntryId(newEntry.id)
 									}
 								}
 							}
@@ -110,7 +110,7 @@ class EntryDetailsFragment : Fragment() {
 								App.db.entryDao().findByIdWithFeed(previousId)?.let { newEntry ->
 									uiThread {
 										setEntry(newEntry, allEntryIds)
-										navigator.setSelectedEntryId(newEntry.id)
+										navigator?.setSelectedEntryId(newEntry.id)
 									}
 								}
 							}
@@ -174,7 +174,7 @@ class EntryDetailsFragment : Fragment() {
 			menu.clear()
 			inflateMenu(R.menu.fragment_entry_details)
 
-			if (activity?.containers_layout?.hasTwoColumns() == false) {
+			if (activity?.containers_layout?.hasTwoColumns() != true) {
 				setNavigationIcon(R.drawable.ic_back_white_24dp)
 				setNavigationOnClickListener { activity?.onBackPressed() }
 			}

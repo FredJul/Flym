@@ -23,10 +23,10 @@ class ContainersLayout @JvmOverloads constructor(context: Context, attrs: Attrib
 
     companion object {
 
-        val ANIM_DURATION = 250
+        const val ANIM_DURATION = 250
 
-        private val STATE_SUPER = "state_super"
-        private val STATE_CONTAINERS_STATE = "state_containers_state"
+        private const val STATE_SUPER = "state_super"
+        private const val STATE_CONTAINERS_STATE = "state_containers_state"
     }
 
     var state: MainNavigator.State? = null

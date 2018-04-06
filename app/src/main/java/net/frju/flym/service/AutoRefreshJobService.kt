@@ -60,7 +60,7 @@ import android.app.job.JobScheduler
 import android.app.job.JobService
 import android.content.ComponentName
 import android.content.Context
-import androidx.content.systemService
+import androidx.core.content.systemService
 import net.frju.flym.data.utils.PrefUtils
 import org.jetbrains.anko.doAsync
 

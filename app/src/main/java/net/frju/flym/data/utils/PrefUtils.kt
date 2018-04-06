@@ -1,7 +1,7 @@
 package net.frju.flym.data.utils
 
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
-import androidx.content.edit
+import androidx.core.content.edit
 import net.frju.flym.App
 import org.jetbrains.anko.defaultSharedPreferences
 

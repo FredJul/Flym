@@ -10,17 +10,17 @@
         android:theme="@style/AppTheme.ActionBar.Details">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+			android:id="@+id/toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="?android:attr/actionBarSize"/>
 
     </android.support.design.widget.AppBarLayout>
 
     <me.thanel.swipeactionview.SwipeActionView
-        android:id="@+id/swipe_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
+		android:id="@+id/swipe_view"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginTop="?android:attr/actionBarSize">
 
         <ImageView
             android:layout_width="50dp"
@@ -41,9 +41,9 @@
     </me.thanel.swipeactionview.SwipeActionView>
 
     <net.frju.flym.ui.views.SwipeRefreshLayout
-        android:id="@+id/refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize" />
+		android:id="@+id/refresh_layout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginTop="?android:attr/actionBarSize"/>
 
 </FrameLayout>

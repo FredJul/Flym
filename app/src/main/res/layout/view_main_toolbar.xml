@@ -5,8 +5,8 @@
     android:fitsSystemWindows="true">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_specific"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+		android:id="@+id/toolbar_specific"
+		android:layout_width="match_parent"
+		android:layout_height="?android:attr/actionBarSize"/>
 
 </merge>

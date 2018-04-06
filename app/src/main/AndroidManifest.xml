@@ -30,9 +30,12 @@
 		</activity>
 
 		<activity
+			android:name="net.frju.flym.ui.entrydetails.EntryDetailsActivity"
+			android:theme="@style/AppTheme.NoActionBar"/>
+
+		<activity
 			android:name="net.frju.flym.ui.feeds.FeedListEditActivity"
-			android:label="@string/feeds">
-		</activity>
+			android:label="@string/feeds"/>
 
 		<activity android:name="net.frju.flym.ui.about.AboutActivity"/>
 
