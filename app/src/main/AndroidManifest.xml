@@ -19,7 +19,7 @@
 		<activity
 			android:name="net.frju.flym.ui.main.MainActivity"
 			android:configChanges="orientation|screenSize"
-			android:launchMode="singleInstance"
+			android:launchMode="singleTask"
 			android:theme="@style/AppTheme.NoActionBar"
 			android:windowSoftInputMode="adjustPan">
 			<intent-filter>
@@ -31,13 +31,18 @@
 
 		<activity
 			android:name="net.frju.flym.ui.entrydetails.EntryDetailsActivity"
+			android:launchMode="singleTask"
 			android:theme="@style/AppTheme.NoActionBar"/>
 
 		<activity
 			android:name="net.frju.flym.ui.feeds.FeedListEditActivity"
-			android:label="@string/feeds"/>
+			android:label="@string/feeds"
+			android:launchMode="singleTask"/>
 
-		<activity android:name="net.frju.flym.ui.about.AboutActivity"/>
+		<activity
+			android:name="net.frju.flym.ui.about.AboutActivity"
+			android:label="@string/about_flym"
+			android:launchMode="singleTask"/>
 
 		<receiver android:name="net.frju.flym.service.BootReceiver">
 			<intent-filter>
