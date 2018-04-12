@@ -66,6 +66,11 @@
 				android:name="android.support.FILE_PROVIDER_PATHS"
 				android:resource="@xml/file_paths"/>
 		</provider>
+
+		<!-- Disable Samsung squircle launcher icon -->
+		<meta-data
+			android:name="com.samsung.android.icon_container.has_icon_container"
+			android:value="true"/>
 	</application>
 
 </manifest>
