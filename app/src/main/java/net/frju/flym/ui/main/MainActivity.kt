@@ -103,6 +103,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                                             val entry = entries.get(i) as JSONObject
                                             val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
                                             if (!url.isEmpty()) {
+                                                @Suppress("DEPRECATION")
                                                 array.add(
                                                         SearchFeedResult(url,
                                                                 Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString(),

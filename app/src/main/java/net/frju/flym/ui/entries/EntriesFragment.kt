@@ -16,6 +16,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.fragment_entries.*
 import kotlinx.android.synthetic.main.view_entry.view.*
 import kotlinx.android.synthetic.main.view_main_containers.*
@@ -35,18 +37,18 @@ import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.support.v4.startActivity
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
-import java.util.*
+import java.util.Date
 
 
 class EntriesFragment : Fragment() {
 
 	companion object {
 
-		private val ARG_FEED = "ARG_FEED"
-		private val STATE_FEED = "STATE_FEED"
-		private val STATE_SEARCH_TEXT = "STATE_SEARCH_TEXT"
-		private val STATE_SELECTED_ENTRY_ID = "STATE_SELECTED_ENTRY_ID"
-		private val STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE"
+		private const val ARG_FEED = "ARG_FEED"
+		private const val STATE_FEED = "STATE_FEED"
+		private const val STATE_SEARCH_TEXT = "STATE_SEARCH_TEXT"
+		private const val STATE_SELECTED_ENTRY_ID = "STATE_SELECTED_ENTRY_ID"
+		private const val STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE"
 
 		fun newInstance(feed: Feed?): EntriesFragment {
 			val fragment = EntriesFragment()
@@ -321,12 +323,14 @@ class EntriesFragment : Fragment() {
 				override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
 					searchText = ""
 					initDataObservers()
+					bottom_navigation.isGone = true
 					return true
 				}
 
 				override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
 					searchText = null
 					initDataObservers()
+					bottom_navigation.isVisible = true
 					return true
 				}
 			})
