@@ -11,31 +11,21 @@ object PrefUtils {
 	val FIRST_OPEN = "FIRST_OPEN"
 	val DISPLAY_TIP = "DISPLAY_TIP"
 
-	val IS_REFRESHING = "IS_REFRESHING"
+	const val IS_REFRESHING = "IS_REFRESHING"
 
-	val REFRESH_INTERVAL = "REFRESH_INTERVAL"
-	val REFRESH_ENABLED = "refresh.enabled"
-	val REFRESH_ON_OPEN_ENABLED = "refreshonopen.enabled"
-	val REFRESH_WIFI_ONLY = "refreshwifionly.enabled"
+	const val REFRESH_INTERVAL = "REFRESH_INTERVAL"
+	const val REFRESH_ENABLED = "refresh.enabled"
+	const val REFRESH_WIFI_ONLY = "refreshwifionly.enabled"
 
-	val NOTIFICATIONS_ENABLED = "notifications.enabled"
-	val NOTIFICATIONS_RINGTONE = "notifications.ringtone"
-	val NOTIFICATIONS_VIBRATE = "notifications.vibrate"
-	val NOTIFICATIONS_LIGHT = "notifications.light"
+	const val DISPLAY_IMAGES = "display_images"
 
-	val LIGHT_THEME = "lighttheme"
-	val DISPLAY_IMAGES = "display_images"
+	const val PRELOAD_IMAGE_MODE = "preload_image_mode"
+	const val PRELOAD_IMAGE_MODE__WIFI_ONLY = "WIFI_ONLY_PRELOAD"
+	const val PRELOAD_IMAGE_MODE__ALWAYS = "ALWAYS_PRELOAD"
 
-	val PRELOAD_IMAGE_MODE = "preload_image_mode"
-	val PRELOAD_IMAGE_MODE__WIFI_ONLY = "WIFI_ONLY_PRELOAD"
-	val PRELOAD_IMAGE_MODE__ALWAYS = "ALWAYS_PRELOAD"
+	const val KEEP_TIME = "keeptime"
 
-	val DISPLAY_OLDEST_FIRST = "display_oldest_first"
-	val DISPLAY_ENTRIES_FULLSCREEN = "display_entries_fullscreen"
-
-	val KEEP_TIME = "keeptime"
-
-	val FONT_SIZE = "fontsize"
+	const val FONT_SIZE = "fontsize"
 
 	fun getBoolean(key: String, defValue: Boolean) =
 			App.context.defaultSharedPreferences.getBoolean(key, defValue)

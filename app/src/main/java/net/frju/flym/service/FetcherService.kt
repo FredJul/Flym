@@ -79,10 +79,10 @@ import net.frju.flym.data.entities.Entry
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.Task
 import net.frju.flym.data.entities.toDbFormat
+import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.ui.main.MainActivity
 import net.frju.flym.utils.HtmlUtils
 import net.frju.flym.utils.sha1
-import net.frju.flym.data.utils.PrefUtils
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -171,7 +171,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 					}
 
 					if (newCount > 0) {
-						if (!MainActivity.isInForeground && PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
+						if (!MainActivity.isInForeground) {
 							val unread = App.db.entryDao().countUnread
 
 							if (unread > 0) {
@@ -185,7 +185,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 								@TargetApi(Build.VERSION_CODES.O)
 								if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-									val channel = NotificationChannel(channelId, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH)
+									val channel = NotificationChannel(channelId, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
 									context.notificationManager.createNotificationChannel(channel)
 								}
 
@@ -198,20 +198,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 										.setAutoCancel(true)
 										.setContentTitle(context.getString(R.string.flym_feeds))
 										.setContentText(text)
-										.setLights(0xffffffff.toInt(), 0, 0)
-
-								if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_VIBRATE, false)) {
-									notifBuilder.setVibrate(longArrayOf(0, 1000))
-								}
-
-								val ringtone = PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, "")
-								if (ringtone.isNotEmpty()) {
-									notifBuilder.setSound(Uri.parse(ringtone))
-								}
-
-								if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_LIGHT, false)) {
-									notifBuilder.setLights(0xffffffff.toInt(), 300, 1000)
-								}
 
 								context.notificationManager.notify(0, notifBuilder.build())
 							}

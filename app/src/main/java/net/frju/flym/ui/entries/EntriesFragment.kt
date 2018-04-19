@@ -27,14 +27,12 @@ import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.service.FetcherService
-import net.frju.flym.ui.about.AboutActivity
 import net.frju.flym.ui.main.MainNavigator
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
-import org.jetbrains.anko.support.v4.startActivity
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
 import java.util.Date
@@ -338,7 +336,11 @@ class EntriesFragment : Fragment() {
 			setOnMenuItemClickListener { item ->
 				when (item.itemId) {
 					R.id.menu_entries__about -> {
-						startActivity<AboutActivity>()
+						navigator.goToAboutMe()
+						true
+					}
+					R.id.menu_entries__settings -> {
+						navigator.goToSettings()
 						true
 					}
 					else -> false

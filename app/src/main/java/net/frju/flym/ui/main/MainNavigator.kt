@@ -13,9 +13,9 @@ interface MainNavigator {
 
     fun goToEntryDetails(entry: EntryWithFeed, allEntryIds: List<String>)
 
-    fun goToSettings()
+	fun goToAboutMe()
 
-    fun goToFeedback()
+	fun goToSettings()
 
     fun setSelectedEntryId(selectedEntryId: String)
 

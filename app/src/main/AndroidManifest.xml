@@ -44,6 +44,11 @@
 			android:label="@string/about_flym"
 			android:launchMode="singleTask"/>
 
+		<activity
+			android:name="net.frju.flym.ui.settings.SettingsActivity"
+			android:label="@string/menu_settings"
+			android:launchMode="singleTask"/>
+
 		<receiver android:name="net.frju.flym.service.BootReceiver">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED"/>

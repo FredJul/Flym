@@ -24,12 +24,14 @@ import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.service.AutoRefreshJobService
 import net.frju.flym.service.FetcherService
+import net.frju.flym.ui.about.AboutActivity
 import net.frju.flym.ui.entries.EntriesFragment
 import net.frju.flym.ui.entrydetails.EntryDetailsActivity
 import net.frju.flym.ui.entrydetails.EntryDetailsFragment
 import net.frju.flym.ui.feeds.FeedAdapter
 import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
+import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
 import okhttp3.Request
 import org.jetbrains.anko.doAsync
@@ -340,11 +342,11 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         listFragment.setSelectedEntryId(selectedEntryId)
     }
 
-    override fun goToSettings() {
-        //start new activity
-    }
+	override fun goToAboutMe() {
+		startActivity<AboutActivity>()
+	}
 
-    override fun goToFeedback() {
-        //start new activity
+    override fun goToSettings() {
+		startActivity<SettingsActivity>()
     }
 }
