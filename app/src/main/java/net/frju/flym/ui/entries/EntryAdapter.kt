@@ -33,7 +33,7 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
         }
 
         @JvmField
-        val CROSS_FADE_FACTORY = DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()
+        val CROSS_FADE_FACTORY: DrawableCrossFadeFactory = DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

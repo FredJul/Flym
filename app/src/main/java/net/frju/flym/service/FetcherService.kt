@@ -103,7 +103,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 	companion object {
 		const val EXTRA_FEED_ID = "EXTRA_FEED_ID"
 
-		val COOKIE_MANAGER = CookieManager().apply {
+		private val COOKIE_MANAGER = CookieManager().apply {
 			setCookiePolicy(CookiePolicy.ACCEPT_ALL)
 		}
 
@@ -282,6 +282,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			val downloadPictures = shouldDownloadPictures()
 
 			for (task in tasks) {
+				App.db.beginTransaction()
+
 				var success = false
 
 				App.db.entryDao().findById(task.entryId)?.let { entry ->
@@ -311,10 +313,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 										success = true
 
-										App.db.taskDao().delete(task)
-
 										entry.mobilizedContent = mobilizedHtml
 										App.db.entryDao().update(entry)
+
+										App.db.taskDao().delete(task)
 									}
 								}
 							}
@@ -331,6 +333,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 						App.db.taskDao().insert(task)
 					}
 				}
+
+				App.db.endTransaction()
 			}
 
 			addImagesToDownload(imgUrlsToDownload)
@@ -406,6 +410,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 			val downloadPictures = shouldDownloadPictures()
 
+			App.db.beginTransaction()
+
 			try {
 				HTTP_CLIENT.newCall(request).execute().use { response ->
 					val input = SyndFeedInput()
@@ -469,6 +475,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 			addImagesToDownload(imgUrlsToDownload)
 
+			App.db.endTransaction()
+
 			return entries.size
 		}
 
@@ -489,6 +497,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				IMAGE_FOLDER_FILE.mkdir() // create images dir
 
 				// Compute the real URL (without "&eacute;", ...)
+				@Suppress("DEPRECATION")
 				val realUrl = Html.fromHtml(imgUrl).toString()
 				val request = Request.Builder()
 						.url(realUrl)

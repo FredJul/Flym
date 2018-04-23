@@ -6,7 +6,6 @@
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
 	<application
 		android:name="net.frju.flym.App"
@@ -31,6 +30,7 @@
 
 		<activity
 			android:name="net.frju.flym.ui.entrydetails.EntryDetailsActivity"
+			android:configChanges="orientation|screenSize"
 			android:launchMode="singleTask"
 			android:theme="@style/AppTheme.NoActionBar"/>
 
@@ -48,12 +48,6 @@
 			android:name="net.frju.flym.ui.settings.SettingsActivity"
 			android:label="@string/menu_settings"
 			android:launchMode="singleTask"/>
-
-		<receiver android:name="net.frju.flym.service.BootReceiver">
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED"/>
-			</intent-filter>
-		</receiver>
 
 		<service
 			android:name="net.frju.flym.service.AutoRefreshJobService"
