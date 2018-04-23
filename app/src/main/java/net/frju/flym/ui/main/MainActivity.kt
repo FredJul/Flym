@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
 import android.text.Html
+import android.widget.EditText
 import android.widget.Toast
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
 import ir.mirrajabi.searchdialog.core.BaseFilter
@@ -34,15 +35,11 @@ import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
 import okhttp3.Request
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.hintTextColor
-import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.textColor
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.ArrayList
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainNavigator {
@@ -175,7 +172,26 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                                     // TODO handle group
                                     App.db.entryDao().markAsRead(feed.id)
                                 }
-                                R.id.rename -> { // TODO
+                                R.id.rename -> {
+                                    val input = EditText(this@MainActivity).apply {
+                                        setSingleLine(true)
+                                        setText(feed.title)
+                                    }
+
+                                    AlertDialog.Builder(this@MainActivity)
+                                            .setTitle(R.string.menu_rename_feed)
+                                            .setView(input)
+                                            .setPositiveButton(android.R.string.ok) { dialog, which ->
+                                                val newName = input.text.toString()
+                                                if (newName.isNotBlank()) {
+                                                    doAsync {
+                                                        feed.title = newName
+                                                        App.db.feedDao().insert(feed)
+                                                    }
+                                                }
+                                            }
+                                            .setNegativeButton(android.R.string.cancel, null)
+                                            .show()
                                 }
                                 R.id.reorder -> startActivity<FeedListEditActivity>()
                                 R.id.delete -> {
@@ -342,11 +358,11 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         listFragment.setSelectedEntryId(selectedEntryId)
     }
 
-	override fun goToAboutMe() {
-		startActivity<AboutActivity>()
-	}
+    override fun goToAboutMe() {
+        startActivity<AboutActivity>()
+    }
 
     override fun goToSettings() {
-		startActivity<SettingsActivity>()
+        startActivity<SettingsActivity>()
     }
 }

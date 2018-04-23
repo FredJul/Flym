@@ -5,12 +5,7 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import kotlinx.android.synthetic.main.fragment_feed_list_edit.view.*
 import net.fred.feedex.R
@@ -18,124 +13,124 @@ import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.ui.views.DragNDropListener
 import org.jetbrains.anko.doAsync
-import java.util.UUID
+import java.util.*
 
 
 class FeedListEditFragment : Fragment() {
 
-	private val feedGroups = mutableListOf<FeedGroup>()
-	private val feedAdapter = EditFeedAdapter(feedGroups)
+    private val feedGroups = mutableListOf<FeedGroup>()
+    private val feedAdapter = EditFeedAdapter(feedGroups)
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-		val view = inflater.inflate(R.layout.fragment_feed_list_edit, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_feed_list_edit, container, false)
 
-		view.feedsList.apply {
-			layoutManager = LinearLayoutManager(context)
-			adapter = feedAdapter
+        view.feedsList.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = feedAdapter
 
-			dragNDropListener = object : DragNDropListener {
+            dragNDropListener = object : DragNDropListener {
 
-				override fun onStartDrag(itemView: View) {
-				}
+                override fun onStartDrag(itemView: View) {
+                }
 
-				override fun onDrag(x: Float, y: Float) {
-				}
+                override fun onDrag(x: Float, y: Float) {
+                }
 
-				override fun onStopDrag(itemView: View) {
-				}
+                override fun onStopDrag(itemView: View) {
+                }
 
-				override fun onDrop(posFrom: Int, posTo: Int) {
+                override fun onDrop(posFrom: Int, posTo: Int) {
 
-					val fromIsTopLevel = feedAdapter.getItemViewType(posFrom) == BaseFeedAdapter.TYPE_TOP_LEVEL
-					val toIsTopLevel = feedAdapter.getItemViewType(posTo) == BaseFeedAdapter.TYPE_TOP_LEVEL
+                    val fromIsTopLevel = feedAdapter.getItemViewType(posFrom) == BaseFeedAdapter.TYPE_TOP_LEVEL
+                    val toIsTopLevel = feedAdapter.getItemViewType(posTo) == BaseFeedAdapter.TYPE_TOP_LEVEL
 
-					val fromFeed = feedAdapter.getFeedAtPos(posFrom)
-					val fromIsFeedWithoutGroup = fromIsTopLevel && !fromFeed.isGroup
+                    val fromFeed = feedAdapter.getFeedAtPos(posFrom)
+                    val fromIsFeedWithoutGroup = fromIsTopLevel && !fromFeed.isGroup
 
-					val toFeed = feedAdapter.getFeedAtPos(posTo)
-					val toIsFeedWithoutGroup = toIsTopLevel && !toFeed.isGroup
+                    val toFeed = feedAdapter.getFeedAtPos(posTo)
+                    val toIsFeedWithoutGroup = toIsTopLevel && !toFeed.isGroup
 
-					if ((fromIsFeedWithoutGroup || !fromIsTopLevel) && toIsTopLevel && !toIsFeedWithoutGroup) {
-						AlertDialog.Builder(activity)
-								.setTitle(R.string.to_group_title)
-								.setMessage(R.string.to_group_message)
-								.setPositiveButton(R.string.to_group_into) { dialog, which ->
-									fromFeed.groupId = toFeed.id
-									changeItemPriority(fromFeed, 1) // TODO would be better at the end instead of beginning
-								}.setNegativeButton(R.string.to_group_above) { dialog, which ->
-									fromFeed.groupId = toFeed.groupId
-									changeItemPriority(fromFeed, toFeed.displayPriority)
-								}.show()
-					} else {
-						fromFeed.groupId = toFeed.groupId
-						changeItemPriority(fromFeed, toFeed.displayPriority)
-					}
-				}
-			}
-		}
+                    if ((fromIsFeedWithoutGroup || !fromIsTopLevel) && toIsTopLevel && !toIsFeedWithoutGroup) {
+                        AlertDialog.Builder(activity)
+                                .setTitle(R.string.to_group_title)
+                                .setMessage(R.string.to_group_message)
+                                .setPositiveButton(R.string.to_group_into) { dialog, which ->
+                                    fromFeed.groupId = toFeed.id
+                                    changeItemPriority(fromFeed, 1) // TODO would be better at the end instead of beginning
+                                }.setNegativeButton(R.string.to_group_above) { dialog, which ->
+                                    fromFeed.groupId = toFeed.groupId
+                                    changeItemPriority(fromFeed, toFeed.displayPriority)
+                                }.show()
+                    } else {
+                        fromFeed.groupId = toFeed.groupId
+                        changeItemPriority(fromFeed, toFeed.displayPriority)
+                    }
+                }
+            }
+        }
 
-		App.db.feedDao().observeAll.observe(this, Observer {
-			it?.let {
-				feedGroups.clear()
+        App.db.feedDao().observeAll.observe(this, Observer {
+            it?.let {
+                feedGroups.clear()
 
-				val subFeedMap = it.groupBy { it.groupId }
+                val subFeedMap = it.groupBy { it.groupId }
 
-				feedGroups.addAll(
-						subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.id].orEmpty()) }.orEmpty()
-				)
+                feedGroups.addAll(
+                        subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.id].orEmpty()) }.orEmpty()
+                )
 
-				feedAdapter.notifyParentDataSetChanged(true)
-			}
-		})
+                feedAdapter.notifyParentDataSetChanged(true)
+            }
+        })
 
-		setHasOptionsMenu(true)
+        setHasOptionsMenu(true)
 
-		return view
-	}
+        return view
+    }
 
-	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-		super.onCreateOptionsMenu(menu, inflater)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
 
-		inflater.inflate(R.menu.fragment_feed_list_edit, menu)
-	}
+        inflater.inflate(R.menu.fragment_feed_list_edit, menu)
+    }
 
-	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-		when (item?.itemId) {
-			R.id.add_group -> {
-				val input = EditText(activity).apply {
-					setSingleLine(true)
-				}
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.add_group -> {
+                val input = EditText(activity).apply {
+                    setSingleLine(true)
+                }
 
-				AlertDialog.Builder(activity)
-						.setTitle(R.string.add_group_title)
-						.setView(input)
-						.setPositiveButton(android.R.string.ok) { dialog, which ->
-							doAsync {
-								val groupName = input.text.toString()
-								if (!groupName.isEmpty()) {
-									val newGroup = Feed().apply {
-										title = groupName
-										isGroup = true
-									}
-									App.db.feedDao().insert(newGroup)
-								}
-							}
-						}
-						.setNegativeButton(android.R.string.cancel, null)
-						.show()
-				return true
-			}
-		}
+                AlertDialog.Builder(activity)
+                        .setTitle(R.string.add_group_title)
+                        .setView(input)
+                        .setPositiveButton(android.R.string.ok) { dialog, which ->
+                            val groupName = input.text.toString()
+                            if (groupName.isNotBlank()) {
+                                doAsync {
+                                    val newGroup = Feed().apply {
+                                        title = groupName
+                                        isGroup = true
+                                    }
+                                    App.db.feedDao().insert(newGroup)
+                                }
+                            }
+                        }
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show()
+                return true
+            }
+        }
 
-		return false
-	}
+        return false
+    }
 
-	private fun changeItemPriority(fromFeed: Feed, newDisplayPriority: Int) {
-		fromFeed.lastManualActionUid = UUID.randomUUID().toString() // Needed hack to avoid recursive trigger
-		fromFeed.displayPriority = newDisplayPriority
+    private fun changeItemPriority(fromFeed: Feed, newDisplayPriority: Int) {
+        fromFeed.lastManualActionUid = UUID.randomUUID().toString() // Needed hack to avoid recursive trigger
+        fromFeed.displayPriority = newDisplayPriority
 
-		doAsync {
-			App.db.feedDao().update(fromFeed)
-		}
-	}
+        doAsync {
+            App.db.feedDao().update(fromFeed)
+        }
+    }
 }

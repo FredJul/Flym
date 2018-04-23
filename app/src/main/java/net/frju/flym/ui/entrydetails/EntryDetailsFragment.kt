@@ -21,6 +21,7 @@ import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.isOnline
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.uiThread
 import org.jetbrains.annotations.NotNull
 
@@ -225,7 +226,7 @@ class EntryDetailsFragment : Fragment() {
 										c.startService(Intent(c, FetcherService::class.java).setAction(FetcherService.ACTION_MOBILIZE_FEEDS))
 									}
 								} else {
-									//TODO UiUtils.showMessage(c, R.string.network_error);
+									toast(R.string.network_error).show()
 								}
 							}
 						} else {

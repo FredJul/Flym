@@ -69,7 +69,6 @@ import android.os.Build
 import android.os.Handler
 import android.support.v4.app.NotificationCompat
 import android.text.Html
-import android.widget.Toast
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
 import net.dankito.readability4j.extended.Readability4JExtended
@@ -88,6 +87,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
 import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.toast
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -562,7 +562,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		if (networkInfo == null || networkInfo.state != NetworkInfo.State.CONNECTED) {
 			if (ACTION_REFRESH_FEEDS == intent.action && !isFromAutoRefresh) {
 				// Display a toast in that case
-				handler.post { Toast.makeText(this@FetcherService, R.string.network_error, Toast.LENGTH_SHORT).show() }
+				handler.post { toast(R.string.network_error).show() }
 			}
 			return
 		}
