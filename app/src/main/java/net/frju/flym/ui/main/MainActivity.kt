@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         private const val FEED_SEARCH_TITLE = "title"
         private const val FEED_SEARCH_URL = "feedId"
         private const val FEED_SEARCH_DESC = "description"
+        //TODO better default feeds
         private val DEFAULT_FEEDS = arrayListOf(SearchFeedResult("http://www.nytimes.com/services/xml/rss/nyt/World.xml", "NY Times", "Word news"))
 
         var isInForeground = false
@@ -70,6 +71,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         nav.adapter = feedAdapter
 
         add_feed_fab.onClick {
+            //TODO strings in xml
             val searchDialog = SimpleSearchDialogCompat(this@MainActivity, "Search...",
                     "What are you looking for...?", null, DEFAULT_FEEDS,
                     SearchResultListener<SearchFeedResult> { dialog, item, position ->
@@ -169,7 +171,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                         setOnMenuItemClickListener { item ->
                             when (item.itemId) {
                                 R.id.mark_all_as_read -> doAsync {
-                                    // TODO handle group
+                                    // TODO handle group and "all entries"
                                     App.db.entryDao().markAsRead(feed.id)
                                 }
                                 R.id.rename -> {
@@ -211,6 +213,13 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                         inflate(R.menu.drawer_feed)
 
                         when {
+                            feed.id == Feed.ALL_ENTRIES_ID -> {
+                                menu.findItem(R.id.rename).isVisible = false
+                                menu.findItem(R.id.delete).isVisible = false
+                                menu.findItem(R.id.reorder).isVisible = false
+                                menu.findItem(R.id.enable_full_text_retrieval).isVisible = false
+                                menu.findItem(R.id.disable_full_text_retrieval).isVisible = false
+                            }
                             feed.isGroup -> {
                                 menu.findItem(R.id.enable_full_text_retrieval).isVisible = false
                                 menu.findItem(R.id.disable_full_text_retrieval).isVisible = false
