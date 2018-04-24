@@ -65,6 +65,8 @@
     <string name="accept">ACCEPT</string>
     <string name="reject">REJECT</string>
     <string name="feed_search">Feed search</string>
+    <string name="feed_search_hint">What are you looking for?</string>
+    <string name="feed_added">Feed added to the list</string>
     <string name="select_file">Select file (SD-root)</string>
     <string name="question_delete_feed">Do you really want to delete this feed?</string>
     <string name="question_delete_group">Do you really want to delete this group and all of its feeds?</string>

@@ -71,11 +71,10 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         nav.adapter = feedAdapter
 
         add_feed_fab.onClick {
-            //TODO strings in xml
-            val searchDialog = SimpleSearchDialogCompat(this@MainActivity, "Search...",
-                    "What are you looking for...?", null, DEFAULT_FEEDS,
+            val searchDialog = SimpleSearchDialogCompat(this@MainActivity, getString(R.string.feed_search),
+                    getString(R.string.feed_search_hint), null, DEFAULT_FEEDS,
                     SearchResultListener<SearchFeedResult> { dialog, item, position ->
-                        Toast.makeText(this@MainActivity, "Added",
+                        Toast.makeText(this@MainActivity, R.string.feed_added,
                                 Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
                         doAsync { App.db.feedDao().insert(Feed(link = item.link, title = item.name)) }
@@ -171,8 +170,11 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                         setOnMenuItemClickListener { item ->
                             when (item.itemId) {
                                 R.id.mark_all_as_read -> doAsync {
-                                    // TODO handle group and "all entries"
-                                    App.db.entryDao().markAsRead(feed.id)
+                                    when {
+                                        feed.id == Feed.ALL_ENTRIES_ID -> App.db.entryDao().markAllAsRead()
+                                        feed.isGroup -> App.db.entryDao().markGroupAsRead(feed.id)
+                                        else -> App.db.entryDao().markAsRead(feed.id)
+                                    }
                                 }
                                 R.id.rename -> {
                                     val input = EditText(this@MainActivity).apply {
