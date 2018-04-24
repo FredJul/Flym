@@ -165,6 +165,9 @@
     <string name="settings_widget_background">背景色</string>
     <string name="settings_widget_background_description">挂件的颜色和透明度</string>
     <string name="all_feeds">全部订阅（包括未来的）</string>
+    <string name="settings_category_experimental">Experimental features</string>
+    <string name="settings_experimental_disable_certificates_validation">Disable certificates validation</string>
+    <string name="settings_experimental_disable_certificates_validation_description">It\'s UNSAFE, but certificates validation disabling can fix several HTTPS errors on previous Android versions.</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one"> 1 条新消息</item>

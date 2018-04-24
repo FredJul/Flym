@@ -157,6 +157,9 @@
     <string name="settings_refresh_wifi_only">Odświeżaj tylko podczas korzystania z Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Automatyczne odświeżenie nastąpi tylko jeżeli sieć Wi-Fi będzie dostępna</string>
     <string name="settings_visible_feeds">Widoczne źródła</string>
+    <string name="settings_category_experimental">Experimental features</string>
+    <string name="settings_experimental_disable_certificates_validation">Disable certificates validation</string>
+    <string name="settings_experimental_disable_certificates_validation_description">It\'s UNSAFE, but certificates validation disabling can fix several HTTPS errors on previous Android versions.</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Jeden nowy artykuł</item>

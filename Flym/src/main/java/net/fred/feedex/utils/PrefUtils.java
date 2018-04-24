@@ -52,6 +52,8 @@ public class PrefUtils {
 
     public static final String FONT_SIZE = "fontsize";
 
+    public static final String DISABLE_CERTIFICATES_VALIDATION = "experimental.disable_certificates_validation";
+
     public static boolean getBoolean(String key, boolean defValue) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());
         return settings.getBoolean(key, defValue);
