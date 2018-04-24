@@ -102,18 +102,21 @@ dependencies {
 	implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
 	implementation "org.jetbrains.anko:anko-design:$anko_version"
 
+	implementation 'pub.devrel:easypermissions:+'
+
 	implementation 'com.rometools:rome-opml:+'
 	implementation 'com.squareup.okhttp3:okhttp:+'
 	implementation "com.squareup.okhttp3:okhttp-urlconnection:+"
 	implementation 'org.jsoup:jsoup:+'
-	implementation 'com.github.bumptech.glide:glide:4.6.1'
-	kapt 'com.github.bumptech.glide:compiler:4.6.1'
+	implementation 'com.github.bumptech.glide:glide:4.7.1'
+	kapt 'com.github.bumptech.glide:compiler:4.7.1'
 	implementation 'com.amulyakhare:com.amulyakhare.textdrawable:+'
 	implementation 'com.github.Tunous:SwipeActionView:+'
 	implementation 'com.bignerdranch.android:expandablerecyclerview:+'
 	implementation 'com.github.mirrajabi:search-dialog:+'
 	implementation 'com.github.jrvansuita:MaterialAbout:+'
 	implementation 'q.rorbin:badgeview:+'
+	implementation 'com.lucasurbas:listitemview:+'
 
 	implementation 'net.dankito.readability4j:readability4j:+'
 }

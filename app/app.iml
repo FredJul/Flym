@@ -22,13 +22,14 @@
       </configuration>
     </facet>
     <facet type="kotlin-language" name="Kotlin">
-      <configuration version="3" platform="JVM 1.6" useProjectSettings="false">
+      <configuration version="3" platform="JVM 1.8" useProjectSettings="false">
         <compilerSettings />
         <compilerArguments>
           <option name="destination" value="$MODULE_DIR$/build/tmp/kotlin-classes/debug" />
           <option name="noStdlib" value="true" />
           <option name="noReflect" value="true" />
           <option name="moduleName" value="app_debug" />
+          <option name="jvmTarget" value="1.8" />
           <option name="addCompilerBuiltIns" value="true" />
           <option name="loadBuiltInsFromDependencies" value="true" />
           <option name="languageVersion" value="1.2" />
@@ -142,15 +143,16 @@
     <orderEntry type="library" name="Gradle: nz.bradcampbell:paperparcel-kotlin-2.0.5" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-v4-27.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support.constraint:constraint-layout-solver:1.1.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.bumptech.glide:glide-4.7.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:recyclerview-v7-27.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-media-compat-27.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-core-ui-27.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-core-ui-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.persistence:db-1.1.0-beta3" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:livedata-1.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.14.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.anko:anko-sdk21:0.10.4@jar" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-fragment-27.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-fragment-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support.constraint:constraint-layout-1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:design-27.1.0" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.core:runtime-1.1.1" level="project" />
@@ -159,8 +161,6 @@
     <orderEntry type="library" name="Gradle: com.android.support:appcompat-v7-27.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.anko:anko-commons:0.10.4@jar" level="project" />
     <orderEntry type="library" name="Gradle: q.rorbin:badgeview-1.1.3" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.bumptech.glide:gifdecoder-4.6.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.bumptech.glide:disklrucache:4.6.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.anko:anko-support-v4:0.10.4@jar" level="project" />
     <orderEntry type="library" name="Gradle: nz.bradcampbell:paperparcel-2.0.5" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25@jar" level="project" />
@@ -169,26 +169,26 @@
     <orderEntry type="library" name="Gradle: com.github.Tunous:SwipeActionView-1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.mirrajabi:search-dialog-1.2.1" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:runtime-1.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.11.3@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:transition-27.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.jrvansuita:MaterialAbout-0.2.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-annotations:27.1.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:cardview-v7-27.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.anko:anko-sdk21-listeners:0.10.4@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-compat-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable-27.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.2.31@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.paging:runtime-1.0.0-rc1" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.anko:anko-appcompat-v7:0.10.4@jar" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-compat-27.1.0" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:viewmodel-1.1.1" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.paging:common:1.0.0-rc1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.amulyakhare:com.amulyakhare.textdrawable-1.0.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.bumptech.glide:glide-4.6.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.jrvansuita:IconHandler-v2.0.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.anko:anko-appcompat-v7-commons:0.10.4@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-vector-drawable-27.1.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-annotations:27.1.0@jar" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.support:support-core-utils-27.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-core-utils-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.jdom:jdom2:2.0.6@jar" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.bumptech.glide:annotations:4.6.1@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.bumptech.glide:disklrucache:4.7.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.2.31@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:extensions-1.1.1" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.core:common:1.1.1@jar" level="project" />
@@ -198,13 +198,16 @@
     <orderEntry type="library" name="Gradle: nz.bradcampbell:paperparcel-api:2.0.5@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.persistence.room:common:1.1.0-beta3@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.10.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.bumptech.glide:gifdecoder-4.7.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.lucasurbas:listitemview-1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: net.dankito.readability4j:readability4j:1.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-library:1.3@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.bumptech.glide:annotations:4.7.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:common:1.1.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:livedata-core-1.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.rometools:rome-utils:1.9.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.core:core-ktx-0.3" level="project" />
     <orderEntry type="library" name="Gradle: com.bignerdranch.android:expandablerecyclerview-3.0.0-RC1" level="project" />
-    <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.11.2@jar" level="project" />
+    <orderEntry type="library" name="Gradle: pub.devrel:easypermissions-1.2.0" level="project" />
   </component>
 </module>
