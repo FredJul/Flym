@@ -42,10 +42,19 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.HashSet;
 
 import okhttp3.OkHttpClient;
 import okhttp3.OkUrlFactory;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 public class NetworkUtils {
 
@@ -233,7 +242,9 @@ public class NetworkUtils {
     }
 
     public static HttpURLConnection setupConnection(URL url) throws IOException {
-        HttpURLConnection connection = new OkUrlFactory(new OkHttpClient()).open(url);
+        OkHttpClient client = PrefUtils.getBoolean(PrefUtils.DISABLE_CERTIFICATES_VALIDATION, false) ?
+                getUnsafeOkHttpClient() : new OkHttpClient();
+        HttpURLConnection connection = new OkUrlFactory(client).open(url);
 
         connection.setDoInput(true);
         connection.setDoOutput(false);
@@ -248,5 +259,55 @@ public class NetworkUtils {
         connection.connect();
 
         return connection;
+    }
+
+    /**
+     * Gets unsafe {@link OkHttpClient} with disabled certificates validation.
+     *
+     * @return the unsafe {@link OkHttpClient}
+     * @see <a href="https://gist.github.com/mefarazath/c9b588044d6bffd26aac3c520660bf40">
+     * https://gist.github.com/mefarazath/c9b588044d6bffd26aac3c520660bf40</a>
+     */
+    @SuppressWarnings({"BadHostnameVerifier", "TrustAllX509TrustManager"})
+    private static OkHttpClient getUnsafeOkHttpClient() {
+        try {
+            // Create a trust manager that does not validate certificate chains
+            final TrustManager[] trustAllCerts = new TrustManager[]{
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain,
+                                                       String authType) {
+                        }
+
+                        @Override
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain,
+                                                       String authType) {
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return new X509Certificate[0];
+                        }
+                    }
+            };
+
+            // Install the all-trusting trust manager
+            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            // Create an ssl socket factory with our all-trusting manager
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+            return new OkHttpClient.Builder()
+                    .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0])
+                    .hostnameVerifier(new HostnameVerifier() {
+                        @Override
+                        public boolean verify(String hostname, SSLSession session) {
+                            return true;
+                        }
+                    }).build();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -166,6 +166,9 @@
     <string name="settings_widget_background">Background</string>
     <string name="settings_widget_background_description">Color and transparency of the widget background</string>
     <string name="all_feeds">All feeds (incl. future)</string>
+    <string name="settings_category_experimental">Experimental features</string>
+    <string name="settings_experimental_disable_certificates_validation">Disable certificates validation</string>
+    <string name="settings_experimental_disable_certificates_validation_description">It\'s UNSAFE, but certificates validation disabling can fix several HTTPS errors on previous Android versions.</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new entry</item>

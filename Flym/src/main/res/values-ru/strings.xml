@@ -179,6 +179,9 @@
     <string name="settings_widget_background">Фон</string>
     <string name="settings_widget_background_description">Цвета и прозрачность фона виджета</string>
     <string name="all_feeds">Все ленты (включая будущие)</string>
+    <string name="settings_category_experimental">Экспериментальные функции</string>
+    <string name="settings_experimental_disable_certificates_validation">Отключить проверку сертификатов</string>
+    <string name="settings_experimental_disable_certificates_validation_description">Хотя это и НЕБЕЗОПАСНО, но отключение проверки сертификатов может исправить некоторые HTTPS-ошибки на предыдущих версиях Android.</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">%d new entry</item>

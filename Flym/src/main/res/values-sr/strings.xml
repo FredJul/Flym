@@ -166,6 +166,9 @@
     <string name="settings_widget_background">Позадина</string>
     <string name="settings_widget_background_description">Боја и прозирност позадине виџета</string>
     <string name="all_feeds">Сви (укљ. будуће)</string>
+    <string name="settings_category_experimental">Experimental features</string>
+    <string name="settings_experimental_disable_certificates_validation">Disable certificates validation</string>
+    <string name="settings_experimental_disable_certificates_validation_description">It\'s UNSAFE, but certificates validation disabling can fix several HTTPS errors on previous Android versions.</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">%d нови унос</item>

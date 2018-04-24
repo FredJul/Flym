@@ -165,4 +165,19 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/settings_category_experimental">
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="experimental.disable_certificates_validation"
+            android:summary="@string/settings_experimental_disable_certificates_validation_description"
+            android:title="@string/settings_experimental_disable_certificates_validation"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

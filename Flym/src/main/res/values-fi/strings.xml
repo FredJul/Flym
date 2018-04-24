@@ -171,6 +171,9 @@
     <string name="settings_widget_background_description">Widgetin taustan väri ja läpinäkyvyys
     </string>
     <string name="all_feeds">Kaikki syötteet (myös tulevat)</string>
+    <string name="settings_category_experimental">Experimental features</string>
+    <string name="settings_experimental_disable_certificates_validation">Disable certificates validation</string>
+    <string name="settings_experimental_disable_certificates_validation_description">It\'s UNSAFE, but certificates validation disabling can fix several HTTPS errors on previous Android versions.</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Yksi uusi artikkeli</item>
