@@ -282,8 +282,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			val downloadPictures = shouldDownloadPictures()
 
 			for (task in tasks) {
-				App.db.beginTransaction()
-
 				var success = false
 
 				App.db.entryDao().findById(task.entryId)?.let { entry ->
@@ -333,8 +331,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 						App.db.taskDao().insert(task)
 					}
 				}
-
-				App.db.endTransaction()
 			}
 
 			addImagesToDownload(imgUrlsToDownload)
@@ -410,8 +406,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 			val downloadPictures = shouldDownloadPictures()
 
-			App.db.beginTransaction()
-
 			try {
 				HTTP_CLIENT.newCall(request).execute().use { response ->
 					val input = SyndFeedInput()
@@ -475,8 +469,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 			addImagesToDownload(imgUrlsToDownload)
 
-			App.db.endTransaction()
-
 			return entries.size
 		}
 
@@ -531,7 +523,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				IMAGE_FOLDER_FILE.listFiles().forEach { file ->
 					if (file.lastModified() < keepDateBorderTime) {
 						var isAFavoriteEntryImage = false
-						favorites.forEach loop@ {
+						favorites.forEach loop@{
 							if (file.name.startsWith(it.id + ID_SEPARATOR)) {
 								isAFavoriteEntryImage = true
 								return@loop

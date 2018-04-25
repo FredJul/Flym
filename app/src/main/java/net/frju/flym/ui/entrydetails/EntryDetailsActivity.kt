@@ -13,10 +13,7 @@ class EntryDetailsActivity : AppCompatActivity() {
 			val fragment = EntryDetailsFragment()
 			fragment.arguments = intent.extras
 
-			supportFragmentManager
-					.beginTransaction()
-					.replace(android.R.id.content, fragment)
-					.commit()
+			supportFragmentManager.beginTransaction().replace(android.R.id.content, fragment).commit()
 		}
 	}
 

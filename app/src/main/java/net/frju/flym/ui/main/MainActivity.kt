@@ -35,11 +35,15 @@ import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
 import okhttp3.Request
-import org.jetbrains.anko.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.hintTextColor
+import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.textColor
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.*
+import java.util.ArrayList
 
 
 class MainActivity : AppCompatActivity(), MainNavigator {
@@ -323,10 +327,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
     private fun clearDetails(): Boolean {
         supportFragmentManager.findFragmentByTag(TAG_DETAILS)?.let {
-            supportFragmentManager
-                    .beginTransaction()
-                    .remove(it)
-                    .commit()
+            supportFragmentManager.beginTransaction().remove(it).commit()
             return true
         }
         return false
@@ -352,10 +353,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         if (containers_layout.hasTwoColumns()) {
             containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
             val fragment = EntryDetailsFragment.newInstance(entry, allEntryIds)
-            supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.frame_details, fragment, TAG_DETAILS)
-                    .commit()
+            supportFragmentManager.beginTransaction().replace(R.id.frame_details, fragment, TAG_DETAILS).commit()
 
             val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
             listFragment.setSelectedEntryId(entry.id)
