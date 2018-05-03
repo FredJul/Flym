@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -327,7 +328,11 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
     private fun clearDetails(): Boolean {
         supportFragmentManager.findFragmentByTag(TAG_DETAILS)?.let {
-            supportFragmentManager.beginTransaction().remove(it).commit()
+            supportFragmentManager
+                    .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .remove(it)
+                    .commitAllowingStateLoss()
             return true
         }
         return false
@@ -343,7 +348,11 @@ class MainActivity : AppCompatActivity(), MainNavigator {
             currentFragment.feed = feed
         } else {
             val master = EntriesFragment.newInstance(feed)
-            supportFragmentManager.beginTransaction().replace(R.id.frame_master, master, TAG_MASTER).commit()
+            supportFragmentManager
+                    .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .replace(R.id.frame_master, master, TAG_MASTER)
+                    .commitAllowingStateLoss()
         }
     }
 
@@ -353,7 +362,11 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         if (containers_layout.hasTwoColumns()) {
             containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
             val fragment = EntryDetailsFragment.newInstance(entry, allEntryIds)
-            supportFragmentManager.beginTransaction().replace(R.id.frame_details, fragment, TAG_DETAILS).commit()
+            supportFragmentManager
+                    .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .replace(R.id.frame_details, fragment, TAG_DETAILS)
+                    .commitAllowingStateLoss()
 
             val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
             listFragment.setSelectedEntryId(entry.id)

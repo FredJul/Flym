@@ -84,7 +84,7 @@ dependencies {
 	kapt "android.arch.persistence.room:compiler:+"
 
 	// Support dependencies
-	ext.support_version = '27.1.0'
+	ext.support_version = '27.1.1'
 	implementation "com.android.support:appcompat-v7:$support_version"
 	implementation "com.android.support:design:$support_version"
 	implementation "com.android.support:cardview-v7:$support_version"
@@ -96,7 +96,7 @@ dependencies {
 	implementation 'nz.bradcampbell:paperparcel-kotlin:+'
 	kapt 'nz.bradcampbell:paperparcel-compiler:+'
 
-	ext.anko_version = '0.10.4'
+	ext.anko_version = '0.10.5'
 	implementation "org.jetbrains.anko:anko-sdk21:$anko_version"
 	implementation "org.jetbrains.anko:anko-sdk21-listeners:$anko_version"
 	implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
