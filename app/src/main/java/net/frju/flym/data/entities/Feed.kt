@@ -42,7 +42,7 @@ data class Feed(
 		fun getLetterDrawable(feedId: Long, feedTitle: String?, rounded: Boolean = false): TextDrawable {
 			val feedName = feedTitle.orEmpty()
 
-			val color = ColorGenerator.DEFAULT.getColor(feedId) // The color is specific to the feedId (which shouldn't change)
+			val color = ColorGenerator.MATERIAL.getColor(feedId) // The color is specific to the feedId (which shouldn't change)
 			val lettersForName = if (feedName.length < 2) feedName.toUpperCase() else feedName.substring(0, 2).toUpperCase()
 			return if (rounded) {
 				TextDrawable.builder().buildRound(lettersForName, color)
