@@ -12,8 +12,8 @@ object PrefUtils {
 
 	const val IS_REFRESHING = "is_refreshing"
 
-	const val REFRESH_INTERVAL = "refresh_interval"
 	const val REFRESH_ENABLED = "refresh_enabled"
+	const val REFRESH_INTERVAL = "refresh_interval"
 	const val REFRESH_WIFI_ONLY = "refresh_wifi_only"
 
 	const val DISPLAY_IMAGES = "display_images"

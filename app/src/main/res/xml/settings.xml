@@ -12,7 +12,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:defaultValue="true"
-			android:key="is_refreshing"
+			android:key="refresh_enabled"
 			android:summary="@string/settings_refresh_enabled_description"
 			android:title="@string/settings_refresh_enabled"/>
 
@@ -20,7 +20,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:defaultValue="7200"
-			android:dependency="is_refreshing"
+			android:dependency="refresh_enabled"
 			android:entries="@array/settings_intervals"
 			android:entryValues="@array/settings_interval_values"
 			android:inputType="number"
