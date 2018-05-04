@@ -59,8 +59,10 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 		private const val FEED_SEARCH_TITLE = "title"
 		private const val FEED_SEARCH_URL = "feedId"
 		private const val FEED_SEARCH_DESC = "description"
-		//TODO better default feeds
-		private val DEFAULT_FEEDS = arrayListOf(SearchFeedResult("http://www.nytimes.com/services/xml/rss/nyt/World.xml", "NY Times", "Word news"))
+
+		private val GNEWS_TOPIC_NAME = intArrayOf(R.string.google_news_top_stories, R.string.google_news_world, R.string.google_news_business, R.string.google_news_technology, R.string.google_news_entertainment, R.string.google_news_sports, R.string.google_news_science, R.string.google_news_health)
+
+		private val GNEWS_TOPIC_CODE = arrayOf("", "WORLD", "BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH")
 
 		var isInForeground = false
 	}
@@ -274,8 +276,17 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 	}
 
 	private fun showAddFeedPopup() {
+		@Suppress("DEPRECATION")
+		val defaultFeeds = GNEWS_TOPIC_NAME.mapIndexed { index, name ->
+			val link = if (GNEWS_TOPIC_CODE[index].isNotEmpty())
+				"https://news.google.com/news/rss/headlines/section/topic/${GNEWS_TOPIC_CODE[index]}?ned=${resources.configuration.locale.language}"
+			else
+				"https://news.google.com/news/rss/?ned=${resources.configuration.locale.language}"
+			SearchFeedResult(link, getString(name))
+		}
+
 		val searchDialog = SimpleSearchDialogCompat(this@MainActivity, getString(R.string.feed_search),
-				getString(R.string.feed_search_hint), null, DEFAULT_FEEDS,
+				getString(R.string.feed_search_hint), null, ArrayList(defaultFeeds),
 				SearchResultListener<SearchFeedResult> { dialog, item, position ->
 					Toast.makeText(this@MainActivity, R.string.feed_added,
 							Toast.LENGTH_SHORT).show()
@@ -292,6 +303,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
 				if (charSequence.isNotEmpty()) {
 					try {
+						@Suppress("DEPRECATION")
 						val request = Request.Builder()
 								.url("http://cloud.feedly.com/v3/search/feeds?count=20&locale=" + resources.configuration.locale.language + "&query=" + URLEncoder.encode(charSequence.toString(), "UTF-8"))
 								.build()
@@ -320,7 +332,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 					} catch (ignored: Throwable) {
 					}
 				} else {
-					array.addAll(DEFAULT_FEEDS)
+					array.addAll(defaultFeeds)
 				}
 
 				results.values = array
