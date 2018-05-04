@@ -1,51 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_us_copyright" translatable="false">Copyright 2013–2016 Frédéric Julian</string>
-    <string name="about_us_content" translatable="false"><![CDATA[
-    <b>Community</b><br/>
-    • Ildar Mulyukov<br/><br/>
-
-    <b>Developers</b><br/>
-    • eighthave<br/>
-    • equiem<br/>
-    • Frédéric Julian<br/>
-    • madx666<br/>
-    • Mikko Huhtala<br/>
-    • Paul Schaub<br/>
-    • RyDroid<br/>
-    • Sergii Pylypenko<br/>
-    • Shapochkin Mihail<br/>
-    • Suyash Bhatt<br/>
-    • Zhaofeng Li<br/><br/>
-
-    <b>Translators</b><br/>
-    • Aitor Beriain<br/>
-    • Benjamin Schütte<br/>
-    • Changwoo Ryu<br/>
-    • chenjia404<br/>
-    • Danilo Treffiletti<br/>
-    • Enric Morales<br/>
-    • Jaroslav Lichtblau<br/>
-    • Jean Lorenz Hertel<br/>
-    • Jozef Jaroščiak<br/>
-    • Matthias Dill<br/>
-    • Mladen Pejaković<br/>
-    • Zheng Juefei<br/><br/>
-
-    This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. See http://www.gnu.org/licenses<br/><br/>
-    Some parts of this software are based on \'Sparse rss\', Copyright 2010-2012 Stefan Handschuch, under the MIT license.
-    ]]></string>
-
     <string-array name="settings_interval_values" translatable="false">
-        <item>60000</item>
-        <item>300000</item>
-        <item>900000</item>
-        <item>1800000</item>
-        <item>3600000</item>
-        <item>7200000</item>
-        <item>21600000</item>
-        <item>43200000</item>
-        <item>86400000</item>
+		<item>60</item>
+		<item>300</item>
+		<item>900</item>
+		<item>1800</item>
+		<item>3600</item>
+		<item>7200</item>
+		<item>21600</item>
+		<item>43200</item>
+		<item>86400</item>
     </string-array>
     <string-array name="settings_keep_time_values" translatable="false">
         <item>1</item>

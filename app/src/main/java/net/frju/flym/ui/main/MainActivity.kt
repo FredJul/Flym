@@ -24,6 +24,7 @@ import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.SearchFeedResult
+import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.service.AutoRefreshJobService
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.about.AboutActivity
@@ -49,342 +50,359 @@ import java.util.ArrayList
 
 class MainActivity : AppCompatActivity(), MainNavigator {
 
-    companion object {
-        const val EXTRA_FROM_NOTIF = "EXTRA_FROM_NOTIF"
+	companion object {
+		const val EXTRA_FROM_NOTIF = "EXTRA_FROM_NOTIF"
 
-        private const val TAG_DETAILS = "TAG_DETAILS"
-        private const val TAG_MASTER = "TAG_MASTER"
+		private const val TAG_DETAILS = "TAG_DETAILS"
+		private const val TAG_MASTER = "TAG_MASTER"
 
-        private const val FEED_SEARCH_TITLE = "title"
-        private const val FEED_SEARCH_URL = "feedId"
-        private const val FEED_SEARCH_DESC = "description"
-        //TODO better default feeds
-        private val DEFAULT_FEEDS = arrayListOf(SearchFeedResult("http://www.nytimes.com/services/xml/rss/nyt/World.xml", "NY Times", "Word news"))
+		private const val FEED_SEARCH_TITLE = "title"
+		private const val FEED_SEARCH_URL = "feedId"
+		private const val FEED_SEARCH_DESC = "description"
+		//TODO better default feeds
+		private val DEFAULT_FEEDS = arrayListOf(SearchFeedResult("http://www.nytimes.com/services/xml/rss/nyt/World.xml", "NY Times", "Word news"))
 
-        var isInForeground = false
-    }
+		var isInForeground = false
+	}
 
-    private val feedGroups = mutableListOf<FeedGroup>()
-    private val feedAdapter = FeedAdapter(feedGroups)
+	private val feedGroups = mutableListOf<FeedGroup>()
+	private val feedAdapter = FeedAdapter(feedGroups)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+		setContentView(R.layout.activity_main)
 
-        nav.layoutManager = LinearLayoutManager(this)
-        nav.adapter = feedAdapter
+		nav.layoutManager = LinearLayoutManager(this)
+		nav.adapter = feedAdapter
 
-        add_feed_fab.onClick {
-            val searchDialog = SimpleSearchDialogCompat(this@MainActivity, getString(R.string.feed_search),
-                    getString(R.string.feed_search_hint), null, DEFAULT_FEEDS,
-                    SearchResultListener<SearchFeedResult> { dialog, item, position ->
-                        Toast.makeText(this@MainActivity, R.string.feed_added,
-                                Toast.LENGTH_SHORT).show()
-                        dialog.dismiss()
-                        doAsync { App.db.feedDao().insert(Feed(link = item.link, title = item.name)) }
-                    })
+		add_feed_fab.onClick {
+			showAddFeedPopup()
+		}
 
-            val apiFilter = object : BaseFilter<SearchFeedResult>() {
-                override fun performFiltering(charSequence: CharSequence): FilterResults? {
-                    doBeforeFiltering()
+		App.db.feedDao().observeAll.observe(this@MainActivity, Observer {
+			it?.let {
+				feedGroups.clear()
 
-                    val results = FilterResults()
-                    val array = ArrayList<SearchFeedResult>()
+				val all = Feed().apply {
+					id = Feed.ALL_ENTRIES_ID
+					title = getString(R.string.all_entries)
+				}
+				feedGroups.add(FeedGroup(all, listOf()))
 
-                    if (charSequence.isNotEmpty()) {
-                        try {
-                            val request = Request.Builder()
-                                    .url("http://cloud.feedly.com/v3/search/feeds?count=20&locale=" + resources.configuration.locale.language + "&query=" + URLEncoder.encode(charSequence.toString(), "UTF-8"))
-                                    .build()
-                            FetcherService.HTTP_CLIENT.newCall(request).execute().use {
-                                it.body()?.let { body ->
-                                    val jsonStr = body.string()
+				val subFeedMap = it.groupBy { it.groupId }
 
-                                    // Parse results
-                                    val entries = JSONObject(jsonStr).getJSONArray("results")
-                                    for (i in 0 until entries.length()) {
-                                        try {
-                                            val entry = entries.get(i) as JSONObject
-                                            val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
-                                            if (!url.isEmpty()) {
-                                                @Suppress("DEPRECATION")
-                                                array.add(
-                                                        SearchFeedResult(url,
-                                                                Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString(),
-                                                                Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString()))
-                                            }
-                                        } catch (ignored: Throwable) {
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (ignored: Throwable) {
-                        }
-                    } else {
-                        array.addAll(DEFAULT_FEEDS)
-                    }
+				feedGroups.addAll(
+						subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.id].orEmpty()) }.orEmpty()
+				)
 
-                    results.values = array
-                    results.count = array.size
-                    return results
-                }
+				feedAdapter.notifyParentDataSetChanged(true)
 
-                override fun publishResults(charSequence: CharSequence, filterResults: FilterResults?) {
-                    filterResults?.let {
-                        @Suppress("UNCHECKED_CAST")
-                        searchDialog.filterResultListener.onFilter(it.values as ArrayList<SearchFeedResult>)
-                    }
-                    doAfterFiltering()
-                }
-            }
-            searchDialog.filter = apiFilter
-            searchDialog.show()
-            searchDialog.searchBox.apply {
-                textColor = Color.BLACK
-                hintTextColor = Color.GRAY
-            }
+				feedAdapter.onFeedClick { view, feed ->
+					goToEntriesList(feed)
+					closeDrawer()
+				}
 
-        }
+				feedAdapter.onFeedLongClick { view, feed ->
+					PopupMenu(this, view).apply {
+						setOnMenuItemClickListener { item ->
+							when (item.itemId) {
+								R.id.mark_all_as_read -> doAsync {
+									when {
+										feed.id == Feed.ALL_ENTRIES_ID -> App.db.entryDao().markAllAsRead()
+										feed.isGroup -> App.db.entryDao().markGroupAsRead(feed.id)
+										else -> App.db.entryDao().markAsRead(feed.id)
+									}
+								}
+								R.id.rename -> {
+									val input = EditText(this@MainActivity).apply {
+										setSingleLine(true)
+										setText(feed.title)
+									}
 
-        App.db.feedDao().observeAll.observe(this@MainActivity, Observer {
-            it?.let {
-                feedGroups.clear()
+									AlertDialog.Builder(this@MainActivity)
+											.setTitle(R.string.menu_rename_feed)
+											.setView(input)
+											.setPositiveButton(android.R.string.ok) { dialog, which ->
+												val newName = input.text.toString()
+												if (newName.isNotBlank()) {
+													doAsync {
+														feed.title = newName
+														App.db.feedDao().insert(feed)
+													}
+												}
+											}
+											.setNegativeButton(android.R.string.cancel, null)
+											.show()
+								}
+								R.id.reorder -> startActivity<FeedListEditActivity>()
+								R.id.delete -> {
+									AlertDialog.Builder(this@MainActivity)
+											.setTitle(feed.title)
+											.setMessage(if (feed.isGroup) R.string.question_delete_group else R.string.question_delete_feed)
+											.setPositiveButton(android.R.string.yes) { _, _ ->
+												doAsync { App.db.feedDao().delete(feed) }
+											}.setNegativeButton(android.R.string.no, null)
+											.show()
+								}
+								R.id.enable_full_text_retrieval -> doAsync { App.db.feedDao().enableFullTextRetrieval(feed.id) }
+								R.id.disable_full_text_retrieval -> doAsync { App.db.feedDao().disableFullTextRetrieval(feed.id) }
+							}
+							true
+						}
+						inflate(R.menu.drawer_feed)
 
-                val all = Feed().apply {
-                    id = Feed.ALL_ENTRIES_ID
-                    title = getString(R.string.all_entries)
-                }
-                feedGroups.add(FeedGroup(all, listOf()))
+						when {
+							feed.id == Feed.ALL_ENTRIES_ID -> {
+								menu.findItem(R.id.rename).isVisible = false
+								menu.findItem(R.id.delete).isVisible = false
+								menu.findItem(R.id.reorder).isVisible = false
+								menu.findItem(R.id.enable_full_text_retrieval).isVisible = false
+								menu.findItem(R.id.disable_full_text_retrieval).isVisible = false
+							}
+							feed.isGroup -> {
+								menu.findItem(R.id.enable_full_text_retrieval).isVisible = false
+								menu.findItem(R.id.disable_full_text_retrieval).isVisible = false
+							}
+							feed.retrieveFullText -> menu.findItem(R.id.enable_full_text_retrieval).isVisible = false
+							else -> menu.findItem(R.id.disable_full_text_retrieval).isVisible = false
+						}
 
-                val subFeedMap = it.groupBy { it.groupId }
+						show()
+					}
+				}
+			}
+		})
 
-                feedGroups.addAll(
-                        subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.id].orEmpty()) }.orEmpty()
-                )
+		toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
+		toolbar.setNavigationOnClickListener({ toggleDrawer() })
 
-                feedAdapter.notifyParentDataSetChanged(true)
+		if (savedInstanceState == null) {
+			// First open => we open the drawer for you
+			if (PrefUtils.getBoolean(PrefUtils.FIRST_OPEN, true)) {
+				PrefUtils.putBoolean(PrefUtils.FIRST_OPEN, false)
+				openDrawer()
 
-                feedAdapter.onFeedClick { view, feed ->
-                    goToEntriesList(feed)
-                    closeDrawer()
-                }
+				AlertDialog.Builder(this)
+						.setTitle(R.string.welcome_title)
+						.setPositiveButton(android.R.string.yes) { _, _ ->
+							showAddFeedPopup()
+						}
+						.setNegativeButton(android.R.string.no, null)
+						.show()
+			} else {
+				closeDrawer()
+			}
 
-                feedAdapter.onFeedLongClick { view, feed ->
-                    PopupMenu(this, view).apply {
-                        setOnMenuItemClickListener { item ->
-                            when (item.itemId) {
-                                R.id.mark_all_as_read -> doAsync {
-                                    when {
-                                        feed.id == Feed.ALL_ENTRIES_ID -> App.db.entryDao().markAllAsRead()
-                                        feed.isGroup -> App.db.entryDao().markGroupAsRead(feed.id)
-                                        else -> App.db.entryDao().markAsRead(feed.id)
-                                    }
-                                }
-                                R.id.rename -> {
-                                    val input = EditText(this@MainActivity).apply {
-                                        setSingleLine(true)
-                                        setText(feed.title)
-                                    }
+			goToEntriesList(null)
+		}
 
-                                    AlertDialog.Builder(this@MainActivity)
-                                            .setTitle(R.string.menu_rename_feed)
-                                            .setView(input)
-                                            .setPositiveButton(android.R.string.ok) { dialog, which ->
-                                                val newName = input.text.toString()
-                                                if (newName.isNotBlank()) {
-                                                    doAsync {
-                                                        feed.title = newName
-                                                        App.db.feedDao().insert(feed)
-                                                    }
-                                                }
-                                            }
-                                            .setNegativeButton(android.R.string.cancel, null)
-                                            .show()
-                                }
-                                R.id.reorder -> startActivity<FeedListEditActivity>()
-                                R.id.delete -> {
-                                    AlertDialog.Builder(this@MainActivity)
-                                            .setTitle(feed.title)
-                                            .setMessage(if (feed.isGroup) R.string.question_delete_group else R.string.question_delete_feed)
-                                            .setPositiveButton(android.R.string.yes) { _, _ ->
-                                                doAsync { App.db.feedDao().delete(feed) }
-                                            }.setNegativeButton(android.R.string.no, null)
-                                            .show()
-                                }
-                                R.id.enable_full_text_retrieval -> doAsync { App.db.feedDao().enableFullTextRetrieval(feed.id) }
-                                R.id.disable_full_text_retrieval -> doAsync { App.db.feedDao().disableFullTextRetrieval(feed.id) }
-                            }
-                            true
-                        }
-                        inflate(R.menu.drawer_feed)
+		AutoRefreshJobService.initAutoRefresh(this)
+	}
 
-                        when {
-                            feed.id == Feed.ALL_ENTRIES_ID -> {
-                                menu.findItem(R.id.rename).isVisible = false
-                                menu.findItem(R.id.delete).isVisible = false
-                                menu.findItem(R.id.reorder).isVisible = false
-                                menu.findItem(R.id.enable_full_text_retrieval).isVisible = false
-                                menu.findItem(R.id.disable_full_text_retrieval).isVisible = false
-                            }
-                            feed.isGroup -> {
-                                menu.findItem(R.id.enable_full_text_retrieval).isVisible = false
-                                menu.findItem(R.id.disable_full_text_retrieval).isVisible = false
-                            }
-                            feed.retrieveFullText -> menu.findItem(R.id.enable_full_text_retrieval).isVisible = false
-                            else -> menu.findItem(R.id.disable_full_text_retrieval).isVisible = false
-                        }
+	override fun onNewIntent(intent: Intent?) {
+		super.onNewIntent(intent)
 
-                        show()
-                    }
-                }
-            }
-        })
+		// If we just clicked on the notification, let's go back to the default view
+		if (intent?.getBooleanExtra(EXTRA_FROM_NOTIF, false) == true && feedGroups.isNotEmpty()) {
+			feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
+			goToEntriesList(feedGroups[0].feed)
+			bottom_navigation.selectedItemId = R.id.unreads
+		}
+	}
 
-        toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
-        toolbar.setNavigationOnClickListener({ toggleDrawer() })
+	override fun onResume() {
+		super.onResume()
 
-        if (savedInstanceState == null) {
-            closeDrawer()
+		isInForeground = true
+		notificationManager.cancel(0)
+	}
 
-            goToEntriesList(null)
-        }
+	override fun onPause() {
+		super.onPause()
+		isInForeground = false
+	}
 
-        AutoRefreshJobService.initAutoRefresh(this)
-    }
+	override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+		super.onRestoreInstanceState(savedInstanceState)
+		feedAdapter.onRestoreInstanceState(savedInstanceState)
+	}
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
+	override fun onSaveInstanceState(outState: Bundle) {
+		super.onSaveInstanceState(outState)
+		feedAdapter.onSaveInstanceState(outState)
+	}
 
-        // If we just clicked on the notification, let's go back to the default view
-        if (intent?.getBooleanExtra(EXTRA_FROM_NOTIF, false) == true && feedGroups.isNotEmpty()) {
-            feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
-            goToEntriesList(feedGroups[0].feed)
-            bottom_navigation.selectedItemId = R.id.unreads
-        }
-    }
+	private fun closeDrawer() {
+		if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
+			drawer?.postDelayed({ drawer.closeDrawer(GravityCompat.START) }, 100)
+		}
+	}
 
-    override fun onResume() {
-        super.onResume()
+	private fun openDrawer() {
+		if (drawer?.isDrawerOpen(GravityCompat.START) == false) {
+			drawer?.openDrawer(GravityCompat.START)
+		}
+	}
 
-        isInForeground = true
-        notificationManager.cancel(0)
-    }
+	private fun toggleDrawer() {
+		if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
+			drawer?.closeDrawer(GravityCompat.START)
+		} else {
+			drawer?.openDrawer(GravityCompat.START)
+		}
+	}
 
-    override fun onPause() {
-        super.onPause()
-        isInForeground = false
-    }
+	private fun goBack(): Boolean {
+		if (containers_layout.state == MainNavigator.State.TWO_COLUMNS_WITH_DETAILS && !containers_layout.hasTwoColumns()) {
+			if (clearDetails()) {
+				containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
+				return true
+			}
+		}
+		return false
+	}
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-        feedAdapter.onRestoreInstanceState(savedInstanceState)
-    }
+	override fun onBackPressed() {
+		if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
+			drawer?.closeDrawer(GravityCompat.START)
+		} else if (toolbar.hasExpandedActionView()) {
+			toolbar.collapseActionView()
+		} else if (!goBack()) {
+			super.onBackPressed()
+		}
+	}
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        feedAdapter.onSaveInstanceState(outState)
-    }
+	private fun showAddFeedPopup() {
+		val searchDialog = SimpleSearchDialogCompat(this@MainActivity, getString(R.string.feed_search),
+				getString(R.string.feed_search_hint), null, DEFAULT_FEEDS,
+				SearchResultListener<SearchFeedResult> { dialog, item, position ->
+					Toast.makeText(this@MainActivity, R.string.feed_added,
+							Toast.LENGTH_SHORT).show()
+					dialog.dismiss()
+					doAsync { App.db.feedDao().insert(Feed(link = item.link, title = item.name)) }
+				})
 
-    fun closeDrawer() {
-        if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
-            drawer?.postDelayed({ drawer.closeDrawer(GravityCompat.START) }, 100)
-        }
-    }
+		val apiFilter = object : BaseFilter<SearchFeedResult>() {
+			override fun performFiltering(charSequence: CharSequence): FilterResults? {
+				doBeforeFiltering()
 
-    fun openDrawer() {
-        if (drawer?.isDrawerOpen(GravityCompat.START) == false) {
-            drawer?.openDrawer(GravityCompat.START)
-        }
-    }
+				val results = FilterResults()
+				val array = ArrayList<SearchFeedResult>()
 
-    fun toggleDrawer() {
-        if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
-            drawer?.closeDrawer(GravityCompat.START)
-        } else {
-            drawer?.openDrawer(GravityCompat.START)
-        }
-    }
+				if (charSequence.isNotEmpty()) {
+					try {
+						val request = Request.Builder()
+								.url("http://cloud.feedly.com/v3/search/feeds?count=20&locale=" + resources.configuration.locale.language + "&query=" + URLEncoder.encode(charSequence.toString(), "UTF-8"))
+								.build()
+						FetcherService.HTTP_CLIENT.newCall(request).execute().use {
+							it.body()?.let { body ->
+								val jsonStr = body.string()
 
-    private fun goBack(): Boolean {
-        if (containers_layout.state == MainNavigator.State.TWO_COLUMNS_WITH_DETAILS && !containers_layout.hasTwoColumns()) {
-            if (clearDetails()) {
-                containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
-                return true
-            }
-        }
-        return false
-    }
+								// Parse results
+								val entries = JSONObject(jsonStr).getJSONArray("results")
+								for (i in 0 until entries.length()) {
+									try {
+										val entry = entries.get(i) as JSONObject
+										val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
+										if (!url.isEmpty()) {
+											@Suppress("DEPRECATION")
+											array.add(
+													SearchFeedResult(url,
+															Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString(),
+															Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString()))
+										}
+									} catch (ignored: Throwable) {
+									}
+								}
+							}
+						}
+					} catch (ignored: Throwable) {
+					}
+				} else {
+					array.addAll(DEFAULT_FEEDS)
+				}
 
-    override fun onBackPressed() {
-        if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
-            drawer?.closeDrawer(GravityCompat.START)
-        } else if (toolbar.hasExpandedActionView()) {
-            toolbar.collapseActionView()
-        } else if (!goBack()) {
-            super.onBackPressed()
-        }
-    }
+				results.values = array
+				results.count = array.size
+				return results
+			}
 
-    private fun clearDetails(): Boolean {
-        supportFragmentManager.findFragmentByTag(TAG_DETAILS)?.let {
-            supportFragmentManager
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .remove(it)
-                    .commitAllowingStateLoss()
-            return true
-        }
-        return false
-    }
+			override fun publishResults(charSequence: CharSequence, filterResults: FilterResults?) {
+				filterResults?.let {
+					@Suppress("UNCHECKED_CAST")
+					searchDialog.filterResultListener.onFilter(it.values as ArrayList<SearchFeedResult>)
+				}
+				doAfterFiltering()
+			}
+		}
+		searchDialog.filter = apiFilter
+		searchDialog.show()
+		searchDialog.searchBox.apply {
+			textColor = Color.BLACK
+			hintTextColor = Color.GRAY
+		}
+	}
 
-    override fun goToEntriesList(feed: Feed?) {
-        clearDetails()
-        containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
+	private fun clearDetails(): Boolean {
+		supportFragmentManager.findFragmentByTag(TAG_DETAILS)?.let {
+			supportFragmentManager
+					.beginTransaction()
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+					.remove(it)
+					.commitAllowingStateLoss()
+			return true
+		}
+		return false
+	}
 
-        // We try to reuse the fragment to avoid loosing the bottom tab position
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_master)
-        if (currentFragment is EntriesFragment) {
-            currentFragment.feed = feed
-        } else {
-            val master = EntriesFragment.newInstance(feed)
-            supportFragmentManager
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .replace(R.id.frame_master, master, TAG_MASTER)
-                    .commitAllowingStateLoss()
-        }
-    }
+	override fun goToEntriesList(feed: Feed?) {
+		clearDetails()
+		containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
 
-    override fun goToEntryDetails(entry: EntryWithFeed, allEntryIds: List<String>) {
-        closeKeyboard()
+		// We try to reuse the fragment to avoid loosing the bottom tab position
+		val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_master)
+		if (currentFragment is EntriesFragment) {
+			currentFragment.feed = feed
+		} else {
+			val master = EntriesFragment.newInstance(feed)
+			supportFragmentManager
+					.beginTransaction()
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+					.replace(R.id.frame_master, master, TAG_MASTER)
+					.commitAllowingStateLoss()
+		}
+	}
 
-        if (containers_layout.hasTwoColumns()) {
-            containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
-            val fragment = EntryDetailsFragment.newInstance(entry, allEntryIds)
-            supportFragmentManager
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .replace(R.id.frame_details, fragment, TAG_DETAILS)
-                    .commitAllowingStateLoss()
+	override fun goToEntryDetails(entry: EntryWithFeed, allEntryIds: List<String>) {
+		closeKeyboard()
 
-            val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
-            listFragment.setSelectedEntryId(entry.id)
-        } else {
-            startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY to entry, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds)
-        }
-    }
+		if (containers_layout.hasTwoColumns()) {
+			containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
+			val fragment = EntryDetailsFragment.newInstance(entry, allEntryIds)
+			supportFragmentManager
+					.beginTransaction()
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+					.replace(R.id.frame_details, fragment, TAG_DETAILS)
+					.commitAllowingStateLoss()
 
-    override fun setSelectedEntryId(selectedEntryId: String) {
-        val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
-        listFragment.setSelectedEntryId(selectedEntryId)
-    }
+			val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
+			listFragment.setSelectedEntryId(entry.id)
+		} else {
+			startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY to entry, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds)
+		}
+	}
 
-    override fun goToAboutMe() {
-        startActivity<AboutActivity>()
-    }
+	override fun setSelectedEntryId(selectedEntryId: String) {
+		val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
+		listFragment.setSelectedEntryId(selectedEntryId)
+	}
 
-    override fun goToSettings() {
-        startActivity<SettingsActivity>()
-    }
+	override fun goToAboutMe() {
+		startActivity<AboutActivity>()
+	}
+
+	override fun goToSettings() {
+		startActivity<SettingsActivity>()
+	}
 }

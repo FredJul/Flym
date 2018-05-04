@@ -8,14 +8,13 @@ import org.jetbrains.anko.defaultSharedPreferences
 
 object PrefUtils {
 
-	val FIRST_OPEN = "FIRST_OPEN"
-	val DISPLAY_TIP = "DISPLAY_TIP"
+	const val FIRST_OPEN = "first_open"
 
-	const val IS_REFRESHING = "IS_REFRESHING"
+	const val IS_REFRESHING = "is_refreshing"
 
-	const val REFRESH_INTERVAL = "REFRESH_INTERVAL"
-	const val REFRESH_ENABLED = "refresh.enabled"
-	const val REFRESH_WIFI_ONLY = "refreshwifionly.enabled"
+	const val REFRESH_INTERVAL = "refresh_interval"
+	const val REFRESH_ENABLED = "refresh_enabled"
+	const val REFRESH_WIFI_ONLY = "refresh_wifi_only"
 
 	const val DISPLAY_IMAGES = "display_images"
 
@@ -23,9 +22,9 @@ object PrefUtils {
 	const val PRELOAD_IMAGE_MODE__WIFI_ONLY = "WIFI_ONLY_PRELOAD"
 	const val PRELOAD_IMAGE_MODE__ALWAYS = "ALWAYS_PRELOAD"
 
-	const val KEEP_TIME = "keeptime"
+	const val KEEP_TIME = "keep_time"
 
-	const val FONT_SIZE = "fontsize"
+	const val FONT_SIZE = "font_size"
 
 	fun getBoolean(key: String, defValue: Boolean) =
 			App.context.defaultSharedPreferences.getBoolean(key, defValue)

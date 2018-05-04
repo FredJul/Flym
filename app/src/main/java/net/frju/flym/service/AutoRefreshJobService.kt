@@ -66,42 +66,42 @@ import org.jetbrains.anko.doAsync
 
 class AutoRefreshJobService : JobService() {
 
-    companion object {
-        private const val TWO_HOURS = 7200L
-        private const val JOB_ID = 0
+	companion object {
+		private const val TWO_HOURS = "7200"
+		private const val JOB_ID = 0
 
-        fun initAutoRefresh(context: Context) {
+		fun initAutoRefresh(context: Context) {
 
-            val jobSchedulerService = context.systemService<JobScheduler>()
+			val jobSchedulerService = context.systemService<JobScheduler>()
 
-            val time = Math.max(600L, PrefUtils.getLong(PrefUtils.REFRESH_INTERVAL, TWO_HOURS))
+			val time = Math.max(86400, PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, TWO_HOURS).toInt())
 
-            if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
-                val builder = JobInfo.Builder(JOB_ID, ComponentName(context, AutoRefreshJobService::class.java))
-                        .setPeriodic(time)
-                        .setPersisted(true)
-                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+			if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
+				val builder = JobInfo.Builder(JOB_ID, ComponentName(context, AutoRefreshJobService::class.java))
+						.setPeriodic(time * 1000L)
+						.setPersisted(true)
+						.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
 
-                jobSchedulerService.schedule(builder.build())
-            } else {
-                jobSchedulerService.cancel(JOB_ID)
-            }
-        }
-    }
+				jobSchedulerService.schedule(builder.build())
+			} else {
+				jobSchedulerService.cancel(JOB_ID)
+			}
+		}
+	}
 
-    override fun onStartJob(params: JobParameters): Boolean {
-        if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            doAsync {
-                FetcherService.fetch(this@AutoRefreshJobService, true, FetcherService.ACTION_REFRESH_FEEDS)
-                jobFinished(params, false)
-            }
-            return true
-        }
+	override fun onStartJob(params: JobParameters): Boolean {
+		if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+			doAsync {
+				FetcherService.fetch(this@AutoRefreshJobService, true, FetcherService.ACTION_REFRESH_FEEDS)
+				jobFinished(params, false)
+			}
+			return true
+		}
 
-        return false
-    }
+		return false
+	}
 
-    override fun onStopJob(params: JobParameters): Boolean {
-        return false
-    }
+	override fun onStopJob(params: JobParameters): Boolean {
+		return false
+	}
 }

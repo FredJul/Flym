@@ -12,26 +12,26 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:defaultValue="true"
-			android:key="refresh.enabled"
+			android:key="is_refreshing"
 			android:summary="@string/settings_refresh_enabled_description"
 			android:title="@string/settings_refresh_enabled"/>
 
 		<net.frju.flym.ui.views.AutoSummaryListPreference
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:defaultValue="1800000"
-			android:dependency="refresh.enabled"
+			android:defaultValue="7200"
+			android:dependency="is_refreshing"
 			android:entries="@array/settings_intervals"
 			android:entryValues="@array/settings_interval_values"
 			android:inputType="number"
-			android:key="refresh.interval"
+			android:key="refresh_interval"
 			android:title="@string/settings_refresh_interval"/>
 
 		<CheckBoxPreference
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:defaultValue="false"
-			android:key="refreshwifionly.enabled"
+			android:key="refresh_wifi_only"
 			android:summary="@string/settings_refresh_wifi_only_description"
 			android:title="@string/settings_refresh_wifi_only"/>
 	</PreferenceCategory>
@@ -48,7 +48,7 @@
 			android:entries="@array/settings_keep_times"
 			android:entryValues="@array/settings_keep_time_values"
 			android:inputType="number"
-			android:key="keeptime"
+			android:key="keep_time"
 			android:title="@string/settings_keep_time"/>
 
 		<net.frju.flym.ui.views.AutoSummaryListPreference
@@ -58,7 +58,7 @@
 			android:entries="@array/settings_font_sizes"
 			android:entryValues="@array/settings_font_size_values"
 			android:inputType="number"
-			android:key="fontsize"
+			android:key="font_size"
 			android:title="@string/settings_font_size"/>
 
 		<CheckBoxPreference
