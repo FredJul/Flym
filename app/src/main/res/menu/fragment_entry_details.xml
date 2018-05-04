@@ -10,13 +10,13 @@
     <item
         android:id="@+id/menu_entry_details__fulltext"
         android:title="@string/get_full_text"
-        android:icon="@drawable/ic_fulltext_white_24dp"
+        android:icon="@drawable/ic_original_text_white_24dp"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_entry_details__original_text"
         android:title="@string/original_text"
-        android:icon="@drawable/ic_original_text_white_24dp"
+        android:icon="@drawable/ic_fulltext_white_24dp"
         app:showAsAction="ifRoom" />
 
     <item

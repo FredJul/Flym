@@ -37,15 +37,11 @@ import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
 import okhttp3.Request
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.hintTextColor
-import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.textColor
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.ArrayList
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainNavigator {
@@ -276,12 +272,13 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 	}
 
 	private fun showAddFeedPopup() {
-		@Suppress("DEPRECATION")
 		val defaultFeeds = GNEWS_TOPIC_NAME.mapIndexed { index, name ->
+			@Suppress("DEPRECATION")
 			val link = if (GNEWS_TOPIC_CODE[index].isNotEmpty())
 				"https://news.google.com/news/rss/headlines/section/topic/${GNEWS_TOPIC_CODE[index]}?ned=${resources.configuration.locale.language}"
 			else
 				"https://news.google.com/news/rss/?ned=${resources.configuration.locale.language}"
+
 			SearchFeedResult(link, getString(name))
 		}
 

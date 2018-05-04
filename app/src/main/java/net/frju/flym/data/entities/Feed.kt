@@ -1,10 +1,6 @@
 package net.frju.flym.data.entities
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.Index
-import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.*
 import android.os.Parcelable
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
@@ -43,7 +39,7 @@ data class Feed(
 			val feedName = feedTitle.orEmpty()
 
 			val color = ColorGenerator.MATERIAL.getColor(feedId) // The color is specific to the feedId (which shouldn't change)
-			val lettersForName = if (feedName.length < 2) feedName.toUpperCase() else feedName.substring(0, 2).toUpperCase()
+            val lettersForName = if (feedName.length < 2) feedName.toUpperCase() else feedName.substring(0, 2).trim().toUpperCase()
 			return if (rounded) {
 				TextDrawable.builder().buildRound(lettersForName, color)
 			} else {
