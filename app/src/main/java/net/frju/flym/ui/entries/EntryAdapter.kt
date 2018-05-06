@@ -7,6 +7,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import kotlinx.android.synthetic.main.view_entry.view.*
@@ -18,7 +19,7 @@ import net.frju.flym.service.FetcherService
 import org.jetbrains.anko.sdk21.listeners.onClick
 
 
-class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, private val favoriteClickListener: (EntryWithFeed) -> Unit) : PagedListAdapter<EntryWithFeed, EntryAdapter.ViewHolder>(DIFF_CALLBACK) {
+class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, private val favoriteClickListener: (EntryWithFeed, ImageView) -> Unit) : PagedListAdapter<EntryWithFeed, EntryAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
 
@@ -29,7 +30,7 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
                     oldItem.id == newItem.id
 
             override fun areContentsTheSame(oldItem: EntryWithFeed, newItem: EntryWithFeed): Boolean =
-                    oldItem.id == newItem.id && oldItem.read == newItem.read && oldItem.favorite == newItem.favorite // no need to do more complex in our case
+                    oldItem.id == newItem.id && oldItem.read == newItem.read // no need to do more complex in our case
         }
 
         @JvmField
@@ -37,7 +38,7 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(entry: EntryWithFeed, globalClickListener: (EntryWithFeed) -> Unit, favoriteClickListener: (EntryWithFeed) -> Unit) = with(itemView) {
+        fun bind(entry: EntryWithFeed, globalClickListener: (EntryWithFeed) -> Unit, favoriteClickListener: (EntryWithFeed, ImageView) -> Unit) = with(itemView) {
             title.isEnabled = !entry.read
             title.text = entry.title
 
@@ -59,7 +60,7 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
             } else {
                 favorite_icon.setImageResource(R.drawable.ic_star_border_white_24dp)
             }
-            favorite_icon.onClick { favoriteClickListener(entry) }
+            favorite_icon.onClick { favoriteClickListener(entry, favorite_icon) }
 
             onClick { globalClickListener(entry) }
         }

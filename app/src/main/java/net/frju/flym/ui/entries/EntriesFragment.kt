@@ -35,7 +35,7 @@ import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
-import java.util.Date
+import java.util.*
 
 
 class EntriesFragment : Fragment() {
@@ -69,10 +69,10 @@ class EntriesFragment : Fragment() {
 
 	private val adapter = EntryAdapter({ entry ->
 		navigator.goToEntryDetails(entry, entryIds!!)
-	}, { entry ->
+	}, { entry, view ->
 		entry.favorite = !entry.favorite
 
-		view?.favorite_icon?.let {
+		view.favorite_icon?.let {
 			if (entry.favorite) {
 				it.setImageResource(R.drawable.ic_star_white_24dp)
 			} else {
