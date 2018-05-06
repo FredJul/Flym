@@ -86,6 +86,8 @@ import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.error
 import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.toast
 import java.io.File
@@ -100,7 +102,7 @@ import java.util.concurrent.TimeUnit
 
 class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
-	companion object {
+	companion object : AnkoLogger {
 		const val EXTRA_FEED_ID = "EXTRA_FEED_ID"
 
 		private val COOKIE_MANAGER = CookieManager().apply {
@@ -234,7 +236,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		fun getDownloadedImagePath(entryId: String, imgUrl: String): String =
 				IMAGE_FOLDER + entryId + ID_SEPARATOR + imgUrl.sha1()
 
-		fun getTempDownloadedImagePath(entryId: String, imgUrl: String): String =
+		private fun getTempDownloadedImagePath(entryId: String, imgUrl: String): String =
 				IMAGE_FOLDER + TEMP_PREFIX + entryId + ID_SEPARATOR + imgUrl.sha1()
 
 		fun getDownloadedOrDistantImageUrl(entryId: String, imgUrl: String): String {
@@ -318,7 +320,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 									}
 								}
 							}
-						} catch (_: Throwable) {
+						} catch (t: Throwable) {
+							error("Can't mobilize feed ${entry.link}", t)
 						}
 					}
 				}
@@ -366,13 +369,14 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 			var globalResult = 0
 
-			val feeds = App.db.feedDao().all
+			val feeds = App.db.feedDao().allNonGroupFeeds
 			for (feed in feeds) {
 				completionService.submit {
 					var result = 0
 					try {
 						result = refreshFeed(feed, keepDateBorderTime)
-					} catch (ignored: Exception) {
+					} catch (e: Exception) {
+						error("Can't fetch feed ${feed.link}", e)
 					}
 
 					result

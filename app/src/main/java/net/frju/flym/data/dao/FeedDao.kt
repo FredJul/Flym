@@ -7,8 +7,8 @@ import net.frju.flym.data.entities.Feed
 
 @Dao
 interface FeedDao {
-    @get:Query("SELECT * FROM feeds")
-    val all: List<Feed>
+    @get:Query("SELECT * FROM feeds WHERE isGroup = 0")
+    val allNonGroupFeeds: List<Feed>
 
     @get:Query("SELECT * FROM feeds ORDER BY isGroup DESC, groupId DESC, displayPriority ASC, feedId ASC")
     val observeAll: LiveData<List<Feed>>
