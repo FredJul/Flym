@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="settings_interval_values" translatable="false">
-		<item>60</item>
 		<item>300</item>
 		<item>900</item>
 		<item>1800</item>

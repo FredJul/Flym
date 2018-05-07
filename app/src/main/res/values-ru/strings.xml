@@ -188,7 +188,6 @@
     </plurals>
 
     <string-array name="settings_intervals">
-        <item>1 минута</item>
         <item>5 минут</item>
         <item>15 минут</item>
         <item>30 минут</item>

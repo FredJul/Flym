@@ -172,7 +172,6 @@
     </plurals>
 
     <string-array name="settings_intervals">
-        <item>1분</item>
         <item>5분</item>
         <item>15분</item>
         <item>30분</item>

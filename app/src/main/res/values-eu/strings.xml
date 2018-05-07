@@ -190,7 +190,6 @@
     </plurals>
 
     <string-array name="settings_intervals">
-        <item>Minutu 1</item>
         <item>5 minutu</item>
         <item>15 minutu</item>
         <item>30 minutu</item>

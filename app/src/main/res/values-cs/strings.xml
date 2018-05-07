@@ -192,7 +192,6 @@
     </plurals>
 
     <string-array name="settings_intervals">
-        <item>1 minuta</item>
         <item>5 minut</item>
         <item>15 minut</item>
         <item>30 minut</item>

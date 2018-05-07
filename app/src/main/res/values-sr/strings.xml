@@ -174,7 +174,6 @@
     </plurals>
 
     <string-array name="settings_intervals">
-        <item>1 минута</item>
         <item>5 минута</item>
         <item>15 минута</item>
         <item>30 минута</item>

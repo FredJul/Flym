@@ -178,7 +178,6 @@
     </plurals>
 
     <string-array name="settings_intervals">
-        <item>1 minuutti</item>
         <item>5 minuuttia</item>
         <item>15 minuuttia</item>
         <item>30 minuuuttia</item>

@@ -74,7 +74,7 @@ class AutoRefreshJobService : JobService() {
 
 			val jobSchedulerService = context.systemService<JobScheduler>()
 
-			val time = Math.max(86400, PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, TWO_HOURS).toInt())
+			val time = Math.max(300, PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, TWO_HOURS).toInt())
 
 			if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
 				val builder = JobInfo.Builder(JOB_ID, ComponentName(context, AutoRefreshJobService::class.java))
