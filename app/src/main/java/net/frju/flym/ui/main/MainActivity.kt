@@ -1,10 +1,13 @@
 package net.frju.flym.ui.main
 
+import android.Manifest
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Environment
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
@@ -12,6 +15,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
 import android.text.Html
 import android.widget.EditText
+import com.rometools.opml.feed.opml.Opml
+import com.rometools.rome.io.WireFeedInput
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
 import ir.mirrajabi.searchdialog.core.BaseFilter
 import ir.mirrajabi.searchdialog.core.SearchResultListener
@@ -39,6 +44,12 @@ import okhttp3.Request
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.json.JSONObject
+import pub.devrel.easypermissions.AfterPermissionGranted
+import pub.devrel.easypermissions.EasyPermissions
+import java.io.File
+import java.io.FileReader
+import java.io.Reader
+import java.io.StringReader
 import java.net.URLEncoder
 import java.util.*
 
@@ -58,6 +69,10 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         private val GNEWS_TOPIC_NAME = intArrayOf(R.string.google_news_top_stories, R.string.google_news_world, R.string.google_news_business, R.string.google_news_technology, R.string.google_news_entertainment, R.string.google_news_sports, R.string.google_news_science, R.string.google_news_health)
 
         private val GNEWS_TOPIC_CODE = arrayOf("", "WORLD", "BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH")
+
+        private const val PERMISSION_REQUEST_CODE = 1
+        private val NEEDED_PERMS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
 
         var isInForeground = false
     }
@@ -180,13 +195,23 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                 PrefUtils.putBoolean(PrefUtils.FIRST_OPEN, false)
                 openDrawer()
 
-                AlertDialog.Builder(this)
-                        .setTitle(R.string.welcome_title)
-                        .setPositiveButton(android.R.string.yes) { _, _ ->
-                            showAddFeedPopup()
-                        }
-                        .setNegativeButton(android.R.string.no, null)
-                        .show()
+                if (isOldFlymAppInstalled()) {
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.welcome_title_with_opml_import)
+                            .setPositiveButton(android.R.string.yes) { _, _ ->
+                                importOpml()
+                            }
+                            .setNegativeButton(android.R.string.no, null)
+                            .show()
+                } else {
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.welcome_title)
+                            .setPositiveButton(android.R.string.yes) { _, _ ->
+                                showAddFeedPopup()
+                            }
+                            .setNegativeButton(android.R.string.no, null)
+                            .show()
+                }
             } else {
                 closeDrawer()
             }
@@ -228,6 +253,75 @@ class MainActivity : AppCompatActivity(), MainNavigator {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         feedAdapter.onSaveInstanceState(outState)
+    }
+
+    private fun isOldFlymAppInstalled() =
+            packageManager.getInstalledApplications(PackageManager.GET_META_DATA).any { it.packageName == "net.fred.feedex" }
+
+    @AfterPermissionGranted(PERMISSION_REQUEST_CODE)
+    private fun importOpml() {
+        if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
+            EasyPermissions.requestPermissions(this, getString(R.string.welcome_title_with_opml_import),
+                    PERMISSION_REQUEST_CODE, *NEEDED_PERMS)
+        } else {
+            if (BACKUP_OPML.exists()) {
+                doAsync {
+                    try {
+                        parseOpml(FileReader(BACKUP_OPML))
+                    } catch (e: Exception) {
+                        try {
+                            // We try to remove the opml version number, it may work better in some cases
+                            val fixedReader = StringReader(BACKUP_OPML.readText().replace("<opml version='[0-9]\\.[0-9]'>".toRegex(), "<opml>"))
+                            parseOpml(fixedReader)
+                        } catch (e: Exception) {
+                            uiThread { toast(R.string.cannot_find_feeds) }
+                        }
+                    }
+                }
+            } else {
+                toast(R.string.cannot_find_feeds)
+            }
+        }
+    }
+
+    private fun parseOpml(opmlReader: Reader) {
+        var id = 1L
+        val feedList = mutableListOf<Feed>()
+        val opml = WireFeedInput().build(opmlReader) as Opml
+        opml.outlines.forEach {
+            if (it.xmlUrl != null || it.children.isNotEmpty()) {
+                val topLevelFeed = Feed()
+                topLevelFeed.id = id++
+                topLevelFeed.title = it.title
+                feedList.add(topLevelFeed)
+
+                if (it.xmlUrl != null) {
+                    topLevelFeed.link = it.xmlUrl
+                    topLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
+                } else {
+                    topLevelFeed.isGroup = true
+
+                    it.children.filter { it.xmlUrl != null }.forEach {
+                        val subLevelFeed = Feed()
+                        subLevelFeed.id = id++
+                        subLevelFeed.title = it.title
+                        subLevelFeed.link = it.xmlUrl
+                        subLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
+                        subLevelFeed.groupId = topLevelFeed.id
+                        feedList.add(subLevelFeed)
+                    }
+                }
+            }
+        }
+
+        if (feedList.isNotEmpty()) {
+            App.db.feedDao().insert(*feedList.toTypedArray())
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     private fun closeDrawer() {

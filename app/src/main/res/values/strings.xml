@@ -11,6 +11,8 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">About Flym</string>
     <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
+    <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
+    <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="never">never</string>
     <string name="update">Update</string>
     <string name="colon">:\u00A0</string>

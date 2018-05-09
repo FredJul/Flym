@@ -25,7 +25,9 @@
     <!-- GENERAL -->
     <string name="app_name">Flym</string>
     <string name="about_flym">À propos de Flym</string>
-    <string name="welcome_title">Bienvenue sur Flym. Voulez vous ajouter un flux ?</string>
+    <string name="welcome_title">Bienvenue sur Flym. Voulez-vous ajouter un flux ?</string>
+    <string name="welcome_title_with_opml_import">Voulez-vous importer vos anciens flux ?</string>
+    <string name="cannot_find_feeds">Aucun flux n\'a été trouvé</string>
     <string name="never">jamais</string>
     <string name="update">Mise à jour</string>
     <string name="colon">\u00A0:\u00A0</string>
