@@ -30,7 +30,7 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
                     oldItem.id == newItem.id
 
             override fun areContentsTheSame(oldItem: EntryWithFeed, newItem: EntryWithFeed): Boolean =
-                    oldItem.id == newItem.id && oldItem.read == newItem.read // no need to do more complex in our case
+                    oldItem.id == newItem.id && oldItem.read == newItem.read && oldItem.favorite == newItem.favorite // no need to do more complex in our case
         }
 
         @JvmField

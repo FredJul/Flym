@@ -75,48 +75,52 @@ dependencies {
 	implementation fileTree(dir: 'libs', include: ['*.jar'])
 
 	implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-	implementation 'androidx.core:core-ktx:+'
 
-	implementation "android.arch.lifecycle:extensions:+"
-	kapt "android.arch.lifecycle:compiler:+"
-	implementation "android.arch.paging:runtime:+"
-	implementation "android.arch.persistence.room:runtime:+"
-	kapt "android.arch.persistence.room:compiler:+"
+	def lifecycle_version = "1.1.1"
+	implementation "android.arch.lifecycle:extensions:$lifecycle_version"
+	kapt "android.arch.lifecycle:compiler:$lifecycle_version"
 
-	// Support dependencies
-	ext.support_version = '27.1.1'
+	def room_version = "1.1.0"
+	implementation "android.arch.persistence.room:runtime:$room_version"
+	kapt "android.arch.persistence.room:compiler:$room_version"
+
+	def support_version = '27.1.1'
 	implementation "com.android.support:appcompat-v7:$support_version"
 	implementation "com.android.support:design:$support_version"
 	implementation "com.android.support:cardview-v7:$support_version"
 	implementation "com.android.support:recyclerview-v7:$support_version"
-	implementation 'com.android.support.constraint:constraint-layout:+'
 
-	// PaperParcel
-	implementation 'nz.bradcampbell:paperparcel:+'
-	implementation 'nz.bradcampbell:paperparcel-kotlin:+'
-	kapt 'nz.bradcampbell:paperparcel-compiler:+'
+	def paperparcel_version = '2.0.6'
+	implementation "nz.bradcampbell:paperparcel:$paperparcel_version"
+	implementation "nz.bradcampbell:paperparcel-kotlin:$paperparcel_version"
+	kapt "nz.bradcampbell:paperparcel-compiler:$paperparcel_version"
 
-	ext.anko_version = '0.10.5'
+	def anko_version = '0.10.5'
 	implementation "org.jetbrains.anko:anko-sdk21:$anko_version"
 	implementation "org.jetbrains.anko:anko-sdk21-listeners:$anko_version"
 	implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
 	implementation "org.jetbrains.anko:anko-design:$anko_version"
 
-	implementation 'pub.devrel:easypermissions:+'
+	def okhttp_version = '3.10.0'
+	implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+	implementation "com.squareup.okhttp3:okhttp-urlconnection:$okhttp_version"
 
-	implementation 'com.rometools:rome-opml:+'
-	implementation 'com.squareup.okhttp3:okhttp:+'
-	implementation "com.squareup.okhttp3:okhttp-urlconnection:+"
-	implementation 'org.jsoup:jsoup:+'
-	implementation 'com.github.bumptech.glide:glide:4.7.1'
-	kapt 'com.github.bumptech.glide:compiler:4.7.1'
-	implementation 'com.amulyakhare:com.amulyakhare.textdrawable:+'
-	implementation 'com.github.Tunous:SwipeActionView:+'
-	implementation 'com.bignerdranch.android:expandablerecyclerview:+'
-	implementation 'com.github.mirrajabi:search-dialog:+'
-	implementation 'com.github.jrvansuita:MaterialAbout:+'
-	implementation 'q.rorbin:badgeview:+'
-	implementation 'com.lucasurbas:listitemview:+'
+	def glide_version = '4.7.1'
+	implementation "com.github.bumptech.glide:glide:$glide_version"
+	kapt "com.github.bumptech.glide:compiler:$glide_version"
 
-	implementation 'net.dankito.readability4j:readability4j:+'
+	implementation 'androidx.core:core-ktx:0.3'
+	implementation "android.arch.paging:runtime:1.0.0"
+	implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+	implementation 'org.jsoup:jsoup:1.11.3'
+	implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+	implementation 'com.github.Tunous:SwipeActionView:1.1.0'
+	implementation 'com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1'
+	implementation 'com.github.mirrajabi:search-dialog:1.2.1'
+	implementation 'com.github.jrvansuita:MaterialAbout:0.2.3'
+	implementation 'q.rorbin:badgeview:1.1.3'
+	implementation 'com.lucasurbas:listitemview:1.1.0'
+	implementation 'net.dankito.readability4j:readability4j:1.0'
+	implementation 'pub.devrel:easypermissions:1.2.0'
+	implementation 'com.rometools:rome-opml:1.9.0'
 }
