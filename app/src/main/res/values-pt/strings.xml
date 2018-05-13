@@ -91,10 +91,9 @@
     <string name="google_news_top_stories">Melhores histórias</string>
     <string name="google_news_world">Mundo</string>
     <string name="google_news_business">Negócios</string>
-    <string name="google_news_technology">Tecnologia</string>
+    <string name="google_news_science_technology">Ciência &amp; Tecnologia</string>
     <string name="google_news_entertainment">Entretenimento</string>
     <string name="google_news_sports">Esportes</string>
-    <string name="google_news_science">Ciência</string>
     <string name="google_news_health">Saúde</string>
     <string name="google_news_custom_topic">Digite um tema personalizado</string>
 

@@ -66,9 +66,9 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         private const val FEED_SEARCH_URL = "feedId"
         private const val FEED_SEARCH_DESC = "description"
 
-        private val GNEWS_TOPIC_NAME = intArrayOf(R.string.google_news_top_stories, R.string.google_news_world, R.string.google_news_business, R.string.google_news_technology, R.string.google_news_entertainment, R.string.google_news_sports, R.string.google_news_science, R.string.google_news_health)
+        private val GNEWS_TOPIC_NAME = intArrayOf(R.string.google_news_top_stories, R.string.google_news_world, R.string.google_news_business, R.string.google_news_science_technology, R.string.google_news_entertainment, R.string.google_news_sports, R.string.google_news_health)
 
-        private val GNEWS_TOPIC_CODE = arrayOf("", "WORLD", "BUSINESS", "TECHNOLOGY", "ENTERTAINMENT", "SPORTS", "SCIENCE", "HEALTH")
+        private val GNEWS_TOPIC_CODE = arrayOf("", "WORLD", "BUSINESS", "SCITECH", "ENTERTAINMENT", "SPORTS", "HEALTH")
 
         private const val PERMISSION_REQUEST_CODE = 1
         private val NEEDED_PERMS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)

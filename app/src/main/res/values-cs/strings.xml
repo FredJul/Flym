@@ -101,10 +101,9 @@
     <string name="google_news_top_stories">Hlavní témata</string>
     <string name="google_news_world">Svět</string>
     <string name="google_news_business">Podnikání</string>
-    <string name="google_news_technology">Technologie</string>
+    <string name="google_news_science_technology">Věda &amp; Technologie</string>
     <string name="google_news_entertainment">Zábava</string>
     <string name="google_news_sports">Sporty</string>
-    <string name="google_news_science">Věda</string>
     <string name="google_news_health">Zdraví</string>
     <string name="google_news_custom_topic">Zadat vlastní téma</string>
 

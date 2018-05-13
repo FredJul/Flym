@@ -92,10 +92,9 @@
     <string name="google_news_top_stories">Најбоље приче</string>
     <string name="google_news_world">Свет</string>
     <string name="google_news_business">Посао</string>
-    <string name="google_news_technology">Технологија</string>
+    <string name="google_news_science_technology">Наука &amp; Технологија</string>
     <string name="google_news_entertainment">Забава</string>
     <string name="google_news_sports">Спорт</string>
-    <string name="google_news_science">Наука</string>
     <string name="google_news_health">Здравље</string>
     <string name="google_news_custom_topic">Enter custom topic</string>
 

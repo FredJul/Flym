@@ -92,10 +92,9 @@
     <string name="google_news_top_stories">주요 뉴스</string>
     <string name="google_news_world">국제</string>
     <string name="google_news_business">경제</string>
-    <string name="google_news_technology">기술</string>
+    <string name="google_news_science_technology">과학 &amp; 기술</string>
     <string name="google_news_entertainment">연예</string>
     <string name="google_news_sports">스포츠</string>
-    <string name="google_news_science">과학</string>
     <string name="google_news_health">건강</string>
     <string name="google_news_custom_topic">Enter custom topic</string>
 

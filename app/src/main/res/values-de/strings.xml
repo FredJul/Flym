@@ -94,10 +94,9 @@
     <string name="google_news_top_stories">Schlagzeilen</string>
     <string name="google_news_world">International</string>
     <string name="google_news_business">Wirtschaft</string>
-    <string name="google_news_technology">Wissen/Technik</string>
+    <string name="google_news_science_technology">Panorama &amp; Wissen/Technik</string>
     <string name="google_news_entertainment">Unterhaltung</string>
     <string name="google_news_sports">Sport</string>
-    <string name="google_news_science">Panorama</string>
     <string name="google_news_health">Gesundheit</string>
     <string name="google_news_custom_topic">Eigenes Thema</string>
 

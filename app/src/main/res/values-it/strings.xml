@@ -98,10 +98,9 @@
     <string name="google_news_top_stories">Temi caldi</string>
     <string name="google_news_world">Mondo</string>
     <string name="google_news_business">Economia</string>
-    <string name="google_news_technology">Tecnologia</string>
+    <string name="google_news_science_technology">Scienza &amp; Tecnologia</string>
     <string name="google_news_entertainment">Intrattenimento</string>
     <string name="google_news_sports">Sport</string>
-    <string name="google_news_science">Scienza</string>
     <string name="google_news_health">Salute</string>
     <string name="google_news_custom_topic">Aggiungi un tema personalizzato</string>
 

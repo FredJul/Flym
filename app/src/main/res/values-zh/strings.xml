@@ -91,10 +91,9 @@
     <string name="google_news_top_stories">热门报道</string>
     <string name="google_news_world">世界</string>
     <string name="google_news_business">财经</string>
-    <string name="google_news_technology">科技</string>
+    <string name="google_news_science_technology">科学 &amp; 科技</string>
     <string name="google_news_entertainment">娱乐</string>
     <string name="google_news_sports">体育</string>
-    <string name="google_news_science">科学</string>
     <string name="google_news_health">健康</string>
     <string name="google_news_custom_topic">自定义话题</string>
 

@@ -96,10 +96,9 @@
     <string name="google_news_top_stories">Top Stories</string>
     <string name="google_news_world">World</string>
     <string name="google_news_business">Business</string>
-    <string name="google_news_technology">Technology</string>
+    <string name="google_news_science_technology">Science &amp; Technology</string>
     <string name="google_news_entertainment">Entertainment</string>
     <string name="google_news_sports">Sports</string>
-    <string name="google_news_science">Science</string>
     <string name="google_news_health">Health</string>
     <string name="google_news_custom_topic">Enter custom topic</string>
 

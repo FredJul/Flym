@@ -90,10 +90,9 @@
     <string name="google_news_top_stories">Nyheter</string>
     <string name="google_news_world">Världen</string>
     <string name="google_news_business">Ekonomi</string>
-    <string name="google_news_technology">Teknik</string>
+    <string name="google_news_science_technology">Vetenskap &amp; Teknik</string>
     <string name="google_news_entertainment">Nöje</string>
     <string name="google_news_sports">Sport</string>
-    <string name="google_news_science">Vetenskap</string>
     <string name="google_news_health">Hälsa</string>
 
     <!-- ENTRIES -->

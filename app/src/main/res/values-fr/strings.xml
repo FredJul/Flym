@@ -104,10 +104,9 @@
     <string name="google_news_top_stories">À la une</string>
     <string name="google_news_world">International</string>
     <string name="google_news_business">Économie</string>
-    <string name="google_news_technology">High-Tech</string>
+    <string name="google_news_science_technology">Science &amp; High-Tech</string>
     <string name="google_news_entertainment">Culture</string>
     <string name="google_news_sports">Sport</string>
-    <string name="google_news_science">Science</string>
     <string name="google_news_health">Santé</string>
     <string name="google_news_custom_topic">Entrer un sujet personnalisé</string>
 

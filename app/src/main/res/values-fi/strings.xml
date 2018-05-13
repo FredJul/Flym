@@ -94,10 +94,9 @@
     <string name="google_news_top_stories">Etusivun uutiset</string>
     <string name="google_news_world">Ulkomaat</string>
     <string name="google_news_business">Talous</string>
-    <string name="google_news_technology">Tekniikka</string>
+    <string name="google_news_science_technology">Tiede &amp; Tekniikka</string>
     <string name="google_news_entertainment">Viihde</string>
     <string name="google_news_sports">Urheilu</string>
-    <string name="google_news_science">Tiede</string>
     <string name="google_news_health">Terveys</string>
 
     <!-- ENTRIES -->
