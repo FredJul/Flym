@@ -62,7 +62,7 @@ open class Entry : Parcelable {
 
 fun SyndEntry.toDbFormat(feed: Feed): Entry {
     val item = Entry()
-    item.id = (feed.id.toString() + "_" + (uri ?: link ?: title
+    item.id = (feed.id.toString() + "_" + (link ?: uri ?: title
     ?: UUID.randomUUID().toString())).sha1()
     item.feedId = feed.id
     item.title = title
