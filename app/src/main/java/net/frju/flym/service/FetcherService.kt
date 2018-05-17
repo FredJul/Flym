@@ -295,8 +295,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 								.build()
 						try {
 							HTTP_CLIENT.newCall(request).execute().use {
-								it.body()?.let { body ->
-									Readability4JExtended(link, body.string()).parse().articleContent?.html()?.let {
+								it.body()?.string()?.let { body ->
+									Readability4JExtended(link, body).parse().articleContent?.html()?.let {
 										val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(link))
 
 										if (downloadPictures) {
