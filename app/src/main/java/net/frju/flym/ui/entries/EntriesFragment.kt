@@ -151,6 +151,11 @@ class EntriesFragment : Fragment() {
 					}
 				}
 
+				// If we will display a totally new list, we need to go back to the first position
+				if (unreadBadge?.badgeNumber ?: 0 > 0 && bottom_navigation.selectedItemId == R.id.unreads) {
+					recycler_view.scrollToPosition(0)
+				}
+
 				listDisplayDate = Date().time
 				initDataObservers()
 

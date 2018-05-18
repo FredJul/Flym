@@ -66,6 +66,8 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         private const val FEED_SEARCH_URL = "feedId"
         private const val FEED_SEARCH_DESC = "description"
 
+        private const val OLD_GNEWS_TO_IGNORE = "http://news.google.com/news?"
+
         private val GNEWS_TOPIC_NAME = intArrayOf(R.string.google_news_top_stories, R.string.google_news_world, R.string.google_news_business, R.string.google_news_science_technology, R.string.google_news_entertainment, R.string.google_news_sports, R.string.google_news_health)
 
         private val GNEWS_TOPIC_CODE = arrayOf("", "WORLD", "BUSINESS", "SCITECH", "ENTERTAINMENT", "SPORTS", "HEALTH")
@@ -293,15 +295,18 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                 val topLevelFeed = Feed()
                 topLevelFeed.id = id++
                 topLevelFeed.title = it.title
-                feedList.add(topLevelFeed)
 
                 if (it.xmlUrl != null) {
-                    topLevelFeed.link = it.xmlUrl
-                    topLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
+                    if (!it.xmlUrl.startsWith(OLD_GNEWS_TO_IGNORE)) {
+                        topLevelFeed.link = it.xmlUrl
+                        topLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
+                        feedList.add(topLevelFeed)
+                    }
                 } else {
                     topLevelFeed.isGroup = true
+                    feedList.add(topLevelFeed)
 
-                    it.children.filter { it.xmlUrl != null }.forEach {
+                    it.children.filter { it.xmlUrl != null && !it.xmlUrl.startsWith(OLD_GNEWS_TO_IGNORE) }.forEach {
                         val subLevelFeed = Feed()
                         subLevelFeed.id = id++
                         subLevelFeed.title = it.title
@@ -398,7 +403,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                     try {
                         @Suppress("DEPRECATION")
                         val request = Request.Builder()
-                                .url("http://cloud.feedly.com/v3/search/feeds?count=20&locale=" + resources.configuration.locale.language + "&query=" + URLEncoder.encode(charSequence.toString(), "UTF-8"))
+                                .url("https://cloud.feedly.com/v3/search/feeds?count=20&locale=" + resources.configuration.locale.language + "&query=" + URLEncoder.encode(charSequence.toString(), "UTF-8"))
                                 .build()
                         FetcherService.HTTP_CLIENT.newCall(request).execute().use {
                             it.body()?.let { body ->
