@@ -53,15 +53,15 @@ public class ArticleTextExtractor {
      */
     public enum Mobilize {Yes, No}
 
-    public static String extractContent(InputStream input, String contentIndicator, Mobilize mobilize) throws Exception {
-        return extractContent(Jsoup.parse(input, null, ""), contentIndicator, mobilize);
+    public static String extractContent(InputStream input, final String url, String contentIndicator, Mobilize mobilize) throws Exception {
+        return extractContent(Jsoup.parse(input, null, ""), url, contentIndicator, mobilize);
     }
 
-    public static String extractContent(Document doc, String contentIndicator, Mobilize mobilize) {
+    public static String extractContent(Document doc, final String url, String contentIndicator, Mobilize mobilize) {
         if (doc == null)
             throw new NullPointerException("missing document");
 
-        FetcherService.getStatusText().AddBytes( doc.html().length() );
+        FetcherService.Status().AddBytes( doc.html().length() );
         // now remove the clutter
         prepareDocument(doc, mobilize);
 
@@ -71,7 +71,7 @@ public class ArticleTextExtractor {
             Collection<Element> nodes = getNodes(doc);
             int maxWeight = 0;
 
-            bestMatchElement = getBestElementFromFile(doc);
+            bestMatchElement = getBestElementFromFile(doc, url);
             if (bestMatchElement == null) {
                 for (Element entry : nodes) {
                     int currentWeight = getWeight(entry, contentIndicator);
@@ -144,46 +144,35 @@ public class ArticleTextExtractor {
         return ret;
     }
 
-    private static Element getBestElementFromFile(Document doc) {
+    private static Element getBestElementFromFile(Document doc, final String url) {
         Element result = null;
-        /*File file = new File( "/sdcard/feedex/fulltextroot.txt" );
-        //if ( file.exists() ) {
-            //BufferedReader in;
-            //try {
-                in = new BufferedReader(new FileReader(file.getAbsolutePath()));
-                try {*/
-                for( String line: PrefUtils.getString( PrefUtils.CONTENT_EXTRACT_RULES, R.string.full_text_root_default ).split( "\n" ) ) {   //while ( result == null ) {
-                        //String line = in.readLine();
-
-                            if ( ( line == null ) || line.isEmpty() )
-                                break;
-                            try {
-                                String[] list1 = line.split(":");
-                                String keyWord = list1[0];
-                                String[] list2 = list1[1].split("=");
-                                String elementType = list2[0].toLowerCase();
-                                String elementValue = list2[1];
-                                if (doc.head().html().contains(keyWord)) {
-                                    if (elementType.equals("id"))
-                                        result = doc.getElementById(elementValue);
-                                    else if (elementType.equals("class")) {
-                                        Elements elements = doc.getElementsByClass(elementValue);
-                                        if (!elements.isEmpty())
-                                            result = elements.first();
-                                    }
-                                }
-                            } catch ( Exception e ) {
-                                Dog.e( e.getMessage() );
-                            }
-
+        for( String line: PrefUtils.getString( PrefUtils.CONTENT_EXTRACT_RULES, R.string.full_text_root_default ).split( "\\n|\\s" ) ) {   //while ( result == null ) {
+            if ( ( line == null ) || line.isEmpty() )
+                continue;
+            try {
+                String[] list1 = line.split(":");
+                String keyWord = list1[0];
+                String[] list2 = list1[1].split("=");
+                String elementType = list2[0].toLowerCase();
+                String elementValue = list2[1];
+                //if (doc.head().html().contains(keyWord)) {
+                if (url.contains(keyWord)) {
+                    if (elementType.equals("id"))
+                        result = doc.getElementById(elementValue);
+                    else if (elementType.equals("class")) {
+                        Elements elements = doc.getElementsByClass(elementValue);
+                        if (!elements.isEmpty())
+                            result = elements.first();
+                        else
+                            result = doc;
                     }
-                /*} finally {
-                    in.close();
+                    break;
                 }
-            } catch (Exception e) {
-                Log.w("Feedex", e.getLocalizedMessage());
+            } catch ( Exception e ) {
+                Dog.e( e.getMessage() );
             }
-        }*/
+
+        }
         return result;
     }
 

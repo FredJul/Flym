@@ -1,5 +1,5 @@
 -renamesourcefileattribute SourceFile    
--keepattributes SourceFile,LineNumberTable,MethodParameters,InnerClasses
+-keepattributes Exceptions,Signature,SourceFile,LineNumberTable,MethodParameters,InnerClasses
 -keepnames class *
 
 -keepclassmembers class * {

@@ -7,7 +7,7 @@ import ru.yanus171.feedexfork.BuildConfig;
 
 public class Dog {
 
-    private static final String DEFAULT_TAG = "Unknown";
+    private static final String DEFAULT_TAG = "FeedFork";
 
     /**
      * Send a verbose log message.
@@ -246,7 +246,8 @@ public class Dog {
     }
 
     private static String getTag() {
-        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+		return DEFAULT_TAG;
+        /*StackTraceElement[] elements = Thread.currentThread().getStackTrace();
         if (elements != null && elements.length > 4) {
 
             // Take the 5th one as the first four are produced by this method
@@ -278,7 +279,7 @@ public class Dog {
             }
         } else {
             return DEFAULT_TAG;
-        }
+        }*/
     }
 
 }

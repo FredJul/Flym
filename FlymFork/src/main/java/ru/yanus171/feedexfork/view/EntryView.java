@@ -348,6 +348,8 @@ public class EntryView extends WebView implements Observer {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.fromFile(extTmpFile), "image/jpeg");
                         context.startActivity(intent);
+                    } else if ( url.contains( "#" ) ) {
+                        return false;
                     } else {
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         context.startActivity(intent);
@@ -391,7 +393,7 @@ public class EntryView extends WebView implements Observer {
 
     @Override
     protected void onScrollChanged (int l, int t, int oldl, int oldt) {
-        FetcherService.getStatusText().HideByScroll();
+        FetcherService.Status().HideByScroll();
         int height = (int) Math.floor(GetContentHeight());
         int webViewHeight = getMeasuredHeight();
         mActivity.mEntryFragment.UpdateProgress();

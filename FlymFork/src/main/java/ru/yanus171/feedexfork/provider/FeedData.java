@@ -194,6 +194,22 @@ public class FeedData {
         public static final String IMAGE_URL = "image_url";
         public static final String SCROLL_POS = "scroll_pos";
         public static final String[] PROJECTION_ID = new String[]{EntryColumns._ID};
+        public static final String[] PROJECTION_WITHOUT_TEXT =
+                new String[]{EntryColumns._ID,
+                             EntryColumns.AUTHOR,
+                             EntryColumns.DATE,
+                             EntryColumns.FEED_ID,
+                             EntryColumns.FETCH_DATE,
+                             EntryColumns.GUID,
+                             EntryColumns.IMAGE_URL,
+                             EntryColumns.IS_FAVORITE,
+                             EntryColumns.IS_READ,
+                             EntryColumns.LINK,
+                             EntryColumns.SCROLL_POS,
+                             EntryColumns.TITLE,
+                             EntryColumns.DATE,
+                             String.format( "substr( %s, 1, 5 ) AS %s", EntryColumns.MOBILIZED_HTML, EntryColumns.MOBILIZED_HTML ), 
+                             FeedColumns.NAME};
         public static final String WHERE_READ = EntryColumns.IS_READ + Constants.DB_IS_TRUE;
         public static final String WHERE_UNREAD = "(" + EntryColumns.IS_READ + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_READ + Constants.DB_IS_FALSE + ')';
         public static final String WHERE_NOT_FAVORITE = "(" + EntryColumns.IS_FAVORITE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_FAVORITE + Constants.DB_IS_FALSE + ')';

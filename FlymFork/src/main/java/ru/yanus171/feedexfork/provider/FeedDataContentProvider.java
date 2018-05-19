@@ -252,7 +252,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        FetcherService.getStatusText().ChangeDB("query DB");
+        FetcherService.Status().ChangeDB("query DB");
 
         long time = new Date().getTime();
         // This is a debug code to allow to visualize the task with the ContentProviderHelper app
@@ -260,7 +260,7 @@ public class FeedDataContentProvider extends ContentProvider {
             SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
             queryBuilder.setTables(TaskColumns.TABLE_NAME);
             SQLiteDatabase database = mDatabaseHelper.getReadableDatabase();
-            FetcherService.getStatusText().ChangeDB("");
+            FetcherService.Status().ChangeDB("");
             return queryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
         }
 
@@ -394,7 +394,7 @@ public class FeedDataContentProvider extends ContentProvider {
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         Dog.v("query " + (new Date().getTime() - time) + " uri = " + uri);
 
-        FetcherService.getStatusText().ChangeDB("");
+        FetcherService.Status().ChangeDB("");
         return cursor;
     }
 
@@ -409,7 +409,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        FetcherService.getStatusText().ChangeDB("insert DB");
+        FetcherService.Status().ChangeDB("insert DB");
         long newId;
 
         int matchCode = URI_MATCHER.match(uri);
@@ -462,7 +462,7 @@ public class FeedDataContentProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Illegal insert. Match code=" + matchCode + "; uri=" + uri);
         }
-        FetcherService.getStatusText().ChangeDB("");
+        FetcherService.Status().ChangeDB("");
         if (newId > -1) {
             notifyChangeOnAllUris(matchCode, uri);
             return ContentUris.withAppendedId(uri, newId);
@@ -478,7 +478,7 @@ public class FeedDataContentProvider extends ContentProvider {
             throw new IllegalArgumentException("Illegal update. Uri=" + uri + "; values=" + values);
         }
 
-        FetcherService.getStatusText().ChangeDB("update DB");
+        FetcherService.Status().ChangeDB("update DB");
         int matchCode = URI_MATCHER.match(uri);
 
         String table;
@@ -632,7 +632,7 @@ public class FeedDataContentProvider extends ContentProvider {
                 && (values.containsKey(FeedColumns.NAME) || values.containsKey(FeedColumns.URL) || values.containsKey(FeedColumns.PRIORITY)) ) ) {
             mDatabaseHelper.exportToOPML();
         }
-        FetcherService.getStatusText().ChangeDB("");
+        FetcherService.Status().ChangeDB("");
         if (count > 0 && mNotifyEnabled ) {
             notifyChangeOnAllUris(matchCode, uri);
         }
@@ -641,7 +641,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        FetcherService.getStatusText().ChangeDB("delete DB");
+        FetcherService.Status().ChangeDB("delete DB");
         int matchCode = URI_MATCHER.match(uri);
 
         String table;
@@ -830,7 +830,7 @@ public class FeedDataContentProvider extends ContentProvider {
 
             notifyChangeOnAllUris(matchCode, uri);
         }
-        FetcherService.getStatusText().ChangeDB("");
+        FetcherService.Status().ChangeDB("");
         return count;
     }
 

@@ -135,7 +135,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         View rootView = inflater.inflate(R.layout.fragment_entry, container, true);
 
         mStatusText = new StatusText( (TextView)rootView.findViewById( R.id.statusText ),
-                                      FetcherService.getStatusText()/*,
+                                      FetcherService.Status()/*,
                                       this*/);
         mToggleFullscreenBtn = rootView.findViewById(R.id.toggleFullscreenBtn);
         mToggleFullscreenBtn.setOnClickListener(new View.OnClickListener() {
@@ -234,9 +234,11 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
     }
 
     private void SetOrientation() {
-        getActivity().setRequestedOrientation( mLockLandOrientation ?
-                                               ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE :
-                                               ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED  );
+		int or = mLockLandOrientation ?
+			   ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE :
+			   ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+		if ( mLockLandOrientation && or != getActivity().getRequestedOrientation() )
+			getActivity().setRequestedOrientation( or );
     }
 
     public void PageUp() {
@@ -298,7 +300,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
     @Override
     public void onDestroy() {
-        FetcherService.getStatusText().deleteObserver(mStatusText);
+        FetcherService.Status().deleteObserver(mStatusText);
         super.onDestroy();
     }
     @Override
@@ -492,19 +494,19 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
                 case R.id.menu_reload_full_text: {
 
-                    int status = FetcherService.getStatusText().Start("Reload fulltext"); try {
+                    int status = FetcherService.Status().Start("Reload fulltext"); try {
                         DeleteMobilized();
                         LoadFullText( ArticleTextExtractor.Mobilize.Yes );
-                    } finally { FetcherService.getStatusText().End( status ); }
+                    } finally { FetcherService.Status().End( status ); }
                     break;
                 }
 
                 case R.id.menu_reload_full_text_without_mobilizer: {
 
-                    int status = FetcherService.getStatusText().Start("Reload fulltext"); try {
+                    int status = FetcherService.Status().Start("Reload fulltext"); try {
                         DeleteMobilized();
                         LoadFullText( ArticleTextExtractor.Mobilize.No );
-                    } finally { FetcherService.getStatusText().End( status ); }
+                    } finally { FetcherService.Status().End( status ); }
                     break;
                 }
 
@@ -540,8 +542,8 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
             return -1;
     }
 
-    public void setData(Uri uri) {
-        //Dog.v( String.format( "EntryFragment.setData( %s )", uri.toString() ) );
+    public void setData(final Uri uri) {
+        Dog.v( String.format( "EntryFragment.setData( %s )", uri.toString() ) );
 
         mCurrentPagerPos = -1;
 
@@ -583,52 +585,71 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         if (mCurrentPagerPos != -1) {
             mEntryPager.setCurrentItem(mCurrentPagerPos);
         }
+		if ( mBaseUri.getPathSegments().size() > 1 ) {
+			Dog.v( "EntryFragment.setData() mBaseUri.getPathSegments[1] = " + mBaseUri.getPathSegments().get(1) );
+			if ( mBaseUri.getPathSegments().get(1).equals( String.valueOf( FetcherService.GetExtrenalLinkFeedID() ) ) ) {
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						Dog.v( "EntryFragment.setData() update time to current" );
+						ContentResolver cr = MainApplication.getContext().getContentResolver();
+						ContentValues values = new ContentValues();
+						values.put(EntryColumns.DATE, (new Date()).getTime());
+						cr.update(uri, values, null, null);
+					}
+				}).start();
+			}
+		}
     }
 
     private void refreshUI(Cursor entryCursor) {
-        if (entryCursor != null) {
-            String feedTitle = entryCursor.isNull(mFeedNamePos) ? entryCursor.getString(mFeedUrlPos) : entryCursor.getString(mFeedNamePos);
-            EntryActivity activity = (EntryActivity) getActivity();
-            activity.setTitle("");//activity.setTitle(feedTitle);
+		try {
+			if (entryCursor != null ) {
+				String feedTitle = entryCursor.isNull(mFeedNamePos) ? entryCursor.getString(mFeedUrlPos) : entryCursor.getString(mFeedNamePos);
+				EntryActivity activity = (EntryActivity) getActivity();
+				activity.setTitle("");//activity.setTitle(feedTitle);
 
-            mFavorite = entryCursor.getInt(mIsFavoritePos) == 1;
-            activity.invalidateOptionsMenu();
+				mFavorite = entryCursor.getInt(mIsFavoritePos) == 1;
+				activity.invalidateOptionsMenu();
 
-            // Listen the mobilizing task
+				// Listen the mobilizing task
 
-            if (FetcherService.hasMobilizationTask(getCurrentEntryID())) {
-                //--showSwipeProgress();
+				if (FetcherService.hasMobilizationTask(getCurrentEntryID())) {
+					//--showSwipeProgress();
 
-                // If the service is not started, start it here to avoid an infinite loading
-                if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-                    MainApplication.getContext().startService(new Intent(MainApplication.getContext(),
-                                                                         FetcherService.class)
-                                                              .setAction(FetcherService.ACTION_MOBILIZE_FEEDS));
-                }
-            } else {
-                //--hideSwipeProgress();
-            }
-            //refreshSwipeProgress();
+					// If the service is not started, start it here to avoid an infinite loading
+					if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+						MainApplication.getContext().startService(new Intent(MainApplication.getContext(),
+																			 FetcherService.class)
+																  .setAction(FetcherService.ACTION_MOBILIZE_FEEDS));
+					}
+				} else {
+					//--hideSwipeProgress();
+				}
+				//refreshSwipeProgress();
 
-            // Mark the previous opened article as read
-            //if (entryCursor.getInt(mIsReadPos) != 1) {
-            if ( !mMarkAsUnreadOnFinish && mLastPagerPos != -1 && mEntryPagerAdapter.getCursor(mLastPagerPos).getInt(mIsReadPos) != 1 ) {
-                final Uri uri = ContentUris.withAppendedId(mBaseUri, mEntriesIds[mLastPagerPos]);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ContentResolver cr = MainApplication.getContext().getContentResolver();
-                        cr.update(uri, FeedData.getReadContentValues(), null, null);
+				// Mark the previous opened article as read
+				//if (entryCursor.getInt(mIsReadPos) != 1) {
+				if ( !mMarkAsUnreadOnFinish && mLastPagerPos != -1 && mEntryPagerAdapter.getCursor(mLastPagerPos).getInt(mIsReadPos) != 1 ) {
+					final Uri uri = ContentUris.withAppendedId(mBaseUri, mEntriesIds[mLastPagerPos]);
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							ContentResolver cr = MainApplication.getContext().getContentResolver();
+							cr.update(uri, FeedData.getReadContentValues(), null, null);
 
-                        // Update the cursor
-                        Cursor updatedCursor = cr.query(uri, null, null, null, null);
-                        updatedCursor.moveToFirst();
-                        mEntryPagerAdapter.setUpdatedCursor(mLastPagerPos, updatedCursor);
-                    }
-                }).start();
-            }
-        }
-    }
+							// Update the cursor
+							Cursor updatedCursor = cr.query(uri, null, null, null, null);
+							updatedCursor.moveToFirst();
+							mEntryPagerAdapter.setUpdatedCursor(mLastPagerPos, updatedCursor);
+						}
+					}).start();
+				}
+			}
+		} catch ( IllegalStateException e ) {
+			e.printStackTrace();
+		}
+	}
 
     private void showEnclosure(Uri uri, String enclosure, int position1, int position2) {
         try {
@@ -700,9 +721,9 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
             new Thread() {
                 @Override
                 public void run() {
-                    int status = FetcherService.getStatusText().Start(getActivity().getString(R.string.loadFullText)); try {
+                    int status = FetcherService.Status().Start(getActivity().getString(R.string.loadFullText)); try {
                         FetcherService.mobilizeEntry(getContext().getContentResolver(), getCurrentEntryID(), mobilize, FetcherService.AutoDownloadEntryImages.Yes);
-                    } finally { FetcherService.getStatusText().End( status ); }
+                    } finally { FetcherService.Status().End( status ); }
                 }
             }.start();
 
@@ -788,13 +809,13 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                 @Override
                 public void run() {
                     FetcherService.mCancelRefresh = false;
-                    int status = FetcherService.getStatusText().Start( getString(R.string.downloadImage) ); try {
+                    int status = FetcherService.Status().Start( getString(R.string.downloadImage) ); try {
                         NetworkUtils.downloadImage(getCurrentEntryID(), url, false);
                     } catch (IOException e) {
-                        //FetcherService.getStatusText().End( status );
+                        //FetcherService.Status().End( status );
                         e.printStackTrace();
                     } finally {
-                        FetcherService.getStatusText().End( status );
+                        FetcherService.Status().End( status );
                     }
 
                 }

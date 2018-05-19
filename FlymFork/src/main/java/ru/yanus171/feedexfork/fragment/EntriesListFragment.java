@@ -100,7 +100,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             String entriesOrder = PrefUtils.getBoolean(PrefUtils.DISPLAY_OLDEST_FIRST, false) || mShowTextInEntryList ? Constants.DB_ASC : Constants.DB_DESC;
             String where = "(" + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + ')';
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, null, where, null, EntryColumns.DATE + entriesOrder);
+            String[] projection = mShowTextInEntryList ? null : EntryColumns.PROJECTION_WITHOUT_TEXT;
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, projection, where, null, EntryColumns.DATE + entriesOrder);
             cursorLoader.setUpdateThrottle(150);
             return cursorLoader;
         }
@@ -278,7 +279,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_entry_list, container, true);
         new StatusText( (TextView)rootView.findViewById( R.id.statusText1 ),
-                        FetcherService.getStatusText()/*,
+                        FetcherService.Status()/*,
                         this*/);
 
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);

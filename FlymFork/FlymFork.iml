@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":FlymFork" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" external.system.module.group="FlymYan" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":FlymFork" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
@@ -8,11 +8,11 @@
     </facet>
     <facet type="android" name="Android">
       <configuration>
-        <option name="SELECTED_BUILD_VARIANT" value="release_debugkey" />
-        <option name="ASSEMBLE_TASK_NAME" value="assembleRelease_debugkey" />
-        <option name="COMPILE_JAVA_TASK_NAME" value="compileRelease_debugkeySources" />
+        <option name="SELECTED_BUILD_VARIANT" value="releaseDebugkey" />
+        <option name="ASSEMBLE_TASK_NAME" value="assembleReleaseDebugkey" />
+        <option name="COMPILE_JAVA_TASK_NAME" value="compileReleaseDebugkeySources" />
         <afterSyncTasks>
-          <task>generateRelease_debugkeySources</task>
+          <task>generateReleaseDebugkeySources</task>
         </afterSyncTasks>
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
@@ -23,32 +23,32 @@
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7">
-    <output url="file://$MODULE_DIR$/build/intermediates/classes/release_debugkey" />
-    <output-test url="file://$MODULE_DIR$/build/intermediates/classes/test/release_debugkey" />
+    <output url="file://$MODULE_DIR$/build/intermediates/classes/releaseDebugkey" />
+    <output-test url="file://$MODULE_DIR$/build/intermediates/classes/test/releaseDebugkey" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/release_debugkey" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/release_debugkey" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/release_debugkey" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/release_debugkey" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/release_debugkey" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/release_debugkey" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/release_debugkey" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/test/release_debugkey" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/release_debugkey/res" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/release_debugkey/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/release_debugkey/assets" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/release_debugkey/aidl" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/release_debugkey/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/release_debugkey/rs" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/release_debugkey/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testRelease_debugkey/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testRelease_debugkey/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testRelease_debugkey/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testRelease_debugkey/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testRelease_debugkey/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testRelease_debugkey/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testRelease_debugkey/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/releaseDebugkey" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/releaseDebugkey" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/releaseDebugkey" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/releaseDebugkey" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/releaseDebugkey" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/releaseDebugkey" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/releaseDebugkey" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/test/releaseDebugkey" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/releaseDebugkey/res" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/releaseDebugkey/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/releaseDebugkey/assets" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/releaseDebugkey/aidl" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/releaseDebugkey/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/releaseDebugkey/rs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/releaseDebugkey/shaders" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testReleaseDebugkey/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testReleaseDebugkey/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testReleaseDebugkey/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testReleaseDebugkey/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testReleaseDebugkey/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testReleaseDebugkey/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testReleaseDebugkey/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/assets" type="java-resource" />
@@ -77,6 +77,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaPrecompile" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/lint" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/merged-not-compiled-resources" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/prebuild" />
@@ -87,35 +88,38 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/shaders" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/splits-support" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
-    <orderEntry type="jdk" jdkName="Android API 25 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android API 26 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="com.android.support:support-vector-drawable-23.2.1" level="project" />
-    <orderEntry type="library" name="com.squareup.okhttp3:okhttp:3.10.0@jar" level="project" />
-    <orderEntry type="library" name="com.squareup.okio:okio:1.14.0@jar" level="project" />
-    <orderEntry type="library" name="com.google.android.gms:play-services-gcm-11.0.4" level="project" />
-    <orderEntry type="library" name="com.android.support:support-core-utils-25.2.0" level="project" />
-    <orderEntry type="library" name="com.google.android.gms:play-services-tasks-11.0.4" level="project" />
-    <orderEntry type="library" name="com.android.support:animated-vector-drawable-23.2.1" level="project" />
-    <orderEntry type="library" name="com.android.support:support-core-ui-25.2.0" level="project" />
-    <orderEntry type="library" name="com.android.support:design-23.2.1" level="project" />
-    <orderEntry type="library" name="com.android.support:appcompat-v7-23.2.1" level="project" />
-    <orderEntry type="library" name="com.google.android.gms:play-services-iid-11.0.4" level="project" />
-    <orderEntry type="library" name="com.android.support:support-media-compat-25.2.0" level="project" />
-    <orderEntry type="library" name="com.amulyakhare:com.amulyakhare.textdrawable-1.0.1" level="project" />
-    <orderEntry type="library" name="com.android.support:support-compat-25.2.0" level="project" />
-    <orderEntry type="library" name="com.android.support:support-annotations:25.2.0@jar" level="project" />
-    <orderEntry type="library" name="com.google.android.gms:play-services-basement-11.0.4" level="project" />
-    <orderEntry type="library" name="org.jsoup:jsoup:1.10.3@jar" level="project" />
-    <orderEntry type="library" name="com.github.bumptech.glide:glide:3.6.1@jar" level="project" />
-    <orderEntry type="library" name="com.squareup.okhttp3:okhttp-urlconnection:3.10.0@jar" level="project" />
-    <orderEntry type="library" name="com.android.support:support-v4-25.2.0" level="project" />
-    <orderEntry type="library" name="com.android.support:recyclerview-v7-23.2.1" level="project" />
-    <orderEntry type="library" name="com.google.android.gms:play-services-base-11.0.4" level="project" />
-    <orderEntry type="library" name="com.android.support:support-fragment-25.2.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-vector-drawable-23.2.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-basement-15.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:recyclerview-v7-23.2.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.bumptech.glide:glide:3.6.1@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.amulyakhare:com.amulyakhare.textdrawable-1.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-fragment-26.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: android.arch.core:common:1.0.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:design-23.2.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-media-compat-26.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-annotations:26.1.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-base-15.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-v4-26.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-gcm-15.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-compat-26.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.14.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.10.3@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp-urlconnection:3.10.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: android.arch.lifecycle:common:1.0.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-core-ui-26.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-stats-15.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:appcompat-v7-23.2.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-core-utils-26.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.10.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-iid-15.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable-23.2.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tasks-15.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: android.arch.lifecycle:runtime-1.0.0" level="project" />
   </component>
 </module>

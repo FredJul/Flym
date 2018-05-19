@@ -377,6 +377,7 @@ public class RssAtomParser extends DefaultHandler {
 
                 if (mTitle != null && (mEntryDate == null || (mEntryDate.after(mRealLastUpdateDate) /*&& mEntryDate.after(mKeepDateBorder)*/))) {
                     ContentValues values = new ContentValues();
+                    values.put(EntryColumns.SCROLL_POS, 0);
 
                     if (mEntryDate != null && mEntryDate.getTime() > mNewRealLastUpdate) {
                         mNewRealLastUpdate = mEntryDate.getTime();
@@ -658,7 +659,7 @@ public class RssAtomParser extends DefaultHandler {
             }
 
         } catch (  Exception e ) {
-            FetcherService.getStatusText().SetError( e.getMessage(), e );
+            FetcherService.Status().SetError( e.getMessage(), e );
             Dog.e("Error", e);
         }
 
@@ -674,72 +675,74 @@ public class RssAtomParser extends DefaultHandler {
         super.endDocument();
     }
 
-    private class FeedFilters {
 
-        private final ArrayList<Rule> mFilters = new ArrayList<>();
+}
 
-        public FeedFilters(String feedId) {
-            ContentResolver cr = MainApplication.getContext().getContentResolver();
-            Cursor c = cr.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), new String[]{FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
-                    FilterColumns.IS_APPLIED_TO_TITLE, FilterColumns.IS_ACCEPT_RULE}, null, null, null);
-            while (c.moveToNext()) {
-                Rule r = new Rule();
-                r.filterText = c.getString(0);
-                r.isRegex = c.getInt(1) == 1;
-                r.isAppliedToTitle = c.getInt(2) == 1;
-                r.isAcceptRule = c.getInt(3) == 1;
-                mFilters.add(r);
-            }
-            c.close();
+class FeedFilters {
 
+    private final ArrayList<Rule> mFilters = new ArrayList<>();
+
+    public FeedFilters(String feedId) {
+        ContentResolver cr = MainApplication.getContext().getContentResolver();
+        Cursor c = cr.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), new String[]{FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
+                FilterColumns.IS_APPLIED_TO_TITLE, FilterColumns.IS_ACCEPT_RULE}, null, null, null);
+        while (c.moveToNext()) {
+            Rule r = new Rule();
+            r.filterText = c.getString(0);
+            r.isRegex = c.getInt(1) == 1;
+            r.isAppliedToTitle = c.getInt(2) == 1;
+            r.isAcceptRule = c.getInt(3) == 1;
+            mFilters.add(r);
         }
+        c.close();
 
-        public boolean isEntryFiltered(String title, String author, String url, String content) {
+    }
 
-            boolean isFiltered = false;
+    public boolean isEntryFiltered(String title, String author, String url, String content) {
 
-            for (Rule r : mFilters) {
+        boolean isFiltered = false;
 
-                boolean isMatch = false;
-                if (r.isRegex) {
-                    Pattern p = Pattern.compile(r.filterText);
-                    if (r.isAppliedToTitle) {
-                        Matcher mT = p.matcher(title);
-                        Matcher mA = p.matcher(author);
-                        Matcher mU = p.matcher(url);
-                        isMatch = mT.find() || mA.find() || mU.find();
-                    } else if (content != null) {
-                        Matcher m = p.matcher(content);
-                        isMatch = m.find();
-                    }
-                } else if ((r.isAppliedToTitle && ( title.contains(r.filterText) || author.contains(r.filterText) || url.contains(r.filterText) )) ||
-                           (!r.isAppliedToTitle && content != null && content.contains(r.filterText))) {
-                    isMatch = true;
+        for (Rule r : mFilters) {
+
+            boolean isMatch = false;
+            if (r.isRegex) {
+                Pattern p = Pattern.compile(r.filterText);
+                if (r.isAppliedToTitle) {
+                    Matcher mT = p.matcher(title);
+                    Matcher mA = p.matcher(author);
+                    Matcher mU = p.matcher(url);
+                    isMatch = mT.find() || mA.find() || mU.find();
+                } else if (content != null) {
+                    Matcher m = p.matcher(content);
+                    isMatch = m.find();
                 }
+            } else if ((r.isAppliedToTitle && ( title.contains(r.filterText) || author.contains(r.filterText) || url.contains(r.filterText) )) ||
+                    (!r.isAppliedToTitle && content != null && content.contains(r.filterText))) {
+                isMatch = true;
+            }
 
-                if (r.isAcceptRule) {
-                    if (isMatch) {
+            if (r.isAcceptRule) {
+                if (isMatch) {
 
-                        isFiltered = false;
-                        //break; // accept rules override reject rules, the rest of the rules must be ignored
-                    } else {
-                        isFiltered = true;
-                        break;
-                    }
-                } else if (isMatch) {
+                    isFiltered = false;
+                    //break; // accept rules override reject rules, the rest of the rules must be ignored
+                } else {
                     isFiltered = true;
-                    break;// // no break, there might be an accept rule later
+                    break;
                 }
+            } else if (isMatch) {
+                isFiltered = true;
+                break;// // no break, there might be an accept rule later
             }
-
-            return isFiltered;
         }
 
-        private class Rule {
-            public String filterText;
-            public boolean isRegex;
-            public boolean isAppliedToTitle;
-            public boolean isAcceptRule;
-        }
+        return isFiltered;
+    }
+
+    private class Rule {
+        public String filterText;
+        public boolean isRegex;
+        public boolean isAppliedToTitle;
+        public boolean isAcceptRule;
     }
 }

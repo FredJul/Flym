@@ -178,7 +178,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         mHandler = new Handler();
-        FetcherService.getStatusText().setHandler(mHandler);
+        FetcherService.Status().setHandler(mHandler);
     }
 
     private void CloseDrawer() {
@@ -212,7 +212,10 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        FetcherService.OpenExternalLink(text.substring(m.start(), m.end()), text.substring(0, m.start()), HomeActivity.this);
+                        FetcherService.OpenLink( FetcherService.LoadLink( FetcherService.GetExtrenalLinkFeedID(),
+                                                 text.substring(m.start(), m.end()),
+                                                 text.substring(0, m.start()),
+                                                 FetcherService.ForceReload.No ), HomeActivity.this );
                     }
                 }).start();
 
@@ -221,7 +224,11 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    FetcherService.OpenExternalLink(intent.getDataString(), intent.getDataString(), HomeActivity.this);
+                FetcherService.OpenLink( FetcherService.LoadLink( FetcherService.GetExtrenalLinkFeedID(),
+                                                                  intent.getDataString(),
+                                                                  intent.getDataString(),
+                                                                  FetcherService.ForceReload.No),
+                                         HomeActivity.this );
                 }
             }).start();
         else if (PrefUtils.getBoolean(PrefUtils.REMEBER_LAST_ENTRY, true)) {

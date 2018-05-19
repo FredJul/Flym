@@ -113,7 +113,7 @@ public class NetworkUtils {
                             final int cStep = 1024 * 10;
                             byte[] buffer = new byte[2048];
                             int bufferLength;
-                            FetcherService.getStatusText().ChangeProgress(getProgressText(bytesRecieved));
+                            FetcherService.Status().ChangeProgress(getProgressText(bytesRecieved));
                             while (!FetcherService.isCancelRefresh() && (bufferLength = inputStream.read(buffer)) > 0) {
                                 if (isSizeLimit && size > maxImageDownloadSize) {
                                     abort = true;
@@ -124,11 +124,11 @@ public class NetworkUtils {
                                 progressBytes += bufferLength;
                                 if (progressBytes >= cStep) {
                                     progressBytes = 0;
-                                    FetcherService.getStatusText().ChangeProgress(getProgressText(bytesRecieved));
+                                    FetcherService.Status().ChangeProgress(getProgressText(bytesRecieved));
                                 }
                             }
                             success = true;
-                            FetcherService.getStatusText().AddBytes(bytesRecieved);
+                            FetcherService.Status().AddBytes(bytesRecieved);
 
                         } finally {
                             inputStream.close();
@@ -217,7 +217,7 @@ public class NetworkUtils {
 
         int n;
         while ((n = inputStream.read(buffer)) > 0) {
-            FetcherService.getStatusText().AddBytes( n );
+            FetcherService.Status().AddBytes( n );
             output.write(buffer, 0, n);
         }
 
@@ -269,7 +269,7 @@ public class NetworkUtils {
 
     public static HttpURLConnection setupConnection(URL url) throws IOException {
         HttpURLConnection connection;
-        FetcherService.getStatusText().ChangeProgress(R.string.setupConnection);
+        FetcherService.Status().ChangeProgress(R.string.setupConnection);
 
         connection = new OkUrlFactory(new OkHttpClient()).open(url);
 
@@ -284,7 +284,7 @@ public class NetworkUtils {
 
         COOKIE_MANAGER.getCookieStore().removeAll(); // Cookie is important for some sites, but we clean them each times
         connection.connect();
-        FetcherService.getStatusText().ChangeProgress("");
+        FetcherService.Status().ChangeProgress("");
         return connection;
     }
 

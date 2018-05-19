@@ -165,7 +165,7 @@ public class StatusText implements Observer {
             if ( e != null )
                 e.printStackTrace();
             synchronized ( mList ) {
-                mErrorText = mErrorText == null ? "" : text;
+                mErrorText = mErrorText == null ? "" : text + "\n" + e.getCause() + "\n" + e.getLocalizedMessage();
             }
             UpdateText();
         }
