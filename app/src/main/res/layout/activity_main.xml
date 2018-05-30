@@ -23,8 +23,8 @@
         android:fitsSystemWindows="true">
 
         <include
-            layout="@layout/view_main_header"
-            android:id="@+id/include"
+            layout="@layout/view_main_drawer_header"
+            android:id="@+id/drawer_header"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -35,8 +35,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add_white_24dp"
             android:layout_marginTop="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/include"
-            app:layout_constraintBottom_toBottomOf="@+id/include"
+            app:layout_constraintTop_toBottomOf="@+id/drawer_header"
+            app:layout_constraintBottom_toBottomOf="@+id/drawer_header"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp" />
 
@@ -45,7 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scrollbars="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/include"
+            app:layout_constraintTop_toBottomOf="@+id/drawer_header"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="0dp"
             app:layout_constraintEnd_toEndOf="parent"

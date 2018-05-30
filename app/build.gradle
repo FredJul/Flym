@@ -119,8 +119,8 @@ dependencies {
 	implementation 'com.github.mirrajabi:search-dialog:1.2.1'
 	implementation 'com.github.jrvansuita:MaterialAbout:0.2.3'
 	implementation 'q.rorbin:badgeview:1.1.3'
-	implementation 'com.lucasurbas:listitemview:1.1.0'
 	implementation 'net.dankito.readability4j:readability4j:1.0'
 	implementation 'pub.devrel:easypermissions:1.2.0'
 	implementation 'com.rometools:rome-opml:1.9.0'
+	implementation 'com.github.isabsent:filepicker:1.1.01'
 }

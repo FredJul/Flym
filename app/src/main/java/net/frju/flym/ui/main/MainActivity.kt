@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
 import android.text.Html
 import android.widget.EditText
+import com.github.isabsent.filepicker.SimpleFilePickerDialog
 import com.rometools.opml.feed.opml.Opml
 import com.rometools.rome.io.WireFeedInput
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
@@ -23,6 +24,7 @@ import ir.mirrajabi.searchdialog.core.SearchResultListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_entries.*
 import kotlinx.android.synthetic.main.view_main_containers.*
+import kotlinx.android.synthetic.main.view_main_drawer_header.*
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
@@ -54,7 +56,7 @@ import java.net.URLEncoder
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), MainNavigator {
+class MainActivity : AppCompatActivity(), MainNavigator, SimpleFilePickerDialog.InteractionListenerInt {
 
     companion object {
         const val EXTRA_FROM_NOTIF = "EXTRA_FROM_NOTIF"
@@ -72,7 +74,8 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
         private val GNEWS_TOPIC_CODE = arrayOf("", "WORLD", "BUSINESS", "SCITECH", "ENTERTAINMENT", "SPORTS", "HEALTH")
 
-        private const val PERMISSION_REQUEST_CODE = 1
+        private const val AUTO_IMPORT_OPML_REQUEST_CODE = 1
+        private const val CHOOSE_OPML_REQUEST_CODE = 2
         private val NEEDED_PERMS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
 
@@ -87,6 +90,25 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
         setContentView(R.layout.activity_main)
 
+        more.onClick {
+            it?.let {
+                PopupMenu(this@MainActivity, it).apply {
+                    menuInflater.inflate(R.menu.drawer_header, menu)
+                    setOnMenuItemClickListener {
+                        when (it.itemId) {
+                            R.id.import_feeds -> {
+                                pickOpml()
+                            }
+                            R.id.export_feeds -> {
+                                // TODO
+                            }
+                        }
+                        true
+                    }
+                    show()
+                }
+            }
+        }
         nav.layoutManager = LinearLayoutManager(this)
         nav.adapter = feedAdapter
 
@@ -260,11 +282,40 @@ class MainActivity : AppCompatActivity(), MainNavigator {
     private fun isOldFlymAppInstalled() =
             packageManager.getInstalledApplications(PackageManager.GET_META_DATA).any { it.packageName == "net.fred.feedex" }
 
-    @AfterPermissionGranted(PERMISSION_REQUEST_CODE)
+
+    override fun onResult(dialogTag: String, which: Int, extras: Bundle): Boolean {
+
+        return true
+    }
+
+    override fun showListItemDialog(titleResId: Int, folderPath: String?, mode: SimpleFilePickerDialog.CompositeMode?, dialogTag: String?) {
+        pickOpml()
+    }
+
+    @AfterPermissionGranted(CHOOSE_OPML_REQUEST_CODE)
+    private fun pickOpml() {
+        if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
+            EasyPermissions.requestPermissions(this, getString(R.string.welcome_title_with_opml_import),
+                    CHOOSE_OPML_REQUEST_CODE, *NEEDED_PERMS)
+        } else {
+//                                val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+//                                    addCategory(Intent.CATEGORY_OPENABLE)
+//                                    type = "*/*"
+//                                }
+//                                val chooserIntent = Intent.createChooser(intent, getString(R.string.select_file))
+//                                startActivityForResult(chooserIntent, CHOOSE_FILE_REQUEST_CODE)
+
+            SimpleFilePickerDialog.build(Environment.getExternalStorageDirectory().absolutePath, SimpleFilePickerDialog.CompositeMode.FILE_ONLY_DIRECT_CHOICE_IMMEDIATE)
+                    .title(R.string.add_group_title)
+                    .show(this, "pick file")
+        }
+    }
+
+    @AfterPermissionGranted(AUTO_IMPORT_OPML_REQUEST_CODE)
     private fun importOpml() {
         if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
             EasyPermissions.requestPermissions(this, getString(R.string.welcome_title_with_opml_import),
-                    PERMISSION_REQUEST_CODE, *NEEDED_PERMS)
+                    AUTO_IMPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
         } else {
             if (BACKUP_OPML.exists()) {
                 doAsync {
