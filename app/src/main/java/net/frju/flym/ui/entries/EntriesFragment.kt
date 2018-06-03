@@ -33,6 +33,7 @@ import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
+import org.jetbrains.anko.uiThread
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
 import java.util.*
@@ -147,17 +148,15 @@ class EntriesFragment : Fragment() {
 							entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
 								App.db.entryDao().markAsUnread(it)
 							}
+
+							uiThread {
+								// we need to wait for the list to be empty before displaying the new items (to avoid scrolling issues)
+								listDisplayDate = Date().time
+								initDataObservers()
+							}
 						}
 					}
 				}
-
-				// If we will display a totally new list, we need to go back to the first position
-				if (unreadBadge?.badgeNumber ?: 0 > 0 && bottom_navigation.selectedItemId == R.id.unreads) {
-					recycler_view.scrollToPosition(0)
-				}
-
-				listDisplayDate = Date().time
-				initDataObservers()
 
 				if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
 					activity?.notificationManager?.cancel(0)
