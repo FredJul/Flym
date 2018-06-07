@@ -389,7 +389,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 					globalResult += f.get()
 				} catch (ignored: Exception) {
 				}
-
 			}
 
 			executor.shutdownNow() // To purge observeAll threads

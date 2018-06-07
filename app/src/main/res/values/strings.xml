@@ -31,6 +31,7 @@
     <string name="no_result">No result</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>

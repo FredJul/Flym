@@ -41,6 +41,7 @@
     <string name="no_result">Aucun résultat</string>
     <string name="drawer_open">Ouvrir menu de navigation</string>
     <string name="drawer_close">Fermer menu de navigation</string>
+    <string name="drawer_explanation">Bienvenue !\n\nAppuyez longtemps sur les flux pour voir les options ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Flux</string>
