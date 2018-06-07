@@ -10,8 +10,9 @@ class EntryDetailsActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 
 		if (savedInstanceState == null) {
-			val fragment = EntryDetailsFragment()
-			fragment.arguments = intent.extras
+			val fragment = EntryDetailsFragment().apply {
+				arguments = intent.extras
+			}
 
 			supportFragmentManager
 					.beginTransaction()

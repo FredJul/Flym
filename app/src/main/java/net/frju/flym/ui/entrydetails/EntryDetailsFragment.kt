@@ -34,9 +34,9 @@ class EntryDetailsFragment : Fragment() {
 		const val ARG_ALL_ENTRIES_IDS = "ARG_ALL_ENTRIES_IDS"
 
 		fun newInstance(entry: EntryWithFeed, allEntryIds: List<String>): EntryDetailsFragment {
-			val fragment = EntryDetailsFragment()
-			fragment.arguments = bundleOf(ARG_ENTRY to entry, ARG_ALL_ENTRIES_IDS to allEntryIds)
-			return fragment
+			return EntryDetailsFragment().apply {
+				arguments = bundleOf(ARG_ENTRY to entry, ARG_ALL_ENTRIES_IDS to allEntryIds)
+			}
 		}
 	}
 

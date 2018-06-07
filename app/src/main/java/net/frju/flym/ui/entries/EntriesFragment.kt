@@ -50,11 +50,11 @@ class EntriesFragment : Fragment() {
 		private const val STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE"
 
 		fun newInstance(feed: Feed?): EntriesFragment {
-			val fragment = EntriesFragment()
-			feed?.let {
-				fragment.arguments = bundleOf(ARG_FEED to feed)
+            return EntriesFragment().apply {
+                feed?.let {
+                    arguments = bundleOf(ARG_FEED to feed)
+                }
 			}
-			return fragment
 		}
 	}
 

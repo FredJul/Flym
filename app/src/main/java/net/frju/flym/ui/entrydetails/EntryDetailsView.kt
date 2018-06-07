@@ -35,47 +35,48 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import net.fred.feedex.R
 import net.frju.flym.data.entities.EntryWithFeed
+import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.utils.FILE_SCHEME
 import net.frju.flym.utils.HtmlUtils
 import net.frju.flym.utils.UTF8
-import net.frju.flym.data.utils.PrefUtils
 import java.io.File
 import java.io.IOException
+
+private const val TEXT_HTML = "text/html"
+private const val HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>"
+private const val BACKGROUND_COLOR = "#2B2B2B"
+private const val QUOTE_BACKGROUND_COLOR = "#383b3f"
+private const val QUOTE_LEFT_COLOR = "#686b6f"
+private const val TEXT_COLOR = "#C0C0C0"
+private const val SUBTITLE_COLOR = "#8c8c8c"
+private const val SUBTITLE_BORDER_COLOR = "solid #303030"
+private const val CSS = "<head><style type='text/css'> " +
+        "body {max-width: 100%; margin: 0.3cm; font-family: sans-serif-light; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 150%} " +
+        "* {max-width: 100%; word-break: break-word}" +
+        "h1, h2 {font-weight: normal; line-height: 130%} " +
+        "h1 {font-size: 170%; margin-bottom: 0.1em} " +
+        "h2 {font-size: 140%} " +
+        "a {color: #0099CC}" +
+        "h1 a {color: inherit; text-decoration: none}" +
+        "img {height: auto} " +
+        "pre {white-space: pre-wrap;} " +
+        "blockquote {border-left: thick solid " + QUOTE_LEFT_COLOR + "; background-color:" + QUOTE_BACKGROUND_COLOR + "; margin: 0.5em 0 0.5em 0em; padding: 0.5em} " +
+        "p {margin: 0.8em 0 0.8em 0} " +
+        "p.subtitle {color: " + SUBTITLE_COLOR + "; border-top:1px " + SUBTITLE_BORDER_COLOR + "; border-bottom:1px " + SUBTITLE_BORDER_COLOR + "; padding-top:2px; padding-bottom:2px; font-weight:800 } " +
+        "ul, ol {margin: 0 0 0.8em 0.6em; padding: 0 0 0 1em} " +
+        "ul li, ol li {margin: 0 0 0.8em 0; padding: 0} " +
+        "</style><meta name='viewport' content='width=device-width'/></head>"
+private const val BODY_START = "<body>"
+private const val BODY_END = "</body>"
+private const val TITLE_START = "<h1><a href='"
+private const val TITLE_MIDDLE = "'>"
+private const val TITLE_END = "</a></h1>"
+private const val SUBTITLE_START = "<p class='subtitle'>"
+private const val SUBTITLE_END = "</p>"
 
 
 class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : WebView(context, attrs, defStyleAttr) {
 
-    private val TEXT_HTML = "text/html"
-    private val HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>"
-    private val BACKGROUND_COLOR = "#2B2B2B"
-    private val QUOTE_BACKGROUND_COLOR = "#383b3f"
-    private val QUOTE_LEFT_COLOR = "#686b6f"
-    private val TEXT_COLOR = "#C0C0C0"
-    private val SUBTITLE_COLOR = "#8c8c8c"
-    private val SUBTITLE_BORDER_COLOR = "solid #303030"
-    private val CSS = "<head><style type='text/css'> " +
-            "body {max-width: 100%; margin: 0.3cm; font-family: sans-serif-light; color: " + TEXT_COLOR + "; background-color:" + BACKGROUND_COLOR + "; line-height: 150%} " +
-            "* {max-width: 100%; word-break: break-word}" +
-            "h1, h2 {font-weight: normal; line-height: 130%} " +
-            "h1 {font-size: 170%; margin-bottom: 0.1em} " +
-            "h2 {font-size: 140%} " +
-            "a {color: #0099CC}" +
-            "h1 a {color: inherit; text-decoration: none}" +
-            "img {height: auto} " +
-            "pre {white-space: pre-wrap;} " +
-            "blockquote {border-left: thick solid " + QUOTE_LEFT_COLOR + "; background-color:" + QUOTE_BACKGROUND_COLOR + "; margin: 0.5em 0 0.5em 0em; padding: 0.5em} " +
-            "p {margin: 0.8em 0 0.8em 0} " +
-            "p.subtitle {color: " + SUBTITLE_COLOR + "; border-top:1px " + SUBTITLE_BORDER_COLOR + "; border-bottom:1px " + SUBTITLE_BORDER_COLOR + "; padding-top:2px; padding-bottom:2px; font-weight:800 } " +
-            "ul, ol {margin: 0 0 0.8em 0.6em; padding: 0 0 0 1em} " +
-            "ul li, ol li {margin: 0 0 0.8em 0; padding: 0} " +
-            "</style><meta name='viewport' content='width=device-width'/></head>"
-    private val BODY_START = "<body>"
-    private val BODY_END = "</body>"
-    private val TITLE_START = "<h1><a href='"
-    private val TITLE_MIDDLE = "'>"
-    private val TITLE_END = "</a></h1>"
-    private val SUBTITLE_START = "<p class='subtitle'>"
-    private val SUBTITLE_END = "</p>"
 
     init {
         // For scrolling

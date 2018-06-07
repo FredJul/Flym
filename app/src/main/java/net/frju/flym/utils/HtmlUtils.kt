@@ -42,7 +42,7 @@ object HtmlUtils {
             .addAttributes("source", "src", "type")
             .addAttributes("track", "src", "kind", "srclang", "label")
 
-    private val URL_SPACE = "%20"
+    private const val URL_SPACE = "%20"
 
     private val IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE)
     private val ADS_PATTERN = Pattern.compile("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", Pattern.CASE_INSENSITIVE)

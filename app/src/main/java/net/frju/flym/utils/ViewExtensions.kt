@@ -15,12 +15,10 @@ fun View.onLaidOut(runnable: () -> Unit) {
     val observer = viewTreeObserver
     observer.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
         override fun onGlobalLayout() {
-            val trueObserver: ViewTreeObserver
-
-            if (observer.isAlive) {
-                trueObserver = observer
+            val trueObserver = if (observer.isAlive) {
+                observer
             } else {
-                trueObserver = viewTreeObserver
+                viewTreeObserver
             }
 
             trueObserver.removeOnGlobalLayoutListener(this)

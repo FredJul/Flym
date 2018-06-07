@@ -5,13 +5,7 @@ import android.content.Context
 import org.jetbrains.anko.connectivityManager
 import org.jetbrains.anko.inputMethodManager
 
-fun Context.isOnline(): Boolean {
-	val netInfo = connectivityManager.activeNetworkInfo
-	if (netInfo != null && netInfo.isConnectedOrConnecting) {
-		return true
-	}
-	return false
-}
+fun Context.isOnline() = connectivityManager.activeNetworkInfo?.isConnectedOrConnecting == true
 
 fun Activity.closeKeyboard() {
 	currentFocus?.let {

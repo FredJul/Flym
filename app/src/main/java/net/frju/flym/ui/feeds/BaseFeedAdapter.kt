@@ -129,8 +129,7 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 		override fun shouldItemViewClickToggleExpansion(): Boolean = false
 	}
 
-	inner class FeedViewHolder(itemView: View)
-		: ChildViewHolder<Feed>(itemView) {
+	inner class FeedViewHolder(itemView: View) : ChildViewHolder<Feed>(itemView) {
 
 		fun bindItem(feed: Feed) {
 			itemView.title.text = feed.title
