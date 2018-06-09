@@ -65,7 +65,7 @@
     <string name="tab_feed_title">Fuente</string>
     <string name="tab_filters_title">Filtros</string>
     <string name="feed_title">TÍTULO</string>
-    <string name="feed_filters">FILTROS DE EXCLUSIÓN</string>
+    <string name="feed_filters">FILTROS</string>
     <string name="filter_add_title">Añadir filtro</string>
     <string name="filter_delete_title">Eliminar filtro</string>
     <string name="filter_edit_title">Editar filtro</string>

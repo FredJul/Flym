@@ -161,6 +161,7 @@ public class FeedData {
         public static final String IS_REGEX = "isregex";
         public static final String IS_APPLIED_TO_TITLE = "isappliedtotitle";
         public static final String IS_ACCEPT_RULE = "isacceptrule";
+        public static final String IS_MARK_STARRED = "ismarkstarred";
 
         public static Uri FILTERS_FOR_FEED_CONTENT_URI(String feedId) {
             return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/filters");
@@ -171,7 +172,7 @@ public class FeedData {
         }
 
         public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {FEED_ID, TYPE_EXTERNAL_ID}, {FILTER_TEXT, TYPE_TEXT},
-                {IS_REGEX, TYPE_BOOLEAN}, {IS_APPLIED_TO_TITLE, TYPE_BOOLEAN}, {IS_ACCEPT_RULE, TYPE_BOOLEAN}};
+                {IS_REGEX, TYPE_BOOLEAN}, {IS_APPLIED_TO_TITLE, TYPE_BOOLEAN}, {IS_ACCEPT_RULE, TYPE_BOOLEAN}, {IS_MARK_STARRED, TYPE_BOOLEAN}};
 
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/filters");
     }

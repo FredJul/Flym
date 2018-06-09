@@ -44,13 +44,13 @@
 
 package ru.yanus171.feedexfork.parser;
 
-import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.text.Html;
 import android.text.TextUtils;
+import android.util.Pair;
 
 
 import org.jsoup.Jsoup;
@@ -58,92 +58,152 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.service.MarkItem;
 import ru.yanus171.feedexfork.utils.ArticleTextExtractor;
 
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 
 import ru.yanus171.feedexfork.utils.Dog;
-
+import ru.yanus171.feedexfork.utils.NetworkUtils;
 
 
 public class HTMLParser {
-	static public void parse( long feedID, String feedUrl, String content ) {
-		if (!TextUtils.isEmpty(content)) {
-
+	static public int Parse(String feedID, String feedUrl ) {
+		//if (!TextUtils.isEmpty(content)) {
+		int result = 0;
             FetcherService.Status().ChangeProgress( "Loading main page");
 
-            Uri uriMainEntry = FetcherService.LoadLink( feedID, feedUrl, "", FetcherService.ForceReload.Yes );
+		/* check and optionally find favicon */
+		try {
+			NetworkUtils.retrieveFavicon(MainApplication.getContext(), new URL(feedUrl), feedID);
+		} catch (Throwable ignored) {
+		}
+
+
+		HttpURLConnection connection = null;
+		Document doc = null;
+		try {
+			connection = NetworkUtils.setupConnection(feedUrl);
+			doc = Jsoup.parse(connection.getInputStream(), null, "");
+		} catch (Exception e) {
+			FetcherService.Status().SetError( e.getLocalizedMessage(), e );
+		} finally {
+			if (connection != null)
+				connection.disconnect();
+		}
+
+		Uri uriMainEntry = FetcherService.LoadLink( feedID, feedUrl, "", FetcherService.ForceReload.Yes, true).first;
             
-			ContentResolver cr = MainApplication.getContext().getContentResolver();
+		ContentResolver cr = MainApplication.getContext().getContentResolver();
+		{
 			Cursor cursor = cr.query(uriMainEntry, new String[]{EntryColumns.TITLE}, null, null, null);
-            if (cursor.moveToFirst()) {
+			if (cursor.moveToFirst()) {
 				ContentValues values = new ContentValues();
-				values.put( FeedColumns.NAME, cursor.getString( 0 ) );
-				cr.update( FeedColumns.CONTENT_URI( feedID ), values, FeedColumns.NAME + Constants.DB_IS_NULL, null );
+				values.put(FeedColumns.NAME, cursor.getString(0));
+				cr.update(FeedColumns.CONTENT_URI(feedID), values, FeedColumns.NAME + Constants.DB_IS_NULL, null);
 			}
 			cursor.close();
+		}
+		FeedFilters filters = new FeedFilters(String.valueOf( feedID ) );
 
-			FeedFilters filters = new FeedFilters(String.valueOf( feedID ) );
-
-			Document doc = Jsoup.parse(content);
-            content  = ArticleTextExtractor.extractContent(doc, feedUrl, null, ArticleTextExtractor.Mobilize.Yes);
-            doc = Jsoup.parse(content);
-            Elements list = doc.select("a");
-            final Pattern BASE_URL = Pattern.compile("(http|https).\\/\\/[^\\/]+\\/");
-			for ( Element el : list ) {
-				if ( FetcherService.isCancelRefresh() )
+		class Item {
+			public String mUrl;
+			public String mCaption;
+			public Item( String url, String caption ){
+				mUrl = url;
+				mCaption = caption;
+			}
+		}
+		ArrayList<Item> listItem = new ArrayList<Item>();
+		String content = ArticleTextExtractor.extractContent(doc, feedUrl, null, ArticleTextExtractor.MobilizeType.Yes, false);
+		doc = Jsoup.parse(content);
+		{
+			Elements list = doc.select("a");
+			final Pattern BASE_URL = Pattern.compile("(http|https).\\/\\/[^/]+\\/");
+			for (Element el : list) {
+				if (FetcherService.isCancelRefresh())
 					break;
-				int status = FetcherService.Status().Start(String.format( "Loading page %d/%d", list.indexOf( el ) + 1, list.size() ) ); try {
-					String link = el.attr("href");
-					//Dog.v("link = " + link);
-					Matcher matcher = BASE_URL.matcher(link);
-                    if ( !matcher.find() ) {
-                        matcher = BASE_URL.matcher(feedUrl);
-                        if ( matcher.find() ) {
-                            link = matcher.group() + link;
-                        }
-                    }
-					//Dog.v("link2 = " + link);
-					if ( link.endsWith( ".pdf" ) )
-						continue;
+				String link = el.attr("href");
+				Dog.v("link before = " + link);
+				Matcher matcher = BASE_URL.matcher(link);
+				if (!matcher.find()) {
+					matcher = BASE_URL.matcher(feedUrl);
+					if (matcher.find()) {
+						link = matcher.group() + link;
+						link = link.replace( "//", "/" );
+					}
+				}
+				Dog.v("link after = " + link);
+				if (link.endsWith(".pdf") || link.endsWith(".epub") || link.endsWith(".doc")  || link.endsWith(".docx"))
+					continue;
 
-					if( filters.isEntryFiltered(el.text(), "", link, "" ) )
-						continue;
+				if (filters.isEntryFiltered(el.text(), "", link, ""))
+					continue;
 
-					FetcherService.LoadLink(feedID, link, el.text(), FetcherService.ForceReload.No);
-				} finally { FetcherService.Status().End(status); }
-			}
-			synchronized ( FetcherService.mCancelRefresh ) {
-				FetcherService.mCancelRefresh = false;
-			}
+				listItem.add(new Item(link, el.text()));
 
-			{
-				ContentValues values = new ContentValues();
-				values.put( FeedColumns.LAST_UPDATE, System.currentTimeMillis() );
-				cr.update( FeedColumns.CONTENT_URI( feedID ), values, null, null );
 			}
-			{
-				ContentValues values = new ContentValues();
-				values.put( EntryColumns.DATE, System.currentTimeMillis() );
-				values.put( EntryColumns.SCROLL_POS, 0 );
-				values.putNull( EntryColumns.IS_READ );
-				cr.update( uriMainEntry, values, null, null );
-			}
-			// img in a tag
-            /*Matcher matcher = Pattern.compile("<a href=[^>]+>(.)+?</a>").matcher(content);
-            while ( matcher.find() ) {
-				Document doc = Jsoup.parse(matcher.group(), null, "");
-                //String link = matcher.group().replace( "<a href=\"", "" );
-				FetcherService.OpenExternalLink( link, intent.getStringExtra( Constants.TITLE_TO_LOAD ), null  );
-            }*/
+		}
+		for ( Item item: listItem ) {
+			if ( FetcherService.isCancelRefresh() )
+				break;
+			int status = FetcherService.Status().Start(String.format( "Loading page %d/%d", listItem.indexOf( item ) + 1, listItem.size() ) ); try {
+				Pair<Uri, Boolean> load = FetcherService.LoadLink(feedID, item.mUrl, item.mCaption, FetcherService.ForceReload.No, true);
+				Uri uri = load.first;
+				if ( load.second ) {
+					result++;
+					Cursor cursor = cr.query(uri, new String[]{EntryColumns.TITLE, EntryColumns.AUTHOR}, null, null, null);
+					cursor.moveToFirst();
 
-        }	
+					if (filters.isMarkAsStarred(cursor.getString(0), cursor.getString(1), item.mUrl, "")) {
+						FetcherService.mMarkAsStarredFoundList.add( new MarkItem( cursor.getString(0), item.mUrl ) );
+						{
+							ContentValues values = new ContentValues();
+							values.put(EntryColumns.IS_FAVORITE, 1);
+							cr.update(uri, values, null, null);
+						}
+
+					}
+					cursor.close();
+
+				}
+			} finally { FetcherService.Status().End(status); }
+		}
+		synchronized ( FetcherService.mCancelRefresh ) {
+			FetcherService.mCancelRefresh = false;
+		}
+
+		{
+			ContentValues values = new ContentValues();
+			values.put( FeedColumns.LAST_UPDATE, System.currentTimeMillis() );
+			cr.update( FeedColumns.CONTENT_URI( feedID ), values, null, null );
+		}
+		{
+			ContentValues values = new ContentValues();
+			values.put( EntryColumns.DATE, System.currentTimeMillis() );
+			values.put( EntryColumns.SCROLL_POS, 0 );
+			values.putNull( EntryColumns.IS_READ );
+			cr.update( uriMainEntry, values, null, null );
+		}
+		// img in a tag
+		/*Matcher matcher = Pattern.compile("<a href=[^>]+>(.)+?</a>").matcher(content);
+		while ( matcher.find() ) {
+			Document doc = Jsoup.Parse(matcher.group(), null, "");
+			//String link = matcher.group().replace( "<a href=\"", "" );
+			FetcherService.OpenExternalLink( link, intent.getStringExtra( Constants.TITLE_TO_LOAD ), null  );
+		}*/
+
+
+		return result;
 	}
 }

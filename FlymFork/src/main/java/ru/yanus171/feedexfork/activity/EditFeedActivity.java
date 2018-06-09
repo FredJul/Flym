@@ -59,7 +59,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -77,7 +80,6 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -141,6 +143,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                         final RadioButton applyTitleRadio = (RadioButton) dialogView.findViewById(R.id.applyTitleRadio);
                         final RadioButton applyContentRadio = (RadioButton) dialogView.findViewById(R.id.applyContentRadio);
                         final RadioButton acceptRadio = (RadioButton) dialogView.findViewById(R.id.acceptRadio);
+                        final RadioButton markAsStarredRadio = (RadioButton) dialogView.findViewById(R.id.markAsStarredRadio);
                         final RadioButton rejectRadio = (RadioButton) dialogView.findViewById(R.id.rejectRadio);
 
                         filterText.setText(c.getString(c.getColumnIndex(FilterColumns.FILTER_TEXT)));
@@ -150,7 +153,9 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                         } else {
                             applyContentRadio.setChecked(true);
                         }
-                        if (c.getInt(c.getColumnIndex(FilterColumns.IS_ACCEPT_RULE)) == 1) {
+                        if (c.getInt(c.getColumnIndex(FilterColumns.IS_MARK_STARRED)) == 1) {
+                            markAsStarredRadio.setChecked(true);
+                        } else if (c.getInt(c.getColumnIndex(FilterColumns.IS_ACCEPT_RULE)) == 1) {
                             acceptRadio.setChecked(true);
                         } else {
                             rejectRadio.setChecked(true);
@@ -174,6 +179,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                                                     values.put(FilterColumns.IS_REGEX, regexCheckBox.isChecked());
                                                     values.put(FilterColumns.IS_APPLIED_TO_TITLE, applyTitleRadio.isChecked());
                                                     values.put(FilterColumns.IS_ACCEPT_RULE, acceptRadio.isChecked());
+                                                    values.put(FilterColumns.IS_MARK_STARRED, markAsStarredRadio.isChecked());
                                                     if (cr.update(FilterColumns.CONTENT_URI, values, FilterColumns._ID + '=' + filterId, null) > 0) {
                                                         cr.notifyChange(
                                                                 FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
@@ -267,7 +273,34 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         });
         View tabWidget = findViewById(android.R.id.tabs);
 
+        mIsAutoRefreshCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mIsAutoImageLoadCb.setEnabled( b );
+            }
+        });
+        mIsAutoRefreshCb.setChecked( false );
         mIsAutoRefreshCb.setVisibility(  PrefUtils.getBoolean( PrefUtils.REFRESH_ONLY_SELECTED, false ) ? View.VISIBLE : View.GONE );
+
+        mUrlEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String text = charSequence.toString();
+                boolean isRss = FetcherService.isRss( text );
+                boolean isUrl = text.startsWith( "http://" ) || text.startsWith( "https://" );
+                mRetrieveFulltextCb.setEnabled( !isUrl || isRss );
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         mTabHost.setup();
         mTabHost.addTab(mTabHost.newTabSpec("feedTab").setIndicator(getString(R.string.tab_feed_title)).setContent(R.id.feed_tab));
@@ -540,12 +573,18 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                         }
                     });
                 } else {
-                    FeedDataContentProvider.addFeed(EditFeedActivity.this,
-                                                    urlOrSearch,
-                                                    name,
-                                                    mHasGroupCb.isChecked() ? mGroupSpinner.getSelectedItemId() : null,
-                                                    mRetrieveFulltextCb.isChecked(),
-                                                    mShowTextInEntryListCb.isChecked());
+                    Uri newFeedUri =
+                        FeedDataContentProvider.addFeed(EditFeedActivity.this,
+                                                        urlOrSearch,
+                                                        name,
+                                                        mHasGroupCb.isChecked() ? mGroupSpinner.getSelectedItemId() : null,
+                                                        mRetrieveFulltextCb.isChecked(),
+                                                        mShowTextInEntryListCb.isChecked());
+
+                    EditFeedActivity.this.startService(new Intent(EditFeedActivity.this, FetcherService.class)
+                            .setAction(FetcherService.ACTION_REFRESH_FEEDS)
+                            .putExtra(Constants.FEED_ID, newFeedUri.getLastPathSegment()) );
+                    HomeActivity.mNewFeedUri = newFeedUri;
 
                     setResult(RESULT_OK);
                     finish();
@@ -569,6 +608,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                                     values.put(FilterColumns.IS_REGEX, ((CheckBox) dialogView.findViewById(R.id.regexCheckBox)).isChecked());
                                     values.put(FilterColumns.IS_APPLIED_TO_TITLE, ((RadioButton) dialogView.findViewById(R.id.applyTitleRadio)).isChecked());
                                     values.put(FilterColumns.IS_ACCEPT_RULE, ((RadioButton) dialogView.findViewById(R.id.acceptRadio)).isChecked());
+                                    values.put(FilterColumns.IS_MARK_STARRED, ((RadioButton) dialogView.findViewById(R.id.markAsStarredRadio)).isChecked());
 
                                     ContentResolver cr = getContentResolver();
                                     cr.insert(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), values);

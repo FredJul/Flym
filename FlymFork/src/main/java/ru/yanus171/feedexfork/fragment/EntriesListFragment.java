@@ -160,9 +160,15 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
                     uriMatch != FeedDataContentProvider.URI_FAVORITES);
         }
 
+        boolean isCanRefresh = !EntryColumns.FAVORITES_CONTENT_URI.equals( mCurrentUri );
+        if ( mCurrentUri != null && mCurrentUri.getPathSegments().size() > 1 ) {
+            String feedID = mCurrentUri.getPathSegments().get(1);
+            isCanRefresh = !feedID.equals(FetcherService.GetExtrenalLinkFeedID());
+        }
         boolean isRefresh = PrefUtils.getBoolean( PrefUtils.IS_REFRESHING, false );
         mMenu.findItem(R.id.menu_cancel_refresh).setVisible( isRefresh );
-        mMenu.findItem(R.id.menu_refresh).setVisible( !isRefresh );
+        mMenu.findItem(R.id.menu_refresh).setVisible( !isRefresh && isCanRefresh );
+
 
         if ( mProgressBar != null ) {
             if (isRefresh)
@@ -526,8 +532,23 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
                 return true;
             }
             case R.id.menu_delete_all: {
-                if ( FeedDataContentProvider.URI_MATCHER.match(mCurrentUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED )
-                    FetcherService.deleteAllFeedEntries( mCurrentUri.getPathSegments().get(1) );
+                if ( FeedDataContentProvider.URI_MATCHER.match(mCurrentUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED ) {
+                    new AlertDialog.Builder(getContext()) //
+                            .setIcon(android.R.drawable.ic_dialog_alert) //
+                            .setTitle( R.string.question ) //
+                            .setMessage( R.string.deleteAllEntries ) //
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    new Thread() {
+                                        @Override
+                                        public void run() {
+                                            FetcherService.deleteAllFeedEntries(mCurrentUri.getPathSegments().get(1));
+                                        }
+                                    }.start();
+                                }
+                            }).setNegativeButton(android.R.string.no, null).show();
+                }
                 return true;
             }
             case R.id.menu_mark_all_as_read: {

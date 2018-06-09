@@ -63,19 +63,19 @@
     </string>
     <string name="feed_url">URL-адрес</string>
     <string name="optional">(не обязательно)</string>
-    <string name="website_or_feed">(сайта или ленты новостей)</string>
+    <string name="website_or_feed">(ленты новостей, или сайта для загрузки всех ссылок)</string>
     <string name="tab_feed_title">Ленту</string>
     <string name="tab_filters_title">Фильтры</string>
     <string name="feed_title">НАЗВАНИЕ</string>
-    <string name="feed_filters">ФИЛЬТРЫ ИСКЛЮЧЕНИЙ</string>
+    <string name="feed_filters">Правила фильтров</string>
     <string name="filter_add_title">Добавить фильтр</string>
     <string name="filter_delete_title">Удалить фильтр</string>
     <string name="filter_edit_title">Редактировать фильтр</string>
     <string name="filter_is_regex">это регулярное выражение</string>
     <string name="filter_apply_to_title">Применить к заголовкам или адресам</string>
     <string name="filter_apply_to_content">Применить к содержанию</string>
-    <string name="accept">ACCEPT</string>
-    <string name="reject">REJECT</string>
+    <string name="accept">Загружать только</string>
+    <string name="reject">Не загружать</string>
     <string name="feed_search">Поиск лент</string>
     <string name="select_file">Выбрать файл (корень SD-карты)</string>
     <string name="question_delete_feed">Вы действительно хотите удалить эту ленту?</string>
@@ -380,5 +380,16 @@
     <string name="new_feed_was_added">Добавлена новая лента</string>
     <string name="entry_marked_unread">Статья отмечена как непрочитанная</string>
     <string name="lock_orientation">Горизонтальная ориентацию</string>
+    <string name="markAsStarred">Поместить в избранное</string>
+    <string name="markedAsStarred">Статья помечена избранной</string>
+    <string name="deleteAllEntries">Удалить все неотмеченные статьи?</string>
+    <string name="question">Вопрос</string>
+    <string name="settings_entry_margins">Отступы</string>
+    <string name="settings_entry_margins_description">по бокам</string>
+    <string name="entry_text_align_justify">Выравнивать по содержимому</string>
+    <string name="entry_text_align_justify_description">иначе по левому краю</string>
+    <string name="reload_full_text_with_tags">Перезагрузить с разметкой</string>
+    <string name="filter_hint">Все фильтры объединяются по ИЛИ. Загружать перевешивает Не загружать</string>
+    <string name="keyword">Ключевое слово</string>
 
 </resources>

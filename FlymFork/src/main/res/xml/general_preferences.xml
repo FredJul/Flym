@@ -191,6 +191,18 @@
             android:summary="@string/settings_remeber_last_entry_description"
             android:title="@string/settings_remember_last_entry"/>
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="entry_margins"
+            android:summary="@string/settings_entry_margins_description"
+            android:title="@string/settings_entry_margins"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="entry_text_align_justify"
+            android:summary="@string/entry_text_align_justify_description"
+            android:title="@string/entry_text_align_justify"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory

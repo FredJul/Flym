@@ -67,7 +67,7 @@
     <string name="tab_feed_title">Flux</string>
     <string name="tab_filters_title">Filtres</string>
     <string name="feed_title">TITRE</string>
-    <string name="feed_filters">FILTRES D\'EXCLUSION</string>
+    <string name="feed_filters">FILTRES </string>
     <string name="filter_add_title">Ajouter un filtre</string>
     <string name="filter_delete_title">Supprimer un filtre</string>
     <string name="filter_edit_title">Éditer le filtre</string>

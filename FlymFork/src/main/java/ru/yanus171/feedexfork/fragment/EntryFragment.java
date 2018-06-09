@@ -496,7 +496,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
                     int status = FetcherService.Status().Start("Reload fulltext"); try {
                         DeleteMobilized();
-                        LoadFullText( ArticleTextExtractor.Mobilize.Yes );
+                        LoadFullText( ArticleTextExtractor.MobilizeType.Yes );
                     } finally { FetcherService.Status().End( status ); }
                     break;
                 }
@@ -505,7 +505,16 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
                     int status = FetcherService.Status().Start("Reload fulltext"); try {
                         DeleteMobilized();
-                        LoadFullText( ArticleTextExtractor.Mobilize.No );
+                        LoadFullText( ArticleTextExtractor.MobilizeType.No );
+                    } finally { FetcherService.Status().End( status ); }
+                    break;
+                }
+
+                case R.id.menu_reload_full_text_with_tags: {
+
+                    int status = FetcherService.Status().Start("Reload fulltext"); try {
+                        DeleteMobilized();
+                        LoadFullText( ArticleTextExtractor.MobilizeType.Tags );
                     } finally { FetcherService.Status().End( status ); }
                     break;
                 }
@@ -587,7 +596,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         }
 		if ( mBaseUri.getPathSegments().size() > 1 ) {
 			Dog.v( "EntryFragment.setData() mBaseUri.getPathSegments[1] = " + mBaseUri.getPathSegments().get(1) );
-			if ( mBaseUri.getPathSegments().get(1).equals( String.valueOf( FetcherService.GetExtrenalLinkFeedID() ) ) ) {
+			if ( mBaseUri.getPathSegments().get(1).equals( FetcherService.GetExtrenalLinkFeedID() ) ) {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -704,11 +713,11 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                 }
             });
         } else /*--if (!isRefreshing())*/ {
-            LoadFullText( ArticleTextExtractor.Mobilize.Yes );
+            LoadFullText( ArticleTextExtractor.MobilizeType.Yes );
         }
     }
 
-    private void LoadFullText(final ArticleTextExtractor.Mobilize mobilize ) {
+    private void LoadFullText(final ArticleTextExtractor.MobilizeType mobilize ) {
         final BaseActivity activity = (BaseActivity) getActivity();
         ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -722,7 +731,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                 @Override
                 public void run() {
                     int status = FetcherService.Status().Start(getActivity().getString(R.string.loadFullText)); try {
-                        FetcherService.mobilizeEntry(getContext().getContentResolver(), getCurrentEntryID(), mobilize, FetcherService.AutoDownloadEntryImages.Yes);
+                        FetcherService.mobilizeEntry(getContext().getContentResolver(), getCurrentEntryID(), mobilize, FetcherService.AutoDownloadEntryImages.Yes, true, true);
                     } finally { FetcherService.Status().End( status ); }
                 }
             }.start();
@@ -846,32 +855,37 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (mBaseUri != null && cursor != null) { // can be null if we do a setData(null) before
-            cursor.moveToFirst();
+            try {
+                cursor.moveToFirst();
 
-            if (mTitlePos == -1) {
-                mTitlePos = cursor.getColumnIndex(EntryColumns.TITLE);
-                mDatePos = cursor.getColumnIndex(EntryColumns.DATE);
-                mAbstractPos = cursor.getColumnIndex(EntryColumns.ABSTRACT);
-                mMobilizedHtmlPos = cursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
-                mLinkPos = cursor.getColumnIndex(EntryColumns.LINK);
-                mIsFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
-                mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
-                mEnclosurePos = cursor.getColumnIndex(EntryColumns.ENCLOSURE);
-                mAuthorPos = cursor.getColumnIndex(EntryColumns.AUTHOR);
-                mScrollPosPos = cursor.getColumnIndex(EntryColumns.SCROLL_POS);
-                mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
-                mFeedUrlPos = cursor.getColumnIndex(FeedColumns.URL);
-                mFeedIconPos = cursor.getColumnIndex(FeedColumns.ICON);
-            }
+                if (mTitlePos == -1) {
+                    mTitlePos = cursor.getColumnIndex(EntryColumns.TITLE);
+                    mDatePos = cursor.getColumnIndex(EntryColumns.DATE);
+                    mAbstractPos = cursor.getColumnIndex(EntryColumns.ABSTRACT);
+                    mMobilizedHtmlPos = cursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
+                    mLinkPos = cursor.getColumnIndex(EntryColumns.LINK);
+                    mIsFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
+                    mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
+                    mEnclosurePos = cursor.getColumnIndex(EntryColumns.ENCLOSURE);
+                    mAuthorPos = cursor.getColumnIndex(EntryColumns.AUTHOR);
+                    mScrollPosPos = cursor.getColumnIndex(EntryColumns.SCROLL_POS);
+                    mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
+                    mFeedUrlPos = cursor.getColumnIndex(FeedColumns.URL);
+                    mFeedIconPos = cursor.getColumnIndex(FeedColumns.ICON);
+                }
 
-            int position = loader.getId();
-            if (position != -1) {
-                FetcherService.mMaxImageDownloadCount = PrefUtils.getImageDownloadCount();
-                mEntryPagerAdapter.displayEntry(position, cursor, false);
+                int position = loader.getId();
+                if (position != -1) {
+                    FetcherService.mMaxImageDownloadCount = PrefUtils.getImageDownloadCount();
+                    mEntryPagerAdapter.displayEntry(position, cursor, false);
 
-                EntryActivity activity = (EntryActivity) getActivity();
-                if (getBoolean(DISPLAY_ENTRIES_FULLSCREEN, false))
-                    activity.setFullScreen(true, true);
+                    EntryActivity activity = (EntryActivity) getActivity();
+                    if (getBoolean(DISPLAY_ENTRIES_FULLSCREEN, false))
+                        activity.setFullScreen(true, true);
+                }
+            } catch ( IllegalStateException e ) {
+                FetcherService.Status().SetError( e.getMessage(), e );
+                Dog.e("Error", e);
             }
         }
     }

@@ -19,6 +19,7 @@
 
 package ru.yanus171.feedexfork.utils;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -230,6 +231,14 @@ public class NetworkUtils {
 
     public static void retrieveFavicon(Context context, URL url, String id) {
         boolean success = false;
+
+        ContentResolver cr = context.getContentResolver();
+        Cursor cursor  = cr.query(FeedData.FeedColumns.CONTENT_URI( id ), new String[] {FeedData.FeedColumns.ICON}, null, null, null  ); try {
+            if (!cursor.moveToFirst() || cursor.getBlob(cursor.getColumnIndex( FeedData.FeedColumns.ICON )) != null )
+                return;
+        } finally {
+            cursor.close();
+        }
         HttpURLConnection iconURLConnection = null;
 
         try {

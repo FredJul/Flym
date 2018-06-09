@@ -66,7 +66,7 @@
     <string name="tab_feed_title">Feed</string>
     <string name="tab_filters_title">Filtri</string>
     <string name="feed_title">TITOLO</string>
-    <string name="feed_filters">REGOLE FILTRO</string>
+    <string name="feed_filters">FILTRO</string>
     <string name="filter_add_title">Aggiungi filtro</string>
     <string name="filter_delete_title">Elimina filtro</string>
     <string name="filter_edit_title">Modifica filtro</string>

@@ -67,6 +67,8 @@ import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
 
+import static ru.yanus171.feedexfork.provider.FeedData.EntryColumns.FAVORITES_CONTENT_URI;
+
 public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
@@ -215,7 +217,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                         FetcherService.OpenLink( FetcherService.LoadLink( FetcherService.GetExtrenalLinkFeedID(),
                                                  text.substring(m.start(), m.end()),
                                                  text.substring(0, m.start()),
-                                                 FetcherService.ForceReload.No ), HomeActivity.this );
+                                                 FetcherService.ForceReload.No,
+                                true).first, HomeActivity.this );
                     }
                 }).start();
 
@@ -227,11 +230,14 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 FetcherService.OpenLink( FetcherService.LoadLink( FetcherService.GetExtrenalLinkFeedID(),
                                                                   intent.getDataString(),
                                                                   intent.getDataString(),
-                                                                  FetcherService.ForceReload.No),
+                                                                  FetcherService.ForceReload.No,
+                                                                  true  ).first,
                                          HomeActivity.this );
                 }
             }).start();
-        else if (PrefUtils.getBoolean(PrefUtils.REMEBER_LAST_ENTRY, true)) {
+        else if (intent.getData() != null && intent.getData().equals( FAVORITES_CONTENT_URI ) ) {
+            selectDrawerItem( 2 );
+        } else if (PrefUtils.getBoolean(PrefUtils.REMEBER_LAST_ENTRY, true)) {
             String lastUri = PrefUtils.getString(PrefUtils.LAST_ENTRY_URI, "");
             if (!lastUri.isEmpty() && !lastUri.contains("-1"))
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(lastUri)));
@@ -404,7 +410,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 newUri = EntryColumns.CONTENT_URI;
                 break;
             case 2:
-                newUri = EntryColumns.FAVORITES_CONTENT_URI;
+                newUri = FAVORITES_CONTENT_URI;
                 break;
             case 3:
                 newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI( FetcherService.GetExtrenalLinkFeedID() );

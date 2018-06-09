@@ -106,7 +106,7 @@ public class EntryView extends WebView implements Observer {
     private static final String SUBTITLE_COLOR = PrefUtils.IsLightTheme() ? "#666666" : "#8c8c8c";
     private static final String SUBTITLE_BORDER_COLOR = PrefUtils.IsLightTheme() ? "solid #ddd" : "solid #303030";
     public static String GetCSS() { return "<head><style type='text/css'> "
-            + "body {max-width: 100%; margin: 0.1cm; text-align:justify; font-weight: " + getFontBold() + " color: " + GetTextColor() + "; background-color:" + BACKGROUND_COLOR + "; line-height: 120%} "
+            + "body {max-width: 100%; margin: " + getMargins() + "; text-align:" + getAlign() + "; font-weight: " + getFontBold() + " color: " + GetTextColor() + "; background-color:" + BACKGROUND_COLOR + "; line-height: 120%} "
             + "* {max-width: 100%; word-break: break-word}"
             + "h1, h2 {font-weight: normal; line-height: 130%} "
             + "h1 {font-size: 170%; text-align:center; margin-bottom: 0.1em} "
@@ -132,6 +132,20 @@ public class EntryView extends WebView implements Observer {
             return "bold;";
         else
             return "normal;";
+    }
+
+    private static String getMargins() {
+        if ( PrefUtils.getBoolean( PrefUtils.ENTRY_MAGRINS, true ) )
+            return "4%";
+        else
+            return "0.1cm";
+    }
+
+    private static String getAlign() {
+        if ( PrefUtils.getBoolean( PrefUtils.ENTRY_TEXT_ALIGN_JUSTIFY, false ) )
+            return "justify";
+        else
+            return "left";
     }
 
     private static final String BODY_START = "<body>";

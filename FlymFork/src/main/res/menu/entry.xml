@@ -50,6 +50,10 @@
         android:icon="@drawable/refresh"
         android:title="@string/menu_reload_full_text_without_mobilizer"/>
     <item
+        android:id="@+id/menu_reload_full_text_with_tags"
+        android:icon="@drawable/refresh"
+        android:title="@string/reload_full_text_with_tags"/>
+    <item
         android:id="@+id/menu_load_all_images"
         android:title="@string/menu_load_all_images"/>
     <item

@@ -61,7 +61,7 @@
     <string name="error_external_storage_not_available">The external storage (e.g. SD-card) is not available.</string>
     <string name="feed_url">URL address</string>
     <string name="optional">(optional)</string>
-    <string name="website_or_feed">(website or feed)</string>
+    <string name="website_or_feed">(feed or webpage to download all links)</string>
     <string name="tab_feed_title">Feed</string>
     <string name="tab_filters_title">Filter</string>
     <string name="feed_title">TITLE</string>
@@ -204,7 +204,7 @@
     <string name="settings_max_image_download_count_description">per one entity</string>
     <string name="downloadNext">"Download next "</string>
     <string name="loadingLink">Loading link</string>
-    <string name="loadLink">Reed</string>
+    <string name="loadLink">Read</string>
     <string name="loadLinkLater">Read later</string>
     <string name="addFeed">Add feed</string>
     <string name="externalLinks">External links</string>
@@ -249,6 +249,17 @@
     <string name="new_feed_was_added">New feed was added</string>
     <string name="entry_marked_unread">The article was marked as unread</string>
     <string name="lock_orientation">Landscape orientation</string>
+    <string name="markAsStarred">Mark as starred</string>
+    <string name="markedAsStarred">The entry was marked as starred: </string>
+    <string name="deleteAllEntries">Delete all feed non starred entries</string>
+    <string name="question">Question</string>
+    <string name="settings_entry_margins">Margins</string>
+    <string name="settings_entry_margins_description">left|right</string>
+    <string name="entry_text_align_justify">Text align justify</string>
+    <string name="entry_text_align_justify_description">otherwise align left</string>
+    <string name="reload_full_text_with_tags">Reload with tags</string>
+    <string name="filter_hint">All filters are connected by OR. Accept rules override reject rules</string>
+    <string name="keyword">keyword</string>
 
 
     <plurals name="number_of_new_entries">

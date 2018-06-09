@@ -100,7 +100,7 @@
         <activity
             android:name=".activity.EntryActivity"
             android:configChanges="orientation|screenSize"
-            android:parentActivityName=".HomeActivity"
+            android:parentActivityName=".activity.HomeActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>

@@ -133,7 +133,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         view.findViewById(R.id.text2hor).setVisibility(View.GONE);
         view.findViewById(android.R.id.text2).setVisibility(View.GONE);
 
-        final long feedId = cursor.getLong(mFeedIdPos);
+        final String feedId = cursor.getString(mFeedIdPos);
         //final long entryID = cursor.getLong(mIdPos);
 
         if (view.getTag(R.id.holder) == null) {
@@ -361,7 +361,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         holder.dateTextView.setEnabled(isUnread);
         holder.urlTextView.setEnabled(isUnread);
 
-        final boolean showUrl = PrefUtils.getBoolean( "settings_show_article_url", false ) || feedId == FetcherService.GetExtrenalLinkFeedID();
+        final boolean showUrl = PrefUtils.getBoolean( "settings_show_article_url", false ) || feedId.equals( FetcherService.GetExtrenalLinkFeedID() );
         holder.urlTextView.setVisibility( showUrl ? View.VISIBLE : View.GONE );
 
         holder.isRead = !isUnread;
