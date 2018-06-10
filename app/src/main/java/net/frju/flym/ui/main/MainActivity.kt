@@ -14,10 +14,13 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
 import android.text.Html
+import android.webkit.URLUtil
 import android.widget.EditText
 import com.github.isabsent.filepicker.SimpleFilePickerDialog
 import com.rometools.opml.feed.opml.Opml
+import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.WireFeedInput
+import com.rometools.rome.io.XmlReader
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
 import ir.mirrajabi.searchdialog.core.BaseFilter
 import ir.mirrajabi.searchdialog.core.SearchResultListener
@@ -42,7 +45,6 @@ import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
-import okhttp3.Request
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.json.JSONObject
@@ -452,35 +454,45 @@ class MainActivity : AppCompatActivity(), MainNavigator, SimpleFilePickerDialog.
 
                 if (charSequence.isNotEmpty()) {
                     try {
-                        @Suppress("DEPRECATION")
-                        val request = Request.Builder()
-                                .url("https://cloud.feedly.com/v3/search/feeds?count=20&locale=" + resources.configuration.locale.language + "&query=" + URLEncoder.encode(charSequence.toString(), "UTF-8"))
-                                .build()
-                        FetcherService.HTTP_CLIENT.newCall(request).execute().use {
-                            it.body()?.let { body ->
-                                val jsonStr = body.string()
+                        val searchStr = charSequence.toString()
 
-                                // Parse results
-                                val entries = JSONObject(jsonStr).getJSONArray("results")
-                                for (i in 0 until entries.length()) {
-                                    try {
-                                        val entry = entries.get(i) as JSONObject
-                                        val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
-                                        if (!url.isEmpty()) {
-                                            @Suppress("DEPRECATION")
-                                            array.add(
-                                                    SearchFeedResult(url,
-                                                            Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString(),
-                                                            Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString()))
+                        if (URLUtil.isNetworkUrl(searchStr)) {
+                            FetcherService.createCall(searchStr).execute().use { response ->
+                                val romeFeed = SyndFeedInput().build(XmlReader(response.body()!!.byteStream()))
+
+                                array.add(SearchFeedResult(searchStr, romeFeed.title, romeFeed.description))
+                            }
+                        } else {
+                            @Suppress("DEPRECATION")
+                            val searchUrl = "https://cloud.feedly.com/v3/search/feeds?count=20&locale=" + resources.configuration.locale.language + "&query=" + URLEncoder.encode(searchStr, "UTF-8")
+                            FetcherService.createCall(searchUrl).execute().use {
+                                it.body()?.let { body ->
+                                    val jsonStr = body.string()
+
+                                    // Parse results
+                                    val entries = JSONObject(jsonStr).getJSONArray("results")
+                                    for (i in 0 until entries.length()) {
+                                        try {
+                                            val entry = entries.get(i) as JSONObject
+                                            val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
+                                            if (!url.isEmpty()) {
+                                                @Suppress("DEPRECATION")
+                                                array.add(
+                                                        SearchFeedResult(url,
+                                                                Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString(),
+                                                                Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString()))
+                                            }
+                                        } catch (ignored: Throwable) {
                                         }
-                                    } catch (ignored: Throwable) {
                                     }
                                 }
                             }
                         }
                     } catch (ignored: Throwable) {
                     }
-                } else {
+                }
+
+                if (array.isEmpty()) {
                     array.addAll(defaultFeeds)
                 }
 

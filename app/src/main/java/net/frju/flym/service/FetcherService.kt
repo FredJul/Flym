@@ -82,6 +82,7 @@ import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.ui.main.MainActivity
 import net.frju.flym.utils.HtmlUtils
 import net.frju.flym.utils.sha1
+import okhttp3.Call
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -109,7 +110,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			setCookiePolicy(CookiePolicy.ACCEPT_ALL)
 		}
 
-		val HTTP_CLIENT: OkHttpClient = OkHttpClient.Builder()
+		private val HTTP_CLIENT: OkHttpClient = OkHttpClient.Builder()
 				.connectTimeout(10, TimeUnit.SECONDS)
 				.readTimeout(10, TimeUnit.SECONDS)
 				.cookieJar(JavaNetCookieJar(COOKIE_MANAGER))
@@ -128,6 +129,12 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		private val IMAGE_FOLDER = IMAGE_FOLDER_FILE.absolutePath + '/'
 		private const val TEMP_PREFIX = "TEMP__"
 		private const val ID_SEPARATOR = "__"
+
+		fun createCall(url: String): Call = HTTP_CLIENT.newCall(Request.Builder()
+				.url(url)
+				.header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
+				.addHeader("accept", "*/*")
+				.build())
 
 		fun fetch(context: Context, isFromAutoRefresh: Boolean, action: String, feedId: Long = 0L) {
 			if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
@@ -288,13 +295,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 				App.db.entryDao().findById(task.entryId)?.let { entry ->
 					entry.link?.let { link ->
-						val request = Request.Builder()
-								.url(link)
-								.header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
-								.addHeader("accept", "*/*")
-								.build()
 						try {
-							HTTP_CLIENT.newCall(request).execute().use {
+							createCall(link).execute().use {
 								it.body()?.string()?.let { body ->
 									Readability4JExtended(link, body).parse().articleContent?.html()?.let {
 										val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(link))
@@ -397,12 +399,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		}
 
 		private fun refreshFeed(feed: Feed, keepDateBorderTime: Long): Int {
-			val request = Request.Builder()
-					.url(feed.link)
-					.header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
-					.addHeader("accept", "*/*")
-					.build()
-
 			val entries = mutableListOf<Entry>()
 			val entriesToInsert = mutableListOf<Entry>()
 			val imgUrlsToDownload = mutableMapOf<String, List<String>>()
@@ -410,7 +406,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			val downloadPictures = shouldDownloadPictures()
 
 			try {
-				HTTP_CLIENT.newCall(request).execute().use { response ->
+				createCall(feed.link).execute().use { response ->
 					val input = SyndFeedInput()
 					val romeFeed = input.build(XmlReader(response.body()!!.byteStream()))
 					romeFeed.entries.filter { it.publishedDate?.time ?: Long.MAX_VALUE > keepDateBorderTime }.map { it.toDbFormat(feed) }.forEach { entries.add(it) }
@@ -494,12 +490,9 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				// Compute the real URL (without "&eacute;", ...)
 				@Suppress("DEPRECATION")
 				val realUrl = Html.fromHtml(imgUrl).toString()
-				val request = Request.Builder()
-						.url(realUrl)
-						.build()
 
 				try {
-					HTTP_CLIENT.newCall(request).execute().use { response ->
+					createCall(realUrl).execute().use { response ->
 						response?.body()?.let { body ->
 							val fileOutput = FileOutputStream(tempImgPath)
 
