@@ -78,6 +78,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, SimpleFilePickerDialog.
 
         private const val AUTO_IMPORT_OPML_REQUEST_CODE = 1
         private const val CHOOSE_OPML_REQUEST_CODE = 2
+        private const val EXPORT_OPML_REQUEST_CODE = 3
         private val NEEDED_PERMS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
 
@@ -102,7 +103,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, SimpleFilePickerDialog.
                                 pickOpml()
                             }
                             R.id.export_feeds -> {
-                                // TODO
+                                exportOpml()
                             }
                         }
                         true
@@ -297,7 +298,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, SimpleFilePickerDialog.
     @AfterPermissionGranted(CHOOSE_OPML_REQUEST_CODE)
     private fun pickOpml() {
         if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
-            EasyPermissions.requestPermissions(this, getString(R.string.welcome_title_with_opml_import),
+            EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation),
                     CHOOSE_OPML_REQUEST_CODE, *NEEDED_PERMS)
         } else {
 //                                val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
@@ -310,6 +311,31 @@ class MainActivity : AppCompatActivity(), MainNavigator, SimpleFilePickerDialog.
             SimpleFilePickerDialog.build(Environment.getExternalStorageDirectory().absolutePath, SimpleFilePickerDialog.CompositeMode.FILE_ONLY_DIRECT_CHOICE_IMMEDIATE)
                     .title(R.string.add_group_title)
                     .show(this, "pick file")
+        }
+    }
+
+    @AfterPermissionGranted(EXPORT_OPML_REQUEST_CODE)
+    private fun exportOpml() {
+        if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
+            EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation),
+                    EXPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
+        } else {
+            if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED || Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED_READ_ONLY) {
+                doAsync {
+                    try {
+                        val filename = (Environment.getExternalStorageDirectory().toString() + "/Flym_"
+                                + System.currentTimeMillis() + ".opml")
+
+                        // OPML.exportToFile(filename)
+
+                        uiThread { toast(String.format(getString(R.string.message_exported_to), filename)) }
+                    } catch (e: Exception) {
+                        uiThread { toast(R.string.error_feed_export) }
+                    }
+                }
+            } else {
+                toast(R.string.error_external_storage_not_available)
+            }
         }
     }
 
