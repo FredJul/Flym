@@ -17,9 +17,13 @@ import android.text.Html
 import android.webkit.URLUtil
 import android.widget.EditText
 import com.github.isabsent.filepicker.SimpleFilePickerDialog
+import com.rometools.opml.feed.opml.Attribute
 import com.rometools.opml.feed.opml.Opml
+import com.rometools.opml.feed.opml.Outline
+import com.rometools.opml.io.impl.OPML20Generator
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.WireFeedInput
+import com.rometools.rome.io.WireFeedOutput
 import com.rometools.rome.io.XmlReader
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
 import ir.mirrajabi.searchdialog.core.BaseFilter
@@ -50,10 +54,8 @@ import org.jetbrains.anko.sdk21.listeners.onClick
 import org.json.JSONObject
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.File
-import java.io.FileReader
-import java.io.Reader
-import java.io.StringReader
+import java.io.*
+import java.net.URL
 import java.net.URLEncoder
 import java.util.*
 
@@ -326,7 +328,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, SimpleFilePickerDialog.
                         val filename = (Environment.getExternalStorageDirectory().toString() + "/Flym_"
                                 + System.currentTimeMillis() + ".opml")
 
-                        // OPML.exportToFile(filename)
+                        exportOpml(FileWriter(filename))
 
                         uiThread { toast(String.format(getString(R.string.message_exported_to), filename)) }
                     } catch (e: Exception) {
@@ -363,6 +365,32 @@ class MainActivity : AppCompatActivity(), MainNavigator, SimpleFilePickerDialog.
                 toast(R.string.cannot_find_feeds)
             }
         }
+    }
+
+    private fun exportOpml(opmlWriter: Writer) {
+        val feeds = App.db.feedDao().all.groupBy { it.groupId }
+
+        val opml = Opml().apply {
+            feedType = OPML20Generator().type
+            encoding = "utf-8"
+            created = Date()
+            outlines = feeds[null]?.map {
+                Outline(it.title, if (it.link.isNotBlank()) URL(it.link) else null, null).apply {
+                    children = feeds[it.id]?.map {
+                        Outline(it.title, if (it.link.isNotBlank()) URL(it.link) else null, null).apply {
+                            if (it.retrieveFullText) {
+                                attributes.add(Attribute("retrieveFullText", "true"))
+                            }
+                        }
+                    }
+                    if (it.retrieveFullText) {
+                        attributes.add(Attribute("retrieveFullText", "true"))
+                    }
+                }
+            }
+        }
+
+        WireFeedOutput().output(opml, opmlWriter)
     }
 
     private fun parseOpml(opmlReader: Reader) {
