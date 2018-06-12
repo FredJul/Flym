@@ -27,6 +27,8 @@ import net.fred.feedex.MainApplication;
 
 public class PrefUtils {
 
+    public static final String NEED_DISPLAY_MIGRATION_POPUP = "NEED_DISPLAY_MIGRATION_POPUP";
+
     public static final String FIRST_OPEN = "FIRST_OPEN";
     public static final String DISPLAY_TIP = "DISPLAY_TIP";
 

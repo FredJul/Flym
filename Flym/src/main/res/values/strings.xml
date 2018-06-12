@@ -21,6 +21,10 @@
  THE SOFTWARE.
 -->
 <resources>
+    <string name="migration">This version is now obsolete and will not be updated.\n\nYou can try the new v2 version, but be careful: it does not contains all features yet!</string>
+    <string name="try_new_version">Try the v2!</string>
+    <string name="stay_with_old_version">Do nothing</string>
+
 
     <!-- GENERAL -->
     <string name="app_name">Flym</string>

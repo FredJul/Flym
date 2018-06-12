@@ -293,8 +293,29 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         mDrawerList.setItemChecked(position, true);
 
-        // First open => we open the drawer for you
-        if (PrefUtils.getBoolean(PrefUtils.FIRST_OPEN, true)) {
+        if (PrefUtils.getBoolean(PrefUtils.NEED_DISPLAY_MIGRATION_POPUP, true)) {
+            PrefUtils.putBoolean(PrefUtils.NEED_DISPLAY_MIGRATION_POPUP, false);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.migration)
+                    .setPositiveButton(R.string.try_new_version, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final String appPackageName = "net.frju.flym";
+                            try {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                            } catch (android.content.ActivityNotFoundException anfe) {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.stay_with_old_version, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+            builder.show();
+        } else if (PrefUtils.getBoolean(PrefUtils.FIRST_OPEN, true)) { // First open => we open the drawer for you
             PrefUtils.putBoolean(PrefUtils.FIRST_OPEN, false);
             if (mDrawerLayout != null) {
                 mDrawerLayout.postDelayed(new Runnable() {
