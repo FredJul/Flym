@@ -126,6 +126,12 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                             R.id.export_feeds -> {
                                 exportOpml()
                             }
+                            R.id.menu_entries__about -> {
+                                goToAboutMe()
+                            }
+                            R.id.menu_entries__settings -> {
+                                goToSettings()
+                            }
                         }
                         true
                     }
