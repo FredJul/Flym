@@ -4,7 +4,6 @@
 
     <!-- Container Sheet -->
     <dimen name="container_max_width">420dp</dimen>
-    <dimen name="container_horizontal_padding_start">72dp</dimen>
     <dimen name="container_horizontal_padding_end">13dp</dimen>
     <dimen name="container_details_top_margin">25dp</dimen>
 
