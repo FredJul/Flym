@@ -11,10 +11,7 @@ It is [free/open-source software](https://www.gnu.org/philosophy/free-sw.html) u
 
 ## Screenshots
 
-![](https://lh3.ggpht.com/iIe-VheufUo37FbsB6uiMx1Gdgj_gAoVxjEQQIq5azkRuUFUAWehiKBMsdpCHao_Tg=h310-rw) _
-![](https://lh4.ggpht.com/esKE8BI14gVwMGcZkHIYuNue6-2ay-BJeuFgK_5gWguUAD24xDDQVu3jpfP0UAR4XQ=h310-rw) _
-![](https://lh5.ggpht.com/bp_N9f3c3RnmQ1Ex-I2sPoW_vBkUBhHfgG4x7VJbRQW4_IIHvs3XU5wfoFLty4ICErE=h310-rw) _
-![](https://lh5.ggpht.com/gqlQO6LPIq0Cclvb0aoI8LavN-TYRPXBejOlb5oqeLuuQ1lNMcGXJ4qvf7cR0m4rfAQ=h310-rw) _
-![](https://lh4.ggpht.com/DtR-Gvoi4zFwDJRq1wzV5nwfjSGT4hN8AodNTeVMOjcxhB36X-zFBMbW5m23H0S9scQ=h310-rw) _
-![](https://lh3.ggpht.com/6v61QeUKPsuPADJgwysm04yJVHq8HzRJSXj87GLMdHk9t_S0hMurn1K0kVjxGUYee-I=h310-rw) _
-![](https://lh5.ggpht.com/AX6VIOpw79hIZylnipMFwJQLQm7W0mG7lXk1vNdzk6FMwWiQj5Mq3vj4jnq3ZDzhBSZQ=h310-rw)
+![](https://lh3.googleusercontent.com/IABRvlpoCXSNwWd1vPuRw7kVFEHoIv_ChdZMBs8lLa0OVaTYPpJ2TO44p3w-wdrzluvd=w1440-h620-rw) _
+![](https://lh3.googleusercontent.com/Ie5lLGF242xxPPuSpDznKvK4OTfYI21xPnipG8p8Gtg7qUS1UPVNP3c0iwL0DLMOOw=w1440-h620-rw) _
+![](https://lh3.googleusercontent.com/LqORvNPrsJC0VB30oD6mtnIfQTVcxyTkKVVLQnElQ6i9__Kq7bwZGj74FmB3wZ4jWw=w1440-h620-rw) _
+![](https://lh3.googleusercontent.com/WxTPChHUjJr3EKUj6Kq8pfsT827swCz9HSBH_Cqya1UGaIJjO8SQM6RDrRJHkghMWKE=w1440-h620-rw)
