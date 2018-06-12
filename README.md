@@ -6,8 +6,7 @@ Flym News Reader
 
 Light and modern Android feed reader (Atom/RSS).
 
-PlayStore link:
-https://play.google.com/store/apps/details?id=net.frju.flym
+<a href='https://play.google.com/store/apps/details?id=net.frju.flym'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
 ![](https://lh3.ggpht.com/iIe-VheufUo37FbsB6uiMx1Gdgj_gAoVxjEQQIq5azkRuUFUAWehiKBMsdpCHao_Tg=h310-rw) _
 ![](https://lh4.ggpht.com/esKE8BI14gVwMGcZkHIYuNue6-2ay-BJeuFgK_5gWguUAD24xDDQVu3jpfP0UAR4XQ=h310-rw) _
