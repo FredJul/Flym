@@ -10,10 +10,10 @@ interface FeedDao {
     @get:Query("SELECT * FROM feeds WHERE isGroup = 0")
     val allNonGroupFeeds: List<Feed>
 
-    @get:Query("SELECT * FROM feeds ORDER BY isGroup DESC, groupId DESC, displayPriority ASC, feedId ASC")
+    @get:Query("SELECT * FROM feeds ORDER BY groupId DESC, displayPriority ASC, feedId ASC")
     val all: List<Feed>
 
-    @get:Query("SELECT * FROM feeds ORDER BY isGroup DESC, groupId DESC, displayPriority ASC, feedId ASC")
+    @get:Query("SELECT * FROM feeds ORDER BY groupId DESC, displayPriority ASC, feedId ASC")
     val observeAll: LiveData<List<Feed>>
 
     @Query("SELECT * FROM feeds WHERE feedId IS :id LIMIT 1")
