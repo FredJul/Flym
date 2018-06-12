@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2017 Frederic Julian
+ * Copyright (c) 2012-2018 Frederic Julian
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
