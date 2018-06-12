@@ -7,14 +7,15 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
-# Add any project specific keep options here:
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# for OOS, no need to remove all info
+-renamesourcefileattribute SourceFile
+-keepattributes SourceFile,LineNumberTable
+-keepnames class *
+-keepclasseswithmembernames class * { *; }
+
+# for the search
+-keep class android.support.v7.widget.SearchView { *; }
 
 # for anko
 -dontwarn org.jetbrains.anko.internals.AnkoInternals
@@ -34,3 +35,10 @@
 -keep interface okhttp3.** { *; }
 -dontwarn okhttp3.**
 -dontwarn okio.**
+
+# Rome lib
+-keep class com.rometools.** { *; }
+-dontwarn java.beans.**
+-dontwarn javax.**
+-dontwarn org.jaxen.**
+-dontwarn org.slf4j.**

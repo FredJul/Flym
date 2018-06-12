@@ -26,11 +26,19 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">플라임 정보</string>
     <string name="welcome_title">플라임 사용을 환영합니다. 피드를 추가하시겠습니까?</string>
+    <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
+    <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">설정</string>
+    <string name="menu_rename_feed">Rename</string>
+    <string name="menu_reorder">Reorder</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
+    <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
     <string name="menu_all_read">모두 읽은 것으로 표시</string>
     <string name="flym_feeds">플라임 피드</string>
     <string name="error">오류</string>
     <string name="network_error">네트워크가 준비되지 않았습니다</string>
+    <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">피드</string>
@@ -41,6 +49,8 @@
     <string name="error_feed_export">내보내기가 실패했습니다. 쓰기 가능한 SD 카드 저장소가 마운트되어 있는지 확인하십시오.</string>
     <string name="error_external_storage_not_available">외부 저장소(SD 카드 따위)가 없습니다.</string>
     <string name="feed_search">피드 검색</string>
+    <string name="feed_search_hint">What are you looking for?</string>
+    <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">정말로 이 피드를 삭제하시겠습니까?</string>
     <string name="question_delete_group">정말로 이 그룹과 이 안의 피드를 모두 삭제하시겠습니까?</string>
     <string name="add_group_title">그룹 이름 선택</string>

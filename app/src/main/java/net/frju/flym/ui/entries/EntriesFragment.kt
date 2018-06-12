@@ -129,7 +129,7 @@ class EntriesFragment : Fragment() {
 		unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
 			setGravityOffset(35F, 0F, true)
 			isShowShadow = false
-			badgeBackgroundColor = ContextCompat.getColor(context!!, R.color.colorPrimaryDark)
+			badgeBackgroundColor = ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark)
 		}
 
 		read_all_fab.onClick {

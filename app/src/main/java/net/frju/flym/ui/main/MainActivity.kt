@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
 import android.text.Html
+import android.util.Log
 import android.webkit.URLUtil
 import android.widget.EditText
 import com.codekidlabs.storagechooser.StorageChooser
@@ -360,6 +361,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                     val fixedReader = StringReader(file.readText().replace("<opml version='[0-9]\\.[0-9]'>".toRegex(), "<opml>"))
                     parseOpml(fixedReader)
                 } catch (e: Exception) {
+                    Log.e("FRED", "", e)
                     uiThread { toast(R.string.cannot_find_feeds) }
                 }
             }

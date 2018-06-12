@@ -27,11 +27,19 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">O aplikácii Flym</string>
     <string name="welcome_title">Vitajte v aplikácii Flym. Chcete pridať nový zdroj?</string>
+    <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
+    <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">Nastavenia</string>
+    <string name="menu_rename_feed">Rename</string>
+    <string name="menu_reorder">Reorder</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
+    <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
     <string name="menu_all_read">Označiť všetko ako prečítané</string>
     <string name="flym_feeds">Flym zdroje</string>
     <string name="error">Chyba</string>
     <string name="network_error">Sieť nie je nastavená</string>
+    <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Zdroje</string>
@@ -42,6 +50,8 @@
     <string name="error_feed_export">Export zlyhal. Na pripojenú SD kartu sa pravdepodobne nedá zapisovať.</string>
     <string name="error_external_storage_not_available">Externý úložný priestor (napr. SD karta) nie je dostupný.</string>
     <string name="feed_search">Prehľadať zdroj</string>
+    <string name="feed_search_hint">What are you looking for?</string>
+    <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Naozaj zmazať tento zdroj?</string>
     <string name="question_delete_group">Naozaj chcete zmazať túto skupinu a všetky jej zdroje?</string>
     <string name="add_group_title">Vybrať meno skupiny</string>

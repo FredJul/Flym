@@ -26,11 +26,19 @@
     <string name="app_name">Флим</string>
     <string name="about_flym">О Флиму</string>
     <string name="welcome_title">Добро дошли у Флим. Желите ли да додате довод?</string>
+    <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
+    <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">Поставке</string>
+    <string name="menu_rename_feed">Rename</string>
+    <string name="menu_reorder">Reorder</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
+    <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
     <string name="menu_all_read">Означи све прочитаним</string>
     <string name="flym_feeds">Флимови доводи</string>
     <string name="error">Грешка</string>
     <string name="network_error">Мрежа није постављена</string>
+    <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Доводи</string>
@@ -41,6 +49,8 @@
     <string name="error_feed_export">Извоз није успео. Проверите да ли имате монтирану уписиву СД картицу.</string>
     <string name="error_external_storage_not_available">Спољашње складиште (нпр. СД картица) није доступно.</string>
     <string name="feed_search">Претрага довода</string>
+    <string name="feed_search_hint">What are you looking for?</string>
+    <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Желите ли заиста да обришете овај довод?</string>
     <string name="question_delete_group">Желите ли заиста да обришете ову групу и све њене доводе?</string>
     <string name="add_group_title">Одредите име групе</string>

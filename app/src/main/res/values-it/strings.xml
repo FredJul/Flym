@@ -26,11 +26,19 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">A proposito di Flym</string>
     <string name="welcome_title">Benvenuto in Flym. Vorresti aggiungere un feed?</string>
+    <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
+    <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">Impostazioni</string>
+    <string name="menu_rename_feed">Rename</string>
+    <string name="menu_reorder">Reorder</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
+    <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
     <string name="menu_all_read">Segna tutti come letti</string>
     <string name="flym_feeds">Feed di Flym</string>
     <string name="error">Errore</string>
     <string name="network_error">Nessuna connessione disponibile</string>
+    <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feed</string>
@@ -45,6 +53,8 @@
         non è disponibile.
     </string>
     <string name="feed_search">Ricerca feed</string>
+    <string name="feed_search_hint">What are you looking for?</string>
+    <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Vuoi cancellare questo feed?</string>
     <string name="question_delete_group">Vuoi cancellare questo gruppo e tutti i suoi feed?</string>
     <string name="add_group_title">Inserire nome del gruppo</string>

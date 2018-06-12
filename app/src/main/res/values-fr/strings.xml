@@ -29,6 +29,11 @@
     <string name="welcome_title_with_opml_import">Voulez-vous importer vos anciens flux ?</string>
     <string name="cannot_find_feeds">Aucun flux n\'a été trouvé</string>
     <string name="menu_settings">Paramètres</string>
+    <string name="menu_rename_feed">Renommer</string>
+    <string name="menu_reorder">Réordonner</string>
+    <string name="menu_delete">Supprimer</string>
+    <string name="menu_enable_full_text_retrieval">Activer la récupération du texte complet</string>
+    <string name="menu_disable_full_text_retrieval">Désactiver la récupération du texte complet</string>
     <string name="menu_all_read">Marquer tout comme lu</string>
     <string name="flym_feeds">Flux Flym</string>
     <string name="error">Erreur</string>
