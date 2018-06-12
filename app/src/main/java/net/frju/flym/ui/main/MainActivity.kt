@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         private const val EXPORT_OPML_REQUEST_CODE = 3
         private val NEEDED_PERMS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
+        private const val RETRIEVE_FULLTEXT_OPML_ATTR = "retrieveFullText"
 
         var isInForeground = false
     }
@@ -349,32 +350,6 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         }
     }
 
-    private fun exportOpml(opmlWriter: Writer) {
-        val feeds = App.db.feedDao().all.groupBy { it.groupId }
-
-        val opml = Opml().apply {
-            feedType = OPML20Generator().type
-            encoding = "utf-8"
-            created = Date()
-            outlines = feeds[null]?.map {
-                Outline(it.title, if (it.link.isNotBlank()) URL(it.link) else null, null).apply {
-                    children = feeds[it.id]?.map {
-                        Outline(it.title, if (it.link.isNotBlank()) URL(it.link) else null, null).apply {
-                            if (it.retrieveFullText) {
-                                attributes.add(Attribute("retrieveFullText", "true"))
-                            }
-                        }
-                    }
-                    if (it.retrieveFullText) {
-                        attributes.add(Attribute("retrieveFullText", "true"))
-                    }
-                }
-            }
-        }
-
-        WireFeedOutput().output(opml, opmlWriter)
-    }
-
     private fun importOpml(file: File) {
         doAsync {
             try {
@@ -404,7 +379,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                 if (it.xmlUrl != null) {
                     if (!it.xmlUrl.startsWith(OLD_GNEWS_TO_IGNORE)) {
                         topLevelFeed.link = it.xmlUrl
-                        topLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
+                        topLevelFeed.retrieveFullText = it.getAttributeValue(RETRIEVE_FULLTEXT_OPML_ATTR) == "true"
                         feedList.add(topLevelFeed)
                     }
                 } else {
@@ -416,7 +391,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                         subLevelFeed.id = id++
                         subLevelFeed.title = it.title
                         subLevelFeed.link = it.xmlUrl
-                        subLevelFeed.retrieveFullText = it.getAttributeValue("retrieveFullText") == "true"
+                        subLevelFeed.retrieveFullText = it.getAttributeValue(RETRIEVE_FULLTEXT_OPML_ATTR) == "true"
                         subLevelFeed.groupId = topLevelFeed.id
                         feedList.add(subLevelFeed)
                     }
@@ -427,6 +402,32 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         if (feedList.isNotEmpty()) {
             App.db.feedDao().insert(*feedList.toTypedArray())
         }
+    }
+
+    private fun exportOpml(opmlWriter: Writer) {
+        val feeds = App.db.feedDao().all.groupBy { it.groupId }
+
+        val opml = Opml().apply {
+            feedType = OPML20Generator().type
+            encoding = "utf-8"
+            created = Date()
+            outlines = feeds[null]?.map {
+                Outline(it.title, if (it.link.isNotBlank()) URL(it.link) else null, null).apply {
+                    children = feeds[it.id]?.map {
+                        Outline(it.title, if (it.link.isNotBlank()) URL(it.link) else null, null).apply {
+                            if (it.retrieveFullText) {
+                                attributes.add(Attribute(RETRIEVE_FULLTEXT_OPML_ATTR, "true"))
+                            }
+                        }
+                    }
+                    if (it.retrieveFullText) {
+                        attributes.add(Attribute(RETRIEVE_FULLTEXT_OPML_ATTR, "true"))
+                    }
+                }
+            }
+        }
+
+        WireFeedOutput().output(opml, opmlWriter)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
