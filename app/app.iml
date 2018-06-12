@@ -140,13 +140,10 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: com.android.support:support-v4-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: nz.bradcampbell:paperparcel-kotlin-2.0.6" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.eltos:simpledialogfragment-2.2" level="project" />
-    <orderEntry type="library" name="Gradle: commons-io:commons-io:2.6@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:glide-4.7.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:recyclerview-v7-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-media-compat-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-core-ui-27.1.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.isabsent:filepicker-1.1.01" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support.constraint:constraint-layout-solver:1.1.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:livedata-1.1.1" level="project" />
@@ -162,6 +159,7 @@
     <orderEntry type="library" name="Gradle: org.jetbrains.anko:anko-sdk21:0.10.5@jar" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25@jar" level="project" />
     <orderEntry type="library" name="Gradle: nz.bradcampbell:paperparcel-2.0.6" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.codekidX:storage-chooser-2.0.3" level="project" />
     <orderEntry type="library" name="Gradle: com.github.mirrajabi:search-dialog-1.2.2" level="project" />
     <orderEntry type="library" name="Gradle: com.github.Tunous:SwipeActionView-1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:runtime-1.1.1" level="project" />
@@ -179,6 +177,7 @@
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:viewmodel-1.1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.2.41@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.amulyakhare:com.amulyakhare.textdrawable-1.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.markushi:circlebutton-1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.anko:anko-design:0.10.5@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.github.jrvansuita:IconHandler-v2.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-vector-drawable-27.1.1" level="project" />

@@ -16,7 +16,7 @@ import android.support.v7.widget.PopupMenu
 import android.text.Html
 import android.webkit.URLUtil
 import android.widget.EditText
-import com.github.isabsent.filepicker.SimpleFilePickerDialog
+import com.codekidlabs.storagechooser.StorageChooser
 import com.rometools.opml.feed.opml.Attribute
 import com.rometools.opml.feed.opml.Opml
 import com.rometools.opml.feed.opml.Outline
@@ -60,7 +60,7 @@ import java.net.URLEncoder
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), MainNavigator, SimpleFilePickerDialog.InteractionListenerInt {
+class MainActivity : AppCompatActivity(), MainNavigator {
 
     companion object {
         const val EXTRA_FROM_NOTIF = "EXTRA_FROM_NOTIF"
@@ -228,7 +228,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, SimpleFilePickerDialog.
                     AlertDialog.Builder(this)
                             .setTitle(R.string.welcome_title_with_opml_import)
                             .setPositiveButton(android.R.string.yes) { _, _ ->
-                                importOpml()
+                                autoImportOpml()
                             }
                             .setNegativeButton(android.R.string.no, null)
                             .show()
@@ -287,32 +287,26 @@ class MainActivity : AppCompatActivity(), MainNavigator, SimpleFilePickerDialog.
     private fun isOldFlymAppInstalled() =
             packageManager.getInstalledApplications(PackageManager.GET_META_DATA).any { it.packageName == "net.fred.feedex" }
 
-
-    override fun onResult(dialogTag: String, which: Int, extras: Bundle): Boolean {
-
-        return true
-    }
-
-    override fun showListItemDialog(titleResId: Int, folderPath: String?, mode: SimpleFilePickerDialog.CompositeMode?, dialogTag: String?) {
-        pickOpml()
-    }
-
     @AfterPermissionGranted(CHOOSE_OPML_REQUEST_CODE)
     private fun pickOpml() {
         if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
             EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation),
                     CHOOSE_OPML_REQUEST_CODE, *NEEDED_PERMS)
         } else {
-//                                val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-//                                    addCategory(Intent.CATEGORY_OPENABLE)
-//                                    type = "*/*"
-//                                }
-//                                val chooserIntent = Intent.createChooser(intent, getString(R.string.select_file))
-//                                startActivityForResult(chooserIntent, CHOOSE_FILE_REQUEST_CODE)
-
-            SimpleFilePickerDialog.build(Environment.getExternalStorageDirectory().absolutePath, SimpleFilePickerDialog.CompositeMode.FILE_ONLY_DIRECT_CHOICE_IMMEDIATE)
-                    .title(R.string.add_group_title)
-                    .show(this, "pick file")
+            StorageChooser.Builder()
+                    .withActivity(this)
+                    .withFragmentManager(fragmentManager)
+                    .withMemoryBar(true)
+                    .allowCustomPath(true)
+                    .setType(StorageChooser.FILE_PICKER)
+                    .customFilter(arrayListOf("xml", "opml"))
+                    .build()
+                    .run {
+                        show()
+                        setOnSelectListener {
+                            importOpml(File(it))
+                        }
+                    }
         }
     }
 
@@ -342,25 +336,13 @@ class MainActivity : AppCompatActivity(), MainNavigator, SimpleFilePickerDialog.
     }
 
     @AfterPermissionGranted(AUTO_IMPORT_OPML_REQUEST_CODE)
-    private fun importOpml() {
+    private fun autoImportOpml() {
         if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
             EasyPermissions.requestPermissions(this, getString(R.string.welcome_title_with_opml_import),
                     AUTO_IMPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
         } else {
             if (BACKUP_OPML.exists()) {
-                doAsync {
-                    try {
-                        parseOpml(FileReader(BACKUP_OPML))
-                    } catch (e: Exception) {
-                        try {
-                            // We try to remove the opml version number, it may work better in some cases
-                            val fixedReader = StringReader(BACKUP_OPML.readText().replace("<opml version='[0-9]\\.[0-9]'>".toRegex(), "<opml>"))
-                            parseOpml(fixedReader)
-                        } catch (e: Exception) {
-                            uiThread { toast(R.string.cannot_find_feeds) }
-                        }
-                    }
-                }
+                importOpml(BACKUP_OPML)
             } else {
                 toast(R.string.cannot_find_feeds)
             }
@@ -391,6 +373,22 @@ class MainActivity : AppCompatActivity(), MainNavigator, SimpleFilePickerDialog.
         }
 
         WireFeedOutput().output(opml, opmlWriter)
+    }
+
+    private fun importOpml(file: File) {
+        doAsync {
+            try {
+                parseOpml(FileReader(file))
+            } catch (e: Exception) {
+                try {
+                    // We try to remove the opml version number, it may work better in some cases
+                    val fixedReader = StringReader(file.readText().replace("<opml version='[0-9]\\.[0-9]'>".toRegex(), "<opml>"))
+                    parseOpml(fixedReader)
+                } catch (e: Exception) {
+                    uiThread { toast(R.string.cannot_find_feeds) }
+                }
+            }
+        }
     }
 
     private fun parseOpml(opmlReader: Reader) {
