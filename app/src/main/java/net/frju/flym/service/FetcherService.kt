@@ -296,7 +296,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 						App.db.taskDao().delete(task)
 					} else {
 						task.numberAttempt += 1
-						App.db.taskDao().insert(task)
+						App.db.taskDao().update(task)
 					}
 				}
 			}
