@@ -74,6 +74,7 @@
     <string name="menu_mark_as_unread">Marcar como não lido</string>
     <string name="get_full_text">Recuperar o texto completo</string>
     <string name="original_text">Mostrar o texto original</string>
+    <string name="open_in_browser">Ver no navegador</string>
     <string name="cant_open_link">Nenhum aplicativo encontrado para este link</string>
 
     <!-- WIDGET -->

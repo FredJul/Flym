@@ -75,6 +75,7 @@
     <string name="menu_mark_as_unread">읽은 것으로 표시</string>
     <string name="get_full_text">전체 텍스트 가져오기</string>
     <string name="original_text">원래 텍스트 가져오기</string>
+	<string name="open_in_browser">브라우저에서 보기</string>
     <string name="cant_open_link">이 링크에 대한 프로그램이 없습니다</string>
 
     <!-- WIDGET -->

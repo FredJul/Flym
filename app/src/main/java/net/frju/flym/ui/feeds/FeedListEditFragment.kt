@@ -22,7 +22,12 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import kotlinx.android.synthetic.main.fragment_feed_list_edit.view.*
 import net.fred.feedex.R
@@ -30,7 +35,7 @@ import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.ui.views.DragNDropListener
 import org.jetbrains.anko.doAsync
-import java.util.*
+import java.util.UUID
 
 
 class FeedListEditFragment : Fragment() {
@@ -108,7 +113,7 @@ class FeedListEditFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater.inflate(R.menu.fragment_feed_list_edit, menu)
+		inflater.inflate(R.menu.menu_fragment_feed_list_edit, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

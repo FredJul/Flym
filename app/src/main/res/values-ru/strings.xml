@@ -82,6 +82,7 @@
     <string name="menu_mark_as_unread">Пометить как непрочитанное</string>
     <string name="get_full_text">Загрузить весь текст</string>
     <string name="original_text">Показать оригинальный текст</string>
+    <string name="open_in_browser">Открыть в браузере</string>
     <string name="cant_open_link">Не найдено приложений для открытия этой ссылки</string>
 
     <!-- WIDGET -->

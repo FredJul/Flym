@@ -80,6 +80,7 @@
     <string name="menu_mark_as_unread">Marca com a no llegit</string>
     <string name="get_full_text">Descarrega el text complet</string>
     <string name="original_text">Mostra el text original</string>
+	<string name="open_in_browser">Mostra al navegador</string>
     <string name="cant_open_link">No s\'ha trobat una aplicació\'per aquest enllaç.</string>
 
     <!-- WIDGET -->

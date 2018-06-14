@@ -73,6 +73,7 @@
     <string name="menu_mark_as_unread">Markera som oläst</string>
     <string name="get_full_text">Hämta hela texten</string>
     <string name="original_text">Visa originaltexten</string>
+    <string name="open_in_browser">Öppna i webläsare</string>
     <string name="cant_open_link">Inget lämpligt program hittades för denna länk</string>
 
     <!-- WIDGET -->

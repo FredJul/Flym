@@ -20,6 +20,7 @@ package net.frju.flym.ui.entrydetails
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -190,7 +191,7 @@ class EntryDetailsFragment : Fragment() {
 	private fun setupToolbar() {
 		toolbar.apply {
 			menu.clear()
-			inflateMenu(R.menu.fragment_entry_details)
+			inflateMenu(R.menu.menu_fragment_entry_details)
 
 			if (activity?.containers_layout?.hasTwoColumns() != true) {
 				setNavigationIcon(R.drawable.ic_back_white_24dp)
@@ -227,6 +228,9 @@ class EntryDetailsFragment : Fragment() {
 						doAsync {
 							App.db.entryDao().update(entry)
 						}
+					}
+					R.id.menu_entry_details__open_browser -> {
+						startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entry.link)))
 					}
 					R.id.menu_entry_details__share -> {
 						startActivity(Intent.createChooser(

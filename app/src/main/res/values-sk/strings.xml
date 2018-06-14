@@ -76,6 +76,7 @@
     <string name="menu_mark_as_unread">Označiť ako neprečítané</string>
     <string name="get_full_text">Stiahnúť celý text</string>
     <string name="original_text">Zobraziť originálny text</string>
+    <string name="open_in_browser">Zobraziť v prehliadači</string>
     <string name="cant_open_link">Pre tento odkaz nebola nájdená žiadna aplikácia</string>
 
     <!-- WIDGET -->

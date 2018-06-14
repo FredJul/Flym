@@ -53,7 +53,7 @@ import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.uiThread
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
-import java.util.*
+import java.util.Date
 
 
 class EntriesFragment : Fragment() {
@@ -307,7 +307,7 @@ class EntriesFragment : Fragment() {
 			}
 
 			menu.clear()
-			inflateMenu(R.menu.fragment_entries)
+			inflateMenu(R.menu.menu_fragment_entries)
 
 			val searchItem = menu.findItem(R.id.menu_entries__search)
 			val searchView = searchItem.actionView as SearchView

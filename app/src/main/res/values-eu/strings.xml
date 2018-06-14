@@ -83,6 +83,7 @@
     <string name="menu_mark_as_unread">Ez irakurrita bezala markatu</string>
     <string name="get_full_text">Testu osoa eskuratu</string>
     <string name="original_text">Jatorrizko testua erakutsi</string>
+	<string name="open_in_browser">Nabigatzailean ikusi</string>
     <string name="cant_open_link">Ez da aplikaziorik aurkitu esteka honetarako</string>
 
     <!-- WIDGET -->

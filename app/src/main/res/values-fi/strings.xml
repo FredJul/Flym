@@ -76,6 +76,7 @@
     <string name="menu_mark_as_unread">Merkitse lukemattomaksi</string>
     <string name="get_full_text">Hae koko teksti</string>
     <string name="original_text">Näytä alkuperäinen teksti</string>
+	<string name="open_in_browser">Avaa selaimessa</string>
     <string name="cant_open_link">Linkin avaamiseen kykenevää sovellusta ei löydy.</string>
 
     <!-- WIDGET -->

@@ -79,6 +79,7 @@
     <string name="menu_mark_as_unread">Marcar como no leído</string>
     <string name="get_full_text">Descargar el texto completo</string>
     <string name="original_text">Mostrar el texto original</string>
+	<string name="open_in_browser">Ver en el navegador</string>
     <string name="cant_open_link">No se ha encontrado una aplicación para este enlace.</string>
 
     <!-- WIDGET -->

@@ -74,6 +74,7 @@
     <string name="menu_mark_as_unread">保持未读</string>
     <string name="get_full_text">接收全文</string>
     <string name="original_text">显示原始文本</string>
+    <string name="open_in_browser">浏览器打开</string>
     <string name="cant_open_link">没有应用可以打开这个链接</string>
 
     <!-- WIDGET -->
