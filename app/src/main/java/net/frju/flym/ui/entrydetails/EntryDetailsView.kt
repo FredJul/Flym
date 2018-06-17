@@ -64,7 +64,7 @@ private const val CSS = "<head><style type='text/css'> " +
         "ul, ol {margin: 0 0 0.8em 0.6em; padding: 0 0 0 1em} " +
         "ul li, ol li {margin: 0 0 0.8em 0; padding: 0} " +
         "</style><meta name='viewport' content='width=device-width'/></head>"
-private const val BODY_START = "<body>"
+private const val BODY_START = "<body dir=\"auto\">"
 private const val BODY_END = "</body>"
 private const val TITLE_START = "<h1><a href='"
 private const val TITLE_MIDDLE = "'>"
