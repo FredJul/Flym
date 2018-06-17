@@ -74,8 +74,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		}
 
 		private val HTTP_CLIENT: OkHttpClient = OkHttpClient.Builder()
-				.connectTimeout(10, TimeUnit.SECONDS)
-				.readTimeout(10, TimeUnit.SECONDS)
+				.connectTimeout(4, TimeUnit.SECONDS)
+				.readTimeout(4, TimeUnit.SECONDS)
 				.cookieJar(JavaNetCookieJar(COOKIE_MANAGER))
 				.build()
 
@@ -408,7 +408,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 									if (entry.imageLink == null) {
 										entry.imageLink = HtmlUtils.getMainImageURL(imagesList)
 									}
-									imgUrlsToDownload.put(entry.id, imagesList)
+									imgUrlsToDownload[entry.id] = imagesList
 								}
 							} else if (entry.imageLink == null) {
 								entry.imageLink = HtmlUtils.getMainImageURL(improvedContent)
