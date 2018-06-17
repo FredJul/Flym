@@ -398,6 +398,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                     if (!existingIds.contains(entry.id)) {
                         entriesToInsert.add(entry)
 
+                        entry.title = entry.title?.replace("\n", " ")?.trim()
                         entry.description?.let { desc ->
                             // Improve the description
                             val improvedContent = HtmlUtils.improveHtmlContent(desc, feedBaseUrl)

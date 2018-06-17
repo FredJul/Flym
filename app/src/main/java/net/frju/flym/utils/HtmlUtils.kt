@@ -35,6 +35,7 @@ object HtmlUtils {
             .addAttributes("audio", "src", "controls")
             .addAttributes("source", "src", "type")
             .addAttributes("track", "src", "kind", "srclang", "label")
+            .addAttributes("p", "style")
 
     private const val URL_SPACE = "%20"
 
