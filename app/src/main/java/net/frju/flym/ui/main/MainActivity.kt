@@ -67,30 +67,18 @@ import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.hintTextColor
-import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
 import org.json.JSONObject
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
-import java.io.Reader
-import java.io.StringReader
-import java.io.Writer
+import java.io.*
 import java.net.URL
 import java.net.URLEncoder
-import java.util.ArrayList
-import java.util.Date
+import java.util.*
 
 
-class MainActivity : AppCompatActivity(), MainNavigator {
+class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
     companion object {
         const val EXTRA_FROM_NOTIF = "EXTRA_FROM_NOTIF"
@@ -550,7 +538,8 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                             FetcherService.createCall(searchStr).execute().use { response ->
                                 val romeFeed = SyndFeedInput().build(XmlReader(response.body()!!.byteStream()))
 
-                                array.add(SearchFeedResult(searchStr, romeFeed.title, romeFeed.description))
+                                array.add(SearchFeedResult(searchStr, romeFeed.title
+                                        ?: searchStr, romeFeed.description ?: ""))
                             }
                         } else {
                             @Suppress("DEPRECATION")
@@ -578,7 +567,8 @@ class MainActivity : AppCompatActivity(), MainNavigator {
                                 }
                             }
                         }
-                    } catch (ignored: Throwable) {
+                    } catch (t: Throwable) {
+                        warn("error during feed search", t)
                     }
                 }
 
