@@ -31,7 +31,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
 import android.text.Html
-import android.util.Log
 import android.webkit.URLUtil
 import android.widget.EditText
 import com.codekidlabs.storagechooser.StorageChooser
@@ -67,15 +66,29 @@ import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.hintTextColor
+import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
+import org.jetbrains.anko.warn
 import org.json.JSONObject
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.*
+import java.io.File
+import java.io.FileReader
+import java.io.FileWriter
+import java.io.Reader
+import java.io.StringReader
+import java.io.Writer
 import java.net.URL
 import java.net.URLEncoder
-import java.util.*
+import java.util.ArrayList
+import java.util.Date
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -148,21 +161,26 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
         App.db.feedDao().observeAll.observe(this@MainActivity, Observer {
             it?.let {
-                feedGroups.clear()
+                val newFeedGroups = mutableListOf<FeedGroup>()
 
                 val all = Feed().apply {
                     id = Feed.ALL_ENTRIES_ID
                     title = getString(R.string.all_entries)
                 }
-                feedGroups.add(FeedGroup(all, listOf()))
+                newFeedGroups.add(FeedGroup(all, listOf()))
 
                 val subFeedMap = it.groupBy { it.groupId }
 
-                feedGroups.addAll(
+                newFeedGroups.addAll(
                         subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.id].orEmpty()) }.orEmpty()
                 )
 
-                feedAdapter.notifyParentDataSetChanged(true)
+                // Do not always call notifyParentDataSetChanged to avoid selection loss during refresh
+                if (hasFeedGroupsChanged(feedGroups, newFeedGroups)) {
+                    feedGroups.clear()
+                    feedGroups += newFeedGroups
+                    feedAdapter.notifyParentDataSetChanged(true)
+                }
 
                 feedAdapter.onFeedClick { view, feed ->
                     goToEntriesList(feed)
@@ -241,7 +259,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         })
 
         toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
-        toolbar.setNavigationOnClickListener({ toggleDrawer() })
+        toolbar.setNavigationOnClickListener { toggleDrawer() }
 
         if (savedInstanceState == null) {
             // First open => we open the drawer for you
@@ -311,6 +329,21 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
     private fun isOldFlymAppInstalled() =
             packageManager.getInstalledApplications(PackageManager.GET_META_DATA).any { it.packageName == "net.fred.feedex" }
+
+    private fun hasFeedGroupsChanged(feedGroups: MutableList<FeedGroup>, newFeedGroups: MutableList<FeedGroup>): Boolean {
+        if (feedGroups != newFeedGroups) {
+            return true
+        }
+
+        // Also need to check all sub groups (can't be checked in FeedGroup's equals)
+        feedGroups.forEachIndexed { index, feedGroup ->
+            if (feedGroups[index].subFeeds != newFeedGroups[index].subFeeds) {
+                return true
+            }
+        }
+
+        return false
+    }
 
     @AfterPermissionGranted(CHOOSE_OPML_REQUEST_CODE)
     private fun pickOpml() {
@@ -384,7 +417,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     val fixedReader = StringReader(file.readText().replace("<opml version='[0-9]\\.[0-9]'>".toRegex(), "<opml>"))
                     parseOpml(fixedReader)
                 } catch (e: Exception) {
-                    Log.e("FRED", "", e)
                     uiThread { toast(R.string.cannot_find_feeds) }
                 }
             }
