@@ -33,7 +33,7 @@
     <string name="menu_reorder">Riordina</string>
     <string name="menu_delete">Cancella</string>
     <string name="menu_enable_full_text_retrieval">Abilita il recupero del testo completo</string>
-    <string name="menu_disable_full_text_retrieval">Disabilita recupero testo completo</string>
+    <string name="menu_disable_full_text_retrieval">Disabilita il recupero del testo completo</string>
     <string name="menu_all_read">Segna tutti come letti</string>
     <string name="flym_feeds">Feed di Flym</string>
     <string name="error">Errore</string>
