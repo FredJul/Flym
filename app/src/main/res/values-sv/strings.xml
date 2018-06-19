@@ -47,7 +47,7 @@
     <string name="error_feed_export">Exporten har misslyckats. Försäkra dig om att du har ett skrivbart SD-kort monterat.</string>
     <string name="error_external_storage_not_available">Det externa lagringsmediet (d.v.s. SD-kort) finns ej tillgängligt.</string>
     <string name="feed_search">Sök efter feed</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Vill du radera denna feed?</string>
     <string name="question_delete_group">Vill du radera denna grupp och alla dess feeds?</string>

@@ -49,7 +49,7 @@
     <string name="error_feed_export">내보내기가 실패했습니다. 쓰기 가능한 SD 카드 저장소가 마운트되어 있는지 확인하십시오.</string>
     <string name="error_external_storage_not_available">외부 저장소(SD 카드 따위)가 없습니다.</string>
     <string name="feed_search">피드 검색</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+    <string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">정말로 이 피드를 삭제하시겠습니까?</string>
     <string name="question_delete_group">정말로 이 그룹과 이 안의 피드를 모두 삭제하시겠습니까?</string>

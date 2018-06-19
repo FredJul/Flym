@@ -54,7 +54,7 @@
         dostupný.
     </string>
     <string name="feed_search">Prohledat zdroj</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Opravdu smazat tento zdroj?</string>
     <string name="question_delete_group">Opravdu chcete smazat tuto skupinu a všechny její

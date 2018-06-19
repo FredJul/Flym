@@ -27,7 +27,7 @@
     <string name="error_feed_export">The export has failed. Make sure you have a writable SD-card mounted.</string>
     <string name="error_external_storage_not_available">The external storage (e.g. SD-card) is not available.</string>
     <string name="feed_search">Feed search</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+    <string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Do you really want to delete this feed?</string>
     <string name="question_delete_group">Do you really want to delete this group and all of its feeds?</string>

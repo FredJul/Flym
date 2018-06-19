@@ -48,7 +48,7 @@
     <string name="error_feed_export">导出失败，请确定你的SD卡可以读写。</string>
     <string name="error_external_storage_not_available">外置存储（如SD卡）不可用。</string>
     <string name="feed_search">搜索订阅</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">你确定要删除这个订阅</string>
     <string name="question_delete_group">你确定要删除这个分组和其中所有的订阅？</string>

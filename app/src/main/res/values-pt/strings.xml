@@ -48,7 +48,7 @@
     <string name="error_feed_export">A exportação falhou. Tenha certeza que você possui um cartão SD montado.</string>
     <string name="error_external_storage_not_available">O armazenamento externo (Ex. cartão SD) não está disponível.</string>
     <string name="feed_search">Busca no Feed</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Você tem certeza que deseja deletar este feed?</string>
     <string name="question_delete_group">Você tem certeza que deseja deletar este grupo e todos os seus feeds?</string>

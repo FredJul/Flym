@@ -52,7 +52,7 @@
         недоступно.
     </string>
     <string name="feed_search">Поиск лент</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Вы действительно хотите удалить эту ленту?</string>
     <string name="question_delete_group">Вы действительно хотите удалить эту группу и все ее

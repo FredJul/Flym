@@ -51,7 +51,7 @@
     <string name="error_external_storage_not_available">El almacenaje externo no está disponible.
     </string>
     <string name="feed_search">Buscar fuentes</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">¿Seguro que quiere eliminar esta fuente?</string>
     <string name="question_delete_group">¿Seguro que quiere eliminar este grupo de fuentes?</string>

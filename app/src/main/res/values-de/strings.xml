@@ -51,7 +51,7 @@
     <string name="error_feed_export">Der Export ist fehlgeschlagen. Stelle sicher, dass eine beschreibbare SD-Karte eingelegt ist.</string>
     <string name="error_external_storage_not_available">Der externe Speicher (z.B. SD-Karte) ist nicht verfügbar.</string>
     <string name="feed_search">Feed-Suche</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Willst du diesen Feed wirklich löschen?</string>
     <string name="question_delete_group">Willst du diese Gruppe mit allen Feeds wirklich löschen?</string>

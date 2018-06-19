@@ -96,6 +96,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     companion object {
         const val EXTRA_FROM_NOTIF = "EXTRA_FROM_NOTIF"
 
+		var isInForeground = false
+
         private const val TAG_DETAILS = "TAG_DETAILS"
         private const val TAG_MASTER = "TAG_MASTER"
 
@@ -115,8 +117,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         private val NEEDED_PERMS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
         private const val RETRIEVE_FULLTEXT_OPML_ATTR = "retrieveFullText"
-
-        var isInForeground = false
     }
 
     private val feedGroups = mutableListOf<FeedGroup>()
@@ -327,170 +327,230 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         feedAdapter.onSaveInstanceState(outState)
     }
 
-    private fun isOldFlymAppInstalled() =
-            packageManager.getInstalledApplications(PackageManager.GET_META_DATA).any { it.packageName == "net.fred.feedex" }
-
-    private fun hasFeedGroupsChanged(feedGroups: MutableList<FeedGroup>, newFeedGroups: MutableList<FeedGroup>): Boolean {
-        if (feedGroups != newFeedGroups) {
-            return true
-        }
-
-        // Also need to check all sub groups (can't be checked in FeedGroup's equals)
-        feedGroups.forEachIndexed { index, feedGroup ->
-            if (feedGroups[index].subFeeds != newFeedGroups[index].subFeeds) {
-                return true
-            }
-        }
-
-        return false
-    }
-
-    @AfterPermissionGranted(CHOOSE_OPML_REQUEST_CODE)
-    private fun pickOpml() {
-        if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
-            EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation),
-                    CHOOSE_OPML_REQUEST_CODE, *NEEDED_PERMS)
-        } else {
-            StorageChooser.Builder()
-                    .withActivity(this)
-                    .withFragmentManager(fragmentManager)
-                    .withMemoryBar(true)
-                    .allowCustomPath(true)
-                    .setType(StorageChooser.FILE_PICKER)
-                    .customFilter(arrayListOf("xml", "opml"))
-                    .build()
-                    .run {
-                        show()
-                        setOnSelectListener {
-                            importOpml(File(it))
-                        }
-                    }
-        }
-    }
-
-    @AfterPermissionGranted(EXPORT_OPML_REQUEST_CODE)
-    private fun exportOpml() {
-        if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
-            EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation),
-                    EXPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
-        } else {
-            if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED || Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED_READ_ONLY) {
-                doAsync {
-                    try {
-                        val filename = (Environment.getExternalStorageDirectory().toString() + "/Flym_"
-                                + System.currentTimeMillis() + ".opml")
-
-                        exportOpml(FileWriter(filename))
-
-                        uiThread { toast(String.format(getString(R.string.message_exported_to), filename)) }
-                    } catch (e: Exception) {
-                        uiThread { toast(R.string.error_feed_export) }
-                    }
-                }
-            } else {
-                toast(R.string.error_external_storage_not_available)
-            }
-        }
-    }
-
-    @AfterPermissionGranted(AUTO_IMPORT_OPML_REQUEST_CODE)
-    private fun autoImportOpml() {
-        if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
-            EasyPermissions.requestPermissions(this, getString(R.string.welcome_title_with_opml_import),
-                    AUTO_IMPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
-        } else {
-            if (BACKUP_OPML.exists()) {
-                importOpml(BACKUP_OPML)
-            } else {
-                toast(R.string.cannot_find_feeds)
-            }
-        }
-    }
-
-    private fun importOpml(file: File) {
-        doAsync {
-            try {
-                parseOpml(FileReader(file))
-            } catch (e: Exception) {
-                try {
-                    // We try to remove the opml version number, it may work better in some cases
-                    val fixedReader = StringReader(file.readText().replace("<opml version='[0-9]\\.[0-9]'>".toRegex(), "<opml>"))
-                    parseOpml(fixedReader)
-                } catch (e: Exception) {
-                    uiThread { toast(R.string.cannot_find_feeds) }
-                }
-            }
-        }
-    }
-
-    private fun parseOpml(opmlReader: Reader) {
-        var id = 1L
-        val feedList = mutableListOf<Feed>()
-        val opml = WireFeedInput().build(opmlReader) as Opml
-        opml.outlines.forEach {
-            if (it.xmlUrl != null || it.children.isNotEmpty()) {
-                val topLevelFeed = Feed()
-                topLevelFeed.id = id++
-                topLevelFeed.title = it.title
-
-                if (it.xmlUrl != null) {
-                    if (!it.xmlUrl.startsWith(OLD_GNEWS_TO_IGNORE)) {
-                        topLevelFeed.link = it.xmlUrl
-                        topLevelFeed.retrieveFullText = it.getAttributeValue(RETRIEVE_FULLTEXT_OPML_ATTR) == "true"
-                        feedList.add(topLevelFeed)
-                    }
-                } else {
-                    topLevelFeed.isGroup = true
-                    feedList.add(topLevelFeed)
-
-                    it.children.filter { it.xmlUrl != null && !it.xmlUrl.startsWith(OLD_GNEWS_TO_IGNORE) }.forEach {
-                        val subLevelFeed = Feed()
-                        subLevelFeed.id = id++
-                        subLevelFeed.title = it.title
-                        subLevelFeed.link = it.xmlUrl
-                        subLevelFeed.retrieveFullText = it.getAttributeValue(RETRIEVE_FULLTEXT_OPML_ATTR) == "true"
-                        subLevelFeed.groupId = topLevelFeed.id
-                        feedList.add(subLevelFeed)
-                    }
-                }
-            }
-        }
-
-        if (feedList.isNotEmpty()) {
-            App.db.feedDao().insert(*feedList.toTypedArray())
-        }
-    }
-
-    private fun exportOpml(opmlWriter: Writer) {
-        val feeds = App.db.feedDao().all.groupBy { it.groupId }
-
-        val opml = Opml().apply {
-            feedType = OPML20Generator().type
-            encoding = "utf-8"
-            created = Date()
-            outlines = feeds[null]?.map {
-                Outline(it.title, if (it.link.isNotBlank()) URL(it.link) else null, null).apply {
-                    children = feeds[it.id]?.map {
-                        Outline(it.title, if (it.link.isNotBlank()) URL(it.link) else null, null).apply {
-                            if (it.retrieveFullText) {
-                                attributes.add(Attribute(RETRIEVE_FULLTEXT_OPML_ATTR, "true"))
-                            }
-                        }
-                    }
-                    if (it.retrieveFullText) {
-                        attributes.add(Attribute(RETRIEVE_FULLTEXT_OPML_ATTR, "true"))
-                    }
-                }
-            }
-        }
-
-        WireFeedOutput().output(opml, opmlWriter)
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
+
+	override fun onBackPressed() {
+		if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
+			drawer?.closeDrawer(GravityCompat.START)
+		} else if (toolbar.hasExpandedActionView()) {
+			toolbar.collapseActionView()
+		} else if (!goBack()) {
+			super.onBackPressed()
+		}
+	}
+
+	override fun goToEntriesList(feed: Feed?) {
+		clearDetails()
+		containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
+
+		// We try to reuse the fragment to avoid loosing the bottom tab position
+		val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_master)
+		if (currentFragment is EntriesFragment) {
+			currentFragment.feed = feed
+		} else {
+			val master = EntriesFragment.newInstance(feed)
+			supportFragmentManager
+					.beginTransaction()
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+					.replace(R.id.frame_master, master, TAG_MASTER)
+					.commitAllowingStateLoss()
+		}
+	}
+
+	override fun goToEntryDetails(entry: EntryWithFeed, allEntryIds: List<String>) {
+		closeKeyboard()
+
+		if (containers_layout.hasTwoColumns()) {
+			containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
+			val fragment = EntryDetailsFragment.newInstance(entry, allEntryIds)
+			supportFragmentManager
+					.beginTransaction()
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+					.replace(R.id.frame_details, fragment, TAG_DETAILS)
+					.commitAllowingStateLoss()
+
+			val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
+			listFragment.setSelectedEntryId(entry.id)
+		} else {
+			startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY to entry, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds)
+		}
+	}
+
+	override fun setSelectedEntryId(selectedEntryId: String) {
+		val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
+		listFragment.setSelectedEntryId(selectedEntryId)
+	}
+
+	override fun goToAboutMe() {
+		startActivity<AboutActivity>()
+	}
+
+	override fun goToSettings() {
+		startActivity<SettingsActivity>()
+	}
+
+	private fun isOldFlymAppInstalled() =
+			packageManager.getInstalledApplications(PackageManager.GET_META_DATA).any { it.packageName == "net.fred.feedex" }
+
+	private fun hasFeedGroupsChanged(feedGroups: MutableList<FeedGroup>, newFeedGroups: MutableList<FeedGroup>): Boolean {
+		if (feedGroups != newFeedGroups) {
+			return true
+		}
+
+		// Also need to check all sub groups (can't be checked in FeedGroup's equals)
+		feedGroups.forEachIndexed { index, feedGroup ->
+			if (feedGroups[index].subFeeds != newFeedGroups[index].subFeeds) {
+				return true
+			}
+		}
+
+		return false
+	}
+
+	@AfterPermissionGranted(CHOOSE_OPML_REQUEST_CODE)
+	private fun pickOpml() {
+		if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
+			EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation),
+					CHOOSE_OPML_REQUEST_CODE, *NEEDED_PERMS)
+		} else {
+			StorageChooser.Builder()
+					.withActivity(this)
+					.withFragmentManager(fragmentManager)
+					.withMemoryBar(true)
+					.allowCustomPath(true)
+					.setType(StorageChooser.FILE_PICKER)
+					.customFilter(arrayListOf("xml", "opml"))
+					.build()
+					.run {
+						show()
+						setOnSelectListener {
+							importOpml(File(it))
+						}
+					}
+		}
+	}
+
+	@AfterPermissionGranted(EXPORT_OPML_REQUEST_CODE)
+	private fun exportOpml() {
+		if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
+			EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation),
+					EXPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
+		} else {
+			if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED || Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED_READ_ONLY) {
+				doAsync {
+					try {
+						val filename = (Environment.getExternalStorageDirectory().toString() + "/Flym_"
+								+ System.currentTimeMillis() + ".opml")
+
+						exportOpml(FileWriter(filename))
+
+						uiThread { toast(String.format(getString(R.string.message_exported_to), filename)) }
+					} catch (e: Exception) {
+						uiThread { toast(R.string.error_feed_export) }
+					}
+				}
+			} else {
+				toast(R.string.error_external_storage_not_available)
+			}
+		}
+	}
+
+	@AfterPermissionGranted(AUTO_IMPORT_OPML_REQUEST_CODE)
+	private fun autoImportOpml() {
+		if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
+			EasyPermissions.requestPermissions(this, getString(R.string.welcome_title_with_opml_import),
+					AUTO_IMPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
+		} else {
+			if (BACKUP_OPML.exists()) {
+				importOpml(BACKUP_OPML)
+			} else {
+				toast(R.string.cannot_find_feeds)
+			}
+		}
+	}
+
+	private fun importOpml(file: File) {
+		doAsync {
+			try {
+				parseOpml(FileReader(file))
+			} catch (e: Exception) {
+				try {
+					// We try to remove the opml version number, it may work better in some cases
+					val fixedReader = StringReader(file.readText().replace("<opml version='[0-9]\\.[0-9]'>".toRegex(), "<opml>"))
+					parseOpml(fixedReader)
+				} catch (e: Exception) {
+					uiThread { toast(R.string.cannot_find_feeds) }
+				}
+			}
+		}
+	}
+
+	private fun parseOpml(opmlReader: Reader) {
+		var id = 1L
+		val feedList = mutableListOf<Feed>()
+		val opml = WireFeedInput().build(opmlReader) as Opml
+		opml.outlines.forEach {
+			if (it.xmlUrl != null || it.children.isNotEmpty()) {
+				val topLevelFeed = Feed()
+				topLevelFeed.id = id++
+				topLevelFeed.title = it.title
+
+				if (it.xmlUrl != null) {
+					if (!it.xmlUrl.startsWith(OLD_GNEWS_TO_IGNORE)) {
+						topLevelFeed.link = it.xmlUrl
+						topLevelFeed.retrieveFullText = it.getAttributeValue(RETRIEVE_FULLTEXT_OPML_ATTR) == "true"
+						feedList.add(topLevelFeed)
+					}
+				} else {
+					topLevelFeed.isGroup = true
+					feedList.add(topLevelFeed)
+
+					it.children.filter { it.xmlUrl != null && !it.xmlUrl.startsWith(OLD_GNEWS_TO_IGNORE) }.forEach {
+						val subLevelFeed = Feed()
+						subLevelFeed.id = id++
+						subLevelFeed.title = it.title
+						subLevelFeed.link = it.xmlUrl
+						subLevelFeed.retrieveFullText = it.getAttributeValue(RETRIEVE_FULLTEXT_OPML_ATTR) == "true"
+						subLevelFeed.groupId = topLevelFeed.id
+						feedList.add(subLevelFeed)
+					}
+				}
+			}
+		}
+
+		if (feedList.isNotEmpty()) {
+			App.db.feedDao().insert(*feedList.toTypedArray())
+		}
+	}
+
+	private fun exportOpml(opmlWriter: Writer) {
+		val feeds = App.db.feedDao().all.groupBy { it.groupId }
+
+		val opml = Opml().apply {
+			feedType = OPML20Generator().type
+			encoding = "utf-8"
+			created = Date()
+			outlines = feeds[null]?.map {
+				Outline(it.title, if (it.link.isNotBlank()) URL(it.link) else null, null).apply {
+					children = feeds[it.id]?.map {
+						Outline(it.title, if (it.link.isNotBlank()) URL(it.link) else null, null).apply {
+							if (it.retrieveFullText) {
+								attributes.add(Attribute(RETRIEVE_FULLTEXT_OPML_ATTR, "true"))
+							}
+						}
+					}
+					if (it.retrieveFullText) {
+						attributes.add(Attribute(RETRIEVE_FULLTEXT_OPML_ATTR, "true"))
+					}
+				}
+			}
+		}
+
+		WireFeedOutput().output(opml, opmlWriter)
+	}
 
     private fun closeDrawer() {
         if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
@@ -520,16 +580,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             }
         }
         return false
-    }
-
-    override fun onBackPressed() {
-        if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
-            drawer?.closeDrawer(GravityCompat.START)
-        } else if (toolbar.hasExpandedActionView()) {
-            toolbar.collapseActionView()
-        } else if (!goBack()) {
-            super.onBackPressed()
-        }
     }
 
     private fun showAddFeedPopup() {
@@ -562,9 +612,9 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                 val results = FilterResults()
                 val array = ArrayList<SearchFeedResult>()
 
-                if (charSequence.isNotEmpty()) {
+				if (charSequence.isNotBlank()) {
                     try {
-                        val searchStr = charSequence.toString()
+						val searchStr = charSequence.toString().trim()
 
                         if (URLUtil.isNetworkUrl(searchStr)) {
                             FetcherService.createCall(searchStr).execute().use { response ->
@@ -602,9 +652,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     } catch (t: Throwable) {
                         warn("error during feed search", t)
                     }
-                }
-
-                if (array.isEmpty()) {
+				} else {
                     array.addAll(defaultFeeds)
                 }
 
@@ -639,55 +687,5 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             return true
         }
         return false
-    }
-
-    override fun goToEntriesList(feed: Feed?) {
-        clearDetails()
-        containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
-
-        // We try to reuse the fragment to avoid loosing the bottom tab position
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_master)
-        if (currentFragment is EntriesFragment) {
-            currentFragment.feed = feed
-        } else {
-            val master = EntriesFragment.newInstance(feed)
-            supportFragmentManager
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .replace(R.id.frame_master, master, TAG_MASTER)
-                    .commitAllowingStateLoss()
-        }
-    }
-
-    override fun goToEntryDetails(entry: EntryWithFeed, allEntryIds: List<String>) {
-        closeKeyboard()
-
-        if (containers_layout.hasTwoColumns()) {
-            containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
-            val fragment = EntryDetailsFragment.newInstance(entry, allEntryIds)
-            supportFragmentManager
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .replace(R.id.frame_details, fragment, TAG_DETAILS)
-                    .commitAllowingStateLoss()
-
-            val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
-            listFragment.setSelectedEntryId(entry.id)
-        } else {
-            startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY to entry, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds)
-        }
-    }
-
-    override fun setSelectedEntryId(selectedEntryId: String) {
-        val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
-        listFragment.setSelectedEntryId(selectedEntryId)
-    }
-
-    override fun goToAboutMe() {
-        startActivity<AboutActivity>()
-    }
-
-    override fun goToSettings() {
-        startActivity<SettingsActivity>()
     }
 }

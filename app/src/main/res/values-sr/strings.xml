@@ -49,7 +49,7 @@
     <string name="error_feed_export">Извоз није успео. Проверите да ли имате монтирану уписиву СД картицу.</string>
     <string name="error_external_storage_not_available">Спољашње складиште (нпр. СД картица) није доступно.</string>
     <string name="feed_search">Претрага довода</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Желите ли заиста да обришете овај довод?</string>
     <string name="question_delete_group">Желите ли заиста да обришете ову групу и све њене доводе?</string>

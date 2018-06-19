@@ -53,7 +53,7 @@
         eskuragarri.
     </string>
     <string name="feed_search">Jario bilaketa</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Benetan jario hau ezabatu nahi al duzu?</string>
 	<string name="question_delete_group">Benetan talde hau eta bere jario guztiak ezabatu nahi

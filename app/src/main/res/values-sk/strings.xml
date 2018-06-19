@@ -50,7 +50,7 @@
     <string name="error_feed_export">Export zlyhal. Na pripojenú SD kartu sa pravdepodobne nedá zapisovať.</string>
     <string name="error_external_storage_not_available">Externý úložný priestor (napr. SD karta) nie je dostupný.</string>
     <string name="feed_search">Prehľadať zdroj</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Naozaj zmazať tento zdroj?</string>
     <string name="question_delete_group">Naozaj chcete zmazať túto skupinu a všetky jej zdroje?</string>

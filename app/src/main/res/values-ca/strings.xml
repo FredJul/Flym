@@ -52,7 +52,7 @@
         available.
     </string>
     <string name="feed_search">Cerca canals</string>
-    <string name="feed_search_hint">What are you looking for?</string>
+	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Voleu eliminar aquest canal?</string>
     <string name="question_delete_group">Voleu eliminar aquest grup i els seus canals?</string>
