@@ -66,29 +66,15 @@ import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.hintTextColor
-import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
-import org.jetbrains.anko.warn
 import org.json.JSONObject
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
-import java.io.Reader
-import java.io.StringReader
-import java.io.Writer
+import java.io.*
 import java.net.URL
 import java.net.URLEncoder
-import java.util.ArrayList
-import java.util.Date
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -104,11 +90,11 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         private const val FEED_SEARCH_TITLE = "title"
         private const val FEED_SEARCH_URL = "feedId"
         private const val FEED_SEARCH_DESC = "description"
+        private val FEED_SEARCH_BLACKLIST = arrayOf("http://syndication.lesechos.fr/rss/rss_finance.xml")
 
         private const val OLD_GNEWS_TO_IGNORE = "http://news.google.com/news?"
 
         private val GNEWS_TOPIC_NAME = intArrayOf(R.string.google_news_top_stories, R.string.google_news_world, R.string.google_news_business, R.string.google_news_science_technology, R.string.google_news_entertainment, R.string.google_news_sports, R.string.google_news_health)
-
         private val GNEWS_TOPIC_CODE = arrayOf("", "WORLD", "BUSINESS", "SCITECH", "ENTERTAINMENT", "SPORTS", "HEALTH")
 
         private const val AUTO_IMPORT_OPML_REQUEST_CODE = 1
@@ -636,7 +622,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                                         try {
                                             val entry = entries.get(i) as JSONObject
                                             val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
-                                            if (!url.isEmpty()) {
+                                            if (!url.isEmpty() && !FEED_SEARCH_BLACKLIST.contains(url)) {
                                                 @Suppress("DEPRECATION")
                                                 array.add(
                                                         SearchFeedResult(url,
