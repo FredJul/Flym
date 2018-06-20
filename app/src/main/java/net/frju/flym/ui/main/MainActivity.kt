@@ -388,7 +388,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
 		// Also need to check all sub groups (can't be checked in FeedGroup's equals)
 		feedGroups.forEachIndexed { index, feedGroup ->
-			if (feedGroups[index].subFeeds != newFeedGroups[index].subFeeds) {
+            if (feedGroup.feed != newFeedGroups[index].feed || feedGroup.subFeeds != newFeedGroups[index].subFeeds) {
 				return true
 			}
 		}
