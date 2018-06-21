@@ -39,6 +39,7 @@
     <string name="error">Errore</string>
     <string name="network_error">Nessuna connessione disponibile</string>
     <string name="drawer_explanation">Benvenuto!\n\nCon una pressione prolungata sui feed vedrai le opzioni ▼</string>
+    <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feed</string>

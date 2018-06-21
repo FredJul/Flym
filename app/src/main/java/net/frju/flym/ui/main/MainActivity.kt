@@ -66,15 +66,30 @@ import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.hintTextColor
+import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textResource
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
+import org.jetbrains.anko.warn
 import org.json.JSONObject
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.*
+import java.io.File
+import java.io.FileReader
+import java.io.FileWriter
+import java.io.Reader
+import java.io.StringReader
+import java.io.Writer
 import java.net.URL
 import java.net.URLEncoder
-import java.util.*
+import java.util.ArrayList
+import java.util.Date
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -166,6 +181,14 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     feedGroups.clear()
                     feedGroups += newFeedGroups
                     feedAdapter.notifyParentDataSetChanged(true)
+
+					if (hasFetchingError(feedGroups)) {
+						drawer_hint.textColor = Color.RED
+						drawer_hint.textResource = R.string.drawer_fetch_error_explanation
+					} else {
+						drawer_hint.textColor = Color.WHITE
+						drawer_hint.textResource = R.string.drawer_explanation
+					}
                 }
 
                 feedAdapter.onFeedClick { view, feed ->
@@ -280,7 +303,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         AutoRefreshJobService.initAutoRefresh(this)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+	override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
         // If we just clicked on the notification, let's go back to the default view
@@ -381,7 +404,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	private fun isOldFlymAppInstalled() =
 			packageManager.getInstalledApplications(PackageManager.GET_META_DATA).any { it.packageName == "net.fred.feedex" }
 
-	private fun hasFeedGroupsChanged(feedGroups: MutableList<FeedGroup>, newFeedGroups: MutableList<FeedGroup>): Boolean {
+	private fun hasFeedGroupsChanged(feedGroups: List<FeedGroup>, newFeedGroups: List<FeedGroup>): Boolean {
 		if (feedGroups != newFeedGroups) {
 			return true
 		}
@@ -396,11 +419,21 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		return false
 	}
 
+	private fun hasFetchingError(newFeedGroups: List<FeedGroup>): Boolean {
+		// Also need to check all sub groups (can't be checked in FeedGroup's equals)
+		feedGroups.forEach { feedGroup ->
+			if (feedGroup.feed.fetchError || feedGroup.subFeeds.any { it.fetchError }) {
+				return true
+			}
+		}
+
+		return false
+	}
+
 	@AfterPermissionGranted(CHOOSE_OPML_REQUEST_CODE)
 	private fun pickOpml() {
 		if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
-			EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation),
-					CHOOSE_OPML_REQUEST_CODE, *NEEDED_PERMS)
+			EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation), CHOOSE_OPML_REQUEST_CODE, *NEEDED_PERMS)
 		} else {
 			StorageChooser.Builder()
 					.withActivity(this)
@@ -422,18 +455,17 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	@AfterPermissionGranted(EXPORT_OPML_REQUEST_CODE)
 	private fun exportOpml() {
 		if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
-			EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation),
-					EXPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
+			EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation), EXPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
 		} else {
 			if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED || Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED_READ_ONLY) {
 				doAsync {
 					try {
-						val filename = (Environment.getExternalStorageDirectory().toString() + "/Flym_"
-								+ System.currentTimeMillis() + ".opml")
+						val opmlFileName = "Flym_" + System.currentTimeMillis() + ".opml"
+						val opmlFilePath = Environment.getExternalStorageDirectory().toString() + "/" + opmlFileName
 
-						exportOpml(FileWriter(filename))
+						exportOpml(FileWriter(opmlFilePath))
 
-						uiThread { toast(String.format(getString(R.string.message_exported_to), filename)) }
+						uiThread { toast(String.format(getString(R.string.message_exported_to), opmlFileName)) }
 					} catch (e: Exception) {
 						uiThread { toast(R.string.error_feed_export) }
 					}
@@ -447,8 +479,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	@AfterPermissionGranted(AUTO_IMPORT_OPML_REQUEST_CODE)
 	private fun autoImportOpml() {
 		if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
-			EasyPermissions.requestPermissions(this, getString(R.string.welcome_title_with_opml_import),
-					AUTO_IMPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
+			EasyPermissions.requestPermissions(this, getString(R.string.welcome_title_with_opml_import), AUTO_IMPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
 		} else {
 			if (BACKUP_OPML.exists()) {
 				importOpml(BACKUP_OPML)

@@ -39,6 +39,7 @@
     <string name="error">Erreur</string>
     <string name="network_error">Pas de connexion disponible</string>
     <string name="drawer_explanation">Bienvenue !\n\nAppuyez longtemps sur les flux pour voir les options ▼</string>
+    <string name="drawer_fetch_error_explanation">Certains de vos flux ne se sont pas raffraichis correctement ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Flux</string>

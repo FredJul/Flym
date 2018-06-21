@@ -41,6 +41,7 @@
     <string name="error">Fehler</string>
     <string name="network_error">Kein Internet</string>
     <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
+    <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
