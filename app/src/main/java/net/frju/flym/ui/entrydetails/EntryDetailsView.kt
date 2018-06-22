@@ -89,7 +89,7 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
         setBackgroundColor(Color.parseColor(BACKGROUND_COLOR))
 
         // Text zoom level from preferences
-        val fontSize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"))
+		val fontSize = PrefUtils.getString(PrefUtils.FONT_SIZE, "0").toInt()
         if (fontSize != 0) {
             settings.textZoom = 100 + fontSize * 20
         }
@@ -124,8 +124,9 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
         if (entry == null) {
             loadDataWithBaseURL("", "", TEXT_HTML, UTF8, null)
         } else {
-            var contentText = if (preferFullText) entry.mobilizedContent
-                    ?: entry.description.orEmpty() else entry.description.orEmpty()
+			var contentText = if (preferFullText) entry.mobilizedContent
+					?: entry.description.orEmpty() else entry.description.orEmpty()
+
             if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
                 contentText = HtmlUtils.replaceImageURLs(contentText, entry.id)
                 if (settings.blockNetworkImage) {

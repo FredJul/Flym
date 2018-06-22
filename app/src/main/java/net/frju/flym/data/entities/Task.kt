@@ -33,5 +33,5 @@ import kotlinx.android.parcel.Parcelize
 				onDelete = ForeignKey.CASCADE))])
 data class Task(
 		var entryId: String = "",
-		var imageLinkToDl: String = "", // TODO try again with null when room will authorize it
+		var imageLinkToDl: String = "",
 		var numberAttempt: Int = 0) : Parcelable

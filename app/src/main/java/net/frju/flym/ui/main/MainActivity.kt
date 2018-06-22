@@ -30,21 +30,14 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
-import android.text.Html
-import android.webkit.URLUtil
 import android.widget.EditText
 import com.codekidlabs.storagechooser.StorageChooser
 import com.rometools.opml.feed.opml.Attribute
 import com.rometools.opml.feed.opml.Opml
 import com.rometools.opml.feed.opml.Outline
 import com.rometools.opml.io.impl.OPML20Generator
-import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.WireFeedInput
 import com.rometools.rome.io.WireFeedOutput
-import com.rometools.rome.io.XmlReader
-import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
-import ir.mirrajabi.searchdialog.core.BaseFilter
-import ir.mirrajabi.searchdialog.core.SearchResultListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_entries.*
 import kotlinx.android.synthetic.main.view_main_containers.*
@@ -53,10 +46,8 @@ import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
-import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.service.AutoRefreshJobService
-import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.about.AboutActivity
 import net.frju.flym.ui.entries.EntriesFragment
 import net.frju.flym.ui.entrydetails.EntryDetailsActivity
@@ -68,7 +59,6 @@ import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.hintTextColor
 import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.startActivity
@@ -76,8 +66,6 @@ import org.jetbrains.anko.textColor
 import org.jetbrains.anko.textResource
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
-import org.jetbrains.anko.warn
-import org.json.JSONObject
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
@@ -87,8 +75,6 @@ import java.io.Reader
 import java.io.StringReader
 import java.io.Writer
 import java.net.URL
-import java.net.URLEncoder
-import java.util.ArrayList
 import java.util.Date
 
 
@@ -102,15 +88,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         private const val TAG_DETAILS = "TAG_DETAILS"
         private const val TAG_MASTER = "TAG_MASTER"
 
-        private const val FEED_SEARCH_TITLE = "title"
-        private const val FEED_SEARCH_URL = "feedId"
-        private const val FEED_SEARCH_DESC = "description"
-        private val FEED_SEARCH_BLACKLIST = arrayOf("http://syndication.lesechos.fr/rss/rss_finance.xml")
-
         private const val OLD_GNEWS_TO_IGNORE = "http://news.google.com/news?"
-
-        private val GNEWS_TOPIC_NAME = intArrayOf(R.string.google_news_top_stories, R.string.google_news_world, R.string.google_news_business, R.string.google_news_science_technology, R.string.google_news_entertainment, R.string.google_news_sports, R.string.google_news_health)
-        private val GNEWS_TOPIC_CODE = arrayOf("", "WORLD", "BUSINESS", "SCITECH", "ENTERTAINMENT", "SPORTS", "HEALTH")
 
         private const val AUTO_IMPORT_OPML_REQUEST_CODE = 1
         private const val CHOOSE_OPML_REQUEST_CODE = 2
@@ -157,7 +135,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         nav.adapter = feedAdapter
 
         add_feed_fab.onClick {
-            showAddFeedPopup()
+			FeedSearchDialog(this).show()
         }
 
         App.db.feedDao().observeAll.observe(this@MainActivity, Observer {
@@ -288,7 +266,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     AlertDialog.Builder(this)
                             .setTitle(R.string.welcome_title)
                             .setPositiveButton(android.R.string.yes) { _, _ ->
-                                showAddFeedPopup()
+								FeedSearchDialog(this).show()
                             }
                             .setNegativeButton(android.R.string.no, null)
                             .show()
@@ -597,101 +575,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             }
         }
         return false
-    }
-
-    private fun showAddFeedPopup() {
-        val defaultFeeds = GNEWS_TOPIC_NAME.mapIndexed { index, name ->
-            @Suppress("DEPRECATION")
-            val link = if (GNEWS_TOPIC_CODE[index].isNotEmpty())
-                "https://news.google.com/news/rss/headlines/section/topic/${GNEWS_TOPIC_CODE[index]}?ned=${resources.configuration.locale.language}"
-            else
-                "https://news.google.com/news/rss/?ned=${resources.configuration.locale.language}"
-
-            SearchFeedResult(link, getString(name))
-        }
-
-        val searchDialog = SimpleSearchDialogCompat(this@MainActivity, getString(R.string.feed_search),
-                getString(R.string.feed_search_hint), null, ArrayList(defaultFeeds),
-                SearchResultListener<SearchFeedResult> { dialog, item, position ->
-                    toast(R.string.feed_added)
-                    dialog.dismiss()
-
-                    val feedToAdd = Feed(link = item.link, title = item.name)
-                    feedToAdd.retrieveFullText = defaultFeeds.contains(item) // do that automatically for google news feeds
-
-                    doAsync { App.db.feedDao().insert(feedToAdd) }
-                })
-
-        val apiFilter = object : BaseFilter<SearchFeedResult>() {
-            override fun performFiltering(charSequence: CharSequence): FilterResults? {
-                doBeforeFiltering()
-
-                val results = FilterResults()
-                val array = ArrayList<SearchFeedResult>()
-
-				if (charSequence.isNotBlank()) {
-                    try {
-						val searchStr = charSequence.toString().trim()
-
-                        if (URLUtil.isNetworkUrl(searchStr)) {
-                            FetcherService.createCall(searchStr).execute().use { response ->
-                                val romeFeed = SyndFeedInput().build(XmlReader(response.body()!!.byteStream()))
-
-                                array.add(SearchFeedResult(searchStr, romeFeed.title
-                                        ?: searchStr, romeFeed.description ?: ""))
-                            }
-                        } else {
-                            @Suppress("DEPRECATION")
-                            val searchUrl = "https://cloud.feedly.com/v3/search/feeds?count=20&locale=" + resources.configuration.locale.language + "&query=" + URLEncoder.encode(searchStr, "UTF-8")
-                            FetcherService.createCall(searchUrl).execute().use {
-                                it.body()?.let { body ->
-                                    val jsonStr = body.string()
-
-                                    // Parse results
-                                    val entries = JSONObject(jsonStr).getJSONArray("results")
-                                    for (i in 0 until entries.length()) {
-                                        try {
-                                            val entry = entries.get(i) as JSONObject
-                                            val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
-                                            if (!url.isEmpty() && !FEED_SEARCH_BLACKLIST.contains(url)) {
-                                                @Suppress("DEPRECATION")
-                                                array.add(
-                                                        SearchFeedResult(url,
-                                                                Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString(),
-                                                                Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString()))
-                                            }
-                                        } catch (ignored: Throwable) {
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } catch (t: Throwable) {
-                        warn("error during feed search", t)
-                    }
-				} else {
-                    array.addAll(defaultFeeds)
-                }
-
-                results.values = array
-                results.count = array.size
-                return results
-            }
-
-            override fun publishResults(charSequence: CharSequence, filterResults: FilterResults?) {
-                filterResults?.let {
-                    @Suppress("UNCHECKED_CAST")
-                    searchDialog.filterResultListener.onFilter(it.values as ArrayList<SearchFeedResult>)
-                }
-                doAfterFiltering()
-            }
-        }
-        searchDialog.filter = apiFilter
-        searchDialog.show()
-        searchDialog.searchBox.apply {
-            textColor = Color.BLACK
-            hintTextColor = Color.GRAY
-        }
     }
 
     private fun clearDetails(): Boolean {
