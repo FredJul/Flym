@@ -30,7 +30,7 @@
     <string name="cannot_find_feeds">Ленты не найдены</string>
     <string name="menu_settings">Настройки</string>
     <string name="menu_rename_feed">Переименовать</string>
-    <string name="menu_reorder">Переместить</string>
+    <string name="menu_reorder">Изменить порядок</string>
     <string name="menu_delete">Удалить</string>
     <string name="menu_enable_full_text_retrieval">Загружать текст полностью</string>
     <string name="menu_disable_full_text_retrieval">Не загружать текст полностью</string>
