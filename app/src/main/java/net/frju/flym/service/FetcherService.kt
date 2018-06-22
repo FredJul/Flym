@@ -127,7 +127,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				else -> { // == Constants.ACTION_REFRESH_FEEDS
 					PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true)
 
-					val keepTime = java.lang.Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000L
+					val keepTime = PrefUtils.getString(PrefUtils.KEEP_TIME, "4").toLong() * 86400000L
 					val keepDateBorderTime = if (keepTime > 0) System.currentTimeMillis() - keepTime else 0
 
 					deleteOldEntries(keepDateBorderTime)
@@ -484,8 +484,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 				IMAGE_FOLDER_FILE.listFiles().forEach { file ->
 					// If old file and not part of a favorite entry
-					if (file.lastModified() < keepDateBorderTime
-							&& !favorites.any { file.name.startsWith(it.id + ID_SEPARATOR) }) {
+					if (file.lastModified() < keepDateBorderTime && !favorites.any { file.name.startsWith(it.id + ID_SEPARATOR) }) {
 						file.delete()
 					}
 				}

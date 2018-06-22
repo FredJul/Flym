@@ -190,6 +190,8 @@ class EntryDetailsFragment : Fragment() {
 
 	private fun setupToolbar() {
 		toolbar.apply {
+			title = entry.feedTitle
+
 			menu.clear()
 			inflateMenu(R.menu.menu_fragment_entry_details)
 
@@ -234,7 +236,7 @@ class EntryDetailsFragment : Fragment() {
 					}
 					R.id.menu_entry_details__share -> {
 						startActivity(Intent.createChooser(
-								Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, entry.link)
+								Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, entry.title).putExtra(Intent.EXTRA_TEXT, entry.link)
 										.setType("text/plain"), getString(R.string.menu_share)
 						))
 					}
