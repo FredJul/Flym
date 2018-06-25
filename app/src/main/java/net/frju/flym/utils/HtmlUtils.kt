@@ -30,12 +30,13 @@ import java.util.regex.Pattern
 object HtmlUtils {
 
     private val JSOUP_WHITELIST = Whitelist.relaxed().addTags("iframe", "video", "audio", "source", "track")
-            .addAttributes("iframe", "src", "frameborder", "height", "width")
-            .addAttributes("video", "src", "controls", "height", "width", "poster")
+            .addAttributes("iframe", "src", "frameborder")
+            .addAttributes("video", "src", "controls", "poster")
             .addAttributes("audio", "src", "controls")
             .addAttributes("source", "src", "type")
             .addAttributes("track", "src", "kind", "srclang", "label")
             .addAttributes("p", "style")
+            .removeAttributes("img", "height", "width")
 
     private const val URL_SPACE = "%20"
 
