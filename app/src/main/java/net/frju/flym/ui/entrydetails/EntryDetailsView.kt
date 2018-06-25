@@ -42,7 +42,7 @@ import java.io.IOException
 
 private const val TEXT_HTML = "text/html"
 private const val HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>"
-private const val BACKGROUND_COLOR = "#2B2B2B"
+private const val BACKGROUND_COLOR = "#202020"
 private const val QUOTE_BACKGROUND_COLOR = "#383b3f"
 private const val QUOTE_LEFT_COLOR = "#686b6f"
 private const val TEXT_COLOR = "#C0C0C0"

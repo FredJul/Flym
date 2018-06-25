@@ -3,7 +3,7 @@
     <color name="colorPrimary">#009789</color>
     <color name="colorPrimaryDark">#00665C</color>
     <color name="colorAccent">#02C8B4</color>
-    <color name="colorBackground">#FF2B2B2B</color>
+    <color name="colorBackground">#202020</color>
     <color name="color_unread">#ffffff</color>
     <color name="color_read">#9e9e9e</color>
     <color name="bottom_navigation_disable">#7bffffff</color>
