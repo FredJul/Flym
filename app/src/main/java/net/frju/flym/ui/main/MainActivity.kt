@@ -18,6 +18,7 @@
 package net.frju.flym.ui.main
 
 import android.Manifest
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -178,29 +179,30 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                                         setText(feed.title)
                                     }
 
-                                    alert {
-                                        titleResource = R.string.menu_rename_feed
-                                        customView = input
-                                        okButton {
-                                            val newName = input.text.toString()
-                                            if (newName.isNotBlank()) {
-                                                doAsync {
-                                                    feed.title = newName
-                                                    App.db.feedDao().insert(feed)
+                                    AlertDialog.Builder(this@MainActivity)
+                                            .setTitle(R.string.menu_rename_feed)
+                                            .setView(input)
+                                            .setPositiveButton(android.R.string.ok) { dialog, which ->
+                                                val newName = input.text.toString()
+                                                if (newName.isNotBlank()) {
+                                                    doAsync {
+                                                        feed.title = newName
+                                                        App.db.feedDao().insert(feed)
+                                                    }
                                                 }
                                             }
-                                        }
-                                        cancelButton { }
-                                    }.show()
+                                            .setNegativeButton(android.R.string.cancel, null)
+                                            .show()
                                 }
                                 R.id.reorder -> startActivity<FeedListEditActivity>()
                                 R.id.delete -> {
-                                    alert {
-                                        title = feed.title.toString()
-                                        messageResource = if (feed.isGroup) R.string.question_delete_group else R.string.question_delete_feed
-                                        yesButton { doAsync { App.db.feedDao().delete(feed) } }
-                                        noButton { }
-                                    }.show()
+                                    AlertDialog.Builder(this@MainActivity)
+                                            .setTitle(feed.title)
+                                            .setMessage(if (feed.isGroup) R.string.question_delete_group else R.string.question_delete_feed)
+                                            .setPositiveButton(android.R.string.yes) { _, _ ->
+                                                doAsync { App.db.feedDao().delete(feed) }
+                                            }.setNegativeButton(android.R.string.no, null)
+                                            .show()
                                 }
                                 R.id.enable_full_text_retrieval -> doAsync { App.db.feedDao().enableFullTextRetrieval(feed.id) }
                                 R.id.disable_full_text_retrieval -> doAsync { App.db.feedDao().disableFullTextRetrieval(feed.id) }
@@ -241,17 +243,21 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                 openDrawer()
 
                 if (isOldFlymAppInstalled()) {
-                    alert {
-                        titleResource = R.string.welcome_title_with_opml_import
-                        yesButton { autoImportOpml() }
-                        noButton { }
-                    }.show()
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.welcome_title_with_opml_import)
+                            .setPositiveButton(android.R.string.yes) { _, _ ->
+                                autoImportOpml()
+                            }
+                            .setNegativeButton(android.R.string.no, null)
+                            .show()
                 } else {
-                    alert {
-                        titleResource = R.string.welcome_title
-                        yesButton { FeedSearchDialog(this@MainActivity).show() }
-                        noButton { }
-                    }.show()
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.welcome_title)
+                            .setPositiveButton(android.R.string.yes) { _, _ ->
+                                FeedSearchDialog(this).show()
+                            }
+                            .setNegativeButton(android.R.string.no, null)
+                            .show()
                 }
             } else {
                 closeDrawer()

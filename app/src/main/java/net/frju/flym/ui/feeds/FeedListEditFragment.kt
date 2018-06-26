@@ -17,6 +17,7 @@
 
 package net.frju.flym.ui.feeds
 
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -28,10 +29,7 @@ import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.ui.views.DragNDropListener
-import org.jetbrains.anko.cancelButton
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.okButton
-import org.jetbrains.anko.support.v4.alert
 import java.util.*
 
 
@@ -70,18 +68,16 @@ class FeedListEditFragment : Fragment() {
                     val toIsFeedWithoutGroup = toIsTopLevel && !toFeed.isGroup
 
                     if ((fromIsFeedWithoutGroup || !fromIsTopLevel) && toIsTopLevel && !toIsFeedWithoutGroup) {
-                        alert {
-                            titleResource = R.string.to_group_title
-                            messageResource = R.string.to_group_message
-                            positiveButton(R.string.to_group_into) {
-                                fromFeed.groupId = toFeed.id
-                                changeItemPriority(fromFeed, 1) // TODO would be better at the end instead of beginning
-                            }
-                            negativeButton(R.string.to_group_above) {
-                                fromFeed.groupId = toFeed.groupId
-                                changeItemPriority(fromFeed, toFeed.displayPriority)
-                            }
-                        }.show()
+                        AlertDialog.Builder(activity)
+                                .setTitle(R.string.to_group_title)
+                                .setMessage(R.string.to_group_message)
+                                .setPositiveButton(R.string.to_group_into) { dialog, which ->
+                                    fromFeed.groupId = toFeed.id
+                                    changeItemPriority(fromFeed, 1) // TODO would be better at the end instead of beginning
+                                }.setNegativeButton(R.string.to_group_above) { dialog, which ->
+                                    fromFeed.groupId = toFeed.groupId
+                                    changeItemPriority(fromFeed, toFeed.displayPriority)
+                                }.show()
                     } else {
                         fromFeed.groupId = toFeed.groupId
                         changeItemPriority(fromFeed, toFeed.displayPriority)
@@ -122,24 +118,23 @@ class FeedListEditFragment : Fragment() {
                     setSingleLine(true)
                 }
 
-                alert {
-                    titleResource = R.string.add_group_title
-                    customView = input
-                    okButton {
-                        val groupName = input.text.toString()
-                        if (groupName.isNotBlank()) {
-                            doAsync {
-                                val newGroup = Feed().apply {
-                                    title = groupName
-                                    isGroup = true
+                AlertDialog.Builder(activity)
+                        .setTitle(R.string.add_group_title)
+                        .setView(input)
+                        .setPositiveButton(android.R.string.ok) { dialog, which ->
+                            val groupName = input.text.toString()
+                            if (groupName.isNotBlank()) {
+                                doAsync {
+                                    val newGroup = Feed().apply {
+                                        title = groupName
+                                        isGroup = true
+                                    }
+                                    App.db.feedDao().insert(newGroup)
                                 }
-                                App.db.feedDao().insert(newGroup)
                             }
                         }
-                    }
-                    cancelButton {}
-                }.show()
-
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show()
                 return true
             }
         }
