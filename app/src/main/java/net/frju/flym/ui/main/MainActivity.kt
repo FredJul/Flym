@@ -18,7 +18,6 @@
 package net.frju.flym.ui.main
 
 import android.Manifest
-import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -57,25 +56,13 @@ import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textResource
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
-import java.io.Reader
-import java.io.StringReader
-import java.io.Writer
+import java.io.*
 import java.net.URL
-import java.util.Date
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -191,30 +178,29 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                                         setText(feed.title)
                                     }
 
-                                    AlertDialog.Builder(this@MainActivity)
-                                            .setTitle(R.string.menu_rename_feed)
-                                            .setView(input)
-                                            .setPositiveButton(android.R.string.ok) { dialog, which ->
-                                                val newName = input.text.toString()
-                                                if (newName.isNotBlank()) {
-                                                    doAsync {
-                                                        feed.title = newName
-                                                        App.db.feedDao().insert(feed)
-                                                    }
+                                    alert {
+                                        titleResource = R.string.menu_rename_feed
+                                        customView = input
+                                        okButton {
+                                            val newName = input.text.toString()
+                                            if (newName.isNotBlank()) {
+                                                doAsync {
+                                                    feed.title = newName
+                                                    App.db.feedDao().insert(feed)
                                                 }
                                             }
-                                            .setNegativeButton(android.R.string.cancel, null)
-                                            .show()
+                                        }
+                                        cancelButton { }
+                                    }.show()
                                 }
                                 R.id.reorder -> startActivity<FeedListEditActivity>()
                                 R.id.delete -> {
-                                    AlertDialog.Builder(this@MainActivity)
-                                            .setTitle(feed.title)
-                                            .setMessage(if (feed.isGroup) R.string.question_delete_group else R.string.question_delete_feed)
-                                            .setPositiveButton(android.R.string.yes) { _, _ ->
-                                                doAsync { App.db.feedDao().delete(feed) }
-                                            }.setNegativeButton(android.R.string.no, null)
-                                            .show()
+                                    alert {
+                                        title = feed.title.toString()
+                                        messageResource = if (feed.isGroup) R.string.question_delete_group else R.string.question_delete_feed
+                                        yesButton { doAsync { App.db.feedDao().delete(feed) } }
+                                        noButton { }
+                                    }.show()
                                 }
                                 R.id.enable_full_text_retrieval -> doAsync { App.db.feedDao().enableFullTextRetrieval(feed.id) }
                                 R.id.disable_full_text_retrieval -> doAsync { App.db.feedDao().disableFullTextRetrieval(feed.id) }
@@ -255,21 +241,17 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                 openDrawer()
 
                 if (isOldFlymAppInstalled()) {
-                    AlertDialog.Builder(this)
-                            .setTitle(R.string.welcome_title_with_opml_import)
-                            .setPositiveButton(android.R.string.yes) { _, _ ->
-                                autoImportOpml()
-                            }
-                            .setNegativeButton(android.R.string.no, null)
-                            .show()
+                    alert {
+                        titleResource = R.string.welcome_title_with_opml_import
+                        yesButton { autoImportOpml() }
+                        noButton { }
+                    }.show()
                 } else {
-                    AlertDialog.Builder(this)
-                            .setTitle(R.string.welcome_title)
-                            .setPositiveButton(android.R.string.yes) { _, _ ->
-								FeedSearchDialog(this).show()
-                            }
-                            .setNegativeButton(android.R.string.no, null)
-                            .show()
+                    alert {
+                        titleResource = R.string.welcome_title
+                        yesButton { FeedSearchDialog(this@MainActivity).show() }
+                        noButton { }
+                    }.show()
                 }
             } else {
                 closeDrawer()
