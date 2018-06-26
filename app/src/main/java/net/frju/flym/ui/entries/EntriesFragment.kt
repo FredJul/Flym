@@ -28,6 +28,7 @@ import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -45,6 +46,7 @@ import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
+import net.frju.flym.utils.closeKeyboard
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
@@ -67,10 +69,10 @@ class EntriesFragment : Fragment() {
 		private const val STATE_LIST_DISPLAY_DATE = "STATE_LIST_DISPLAY_DATE"
 
 		fun newInstance(feed: Feed?): EntriesFragment {
-            return EntriesFragment().apply {
-                feed?.let {
-                    arguments = bundleOf(ARG_FEED to feed)
-                }
+			return EntriesFragment().apply {
+				feed?.let {
+					arguments = bundleOf(ARG_FEED to feed)
+				}
 			}
 		}
 	}
@@ -282,6 +284,13 @@ class EntriesFragment : Fragment() {
 		}
 
 		recycler_view.emptyView = empty_view
+
+		recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+			override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+				super.onScrollStateChanged(recyclerView, newState)
+				activity?.closeKeyboard()
+			}
+		})
 	}
 
 	private fun startRefresh() {
@@ -313,11 +322,10 @@ class EntriesFragment : Fragment() {
 			val searchView = searchItem.actionView as SearchView
 			if (searchText != null) {
 				searchItem.expandActionView()
-				searchView.post( // Without that, it just does not work
-						{
-							searchView.setQuery(searchText, false)
-							searchView.clearFocus()
-						})
+				searchView.post {
+					searchView.setQuery(searchText, false)
+					searchView.clearFocus()
+				}
 			}
 
 			searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
