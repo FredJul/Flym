@@ -54,6 +54,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.error
 import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.toast
+import org.jsoup.Jsoup
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -260,8 +261,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 					entry.link?.let { link ->
 						try {
 							createCall(link).execute().use {
-								it.body()?.string()?.let { body ->
-									Readability4JExtended(link, body).parse().articleContent?.html()?.let {
+								it.body()?.byteStream()?.let { input ->
+									Readability4JExtended(link, Jsoup.parse(input, null, link)).parse().articleContent?.html()?.let {
 										val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(link))
 
 										if (downloadPictures) {
