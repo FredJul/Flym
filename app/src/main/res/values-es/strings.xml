@@ -82,6 +82,9 @@
     <string name="original_text">Mostrar el texto original</string>
 	<string name="open_in_browser">Ver en el navegador</string>
     <string name="cant_open_link">No se ha encontrado una aplicación para este enlace.</string>
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
 
     <!-- WIDGET -->
 

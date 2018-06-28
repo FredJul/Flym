@@ -77,6 +77,9 @@
     <string name="original_text">Mostrar o texto original</string>
     <string name="open_in_browser">Ver no navegador</string>
     <string name="cant_open_link">Nenhum aplicativo encontrado para este link</string>
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
 
     <!-- WIDGET -->
 

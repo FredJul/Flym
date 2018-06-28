@@ -79,6 +79,9 @@
     <string name="original_text">Näytä alkuperäinen teksti</string>
 	<string name="open_in_browser">Avaa selaimessa</string>
     <string name="cant_open_link">Linkin avaamiseen kykenevää sovellusta ei löydy.</string>
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
 
     <!-- WIDGET -->
 

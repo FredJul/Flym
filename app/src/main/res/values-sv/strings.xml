@@ -76,6 +76,9 @@
     <string name="original_text">Visa originaltexten</string>
     <string name="open_in_browser">Öppna i webläsare</string>
     <string name="cant_open_link">Inget lämpligt program hittades för denna länk</string>
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
 
     <!-- WIDGET -->
 

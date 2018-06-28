@@ -56,8 +56,9 @@
     <string name="original_text">Show original text</string>
 	<string name="open_in_browser">See in browser</string>
     <string name="cant_open_link">No application found for this link</string>
-
-    <!-- WIDGET -->
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automated refresh</string>

@@ -87,6 +87,9 @@
     <string name="original_text">Zobrazit originální text</string>
 	<string name="open_in_browser">Zobrazit v prohlížeči</string>
     <string name="cant_open_link">Pro tento odkaz nebyla nalezena žádná aplikace</string>
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
 
     <!-- WIDGET -->
 

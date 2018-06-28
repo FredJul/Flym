@@ -79,6 +79,9 @@
     <string name="original_text">Zobraziť originálny text</string>
     <string name="open_in_browser">Zobraziť v prehliadači</string>
     <string name="cant_open_link">Pre tento odkaz nebola nájdená žiadna aplikácia</string>
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
 
     <!-- WIDGET -->
 

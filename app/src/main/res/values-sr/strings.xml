@@ -78,6 +78,9 @@
     <string name="original_text">Прикажи оригиналан текст</string>
     <string name="open_in_browser">Погледај у прегледачу</string>
     <string name="cant_open_link">Ниједна апликација није додељена овој вези</string>
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
 
     <!-- WIDGET -->
 

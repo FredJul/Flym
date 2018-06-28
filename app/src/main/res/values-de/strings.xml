@@ -80,6 +80,9 @@
     <string name="original_text">Ursprünglichen Text anzeigen</string>
 	<string name="open_in_browser">Im Browser ansehen</string>
     <string name="cant_open_link">Keine Anwendung für diesen Link gefunden</string>
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
 
     <!-- WIDGET -->
 

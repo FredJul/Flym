@@ -47,25 +47,17 @@
     <string name="menu_import">Importer depuis OPML</string>
     <string name="menu_export">Exporter vers OPML</string>
     <string name="storage_request_explanation">Pour pouvoir importer ou exporter les flux dans un fichier, vous devez authoriser l\'application à accéder à la mémoire de stockage.</string>
-    <string name="error_feed_export">L\'export a échoué. Assurez-vous d\'avoir une carte SD montée
-        et autorisée en écriture.
-    </string>
-    <string name="error_external_storage_not_available">Le stockage externe (comme la carte SD)
-        n\'est pas disponible.
-    </string>
+    <string name="error_feed_export">L\'export a échoué. Assurez-vous d\'avoir une carte SD montée et autorisée en écriture.</string>
+    <string name="error_external_storage_not_available">Le stockage externe (comme la carte SD) n\'est pas disponible.</string>
     <string name="feed_search">Recherche de flux</string>
     <string name="feed_search_hint">Entrez un lien de flux ou un mot-clé</string>
     <string name="feed_added">Flux ajouté à votre liste</string>
     <string name="question_delete_feed">Voulez-vous vraiment supprimer ce flux\u00A0?</string>
-    <string name="question_delete_group">Voulez-vous vraiment supprimer ce groupe et tout ses
-        flux\u00A0?
-    </string>
+    <string name="question_delete_group">Voulez-vous vraiment supprimer ce groupe et tout ses flux\u00A0?</string>
     <string name="add_group_title">Entrez le nom du groupe</string>
     <string name="message_exported_to">Exporté vers %s.</string>
     <string name="to_group_title">Déplacement de flux</string>
-    <string name="to_group_message">Vous pouvez placer ce flux dans ou au-dessus de ce groupe. Que
-        voulez-vous faire\u00A0?
-    </string>
+    <string name="to_group_message">Vous pouvez placer ce flux dans ou au-dessus de ce groupe. Que voulez-vous faire\u00A0?</string>
     <string name="to_group_above">Au-dessus du groupe</string>
     <string name="to_group_into">Dans le groupe</string>
     <string name="google_news_top_stories">À la une</string>
@@ -86,14 +78,14 @@
     <string name="original_text">Affiche le texte original</string>
 	<string name="open_in_browser">Ouvrir dans le navigateur web</string>
     <string name="cant_open_link">Aucune application trouvée pour ce lien</string>
-
-    <!-- WIDGET -->
+    <string name="unreads">Non lus</string>
+    <string name="all">Tous</string>
+    <string name="favorites">Favoris</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Mise à jour automatique</string>
     <string name="settings_refresh_enabled">Activer la mise à jour auto</string>
-    <string name="settings_refresh_enabled_description">Active la mise à jour automatique des flux
-    </string>
+    <string name="settings_refresh_enabled_description">Active la mise à jour automatique des flux</string>
     <string name="settings_refresh_interval">Intervalle de mise à jour</string>
     <string name="settings_category_content_presentation">Présentation des flux</string>
     <string name="settings_keep_time">Délai de conservation des flux</string>
@@ -102,9 +94,7 @@
     <string name="settings_preload_image_mode">Préchargement des images</string>
     <string name="settings_font_size">Taille du texte</string>
     <string name="settings_refresh_wifi_only">Mise à jour en WiFi uniquement</string>
-    <string name="settings_refresh_wifi_only_description">La mise à jour auto ne se fera que si le
-        Wifi est activé
-    </string>
+    <string name="settings_refresh_wifi_only_description">La mise à jour auto ne se fera que si le Wifi est activé</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">%d nouvel article</item>

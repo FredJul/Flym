@@ -86,6 +86,9 @@
     <string name="original_text">Jatorrizko testua erakutsi</string>
 	<string name="open_in_browser">Nabigatzailean ikusi</string>
     <string name="cant_open_link">Ez da aplikaziorik aurkitu esteka honetarako</string>
+    <string name="unreads">Unreads</string>
+    <string name="all">All</string>
+    <string name="favorites">Favorites</string>
 
     <!-- WIDGET -->
 
