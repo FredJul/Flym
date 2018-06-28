@@ -86,9 +86,9 @@
     <string name="original_text">Показать оригинальный текст</string>
     <string name="open_in_browser">Открыть в браузере</string>
     <string name="cant_open_link">Не найдено приложений для открытия этой ссылки</string>
-    <string name="unreads">Unreads</string>
-    <string name="all">All</string>
-    <string name="favorites">Favorites</string>
+    <string name="unreads">Непрочитанные</string>
+    <string name="all">Все</string>
+    <string name="favorites">Избранные</string>
 
     <!-- WIDGET -->
 
