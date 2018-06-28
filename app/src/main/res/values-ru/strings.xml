@@ -34,7 +34,7 @@
     <string name="menu_delete">Удалить</string>
     <string name="menu_enable_full_text_retrieval">Загружать текст полностью</string>
     <string name="menu_disable_full_text_retrieval">Не загружать текст полностью</string>
-    <string name="menu_all_read">Пометить все как прочитанное</string>
+    <string name="menu_all_read">Пометить все как прочитанные</string>
     <string name="flym_feeds">Flym ленты</string>
     <string name="error">Ошибка</string>
     <string name="network_error">Нет подключения к сети</string>
@@ -86,9 +86,9 @@
     <string name="original_text">Показать оригинальный текст</string>
     <string name="open_in_browser">Открыть в браузере</string>
     <string name="cant_open_link">Не найдено приложений для открытия этой ссылки</string>
-    <string name="unreads">Unreads</string>
-    <string name="all">All</string>
-    <string name="favorites">Favorites</string>
+    <string name="unreads">Непрочитанные</string>
+    <string name="all">Все</string>
+    <string name="favorites">Избранные</string>
 
     <!-- WIDGET -->
 
