@@ -29,7 +29,7 @@
     <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">Inställningar</string>
     <string name="menu_rename_feed">Rename</string>
-    <string name="menu_reorder">Reorder</string>
+    <string name="menu_reorder">Reorder feeds</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
     <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>

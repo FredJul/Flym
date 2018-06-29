@@ -8,7 +8,7 @@
 	<string name="cannot_find_feeds">Dovodi nisu pornađeni</string>
 	<string name="menu_settings">Podešavanja</string>
 	<string name="menu_rename_feed">Preimenuj</string>
-	<string name="menu_reorder">Presloži</string>
+	<string name="menu_reorder">Reorder feeds</string>
 	<string name="menu_delete">Izbriši</string>
 	<string name="menu_enable_full_text_retrieval">Omogući preuzimanje kompletnog teksta</string>
 	<string name="menu_disable_full_text_retrieval">Onemogući preuzimanje kompletnog teksta</string>

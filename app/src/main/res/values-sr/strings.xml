@@ -9,7 +9,7 @@
     <string name="cannot_find_feeds">Доводи нису порнађени</string>
     <string name="menu_settings">Подешавања</string>
     <string name="menu_rename_feed">Преименуј</string>
-    <string name="menu_reorder">Пресложи</string>
+    <string name="menu_reorder">Reorder feeds</string>
     <string name="menu_delete">Избриши</string>
     <string name="menu_enable_full_text_retrieval">Омогући преузимање комплетног текста</string>
     <string name="menu_disable_full_text_retrieval">Онемогући преузимање комплетног текста</string>

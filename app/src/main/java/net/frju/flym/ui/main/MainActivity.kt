@@ -57,13 +57,25 @@ import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textResource
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.*
+import java.io.File
+import java.io.FileReader
+import java.io.FileWriter
+import java.io.Reader
+import java.io.StringReader
+import java.io.Writer
 import java.net.URL
-import java.util.*
+import java.util.Date
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -100,18 +112,11 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     menuInflater.inflate(R.menu.menu_drawer_header, menu)
                     setOnMenuItemClickListener {
                         when (it.itemId) {
-                            R.id.import_feeds -> {
-                                pickOpml()
-                            }
-                            R.id.export_feeds -> {
-                                exportOpml()
-                            }
-                            R.id.menu_entries__about -> {
-                                goToAboutMe()
-                            }
-                            R.id.menu_entries__settings -> {
-                                goToSettings()
-                            }
+							R.id.reorder -> startActivity<FeedListEditActivity>()
+							R.id.import_feeds -> pickOpml()
+							R.id.export_feeds -> exportOpml()
+							R.id.menu_entries__about -> goToAboutMe()
+							R.id.menu_entries__settings -> goToSettings()
                         }
                         true
                     }
