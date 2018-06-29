@@ -80,8 +80,9 @@
     <string name="unreads">Unreads</string>
     <string name="all">All</string>
     <string name="favorites">Favorites</string>
-
-    <!-- WIDGET -->
+    <string name="no_entries">No items\nPlease pull down to refresh</string>
+    <string name="undo">撤销</string>
+    <string name="marked_as_read">标记已读</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">自动刷新</string>
@@ -98,7 +99,6 @@
     <string name="settings_refresh_wifi_only_description">自动刷新仅在Wi-Fi环境启用</string>
 
     <plurals name="number_of_new_entries">
-        <item quantity="one"> 1 条新消息</item>
         <item quantity="other">%d 条新消息</item>
     </plurals>
 

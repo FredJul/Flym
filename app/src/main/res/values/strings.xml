@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- GENERAL -->
@@ -54,11 +55,14 @@
     <string name="menu_mark_as_unread">Mark as unread</string>
     <string name="get_full_text">Retrieve the full text</string>
     <string name="original_text">Show original text</string>
-	<string name="open_in_browser">See in browser</string>
+    <string name="open_in_browser">See in browser</string>
     <string name="cant_open_link">No application found for this link</string>
     <string name="unreads">Unreads</string>
     <string name="all">All</string>
     <string name="favorites">Favorites</string>
+    <string name="no_entries">No items\nPlease pull down to refresh</string>
+    <string name="undo">Undo</string>
+    <string name="marked_as_read">Marked as read</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automated refresh</string>

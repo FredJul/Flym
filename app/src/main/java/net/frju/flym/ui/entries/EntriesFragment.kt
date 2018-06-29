@@ -161,7 +161,7 @@ class EntriesFragment : Fragment() {
 						}
 					}
 
-					longSnackbar(coordinator, "Marked as read", "Undo") {
+					longSnackbar(coordinator, R.string.marked_as_read, R.string.undo) {
 						doAsync {
 							// TODO check if limit still needed
 							entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {

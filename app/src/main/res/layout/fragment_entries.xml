@@ -32,14 +32,14 @@
         </net.frju.flym.ui.views.SwipeRefreshLayout>
 
         <TextView
-            android:id="@+id/empty_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableTop="@drawable/ic_empty_gray_100dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="No items\nPlease pull down to refresh"
-            android:textColor="@android:color/darker_gray" />
+			android:id="@+id/empty_view"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:drawableTop="@drawable/ic_empty_gray_100dp"
+			android:layout_gravity="center"
+			android:gravity="center"
+			android:text="@string/no_entries"
+			android:textColor="@android:color/darker_gray" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/read_all_fab"

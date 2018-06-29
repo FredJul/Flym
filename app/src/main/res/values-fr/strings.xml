@@ -81,6 +81,9 @@
     <string name="unreads">Non lus</string>
     <string name="all">Tous</string>
     <string name="favorites">Favoris</string>
+    <string name="no_entries">Aucun article\nGlissez vers le bas pour raffraichir</string>
+    <string name="undo">Annuler</string>
+    <string name="marked_as_read">Marqués comme lus</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Mise à jour automatique</string>

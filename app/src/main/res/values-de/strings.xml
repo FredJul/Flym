@@ -83,8 +83,9 @@
     <string name="unreads">Unreads</string>
     <string name="all">All</string>
     <string name="favorites">Favorites</string>
-
-    <!-- WIDGET -->
+    <string name="no_entries">No items\nPlease pull down to refresh</string>
+    <string name="undo">Rückgängig</string>
+    <string name="marked_as_read">Als gelesen markieren</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>
