@@ -25,8 +25,8 @@
     <!-- GENERAL -->
     <string name="app_name">Flym</string>
     <string name="about_flym">A proposito di Flym</string>
-    <string name="welcome_title">Benvenuto in Flym. Vorresti aggiungere un feed?</string>
-    <string name="welcome_title_with_opml_import">Vorresti importare i precedenti feed in Flym?</string>
+    <string name="welcome_title">Benvenuto in Flym. Vuoi aggiungere un feed?</string>
+    <string name="welcome_title_with_opml_import">Vuoi importare i feed precedenti in Flym?</string>
     <string name="cannot_find_feeds">Nessun feed è stato trovato</string>
     <string name="menu_settings">Impostazioni</string>
     <string name="menu_rename_feed">Rinomina</string>
@@ -44,26 +44,20 @@
     <!-- FEEDS -->
     <string name="feeds">Feed</string>
     <string name="menu_add_group">Aggiungi gruppo</string>
-    <string name="menu_import">Importa OPML</string>
-    <string name="menu_export">Esporta OPML</string>
+    <string name="menu_import">Importa file OPML</string>
+    <string name="menu_export">Esporta file OPML</string>
     <string name="storage_request_explanation">Per poter importare/esportare i feed da/su file, è necessario consentire all\'applicazione di accedere alla memoria di archiviazione.</string>
-    <string name="error_feed_export">L\'esportazione è fallita. Controllare di avere una scheda SD
-        scrivibile e correttamente montata.
-    </string>
-    <string name="error_external_storage_not_available">L\'archivio esterno (per esempio la scheda SD)
-        non è disponibile.
-    </string>
+    <string name="error_feed_export">L\'esportazione è fallita. Controllare di avere una scheda SD scrivibile e correttamente montata.</string>
+    <string name="error_external_storage_not_available">L\'archivio esterno (per esempio la scheda SD) non è disponibile.</string>
     <string name="feed_search">Ricerca feed</string>
-    <string name="feed_search_hint">Enter feed link or keyword</string>
+    <string name="feed_search_hint">Inserisci il link di un feed o una parola chiave</string>
     <string name="feed_added">Feed aggiunto alla lista</string>
     <string name="question_delete_feed">Vuoi cancellare questo feed?</string>
     <string name="question_delete_group">Vuoi cancellare questo gruppo e tutti i suoi feed?</string>
     <string name="add_group_title">Inserire nome del gruppo</string>
     <string name="message_exported_to">Esportato su %s.</string>
     <string name="to_group_title">Azione spostamento feed</string>
-    <string name="to_group_message">Puoi sia spostare il feed dentro il gruppo sia prima del gruppo.
-        Cosa vuoi fare?
-    </string>
+    <string name="to_group_message">Puoi sia spostare il feed dentro il gruppo sia prima del gruppo. Cosa vuoi fare?</string>
     <string name="to_group_above">Sopra il gruppo</string>
     <string name="to_group_into">Dentro il gruppo</string>
     <string name="google_news_top_stories">Temi caldi</string>
@@ -82,20 +76,19 @@
     <string name="menu_mark_as_unread">Segna come non letto</string>
     <string name="get_full_text">Recupera il testo completo</string>
     <string name="original_text">Mostra testo originale</string>
-	<string name="open_in_browser">Vedi nel browser</string>
+    <string name="open_in_browser">Vedi nel browser</string>
     <string name="cant_open_link">Nessuna applicazione trovata per questo link</string>
-    <string name="unreads">Unreads</string>
-    <string name="all">All</string>
-    <string name="favorites">Favorites</string>
-	<string name="no_entries">No items\nPlease pull down to refresh</string>
-	<string name="undo">Annulla</string>
-	<string name="marked_as_read">Contrassegnato come letto</string>
+    <string name="unreads">Non letti</string>
+    <string name="all">Tutti</string>
+    <string name="favorites">Preferiti</string>
+    <string name="no_entries">Nessun feed\nPer favore effettua lo swipe verso il basso per aggiornare</string>
+    <string name="undo">Annulla</string>
+    <string name="marked_as_read">Contrassegnato come letto</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Aggiornamento automatico</string>
     <string name="settings_refresh_enabled">Attiva aggiornamento automatico</string>
-    <string name="settings_refresh_enabled_description">Attiva l\'aggiornamento automatico dei feed
-    </string>
+    <string name="settings_refresh_enabled_description">Attiva l\'aggiornamento automatico dei feed</string>
     <string name="settings_refresh_interval">Intervallo</string>
     <string name="settings_category_content_presentation">Aspetto e contenuti</string>
     <string name="settings_keep_time">Tempo di archiviazione</string>
@@ -104,10 +97,7 @@
     <string name="settings_preload_image_mode">Scarica le immagini in anticipo</string>
     <string name="settings_font_size">Dimensione testo</string>
     <string name="settings_refresh_wifi_only">Aggiorna solo in WiFi</string>
-    <string name="settings_refresh_wifi_only_description">L\'aggiornamento automatico viene eseguito
-        solo quando si è connessi ad una rete WiFi
-    </string>
-
+    <string name="settings_refresh_wifi_only_description">L\'aggiornamento automatico viene eseguito solo quando si è connessi ad una rete WiFi</string>
     <plurals name="number_of_new_entries">
         <item quantity="one">Un nuovo articolo</item>
         <item quantity="other">%d nuovi articoli</item>
