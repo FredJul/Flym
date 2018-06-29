@@ -6,10 +6,10 @@
     <string name="about_flym">О Флиму</string>
     <string name="welcome_title">Добродошли у Флим. Да ли желите да додате нови довод?</string>
     <string name="welcome_title_with_opml_import">Да ли желите да увезете претходне Флим доводе?</string>
-    <string name="cannot_find_feeds">Доводи нису порнађени</string>
+    <string name="cannot_find_feeds">Доводи нису пронађени</string>
     <string name="menu_settings">Подешавања</string>
     <string name="menu_rename_feed">Преименуј</string>
-    <string name="menu_reorder">Reorder feeds</string>
+    <string name="menu_reorder">Организуј редослед довода</string>
     <string name="menu_delete">Избриши</string>
     <string name="menu_enable_full_text_retrieval">Омогући преузимање комплетног текста</string>
     <string name="menu_disable_full_text_retrieval">Онемогући преузимање комплетног текста</string>
@@ -60,9 +60,9 @@
     <string name="unreads">Непрочитано</string>
     <string name="all">Све</string>
     <string name="favorites">Омиљено</string>
-    <string name="no_entries">No items\nPlease pull down to refresh</string>
-    <string name="undo">Undo</string>
-    <string name="marked_as_read">Marked as read</string>
+    <string name="no_entries">Нема чланака\nМолимо да превучете прстом надоле за освежавање листе чланака</string>
+    <string name="undo">Поништи</string>
+    <string name="marked_as_read">Означено као прочитано</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Аутоматско освежавање</string>
