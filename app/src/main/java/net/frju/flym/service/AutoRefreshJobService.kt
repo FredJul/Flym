@@ -34,6 +34,7 @@ class AutoRefreshJobService : JobService() {
 
         fun initAutoRefresh(context: Context) {
 
+            // DO NOT USE ANKO TO RETRIEVE THE SERVICE HERE (crash on API 21)
             val jobSchedulerService = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
 
             val time = Math.max(300, PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, TWO_HOURS).toInt())

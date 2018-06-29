@@ -21,10 +21,11 @@ import android.content.Intent
 import android.text.TextUtils
 import net.frju.flym.App
 import net.frju.flym.service.FetcherService
+import org.jetbrains.anko.doAsync
 import org.jsoup.Jsoup
 import org.jsoup.safety.Whitelist
 import java.io.File
-import java.util.*
+import java.util.ArrayList
 import java.util.regex.Pattern
 
 object HtmlUtils {
@@ -119,10 +120,10 @@ object HtmlUtils {
 
             // Download the images if needed
             if (!imagesToDl.isEmpty()) {
-                Thread(Runnable {
+                doAsync {
                     FetcherService.addImagesToDownload(mapOf(itemId to imagesToDl))
                     App.context.startService(Intent(App.context, FetcherService::class.java).setAction(FetcherService.ACTION_DOWNLOAD_IMAGES))
-                }).start()
+                }
             }
         }
 

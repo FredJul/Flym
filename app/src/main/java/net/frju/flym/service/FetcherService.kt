@@ -51,6 +51,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.connectivityManager
 import org.jetbrains.anko.error
 import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.toast
@@ -105,8 +106,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				return
 			}
 
-			val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-			val networkInfo = connectivityManager.activeNetworkInfo
+			val networkInfo = context.connectivityManager.activeNetworkInfo
 			// Connectivity issue, we quit
 			if (networkInfo == null || networkInfo.state != NetworkInfo.State.CONNECTED) {
 				return
@@ -190,18 +190,18 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		fun shouldDownloadPictures(): Boolean {
 			val fetchPictureMode = PrefUtils.getString(PrefUtils.PRELOAD_IMAGE_MODE, PrefUtils.PRELOAD_IMAGE_MODE__WIFI_ONLY)
 
-			var downloadPictures = false
 			if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
 				if (PrefUtils.PRELOAD_IMAGE_MODE__ALWAYS == fetchPictureMode) {
-					downloadPictures = true
+					return true
 				} else if (PrefUtils.PRELOAD_IMAGE_MODE__WIFI_ONLY == fetchPictureMode) {
-					val ni = (App.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
+					val ni = App.context.connectivityManager.activeNetworkInfo
 					if (ni != null && ni.type == ConnectivityManager.TYPE_WIFI) {
-						downloadPictures = true
+						return true
 					}
 				}
 			}
-			return downloadPictures
+
+			return false
 		}
 
 		fun getDownloadedImagePath(entryId: String, imgUrl: String): String =
@@ -306,19 +306,21 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		}
 
 		private fun downloadAllImages() {
-			val tasks = App.db.taskDao().downloadTasks
-			for (task in tasks) {
-				try {
-					downloadImage(task.entryId, task.imageLinkToDl)
+			if (shouldDownloadPictures()) {
+				val tasks = App.db.taskDao().downloadTasks
+				for (task in tasks) {
+					try {
+						downloadImage(task.entryId, task.imageLinkToDl)
 
-					// If we are here, everything is OK
-					App.db.taskDao().delete(task)
-				} catch (ignored: Exception) {
-					if (task.numberAttempt + 1 > MAX_TASK_ATTEMPT) {
+						// If we are here, everything is OK
 						App.db.taskDao().delete(task)
-					} else {
-						task.numberAttempt += 1
-						App.db.taskDao().insert(task)
+					} catch (ignored: Exception) {
+						if (task.numberAttempt + 1 > MAX_TASK_ATTEMPT) {
+							App.db.taskDao().delete(task)
+						} else {
+							task.numberAttempt += 1
+							App.db.taskDao().insert(task)
+						}
 					}
 				}
 			}
@@ -512,7 +514,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 		val isFromAutoRefresh = intent.getBooleanExtra(FROM_AUTO_REFRESH, false)
 
-		val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 		val networkInfo = connectivityManager.activeNetworkInfo
 		// Connectivity issue, we quit
 		if (networkInfo == null || networkInfo.state != NetworkInfo.State.CONNECTED) {
