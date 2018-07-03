@@ -24,6 +24,7 @@
 
         <CheckBoxPreference
             android:defaultValue="true"
+            
             android:key="refresh.enabled"
             android:title="@string/settings_refresh_enabled"/>
 
