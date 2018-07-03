@@ -66,6 +66,8 @@ import android.util.Pair;
 import android.util.Xml;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -234,6 +236,9 @@ public class FetcherService extends IntentService {
             return;
         }
 
+        if ( isFromAutoRefresh && Build.VERSION.SDK_INT < 26 && AutoRefreshService.isBatteryLow(this) )
+            return;
+
         if (ACTION_MOBILIZE_FEEDS.equals(intent.getAction())) {
             mobilizeAllEntries(isFromAutoRefresh);
             downloadAllImages();
@@ -263,9 +268,33 @@ public class FetcherService extends IntentService {
 
                 String feedId = intent.getStringExtra(Constants.FEED_ID);
                 String groupId = intent.getStringExtra(Constants.GROUP_ID);
-                int newCount = (feedId == null ?
+
+                mMarkAsStarredFoundList.clear();
+                int newCount = 0;
+                try {
+                    newCount = (feedId == null ?
                                 refreshFeeds(keepDateBorderTime, groupId, isFromAutoRefresh) :
                                 refreshFeed(feedId, keepDateBorderTime, isFromAutoRefresh));
+
+                } finally {
+                    if (mMarkAsStarredFoundList.size() > 3) {
+                        ArrayList<String> list = new ArrayList<String>();
+                        for (MarkItem item : mMarkAsStarredFoundList)
+                            list.add(item.mCaption);
+                        ShowNotification(TextUtils.join(", ", list),
+                                R.string.markedAsStarred,
+                                new Intent(FetcherService.this, HomeActivity.class)
+                                        .setData(EntryColumns.FAVORITES_CONTENT_URI),
+                                null);
+                    } else if (mMarkAsStarredFoundList.size() > 0)
+                        for (MarkItem item : mMarkAsStarredFoundList) {
+                            Uri entryUri = getEntryUri(item.mLink, item.mFeedID);
+                            ShowNotification(item.mCaption,
+                                    R.string.markedAsStarred,
+                                    new Intent(Intent.ACTION_VIEW, entryUri),
+                                    entryUri);
+                        }
+                }
 
                 if (newCount > 0) {
                     if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
@@ -750,7 +779,7 @@ public class FetcherService extends IntentService {
                 return t;
             }
         });
-
+        int globalResult = 0;
         CompletionService<Integer> completionService = new ExecutorCompletionService<>(executor);
         while (cursor.moveToNext()) {
             //Status().Start(String.format("%d from %d", cursor.getPosition(), cursor.getCount()));
@@ -771,7 +800,6 @@ public class FetcherService extends IntentService {
         }
         cursor.close();
 
-        int globalResult = 0;
         for (int i = 0; i < nbFeed; i++) {
             try {
                 Future<Integer> f = completionService.take();
@@ -781,13 +809,11 @@ public class FetcherService extends IntentService {
         }
 
         executor.shutdownNow(); // To purge all threads
-
         return globalResult;
     }
 
     private int refreshFeed(String feedId, long keepDateBorderTime, boolean fromAutoRefresh) {
 
-        mMarkAsStarredFoundList.clear();
 
         int newCount = 0;
 
@@ -801,6 +827,14 @@ public class FetcherService extends IntentService {
             int urlPosition = cursor.getColumnIndex(FeedColumns.URL);
             int idPosition = cursor.getColumnIndex(FeedColumns._ID);
             int titlePosition = cursor.getColumnIndex(FeedColumns.NAME);
+            boolean isRss = true;
+            try {
+                JSONObject jsonOptions  = new JSONObject( cursor.getString( cursor.getColumnIndex(FeedColumns.OPTIONS) ) );
+                isRss = jsonOptions.getBoolean( "isRss" );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             //int showTextInEntryList = cursor.getColumnIndex(FeedColumns.SHOW_TEXT_IN_ENTRY_LIST);
 
             String id = cursor.getString(idPosition);
@@ -808,31 +842,11 @@ public class FetcherService extends IntentService {
             int status = Status().Start(cursor.getString(titlePosition));
             try {
 
-                if (isRss(feedUrl))
+                if ( isRss )
                     newCount = ParseRSSAndAddEntries(feedUrl, cursor, keepDateBorderTime, id, fromAutoRefresh);
                 else
                     newCount = HTMLParser.Parse(cursor.getString(idPosition), feedUrl);
             } finally {
-
-
-                if (mMarkAsStarredFoundList.size() > 3) {
-                    ArrayList<String> list = new ArrayList<String>();
-                    for ( MarkItem item: mMarkAsStarredFoundList )
-                        list.add( item.mCaption );
-                    ShowNotification(TextUtils.join(", ", list),
-                                     R.string.markedAsStarred,
-                                     new Intent(FetcherService.this, HomeActivity.class)
-                                         .setData( EntryColumns.FAVORITES_CONTENT_URI ),
-                                    null );
-                } else if (mMarkAsStarredFoundList.size() > 0)
-                    for (MarkItem item : mMarkAsStarredFoundList) {
-                        Uri entryUri = getEntryUri( item.mLink, feedId );
-                        ShowNotification(item.mCaption,
-                                        R.string.markedAsStarred,
-                                        new Intent(Intent.ACTION_VIEW, entryUri),
-                                        entryUri);
-                    }
-
                 Status().End(status);
             }
         }
@@ -914,8 +928,11 @@ public class FetcherService extends IntentService {
             FetcherService.Status().AddBytes(n);
             outputStream.write(byteBuffer, 0, n);
         }
+        String content = outputStream.toString(encoding.name()).replace(" & ", " &amp; ");
+        content = content.replaceAll( "<[a-z]+?:", "<" );
+        content = content.replaceAll( "</[a-z]+?:", "</" );
 
-        return outputStream.toString(encoding.name()).replace(" & ", " &amp; ");
+        return content;
     }
 
 
@@ -1175,9 +1192,9 @@ public class FetcherService extends IntentService {
             Status().AddBytes(contentHandler.toString().length());
         }
 
-        public static boolean isRss (String feedUrl){
+        /*public static boolean isRss (String feedUrl){
             return feedUrl.toLowerCase().contains("feed") || feedUrl.toLowerCase().contains("rss");
-        }
+        }*/
 
         private static void parseXml (Reader reader,
                 ContentHandler contentHandler) throws IOException, SAXException {

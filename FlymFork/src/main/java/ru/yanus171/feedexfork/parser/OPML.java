@@ -73,7 +73,7 @@ public class OPML {
     public static final String BACKUP_OPML = Environment.getExternalStorageDirectory() + "/Flym_auto_backup.opml";
 
     private static final String[] FEEDS_PROJECTION = new String[]{FeedColumns._ID, FeedColumns.IS_GROUP, FeedColumns.NAME, FeedColumns.URL,
-            FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH, FeedColumns.IS_IMAGE_AUTO_LOAD};
+            FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH, FeedColumns.IS_IMAGE_AUTO_LOAD, FeedColumns.OPTIONS };
     private static final String[] FILTERS_PROJECTION = new String[]{FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
             FilterColumns.IS_APPLIED_TO_TITLE, FilterColumns.IS_ACCEPT_RULE, FilterColumns.IS_MARK_STARRED};
 

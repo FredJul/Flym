@@ -110,6 +110,7 @@ public class FeedData {
         public static final String IS_GROUP_EXPANDED = "is_group_expanded";
         public static final String IS_AUTO_REFRESH = "is_auto_refresh";
         public static final String IS_IMAGE_AUTO_LOAD = "is_image_auto_load";
+        public static final String OPTIONS = "options";
         public static final String[] PROJECTION_ID = new String[]{FeedColumns._ID};
         public static final String[] PROJECTION_GROUP_ID = new String[]{FeedColumns.GROUP_ID};
         public static final String[] PROJECTION_PRIORITY = new String[]{FeedColumns.PRIORITY};
@@ -125,7 +126,7 @@ public class FeedData {
         public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {URL, TYPE_TEXT_UNIQUE}, {NAME, TYPE_TEXT}, {IS_GROUP, TYPE_BOOLEAN},
                 {GROUP_ID, TYPE_EXTERNAL_ID}, {LAST_UPDATE, TYPE_DATE_TIME}, {REAL_LAST_UPDATE, TYPE_DATE_TIME}, {RETRIEVE_FULLTEXT, TYPE_BOOLEAN},
                 {ICON, "BLOB"}, {ERROR, TYPE_TEXT}, {PRIORITY, TYPE_INT}, {FETCH_MODE, TYPE_INT}, {SHOW_TEXT_IN_ENTRY_LIST, TYPE_BOOLEAN},
-                {IS_GROUP_EXPANDED, TYPE_BOOLEAN}, {IS_AUTO_REFRESH, TYPE_BOOLEAN}, {IS_IMAGE_AUTO_LOAD, TYPE_BOOLEAN}};
+                {IS_GROUP_EXPANDED, TYPE_BOOLEAN}, {IS_AUTO_REFRESH, TYPE_BOOLEAN}, {IS_IMAGE_AUTO_LOAD, TYPE_BOOLEAN}, {OPTIONS, TYPE_TEXT}};
 
         public static Uri GROUPS_CONTENT_URI(String groupId) {
             return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId);

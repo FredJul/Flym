@@ -152,7 +152,11 @@ public class FeedDataContentProvider extends ContentProvider {
 
     private DatabaseHelper mDatabaseHelper;
 
-    public static Uri addFeed(Context context, String url, String name, Long groupID, boolean retrieveFullText, boolean showTextInEntryList) {
+    public static Uri addFeed(Context context, String url, String name, Long groupID,
+                              boolean retrieveFullText,
+                              boolean showTextInEntryList,
+                              boolean imageAutoLoad,
+                              String options) {
         ContentResolver cr = context.getContentResolver();
 
         if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME)) {
@@ -183,6 +187,8 @@ public class FeedDataContentProvider extends ContentProvider {
                 values.put(FeedColumns.IS_GROUP_EXPANDED, 1);
             } else
                 values.putNull( FeedColumns.GROUP_ID );
+            values.put(FeedColumns.IS_IMAGE_AUTO_LOAD, imageAutoLoad);
+            values.put(FeedColumns.OPTIONS, options);
 
             result = cr.insert(FeedColumns.CONTENT_URI, values);
         }

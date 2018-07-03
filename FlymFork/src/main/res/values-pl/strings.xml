@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright (c) 2012-2015 Frederic Julian
+ Copyright (c) 2010-2012 Stefan Handschuh
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-->
+<resources>
+
+    <!-- GENERAL -->
+    <string name="app_name">Flym Fork</string>
+    <string name="about_flym">O programie / Pomoc / Kontakt z Autorem. </string>
+    <string name="welcome_title">Witaj we Flym Fork. Chciał(a)byś dodać nowy kanał RSS?</string>
+    <string name="never">Nigdy.</string>
+    <string name="update">Aktualizuj...</string>
+    <string name="colon">:\u00A0</string>
+    <string name="menu_settings">Ustawienia</string>
+    <string name="menu_refresh">Odśwież</string>
+    <string name="menu_all_read">Oznacz wszystkie jako przeczytane.</string>
+    <string name="flym_feeds">Kanały Flym Fork.</string>
+    <string name="error">Błąd.</string>
+    <string name="network_error">Sieć nie jest (poprawnie) skonfigurowana.</string>
+    <string name="loading">Wczytuję…</string>
+    <string name="no_result">Brak wyników.</string>
+    <string name="drawer_open">Otwórz panel nawigacyjny.</string>
+    <string name="drawer_close">Zamknij panel nawigacyjny.</string>
+
+    <!-- FEEDS -->
+    <string name="feeds">Kanały.</string>
+    <string name="menu_add_feed">Dodaj kanał.</string>
+    <string name="no_feeds">Brak kanałów.</string>
+    <string name="no_filters">Brak reguł.</string>
+    <string name="context_menu_delete">Usuń.</string>
+    <string name="edit_feed_title">Edytuj kanał.</string>
+    <string name="new_feed_title">Nowy kanał.</string>
+    <string name="context_menu_edit">Edytuj.</string>
+    <string name="menu_add_group">Dodaj grupę.</string>
+    <string name="menu_import">Importuj z pliku OPML.</string>
+    <string name="menu_export">Eksportuj do pliku OPML.</string>
+    <string name="storage_request_explanation">Aby importować lub eksportować kanały z/do pliku, potrzebujesz zezwolić Flymowi na dostęp do pamięci.</string>
+    <string name="error_feed_error">Witryna kanału nieosiągalna.</string>
+    <string name="error_feed_process">Kanał nie może być przetwarzany.</string>
+    <string name="error_feed_url_exists">Taki adres już istnieje.</string>
+    <string name="error_feed_import">Wybrany plik nie może być importowany.</string>
+    <string name="error_feed_export">Eksport zakończony niepowodzeniem. Upewnij się iż używasz karty SD z włączoną opcją zapisu.</string>
+    <string name="error_external_storage_not_available">Pamięć zewnętrzna (np. karta SD) niedostępna.</string>
+    <string name="feed_url">Adres URL.</string>
+    <string name="optional">(opcjonalnie)</string>
+    <string name="website_or_feed">(adres kanału lub słowo kluczowe)</string>
+    <string name="tab_feed_title">Kanał</string>
+    <string name="tab_filters_title">Filtr</string>
+    <string name="feed_title">TYTUŁ</string>
+    <string name="feed_filters">REGUŁY FILTRÓW</string>
+    <string name="filter_add_title">Dodaj regułę.</string>
+    <string name="filter_delete_title">Usuń regułę.</string>
+    <string name="filter_edit_title">Edytuj regułę.</string>
+    <string name="filter_is_regex">...jest wyrażeniem regularnym.</string>
+    <string name="filter_apply_to_title">Stosuj do tytułu lub linku artykułu.</string>
+    <string name="filter_apply_to_content">Stosuj do treści artykułu.</string>
+    <string name="accept">AKCEPTUJ</string>
+    <string name="reject">ODRZUĆ</string>
+    <string name="feed_search">Wyszukiwanie kanałów.</string>
+    <string name="select_file">Wybierz plik  z karty SD.</string>
+    <string name="question_delete_feed">Czy na pewno chcesz usunąć ten kanał?</string>
+    <string name="question_delete_group">Czy na pewno chcesz usunąć tą grupę wraz z jej kanałami?</string>
+    <string name="question_delete_filter">Czy na pewno chcesz usunąć ten filtr?</string>
+    <string name="add_group_title">Wprowadź nazwę grupy.</string>
+    <string name="edit_group_title">Edytuj nazwę grupy.</string>
+    <string name="message_exported_to">Wyeksportowano do %s.</string>
+    <string name="to_group_title">Przenieś kanał.</string>
+    <string name="to_group_message">Chcesz umieścić ten kanał wewnątrz wybranej grupy, czy poza nią?</string>
+    <string name="to_group_above">Poza grupą.</string>
+    <string name="to_group_into">Wewnątrz grupy.</string>
+    <string name="add_custom_feed">Dodaj kanał lub wyszukaj nowy.</string>
+    <string name="google_news_title">Tematy Wiadomości Google.</string>
+    <string name="google_news_indicator">Wybierz jeden lub kilka tematów. Niektóre z nich mogą nie być dostępne w Twoim języku.</string>
+    <string name="google_news_top_stories">Najpopularniejsze</string>
+    <string name="google_news_world">Świat</string>
+    <string name="google_news_business">Biznes</string>
+    <string name="google_news_technology">Technologia</string>
+    <string name="google_news_entertainment">Rozrywka</string>
+    <string name="google_news_sports">Sport</string>
+    <string name="google_news_science">Nauka</string>
+    <string name="google_news_health">Zdrowie</string>
+    <string name="google_news_custom_topic">Wprowadź Własny temat.</string>
+
+    <!-- ENTRIES -->
+    <string name="unread_entries">Nieprzeczytane.</string>
+    <string name="all_entries">Wszystkie.</string>
+    <string name="no_entries">Brak artykułów.</string>
+    <string name="downloadOneImage">Pobierz obrazek.</string>
+    <string name="favorites">Ulubione.</string>
+    <string name="context_menu_share_starred">Udostępnij Ulubione.</string>
+    <string name="menu_star">Oznacz jako Ulubione.</string>
+    <string name="menu_unstar">Usuń z Ulubionych.</string>
+    <string name="menu_share">Udostępnij.</string>
+    <string name="menu_full_screen">Pełny ekran.</string>
+    <string name="menu_font_bold">Pełny ekran.</string>
+    <string name="menu_copy_clipboard">Kopiuj link do schowka.</string>
+    <string name="menu_cancel_refresh">Anuluj aktualizację.</string>
+    <string name="menu_delete_all">Usuń wszystko.</string>
+    <string name="menu_toogle_unread_all">Nieprzeczytane|Wszystkie</string>
+    <string name="menu_load_all_images">Wczytuj wszystkie obrazki.</string>
+    <string name="menu_mark_as_favorite">Oznacz jako Ulubione.</string>
+    <string name="menu_mark_as_unfavorite">Usuń z Ulubionych.</string>
+    <string name="menu_mark_as_unread">Oznacz jako nieprzeczytane.</string>
+    <string name="menu_reload_full_text">Przeładuj pełną treść.</string>
+    <string name="menu_reload_full_text_without_mobilizer">Przeładuj bez Mobilizera.</string>
+    <string name="share_favorites_title">Flym Fork: Ulubione artykuły.</string>
+    <string name="copied_clipboard">Link skopiowany.</string>
+    <string name="get_full_text">Wczytuj pełne artykuły.</string>
+    <string name="show_text_in_entry_list">Pokazuj zajawki na liście artykułów.</string>
+    <string name="original_text">Pokaż zajawkę.</string>
+    <string name="see_enclosure">Wczytaj załącznik.</string>
+    <string name="see_link">Otwórz w przeglądarce.</string>
+    <string name="cant_open_link">Brak aplikacji obsługujących ten link.</string>
+    <string name="open_enclosure">Otwórz załącznik.</string>
+    <string name="file">Plik</string>
+    <string name="download_and_save">Pobierz i zapisz.</string>
+    <string name="open_link">Otwórz link.</string>
+    <string name="tip_sentence">Porada: oznacz jako przeczytane przesuwając w lewo.</string>
+    <string name="undo">Cofnij.</string>
+    <string name="marked_as_read">Oznaczono jako przeczytane.</string>
+
+    <!-- WIDGET -->
+    <string name="red">Czerwony</string>
+    <string name="green">Zielony</string>
+    <string name="blue">Niebieski</string>
+    <string name="transparency">Przezroczystość.</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Automatyczne odświeżanie.</string>
+    <string name="settings_refresh_enabled">Włącz automatyczne odświeżanie.</string>
+    <string name="settings_refresh_enabled_description">Aktywuj automatyczne odświeżanie kanałów.</string>
+    <string name="settings_refresh_interval">Odświeżaj co:</string>
+    <string name="settings_category_notifications">Powiadomienia.</string>
+    <string name="settings_notifications_enabled">Włącz powiadomienia.</string>
+    <string name="settings_notifications_enabled_description">Włącz powiadomienia o nowych artykułach.</string>
+    <string name="settings_notifications_ringtone">Dzwonek.</string>
+    <string name="settings_notifications_ringtone_none">Brak.</string>
+    <string name="settings_notifications_vibrate">Wibracja.</string>
+    <string name="settings_notifications_vibrate_description">Aktywuj wibrację powiadamiającą o nowych artykułach.</string>
+    <string name="settings_notifications_light">Dioda.</string>
+    <string name="settings_notifications_light_description">Aktywuj diodę powiadamiającą o nowych artykułach.</string>
+    <string name="settings_category_content_presentation">Prezentacja treści.</string>
+    <string name="settings_light_theme">Jasny motyw.</string>
+    <string name="settings_light_theme_description">Użyj jasnego motywu.</string>
+    <string name="settings_keep_time">Czas przez jaki artykuły będą zachowane.</string>
+    <string name="settings_display_images">Wyświetlaj obrazki.</string>
+    <string name="settings_display_images_description">Wyświetlaj obrazki w artykułach.</string>
+    <string name="settings_preload_image_mode">Wczytuj obrazki 'na zapas'.</string>
+    <string name="settings_font_size">Rozmiar tekstu.</string>
+    <string name="settings_display_oldest_first">Kolejność artykułów.</string>
+    <string name="settings_display_oldest_first_description">Najstarsze na początku.</string>
+    <string name="settings_display_entries_fullscreen">Automatyczny tryb pełnoekranowy.</string>
+    <string name="settings_display_entries_fullscreen_description">Automatycznie wyświetlaj artykuły w trybie pełnoekranowym.</string>
+    <string name="settings_refresh_on_open_description">Odświeża wszystkie kanały po uruchomieniu programu.</string>
+    <string name="settings_refresh_on_open">Odświeżaj kanały przy uruchomieniu.</string>
+    <string name="settings_refresh_wifi_only">Odświeżaj tylko przez Wi-Fi.</string>
+    <string name="settings_refresh_wifi_only_description">Automatyczne odświeżanie będzie miało miejsce tylko przy dostępnym połączeniu Wi-Fi.</string>
+    <string name="settings_display_text_color">Jasność tekstu.</string>
+    <string name="settings_max_image_download_count">Maksymalna ilość pobranych obrazków.</string>
+    <string name="settings_visible_feeds">Widoczne kanały.</string>
+    <string name="settings_widget_background">Tło.</string>
+    <string name="settings_widget_background_description">Kolor i przezroczystość tła widżetu.</string>
+    <string name="all_feeds">Wszystkie kanały (w tym przyszłe).</string>
+    <string name="settings_display_text_color_description">w ciemnym motywie (0..255)</string>
+    <string name="downloadImage">Pobierz obrazek.</string>
+    <string name="loadFullText">Wczytaj pełną treść.</string>
+    <string name="deleteOldEntries">Usuń stare artykuły.</string>
+    <string name="AllImages">Wszystkie obrazki.</string>
+    <string name="EntryImages">Obrazki artykułu.</string>
+    <string name="mobilizeAll">mobilize all</string>
+    <string name="RefreshFeeds">Odśwież kanały.</string>
+    <string name="deleteImages">Usuń obrazki.</string>
+    <string name="applyOperations">Zastosuj operacje.</string>
+    <string name="extractContent">Pozyskaj treść.</string>
+    <string name="improveHtmlContent">Udoskonalam treść HTML.</string>
+    <string name="parseXml">Parsuj XML.</string>
+    <string name="setupConnection">Ustaw połączenie.</string>
+    <string name="settings_content_extract_rules">Reguły pozyskiwania treści.</string>
+    <string name="settings_content_extract_rules_description">Ustaw dla poszczególnych witryn (potrzebujesz podstawowej wiedzy o HTML).</string>
+    <string name="settings_tapZones">Strefy Aktywne.</string>
+    <string name="settings_additional">Dodatkowe.</string>
+    <string name="settings_load_comments">Wczytuj komentarze.</string>
+    <string name="settings_load_comments_description">w pełnej treści artykułu</string>
+    <string name="settings_tap_zones_description">podczas wyświetlania treści artykułu</string>
+    <string name="settings_tap_zones_dialogtitle">tylko informacyjnie, modyfikowanie niedostępne</string>
+    <string name="settings_max_image_download_count_description">na jeden artykuł</string>
+    <string name="downloadNext">"Pobierz następny."</string>
+    <string name="loadingLink">Wczytuję linki...</string>
+    <string name="loadLink">Czytaj...</string>
+    <string name="loadLinkLater">Przeczytaj później.</string>
+    <string name="addFeed">Dodaj kanał.</string>
+    <string name="externalLinks">Linki zewnętrzne.</string>
+    <string name="markAllAsRead">Oznacz wszystko jako przeczytane.</string>
+    <string name="settings_remember_last_entry">Pamiętaj ostatnio wyświetlany artykuł.</string>
+    <string name="settings_remeber_last_entry_description">Otwórz ostatnio wyświetlany artykuł przy uruchomieniu - w przeciwnym razie pokaż listę artykułów.</string>
+    <string name="pageUp">strona w górę</string>
+    <string name="pageDown">strona w dół</string>
+    <string name="fullScreenToggle">przełącznik pełnego ekranu</string>
+    <string name="auto_refresh_feed">Automatycznie odświeżaj kanał.</string>
+    <string name="settings_refresh_only_selected">Tylko wybrane.</string>
+    <string name="settings_refresh_only_selected_summary">Automatycznie odświeża tylko wybrane kanały.</string>
+    <string name="actionBarToggle">Przełącznik belki akcji.</string>
+    <string name="settings_show_tap_zones">Strefy Aktywne widoczne.</string>
+    <string name="settings_show_tap_zone_description">...jako częściowo przezroczyste kwadraty podczas wyświetlania artykułu.</string>
+    <string name="settings_max_image_download_size_kb">Maksymalna waga obrazka.</string>
+    <string name="settings_max_image_download_size_kb_summary">(w kb). Nie wczytuj obrazków większych niż...</string>
+    <string name="standard">Standard.</string>
+    <string name="fontsize_entrylist">Rozmiar tekstu na liście artykułów.</string>
+    <string name="settings_volume_buttons_action">Funkcje przycisków głośności.</string>
+    <string name="behaviour">Zachowanie</string>
+    <string name="question_delete_entry">Usunąć artykuł?</string>
+    <string name="share_all_text">Udostępnij cały tekst.</string>
+    <string name="group">Dodaj do grupy.</string>
+    <string name="auto_image_load">Automatycznie wczytuj obrazki.</string>
+    <string name="show_progress_info">Szczegółowe informacje techniczne.</string>
+    <string name="show_progress_info_descr">Pokazuje szczegółowe informacje nt. aktualnie przeprowadzanej operacji.</string>
+    <string name="filter_apply_to_url">Zastosuj do adresu URL.</string>
+    <string name="show_article_url">Pokaż adres URL artykułu.</string>
+    <string name="show_article_url_descr">na liście artykułów</string>
+    <string name="show_article_icon">Pokaż ikonę artykułu.</string>
+    <string name="show_article_icon_descr">Wyłącz by uzyskać więcej miejsca na ekranie.</string>
+    <string name="menu_fix_order">Napraw kolejność artykułów.</string>
+    <string name="settings_category_article_list">Lista artykułów.</string>
+    <string name="settings_category_article_text">Tekst artykułu.</string>
+    <string name="vibrate_on_article_list_entry_swype">Wibruj przy przesunięciu w lewo/prawo.</string>
+    <string name="vibrate_on_article_list_entry_swype_summary">w artykule na liście</string>
+    <string name="show_mark_all_as_read_button">Przycisk 'Oznacz wszystko jako przeczytane'.</string>
+    <string name="show_mark_all_as_read_button_summary">Pokaż przycisk 'Oznacz wszystkie artykuły jako przeczytane'. W przeciwnym razie znajdziesz tą funkcję w menu.</string>
+    <string name="entry_marked_unfavourite">Artykuł został usunięty z Ulubionych.</string>
+    <string name="entry_marked_favourite">Artykuł został dodany do Ulubionych.</string>
+    <string name="new_feed_was_added">Nowy kanał został dodany.</string>
+    <string name="entry_marked_unread">Artykuł został oznaczony jako nieprzeczytany.</string>
+    <string name="lock_orientation">Orientacja pozioma.</string>
+    <string name="markAsStarred">Oznacz jako Ulubione.</string>
+    <string name="markedAsStarred">Artykuł został dodany do Ulubionych.</string>
+    <string name="deleteAllEntries">Usuń wszystkie artykuły poza Ulubionymi.</string>
+    <string name="question">Pytanie.</string>
+    <string name="settings_entry_margins">Marginesy.</string>
+    <string name="settings_entry_margins_description">lewy|prawy</string>
+    <string name="entry_text_align_justify">Tekst justowany.</string>
+    <string name="entry_text_align_justify_description">W przeciwnym razie wyrównany do lewej.</string>
+    <string name="reload_full_text_with_tags">Przeładuj z tagami.</string>
+    <string name="filter_hint">Akcja przypisana filtrom zostanie wykonana przy spełnieniu co najmniej jednego z warunków (reguł). 'Akceptuj' nadpisuje 'Odrzuć'.</string>
+    <string name="keyword">słowo kluczowe</string>
+    <string name="loadTypeWeb">Web (wczytuj wszystkie linki).</string>
+    <string name="loadTypeRSS">Kanał RSS lub słowo kluczowe.</string>
+    <string name="loadType">Wczytuj:</string>
+    <string name="global_filter">Filtr globalny.</string>
+    <string name="global_filter_descr">Filtr stosowany do wszystkich kanałów. Nie wypełniaj pól, jeśli ma być nieaktywny,</string>
+    <string name="global_marks_as_star_filter_apply_to_title_descr">w przeciwnym razie stosuj do treści</string>
+    <string name="rule_text">słowo lub fraza</string>
+
+
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Jeden nowy artykuł.</item>
+        <item quantity="other">%d nowych artykułów.</item>
+    </plurals>
+
+    <string-array name="settings_intervals">
+        <item>1 minuta</item>
+        <item>5 minut</item>
+        <item>15 minut</item>
+        <item>30 minut</item>
+        <item>1 godzina</item>
+        <item>2 godziny</item>
+        <item>6 godzin</item>
+        <item>12 godzin</item>
+        <item>1 dzień</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 dzień</item>
+        <item>2 dni</item>
+        <item>4 dni</item>
+        <item>1 tydzień</item>
+        <item>2 tygodnie</item>
+        <item>1 miesiąc</item>
+        <item>2 miesiące</item>
+        <item>3 miesiące</item>
+        <item>na zawsze</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>@string/standard</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+        <item>+4</item>
+        <item>+5</item>
+    </string-array>
+
+    <string-array name="settings_volume_buttons_action">
+        <item>domyślne</item>
+        <item>następny/poprzedni artykuł</item>
+        <item>strona w górę/w dół</item>
+    </string-array>
+
+    <string-array name="settings_preload_image_modes">
+        <item>nigdy</item>
+        <item>tylko przez Wi-Fi</item>
+        <item>zawsze</item>
+    </string-array>
+
+</resources>

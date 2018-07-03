@@ -63,7 +63,7 @@
     </string>
     <string name="feed_url">URL-адрес</string>
     <string name="optional">(не обязательно)</string>
-    <string name="website_or_feed">(ленты новостей, или сайта для загрузки всех ссылок)</string>
+    <string name="website_or_feed">(ленты новостей или ключевое слово)</string>
     <string name="tab_feed_title">Ленту</string>
     <string name="tab_filters_title">Фильтры</string>
     <string name="feed_title">НАЗВАНИЕ</string>
@@ -391,5 +391,14 @@
     <string name="reload_full_text_with_tags">Перезагрузить с разметкой</string>
     <string name="filter_hint">Все фильтры объединяются по ИЛИ. Загружать перевешивает Не загружать</string>
     <string name="keyword">Ключевое слово</string>
+    <string name="loadTypeWeb">Web (загружать все ссылки)</string>
+    <string name="loadTypeRSS">Лента RSS или ключевое слово</string>
+    <string name="loadType">Тип загрузки:</string>
+    <string name="global_filter">Глобальный фильтр ...</string>
+    <string name="global_filter_descr">Фильтр, применяемый к каждой ленте. Для отключения оставьте текст фильтра (и регулярного выражения) пустым</string>
+    <string name="global_marks_as_star_filter_apply_to_title_descr">в противном случае применить к содержимому</string>
+    <string name="rule_text">Текст правила</string>
+    <string name="settings_min_update_battery_level">Min уровень батареи</string>
+    <string name="global_marks_as_star_filter_rule_descr">Каждое правило на своей строке</string>
 
 </resources>

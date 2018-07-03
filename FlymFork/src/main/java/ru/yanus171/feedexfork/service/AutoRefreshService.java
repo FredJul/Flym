@@ -44,8 +44,14 @@
 
 package ru.yanus171.feedexfork.service;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
+import android.os.Build;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
@@ -62,33 +68,68 @@ public class AutoRefreshService extends GcmTaskService {
 
     @Override
     public int onRunTask(TaskParams taskParams) {
-        getBaseContext().startService(new Intent(getBaseContext(), FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true));
+        getBaseContext().startService(getFetcherServiceIntent( getBaseContext() ));
 
         return GcmNetworkManager.RESULT_SUCCESS;
     }
 
-    public static void initAutoRefresh(Context context) {
-        GcmNetworkManager gcmNetworkManager = GcmNetworkManager.getInstance(context);
+    static Intent getFetcherServiceIntent( Context context ) {
+        return new Intent(context, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true);
+    }
 
-        long time = 3600L;
+
+    public static void initAutoRefresh(Context context) {
+        if (Build.VERSION.SDK_INT >= 25 )
+
+            AutoRefreshJobService.initAutoRefresh( context );
+        else {
+
+            GcmNetworkManager gcmNetworkManager = GcmNetworkManager.getInstance(context);
+            if (isAutoUpdateEnabled()) {
+                PeriodicTask task = new PeriodicTask.Builder()
+                        .setService(AutoRefreshService.class)
+                        .setTag(TASK_TAG_PERIODIC)
+                        .setPeriod(getTimeIntervalInMSecs() / 1000)
+                        .setPersisted(true)
+                        .setRequiredNetwork(Task.NETWORK_STATE_CONNECTED)
+                        .setUpdateCurrent(true)
+                        .build();
+
+                gcmNetworkManager.schedule(task);
+            } else {
+                gcmNetworkManager.cancelTask(TASK_TAG_PERIODIC, AutoRefreshService.class);
+            }
+
+        }
+    }
+
+    public static boolean isBatteryLow(Context context) {
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent battery = context.registerReceiver(null, ifilter);
+        int level = battery.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = battery.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+        float batteryPct = level / (float)scale * 100;
+
+        long lowLevelPct = 20;
         try {
-            time = Math.max(60L, Long.parseLong(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, SIXTY_MINUTES)) / 1000);
+            lowLevelPct = Math.max(50, Long.parseLong(PrefUtils.getString("refresh.min_update_battery_level", 20)) );
         } catch (Exception ignored) {
         }
+        return batteryPct < lowLevelPct;
+    }
 
-        if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
-            PeriodicTask task = new PeriodicTask.Builder()
-                    .setService(AutoRefreshService.class)
-                    .setTag(TASK_TAG_PERIODIC)
-                    .setPeriod(time)
-                    .setPersisted(true)
-                    .setRequiredNetwork(Task.NETWORK_STATE_CONNECTED)
-                    .setUpdateCurrent(true)
-                    .build();
+    static boolean isAutoUpdateEnabled() {
+        return PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true);
+    }
 
-            gcmNetworkManager.schedule(task);
-        } else {
-            gcmNetworkManager.cancelTask(TASK_TAG_PERIODIC, AutoRefreshService.class);
+    static long getTimeIntervalInMSecs() {
+
+        long time = 3600L * 1000;
+        try {
+            time = Math.max(60L * 1000, Long.parseLong(PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, SIXTY_MINUTES)));
+        } catch (Exception ignored) {
         }
+        return time;
     }
 }

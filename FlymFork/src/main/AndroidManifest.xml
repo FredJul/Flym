@@ -3,15 +3,15 @@
     package="ru.yanus171.feedexfork"
     android:installLocation="auto">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <permission
         android:name="ru.yanus171.feedexfork.provider.WRITE_PERMISSION"
-        android:protectionLevel="signature"/>
+        android:protectionLevel="signature" />
 
     <application
         android:name=".MainApplication"
@@ -28,84 +28,95 @@
             </intent-filter>
         </service>
 
-        <service android:name=".service.FetcherService"/>
+        <service
+            android:name=".service.AutoRefreshJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:enabled="true"
+            android:exported="true"/>
+        <service
+            android:name=".service.FetcherService"
+            />
 
         <provider
             android:name=".provider.FeedDataContentProvider"
             android:authorities="ru.yanus171.feedexfork.provider.FeedData"
             android:exported="true"
-            android:writePermission="ru.yanus171.feedexfork.provider.WRITE_PERMISSION"/>
+            android:writePermission="ru.yanus171.feedexfork.provider.WRITE_PERMISSION" />
 
         <activity
             android:name=".activity.HomeActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <intent-filter android:label="@string/loadLink" >
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/plain"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter android:label="@string/loadLink">
+                <action android:name="android.intent.action.SEND" />
 
-            <intent-filter android:label="@string/loadLink" >
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
             </intent-filter>
+            <intent-filter android:label="@string/loadLink">
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.AddGoogleNewsActivity"
             android:label="@string/google_news_title"
-            android:windowSoftInputMode="stateHidden"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.AboutActivity"
             android:label="@string/about_flym"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.EditFeedsListActivity"
             android:label="@string/feeds"
-            android:launchMode="singleTask"/>
-
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.LoadLinkLaterActivity"
-            android:label="@string/feeds"
-            android:noHistory="true"
             android:clearTaskOnLaunch="true"
+            android:label="@string/feeds"
             android:launchMode="singleInstance"
+            android:noHistory="true"
             android:theme="@android:style/Theme.NoDisplay">
-            <intent-filter android:label="@string/loadLinkLater" >
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/plain"/>
+            <intent-filter android:label="@string/loadLinkLater">
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
             </intent-filter>
-            <intent-filter android:label="@string/loadLinkLater" >
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
+            <intent-filter android:label="@string/loadLinkLater">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".activity.EntryActivity"
             android:configChanges="orientation|screenSize"
-            android:parentActivityName=".activity.HomeActivity"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:parentActivityName=".activity.HomeActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.item/vnd.flymfork.entry"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.flymfork.entry" />
             </intent-filter>
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -116,35 +127,37 @@
         <activity
             android:name=".activity.GeneralPrefsActivity"
             android:label="@string/menu_settings"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask" />
         <activity android:name=".widget.WidgetConfigActivity">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.EditFeedActivity"
             android:windowSoftInputMode="stateVisible|adjustResize">
-
             <intent-filter>
-                <action android:name="android.intent.action.EDIT"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.item/vnd.flymfork.feed"/>
-            </intent-filter>
+                <action android:name="android.intent.action.EDIT" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.flymfork.feed" />
+            </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.INSERT"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="vnd.android.cursor.dir/vnd.flymfork.feed"/>
-            </intent-filter>
+                <action android:name="android.intent.action.INSERT" />
 
-            <intent-filter  android:label="@string/addFeed">
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/plain"/>
-            </intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
 
-            <intent-filter android:label="@string/addFeed" >
+                <data android:mimeType="vnd.android.cursor.dir/vnd.flymfork.feed" />
+            </intent-filter>
+            <intent-filter android:label="@string/addFeed">
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter android:label="@string/addFeed">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -158,8 +171,7 @@
                 <data android:pathPattern=".*/feed" />
                 <data android:pathPattern=".*feed/*" />
             </intent-filter>
-
-            <intent-filter  android:label="@string/addFeed">
+            <intent-filter android:label="@string/addFeed">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -172,7 +184,6 @@
                 <data android:host="feeds2.feedburner.com" />
                 <data android:host="feedsproxy.google.com" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -200,30 +211,29 @@
 
         <receiver android:name=".widget.WidgetProvider">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widgetinfo"/>
+                android:resource="@xml/widgetinfo" />
         </receiver>
-
         <receiver android:name=".widget.TickerWidgetProvider">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/tickerwidgetinfo"/>
+                android:resource="@xml/tickerwidgetinfo" />
         </receiver>
 
         <service
             android:name=".widget.WidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"/>
-
-        <service android:name=".widget.TickerWidgetService"/>
-        <!--     <meta-data
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service android:name=".widget.TickerWidgetService" />
+        <!--
+                 <meta-data
                  android:name="com.google.android.gms.version"
                  android:value="@integer/google_play_services_version"/>
 
@@ -232,7 +242,9 @@
                  <intent-filter>
                      <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
                  </intent-filter>
-             </service>-->
+             </service>
+        -->
+
     </application>
 
 </manifest>

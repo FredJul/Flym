@@ -78,7 +78,7 @@ import ru.yanus171.feedexfork.utils.NetworkUtils;
 
 
 public class HTMLParser {
-	static public int Parse(String feedID, String feedUrl ) {
+	static public int Parse(final String feedID, String feedUrl ) {
 		//if (!TextUtils.isEmpty(content)) {
 		int result = 0;
             FetcherService.Status().ChangeProgress( "Loading main page");
@@ -129,7 +129,7 @@ public class HTMLParser {
 		doc = Jsoup.parse(content);
 		{
 			Elements list = doc.select("a");
-			final Pattern BASE_URL = Pattern.compile("(http|https).\\/\\/[^/]+\\/");
+			final Pattern BASE_URL = Pattern.compile("(http|https).[\\/]+[^/]+");
 			for (Element el : list) {
 				if (FetcherService.isCancelRefresh())
 					break;
@@ -166,7 +166,9 @@ public class HTMLParser {
 					cursor.moveToFirst();
 
 					if (filters.isMarkAsStarred(cursor.getString(0), cursor.getString(1), item.mUrl, "")) {
-						FetcherService.mMarkAsStarredFoundList.add( new MarkItem( cursor.getString(0), item.mUrl ) );
+						synchronized ( FetcherService.mMarkAsStarredFoundList ) {
+							FetcherService.mMarkAsStarredFoundList.add(new MarkItem(feedID, cursor.getString(0), item.mUrl));
+						}
 						{
 							ContentValues values = new ContentValues();
 							values.put(EntryColumns.IS_FAVORITE, 1);

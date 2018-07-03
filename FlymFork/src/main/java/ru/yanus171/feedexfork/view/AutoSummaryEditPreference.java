@@ -22,9 +22,9 @@ package ru.yanus171.feedexfork.view;
 import android.content.Context;
 import android.util.AttributeSet;
 
-public class AutoSummaryListPreference extends android.preference.ListPreference {
+public class AutoSummaryEditPreference extends android.preference.EditTextPreference {
 
-    public AutoSummaryListPreference(Context context, AttributeSet attrs) {
+    public AutoSummaryEditPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -37,7 +37,7 @@ public class AutoSummaryListPreference extends android.preference.ListPreference
     }
 
     private CharSequence GetSummary() {
-        return getEntry().toString().replace( "%", "%%" );
+        return getSummary() + "\n\n" + getText().replace( "%", "%%" );
     }
 
     @Override

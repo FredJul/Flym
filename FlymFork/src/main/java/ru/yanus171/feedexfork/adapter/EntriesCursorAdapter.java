@@ -214,10 +214,10 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                             view.getParent().requestDisallowInterceptTouchEvent(false);
                         if ( Math.abs( initialy - event.getY() ) > minY  )
                             isPress = false;
+                        holder.readToggleSwypeBtnView.setVisibility( View.VISIBLE );
+                        holder.starToggleSwypeBtnView.setVisibility( View.VISIBLE );
                     }
 
-                    holder.readToggleSwypeBtnView.setVisibility( View.VISIBLE );
-                    holder.starToggleSwypeBtnView.setVisibility( View.VISIBLE );
 
                     int overlap = holder.readToggleSwypeBtnView.getWidth() / 2;
                     int threshold = holder.readToggleSwypeBtnView.getWidth();
@@ -250,6 +250,9 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
                         if ( view.getParent() != null )
                             view.getParent().requestDisallowInterceptTouchEvent(false);
+                        holder.readToggleSwypeBtnView.setVisibility( View.GONE );
+                        holder.starToggleSwypeBtnView.setVisibility( View.GONE );
+
                     }
 
                     if ( paddingX > max )
@@ -324,7 +327,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         String feedName = cursor.getString(mFeedNamePos);
 
-        if ( !mShowEntryText && PrefUtils.getBoolean( "setting_show_article_icon", true ) ) {
+        if ( /*!mShowEntryText && */PrefUtils.getBoolean( "setting_show_article_icon", true ) ) {
             holder.mainImgView.setVisibility( View.VISIBLE );
             String mainImgUrl = cursor.getString(mMainImgPos);
             mainImgUrl = TextUtils.isEmpty(mainImgUrl) ? null : NetworkUtils.getDownloadedOrDistantImageUrl(holder.entryID, mainImgUrl);

@@ -36,6 +36,15 @@
             android:key="refresh.interval"
             android:title="@string/settings_refresh_interval"/>
 
+        <ru.yanus171.feedexfork.view.AutoSummaryListPreference
+            android:defaultValue="20"
+            android:dependency="refresh.enabled"
+            android:entries="@array/settings_battery_level"
+            android:entryValues="@array/settings_battery_level_values"
+            android:inputType="number"
+            android:key="refresh.min_update_battery_level"
+            android:title="@string/settings_min_update_battery_level"/>
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="refresh.only_selected"
@@ -236,6 +245,37 @@
 
 
     </PreferenceCategory>
+
+    <PreferenceScreen
+        android:title="@string/global_filter"
+        android:summary="@string/global_filter_descr">
+
+        <PreferenceCategory
+            android:layout="@layout/preference_category"
+            android:title="@string/markAsStarred">
+            <CheckBoxPreference
+                android:key="global_marks_as_star_filter_on"
+                android:defaultValue="false"
+                android:title="Turn on"/>
+            <ru.yanus171.feedexfork.view.AutoSummaryEditPreference
+                android:key="global_marks_as_star_filter_rule"
+                android:dependency="global_marks_as_star_filter_on"
+                android:title="@string/rule_text"
+                android:inputType="text|textMultiLine"
+                android:summary="@string/global_marks_as_star_filter_rule_descr"/>
+            <CheckBoxPreference
+                android:key="global_marks_as_star_filter_rule_is_regex"
+                android:dependency="global_marks_as_star_filter_on"
+                android:defaultValue="false"
+                android:title="@string/filter_is_regex"/>
+            <CheckBoxPreference
+                android:key="global_marks_as_star_filter_apply_to_title"
+                android:dependency="global_marks_as_star_filter_on"
+                android:defaultValue="false"
+                android:title="@string/filter_apply_to_title"
+                android:summary= "@string/global_marks_as_star_filter_apply_to_title_descr"/>
+        </PreferenceCategory>
+    </PreferenceScreen>
 
     <PreferenceCategory
         android:layout="@layout/preference_category"

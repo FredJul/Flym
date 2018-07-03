@@ -1,8 +1,11 @@
 package ru.yanus171.feedexfork.view;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.NotificationCompat;
 import android.view.Gravity;
@@ -20,6 +23,8 @@ import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.service.FetcherService;
 import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.PrefUtils;
+
+import static ru.yanus171.feedexfork.MainApplication.NOTIFICATION_CHANNEL_ID;
 
 /**
  * Created by Admin on 03.06.2016.
@@ -198,13 +203,16 @@ public class StatusText implements Observer {
                 });
         }
     }
+
+
+
     static public Notification GetNotification(String text ) {
         Context context = MainApplication.getContext();
         NotificationCompat.BigTextStyle bigxtstyle =
                 new NotificationCompat.BigTextStyle();
         bigxtstyle.bigText(text);
         bigxtstyle.setBigContentTitle(context.getString(R.string.update));
-        return new NotificationCompat.Builder(MainApplication.getContext()) //
+        android.support.v4.app.NotificationCompat.Builder builder = new NotificationCompat.Builder(MainApplication.getContext()) //
                 //.setContentIntent(NULL) //
                 .setSmallIcon(R.drawable.refresh) //
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher)) //
@@ -213,9 +221,12 @@ public class StatusText implements Observer {
                 //.setAutoCancel(true) //
                 //.setContentTitle(context.getString(R.string.update)) //
                 //.setContentText(text) //
-                .setStyle( bigxtstyle )
+                .setStyle( bigxtstyle );
+
                 //.setLights(0xffffffff, 0, 0)
-                .build();
+        if (Build.VERSION.SDK_INT >= 26 )
+            builder.setChannelId( NOTIFICATION_CHANNEL_ID );
+        return builder.build();
     }
 
 

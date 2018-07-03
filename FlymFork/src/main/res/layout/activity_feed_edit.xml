@@ -1,8 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
-    <include layout="@layout/view_toolbar"/>
+    <include layout="@layout/view_toolbar" />
 
     <TabHost
         android:id="@+id/tabHost"
@@ -18,117 +20,166 @@
             <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
-                <RelativeLayout
+                <LinearLayout
                     android:id="@+id/feed_tab"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/url_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/feed_url"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textStyle="bold"/>
-
-                    <EditText
-                        android:id="@+id/feed_url"
+                    <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/url_textview"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="5dp"
-                        android:hint="@string/website_or_feed"
-                        android:inputType="textUri"
-                        android:singleLine="true"/>
-
-                    <TextView
-                        android:id="@+id/name_textview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/feed_url"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/feed_title"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textStyle="bold"/>
-
-                    <EditText
-                        android:id="@+id/feed_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/name_textview"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="5dp"
-                        android:hint="@string/optional"
-                        android:singleLine="true"/>
-
-                    <LinearLayout
-                        android:id="@+id/layout_group"
-                        android:orientation="horizontal"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/feed_title"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/feed_tab"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="ltr"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/url_textview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:text="@string/feed_url"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textStyle="bold" />
+
+
+                        </LinearLayout>
+
+                        <EditText
+                            android:id="@+id/feed_url"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/url_textview"
+                            android:layout_marginTop="5dp"
+                            android:hint="@string/website_or_feed"
+                            android:inputType="textUri"
+                            android:singleLine="true" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/loadType"
+                                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                            <RadioGroup
+                                android:id="@+id/rgLoadType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:checkedButton="@+id/rbRss"
+                                android:orientation="vertical">
+
+
+                                <RadioButton
+                                    android:id="@+id/rbRss"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/loadTypeRSS" />
+
+                                <RadioButton
+                                    android:id="@+id/rbWeb"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/loadTypeWeb" />
+                            </RadioGroup>
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/name_textview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/feed_url"
+                            android:layout_marginTop="20dp"
+                            android:text="@string/feed_title"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/feed_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/name_textview"
+                            android:layout_marginTop="5dp"
+                            android:hint="@string/optional"
+                            android:singleLine="true" />
+
+                        <LinearLayout
+                            android:id="@+id/layout_group"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/feed_title"
+                            android:layout_alignParentRight="true"
+                            android:orientation="horizontal">
+
+                            <CheckBox
+                                android:id="@+id/has_group"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/group" />
+
+                            <Spinner
+                                android:id="@+id/spin_group"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:choiceMode="singleChoice"
+                                android:visibility="visible" />
+                        </LinearLayout>
+
                         <CheckBox
-                            android:id="@+id/has_group"
+                            android:id="@+id/retrieve_fulltext"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:text="@string/group"/>
-                        <Spinner
-                            android:id="@+id/spin_group"
+                            android:layout_below="@+id/layout_group"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/get_full_text" />
+
+                        <CheckBox
+                            android:id="@+id/show_text_in_entry_list"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:choiceMode="singleChoice"
-                            android:visibility="visible" />
+                            android:layout_below="@+id/retrieve_fulltext"
+                            android:layout_alignParentRight="true"
+                            android:singleLine="false"
+                            android:text="@string/show_text_in_entry_list" />
+
+                        <CheckBox
+                            android:id="@+id/auto_refresh"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/show_text_in_entry_list"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/auto_refresh_feed" />
+
+                        <CheckBox
+                            android:id="@+id/auto_image_load"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/auto_refresh"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/auto_image_load" />
                     </LinearLayout>
-                    <CheckBox
-                        android:id="@+id/retrieve_fulltext"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/layout_group"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/get_full_text"/>
-                    <CheckBox
-                        android:id="@+id/show_text_in_entry_list"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:singleLine="false"
-                        android:layout_below="@+id/retrieve_fulltext"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/show_text_in_entry_list"/>
-                    <CheckBox
-                        android:id="@+id/auto_refresh"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/show_text_in_entry_list"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/auto_refresh_feed"/>
-                    <CheckBox
-                        android:id="@+id/auto_image_load"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/auto_refresh"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/auto_image_load"/>
-                </RelativeLayout>
+                    </ScrollView>
+
+                </LinearLayout>
 
                 <RelativeLayout
                     android:id="@+id/filters_tab"
@@ -139,42 +190,38 @@
                         android:id="@+id/filter_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
                         android:layout_marginTop="20dp"
                         android:text="@string/feed_filters"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/filter_hint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
                         android:layout_below="@+id/filter_textview"
+                        android:layout_marginTop="20dp"
                         android:text="@string/filter_hint"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_below="@+id/filter_hint"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp">
+                        android:layout_below="@+id/filter_hint">
 
                         <TextView
                             android:id="@android:id/empty"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="@string/no_filters"/>
+                            android:text="@string/no_filters" />
 
                         <ListView
                             android:id="@android:id/list"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:choiceMode="singleChoice"/>
+                            android:choiceMode="singleChoice" />
                     </FrameLayout>
                 </RelativeLayout>
             </FrameLayout>

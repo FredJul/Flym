@@ -428,7 +428,9 @@ public class RssAtomParser extends DefaultHandler {
 
                     mStarred = false;
                     if ( mFilters.isMarkAsStarred(improvedTitle, improvedAuthor, entryLinkString, improvedContent) ) {
-                        FetcherService.mMarkAsStarredFoundList.add( new MarkItem( improvedTitle, entryLinkString ) );
+                        synchronized ( FetcherService.mMarkAsStarredFoundList ) {
+                            FetcherService.mMarkAsStarredFoundList.add(new MarkItem(mId, improvedTitle, entryLinkString));
+                        }
                         mStarred = true;
                     }
 
@@ -690,90 +692,3 @@ public class RssAtomParser extends DefaultHandler {
 
 }
 
-class FeedFilters {
-
-    private final ArrayList<Rule> mFilters = new ArrayList<>();
-
-    public FeedFilters(String feedId) {
-        ContentResolver cr = MainApplication.getContext().getContentResolver();
-        Cursor c = cr.query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), new String[]{FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
-                FilterColumns.IS_APPLIED_TO_TITLE, FilterColumns.IS_ACCEPT_RULE, FilterColumns.IS_MARK_STARRED}, null, null, null);
-        while (c.moveToNext()) {
-            Rule r = new Rule();
-            r.filterText = c.getString(0);
-            r.isRegex = c.getInt(1) == 1;
-            r.isAppliedToTitle = c.getInt(2) == 1;
-            r.isAcceptRule = c.getInt(3) == 1;
-            r.isMarkAsStarred = c.getInt(4) == 1;
-            mFilters.add(r);
-        }
-        c.close();
-
-    }
-
-    public boolean isEntryFiltered(String title, String author, String url, String content) {
-
-        boolean isFiltered = false;
-
-        for (Rule r : mFilters) {
-            if ( r.isMarkAsStarred)
-                continue;
-
-            boolean isMatch = r.isMatch( title, author, url, content );
-
-            if (r.isAcceptRule) {
-                if (isMatch) {
-
-                    isFiltered = false;
-                    break; // accept rules override reject rules, the rest of the rules must be ignored
-                } else {
-                    isFiltered = true;
-                    //break;
-                }
-            } else if (isMatch) {
-                isFiltered = true;
-                //break; // no break, there might be an accept rule later
-            }
-        }
-
-        return isFiltered;
-    }
-
-    public boolean isMarkAsStarred(String title, String author, String url, String content) {
-        for (Rule r : mFilters)
-            if ( r.isMarkAsStarred && r.isMatch( title, author, url, content ) )
-                return true;
-        return false;
-    }
-
-    private class Rule {
-        public String filterText;
-        public boolean isRegex;
-        public boolean isAppliedToTitle;
-        public boolean isAcceptRule;
-        public boolean isMarkAsStarred = false;
-
-        boolean isMatch(String title, String author, String url, String content) {
-            boolean result = false;
-
-            if (isRegex) {
-                Pattern p = Pattern.compile(filterText);
-                if (isAppliedToTitle) {
-                    Matcher mT = p.matcher(title);
-                    Matcher mA = p.matcher(author);
-                    Matcher mU = p.matcher(url);
-                    result = mT.find() || mA.find() || mU.find();
-                } else if (content != null) {
-                    Matcher m = p.matcher(content);
-                    result = m.find();
-                }
-            } else if ((isAppliedToTitle && (title != null && title.contains(filterText) ||
-                                             author != null && author.contains(filterText) ||
-                                             url.contains(filterText))) ||
-                    (!isAppliedToTitle && content != null && content.contains(filterText))) {
-                result = true;
-            }
-            return result;
-        }
-    }
-}
