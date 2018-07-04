@@ -29,7 +29,7 @@
     <string name="welcome_title_with_opml_import">Voulez-vous importer vos anciens flux ?</string>
     <string name="cannot_find_feeds">Aucun flux n\'a été trouvé</string>
     <string name="menu_settings">Paramètres</string>
-    <string name="menu_rename_feed">Renommer</string>
+    <string name="menu_edit_feed">Éditer le flux</string>
     <string name="menu_reorder">Réordonner les flux</string>
     <string name="menu_delete">Supprimer</string>
     <string name="menu_enable_full_text_retrieval">Activer la récupération du texte complet</string>
@@ -67,6 +67,8 @@
     <string name="google_news_entertainment">Culture</string>
     <string name="google_news_sports">Sport</string>
     <string name="google_news_health">Santé</string>
+    <string name="feed_name">Nom du flux</string>
+    <string name="feed_link">Lien du flux</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Tous les articles</string>

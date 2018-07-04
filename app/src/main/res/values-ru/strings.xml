@@ -29,7 +29,7 @@
     <string name="welcome_title_with_opml_import">Импортировать предыдущие ленты Flym?</string>
     <string name="cannot_find_feeds">Ленты не найдены</string>
     <string name="menu_settings">Настройки</string>
-    <string name="menu_rename_feed">Переименовать</string>
+    <string name="menu_edit_feed">Редактировать ленту</string>
     <string name="menu_reorder">Изменить порядок</string>
     <string name="menu_delete">Удалить</string>
     <string name="menu_enable_full_text_retrieval">Загружать текст полностью</string>
@@ -75,6 +75,8 @@
     <string name="google_news_entertainment">Развлечения</string>
     <string name="google_news_sports">Спорт</string>
     <string name="google_news_health">Здоровье</string>
+    <string name="feed_name">Feed name</string>
+    <string name="feed_link">Feed link</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Все новости</string>

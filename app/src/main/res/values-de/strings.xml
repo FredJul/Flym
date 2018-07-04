@@ -31,7 +31,7 @@
     <string name="welcome_title_with_opml_import">Möchtest du frühere Flym-Feeds importieren?</string>
     <string name="cannot_find_feeds">Keine Feeds gefunden</string>
     <string name="menu_settings">Einstellungen</string>
-    <string name="menu_rename_feed">Umbenennen</string>
+    <string name="menu_edit_feed">Feed bearbeiten</string>
     <string name="menu_reorder">Feeds neu ordnen</string>
     <string name="menu_delete">Löschen</string>
     <string name="menu_enable_full_text_retrieval">Volltextsuche aktivieren</string>
@@ -69,6 +69,8 @@
     <string name="google_news_entertainment">Unterhaltung</string>
     <string name="google_news_sports">Sport</string>
     <string name="google_news_health">Gesundheit</string>
+    <string name="feed_name">Feed name</string>
+    <string name="feed_link">Feed link</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Alle Einträge</string>

@@ -29,7 +29,7 @@
     <string name="welcome_title_with_opml_import">Vuoi importare i feed precedenti in Flym?</string>
     <string name="cannot_find_feeds">Nessun feed è stato trovato</string>
     <string name="menu_settings">Impostazioni</string>
-    <string name="menu_rename_feed">Rinomina</string>
+    <string name="menu_edit_feed">Modifica il feed</string>
     <string name="menu_reorder">Riordina</string>
     <string name="menu_delete">Cancella</string>
     <string name="menu_enable_full_text_retrieval">Abilita il recupero del testo completo</string>
@@ -67,6 +67,8 @@
     <string name="google_news_entertainment">Intrattenimento</string>
     <string name="google_news_sports">Sport</string>
     <string name="google_news_health">Salute</string>
+    <string name="feed_name">Feed name</string>
+    <string name="feed_link">Feed link</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Tutti gli articoli</string>

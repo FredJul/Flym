@@ -8,7 +8,7 @@
     <string name="welcome_title_with_opml_import">Da li želite da uvezete prethodne Flim dovode?</string>
     <string name="cannot_find_feeds">Dovodi nisu pronađeni</string>
     <string name="menu_settings">Podešavanja</string>
-    <string name="menu_rename_feed">Preimenuj</string>
+    <string name="menu_edit_feed">Edit feed</string>
     <string name="menu_reorder">Organizuj redosled dovoda</string>
     <string name="menu_delete">Izbriši</string>
     <string name="menu_enable_full_text_retrieval">Omogući preuzimanje kompletnog teksta</string>
@@ -46,6 +46,8 @@
     <string name="google_news_entertainment">Zabava</string>
     <string name="google_news_sports">Sport</string>
     <string name="google_news_health">Zdravlje</string>
+    <string name="feed_name">Feed name</string>
+    <string name="feed_link">Feed link</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Svi članci</string>

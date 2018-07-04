@@ -104,7 +104,7 @@ dependencies {
 	kapt "com.github.bumptech.glide:compiler:$glide_version"
 
 	implementation 'androidx.core:core-ktx:0.3'
-	implementation "android.arch.paging:runtime:1.0.0"
+	implementation "android.arch.paging:runtime:1.0.1"
 	implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 	implementation 'org.jsoup:jsoup:1.11.3'
 	implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'

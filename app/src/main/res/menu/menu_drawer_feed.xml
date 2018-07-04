@@ -6,8 +6,8 @@
 		android:title="@string/menu_all_read"/>
 
 	<item
-		android:id="@+id/rename"
-		android:title="@string/menu_rename_feed"/>
+		android:id="@+id/edit_feed"
+		android:title="@string/menu_edit_feed"/>
 
 	<item
 		android:id="@+id/reorder"

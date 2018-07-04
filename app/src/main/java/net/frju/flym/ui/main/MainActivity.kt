@@ -18,6 +18,7 @@
 package net.frju.flym.ui.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.content.Intent
@@ -30,7 +31,6 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
-import android.widget.EditText
 import com.codekidlabs.storagechooser.StorageChooser
 import com.rometools.opml.feed.opml.Attribute
 import com.rometools.opml.feed.opml.Opml
@@ -39,6 +39,7 @@ import com.rometools.opml.io.impl.OPML20Generator
 import com.rometools.rome.io.WireFeedInput
 import com.rometools.rome.io.WireFeedOutput
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_edit_feed.view.*
 import kotlinx.android.synthetic.main.fragment_entries.*
 import kotlinx.android.synthetic.main.view_main_containers.*
 import kotlinx.android.synthetic.main.view_main_drawer_header.*
@@ -101,7 +102,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = FeedAdapter(feedGroups)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+	override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
@@ -178,22 +179,25 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                                         else -> App.db.entryDao().markAsRead(feed.id)
                                     }
                                 }
-                                R.id.rename -> {
-                                    val input = EditText(this@MainActivity).apply {
-                                        setSingleLine(true)
-                                        setText(feed.title)
-                                    }
+								R.id.edit_feed -> {
+									@SuppressLint("InflateParams")
+									val input = layoutInflater.inflate(R.layout.dialog_edit_feed, null, false).apply {
+										feed_name.setText(feed.title)
+										feed_link.setText(feed.link)
+									}
 
                                     AlertDialog.Builder(this@MainActivity)
-                                            .setTitle(R.string.menu_rename_feed)
+											.setTitle(R.string.menu_edit_feed)
                                             .setView(input)
                                             .setPositiveButton(android.R.string.ok) { dialog, which ->
-                                                val newName = input.text.toString()
-                                                if (newName.isNotBlank()) {
+												val newName = input.feed_name.text.toString()
+												val newLink = input.feed_link.text.toString()
+												if (newName.isNotBlank() && newLink.isNotBlank()) {
                                                     doAsync {
 														// Need to do a copy to not directly modify the memory and being able to detect changes
 														val newFeed = feed.copy().apply {
 															title = newName
+															link = newLink
 														}
 														App.db.feedDao().update(newFeed)
                                                     }
@@ -221,7 +225,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
                         when {
                             feed.id == Feed.ALL_ENTRIES_ID -> {
-                                menu.findItem(R.id.rename).isVisible = false
+								menu.findItem(R.id.edit_feed).isVisible = false
                                 menu.findItem(R.id.delete).isVisible = false
                                 menu.findItem(R.id.reorder).isVisible = false
                                 menu.findItem(R.id.enable_full_text_retrieval).isVisible = false

@@ -59,8 +59,8 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
             title.isEnabled = !entry.read
             title.text = entry.title
 
-            feed_name.isEnabled = !entry.read
-            feed_name.text = entry.feedTitle.orEmpty()
+			feed_name_layout.isEnabled = !entry.read
+			feed_name_layout.text = entry.feedTitle.orEmpty()
 
             val mainImgUrl = if (TextUtils.isEmpty(entry.imageLink)) null else FetcherService.getDownloadedOrDistantImageUrl(entry.id, entry.imageLink!!)
 
