@@ -17,10 +17,12 @@
 
 package net.frju.flym.ui.entries
 
+import android.annotation.SuppressLint
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,12 +58,6 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(entry: EntryWithFeed, globalClickListener: (EntryWithFeed) -> Unit, favoriteClickListener: (EntryWithFeed, ImageView) -> Unit) = with(itemView) {
-            title.isEnabled = !entry.read
-            title.text = entry.title
-
-			feed_name_layout.isEnabled = !entry.read
-			feed_name_layout.text = entry.feedTitle.orEmpty()
-
             val mainImgUrl = if (TextUtils.isEmpty(entry.imageLink)) null else FetcherService.getDownloadedOrDistantImageUrl(entry.id, entry.imageLink!!)
 
             val letterDrawable = Feed.getLetterDrawable(entry.feedId, entry.feedTitle)
@@ -71,6 +67,17 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
                 GlideApp.with(context).clear(main_icon)
                 main_icon.setImageDrawable(letterDrawable)
             }
+
+            title.isEnabled = !entry.read
+            title.text = entry.title
+
+            feed_name_layout.isEnabled = !entry.read
+            feed_name_layout.text = entry.feedTitle.orEmpty()
+
+            date.isEnabled = !entry.read
+            @SuppressLint("SetTextI18n")
+            date.text = DateFormat.getMediumDateFormat(context).format(entry.publicationDate) + ' ' +
+                    DateFormat.getTimeFormat(context).format(entry.publicationDate)
 
             if (entry.favorite) {
                 favorite_icon.setImageResource(R.drawable.ic_star_white_24dp)
