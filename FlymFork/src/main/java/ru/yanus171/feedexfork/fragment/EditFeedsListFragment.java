@@ -47,13 +47,18 @@ package ru.yanus171.feedexfork.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
@@ -73,20 +78,24 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.activity.AddGoogleNewsActivity;
+import ru.yanus171.feedexfork.activity.EditFeedActivity;
 import ru.yanus171.feedexfork.adapter.FeedsCursorAdapter;
 import ru.yanus171.feedexfork.parser.OPML;
+import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
+import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
 import ru.yanus171.feedexfork.utils.UiUtils;
 import ru.yanus171.feedexfork.view.DragNDropExpandableListView;
 import ru.yanus171.feedexfork.view.DragNDropListener;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class EditFeedsListFragment extends ListFragment {
 
@@ -127,22 +136,7 @@ public class EditFeedsListFragment extends ListFragment {
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 case R.id.menu_delete:
-                    new AlertDialog.Builder(getActivity()) //
-                            .setIcon(android.R.drawable.ic_dialog_alert) //
-                            .setTitle(title) //
-                            .setMessage(R.string.question_delete_feed) //
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    new Thread() {
-                                        @Override
-                                        public void run() {
-                                            ContentResolver cr = getActivity().getContentResolver();
-                                            cr.delete(FeedColumns.CONTENT_URI(feedId), null, null);
-                                        }
-                                    }.start();
-                                }
-                            }).setNegativeButton(android.R.string.no, null).show();
+                    DeleteFeed(EditFeedsListFragment.this.getActivity(), FeedColumns.CONTENT_URI(feedId), title);
 
                     mode.finish(); // Action picked, so close the CAB
                     return true;
@@ -159,6 +153,28 @@ public class EditFeedsListFragment extends ListFragment {
             }
         }
     };
+
+    public static void DeleteFeed(final Activity activity,  final Uri feedUri, String title) {
+        new AlertDialog.Builder(activity) //
+                .setIcon(android.R.drawable.ic_dialog_alert) //
+                .setTitle(title) //
+                .setMessage(R.string.question_delete_feed) //
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                                cr.delete(feedUri, null, null);
+                            }
+                        }.start();
+                        if ( activity instanceof EditFeedActivity )
+                            activity.finish();
+                    }
+                }).setNegativeButton(android.R.string.no, null).show();
+    }
+
     private final ActionMode.Callback mGroupActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -304,7 +320,7 @@ public class EditFeedsListFragment extends ListFragment {
             }
         });
 
-        mListView.setAdapter(new FeedsCursorAdapter(getActivity(), FeedColumns.GROUPS_CONTENT_URI));
+        mListView.setAdapter(new FeedsCursorAdapter(getActivity(), FeedColumns.GROUPS_AND_ROOT_CONTENT_URI));
 
         mListView.setDragNDropListener(new DragNDropListener() {
             boolean fromHasGroupIndicator = false;
@@ -344,7 +360,7 @@ public class EditFeedsListFragment extends ListFragment {
 
                                     ContentResolver cr = getActivity().getContentResolver();
                                     cr.update(FeedColumns.CONTENT_URI(mListView.getItemIdAtPosition(flatPosFrom)), values, null, null);
-                                    cr.notifyChange(FeedColumns.GROUPS_CONTENT_URI, null);
+                                    cr.notifyChange(FeedColumns.GROUPS_AND_ROOT_CONTENT_URI, null);
                                 }
                             }).setNegativeButton(R.string.to_group_above, new DialogInterface.OnClickListener() {
                         @Override
@@ -480,6 +496,69 @@ public class EditFeedsListFragment extends ListFragment {
                         importFromOpml();
                     }
                 }
+
+                return true;
+            }
+            case R.id.menu_fix_order: {
+                FeedDataContentProvider.mPriorityManagement = false;
+
+                final ProgressDialog pd = new ProgressDialog(getContext());
+                pd.setMessage(getString(R.string.applyOperations));
+                //pd.setCancelable(true);
+                //pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                pd.setIndeterminate(true);
+                pd.show();
+
+                final Handler handler = new Handler();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+                        ContentResolver cr = MainApplication.getContext().getContentResolver();
+                        try {
+                            int order = 0;
+                            {
+                                final Cursor cur = cr.query(FeedColumns.GROUPS_AND_ROOT_CONTENT_URI, new String[]{FeedColumns._ID}, null, null, FeedColumns.PRIORITY + ", " + FeedColumns._ID);
+                                while (cur.moveToNext()) {
+                                    order++;
+                                    operations.add(ContentProviderOperation.newUpdate(FeedColumns.CONTENT_URI(cur.getLong(0))).withValue(FeedColumns.PRIORITY, order).build());
+                                }
+                                cur.close();
+                            }
+
+                            {
+                                final Cursor cur = cr.query(FeedColumns.GROUPS_CONTENT_URI, new String[]{FeedColumns._ID}, null, null, FeedColumns.PRIORITY + ", " + FeedColumns._ID);
+                                while (cur.moveToNext()) {
+                                    order = 0;
+                                    Cursor curGroupFeeds = cr.query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(cur.getLong(0)), new String[]{FeedColumns._ID}, null, null, FeedColumns.PRIORITY + ", " + FeedColumns._ID);
+                                    while (curGroupFeeds.moveToNext()) {
+                                        order++;
+                                        operations.add(ContentProviderOperation.newUpdate(FeedColumns.CONTENT_URI(curGroupFeeds.getLong(0))).withValue(FeedColumns.PRIORITY, order).build());
+                                    }
+                                    curGroupFeeds.close();
+
+                                }
+                                cur.close();
+                            }
+                            try {
+                                cr.applyBatch(FeedData.AUTHORITY, operations);
+                            } catch (Throwable ignored) {
+                                ignored.printStackTrace();
+                            }
+                        } finally {
+                            FeedDataContentProvider.mPriorityManagement = true;
+                        }
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                pd.cancel();
+                            }
+                        });
+
+                    }
+                }).start();
+
 
                 return true;
             }

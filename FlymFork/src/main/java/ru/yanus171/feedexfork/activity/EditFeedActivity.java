@@ -55,6 +55,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
@@ -63,16 +64,23 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.ResourceCursorAdapter;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -84,12 +92,16 @@ import java.util.HashMap;
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.adapter.FiltersCursorAdapter;
+import ru.yanus171.feedexfork.fragment.EditFeedsListFragment;
 import ru.yanus171.feedexfork.loader.BaseLoader;
+import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
 import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
+import ru.yanus171.feedexfork.service.FetcherService;
 import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
+import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
 
 public class EditFeedActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -98,7 +110,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     static final String FEED_SEARCH_DESC = "description";//"contentSnippet";
     private static final String STATE_CURRENT_TAB = "STATE_CURRENT_TAB";
     private static final String[] FEED_PROJECTION =
-        new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.IS_GROUP, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST };
+        new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.IS_GROUP, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH, FeedColumns.GROUP_ID, FeedColumns.IS_IMAGE_AUTO_LOAD, FeedColumns.OPTIONS  };
     private final ActionMode.Callback mFilterActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -123,58 +135,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
 
             switch (item.getItemId()) {
                 case R.id.menu_edit:
-                    Cursor c = mFiltersCursorAdapter.getCursor();
-                    if (c.moveToPosition(mFiltersCursorAdapter.getSelectedFilter())) {
-                        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_filter_edit, null);
-                        final EditText filterText = (EditText) dialogView.findViewById(R.id.filterText);
-                        final CheckBox regexCheckBox = (CheckBox) dialogView.findViewById(R.id.regexCheckBox);
-                        final RadioButton applyTitleRadio = (RadioButton) dialogView.findViewById(R.id.applyTitleRadio);
-                        final RadioButton applyContentRadio = (RadioButton) dialogView.findViewById(R.id.applyContentRadio);
-                        final RadioButton acceptRadio = (RadioButton) dialogView.findViewById(R.id.acceptRadio);
-                        final RadioButton rejectRadio = (RadioButton) dialogView.findViewById(R.id.rejectRadio);
-
-                        filterText.setText(c.getString(c.getColumnIndex(FilterColumns.FILTER_TEXT)));
-                        regexCheckBox.setChecked(c.getInt(c.getColumnIndex(FilterColumns.IS_REGEX)) == 1);
-                        if (c.getInt(c.getColumnIndex(FilterColumns.IS_APPLIED_TO_TITLE)) == 1) {
-                            applyTitleRadio.setChecked(true);
-                        } else {
-                            applyContentRadio.setChecked(true);
-                        }
-                        if (c.getInt(c.getColumnIndex(FilterColumns.IS_ACCEPT_RULE)) == 1) {
-                            acceptRadio.setChecked(true);
-                        } else {
-                            rejectRadio.setChecked(true);
-                        }
-
-                        final long filterId = mFiltersCursorAdapter.getItemId(mFiltersCursorAdapter.getSelectedFilter());
-                        new AlertDialog.Builder(EditFeedActivity.this) //
-                                .setTitle(R.string.filter_edit_title) //
-                                .setView(dialogView) //
-                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        new Thread() {
-                                            @Override
-                                            public void run() {
-                                                String filter = filterText.getText().toString();
-                                                if (!filter.isEmpty()) {
-                                                    ContentResolver cr = getContentResolver();
-                                                    ContentValues values = new ContentValues();
-                                                    values.put(FilterColumns.FILTER_TEXT, filter);
-                                                    values.put(FilterColumns.IS_REGEX, regexCheckBox.isChecked());
-                                                    values.put(FilterColumns.IS_APPLIED_TO_TITLE, applyTitleRadio.isChecked());
-                                                    values.put(FilterColumns.IS_ACCEPT_RULE, acceptRadio.isChecked());
-                                                    if (cr.update(FilterColumns.CONTENT_URI, values, FilterColumns._ID + '=' + filterId, null) > 0) {
-                                                        cr.notifyChange(
-                                                                FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
-                                                                null);
-                                                    }
-                                                }
-                                            }
-                                        }.start();
-                                    }
-                                }).setNegativeButton(android.R.string.cancel, null).show();
-                    }
+                    EditFilter();
 
                     mode.finish(); // Action picked, so close the CAB
                     return true;
@@ -214,12 +175,76 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             mFiltersListView.invalidateViews();
         }
     };
+
+    public void EditFilter() {
+        Cursor c = mFiltersCursorAdapter.getCursor();
+        if (c.moveToPosition(mFiltersCursorAdapter.getSelectedFilter())) {
+            final View dialogView = getLayoutInflater().inflate(R.layout.dialog_filter_edit, null);
+            final EditText filterText = (EditText) dialogView.findViewById(R.id.filterText);
+            final CheckBox regexCheckBox = (CheckBox) dialogView.findViewById(R.id.regexCheckBox);
+            final RadioButton applyTitleRadio = (RadioButton) dialogView.findViewById(R.id.applyTitleRadio);
+            final RadioButton applyContentRadio = (RadioButton) dialogView.findViewById(R.id.applyContentRadio);
+            final RadioButton acceptRadio = (RadioButton) dialogView.findViewById(R.id.acceptRadio);
+            final RadioButton markAsStarredRadio = (RadioButton) dialogView.findViewById(R.id.markAsStarredRadio);
+            final RadioButton rejectRadio = (RadioButton) dialogView.findViewById(R.id.rejectRadio);
+
+            filterText.setText(c.getString(c.getColumnIndex(FilterColumns.FILTER_TEXT)));
+            regexCheckBox.setChecked(c.getInt(c.getColumnIndex(FilterColumns.IS_REGEX)) == 1);
+            if (c.getInt(c.getColumnIndex(FilterColumns.IS_APPLIED_TO_TITLE)) == 1) {
+                applyTitleRadio.setChecked(true);
+            } else {
+                applyContentRadio.setChecked(true);
+            }
+            if (c.getInt(c.getColumnIndex(FilterColumns.IS_MARK_STARRED)) == 1) {
+                markAsStarredRadio.setChecked(true);
+            } else if (c.getInt(c.getColumnIndex(FilterColumns.IS_ACCEPT_RULE)) == 1) {
+                acceptRadio.setChecked(true);
+            } else {
+                rejectRadio.setChecked(true);
+            }
+
+            final long filterId = mFiltersCursorAdapter.getItemId(mFiltersCursorAdapter.getSelectedFilter());
+            new AlertDialog.Builder(EditFeedActivity.this) //
+                    .setTitle(R.string.filter_edit_title) //
+                    .setView(dialogView) //
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            new Thread() {
+                                @Override
+                                public void run() {
+                                    String filter = filterText.getText().toString();
+                                    if (!filter.isEmpty()) {
+                                        ContentResolver cr = getContentResolver();
+                                        ContentValues values = new ContentValues();
+                                        values.put(FilterColumns.FILTER_TEXT, filter);
+                                        values.put(FilterColumns.IS_REGEX, regexCheckBox.isChecked());
+                                        values.put(FilterColumns.IS_APPLIED_TO_TITLE, applyTitleRadio.isChecked());
+                                        values.put(FilterColumns.IS_ACCEPT_RULE, acceptRadio.isChecked());
+                                        values.put(FilterColumns.IS_MARK_STARRED, markAsStarredRadio.isChecked());
+                                        if (cr.update(FilterColumns.CONTENT_URI, values, FilterColumns._ID + '=' + filterId, null) > 0) {
+                                            cr.notifyChange(
+                                                    FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
+                                                    null);
+                                        }
+                                    }
+                                }
+                            }.start();
+                        }
+                    }).setNegativeButton(android.R.string.cancel, null).show();
+        }
+    }
+
     private TabHost mTabHost;
     private EditText mNameEditText, mUrlEditText;
     private CheckBox mRetrieveFulltextCb;
     private CheckBox mShowTextInEntryListCb;
+    private CheckBox mIsAutoRefreshCb, mIsAutoImageLoadCb;
     private ListView mFiltersListView;
+    private Spinner mGroupSpinner;
+    private CheckBox mHasGroupCb;
     private FiltersCursorAdapter mFiltersCursorAdapter;
+    private RadioGroup mLoadTypeRG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,8 +266,55 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         mUrlEditText = (EditText) findViewById(R.id.feed_url);
         mRetrieveFulltextCb = (CheckBox) findViewById(R.id.retrieve_fulltext);
         mShowTextInEntryListCb = (CheckBox) findViewById(R.id.show_text_in_entry_list);
+        mIsAutoRefreshCb =  (CheckBox) findViewById(R.id.auto_refresh);
+        mIsAutoImageLoadCb =  (CheckBox) findViewById(R.id.auto_image_load);
         mFiltersListView = (ListView) findViewById(android.R.id.list);
+        mGroupSpinner = (Spinner) findViewById(R.id.spin_group);
+        mHasGroupCb = (CheckBox) findViewById(R.id.has_group);
+        mHasGroupCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                UpdateSpinnerGroup();
+            }
+        });
+        mLoadTypeRG = (RadioGroup) findViewById(R.id.rgLoadType);
         View tabWidget = findViewById(android.R.id.tabs);
+
+        mIsAutoRefreshCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mIsAutoImageLoadCb.setEnabled( b );
+            }
+        });
+        mIsAutoRefreshCb.setChecked( false );
+        mIsAutoRefreshCb.setVisibility(  PrefUtils.getBoolean( PrefUtils.REFRESH_ONLY_SELECTED, false ) ? View.VISIBLE : View.GONE );
+
+        mLoadTypeRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                mRetrieveFulltextCb.setEnabled( i == R.id.rbRss );
+            }
+        });
+
+        /*mUrlEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String text = charSequence.toString();
+                boolean isRss = FetcherService.isRss( text );
+                boolean isUrl = text.startsWith( "http://" ) || text.startsWith( "https://" );
+                mRetrieveFulltextCb.setEnabled( !isUrl || isRss );
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });*/
 
         mTabHost.setup();
         mTabHost.addTab(mTabHost.newTabSpec("feedTab").setIndicator(getString(R.string.tab_feed_title)).setContent(R.id.feed_tab));
@@ -259,6 +331,23 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             mTabHost.setCurrentTab(savedInstanceState.getInt(STATE_CURRENT_TAB));
         }
 
+        ResourceCursorAdapter adapter =
+                new ResourceCursorAdapter( this,
+                                           android.R.layout.simple_spinner_item,
+                                           getContentResolver().query( FeedColumns.GROUPS_CONTENT_URI, new String[] { FeedColumns._ID, FeedColumns.NAME }, null, null, FeedColumns.NAME ),
+                                           0 ) {
+            @Override
+            public void bindView(View view, Context context, Cursor cursor) {
+                TextView nameTextView = (TextView) view.findViewById(android.R.id.text1);
+                nameTextView.setText(cursor.getString(1));
+            }
+        };
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mGroupSpinner.setAdapter( adapter );
+
+        mIsAutoImageLoadCb.setVisibility( PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true) ? View.VISIBLE : View.GONE );
+        mLoadTypeRG.check( R.id.rbRss );
+
         if (intent.getAction().equals(Intent.ACTION_INSERT) || intent.getAction().equals(Intent.ACTION_SEND)) {
             setTitle(R.string.new_feed_title);
 
@@ -267,6 +356,12 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             if (intent.hasExtra(Intent.EXTRA_TEXT)) {
                 mUrlEditText.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
             }
+            mHasGroupCb.setChecked(false);
+            mIsAutoImageLoadCb.setChecked( true );
+
+            UpdateSpinnerGroup();
+
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
             setTitle(R.string.new_feed_title);
 
@@ -287,7 +382,20 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                 }
             });
 
+            mFiltersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    mFiltersCursorAdapter.setSelectedFilter(position);
+                    mFiltersListView.invalidateViews();
+                    EditFilter();
+                    //return true;
+                }
+            });
+
+
             getLoaderManager().initLoader(0, null, this);
+
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
             if (savedInstanceState == null) {
                 Cursor cursor = getContentResolver().query(intent.getData(), FEED_PROJECTION, null, null, null);
@@ -297,6 +405,24 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     mUrlEditText.setText(cursor.getString(1));
                     mRetrieveFulltextCb.setChecked(cursor.getInt(2) == 1);
                     mShowTextInEntryListCb.setChecked(cursor.getInt(4) == 1);
+                    mIsAutoRefreshCb.setChecked(cursor.getInt(5) == 1);
+                    mIsAutoImageLoadCb.setChecked(cursor.isNull(7) || cursor.getInt(7) == 1);
+                    mGroupSpinner.setSelection( -1);
+                    mHasGroupCb.setChecked(!cursor.isNull(6));
+                    UpdateSpinnerGroup();
+                    if ( !cursor.isNull(6) )
+                        for ( int i = 0; i < mGroupSpinner.getCount(); i ++ )
+                            if ( mGroupSpinner.getItemIdAtPosition( i ) == cursor.getInt(6) ) {
+                                mGroupSpinner.setSelection( i );
+                                break;
+                            }
+
+                    try {
+                        JSONObject jsonOptions  = new JSONObject( cursor.getString( cursor.getColumnIndex(FeedColumns.OPTIONS) ) );
+                        mLoadTypeRG.check( jsonOptions.getBoolean( "isRss" ) ? R.id.rbRss : R.id.rbWeb );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     if (cursor.getInt(3) == 1) { // if it's a group, we cannot edit it
                         finish();
                     }
@@ -310,6 +436,10 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                 }
             }
         }
+    }
+
+    private void UpdateSpinnerGroup() {
+        mGroupSpinner.setVisibility( mHasGroupCb.isChecked() ? View.VISIBLE : View.GONE );
     }
 
     @Override
@@ -334,23 +464,33 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                 } else {
                     ContentValues values = new ContentValues();
 
-                    if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME)) {
+                    if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME))
                         url = Constants.HTTP_SCHEME + url;
-                    }
+
                     values.put(FeedColumns.URL, url);
 
                     String name = mNameEditText.getText().toString();
 
+
                     values.put(FeedColumns.NAME, name.trim().length() > 0 ? name : null);
                     values.put(FeedColumns.RETRIEVE_FULLTEXT, mRetrieveFulltextCb.isChecked() ? 1 : null);
                     values.put(FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, mShowTextInEntryListCb.isChecked() ? 1 : null);
+                    values.put(FeedColumns.IS_AUTO_REFRESH, mIsAutoRefreshCb.isChecked() ? 1 : null);
+                    values.put(FeedColumns.IS_IMAGE_AUTO_LOAD, mIsAutoImageLoadCb.isChecked() ? 1 : 0);
+                    values.put(FeedColumns.OPTIONS, getOptionsJsonString());
                     values.put(FeedColumns.FETCH_MODE, 0);
+                    if ( mHasGroupCb.isChecked() && mGroupSpinner.getSelectedItemId() != AdapterView.INVALID_ROW_ID )
+                        values.put(FeedColumns.GROUP_ID, mGroupSpinner.getSelectedItemId() );
+                    else
+                        values.putNull(FeedColumns.GROUP_ID);
+
                     values.putNull(FeedColumns.ERROR);
 
                     synchronized (HomeActivity.mFeedSetupChanged ) {
                         HomeActivity.mFeedSetupChanged = true;
                         cr.update(getIntent().getData(), values, null, null);
                     }
+
                 }
             } catch (Exception ignored) {
             } finally {
@@ -362,6 +502,16 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         }
 
         super.onDestroy();
+    }
+
+    private String getOptionsJsonString() {
+        JSONObject jsonOptions = new JSONObject();
+        try {
+            jsonOptions.put( "isRss", mLoadTypeRG.getCheckedRadioButtonId() == R.id.rbRss );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonOptions.toString();
     }
 
     @Override
@@ -380,9 +530,10 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             menu.findItem(R.id.menu_add_filter).setVisible(true);
         }
 
-        if (getIntent() != null && getIntent().getAction().equals(Intent.ACTION_EDIT)) {
-            menu.findItem(R.id.menu_validate).setVisible(false); // only in insert mode
-        }
+        boolean edit = getIntent() != null && getIntent().getAction().equals(Intent.ACTION_EDIT);
+        boolean insert = getIntent() != null && ( getIntent().getAction().equals(Intent.ACTION_INSERT)  || getIntent().getAction().equals(Intent.ACTION_SEND) );
+        menu.findItem(R.id.menu_validate).setVisible(insert);
+        menu.findItem(R.id.menu_delete_feed).setVisible(edit);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -437,17 +588,25 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                                 int[] to = new int[]{android.R.id.text1, android.R.id.text2};
 
                                 // fill in the grid_item layout
-                                SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.item_search_result, from,
-                                        to);
+                                SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.item_search_result, from, to);
                                 builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        FeedDataContentProvider.addFeed(EditFeedActivity.this,
-                                                                        data.get(which).get(FEED_SEARCH_URL),
-                                                                        name.isEmpty() ? data.get(which).get(FEED_SEARCH_TITLE) : name,
-                                                                        mRetrieveFulltextCb.isChecked(),
-                                                                        mShowTextInEntryListCb.isChecked());
+                                        Uri newFeedUri =
+                                                FeedDataContentProvider.addFeed(EditFeedActivity.this,
+                                                        data.get(which).get(FEED_SEARCH_URL),
+                                                        name.isEmpty() ? data.get(which).get(FEED_SEARCH_TITLE) : name,
+                                                        mHasGroupCb.isChecked() ? mGroupSpinner.getSelectedItemId() : null,
+                                                        mRetrieveFulltextCb.isChecked(),
+                                                        mShowTextInEntryListCb.isChecked(),
+                                                        mIsAutoImageLoadCb.isChecked(),
+                                                        getOptionsJsonString());
+                                        UiUtils.toast( EditFeedActivity.this, R.string.new_feed_was_added);
 
+                                        EditFeedActivity.this.startService(new Intent(EditFeedActivity.this, FetcherService.class)
+                                                .setAction(FetcherService.ACTION_REFRESH_FEEDS)
+                                                .putExtra(Constants.FEED_ID, newFeedUri.getLastPathSegment()) );
+                                        HomeActivity.mNewFeedUri = newFeedUri;
                                         setResult(RESULT_OK);
                                         finish();
                                     }
@@ -461,11 +620,20 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                         }
                     });
                 } else {
-                    FeedDataContentProvider.addFeed(EditFeedActivity.this,
-                                                    urlOrSearch,
-                                                    name,
-                                                    mRetrieveFulltextCb.isChecked(),
-                                                    mShowTextInEntryListCb.isChecked());
+                    Uri newFeedUri =
+                        FeedDataContentProvider.addFeed(EditFeedActivity.this,
+                                                        urlOrSearch,
+                                                        name,
+                                                        mHasGroupCb.isChecked() ? mGroupSpinner.getSelectedItemId() : null,
+                                                        mRetrieveFulltextCb.isChecked(),
+                                                        mShowTextInEntryListCb.isChecked(),
+                                                        mIsAutoImageLoadCb.isChecked(),
+                                                        getOptionsJsonString());
+
+                    EditFeedActivity.this.startService(new Intent(EditFeedActivity.this, FetcherService.class)
+                            .setAction(FetcherService.ACTION_REFRESH_FEEDS)
+                            .putExtra(Constants.FEED_ID, newFeedUri.getLastPathSegment()) );
+                    HomeActivity.mNewFeedUri = newFeedUri;
 
                     setResult(RESULT_OK);
                     finish();
@@ -489,6 +657,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                                     values.put(FilterColumns.IS_REGEX, ((CheckBox) dialogView.findViewById(R.id.regexCheckBox)).isChecked());
                                     values.put(FilterColumns.IS_APPLIED_TO_TITLE, ((RadioButton) dialogView.findViewById(R.id.applyTitleRadio)).isChecked());
                                     values.put(FilterColumns.IS_ACCEPT_RULE, ((RadioButton) dialogView.findViewById(R.id.acceptRadio)).isChecked());
+                                    values.put(FilterColumns.IS_MARK_STARRED, ((RadioButton) dialogView.findViewById(R.id.markAsStarredRadio)).isChecked());
 
                                     ContentResolver cr = getContentResolver();
                                     cr.insert(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedId), values);
@@ -501,7 +670,11 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                 }).show();
                 return true;
             }
+            case R.id.menu_delete_feed:
+                EditFeedsListFragment.DeleteFeed( this, getIntent().getData(), "" );
+                return true;
             default:
+
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -544,7 +717,7 @@ class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, St
     public ArrayList<HashMap<String, String>> loadInBackground() {
         try {
         //    HttpURLConnection conn = NetworkUtils.setupConnection("https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=" + mSearchText);
-            HttpURLConnection conn = NetworkUtils.setupConnection("http://cloud.feedly.com/v3/search/feeds/?query=" + mSearchText);
+            HttpURLConnection conn = NetworkUtils.setupConnection("http://cloud.feedly.com/v3/search/feeds/?count=20&query=" + mSearchText);
             try {
                 String jsonStr = new String(NetworkUtils.getBytes(conn.getInputStream()));
                 //String jsonStr = "{\"results\":[{\"deliciousTags\":[\"история\",\"science\",\"education\",\"culture\"],\"feedId\":\"feed/http://arzamas.academy/feed_v1.rss\",\"title\":\"Arzamas | Всё\",\"language\":\"ru\",\"lastUpdated\":1493701920000,\"subscribers\":1947,\"velocity\":3.5,\"website\":\"http://arzamas.academy/?utm_campaign=main_rss&utm_medium=rss&utm_source=rss_link\",\"score\":1947.0,\"coverage\":0.0,\"coverageScore\":0.0,\"estimatedEngagement\":1507,\"scheme\":\"TEXT:BASELINE:ORGANIC_SEARCH\",\"contentType\":\"article\",\"description\":\"Новые курсы каждый четверг и дополнительные материалы в течение недели\",\"coverUrl\":\"https://storage.googleapis.com/site-assets/k-a2Rfu4lTUFERhdb4Iu4gHFsZMPdSLNGXIfDvO_Xio_cover-15b8675fdfa\",\"iconUrl\":\"http://storage.googleapis.com/site-assets/k-a2Rfu4lTUFERhdb4Iu4gHFsZMPdSLNGXIfDvO_Xio_icon-15414d05afc\",\"partial\":false,\"visualUrl\":\"http://storage.googleapis.com/site-assets/k-a2Rfu4lTUFERhdb4Iu4gHFsZMPdSLNGXIfDvO_Xio_visual-15414d05afc\",\"coverColor\":\"000000\",\"art\":0.0},{\"deliciousTags\":[\"magazines\",\"история\",\"журналы\",\"блоги\"],\"feedId\":\"feed/http://arzamas.academy/feed_v1/mag.rss\",\"title\":\"Arzamas | Журнал\",\"language\":\"ru\",\"lastUpdated\":1493701980000,\"subscribers\":249,\"velocity\":1.2,\"website\":\"http://arzamas.academy/mag\",\"score\":1871.93,\"coverage\":0.0,\"coverageScore\":0.0,\"estimatedEngagement\":1390,\"scheme\":\"TEXT:BASELINE:ORGANIC_SEARCH\",\"contentType\":\"article\",\"description\":\"??????? ???????? ? ?????, ??????? ? ???????????\",\"coverUrl\":\"https://storage.googleapis.com/site-assets/ji5fzOy4BO9f4oY16Qmlc3KH9RlyGhyWY94tNjhuGzM_cover-15b8e8b3d47\",\"iconUrl\":\"http://storage.googleapis.com/site-assets/ji5fzOy4BO9f4oY16Qmlc3KH9RlyGhyWY94tNjhuGzM_icon-1542d1e8523\",\"partial\":false,\"visualUrl\":\"http://storage.googleapis.com/site-assets/ji5fzOy4BO9f4oY16Qmlc3KH9RlyGhyWY94tNjhuGzM_visual-1542d1e8523\",\"coverColor\":\"000000\",\"art\":0.0},{\"deliciousTags\":[\"science\",\"история\",\"образование\",\"education\"],\"feedId\":\"feed/http://arzamas.academy/feed_v1/courses.rss\",\"title\":\"Arzamas | Курсы\",\"language\":\"ru\",\"lastUpdated\":1435214100000,\"subscribers\":245,\"velocity\":0.01,\"website\":\"http://arzamas.academy/courses?utm_campaign=courses_rss&utm_medium=rss&utm_source=rss_link\",\"score\":24.5,\"coverage\":0.0,\"coverageScore\":0.0,\"scheme\":\"TEXT:BASELINE:ORGANIC_SEARCH\",\"contentType\":\"article\",\"description\":\"Новые курсы каждый четверг\",\"coverUrl\":\"https://storage.googleapis.com/site-assets/oAIHb_UC11ZeKuhJ5EHbRqG5xBSgtfKokwxB22lC79M_cover-15b870310a2\",\"iconUrl\":\"https://storage.googleapis.com/site-assets/oAIHb_UC11ZeKuhJ5EHbRqG5xBSgtfKokwxB22lC79M_icon-15b870310a2\",\"partial\":false,\"visualUrl\":\"https://storage.googleapis.com/site-assets/oAIHb_UC11ZeKuhJ5EHbRqG5xBSgtfKokwxB22lC79M_visual-15b870310a2\",\"coverColor\":\"000000\",\"art\":0.0},{\"feedId\":\"feed/http://arzamas.academy/feed_v1/podcast.rss\",\"title\":\"История культуры | Курсы | Arzamas\",\"language\":\"ru\",\"lastUpdated\":1492671600000,\"subscribers\":17,\"velocity\":10.5,\"website\":\"http://arzamas.academy/courses?utm_campaign=episodes_podcast_rss&utm_medium=rss&utm_source=rss_link\",\"score\":17.0,\"coverage\":0.0,\"coverageScore\":0.0,\"estimatedEngagement\":366,\"scheme\":\"TEXT:BASELINE:ORGANIC_SEARCH\",\"contentType\":\"audio\",\"description\":\"Arzamas — это просветительский проект, посвященный гуманитарному знанию. В основе Arzamas лежат курсы, или «гуманитарные сериалы», — каждый на свою тему. Мы записываем выдающихся ученых-гуманитариев и снабжаем их лекции дополнительными материалами. Получается своебразный университет, каждую неделю, по четвергам, выпускающий новый курс по истории, литературе, искусству, антропологии, философии — о культуре и человеке. В этом подкасте представлены аудио-версии наших курсов. Полные версии доступы на нашем сайте (http://arzamas.academy).\",\"coverUrl\":\"https://storage.googleapis.com/site-assets/icWMybnKLWR_HUKv9xalz-t_5fWkFgn19OICVXWnYSA_cover-15b99c01c32\",\"iconUrl\":\"https://storage.googleapis.com/site-assets/icWMybnKLWR_HUKv9xalz-t_5fWkFgn19OICVXWnYSA_icon-15b99c01c32\",\"partial\":false,\"visualUrl\":\"https://storage.googleapis.com/site-assets/icWMybnKLWR_HUKv9xalz-t_5fWkFgn19OICVXWnYSA_visual-15b99c01c32\",\"coverColor\":\"000000\",\"art\":0.0},{\"deliciousTags\":[\"youtube\"],\"feedId\":\"feed/https://www.youtube.com/playlist?list=UUVgvnGSFU41kIhEc09aztEg\",\"title\":\"Arzamas (uploads) on YouTube\",\"language\":\"ru\",\"lastUpdated\":1491832800000,\"subscribers\":28,\"velocity\":1.2,\"website\":\"https://youtube.com/playlist?list=UUVgvnGSFU41kIhEc09aztEg\",\"score\":152.78,\"coverage\":0.0,\"coverageScore\":0.0,\"estimatedEngagement\":149,\"scheme\":\"TEXT:BASELINE:ORGANIC_SEARCH\",\"contentType\":\"video\",\"description\":\"Официальный канал Arzamas.academy\",\"iconUrl\":\"https://storage.googleapis.com/site-assets/jGwxZEqqmeCambMrgz-PZPVTczhBEEZ48IdO6thk3Ww_sicon-15b6534aa74\",\"partial\":false,\"visualUrl\":\"https://storage.googleapis.com/site-assets/jGwxZEqqmeCambMrgz-PZPVTczhBEEZ48IdO6thk3Ww_svisual-15b6534aa74\",\"art\":0.0}],\"queryType\":\"term\",\"related\":[\"история\"],\"scheme\":\"subs.0\"}";

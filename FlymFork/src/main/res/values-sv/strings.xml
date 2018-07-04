@@ -22,7 +22,7 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">Om Flym</string>
+    <string name="about_flym">Om Flym / Help / Contact developer</string>
     <string name="welcome_title">Välkommen till Flym. Skulle du vilja lägga till en feed?</string>
     <string name="never">aldrig</string>
     <string name="update">Uppdaterad</string>
@@ -67,7 +67,7 @@
     <string name="filter_delete_title">Radera regel</string>
     <string name="filter_edit_title">Redigera regel</string>
     <string name="filter_is_regex">är ett reguljärt uttryck (regex)</string>
-    <string name="filter_apply_to_title">Tillämpa på titeln</string>
+    <string name="filter_apply_to_title">Tillämpa på titeln (or link adress)</string>
     <string name="filter_apply_to_content">Tillämpa på texten</string>
     <string name="accept">ACCEPTERA</string>
     <string name="reject">AVFÄRDA</string>
@@ -188,14 +188,8 @@
         <item>3 månader</item>
         <item>För alltid</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Normal</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">Normal</string>
+
     <string-array name="settings_preload_image_modes">
         <item>Aldrig</item>
         <item>Endast via Wi-Fi</item>

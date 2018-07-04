@@ -19,6 +19,7 @@
 
 package ru.yanus171.feedexfork.utils;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -29,15 +30,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.text.Html;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.OkUrlFactory;
-
-import ru.yanus171.feedexfork.Constants;
-import ru.yanus171.feedexfork.MainApplication;
-import ru.yanus171.feedexfork.R;
-import ru.yanus171.feedexfork.provider.FeedData;
-import ru.yanus171.feedexfork.service.FetcherService;
-import ru.yanus171.feedexfork.view.EntryView;
+import okhttp3.OkHttpClient;
+import okhttp3.OkUrlFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,6 +44,13 @@ import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Pattern;
+
+import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
+import ru.yanus171.feedexfork.R;
+import ru.yanus171.feedexfork.provider.FeedData;
+import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.view.EntryView;
 
 public class NetworkUtils {
 
@@ -83,13 +84,16 @@ public class NetworkUtils {
         return FileUtils.GetImagesFolder().getAbsolutePath() + "/" + TEMP_PREFIX + entryId + ID_SEPARATOR + StringUtils.getMd5(imgUrl);
     }
 
-    public static void downloadImage(final long entryId, String imgUrl/*, boolean updateGUI*/ ) throws IOException {
+    public static void downloadImage(final long entryId, String imgUrl, boolean isSizeLimit ) throws IOException {
         if ( FetcherService.isCancelRefresh() )
             return;
         String tempImgPath = getTempDownloadedImagePath(entryId, imgUrl);
         String finalImgPath = getDownloadedImagePath(entryId, imgUrl);
 
+
         if (!new File(tempImgPath).exists() && !new File(finalImgPath).exists()) {
+            boolean abort = false;
+            boolean success = false;
             HttpURLConnection imgURLConnection = null;
             try {
                 //IMAGE_FOLDER_FILE.mkdir(); // create images dir
@@ -98,33 +102,48 @@ public class NetworkUtils {
                 String realUrl = Html.fromHtml(imgUrl).toString();
                 imgURLConnection = setupConnection(realUrl);
 
+                int size = imgURLConnection.getContentLength();
+                int maxImageDownloadSize = PrefUtils.getImageMaxDownloadSizeInKb() * 1024;
+                if ( !isSizeLimit || size <= maxImageDownloadSize ) {
 
+                    FileOutputStream fileOutput = new FileOutputStream(tempImgPath); try {
+                        InputStream inputStream = imgURLConnection.getInputStream(); try {
 
-                FileOutputStream fileOutput = new FileOutputStream(tempImgPath);
-                InputStream inputStream = imgURLConnection.getInputStream();
+                            int bytesRecieved = 0;
+                            int progressBytes = 0;
+                            final int cStep = 1024 * 10;
+                            byte[] buffer = new byte[2048];
+                            int bufferLength;
+                            FetcherService.Status().ChangeProgress(getProgressText(bytesRecieved));
+                            while (!FetcherService.isCancelRefresh() && (bufferLength = inputStream.read(buffer)) > 0) {
+                                if (isSizeLimit && size > maxImageDownloadSize) {
+                                    abort = true;
+                                    break;
+                                }
+                                fileOutput.write(buffer, 0, bufferLength);
+                                bytesRecieved += bufferLength;
+                                progressBytes += bufferLength;
+                                if (progressBytes >= cStep) {
+                                    progressBytes = 0;
+                                    FetcherService.Status().ChangeProgress(getProgressText(bytesRecieved));
+                                }
+                            }
+                            success = true;
+                            FetcherService.Status().AddBytes(bytesRecieved);
 
-                int bytesRecieved = 0;
-                int progressBytes = 0;
-                final int cStep = 1024 * 10;
-                byte[] buffer = new byte[2048];
-                int bufferLength;
-                FetcherService.getObservable().ChangeProgress(getProgressText(bytesRecieved));
-                while (!FetcherService.isCancelRefresh() && (bufferLength = inputStream.read(buffer)) > 0) {
-                    fileOutput.write(buffer, 0, bufferLength);
-                    bytesRecieved += bufferLength;
-                    progressBytes += bufferLength;
-                    if (progressBytes >= cStep) {
-                        progressBytes = 0;
-                        FetcherService.getObservable().ChangeProgress(getProgressText(bytesRecieved));
+                        } finally {
+                            inputStream.close();
+                        }
+                    } finally {
+                        fileOutput.flush();
+                        fileOutput.close();
                     }
+
+                    if ( !abort )
+                        new File(tempImgPath).renameTo(new File(finalImgPath));
+                    else
+                        new File(tempImgPath).delete();
                 }
-                FetcherService.getObservable().AddBytes( bytesRecieved );
-                fileOutput.flush();
-                fileOutput.close();
-                inputStream.close();
-
-                new File(tempImgPath).renameTo(new File(finalImgPath));
-
             } catch (IOException e) {
                 new File(tempImgPath).delete();
                 throw e;
@@ -133,9 +152,11 @@ public class NetworkUtils {
                     imgURLConnection.disconnect();
                 }
             }
+
+            if ( success && !abort )
+                EntryView.NotifyToUpdate( entryId );
         }
         //if ( updateGUI )
-            EntryView.NotifyToUpdate( entryId );
     }
 
     private static String getProgressText(int bytesRecieved) {
@@ -197,7 +218,7 @@ public class NetworkUtils {
 
         int n;
         while ((n = inputStream.read(buffer)) > 0) {
-            FetcherService.getObservable().AddBytes( n );
+            FetcherService.Status().AddBytes( n );
             output.write(buffer, 0, n);
         }
 
@@ -210,6 +231,14 @@ public class NetworkUtils {
 
     public static void retrieveFavicon(Context context, URL url, String id) {
         boolean success = false;
+
+        ContentResolver cr = context.getContentResolver();
+        Cursor cursor  = cr.query(FeedData.FeedColumns.CONTENT_URI( id ), new String[] {FeedData.FeedColumns.ICON}, null, null, null  ); try {
+            if (!cursor.moveToFirst() || cursor.getBlob(cursor.getColumnIndex( FeedData.FeedColumns.ICON )) != null )
+                return;
+        } finally {
+            cursor.close();
+        }
         HttpURLConnection iconURLConnection = null;
 
         try {
@@ -249,7 +278,7 @@ public class NetworkUtils {
 
     public static HttpURLConnection setupConnection(URL url) throws IOException {
         HttpURLConnection connection;
-        FetcherService.getObservable().ChangeProgress(R.string.setupConnection);
+        FetcherService.Status().ChangeProgress(R.string.setupConnection);
 
         connection = new OkUrlFactory(new OkHttpClient()).open(url);
 
@@ -264,7 +293,7 @@ public class NetworkUtils {
 
         COOKIE_MANAGER.getCookieStore().removeAll(); // Cookie is important for some sites, but we clean them each times
         connection.connect();
-        FetcherService.getObservable().ChangeProgress("");
+        FetcherService.Status().ChangeProgress("");
         return connection;
     }
 

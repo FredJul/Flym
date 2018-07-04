@@ -38,3 +38,4 @@ build
 *.exe
 BackUp*.bat
 Default.sfx
+/FlymFork/src/main/nbproject/private/

@@ -23,7 +23,6 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">About app</string>
     <string name="welcome_title">Bienvenue sur Flym. Voulez vous ajouter un flux ?</string>
     <string name="never">jamais</string>
     <string name="update">Mise à jour</string>
@@ -68,12 +67,12 @@
     <string name="tab_feed_title">Flux</string>
     <string name="tab_filters_title">Filtres</string>
     <string name="feed_title">TITRE</string>
-    <string name="feed_filters">FILTRES D\'EXCLUSION</string>
+    <string name="feed_filters">FILTRES </string>
     <string name="filter_add_title">Ajouter un filtre</string>
     <string name="filter_delete_title">Supprimer un filtre</string>
     <string name="filter_edit_title">Éditer le filtre</string>
     <string name="filter_is_regex">est une expression régulière</string>
-    <string name="filter_apply_to_title">Appliquer au titre</string>
+    <string name="filter_apply_to_title">Appliquer au titre (or link adress)</string>
     <string name="filter_apply_to_content">Appliquer au contenu</string>
     <string name="accept">ACCEPT</string>
     <string name="reject">REJECT</string>
@@ -212,14 +211,8 @@
         <item>3 mois</item>
         <item>Toujours</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Standard</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">Standard</string>
+
     <string-array name="settings_preload_image_modes">
         <item>Jamais</item>
         <item>En Wi-Fi uniquement</item>

@@ -71,6 +71,11 @@ public final class Constants {
     public static final String UTF8 = "UTF-8";
 
     public static final String FROM_AUTO_REFRESH = "from_auto_refresh";
+    //public static final String OPEN_ACTIVITY = "open_activity";
+    public static final String URL_TO_LOAD = "url_to_load";
+    public static final String TITLE_TO_LOAD = "title_to_load";
+
+
 
     public static final String MIMETYPE_TEXT_PLAIN = "text/plain";
 

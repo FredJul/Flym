@@ -22,7 +22,6 @@ package ru.yanus171.feedexfork.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
-import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +29,10 @@ import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,22 +49,25 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.io.File;
-import java.util.Date;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.adapter.DrawerAdapter;
 import ru.yanus171.feedexfork.adapter.EntriesCursorAdapter;
 import ru.yanus171.feedexfork.fragment.EntriesListFragment;
 import ru.yanus171.feedexfork.parser.OPML;
+import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.service.AutoRefreshService;
 import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
+
+import static ru.yanus171.feedexfork.provider.FeedData.EntryColumns.FAVORITES_CONTENT_URI;
 
 public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -69,6 +75,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     private static final String FEED_UNREAD_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " +
             EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + '=' + FeedColumns.TABLE_NAME + '.' + FeedColumns._ID + ')';
+
+    private static final String FEED_ALL_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " +
+            EntryColumns.FEED_ID + '=' + FeedColumns.TABLE_NAME + '.' + FeedColumns._ID + ')';
 
     private static final int LOADER_ID = 0;
     private static final int PERMISSIONS_REQUEST_IMPORT_FROM_OPML = 1;
@@ -89,7 +98,10 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_home);
+        if ( getIntent().hasCategory( "LoadLinkLater" ) )
+            finish();
+        else
+            setContentView(R.layout.activity_home);
 
         mEntriesFragment = (EntriesListFragment) getSupportFragmentManager().findFragmentById(R.id.entries_list_fragment);
 
@@ -100,20 +112,15 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mLeftDrawer = findViewById(R.id.left_drawer);
+        //mLeftDrawer.setBackgroundColor(ContextCompat.getColor( this, PrefUtils.IsLightTheme() ?  R.color.light_background : R.color.dark_background));
+
         mDrawerList = (ListView) findViewById(R.id.drawer_list);
         mDrawerList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mDrawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectDrawerItem(position);
-                if (mDrawerLayout != null) {
-                    mDrawerLayout.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mDrawerLayout.closeDrawer(mLeftDrawer);
-                        }
-                    }, 50);
-                }
+                CloseDrawer();
             }
         });
         mDrawerList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -173,14 +180,23 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         mHandler = new Handler();
-        FetcherService.getObservable().setHandler(mHandler);
+        FetcherService.Status().setHandler(mHandler);
+    }
 
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    private void CloseDrawer() {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mDrawerLayout.closeDrawer(mLeftDrawer);
+                }
+            }, 50);
+        }
     }
 
     @Override
     public void onPause() {
-        synchronized ( EntriesCursorAdapter.mMarkAsReadList ) {
+        synchronized (EntriesCursorAdapter.mMarkAsReadList) {
             EntriesCursorAdapter.mMarkAsReadList.clear();//SetIsReadMakredList();
         }
         super.onPause();
@@ -190,16 +206,45 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     public void onResume() {
         super.onResume();
 
-        Intent intent = getIntent();
-        if (intent.getScheme() != null && intent.getScheme().startsWith("http")) {
+        final Intent intent = getIntent();
+        if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEND) && intent.hasExtra(Intent.EXTRA_TEXT)) {
+            final String text = intent.getStringExtra(Intent.EXTRA_TEXT);
+            final Matcher m = HtmlUtils.HTTP_PATTERN.matcher(text);
+            if (m.find()) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FetcherService.OpenLink( FetcherService.LoadLink( FetcherService.GetExtrenalLinkFeedID(),
+                                                 text.substring(m.start(), m.end()),
+                                                 text.substring(0, m.start()),
+                                                 FetcherService.ForceReload.No,
+                                true).first, HomeActivity.this );
+                    }
+                }).start();
 
+            }
+        } else if (intent.getScheme() != null && intent.getScheme().startsWith("http"))
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                FetcherService.OpenLink( FetcherService.LoadLink( FetcherService.GetExtrenalLinkFeedID(),
+                                                                  intent.getDataString(),
+                                                                  intent.getDataString(),
+                                                                  FetcherService.ForceReload.No,
+                                                                  true  ).first,
+                                         HomeActivity.this );
+                }
+            }).start();
+        else if (intent.getData() != null && intent.getData().equals( FAVORITES_CONTENT_URI ) ) {
+            selectDrawerItem( 2 );
         } else if (PrefUtils.getBoolean(PrefUtils.REMEBER_LAST_ENTRY, true)) {
             String lastUri = PrefUtils.getString(PrefUtils.LAST_ENTRY_URI, "");
             if (!lastUri.isEmpty() && !lastUri.contains("-1"))
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(lastUri)));
         }
 
-        //getLoaderManager().restartLoader(LOADER_ID, null, this);
+        if ( mFeedSetupChanged )
+            getLoaderManager().restartLoader(LOADER_ID, null, this);
         //if ( mDrawerAdapter != null  )
         //    selectDrawerItem( mCurrentDrawerPos );
     }
@@ -215,82 +260,11 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         super.onNewIntent(intent);
         // We reset the current drawer position
         // selectDrawerItem(0);
-
-        if ( intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEND) && intent.hasExtra(Intent.EXTRA_TEXT) ) {
-            String text = intent.getStringExtra(Intent.EXTRA_TEXT);
-            Pattern p = Pattern.compile( "(?<![\\>https?://|href=\"'])(?<http>(https?:[/][/]|www.)([a-z]|[-_%]|[A-Z]|[0-9]|[/.]|[~])*)" );
-            Matcher m = p.matcher( text );
-            if ( m.find() )
-                OpenExternalLink( text.substring(m.start(), m.end()), text.substring( 0, m.start() ) );
-
-        } else if (intent.getScheme() != null && intent.getScheme().startsWith("http"))
-            OpenExternalLink(intent.getDataString(), intent.getDataString());
-
+        setIntent( intent );
     }
 
-    private void OpenExternalLink(final String url, final String title) {
-        new Thread() {
-            @Override
-            public void run() {
-                int status = FetcherService.getObservable().Start( getString(R.string.loadingLink) );
 
-                Uri entryUri;
 
-                Cursor cursor = getContentResolver().query( EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(GetExtrenalLinkFeedID()),
-                                            new String[] { EntryColumns._ID },
-                                            EntryColumns.LINK + "='" + url +"'",
-                                            null,
-                                            null);
-                if ( cursor.moveToFirst() ) {
-                    entryUri = EntryColumns.CONTENT_URI( cursor.getLong( 0 ) );
-                } else {
-
-                    ContentValues values = new ContentValues();
-                    values.put(EntryColumns.TITLE, title);
-                    //values.put(EntryColumns.ABSTRACT, NULL);
-                    //values.put(EntryColumns.IMAGE_URL, NULL);
-                    //values.put(EntryColumns.AUTHOR, NULL);
-                    //values.put(EntryColumns.ENCLOSURE, NULL);
-                    values.put(EntryColumns.DATE, (new Date()).getTime());
-                    values.put(EntryColumns.LINK, url);
-
-                    //values.put(EntryColumns.MOBILIZED_HTML, enclosureString);
-                    //values.put(EntryColumns.ENCLOSURE, enclosureString);
-                    entryUri = getContentResolver().insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(GetExtrenalLinkFeedID()), values);
-
-                    FetcherService.mobilizeEntry(getContentResolver(), Long.parseLong(entryUri.getLastPathSegment()));
-                }
-                cursor.close();
-
-                //startActivity(new Intent(Intent.ACTION_VIEW, entryUri));
-                PrefUtils.putString( PrefUtils.LAST_ENTRY_URI, entryUri.toString() );
-                startActivity( new Intent( HomeActivity.this, HomeActivity.class ) );
-                FetcherService.getObservable().End( status );
-            }
-
-        }.start();
-    }
-
-    long GetExtrenalLinkFeedID() {
-        long result = 0;
-
-        Cursor cursor = getContentResolver().query( FeedColumns.CONTENT_URI,
-                                                    FeedColumns.PROJECTION_ID,
-                                                    FeedColumns.FETCH_MODE + "=" + FetcherService.FETCHMODE_EXERNAL_LINK,
-                                                    null,
-                                                    null);
-        if ( cursor.moveToFirst() )
-            result = cursor.getLong( 0 );
-        cursor.close();
-
-        if ( result == 0 ) {
-            ContentValues values = new ContentValues();
-            values.put( FeedColumns.FETCH_MODE, FetcherService.FETCHMODE_EXERNAL_LINK );
-            values.put( FeedColumns.NAME, getString(R.string.externalLinks) );
-            result = Long.parseLong( getContentResolver().insert(FeedColumns.CONTENT_URI, values).getLastPathSegment() );
-        }
-        return result;
-    }
 
     public void onBackPressed() {
         // Before exiting from app the navigation drawer is opened
@@ -305,6 +279,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     protected void onDestroy() {
         super.onDestroy();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
@@ -351,45 +326,65 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         CursorLoader cursorLoader =
                 new CursorLoader(this,
-                                 FeedColumns.GROUPED_FEEDS_CONTENT_URI,
-                                 new String[]{FeedColumns._ID, FeedColumns.URL, FeedColumns.NAME,
-                                              FeedColumns.IS_GROUP, FeedColumns.ICON, FeedColumns.LAST_UPDATE,
-                                              FeedColumns.ERROR, FEED_UNREAD_NUMBER, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST,
-                                              FeedColumns.IS_GROUP_EXPANDED  },
-                                         FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR +
-                                         FeedColumns.GROUP_ID + Constants.DB_IS_NULL  + Constants.DB_OR +
-                                         FeedColumns.GROUP_ID + " IN (SELECT " + FeedColumns._ID +
-                                                                     " FROM " + FeedColumns.TABLE_NAME +
-                                                                     " WHERE " + FeedColumns.IS_GROUP_EXPANDED + Constants.DB_IS_TRUE + ")",
-                                 null,
-                                 null );
+                        FeedColumns.GROUPED_FEEDS_CONTENT_URI,
+                        new String[]{FeedColumns._ID, FeedColumns.URL, FeedColumns.NAME,
+                                FeedColumns.IS_GROUP, FeedColumns.ICON, FeedColumns.LAST_UPDATE,
+                                FeedColumns.ERROR, FEED_UNREAD_NUMBER, FEED_ALL_NUMBER, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST,
+                                FeedColumns.IS_GROUP_EXPANDED, FeedColumns.IS_AUTO_REFRESH, FeedColumns.OPTIONS},
+                        "(" + FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR +
+                                FeedColumns.GROUP_ID + Constants.DB_IS_NULL + Constants.DB_OR +
+                                FeedColumns.GROUP_ID + " IN (SELECT " + FeedColumns._ID +
+                                " FROM " + FeedColumns.TABLE_NAME +
+                                " WHERE " + FeedColumns.IS_GROUP_EXPANDED + Constants.DB_IS_TRUE + "))" + FeedData.getWhereNotExternal(),
+                        null,
+                        null);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
         return cursorLoader;
     }
 
+
+    public static Uri mNewFeedUri = Uri.EMPTY;
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 
         synchronized (mFeedSetupChanged) {
-            if (mDrawerAdapter != null && !mFeedSetupChanged) {
+            boolean needSelect = false;
+            if (mDrawerAdapter != null ) {
                 mDrawerAdapter.setCursor(cursor);
             } else {
-                mFeedSetupChanged = false;
-
                 mDrawerAdapter = new DrawerAdapter(this, cursor);
                 mDrawerList.setAdapter(mDrawerAdapter);
                 // We don't have any menu yet, we need to display it
+                needSelect = true;
+            }
+            if ( mFeedSetupChanged ) {
+                mFeedSetupChanged = false;
+                needSelect = true;
+            }
 
+            if ( !mNewFeedUri.equals( Uri.EMPTY ) ) {
+                mCurrentDrawerPos = mDrawerAdapter.getItemPosition( Long.parseLong( mNewFeedUri.getLastPathSegment() ) );
+                needSelect = true;
+                mDrawerList.smoothScrollToPosition( mCurrentDrawerPos );
+                CloseDrawer();
+                mNewFeedUri = Uri.EMPTY;
+            }
+
+            if ( needSelect )
                 mDrawerList.post(new Runnable() {
                     @Override
                     public void run() {
-                            selectDrawerItem(mCurrentDrawerPos);
-                        }
+                        selectDrawerItem(mCurrentDrawerPos);
+                    }
                 });
-            }
         }
 
     }
@@ -415,15 +410,21 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 newUri = EntryColumns.CONTENT_URI;
                 break;
             case 2:
-                newUri = EntryColumns.FAVORITES_CONTENT_URI;
+                newUri = FAVORITES_CONTENT_URI;
+                break;
+            case 3:
+                newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI( FetcherService.GetExtrenalLinkFeedID() );
+                showFeedInfo = false;
                 break;
             default:
                 long feedOrGroupId = mDrawerAdapter.getItemId(position);
-                if ( feedOrGroupId != -1 ) {
+                if (feedOrGroupId != -1) {
                     if (mDrawerAdapter.isItemAGroup(position)) {
-                        newUri = EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
+                        //newUri = EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
+                        newUri = mEntriesFragment.mShowUnRead ? EntryColumns.UNREAD_ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId) : EntryColumns.ENTRIES_FOR_GROUP_CONTENT_URI(feedOrGroupId);
                     } else {
-                        newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
+                        //newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
+                        newUri = mEntriesFragment.mShowUnRead ? EntryColumns.UNREAD_ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId) : EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedOrGroupId);
                         showFeedInfo = false;
                     }
                 } else
@@ -434,13 +435,14 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         //if (!newUri.equals(mEntriesFragment.getUri()))
-             mEntriesFragment.setData(newUri,
-                                      showFeedInfo,
-                                      false,
-                                      mDrawerAdapter == null ? false : mDrawerAdapter.isShowTextInEntryList(position));
+        mEntriesFragment.setData(newUri,
+                showFeedInfo,
+                false,
+                mDrawerAdapter == null ? false : mDrawerAdapter.isShowTextInEntryList(position));
 
-
+        //mDrawerList.setSelection( position );
         mDrawerList.setItemChecked(position, true);
+        //mDrawerList.smoothScrollToPositionFromTop(mFirstVisibleItem, 0, 0);
 
         // First open => we open the drawer for you
         if (PrefUtils.getBoolean(PrefUtils.FIRST_OPEN, true)) {
@@ -471,6 +473,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         // Set title & icon
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
+            getSupportActionBar().setHomeAsUpIndicator( 0 );
             switch (mCurrentDrawerPos) {
                 case 0:
                     getSupportActionBar().setTitle(R.string.unread_entries);
@@ -480,9 +483,22 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     break;
                 case 2:
                     getSupportActionBar().setTitle(R.string.favorites);
+                    Bitmap original = BitmapFactory.decodeResource(getResources(), R.drawable.rating_important);
+                    int size = UiUtils.dpToPixel( 32 );
+                    Bitmap b = Bitmap.createScaledBitmap( original, size, size, false);
+                    Drawable d = new BitmapDrawable(getResources(), b);
+                    getSupportActionBar().setHomeAsUpIndicator( d );
+                    break;
+                case 3:
+                    getSupportActionBar().setTitle(R.string.externalLinks);
                     break;
                 default:
                     getSupportActionBar().setTitle(mTitle);
+                    Drawable image = mDrawerAdapter.getItemIcon( position ) == null ?
+                                     null :
+                                     new BitmapDrawable( MainApplication.getContext().getResources(),
+                                                         UiUtils.getScaledBitmap( mDrawerAdapter.getItemIcon( position ), 32 ) );
+                    getSupportActionBar().setHomeAsUpIndicator( image );
                     break;
             }
         }
@@ -513,5 +529,15 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 return;
             }
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 }

@@ -22,11 +22,6 @@ package ru.yanus171.feedexfork.utils;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import ru.yanus171.feedexfork.Constants;
-import ru.yanus171.feedexfork.MainApplication;
-import ru.yanus171.feedexfork.R;
-import ru.yanus171.feedexfork.service.FetcherService;
-
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
@@ -34,6 +29,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
+import ru.yanus171.feedexfork.R;
+import ru.yanus171.feedexfork.service.FetcherService;
 
 public class HtmlUtils {
 
@@ -47,6 +47,7 @@ public class HtmlUtils {
     public static final String URL_SPACE = "%20";
 
     private static final Pattern IMG_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
+    private static final Pattern A_IMG_PATTERN = Pattern.compile("<a href([^>]+)>([^<]?)<img(.)*?</a>", Pattern.CASE_INSENSITIVE);
     private static final Pattern ADS_PATTERN = Pattern.compile("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", Pattern.CASE_INSENSITIVE);
     private static final Pattern LAZY_LOADING_PATTERN = Pattern.compile("\\s+src=[^>]+\\s+original[-]*src=(\"|')", Pattern.CASE_INSENSITIVE);
     private static final Pattern EMPTY_IMAGE_PATTERN = Pattern.compile("<img\\s+(height=['\"]1['\"]\\s+width=['\"]1['\"]|width=['\"]1['\"]\\s+height=['\"]1['\"])\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
@@ -56,6 +57,11 @@ public class HtmlUtils {
     private static final Pattern END_BR_PATTERN = Pattern.compile("(\\s*<br\\s*[/]*>\\s*)*$", Pattern.CASE_INSENSITIVE);
     private static final Pattern MULTIPLE_BR_PATTERN = Pattern.compile("(\\s*<br\\s*[/]*>\\s*){3,}", Pattern.CASE_INSENSITIVE);
     private static final Pattern EMPTY_LINK_PATTERN = Pattern.compile("<a\\s+[^>]*></a>", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REF_REPLY_PATTERN = Pattern.compile("<a[^>]+(reply|thread|comment|user)[^>]+(.)*?/a>", Pattern.CASE_INSENSITIVE);
+    private static final Pattern IMG_USER_PATTERN = Pattern.compile("<img[^>]+(user)[^>]+(.)*?>", Pattern.CASE_INSENSITIVE);
+
+    public static final Pattern HTTP_PATTERN = Pattern.compile("(http.?:[/][/]|www.)([a-z]|[-_%]|[A-Z]|[0-9]|[\\:]|[/.]|[~])*");//Pattern.compile("(?<![\\>https?://|href=\"'])(?<http>(https?:[/][/]|www.)([a-z]|[-_%]|[A-Z]|[0-9]|[/.]|[~])*)");
+
     //public static boolean mIsDownloadingImagesForEntryView = false;
 
 
@@ -82,6 +88,16 @@ public class HtmlUtils {
             content = START_BR_PATTERN.matcher(content).replaceAll("");
             content = END_BR_PATTERN.matcher(content).replaceAll("");
             content = MULTIPLE_BR_PATTERN.matcher(content).replaceAll("<br><br>");
+            content = REF_REPLY_PATTERN.matcher(content).replaceAll("");
+            content = IMG_USER_PATTERN.matcher(content).replaceAll("");
+
+            // xml
+            content = content.replace( "&lt;", "<" );
+            content = content.replace( "&gt;", ">" );
+            content = content.replace( "&amp;", "&" );
+            content = content.replace( "&quot;", "\"" );
+            content = content.replace( "&#39;", "'" );
+
         }
 
         return content;
@@ -105,35 +121,55 @@ public class HtmlUtils {
     }
 
     public static String replaceImageURLs(String content, final long entryId) {
+        // TODO <a href([^>]+)>([^<]+)<img(.)*?</a>
 
         if (!TextUtils.isEmpty(content)) {
+
+            // img in a tag
+            Matcher matcher = A_IMG_PATTERN.matcher(content);
+            while ( matcher.find()  ) {
+                String match = matcher.group();
+                String replace = match.replaceAll( "<a([^>]+)>", "" ).replaceAll( "</a>", "" );
+                content = content.replace( match, replace );
+            }
+
             boolean needDownloadPictures = PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true);//NetworkUtils.needDownloadPictures();
             final ArrayList<String> imagesToDl = new ArrayList<>();
 
-            Matcher matcher = IMG_PATTERN.matcher(content);
+            matcher = IMG_PATTERN.matcher(content);
             int index = 0;
             while ( matcher.find()  ) {
-                index++;
-                String match = matcher.group(1);
-                //String match1 = matcher.group(1).replace(" ", URL_SPACE);
-                String imgPath = NetworkUtils.getDownloadedImagePath(entryId, match);
+                String srcText = matcher.group(1);
+                srcText = srcText.replace(" ", URL_SPACE);
+                if ( srcText.startsWith( Constants.FILE_SCHEME ) ) {
+                    content = content.replace( getDownloadImageHtml(srcText), "" );
+                } else {
+                    String imgPath = NetworkUtils.getDownloadedImagePath(entryId, srcText);
+                    index++;
+                    if (new File(imgPath).exists()) {
+                        content = content.replace(srcText, Constants.FILE_SCHEME + imgPath);
 
-                if (new File(imgPath).exists()) {
-                    content = content.replace(match, Constants.FILE_SCHEME + imgPath);
-                } else if (needDownloadPictures) {
-                    if ( ( index < FetcherService.mMaxImageDownloadCount ) || ( FetcherService.mMaxImageDownloadCount == 0 ) ) {
-                        imagesToDl.add(match);
-                        content = content.replace(match, Constants.FILE_SCHEME + imgPath);
-                    } else {
-                        String match0 = matcher.group(0);
-                        String html = getButtonHtml("downloadImage('" + match + "')" , getString( R.string.downloadOneImage ) ) +
-                                      getButtonHtml("downloadNextImages()" , getString( R.string.downloadNext ) + PrefUtils.getImageDownloadCount() ) + "<br/>";
-
-                        content = content.replace(match0, html + match0.replace(match, Constants.FILE_SCHEME + imgPath));
+                    } else if (needDownloadPictures) {
+                        String imgTagText = matcher.group(0);
+                        if ( ( index < FetcherService.mMaxImageDownloadCount ) || ( FetcherService.mMaxImageDownloadCount == 0 ) ) {
+                            imagesToDl.add(srcText);
+                            content = content.replace(imgTagText, //getDownloadImageHtml(srcText) +
+                                                                  imgTagText.replace(srcText, Constants.FILE_SCHEME + imgPath)
+                                                                            .replaceAll( "alt=\"[^\"]+?\"", "alt=\"" + getString( R.string.downloadOneImage ) + "\" " )
+                                                                            .replace( "alt=\"\"", "alt=\"" + getString( R.string.downloadOneImage ) + "\" " )
+                                                                            .replace( "<img ", "<img onclick=\"downloadImage('" + srcText + "')\" " ) );
+                        } else {
+                            String htmlButtons = getDownloadImageHtml(srcText) + "<br/>";
+                            if ( index == FetcherService.mMaxImageDownloadCount + 1 )
+                                htmlButtons += getButtonHtml("downloadNextImages()" , getString( R.string.downloadNext ) + PrefUtils.getImageDownloadCount() );
+                            content = content.replace(imgTagText, htmlButtons + imgTagText.replace(srcText, Constants.FILE_SCHEME + imgPath));
+                        }
                     }
                 }
             }
 
+            content = content.replaceAll( "width=\\\"\\d+\\\"", "" );
+            content = content.replaceAll( "height=\\\"\\d+\\\"", "" );
             //FetcherService.mMaxImageDownloadCount = PrefUtils.getImageDownloadCount();
 
             // Download the images if needed
@@ -152,6 +188,10 @@ public class HtmlUtils {
         return content;
     }
 
+    static String getDownloadImageHtml(String match) {
+        return getButtonHtml("downloadImage('" + match + "')" , getString( R.string.downloadOneImage ) );
+    }
+
     private static String getString( int id ) {
         return MainApplication.getContext().getString(id);
 
@@ -160,7 +200,7 @@ public class HtmlUtils {
     private static String getButtonHtml(String methodName, String caption) {
         final String BUTTON_START = "<i onclick=\"";
         //final String BUTTON_MIDDLE = " onclick=\"";
-        final String BUTTON_END = "\">" + caption + "   </i>";
+        final String BUTTON_END = "\" align=\"left\">" + caption + "   </i>";
         //String html = BUTTON_SECTION_START + BUTTON_START + "Download image" + BUTTON_MIDDLE + "ImageDownloadJavaScriptObject.downloadImage('" + match + "');" + BUTTON_END + BUTTON_SECTION_END;
         return BUTTON_START + "ImageDownloadJavaScriptObject." + methodName + ";" + BUTTON_END;
     }
@@ -191,10 +231,7 @@ public class HtmlUtils {
     }
 
     private static boolean isCorrectImage(String imgUrl) {
-        if (!imgUrl.endsWith(".gif") && !imgUrl.endsWith(".GIF") && !imgUrl.endsWith(".img") && !imgUrl.endsWith(".IMG")) {
-            return true;
-        }
+        return !imgUrl.endsWith(".gif") && !imgUrl.endsWith(".GIF") && !imgUrl.endsWith(".img") && !imgUrl.endsWith(".IMG");
 
-        return false;
     }
 }

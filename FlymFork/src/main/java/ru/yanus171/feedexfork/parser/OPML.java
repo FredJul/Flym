@@ -51,11 +51,6 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Xml;
 
-import ru.yanus171.feedexfork.Constants;
-import ru.yanus171.feedexfork.MainApplication;
-import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
-import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -68,14 +63,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
+import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
+import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
+
 public class OPML {
 
     public static final String BACKUP_OPML = Environment.getExternalStorageDirectory() + "/Flym_auto_backup.opml";
 
     private static final String[] FEEDS_PROJECTION = new String[]{FeedColumns._ID, FeedColumns.IS_GROUP, FeedColumns.NAME, FeedColumns.URL,
-            FeedColumns.RETRIEVE_FULLTEXT};
+            FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH, FeedColumns.IS_IMAGE_AUTO_LOAD, FeedColumns.OPTIONS };
     private static final String[] FILTERS_PROJECTION = new String[]{FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
-            FilterColumns.IS_APPLIED_TO_TITLE, FilterColumns.IS_ACCEPT_RULE};
+            FilterColumns.IS_APPLIED_TO_TITLE, FilterColumns.IS_ACCEPT_RULE, FilterColumns.IS_MARK_STARRED};
 
     private static final String START = "<?xml version='1.0' encoding='utf-8'?>\n<opml version='1.1'>\n<head>\n<title>Flym export</title>\n<dateCreated>";
     private static final String AFTER_DATE = "</dateCreated>\n</head>\n<body>\n";
@@ -89,6 +89,7 @@ public class OPML {
     private static final String FILTER_IS_REGEX = "' isRegex='";
     private static final String FILTER_IS_APPLIED_TO_TITLE = "' isAppliedToTitle='";
     private static final String FILTER_IS_ACCEPT_RULE = "' isAcceptRule='";
+    private static final String FILTER_IS_MARK_AS_STARRED = "' isMarkAsStarred='";
     private static final String FILTER_CLOSING = "'/>\n";
     private static final String CLOSING = "</body>\n</opml>\n";
 
@@ -117,7 +118,7 @@ public class OPML {
         }
 
         Cursor cursor = MainApplication.getContext().getContentResolver()
-                .query(FeedColumns.GROUPS_CONTENT_URI, FEEDS_PROJECTION, null, null, null);
+                .query(FeedColumns.GROUPS_AND_ROOT_CONTENT_URI, FEEDS_PROJECTION, null, null, null);
 
         StringBuilder builder = new StringBuilder(START);
         builder.append(System.currentTimeMillis());
@@ -154,6 +155,8 @@ public class OPML {
                             builder.append(cursorFilters.getInt(2) == 1 ? Constants.TRUE : "false");
                             builder.append(FILTER_IS_ACCEPT_RULE);
                             builder.append(cursorFilters.getInt(3) == 1 ? Constants.TRUE : "false");
+                            builder.append(FILTER_IS_MARK_AS_STARRED);
+                            builder.append(cursorFilters.getInt(4) == 1 ? Constants.TRUE : "false");
                             builder.append(FILTER_CLOSING);
                         }
                         builder.append("\t");
@@ -184,6 +187,8 @@ public class OPML {
                         builder.append(cursorFilters.getInt(2) == 1 ? Constants.TRUE : "false");
                         builder.append(FILTER_IS_ACCEPT_RULE);
                         builder.append(cursorFilters.getInt(3) == 1 ? Constants.TRUE : "false");
+                        builder.append(FILTER_IS_MARK_AS_STARRED);
+                        builder.append(cursorFilters.getInt(4) == 1 ? Constants.TRUE : "false");
                         builder.append(FILTER_CLOSING);
                     }
                     builder.append(OUTLINE_END);
@@ -214,6 +219,7 @@ public class OPML {
         private static final String ATTRIBUTE_IS_REGEX = "isRegex";
         private static final String ATTRIBUTE_IS_APPLIED_TO_TITLE = "isAppliedToTitle";
         private static final String ATTRIBUTE_IS_ACCEPT_RULE = "isAcceptRule";
+        private static final String ATTRIBUTE_IS_MARK_AS_STARRED = "isMarkAsStarred";
 
         private boolean mBodyTagEntered = false;
         private boolean mFeedEntered = false;
@@ -277,6 +283,7 @@ public class OPML {
                     values.put(FilterColumns.IS_REGEX, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_REGEX)));
                     values.put(FilterColumns.IS_APPLIED_TO_TITLE, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_APPLIED_TO_TITLE)));
                     values.put(FilterColumns.IS_ACCEPT_RULE, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_ACCEPT_RULE)));
+                    values.put(FilterColumns.IS_MARK_STARRED, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_MARK_AS_STARRED)));
 
                     ContentResolver cr = MainApplication.getContext().getContentResolver();
                     cr.insert(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(mFeedId), values);

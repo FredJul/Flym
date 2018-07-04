@@ -23,7 +23,6 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">About app</string>
     <string name="welcome_title">플라임 사용을 환영합니다. 피드를 추가하시겠습니까?</string>
     <string name="never">하지 않음</string>
     <string name="update">업데이트</string>
@@ -69,7 +68,7 @@
     <string name="filter_delete_title">규칙 삭제</string>
     <string name="filter_edit_title">규칙 편집</string>
     <string name="filter_is_regex">정규식임</string>
-    <string name="filter_apply_to_title">제목에 적용</string>
+    <string name="filter_apply_to_title">제목에 적용 (or link adress)</string>
     <string name="filter_apply_to_content">내용에 적용</string>
     <string name="accept">허용</string>
     <string name="reject">거부</string>
@@ -192,14 +191,8 @@
         <item>3달</item>
         <item>계속</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>표준 크기</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">표준 크기</string>
+
     <string-array name="settings_preload_image_modes">
         <item>안 함</item>
         <item>Wi-Fi를 통해서만</item>

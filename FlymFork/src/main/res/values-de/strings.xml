@@ -25,7 +25,7 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">Über app</string>
+    <string name="about_flym">Über app / Help / Contact developer </string>
     <string name="welcome_title">Wilkommen in Flym. Willst du einen Feed hinzufügen?</string>
     <string name="never">nie</string>
     <string name="update">aktualisiert</string>
@@ -71,7 +71,7 @@
     <string name="filter_delete_title">Filter entfernen</string>
     <string name="filter_edit_title">Filter bearbeiten</string>
     <string name="filter_is_regex">ist ein regulärer Ausdruck</string>
-    <string name="filter_apply_to_title">Auf den Titel anwenden</string>
+    <string name="filter_apply_to_title">Auf den Titel anwenden (or link adress)</string>
     <string name="filter_apply_to_content">Auf den Inhalt anwenden</string>
     <string name="accept">Annehmen</string>
     <string name="reject">Zurückweisen</string>
@@ -167,6 +167,7 @@
     <string name="settings_widget_background">Hintergrund</string>
     <string name="settings_widget_background_description">Farbe und Transparenz des Widget-Hintergrundes</string>
     <string name="all_feeds">Alle Feeds (auch zukünftige)</string>
+    <string name="settings_category_article_list">Artikel Liste</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Eintrag</item>
@@ -195,14 +196,8 @@
         <item>3 Monate</item>
         <item>Für immer</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Standard</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">Standard</string>
+
     <string-array name="settings_preload_image_modes">
         <item>Niemals</item>
         <item>Nur über WLAN</item>

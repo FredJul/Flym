@@ -2,4 +2,5 @@
 <resources>
     <attr name="card_color" format="reference"/>
     <attr name="colorReadState" format="color|reference" />
+    <attr name="colorPrefBackground" format="color|reference" />
 </resources>

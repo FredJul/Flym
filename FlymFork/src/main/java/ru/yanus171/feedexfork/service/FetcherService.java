@@ -57,12 +57,17 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.util.Xml;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -99,12 +104,12 @@ import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.activity.HomeActivity;
 import ru.yanus171.feedexfork.parser.RssAtomParser;
+import ru.yanus171.feedexfork.parser.HTMLParser;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.provider.FeedData.TaskColumns;
 import ru.yanus171.feedexfork.utils.ArticleTextExtractor;
-import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.FileUtils;
 import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
@@ -116,6 +121,7 @@ public class FetcherService extends IntentService {
 
     public static final String ACTION_REFRESH_FEEDS = FeedData.PACKAGE_NAME + ".REFRESH";
     public static final String ACTION_MOBILIZE_FEEDS = FeedData.PACKAGE_NAME + ".MOBILIZE_FEEDS";
+    public static final String ACTION_LOAD_LINK = FeedData.PACKAGE_NAME + ".LOAD_LINK";
     public static final String ACTION_DOWNLOAD_IMAGES = FeedData.PACKAGE_NAME + ".DOWNLOAD_IMAGES";
 
     private static final int THREAD_NUMBER = 3;
@@ -138,6 +144,7 @@ public class FetcherService extends IntentService {
 
     public static volatile Boolean mIsDeletingOld = false;
 
+    public static final ArrayList<MarkItem> mMarkAsStarredFoundList = new ArrayList<MarkItem>();
 
     /* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
     private static final Pattern FEED_LINK_PATTERN = Pattern.compile(
@@ -147,14 +154,14 @@ public class FetcherService extends IntentService {
 
     private final Handler mHandler;
 
-    public static StatusText.FetcherObservable getObservable() {
-        if ( mObservable == null ) {
-            mObservable = new StatusText.FetcherObservable();
+    public static StatusText.FetcherObservable Status() {
+        if ( mStatusText == null ) {
+            mStatusText = new StatusText.FetcherObservable();
         }
-        return mObservable;
+        return mStatusText;
     }
 
-    private static StatusText.FetcherObservable mObservable = null;
+    private static StatusText.FetcherObservable mStatusText = null;
 
     public FetcherService() {
         super(FetcherService.class.getSimpleName());
@@ -201,7 +208,10 @@ public class FetcherService extends IntentService {
             return;
         }
 
+        Status().Clear();
+
         boolean isFromAutoRefresh = intent.getBooleanExtra(Constants.FROM_AUTO_REFRESH, false);
+        //boolean isOpenActivity = intent.getBooleanExtra(Constants.OPEN_ACTIVITY, false);
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -226,17 +236,28 @@ public class FetcherService extends IntentService {
             return;
         }
 
+        if ( isFromAutoRefresh && Build.VERSION.SDK_INT < 26 && AutoRefreshService.isBatteryLow(this) )
+            return;
+
         if (ACTION_MOBILIZE_FEEDS.equals(intent.getAction())) {
-            mobilizeAllEntries();
+            mobilizeAllEntries(isFromAutoRefresh);
             downloadAllImages();
+        } else if (ACTION_LOAD_LINK.equals(intent.getAction())) {
+            startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( getString(R.string.loadingLink) ) );
+            LoadLink( GetExtrenalLinkFeedID(),
+                      intent.getStringExtra( Constants.URL_TO_LOAD ),
+                      intent.getStringExtra( Constants.TITLE_TO_LOAD ),
+                      FetcherService.ForceReload.No,
+                      true);
+            downloadAllImages();
+            stopForeground( true );
         } else if (ACTION_DOWNLOAD_IMAGES.equals(intent.getAction())) {
             downloadAllImages();
         } else { // == Constants.ACTION_REFRESH_FEEDS
 
-            startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( "" ) );
+            startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( getString(R.string.loading) ) );
 
-            int status = getObservable().Start(getString(R.string.RefreshFeeds) + ": "); try {
-
+            int status = Status().Start(getString(R.string.RefreshFeeds) + ": "); try {
                 PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);
                 mCancelRefresh = false;
 
@@ -247,7 +268,33 @@ public class FetcherService extends IntentService {
 
                 String feedId = intent.getStringExtra(Constants.FEED_ID);
                 String groupId = intent.getStringExtra(Constants.GROUP_ID);
-                int newCount = (feedId == null ? refreshFeeds(keepDateBorderTime, groupId) : refreshFeed(feedId, keepDateBorderTime));
+
+                mMarkAsStarredFoundList.clear();
+                int newCount = 0;
+                try {
+                    newCount = (feedId == null ?
+                                refreshFeeds(keepDateBorderTime, groupId, isFromAutoRefresh) :
+                                refreshFeed(feedId, keepDateBorderTime, isFromAutoRefresh));
+
+                } finally {
+                    if (mMarkAsStarredFoundList.size() > 3) {
+                        ArrayList<String> list = new ArrayList<String>();
+                        for (MarkItem item : mMarkAsStarredFoundList)
+                            list.add(item.mCaption);
+                        ShowNotification(TextUtils.join(", ", list),
+                                R.string.markedAsStarred,
+                                new Intent(FetcherService.this, HomeActivity.class)
+                                        .setData(EntryColumns.FAVORITES_CONTENT_URI),
+                                null);
+                    } else if (mMarkAsStarredFoundList.size() > 0)
+                        for (MarkItem item : mMarkAsStarredFoundList) {
+                            Uri entryUri = getEntryUri(item.mLink, item.mFeedID);
+                            ShowNotification(item.mCaption,
+                                    R.string.markedAsStarred,
+                                    new Intent(Intent.ACTION_VIEW, entryUri),
+                                    entryUri);
+                        }
+                }
 
                 if (newCount > 0) {
                     if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
@@ -258,50 +305,21 @@ public class FetcherService extends IntentService {
                         cursor.close();
 
                         if (newCount > 0) {
-                            String text = getResources().getQuantityString(R.plurals.number_of_new_entries, newCount, newCount);
-
-                            Intent notificationIntent = new Intent(FetcherService.this, HomeActivity.class);
-                            PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-                            Notification.Builder notifBuilder = new Notification.Builder(MainApplication.getContext()) //
-                                    .setContentIntent(contentIntent) //
-                                    .setSmallIcon(R.drawable.ic_statusbar_rss) //
-                                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)) //
-                                    .setTicker(text) //
-                                    .setWhen(System.currentTimeMillis()) //
-                                    .setAutoCancel(true) //
-                                    .setContentTitle(getString(R.string.flym_feeds)) //
-                                    .setContentText(text) //
-                                    .setLights(0xffffffff, 0, 0);
-
-                            if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_VIBRATE, false)) {
-                                notifBuilder.setVibrate(new long[]{0, 1000});
-                            }
-
-                            String ringtone = PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, null);
-                            if (ringtone != null && ringtone.length() > 0) {
-                                notifBuilder.setSound(Uri.parse(ringtone));
-                            }
-
-                            if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_LIGHT, false)) {
-                                notifBuilder.setLights(0xffffffff, 300, 1000);
-                            }
-
-                            if (Constants.NOTIF_MGR != null) {
-                                Constants.NOTIF_MGR.notify(0, notifBuilder.getNotification());
-                            }
+                            ShowNotification(getResources().getQuantityString(R.plurals.number_of_new_entries, newCount, newCount),
+                                             R.string.flym_feeds,
+                                             new Intent(this, HomeActivity.class),
+                                             null);
                         }
                     } else if (Constants.NOTIF_MGR != null) {
                         Constants.NOTIF_MGR.cancel(0);
                     }
                 }
 
-                mobilizeAllEntries();
+                mobilizeAllEntries( isFromAutoRefresh );
                 downloadAllImages();
 
             } finally {
-                getObservable().End( status );
+                Status().End( status );
             }
 
             PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false);
@@ -357,17 +375,17 @@ public class FetcherService extends IntentService {
         }
     }
 
-    private void mobilizeAllEntries() {
-        int status = getObservable().Start(getString(R.string.mobilizeAll)); try {
+    private void mobilizeAllEntries( boolean fromAutoRefresh) {
+        int status = Status().Start(getString(R.string.mobilizeAll)); try {
             ContentResolver cr = getContentResolver();
-            //getObservable().ChangeProgress("query DB");
+            //Status().ChangeProgress("query DB");
             Cursor cursor = cr.query(TaskColumns.CONTENT_URI, new String[]{TaskColumns._ID, TaskColumns.ENTRY_ID, TaskColumns.NUMBER_ATTEMPT},
                     TaskColumns.IMG_URL_TO_DL + Constants.DB_IS_NULL, null, null);
-            getObservable().ChangeProgress("");
+            Status().ChangeProgress("");
             ArrayList<ContentProviderOperation> operations = new ArrayList<>();
 
             while (cursor.moveToNext() && !isCancelRefresh()) {
-                int status1 = getObservable().Start(String.format("%d/%d", cursor.getPosition(), cursor.getCount())); try {
+                int status1 = Status().Start(String.format("%d/%d", cursor.getPosition(), cursor.getCount())); try {
                     long taskId = cursor.getLong(0);
                     long entryId = cursor.getLong(1);
                     int nbAttempt = 0;
@@ -375,9 +393,7 @@ public class FetcherService extends IntentService {
                         nbAttempt = cursor.getInt(2);
                     }
 
-                    //boolean success = ;
-
-                    if (mobilizeEntry(cr, entryId)) {
+                    if (mobilizeEntry(cr, entryId, ArticleTextExtractor.MobilizeType.Yes, IsAutoDownloadImages(fromAutoRefresh, cr, entryId), true, true)) {
                         cr.delete(TaskColumns.CONTENT_URI(taskId), null, null);//operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
                     } else {
                         if (nbAttempt + 1 > MAX_TASK_ATTEMPT) {
@@ -390,25 +406,47 @@ public class FetcherService extends IntentService {
                     }
 
                 } finally {
-                    getObservable().End( status1 );
+                    Status().End( status1 );
                 }
             }
 
             cursor.close();
 
             if (!operations.isEmpty()) {
-                getObservable().ChangeProgress(R.string.applyOperations);
+                Status().ChangeProgress(R.string.applyOperations);
                 try {
                     cr.applyBatch(FeedData.AUTHORITY, operations);
                 } catch (Throwable ignored) {
                 }
             }
-        } finally { getObservable().End( status ); }
+        } finally { Status().End( status ); }
 
 
     }
 
-    public static boolean mobilizeEntry(ContentResolver cr, long entryId) {
+    private AutoDownloadEntryImages IsAutoDownloadImages(boolean fromAutoRefresh, ContentResolver cr, long entryId) {
+        AutoDownloadEntryImages result = AutoDownloadEntryImages.Yes;
+        if ( fromAutoRefresh ) {
+            Cursor curEntry = cr.query( EntryColumns.CONTENT_URI( entryId ), new String[] { EntryColumns.FEED_ID }, null, null, null );
+            if ( curEntry.moveToFirst() ) {
+                Cursor curFeed = cr.query( FeedColumns.CONTENT_URI( curEntry.getInt( 0 ) ), new String[] { FeedColumns.IS_IMAGE_AUTO_LOAD }, null, null, null );
+                if ( curFeed.moveToFirst() )
+                    result = curFeed.isNull( 0 ) || curFeed.getInt( 0 ) == 1 ? AutoDownloadEntryImages.Yes : AutoDownloadEntryImages.No;
+                curFeed.close();
+            }
+            curEntry.close();
+        }
+        return result;
+    }
+
+    public enum AutoDownloadEntryImages {Yes, No}
+
+    public static boolean mobilizeEntry(final ContentResolver cr,
+                                        final long entryId,
+                                        final ArticleTextExtractor.MobilizeType mobilize,
+                                        final AutoDownloadEntryImages autoDownloadEntryImages,
+                                        final boolean isFindBestElement,
+                                        final boolean isCorrectTitle ) {
         boolean success = false;
 
         Uri entryUri = EntryColumns.CONTENT_URI(entryId);
@@ -418,6 +456,7 @@ public class FetcherService extends IntentService {
             if (entryCursor.isNull(entryCursor.getColumnIndex(EntryColumns.MOBILIZED_HTML))) { // If we didn't already mobilized it
                 int linkPos = entryCursor.getColumnIndex(EntryColumns.LINK);
                 int abstractHtmlPos = entryCursor.getColumnIndex(EntryColumns.ABSTRACT);
+                int titlePos = entryCursor.getColumnIndex(EntryColumns.TITLE);
                 HttpURLConnection connection = null;
 
                 try {
@@ -436,32 +475,35 @@ public class FetcherService extends IntentService {
                     connection = NetworkUtils.setupConnection(link);
 
                     String mobilizedHtml = "";
-                    getObservable().ChangeProgress(R.string.extractContent);
+                    Status().ChangeProgress(R.string.extractContent);
 
+                    if (FetcherService.isCancelRefresh())
+                        return false;
                     Document doc = Jsoup.parse(connection.getInputStream(), null, "");
 
-                    String title = null;
-                    if ( !entryCursor.isNull( entryCursor.getColumnIndex( EntryColumns.TITLE ) ) ) {
+                    String title = entryCursor.getString(titlePos);
+                    //if ( entryCursor.isNull( titlePos ) || title == null || title.isEmpty() || title.startsWith("http")  ) {
+                    if ( isCorrectTitle ) {
                         Elements titleEls = doc.getElementsByTag("title");
                         if (!titleEls.isEmpty())
                             title = titleEls.first().text();
                     }
 
-                    mobilizedHtml = ArticleTextExtractor.extractContent(doc, contentIndicator);
+                    mobilizedHtml = ArticleTextExtractor.extractContent(doc, link, contentIndicator, mobilize, true);
 
-                    getObservable().ChangeProgress("");
+                    Status().ChangeProgress("");
 
                     if (mobilizedHtml != null) {
-                        getObservable().ChangeProgress(R.string.improveHtmlContent);
+                        Status().ChangeProgress(R.string.improveHtmlContent);
                         mobilizedHtml = HtmlUtils.improveHtmlContent(mobilizedHtml, NetworkUtils.getBaseUrl(link));
-                        getObservable().ChangeProgress("");
+                        Status().ChangeProgress("");
                         ContentValues values = new ContentValues();
                         values.put(EntryColumns.MOBILIZED_HTML, mobilizedHtml);
                         if ( title != null )
                             values.put(EntryColumns.TITLE, title);
 
                         ArrayList<String> imgUrlsToDownload = null;
-                        if (NetworkUtils.needDownloadPictures()) {
+                        if (autoDownloadEntryImages == AutoDownloadEntryImages.Yes && NetworkUtils.needDownloadPictures()) {
                             imgUrlsToDownload = HtmlUtils.getImageURLs(mobilizedHtml);
                         }
 
@@ -479,12 +521,13 @@ public class FetcherService extends IntentService {
                         cr.update( entryUri, values, null, null );//operations.add(ContentProviderOperation.newUpdate(entryUri).withValues(values).build());
 
                         success = true;
-                        if (imgUrlsToDownload != null && !imgUrlsToDownload.isEmpty()) {
+                        if ( imgUrlsToDownload != null && !imgUrlsToDownload.isEmpty() ) {
                             addImagesToDownload(String.valueOf(entryId), imgUrlsToDownload);
                         }
                     }
-                } catch (Throwable e) {
-                    Dog.e("Mobilize error", e);
+                } catch (Exception e) {
+                    //Dog.e("Mobilize error", e);
+                    Status().SetError( e.getLocalizedMessage(), e );
                 } finally {
                     if (connection != null) {
                         connection.disconnect();
@@ -499,8 +542,107 @@ public class FetcherService extends IntentService {
         return success;
     }
 
+    public static void StartServiceOpenExternalLink( final String url, final String title) {
+        MainApplication.getContext().startService( new Intent(MainApplication.getContext(), FetcherService.class)
+                .setAction( ACTION_LOAD_LINK )
+                .putExtra(Constants.URL_TO_LOAD, url)
+                .putExtra(Constants.TITLE_TO_LOAD, url));
+    }
+
+    public enum ForceReload {Yes, No}
+    public static void OpenLink( Uri entryUri, final AppCompatActivity activity ) {
+        PrefUtils.putString(PrefUtils.LAST_ENTRY_URI, entryUri.toString());
+        Intent intent = new Intent(MainApplication.getContext(), HomeActivity.class);
+        activity.startActivity( intent );
+    }
+    public static Pair<Uri,Boolean> LoadLink(final String feedID,
+                                             final String url,
+                                             final String title,
+                                             final ForceReload forceReload,
+                                             final boolean isCorrectTitle) {
+                //MainApplication.getContext().startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( "" ) );
+
+        Uri entryUri;
+        boolean load = false;
+
+        int status = FetcherService.Status().Start(MainApplication.getContext().getString(R.string.loadingLink)); try {
+            String url1 = url.replace("https:", "http:");
+            String url2 = url.replace("http:", "https:");
+            ContentResolver cr = MainApplication.getContext().getContentResolver();
+            Cursor cursor = cr.query(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedID),
+                    new String[]{EntryColumns._ID},
+                    EntryColumns.LINK + "='" + url1 + "'" + Constants.DB_OR + EntryColumns.LINK + "='" + url2 + "'",
+                    null,
+                    null);
+            if (cursor.moveToFirst()) {
+                entryUri = EntryColumns.CONTENT_URI(cursor.getLong(0));
+                load = ( forceReload == ForceReload.Yes );
+                if ( load ) {
+                    ContentValues values = new ContentValues();
+                    values.put(EntryColumns.DATE, (new Date()).getTime());
+                    cr.update(entryUri, values, null, null);//operations.add(ContentProviderOperation.newUpdate(entryUri).withValues(values).build());
+                }
+            } else {
+
+                ContentValues values = new ContentValues();
+                values.put(EntryColumns.TITLE, title);
+                values.put(EntryColumns.SCROLL_POS, 0);
+                //values.put(EntryColumns.ABSTRACT, NULL);
+                //values.put(EntryColumns.IMAGE_URL, NULL);
+                //values.put(EntryColumns.AUTHOR, NULL);
+                //values.put(EntryColumns.ENCLOSURE, NULL);
+                values.put(EntryColumns.DATE, (new Date()).getTime());
+                values.put(EntryColumns.LINK, url);
+
+                //values.put(EntryColumns.MOBILIZED_HTML, enclosureString);
+                //values.put(EntryColumns.ENCLOSURE, enclosureString);
+                entryUri = cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedID), values);
+                load = true;
+            }
+
+            if ( forceReload == ForceReload.Yes ) {
+                ContentValues values = new ContentValues();
+                values.putNull(EntryColumns.MOBILIZED_HTML);
+                cr.update(entryUri, values, null, null);
+            }
+            if ( load && !FetcherService.isCancelRefresh() )
+                mobilizeEntry(cr, Long.parseLong(entryUri.getLastPathSegment()), ArticleTextExtractor.MobilizeType.Yes, AutoDownloadEntryImages.Yes, true, isCorrectTitle);
+
+            cursor.close();
+
+        } finally {
+            FetcherService.Status().End(status);
+        }
+        //stopForeground( true );
+        return new Pair<Uri,Boolean>(entryUri, load);
+    }
+
+    private static String mExtrenalLinkFeedID = "";
+    public static String GetExtrenalLinkFeedID() {
+        synchronized ( mExtrenalLinkFeedID ) {
+            if (mExtrenalLinkFeedID.isEmpty()) {
+
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                Cursor cursor = cr.query(FeedColumns.CONTENT_URI,
+                        FeedColumns.PROJECTION_ID,
+                        FeedColumns.FETCH_MODE + "=" + FetcherService.FETCHMODE_EXERNAL_LINK, null, null);
+                if (cursor.moveToFirst())
+                    mExtrenalLinkFeedID = cursor.getString(0);
+                cursor.close();
+
+                if (mExtrenalLinkFeedID.isEmpty()) {
+                    ContentValues values = new ContentValues();
+                    values.put(FeedColumns.FETCH_MODE, FetcherService.FETCHMODE_EXERNAL_LINK);
+                    values.put(FeedColumns.NAME, MainApplication.getContext().getString(R.string.externalLinks));
+                    mExtrenalLinkFeedID = cr.insert(FeedColumns.CONTENT_URI, values).getLastPathSegment();
+                }
+            }
+        }
+        return mExtrenalLinkFeedID;
+    }
+
     public static void downloadAllImages() {
-        StatusText.FetcherObservable obs = getObservable();
+        StatusText.FetcherObservable obs = Status();
         int status = obs.Start(MainApplication.getContext().getString(R.string.AllImages)); try {
 
             ContentResolver cr = MainApplication.getContext().getContentResolver();
@@ -520,7 +662,7 @@ public class FetcherService extends IntentService {
                     }
 
                     try {
-                        NetworkUtils.downloadImage(entryId, imgPath/*, false*/);
+                        NetworkUtils.downloadImage(entryId, imgPath, true);
 
                         // If we are here, everything is OK
                         operations.add(ContentProviderOperation.newDelete(TaskColumns.CONTENT_URI(taskId)).build());
@@ -559,14 +701,16 @@ public class FetcherService extends IntentService {
     }
 
     public static void downloadEntryImages( long entryId, ArrayList<String> imageList ) {
-        StatusText.FetcherObservable obs = getObservable();
+        StatusText.FetcherObservable obs = Status();
+        boolean wereChanges = false;
         int status = obs.Start(MainApplication.getContext().getString(R.string.EntryImages)); try {
             for( String imgPath: imageList ) {
                 if (isCancelRefresh() || !isEntryIDActive( entryId ) )
                     break;
                 int status1 = obs.Start(String.format("%d/%d", imageList.indexOf(imgPath) + 1, imageList.size()));
                 try {
-                    NetworkUtils.downloadImage(entryId, imgPath/*, false*/);
+                    NetworkUtils.downloadImage(entryId, imgPath, true);
+                    wereChanges = true;
                 } catch (Exception e) {
 
                 } finally {
@@ -574,6 +718,7 @@ public class FetcherService extends IntentService {
                 }
             }
         } finally { obs.End( status ); }
+        if ( wereChanges )
         EntryView.NotifyToUpdate( entryId );
     }
 
@@ -584,13 +729,13 @@ public class FetcherService extends IntentService {
                     new Thread() {
                         @Override
                         public void run() {
-                            int status = getObservable().Start(MainApplication.getContext().getString(R.string.deleteOldEntries)); try {
+                            int status = Status().Start(MainApplication.getContext().getString(R.string.deleteOldEntries)); try {
                                 mIsDeletingOld = true;
                                     String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
                                 // Delete the entries, the cache files will be deleted by the content provider
                                 MainApplication.getContext().getContentResolver().delete(EntryColumns.CONTENT_URI, where, null);
 
-                                getObservable().ChangeProgress(R.string.deleteImages);
+                                Status().ChangeProgress(R.string.deleteImages);
                                 File[] files = FileUtils.GetImagesFolder().listFiles(new FileFilter() {//NetworkUtils.IMAGE_FOLDER_FILE.listFiles(new FileFilter() {
                                     @Override
                                     public boolean accept(File pathname) {
@@ -601,13 +746,13 @@ public class FetcherService extends IntentService {
                                     int i = 0;
                                     for( File file: files ) {
                                         i++;
-                                        getObservable().ChangeProgress(getString(R.string.deleteImages) + String.format( " %d/%d", i, files.length ) );
+                                        Status().ChangeProgress(getString(R.string.deleteImages) + String.format( " %d/%d", i, files.length ) );
                                         file.delete();
                                     }
                                 }
-                                getObservable().ChangeProgress("");
+                                Status().ChangeProgress("");
                             } finally {
-                                getObservable().End( status );
+                                Status().End( status );
                                 mIsDeletingOld = false;
                             }
                         }
@@ -615,14 +760,15 @@ public class FetcherService extends IntentService {
         }
     }
 
-    private int refreshFeeds(final long keepDateBorderTime, String groupID) {
+    private int refreshFeeds(final long keepDateBorderTime, String groupID, final boolean isFromAutoRefresh) {
 
         ContentResolver cr = getContentResolver();
         final Cursor cursor;
+        String where = PrefUtils.getBoolean( PrefUtils.REFRESH_ONLY_SELECTED, false ) && isFromAutoRefresh ? FeedColumns.IS_AUTO_REFRESH + Constants.DB_IS_TRUE : null;
         if ( groupID != null )
             cursor = cr.query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(groupID), FeedColumns.PROJECTION_ID, null, null, null);
         else
-            cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, null, null, null);
+            cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID, where, null, null);
         int nbFeed = cursor.getCount();
 
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_NUMBER, new ThreadFactory() {
@@ -633,10 +779,10 @@ public class FetcherService extends IntentService {
                 return t;
             }
         });
-
+        int globalResult = 0;
         CompletionService<Integer> completionService = new ExecutorCompletionService<>(executor);
         while (cursor.moveToNext()) {
-            //getObservable().Start(String.format("%d from %d", cursor.getPosition(), cursor.getCount()));
+            //Status().Start(String.format("%d from %d", cursor.getPosition(), cursor.getCount()));
             final String feedId = cursor.getString(0);
             completionService.submit(new Callable<Integer>() {
                 @Override
@@ -644,17 +790,16 @@ public class FetcherService extends IntentService {
                     int result = 0;
                     try {
                         if (!isCancelRefresh())
-                            result = refreshFeed(feedId, keepDateBorderTime);
+                            result = refreshFeed(feedId, keepDateBorderTime, isFromAutoRefresh);
                     } catch (Exception ignored) {
                     }
                     return result;
                 }
             });
-            //getObservable().End();
+            //Status().End();
         }
         cursor.close();
 
-        int globalResult = 0;
         for (int i = 0; i < nbFeed; i++) {
             try {
                 Future<Integer> f = completionService.take();
@@ -664,12 +809,16 @@ public class FetcherService extends IntentService {
         }
 
         executor.shutdownNow(); // To purge all threads
-
         return globalResult;
     }
 
-    private int refreshFeed(String feedId, long keepDateBorderTime) {
-        RssAtomParser handler = null;
+    private int refreshFeed(String feedId, long keepDateBorderTime, boolean fromAutoRefresh) {
+
+
+        int newCount = 0;
+
+        if ( GetExtrenalLinkFeedID().equals( feedId ) )
+            return 0;
 
         ContentResolver cr = getContentResolver();
         Cursor cursor = cr.query(FeedColumns.CONTENT_URI(feedId), null, null, null, null);
@@ -678,350 +827,473 @@ public class FetcherService extends IntentService {
             int urlPosition = cursor.getColumnIndex(FeedColumns.URL);
             int idPosition = cursor.getColumnIndex(FeedColumns._ID);
             int titlePosition = cursor.getColumnIndex(FeedColumns.NAME);
-            int fetchModePosition = cursor.getColumnIndex(FeedColumns.FETCH_MODE);
-            int realLastUpdatePosition = cursor.getColumnIndex(FeedColumns.REAL_LAST_UPDATE);
-            int iconPosition = cursor.getColumnIndex(FeedColumns.ICON);
-            int retrieveFullscreenPosition = cursor.getColumnIndex(FeedColumns.RETRIEVE_FULLTEXT);
+            boolean isRss = true;
+            try {
+                JSONObject jsonOptions  = new JSONObject( cursor.getString( cursor.getColumnIndex(FeedColumns.OPTIONS) ) );
+                isRss = jsonOptions.getBoolean( "isRss" );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             //int showTextInEntryList = cursor.getColumnIndex(FeedColumns.SHOW_TEXT_IN_ENTRY_LIST);
 
-
             String id = cursor.getString(idPosition);
-            HttpURLConnection connection = null;
-
-            int status = getObservable().Start(cursor.getString(titlePosition));
+            String feedUrl = cursor.getString(urlPosition);
+            int status = Status().Start(cursor.getString(titlePosition));
             try {
 
-                String feedUrl = cursor.getString(urlPosition);
-                connection = NetworkUtils.setupConnection(feedUrl);
-                String contentType = connection.getContentType();
-                int fetchMode = cursor.getInt(fetchModePosition);
+                if ( isRss )
+                    newCount = ParseRSSAndAddEntries(feedUrl, cursor, keepDateBorderTime, id, fromAutoRefresh);
+                else
+                    newCount = HTMLParser.Parse(cursor.getString(idPosition), feedUrl);
+            } finally {
+                Status().End(status);
+            }
+        }
+        cursor.close();
+        return newCount;
+    }
 
-                handler = new RssAtomParser(new Date(cursor.getLong(realLastUpdatePosition)),
-                                            keepDateBorderTime,
-                                            id,
-                                            cursor.getString(titlePosition),
-                                            feedUrl,
-                                            cursor.getInt(retrieveFullscreenPosition) == 1);
-                handler.setFetchImages(NetworkUtils.needDownloadPictures());
 
-                if (fetchMode == 0) {
-                    if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
-                        String line;
-                        int posStart = -1;
+    private void ShowNotification (String text, int captionID, Intent intent, Uri entryUri){
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
-                        while ((line = reader.readLine()) != null) {
-                            FetcherService.getObservable().AddBytes( line.length() );
-                            if (line.contains(HTML_BODY)) {
-                                break;
-                            } else {
-                                Matcher matcher = FEED_LINK_PATTERN.matcher(line);
+        Notification.Builder notifBuilder = new Notification.Builder(MainApplication.getContext()) //
+                .setContentIntent(contentIntent) //
+                .setSmallIcon(R.drawable.ic_statusbar_rss) //
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher)) //
+                //.setTicker(text) //
+                .setWhen(System.currentTimeMillis()) //
+                .setAutoCancel(true) //
+                .setContentTitle(getString(captionID)) //
+                .setLights(0xffffffff, 0, 0);
 
-                                if (matcher.find()) { // not "while" as only one link is needed
-                                    line = matcher.group();
-                                    posStart = line.indexOf(HREF);
+        if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_VIBRATE, false)) {
+            notifBuilder.setVibrate(new long[]{0, 1000});
+        }
 
-                                    if (posStart > -1) {
-                                        String url = line.substring(posStart + 6, line.indexOf('"', posStart + 10)).replace(Constants.AMP_SG,
-                                                Constants.AMP);
+        String ringtone = PrefUtils.getString(PrefUtils.NOTIFICATIONS_RINGTONE, null);
+        if (ringtone != null && ringtone.length() > 0) {
+            notifBuilder.setSound(Uri.parse(ringtone));
+        }
 
-                                        ContentValues values = new ContentValues();
+        if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_LIGHT, false)) {
+            notifBuilder.setLights(0xffffffff, 300, 1000);
+        }
 
-                                        if (url.startsWith(Constants.SLASH)) {
-                                            int index = feedUrl.indexOf('/', 8);
+        Notification nf;
+        if (Build.VERSION.SDK_INT < 16)
+            nf = notifBuilder.setContentText(text).build();
+        else
+            nf = new Notification.BigTextStyle(notifBuilder.setContentText(text)).bigText(text).build();
 
-                                            if (index > -1) {
-                                                url = feedUrl.substring(0, index) + url;
-                                            } else {
-                                                url = feedUrl + url;
-                                            }
-                                        } else if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME)) {
-                                            url = feedUrl + '/' + url;
+        if (Constants.NOTIF_MGR != null) {
+            int i = 0;
+            try {
+                if ( entryUri != null )
+                    i = Integer.parseInt( entryUri.getLastPathSegment() );
+            } catch ( Throwable th ) {
+
+            }
+            Constants.NOTIF_MGR.notify(captionID + i, nf);
+        }
+    }
+
+    private Uri getEntryUri(String entryLink, String feedID) {
+        Uri entryUri = null;
+        Cursor cursor = MainApplication.getContext().getContentResolver().query(
+                EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedID),
+                new String[]{EntryColumns._ID},
+                EntryColumns.LINK + "='" + entryLink + "'",
+                null,
+                null);
+        if (cursor.moveToFirst())
+            entryUri = EntryColumns.CONTENT_URI(cursor.getLong(0));
+        cursor.close();
+        return entryUri;
+    }
+
+
+    private static String ToString (InputStream inputStream, Xml.Encoding encoding ) throws
+    IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        //InputStream inputStream = connection.getInputStream();
+
+        byte[] byteBuffer = new byte[4096];
+
+        int n;
+        while ((n = inputStream.read(byteBuffer)) > 0) {
+            FetcherService.Status().AddBytes(n);
+            outputStream.write(byteBuffer, 0, n);
+        }
+        String content = outputStream.toString(encoding.name()).replace(" & ", " &amp; ");
+        content = content.replaceAll( "<[a-z]+?:", "<" );
+        content = content.replaceAll( "</[a-z]+?:", "</" );
+
+        return content;
+    }
+
+
+    private int ParseRSSAndAddEntries(String feedUrl, Cursor cursor, long keepDateBorderTime, String feedId, boolean fromAutoRefresh) {
+        RssAtomParser handler = null;
+
+        int fetchModePosition = cursor.getColumnIndex(FeedColumns.FETCH_MODE);
+        int realLastUpdatePosition = cursor.getColumnIndex(FeedColumns.REAL_LAST_UPDATE);
+        int retrieveFullscreenPosition = cursor.getColumnIndex(FeedColumns.RETRIEVE_FULLTEXT);
+        int autoImageDownloadPosition = cursor.getColumnIndex(FeedColumns.IS_IMAGE_AUTO_LOAD);
+        int titlePosition = cursor.getColumnIndex(FeedColumns.NAME);
+        int urlPosition = cursor.getColumnIndex(FeedColumns.URL);
+        int iconPosition = cursor.getColumnIndex(FeedColumns.ICON);
+
+        HttpURLConnection connection = null;
+        ContentResolver cr = MainApplication.getContext().getContentResolver();
+        try {
+
+            connection = NetworkUtils.setupConnection(feedUrl);
+            String contentType = connection.getContentType();
+            int fetchMode = cursor.getInt(fetchModePosition);
+
+            boolean autoDownloadImages = cursor.isNull(autoImageDownloadPosition) || cursor.getInt(autoImageDownloadPosition) == 1;
+
+            if (fetchMode == 0) {
+                if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+                    String line;
+                    int posStart = -1;
+
+
+                    while ((line = reader.readLine()) != null) {
+                        FetcherService.Status().AddBytes(line.length());
+                        if (line.contains(HTML_BODY)) {
+                            break;
+                        } else {
+                            Matcher matcher = FEED_LINK_PATTERN.matcher(line);
+
+                            if (matcher.find()) { // not "while" as only one link is needed
+                                line = matcher.group();
+                                posStart = line.indexOf(HREF);
+
+                                if (posStart > -1) {
+                                    String url = line.substring(posStart + 6, line.indexOf('"', posStart + 10)).replace(Constants.AMP_SG,
+                                            Constants.AMP);
+
+                                    ContentValues values = new ContentValues();
+
+                                    if (url.startsWith(Constants.SLASH)) {
+                                        int index = feedUrl.indexOf('/', 8);
+
+                                        if (index > -1) {
+                                            url = feedUrl.substring(0, index) + url;
+                                        } else {
+                                            url = feedUrl + url;
                                         }
-                                        values.put(FeedColumns.URL, url);
-                                        cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
-                                        connection.disconnect();
-                                        connection = NetworkUtils.setupConnection(url);
-                                        contentType = connection.getContentType();
-                                        break;
+                                    } else if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME)) {
+                                        url = feedUrl + '/' + url;
                                     }
+                                    values.put(FeedColumns.URL, url);
+                                    cr.update(FeedColumns.CONTENT_URI(feedId), values, null, null);
+                                    connection.disconnect();
+                                    connection = NetworkUtils.setupConnection(url);
+                                    contentType = connection.getContentType();
+                                    break;
                                 }
                             }
                         }
-                        // this indicates a badly configured feed
-                        if (posStart == -1) {
-                            connection.disconnect();
-                            connection = NetworkUtils.setupConnection(feedUrl);
-                            contentType = connection.getContentType();
+                    }
+                    // this indicates a badly configured feed
+                    if (posStart == -1) {
+                        connection.disconnect();
+                        connection = NetworkUtils.setupConnection(feedUrl);
+                        contentType = connection.getContentType();
+                    }
+                }
+
+                if (contentType != null) {
+                    int index = contentType.indexOf(CHARSET);
+
+                    if (index > -1) {
+                        int index2 = contentType.indexOf(';', index);
+
+                        try {
+                            Xml.findEncodingByName(index2 > -1 ? contentType.substring(index + 8, index2) : contentType.substring(index + 8));
+                            fetchMode = FETCHMODE_DIRECT;
+                        } catch (UnsupportedEncodingException ignored) {
+                            fetchMode = FETCHMODE_REENCODE;
                         }
+                    } else {
+                        fetchMode = FETCHMODE_REENCODE;
                     }
 
+                } else {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+                    char[] chars = new char[20];
+
+                    int length = bufferedReader.read(chars);
+
+                    FetcherService.Status().AddBytes(length);
+
+                    String xmlDescription = new String(chars, 0, length);
+
+                    connection.disconnect();
+                    connection = NetworkUtils.setupConnection(connection.getURL());
+
+                    int start = xmlDescription.indexOf(ENCODING);
+
+                    if (start > -1) {
+                        try {
+                            Xml.findEncodingByName(xmlDescription.substring(start + 10, xmlDescription.indexOf('"', start + 11)));
+                            fetchMode = FETCHMODE_DIRECT;
+                        } catch (UnsupportedEncodingException ignored) {
+                            fetchMode = FETCHMODE_REENCODE;
+                        }
+                    } else {
+                        // absolutely no encoding information found
+                        fetchMode = FETCHMODE_DIRECT;
+                    }
+                }
+
+                ContentValues values = new ContentValues();
+                values.put(FeedColumns.FETCH_MODE, fetchMode);
+                cr.update(FeedColumns.CONTENT_URI(feedId), values, null, null);
+            }
+
+            handler = new RssAtomParser(new Date(cursor.getLong(realLastUpdatePosition)),
+                    keepDateBorderTime,
+                    feedId,
+                    cursor.getString(titlePosition),
+                    feedUrl,
+                    cursor.getInt(retrieveFullscreenPosition) == 1);
+            handler.setFetchImages(NetworkUtils.needDownloadPictures() && !(fromAutoRefresh && !autoDownloadImages));
+
+            InputStream inputStream = connection.getInputStream();
+
+            switch (fetchMode) {
+                default:
+                case FETCHMODE_DIRECT: {
                     if (contentType != null) {
                         int index = contentType.indexOf(CHARSET);
 
-                        if (index > -1) {
-                            int index2 = contentType.indexOf(';', index);
+                        int index2 = contentType.indexOf(';', index);
 
-                            try {
-                                Xml.findEncodingByName(index2 > -1 ? contentType.substring(index + 8, index2) : contentType.substring(index + 8));
-                                fetchMode = FETCHMODE_DIRECT;
-                            } catch (UnsupportedEncodingException ignored) {
-                                fetchMode = FETCHMODE_REENCODE;
-                            }
-                        } else {
-                            fetchMode = FETCHMODE_REENCODE;
-                        }
+                        parseXml(cursor.getString(urlPosition),
+                                inputStream,
+                                Xml.findEncodingByName(index2 > -1 ? contentType.substring(index + 8, index2) : contentType.substring(index + 8)),
+                                handler);
 
                     } else {
-                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+                        parseXml(reader, handler);
 
-                        char[] chars = new char[20];
+                    }
+                    break;
+                }
+                case FETCHMODE_REENCODE: {
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-                        int length = bufferedReader.read(chars);
+                    byte[] byteBuffer = new byte[4096];
 
-                        FetcherService.getObservable().AddBytes( length );
-
-                        String xmlDescription = new String(chars, 0, length);
-
-                        connection.disconnect();
-                        connection = NetworkUtils.setupConnection(connection.getURL());
-
-                        int start = xmlDescription.indexOf(ENCODING);
-
-                        if (start > -1) {
-                            try {
-                                Xml.findEncodingByName(xmlDescription.substring(start + 10, xmlDescription.indexOf('"', start + 11)));
-                                fetchMode = FETCHMODE_DIRECT;
-                            } catch (UnsupportedEncodingException ignored) {
-                                fetchMode = FETCHMODE_REENCODE;
-                            }
-                        } else {
-                            // absolutely no encoding information found
-                            fetchMode = FETCHMODE_DIRECT;
-                        }
+                    int n;
+                    while ((n = inputStream.read(byteBuffer)) > 0) {
+                        FetcherService.Status().AddBytes(n);
+                        outputStream.write(byteBuffer, 0, n);
                     }
 
-                    ContentValues values = new ContentValues();
-                    values.put(FeedColumns.FETCH_MODE, fetchMode);
-                    cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
-                }
+                    String xmlText = outputStream.toString();
 
-                switch (fetchMode) {
-                    default:
-                    case FETCHMODE_DIRECT: {
+                    int start = xmlText != null ? xmlText.indexOf(ENCODING) : -1;
+
+                    if (start > -1) {
+                        parseXml(
+                                new StringReader(new String(outputStream.toByteArray(),
+                                        xmlText.substring(start + 10, xmlText.indexOf('"', start + 11)))), handler
+                        );
+                    } else {
+                        // use content type
                         if (contentType != null) {
                             int index = contentType.indexOf(CHARSET);
 
-                            int index2 = contentType.indexOf(';', index);
+                            if (index > -1) {
+                                int index2 = contentType.indexOf(';', index);
 
-                            InputStream inputStream = connection.getInputStream();
-                            parseXml(inputStream,
-                                    Xml.findEncodingByName(index2 > -1 ? contentType.substring(index + 8, index2) : contentType.substring(index + 8)),
-                                    handler);
-
-                        } else {
-                            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-                            parseXml(reader, handler);
-
-                        }
-                        break;
-                    }
-                    case FETCHMODE_REENCODE: {
-                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                        InputStream inputStream = connection.getInputStream();
-
-                        byte[] byteBuffer = new byte[4096];
-
-                        int n;
-                        while ((n = inputStream.read(byteBuffer)) > 0) {
-                            FetcherService.getObservable().AddBytes( n );
-                            outputStream.write(byteBuffer, 0, n);
-                        }
-
-                        String xmlText = outputStream.toString();
-
-                        int start = xmlText != null ? xmlText.indexOf(ENCODING) : -1;
-
-                        if (start > -1) {
-                            parseXml(
-                                    new StringReader(new String(outputStream.toByteArray(),
-                                            xmlText.substring(start + 10, xmlText.indexOf('"', start + 11)))), handler
-                            );
-                        } else {
-                            // use content type
-                            if (contentType != null) {
-                                int index = contentType.indexOf(CHARSET);
-
-                                if (index > -1) {
-                                    int index2 = contentType.indexOf(';', index);
-
-                                    try {
-                                        StringReader reader = new StringReader(new String(outputStream.toByteArray(), index2 > -1 ? contentType.substring(
-                                                index + 8, index2) : contentType.substring(index + 8)));
-                                        parseXml(reader, handler);
-                                    } catch (Exception ignored) {
-                                    }
-                                } else {
-                                    StringReader reader = new StringReader(new String(outputStream.toByteArray()));
+                                try {
+                                    StringReader reader = new StringReader(new String(outputStream.toByteArray(), index2 > -1 ? contentType.substring(
+                                            index + 8, index2) : contentType.substring(index + 8)));
                                     parseXml(reader, handler);
+                                } catch (Exception ignored) {
                                 }
+                            } else {
+                                StringReader reader = new StringReader(new String(outputStream.toByteArray()));
+                                parseXml(reader, handler);
                             }
                         }
-                        break;
                     }
+                    break;
                 }
+            }
 
+
+            connection.disconnect();
+        } catch(FileNotFoundException e){
+            if (handler == null || (!handler.isDone() && !handler.isCancelled())) {
+                ContentValues values = new ContentValues();
+
+                // resets the fetch mode to determine it again later
+                values.put(FeedColumns.FETCH_MODE, 0);
+
+                values.put(FeedColumns.ERROR, getString(R.string.error_feed_error));
+                cr.update(FeedColumns.CONTENT_URI(feedId), values, null, null);
+                FetcherService.Status().SetError(getString(R.string.error_feed_error), e);
+            }
+        } catch(Exception e){
+            if (handler == null || (!handler.isDone() && !handler.isCancelled())) {
+                ContentValues values = new ContentValues();
+
+                // resets the fetch mode to determine it again later
+                values.put(FeedColumns.FETCH_MODE, 0);
+
+                values.put(FeedColumns.ERROR, e.getMessage() != null ? e.getMessage() : getString(R.string.error_feed_process));
+                cr.update(FeedColumns.CONTENT_URI(feedId), values, null, null);
+
+                FetcherService.Status().SetError(e.getMessage(), e);
+            }
+        } finally{
+            /* check and optionally find favicon */
+            try {
+                if (handler != null && cursor.getBlob(iconPosition) == null) {
+                    if (handler.getFeedLink() != null)
+                        NetworkUtils.retrieveFavicon(this, new URL(handler.getFeedLink()), feedId);
+                    else
+                        NetworkUtils.retrieveFavicon(this, connection.getURL(), feedId);
+                }
+            } catch (Throwable ignored) {
+            }
+
+            if (connection != null) {
                 connection.disconnect();
-            } catch (FileNotFoundException e) {
-                if (handler == null || (!handler.isDone() && !handler.isCancelled())) {
-                    ContentValues values = new ContentValues();
-
-                    // resets the fetch mode to determine it again later
-                    values.put(FeedColumns.FETCH_MODE, 0);
-
-                    values.put(FeedColumns.ERROR, getString(R.string.error_feed_error));
-                    cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
-                }
-            } catch (Throwable e) {
-                if (handler == null || (!handler.isDone() && !handler.isCancelled())) {
-                    ContentValues values = new ContentValues();
-
-                    // resets the fetch mode to determine it again later
-                    values.put(FeedColumns.FETCH_MODE, 0);
-
-                    values.put(FeedColumns.ERROR, e.getMessage() != null ? e.getMessage() : getString(R.string.error_feed_process));
-                    cr.update(FeedColumns.CONTENT_URI(id), values, null, null);
-                }
-            } finally {
-
-				/* check and optionally find favicon */
-                try {
-                    if (handler != null && cursor.getBlob(iconPosition) == null) {
-                        String feedLink = handler.getFeedLink();
-                        if (feedLink != null) {
-                            NetworkUtils.retrieveFavicon(this, new URL(feedLink), id);
-                        } else {
-                            NetworkUtils.retrieveFavicon(this, connection.getURL(), id);
-                        }
-                    }
-                } catch (Throwable ignored) {
-                }
-
-                if (connection != null) {
-                    connection.disconnect();
-                }
-                getObservable().End( status );
             }
         }
-
-        cursor.close();
-
         return handler != null ? handler.getNewCount() : 0;
     }
 
-    private static void parseXml(InputStream in, Xml.Encoding encoding,
-                             ContentHandler contentHandler) throws IOException, SAXException {
-        getObservable().ChangeProgress( R.string.parseXml );
-        Xml.parse(in, encoding, contentHandler);
-        getObservable().ChangeProgress( "" );
-        getObservable().AddBytes(contentHandler.toString().length());
-    }
-    private static void parseXml(Reader reader,
-                                 ContentHandler contentHandler) throws IOException, SAXException {
-        getObservable().ChangeProgress( R.string.parseXml );
-        Xml.parse(reader, contentHandler);
-        getObservable().ChangeProgress( "" );
-        getObservable().AddBytes(contentHandler.toString().length() );
-    }
-
-    public static void cancelRefresh() {
-    //if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-        synchronized (mCancelRefresh) {
-            mCancelRefresh = true;
-        }
-    //}
-    }
-
-    public static void deleteAllFeedEntries( String feedID ) {
-        int status = getObservable().Start("deleteAllFeedEntries");
-        try {
-            ContentResolver cr = MainApplication.getContext().getContentResolver();
-            cr.delete(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedID), EntryColumns.WHERE_NOT_FAVORITE, null);
-            ContentValues values = new ContentValues();
-            values.putNull( FeedColumns.LAST_UPDATE );
-            values.putNull( FeedColumns.REAL_LAST_UPDATE );
-            cr.update(FeedColumns.CONTENT_URI( feedID ), values, null, null );
-        } finally {
-            getObservable().End(status);
+    private static void parseXml (String feedUrl, InputStream in, Xml.Encoding
+        encoding,
+                ContentHandler contentHandler) throws IOException, SAXException {
+            Status().ChangeProgress(R.string.parseXml);
+            //Xml.Parse(in, encoding, contentHandler);
+            //if (isRss(feedUrl))
+            Xml.parse(ToString(in, encoding), contentHandler);
+            //else
+            //    HTMLParser.Parse( feedID, feedUrl, ToString( in, encoding ) );
+            Status().ChangeProgress("");
+            Status().AddBytes(contentHandler.toString().length());
         }
 
-    }
+        /*public static boolean isRss (String feedUrl){
+            return feedUrl.toLowerCase().contains("feed") || feedUrl.toLowerCase().contains("rss");
+        }*/
 
-    public static void createTestData() {
-        int status = getObservable().Start("createTestData");
-        try {
-            {
-                final String testFeedID = "10000";
-                final String testAbstract1 = "safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd ";
-                String testAbstract = "";
-                for (int i = 0; i < 10; i++)
-                    testAbstract += testAbstract1;
-                //final String testAbstract2 = "sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff";
+        private static void parseXml (Reader reader,
+                ContentHandler contentHandler) throws IOException, SAXException {
+            Status().ChangeProgress(R.string.parseXml);
+            Xml.parse(reader, contentHandler);
+            //Xml.Parse( ToString( in, encoding ), contentHandler );
+            Status().ChangeProgress("");
+            Status().AddBytes(contentHandler.toString().length());
+        }
 
-                deleteAllFeedEntries(testFeedID);
+        public static void cancelRefresh () {
+            //if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+            synchronized (mCancelRefresh) {
+                mCancelRefresh = true;
 
+            }
+            //}
+        }
+
+        public static void deleteAllFeedEntries (String feedID ){
+            int status = Status().Start("deleteAllFeedEntries");
+            try {
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
+                cr.delete(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedID), EntryColumns.WHERE_NOT_FAVORITE, null);
                 ContentValues values = new ContentValues();
-                values.put(FeedColumns._ID, testFeedID);
-                values.put(FeedColumns.NAME, "testFeed");
-                values.putNull(FeedColumns.IS_GROUP);
-                //values.putNull(FeedColumns.GROUP_ID);
                 values.putNull(FeedColumns.LAST_UPDATE);
-                values.put(FeedColumns.FETCH_MODE, 0);
-                cr.insert(FeedColumns.CONTENT_URI, values);
-
-                for (int i = 0; i < 30; i++) {
-                    values.clear();
-                    values.put(EntryColumns._ID, i);
-                    values.put(EntryColumns.ABSTRACT, testAbstract);
-                    values.put(EntryColumns.TITLE, "testTitle" + i);
-                    cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(testFeedID), values);
-                }
+                values.putNull(FeedColumns.REAL_LAST_UPDATE);
+                cr.update(FeedColumns.CONTENT_URI(feedID), values, null, null);
+            } finally {
+                Status().End(status);
             }
 
-            {
-                // small
-                final String testFeedID = "10001";
-                final String testAbstract1 = "safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd ";
-                String testAbstract = "";
-                for ( int i = 0; i < 1; i++  )
-                    testAbstract += testAbstract1;
-                //final String testAbstract2 = "sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff";
+        }
 
-                deleteAllFeedEntries(testFeedID);
+        public static void createTestData () {
+            int status = Status().Start("createTestData");
+            try {
+                {
+                    final String testFeedID = "10000";
+                    final String testAbstract1 = "safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd ";
+                    String testAbstract = "";
+                    for (int i = 0; i < 10; i++)
+                        testAbstract += testAbstract1;
+                    //final String testAbstract2 = "sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff";
 
-                ContentResolver cr = MainApplication.getContext().getContentResolver();
-                ContentValues values = new ContentValues();
-                values.put(FeedColumns._ID, testFeedID);
-                values.put(FeedColumns.NAME, "testFeedSmall");
-                values.putNull(FeedColumns.IS_GROUP);
-                //values.putNull(FeedColumns.GROUP_ID);
-                values.putNull(FeedColumns.LAST_UPDATE);
-                values.put(FeedColumns.FETCH_MODE, 0);
-                cr.insert(FeedColumns.CONTENT_URI, values);
+                    deleteAllFeedEntries(testFeedID);
 
-                for (int i = 0; i < 30; i++) {
-                    values.clear();
-                    values.put(EntryColumns._ID, 100 + i);
-                    values.put(EntryColumns.ABSTRACT, testAbstract);
-                    values.put(EntryColumns.TITLE, "testTitleSmall" + i);
-                    cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(testFeedID), values);
+                    ContentResolver cr = MainApplication.getContext().getContentResolver();
+                    ContentValues values = new ContentValues();
+                    values.put(FeedColumns._ID, testFeedID);
+                    values.put(FeedColumns.NAME, "testFeed");
+                    values.putNull(FeedColumns.IS_GROUP);
+                    //values.putNull(FeedColumns.GROUP_ID);
+                    values.putNull(FeedColumns.LAST_UPDATE);
+                    values.put(FeedColumns.FETCH_MODE, 0);
+                    cr.insert(FeedColumns.CONTENT_URI, values);
+
+                    for (int i = 0; i < 30; i++) {
+                        values.clear();
+                        values.put(EntryColumns._ID, i);
+                        values.put(EntryColumns.ABSTRACT, testAbstract);
+                        values.put(EntryColumns.TITLE, "testTitle" + i);
+                        cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(testFeedID), values);
+                    }
                 }
+
+                {
+                    // small
+                    final String testFeedID = "10001";
+                    final String testAbstract1 = "safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd safdkhfgsadjkhgfsakdhgfasdhkgf sadfdasfdsafasdfasd ";
+                    String testAbstract = "";
+                    for (int i = 0; i < 1; i++)
+                        testAbstract += testAbstract1;
+                    //final String testAbstract2 = "sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs sfdsdafsdafs fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff fffffffffffffff";
+
+                    deleteAllFeedEntries(testFeedID);
+
+                    ContentResolver cr = MainApplication.getContext().getContentResolver();
+                    ContentValues values = new ContentValues();
+                    values.put(FeedColumns._ID, testFeedID);
+                    values.put(FeedColumns.NAME, "testFeedSmall");
+                    values.putNull(FeedColumns.IS_GROUP);
+                    //values.putNull(FeedColumns.GROUP_ID);
+                    values.putNull(FeedColumns.LAST_UPDATE);
+                    values.put(FeedColumns.FETCH_MODE, 0);
+                    cr.insert(FeedColumns.CONTENT_URI, values);
+
+                    for (int i = 0; i < 30; i++) {
+                        values.clear();
+                        values.put(EntryColumns._ID, 100 + i);
+                        values.put(EntryColumns.ABSTRACT, testAbstract);
+                        values.put(EntryColumns.TITLE, "testTitleSmall" + i);
+                        cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(testFeedID), values);
+                    }
+                }
+            } finally {
+                Status().End(status);
             }
-        } finally {
-            getObservable().End(status);
+
         }
 
     }
-}

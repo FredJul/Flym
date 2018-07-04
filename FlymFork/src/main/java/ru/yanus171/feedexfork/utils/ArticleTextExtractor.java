@@ -51,37 +51,54 @@ public class ArticleTextExtractor {
      * @param contentIndicator a text which should be included into the extracted content, or null
      * @return extracted article, all HTML tags stripped
      */
-    public static String extractContent(InputStream input, String contentIndicator) throws Exception {
-        return extractContent(Jsoup.parse(input, null, ""), contentIndicator);
+    public enum MobilizeType {Yes, No, Tags}
+
+    public static String extractContent(InputStream input, final String url, String contentIndicator, MobilizeType mobilize, boolean isFindBEstElement) throws Exception {
+        return extractContent(Jsoup.parse(input, null, ""), url, contentIndicator, mobilize, isFindBEstElement);
     }
 
-    public static String extractContent(Document doc, String contentIndicator) {
+    public static String extractContent(Document doc,
+                                        final String url,
+                                        String contentIndicator,
+                                        MobilizeType mobilize,
+                                        boolean isFindBestElement) {
         if (doc == null)
             throw new NullPointerException("missing document");
 
-        FetcherService.getObservable().AddBytes( doc.html().length() );
+        FetcherService.Status().AddBytes( doc.html().length() );
         // now remove the clutter
-        prepareDocument(doc);
+        prepareDocument(doc, mobilize);
 
-        // init elements
-        Collection<Element> nodes = getNodes(doc);
-        int maxWeight = 0;
-        Element bestMatchElement = null;
+        Element bestMatchElement = doc;
+        if ( mobilize == MobilizeType.Yes ) {
+            // init elements
+            Collection<Element> nodes = getNodes(doc);
+            int maxWeight = 0;
 
-        bestMatchElement = getBestElementFromFile(doc);
-        if (bestMatchElement == null) {
-            for (Element entry : nodes) {
-                int currentWeight = getWeight(entry, contentIndicator);
-                if (currentWeight > maxWeight) {
-                    maxWeight = currentWeight;
-                    bestMatchElement = entry;
+            bestMatchElement = getBestElementFromFile(doc, url);
+            if (bestMatchElement == null && isFindBestElement ) {
+                for (Element entry : nodes) {
+                    int currentWeight = getWeight(entry, contentIndicator);
+                    if (currentWeight > maxWeight) {
+                        maxWeight = currentWeight;
+                        bestMatchElement = entry;
 
-                    if (maxWeight > 300) {
-                        break;
+                        if (maxWeight > 300) {
+                            break;
+                        }
                     }
                 }
             }
+        } else if ( mobilize == MobilizeType.Tags ) {
+            for (Element el : doc.getElementsByAttribute( "class" ) )
+                if ( el.hasText() ) {
+                    el.prependText("<< class=" + el.attr("class") + ": ");
+                    el.appendText(": class=" + el.attr("class") + ">>");
+                }
         }
+        if ( bestMatchElement == null )
+            bestMatchElement = doc;
+
         Collection<Element> metas = getMetas(doc);
         String ogImage = null;
         for (Element entry : metas) {
@@ -91,36 +108,36 @@ public class ArticleTextExtractor {
             }
         }
 
-        if (bestMatchElement != null) {
 
-            Elements title = bestMatchElement.getElementsByClass("title");
-            for (Element entry : title)
-                if ( entry.tagName().toLowerCase().equals( "h1" ) ) {
-                    title.first().remove();
-                    break;
+        Elements title = bestMatchElement.getElementsByClass("title");
+        for (Element entry : title)
+            if (entry.tagName().toLowerCase().equals("h1")) {
+                title.first().remove();
+                break;
+            }
+
+        String ret = bestMatchElement.toString();
+        if (ogImage != null && !ret.contains(ogImage)) {
+            ret = "<img src=\"" + ogImage + "\"><br>\n" + ret;
+        }
+
+
+        if ( mobilize == MobilizeType.Yes && PrefUtils.getBoolean(PrefUtils.LOAD_COMMENTS, false)) {
+            Element comments = doc.getElementById("comments");
+            if (comments != null) {
+                Elements li = comments.getElementsByTag("li");
+                for (Element entry : li) {
+                    entry.tagName("p");
                 }
-
-            String ret = bestMatchElement.toString();
-            if (ogImage != null && !ret.contains(ogImage)) {
-                ret = "<img src=\""+ogImage+"\"><br>\n"+ret;
+                Elements ul = comments.getElementsByTag("ul");
+                for (Element entry : ul) {
+                    entry.tagName("p");
+                }
+                ret += comments;
             }
+        }
 
-
-            if ( PrefUtils.getBoolean( PrefUtils.LOAD_COMMENTS, false ) ) {
-              Element comments = doc.getElementById("comments");
-              if ( comments != null ) {
-                  Elements li = comments.getElementsByTag( "li" );
-                  for (Element entry : li) {
-                      entry.tagName( "p" );
-                  }
-                  Elements ul = comments.getElementsByTag( "ul" );
-                  for (Element entry : ul) {
-                      entry.tagName( "p" );
-                  }
-                  ret += comments;
-              }
-            }
-
+        if ( mobilize == MobilizeType.No ) {
             ret = ret.replaceAll("<table(.)*?>", "<p>");
             ret = ret.replaceAll("</table>", "</p>");
 
@@ -132,50 +149,39 @@ public class ArticleTextExtractor {
 
             ret = ret.replaceAll("<th(.)*?>", "<p>");
             ret = ret.replaceAll("</th>", "</p>");
-
-            return ret;
         }
-
-
-        return null;
+        return ret;
     }
 
-    private static Element getBestElementFromFile(Document doc) {
+    private static Element getBestElementFromFile(Document doc, final String url) {
         Element result = null;
-        /*File file = new File( "/sdcard/feedex/fulltextroot.txt" );
-        //if ( file.exists() ) {
-            //BufferedReader in;
-            //try {
-                in = new BufferedReader(new FileReader(file.getAbsolutePath()));
-                try {*/
-                for( String line: PrefUtils.getString( PrefUtils.CONTENT_EXTRACT_RULES, R.string.full_text_root_default ).split( "\n" ) ) {   //while ( result == null ) {
-                        //String line = in.readLine();
-
-                            if ( ( line == null ) || line.isEmpty() )
-                                break;
-                            String[] list1 = line.split(":");
-                            String keyWord = list1[0];
-                            String[] list2 = list1[1].split("=");
-                            String elementType = list2[0].toLowerCase();
-                            String elementValue = list2[1];
-                            if ( doc.head().html().contains(keyWord) ) {
-                                if ( elementType.equals( "id" ) )
-                                    result = doc.getElementById( elementValue );
-                                else if ( elementType.equals( "class" ) ) {
-                                    Elements elements = doc.getElementsByClass( elementValue );
-                                    if ( !elements.isEmpty() )
-                                        result = elements.first();
-                                }
-                            }
-
+        for( String line: PrefUtils.getString( PrefUtils.CONTENT_EXTRACT_RULES, R.string.full_text_root_default ).split( "\\n|\\s" ) ) {   //while ( result == null ) {
+            if ( ( line == null ) || line.isEmpty() )
+                continue;
+            try {
+                String[] list1 = line.split(":");
+                String keyWord = list1[0];
+                String[] list2 = list1[1].split("=");
+                String elementType = list2[0].toLowerCase();
+                String elementValue = list2[1];
+                //if (doc.head().html().contains(keyWord)) {
+                if (url.contains(keyWord)) {
+                    if (elementType.equals("id"))
+                        result = doc.getElementById(elementValue);
+                    else if (elementType.equals("class")) {
+                        Elements elements = doc.getElementsByClass(elementValue);
+                        if (!elements.isEmpty())
+                            result = elements.first();
+                        else
+                            result = doc;
                     }
-                /*} finally {
-                    in.close();
+                    break;
                 }
-            } catch (Exception e) {
-                Log.w("Feedex", e.getLocalizedMessage());
+            } catch ( Exception e ) {
+                Dog.e( e.getMessage() );
             }
-        }*/
+
+        }
         return result;
     }
 
@@ -295,9 +301,10 @@ public class ArticleTextExtractor {
      * @param doc document to prepare. Passed as reference, and changed inside
      *            of function
      */
-    private static void prepareDocument(Document doc) {
+    private static void prepareDocument(Document doc, MobilizeType mobilize) {
         // stripUnlikelyCandidates(doc);
-        removeSelectsAndOptions(doc);
+        if ( mobilize == MobilizeType.Yes )
+            removeSelectsAndOptions(doc);
         removeScriptsAndStyles(doc);
     }
 
@@ -324,10 +331,16 @@ public class ArticleTextExtractor {
             item.remove();
         }
 
+        if (FetcherService.isCancelRefresh())
+            return doc;
+
         Elements noscripts = doc.getElementsByTag("noscript");
         for (Element item : noscripts) {
             item.remove();
         }
+
+        if (FetcherService.isCancelRefresh())
+            return doc;
 
         Elements styles = doc.getElementsByTag("style");
         for (Element style : styles) {
@@ -342,6 +355,9 @@ public class ArticleTextExtractor {
         for (Element item : scripts) {
             item.remove();
         }
+
+        if (FetcherService.isCancelRefresh())
+            return doc;
 
         Elements noscripts = doc.getElementsByTag("option");
         for (Element item : noscripts) {

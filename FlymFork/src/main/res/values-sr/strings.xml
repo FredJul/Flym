@@ -23,7 +23,7 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">О Флиму</string>
+    <string name="about_flym">О Флиму / Help / Contact developer</string>
     <string name="welcome_title">Добро дошли у Флим. Желите ли да додате довод?</string>
     <string name="never">никад</string>
     <string name="update">Ажурирано</string>
@@ -69,7 +69,7 @@
     <string name="filter_delete_title">Брисање правила</string>
     <string name="filter_edit_title">Уређивање правила</string>
     <string name="filter_is_regex">је регуларни израз</string>
-    <string name="filter_apply_to_title">Примени на наслов</string>
+    <string name="filter_apply_to_title">Примени на наслов (or link adress)</string>
     <string name="filter_apply_to_content">Примени на садржај</string>
     <string name="accept">ПРИХВАТИ</string>
     <string name="reject">ОДБИЈ</string>
@@ -194,14 +194,8 @@
         <item>3 месеца</item>
         <item>Заувек</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Стандардна</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">Стандардна</string>
+
     <string-array name="settings_preload_image_modes">
         <item>Никад</item>
         <item>Само преко бежичног</item>

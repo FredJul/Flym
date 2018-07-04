@@ -53,7 +53,6 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -73,6 +72,7 @@ import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.activity.EntryActivity;
 import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.FileUtils;
 import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
@@ -81,13 +81,15 @@ public class EntryView extends WebView implements Observer {
 
     private static final String TEXT_HTML = "text/html";
     private static final String HTML_IMG_REGEX = "(?i)<[/]?[ ]?img(.|\n)*?>";
-    private static final String BACKGROUND_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#f6f6f6" : "#181b1f";
-    private static final String QUOTE_BACKGROUND_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#e6e6e6" : "#383b3f";
-    private static final String QUOTE_LEFT_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#a6a6a6" : "#686b6f";
+    private static final String BACKGROUND_COLOR = PrefUtils.IsLightTheme() ? "#f6f6f6" : "#181b1f";
+    private static final String QUOTE_BACKGROUND_COLOR = PrefUtils.IsLightTheme() ? "#e6e6e6" : "#383b3f";
+    private static final String QUOTE_LEFT_COLOR = PrefUtils.IsLightTheme() ? "#a6a6a6" : "#686b6f";
+
+
     private long mEntryId = -1;
 
     //private static final String TEXT_COLOR_BRIGHTNESS = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#000000" : "#C0C0C0";
-    private static String GetTextColor() {return PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#000000" : getTextColorDarkTheme();}
+    private static String GetTextColor() {return PrefUtils.IsLightTheme() ? "#000000" : getTextColorDarkTheme();}
 
     private static String getTextColorDarkTheme() {
 
@@ -100,18 +102,19 @@ public class EntryView extends WebView implements Observer {
         return "#" + Integer.toHexString( Color.argb( 255, b, b, b ) ).substring( 2 );
     }
 
-    private static final String BUTTON_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#52A7DF" : "#1A5A81";
-    private static final String SUBTITLE_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#666666" : "#8c8c8c";
-    private static final String SUBTITLE_BORDER_COLOR = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "solid #ddd" : "solid #303030";
-    private static String GetCSS() { return "<head><style type='text/css'> "
-            + "body {max-width: 100%; margin: 0.1cm; text-align:justify; font-weight: " + getFontBold() + " color: " + GetTextColor() + "; background-color:" + BACKGROUND_COLOR + "; line-height: 120%} "
+    private static final String BUTTON_COLOR = PrefUtils.IsLightTheme() ? "#52A7DF" : "#1A5A81";
+    private static final String SUBTITLE_COLOR = PrefUtils.IsLightTheme() ? "#666666" : "#8c8c8c";
+    private static final String SUBTITLE_BORDER_COLOR = PrefUtils.IsLightTheme() ? "solid #ddd" : "solid #303030";
+    public static String GetCSS() { return "<head><style type='text/css'> "
+            + "body {max-width: 100%; margin: " + getMargins() + "; text-align:" + getAlign() + "; font-weight: " + getFontBold() + " color: " + GetTextColor() + "; background-color:" + BACKGROUND_COLOR + "; line-height: 120%} "
             + "* {max-width: 100%; word-break: break-word}"
             + "h1, h2 {font-weight: normal; line-height: 130%} "
             + "h1 {font-size: 170%; text-align:center; margin-bottom: 0.1em} "
             + "h2 {font-size: 140%} "
             + "a {color: #0099CC}"
             + "h1 a {color: inherit; text-decoration: none}"
-            + "img {height: auto} "
+            + "img {display: inline;max-width: 100%;height: auto} "
+            + "iframe {allowfullscreen;position:relative;top:0;left:0;width:100%;height:100%;}"
             + "pre {white-space: pre-wrap;} "
             + "blockquote {border-left: thick solid " + QUOTE_LEFT_COLOR + "; background-color:" + QUOTE_BACKGROUND_COLOR + "; margin: 0.5em 0 0.5em 0em; padding: 0.5em} "
             + "p {margin: 0.8em 0 0.8em 0} "
@@ -120,7 +123,7 @@ public class EntryView extends WebView implements Observer {
             + "ul li, ol li {margin: 0 0 0.8em 0; padding: 0} "
             + "div.button-section {padding: 0.4cm 0; margin: 0; text-align: center} "
             + ".button-section p {margin: 0.1cm 0 0.2cm 0}"
-            + ".button-section p.marginfix {margin: 0.5cm 0 0.5cm 0}"
+            + ".button-section p.marginfix {margin: 0.2cm 0 0.2cm 0}"
             + ".button-section input, .button-section a {font-family: sans-serif-light; font-size: 100%; color: #FFFFFF; background-color: " + BUTTON_COLOR + "; text-decoration: none; border: none; border-radius:0.2cm; padding: 0.3cm} "
             + "</style><meta name='viewport' content='width=device-width'/></head>"; }
 
@@ -129,6 +132,20 @@ public class EntryView extends WebView implements Observer {
             return "bold;";
         else
             return "normal;";
+    }
+
+    private static String getMargins() {
+        if ( PrefUtils.getBoolean( PrefUtils.ENTRY_MAGRINS, true ) )
+            return "4%";
+        else
+            return "0.1cm";
+    }
+
+    private static String getAlign() {
+        if ( PrefUtils.getBoolean( PrefUtils.ENTRY_TEXT_ALIGN_JUSTIFY, false ) )
+            return "justify";
+        else
+            return "left";
     }
 
     private static final String BODY_START = "<body>";
@@ -154,8 +171,8 @@ public class EntryView extends WebView implements Observer {
     public static final ImageDownloadObservable mImageDownloadObservable = new ImageDownloadObservable();
     private EntryViewManager mEntryViewMgr;
     public static Handler mHandler = null;
-    String mData = "";
-    public int mScrollY = 0;
+    public String mData = "";
+    public float mScrollPartY = 0;
 
     private EntryActivity mActivity;
 
@@ -191,6 +208,8 @@ public class EntryView extends WebView implements Observer {
         mActivity = activity;
         mEntryId = entryId;
         //getSettings().setBlockNetworkLoads(true);
+        getSettings().setUseWideViewPort( true );
+        getSettings().setSupportZoom( false );
         getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
             contentText = HtmlUtils.replaceImageURLs(contentText, entryId);
@@ -213,8 +232,6 @@ public class EntryView extends WebView implements Observer {
         // }
         // do not put 'null' to the base url...
         mData = generateHtmlContent(title, link, contentText, enclosure, author, timestamp, preferFullText);
-        if ( getScrollY() != 0 )
-            mScrollY = getScrollY();
         loadDataWithBaseURL("", mData, TEXT_HTML, Constants.UTF8, null);
     }
 
@@ -248,9 +265,9 @@ public class EntryView extends WebView implements Observer {
                     .append("injectedJSObject.onClickEnclosure();").append(BUTTON_END);
         }
 
-        if (link.length() > 0) {
+        /*if (link.length() > 0) {
             content.append(LINK_BUTTON_START).append(link).append(LINK_BUTTON_MIDDLE).append(context.getString(R.string.see_link)).append(LINK_BUTTON_END);
-        }
+        }*/
 
         content.append(BUTTON_SECTION_END).append(BODY_END);
 
@@ -264,13 +281,13 @@ public class EntryView extends WebView implements Observer {
         mImageDownloadObservable.addObserver(this);
         // For scrolling
         setHorizontalScrollBarEnabled(false);
-        getSettings().setUseWideViewPort(false);
+        getSettings().setUseWideViewPort(true);
 
         // For color
         setBackgroundColor(Color.parseColor(BACKGROUND_COLOR));
 
         // Text zoom level from preferences
-        int fontSize = Integer.parseInt(PrefUtils.getString(PrefUtils.FONT_SIZE, "0"));
+        int fontSize = PrefUtils.getFontSize();
         if (fontSize != 0) {
             getSettings().setTextZoom(100 + (fontSize * 20));
         }
@@ -333,7 +350,6 @@ public class EntryView extends WebView implements Observer {
             }
         });
 
-
         setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -346,6 +362,8 @@ public class EntryView extends WebView implements Observer {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setDataAndType(Uri.fromFile(extTmpFile), "image/jpeg");
                         context.startActivity(intent);
+                    } else if ( url.contains( "#" ) ) {
+                        return false;
                     } else {
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         context.startActivity(intent);
@@ -358,18 +376,15 @@ public class EntryView extends WebView implements Observer {
                 return true;
             }
 
+
             @Override
             public void onPageFinished(WebView view, String url) {
-                Log.v("main", "EntryView.this.scrollTo " + mScrollY);
-                if (mScrollY != 0) {
-                    //EntryView.this.scrollTo(0, mScrollY);
+                Dog.v("main", "EntryView.this.scrollTo " + mScrollPartY);
+                if (mScrollPartY != 0 /*&& getContentHeight() != getScrollY()*/ ) {
                     view.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            //float webviewsize = mWebView.getContentHeight() - mWebView.getTop();
-                            //float positionInWV = webviewsize * mProgressToRestore;
-                            //int positionY = Math.round(mWebView.getTop() + positionInWV);
-                            EntryView.this.scrollTo(0, mScrollY);
+                            EntryView.this.scrollTo(0, GetScrollY() );
                         }
                         // Delay the scrollTo to make it work
                     }, 150);
@@ -380,15 +395,21 @@ public class EntryView extends WebView implements Observer {
 
     }
 
+
+    /*@Override
+    public void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
+        super.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
+        if ( scrollY > 50 && clampedY ) {
+            mActivity.setFullScreen(false, EntryActivity.GetIsActionBarHidden());
+        }
+
+    }*/
+
     @Override
     protected void onScrollChanged (int l, int t, int oldl, int oldt) {
-        FetcherService.getObservable().HideByScroll();
-        int height = (int) Math.floor(getContentHeight() * getScale());
+        FetcherService.Status().HideByScroll();
+        int height = (int) Math.floor(GetContentHeight());
         int webViewHeight = getMeasuredHeight();
-        if(getScrollY() + webViewHeight >= height){
-            //EntryActivity activity = (EntryActivity) getActivity();
-            mActivity.setFullScreen(false, mActivity.GetIsActionBarHidden());
-        }
         mActivity.mEntryFragment.UpdateProgress();
         mActivity.mEntryFragment.UpdateClock();
     }
@@ -397,8 +418,9 @@ public class EntryView extends WebView implements Observer {
     @Override
     public void update(Observable observable, Object data) {
         if ( ( data != null ) && ( (Long)data == mEntryId ) )  {
-            if (getScrollY() != 0)
-                mScrollY = getScrollY();
+            if ( GetViewScrollPartY() < mScrollPartY )
+                mScrollPartY = GetViewScrollPartY();
+            mData = HtmlUtils.replaceImageURLs(mData, mEntryId);
             loadDataWithBaseURL("", mData, TEXT_HTML, Constants.UTF8, null);
         //setScrollY( y );
         }
@@ -484,6 +506,19 @@ public class EntryView extends WebView implements Observer {
         public boolean hasChanged () {
             return true;
         }
+    }
+
+
+    public int GetScrollY() {
+        return GetContentHeight() * mScrollPartY != 0 ? ( int )( GetContentHeight() * mScrollPartY ) : 0;
+    }
+
+    public float GetContentHeight() {
+        return getContentHeight() * getScale();
+    }
+
+    public float GetViewScrollPartY() {
+        return getContentHeight() != 0 ? getScrollY() / GetContentHeight() : 0 ;
     }
 
 

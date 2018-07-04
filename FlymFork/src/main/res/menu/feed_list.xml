@@ -23,4 +23,7 @@
         android:id="@+id/menu_export"
         android:icon="@drawable/action_export"
         android:title="@string/menu_export"/>
+    <item
+        android:id="@+id/menu_fix_order"
+        android:title="@string/menu_fix_order"/>
 </menu>

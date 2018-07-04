@@ -63,6 +63,8 @@ public class GeneralPrefsActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
     }
 
     @Override
@@ -74,4 +76,13 @@ public class GeneralPrefsActivity extends BaseActivity {
         }
         return true;
     }
+
+    public void onBackPressed() {
+        synchronized (HomeActivity.mFeedSetupChanged ) {
+            HomeActivity.mFeedSetupChanged = true;
+        }
+        super.onBackPressed();
+
+    }
+
 }

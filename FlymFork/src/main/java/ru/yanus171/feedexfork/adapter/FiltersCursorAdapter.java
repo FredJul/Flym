@@ -35,6 +35,7 @@ public class FiltersCursorAdapter extends ResourceCursorAdapter {
     private int mIsAcceptRulePosition;
 
     private int mSelectedFilter = -1;
+    private int mIsMarkAsStarredPosition = -1;
 
     public FiltersCursorAdapter(Context context, Cursor cursor) {
         super(context, R.layout.item_rule_list, cursor, 0);
@@ -55,9 +56,17 @@ public class FiltersCursorAdapter extends ResourceCursorAdapter {
         }
 
         boolean isAcceptRule = cursor.getInt(mIsAcceptRulePosition) == 1;
-        isAcceptRuleTextView.setText(isAcceptRule ? R.string.accept : R.string.reject);
-        isAcceptRuleTextView.setTextColor(isAcceptRule ? context.getResources().getColor(android.R.color.holo_green_dark) :
-                context.getResources().getColor(android.R.color.holo_red_dark));
+        boolean isMarkAsStarred = cursor.getInt(mIsMarkAsStarredPosition) == 1;
+        if (isMarkAsStarred) {
+            isAcceptRuleTextView.setText(R.string.markAsStarred);
+            isAcceptRuleTextView.setTextColor( context.getResources().getColor(android.R.color.holo_blue_dark) );
+        } else if (isAcceptRule) {
+            isAcceptRuleTextView.setText(R.string.accept);
+            isAcceptRuleTextView.setTextColor( context.getResources().getColor(android.R.color.holo_green_dark) );
+        } else {
+            isAcceptRuleTextView.setText(R.string.reject);
+            isAcceptRuleTextView.setTextColor( context.getResources().getColor(android.R.color.holo_red_dark) );
+        }
         filterTextTextView.setText(cursor.getString(mFilterTextColumnPosition));
         isAppliedToTitleTextView.setText(cursor.getInt(mIsAppliedToTitleColumnPosition) == 1 ? R.string.filter_apply_to_title : R.string.filter_apply_to_content);
     }
@@ -91,6 +100,7 @@ public class FiltersCursorAdapter extends ResourceCursorAdapter {
             mFilterTextColumnPosition = cursor.getColumnIndex(FilterColumns.FILTER_TEXT);
             mIsAppliedToTitleColumnPosition = cursor.getColumnIndex(FilterColumns.IS_APPLIED_TO_TITLE);
             mIsAcceptRulePosition = cursor.getColumnIndex(FilterColumns.IS_ACCEPT_RULE);
+            mIsMarkAsStarredPosition = cursor.getColumnIndex(FilterColumns.IS_MARK_STARRED);
         }
     }
 

@@ -46,11 +46,30 @@
         android:icon="@drawable/refresh"
         android:title="@string/menu_reload_full_text"/>
     <item
+        android:id="@+id/menu_reload_full_text_without_mobilizer"
+        android:icon="@drawable/refresh"
+        android:title="@string/menu_reload_full_text_without_mobilizer"/>
+    <item
+        android:id="@+id/menu_reload_full_text_with_tags"
+        android:icon="@drawable/refresh"
+        android:title="@string/reload_full_text_with_tags"/>
+    <item
         android:id="@+id/menu_load_all_images"
         android:title="@string/menu_load_all_images"/>
     <item
+        android:id="@+id/menu_share_all_text"
+        android:title="@string/share_all_text"/>
+    <item
+        android:id="@+id/menu_open_link"
+        android:title="@string/open_link"/>
+    <item
         android:id="@+id/menu_cancel_refresh"
-        android:icon="@drawable/ic_action_cancel"
+        android:icon="@drawable/ic_action_cancel_gray"
         android:visible="true"
         android:title="@string/menu_cancel_refresh"/>
+    <item
+        android:id="@+id/menu_lock_land_orientation"
+        android:title="@string/lock_orientation"
+        android:checkable="true"/>
 </menu>
+

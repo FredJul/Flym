@@ -34,6 +34,7 @@ public class PrefUtils {
 
     public static final String REFRESH_INTERVAL = "refresh.interval";
     public static final String REFRESH_ENABLED = "refresh.enabled";
+    public static final String REFRESH_ONLY_SELECTED = "refresh.only_selected";
     public static final String REFRESH_ON_OPEN_ENABLED = "refreshonopen.enabled";
     public static final String REFRESH_WIFI_ONLY = "refreshwifionly.enabled";
 
@@ -51,20 +52,36 @@ public class PrefUtils {
     public static final String ENTRY_FONT_BOLD = "entry_font_bold";
     public static final String TEXT_COLOR_BRIGHTNESS = "text_color_brightness";
     public static final String MAX_IMAGE_DOWNLOAD_COUNT = "max_image_download_count";
+    public static final String MAX_IMAGE_DOWNLOAD_SIZE = "settings_max_image_download_size_kb";
+    public static final String ENTRY_MAGRINS = "entry_margins";
+    public static final String ENTRY_TEXT_ALIGN_JUSTIFY = "entry_text_align_justify";
+
     public static final String CONTENT_EXTRACT_RULES = "content_extract_rules";
     public static final String LOAD_COMMENTS = "load_comments";
     public static final String REMEBER_LAST_ENTRY = "remember_last_entry";
+    public static final String TAP_ZONES_VISIBLE = "settings_tap_zones_visible";
+    public static final String SHOW_PROGRESS_INFO = "settings_show_progress_info";
+
 
     public static final String LAST_ENTRY_URI = "last_entry_uri";
     public static final String LAST_ENTRY_SCROLL_Y = "last_entry_scroll_y";
     public static final String LAST_ENTRY_ID = "last_entry_id";
 
 
+    public static final String VOLUME_BUTTONS_ACTION_DEFAULT = "Default";
+    public static final String VOLUME_BUTTONS_ACTION_SWITCH_ENTRY = "SwithEntry";
+    public static final String VOLUME_BUTTONS_ACTION_PAGE_UP_DOWN = "PageUpDown";
 
 
     public static final String KEEP_TIME = "keeptime";
 
-    public static final String FONT_SIZE = "fontsize";
+
+    public static int getFontSize() {
+        return Integer.parseInt(PrefUtils.getString("fontsize", "0"));
+    }
+    public static int getFontSizeEntryList() {
+        return Integer.parseInt(PrefUtils.getString("fontsize_entrylist", "0"));
+    }
 
     public static int getImageDownloadCount() {
         try {
@@ -74,6 +91,13 @@ public class PrefUtils {
         }
     }
 
+    public static int getImageMaxDownloadSizeInKb() {
+        try {
+            return Integer.parseInt(PrefUtils.getString(PrefUtils.MAX_IMAGE_DOWNLOAD_SIZE, "2048"));
+        } catch ( NumberFormatException e ) {
+            return 2048;
+        }
+    }
 
     public static boolean getBoolean(String key, boolean defValue) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());
@@ -143,4 +167,9 @@ public class PrefUtils {
         } catch (Exception ignored) { // Seems to be possible to have a NPE here... Why??
         }
     }
+
+    public static boolean IsLightTheme() {
+        return getBoolean(LIGHT_THEME, false);
+    }
+
 }

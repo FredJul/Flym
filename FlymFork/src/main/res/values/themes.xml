@@ -8,6 +8,7 @@
         <item name="colorPrimaryDark">@color/light_theme_color_primary_dark</item>
         <item name="colorAccent">@color/light_theme_color_primary</item>
         <item name="colorReadState">@color/light_read_state</item>
+        <item name="colorPrefBackground">#CCCCCC</item>
     </style>
 
     <style name="Theme.Dark" parent="Theme.AppCompat.NoActionBar">
@@ -17,6 +18,7 @@
         <item name="colorPrimaryDark">@color/dark_theme_color_primary_dark</item>
         <item name="colorAccent">@color/light_theme_color_primary</item>
         <item name="colorReadState">@color/dark_read_state</item>
+        <item name="colorPrefBackground">#555555</item>
     </style>
 
     <style name="TapZone" >
@@ -27,5 +29,10 @@
         <item name="android:layout_height">40dp</item>
         <item name="android:background">@drawable/round_background</item>
         <item name="android:visibility">visible</item>
+    </style>
+
+    <style name="PrefCat" >
+        <item name="android:background">#FFAAAAAA</item>
+
     </style>
 </resources>

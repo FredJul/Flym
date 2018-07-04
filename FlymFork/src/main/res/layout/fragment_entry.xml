@@ -48,14 +48,16 @@
         <TextView
             android:id="@+id/toggleFullScreenStatusBarBtn"
             style="@style/TapZone"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_centerInParent="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
             android:layout_marginBottom="5dp"
             android:layout_marginRight="5dp"
+            android:textSize="10dp"
             android:text="@string/fullScreenToggle"/>
 
-        <ImageView
+        <TextView
             android:id="@+id/toggleFullscreenBtn"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -64,7 +66,8 @@
             android:layout_marginBottom="5dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/round_background"
-            android:visibility="visible"/>
+            android:textSize="10dp"
+            android:text="@string/actionBarToggle"/>
 
         <LinearLayout
             android:layout_width="match_parent"

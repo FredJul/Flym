@@ -5,6 +5,9 @@
     <color name="dark_theme_color_primary">#175073</color>
     <color name="dark_theme_color_primary_dark">#ff10364e</color>
     <color name="dark_background">#FF202020</color>
+    <color name="dark_background_ligth">#FF303030</color>
+    <color name="light_background">#FFEEEEEE</color>
+    <color name="light_background_light">#FFFFFFFF</color>
     <color name="dark_header">#163b53</color>
     <color name="light_theme_color_unread">#000000</color>
     <color name="light_theme_color_read">#9e9e9e</color>

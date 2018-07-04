@@ -22,7 +22,7 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">О приложении / Помощь</string>
+    <string name="about_flym">О приложении / Помощь / Связь с разработчиком </string>
     <string name="welcome_title">Добавить канал?</string>
     <string name="never">никогда</string>
     <string name="update">Обновление</string>
@@ -63,19 +63,19 @@
     </string>
     <string name="feed_url">URL-адрес</string>
     <string name="optional">(не обязательно)</string>
-    <string name="website_or_feed">(сайта или ленты новостей)</string>
+    <string name="website_or_feed">(ленты новостей или ключевое слово)</string>
     <string name="tab_feed_title">Ленту</string>
     <string name="tab_filters_title">Фильтры</string>
     <string name="feed_title">НАЗВАНИЕ</string>
-    <string name="feed_filters">ФИЛЬТРЫ ИСКЛЮЧЕНИЙ</string>
+    <string name="feed_filters">Правила фильтров</string>
     <string name="filter_add_title">Добавить фильтр</string>
     <string name="filter_delete_title">Удалить фильтр</string>
     <string name="filter_edit_title">Редактировать фильтр</string>
     <string name="filter_is_regex">это регулярное выражение</string>
-    <string name="filter_apply_to_title">Применить к заголовкам</string>
+    <string name="filter_apply_to_title">Применить к заголовкам или адресам</string>
     <string name="filter_apply_to_content">Применить к содержанию</string>
-    <string name="accept">ACCEPT</string>
-    <string name="reject">REJECT</string>
+    <string name="accept">Загружать только</string>
+    <string name="reject">Не загружать</string>
     <string name="feed_search">Поиск лент</string>
     <string name="select_file">Выбрать файл (корень SD-карты)</string>
     <string name="question_delete_feed">Вы действительно хотите удалить эту ленту?</string>
@@ -94,7 +94,7 @@
     <string name="to_group_into">Внутрь группы</string>
     <string name="add_custom_feed">Добавить ленту по адресу или по названию</string>
     <string name="google_news_title">Google News topics</string>
-    <string name="google_news_indicator">Выберите один или несколько категорий.</string>
+    <string name="google_news_indicator">Выберите одну или несколько категорий.</string>
     <string name="google_news_top_stories">Top Stories</string>
     <string name="google_news_world">Мир</string>
     <string name="google_news_business">Бизнес</string>
@@ -106,7 +106,7 @@
     <string name="google_news_custom_topic">Своя тема</string>
 
     <!-- ENTRIES -->
-    <string name="unread_entries">Непрочитаное</string>
+    <string name="unread_entries">Непрочитанное</string>
     <string name="all_entries">Все</string>
     <string name="no_entries">Нет новостей</string>
     <string name="favorites">Избранное</string>
@@ -125,6 +125,7 @@
     <string name="menu_mark_as_unfavorite">Убрать из избранного</string>
     <string name="menu_mark_as_unread">Отметить как непрочитанное</string>
     <string name="menu_reload_full_text">Перезагрузить весь текст</string>
+    <string name="menu_reload_full_text_without_mobilizer">Перезагрузить без мобилайзера</string>
     <string name="menu_toogle_unread_all">Прочитанные|Все</string>
     <string name="share_favorites_title">Избранные новости</string>
     <string name="copied_clipboard">Ссылка скопирована</string>
@@ -138,7 +139,7 @@
     <string name="file">File</string>
     <string name="download_and_save">Загрузить и сохранить</string>
     <string name="open_link">Открыть ссылку</string>
-    <string name="tip_sentence">Подсказка: свайп влево помечает статью как прочитанную</string>
+    <string name="tip_sentence">Подсказка: свайп влево помечает статью как прочитанную, свайп вправо - как избранную</string>
     <string name="undo">Отменить</string>
     <string name="marked_as_read">Отмечено как прочитанное</string>
 
@@ -163,8 +164,8 @@
     <string name="settings_notifications_vibrate">Вибрация</string>
     <string name="settings_notifications_vibrate_description">Включить вибрацию при новых записях
     </string>
-    <string name="settings_notifications_light">Light</string>
-    <string name="settings_notifications_light_description">Enable notification light on new entries</string>
+    <string name="settings_notifications_light">Светодиод</string>
+    <string name="settings_notifications_light_description">Мигание светодиода при появлении новых статей</string>
     <string name="settings_category_content_presentation">Представление содержания</string>
     <string name="settings_light_theme">Светлая тема</string>
     <string name="settings_light_theme_description">Использовать светлую тему</string>
@@ -178,12 +179,10 @@
     <string name="settings_display_entries_fullscreen">Статьи на полный экран</string>
     <string name="settings_display_entries_fullscreen_description">Открывать текст статьи на полный экран</string>
     <string name="settings_refresh_on_open">Обновлять при запуске</string>
-    <string name="settings_refresh_on_open_description">Обновлять все ленты пии запуске приложения
+    <string name="settings_refresh_on_open_description">Обновлять все ленты при запуске приложения
     </string>
-    <string name="settings_refresh_wifi_only">Обновлять толькоа по WiFi</string>
-    <string name="settings_refresh_wifi_only_description">Автоматическое обновление будет
-        выполняться только при включенном WiFi
-    </string>
+    <string name="settings_refresh_wifi_only">Обновлять только по WiFi</string>
+    <string name="settings_refresh_wifi_only_description">Автоматическое обновление будет выполняться только при включенном WiFi</string>
     <string name="settings_visible_feeds">Видимые ленты</string>
     <string name="settings_widget_background">Фон</string>
     <string name="settings_widget_background_description">Цвета и прозрачность фона виджета</string>
@@ -210,11 +209,12 @@
     <string name="settings_load_comments_description">в полных текстах статей</string>
     <string name="settings_tap_zones_description">на экране чтения статьи</string>
     <string name="settings_tap_zones_dialogtitle">Для информации, изменение невозможно</string>
-    <string name="settings_max_image_download_count">Max число картинок при загрузке</string>
+    <string name="settings_max_image_download_count">Макс. число картинок при загрузке</string>
     <string name="settings_max_image_download_count_description">на одну статью</string>
     <string name="downloadNext">"Загрузить следующие "</string>
     <string name="loadingLink">Загрузка ссылки</string>
     <string name="loadLink">Читать</string>
+    <string name="loadLinkLater">Читать позже</string>
     <string name="addFeed">Добавить канал</string>
     <string name="externalLinks">Внешние ссылки</string>
     <string name="markAllAsRead">Отметить все как прочитанные</string>
@@ -248,20 +248,19 @@
         <item>3 месяца</item>
         <item>Не удалять</item>
     </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Стандартно</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-    </string-array>
+    <string name="standard">Стандартно</string>
+
     <string-array name="settings_preload_image_modes">
-        <item>Never</item>
-        <item>Only over Wi-Fi</item>
-        <item>Always</item>
+        <item>Никогда</item>
+        <item>Только по Wi-Fi</item>
+        <item>Всегда</item>
     </string-array>
 
+    <string-array name="settings_volume_buttons_action">
+        <item>По умолчанию</item>
+        <item>След./Предыдущ. статья</item>
+        <item>След./Предыдущ. страница</item>
+    </string-array>
 
     <string name="about_us_content" translatable="true"><![CDATA[
 
@@ -277,7 +276,7 @@
     <br/>
     <b>Основные функции:</b> <br/>
     - загрузка RSS лент статей  <br/>
-    - поиск им добавление ленты по ключевому слову <br/>
+    - поиск и добавление ленты по ключевому слову <br/>
     - загрузка оффлайн полнотекстовых версий статей с изображениями <br/>
     - импорт/экспорт списка каналов из OPML <br/>
     - фильтр статей по ключевым словам или регулярным выражениям <br/>
@@ -347,5 +346,59 @@
     <string name="pageUp">Страница вверх</string>
     <string name="pageDown">Страница вниз</string>
     <string name="fullScreenToggle">Пркл. полный экран</string>
+    <string name="auto_refresh_feed">Обновлять автоматически</string>
+    <string name="settings_refresh_only_selected">Только выбранные</string>
+    <string name="settings_refresh_only_selected_summary">автоматическое обновление только выбранных лент</string>
+    <string name="actionBarToggle">Пркл. панель действий</string>
+    <string name="settings_show_tap_zones">Зоны нажатий видимы</string>
+    <string name="settings_show_tap_zone_description">полупрозрачные квадратики в окне чтения статьи</string>
+    <string name="settings_max_image_download_size_kb">Макс. размер изображения</string>
+    <string name="settings_max_image_download_size_kb_summary">(в kb). Не загружать автоматически изображения, имеющие больший размер</string>
+    <string name="fontsize_entrylist">Размер текста в списке статей</string>
+    <string name="settings_volume_buttons_action">Действие кнопок громкости</string>
+    <string name="behaviour">Поведение</string>
+    <string name="question_delete_entry">Удалить статью?</string>
+    <string name="share_all_text">Поделиться текстом</string>
+    <string name="group">Группа</string>
+    <string name="auto_image_load">Загружать изображения при автоматической загрузке</string>
+    <string name="show_progress_info">Подробная информация процесса</string>
+    <string name="show_progress_info_descr">Показывать подробную информацию о текущих действиях в процессе загрузки лент</string>
+    <string name="filter_apply_to_url">Применить к адресу</string>
+    <string name="show_article_url">Показывать адрес статьи</string>
+    <string name="show_article_url_descr">в списке статей</string>
+    <string name="show_article_icon">Показывать иконки статей</string>
+    <string name="show_article_icon_descr">отключите для экономии места на экране</string>
+    <string name="menu_fix_order">Починить порядок статей</string>
+    <string name="settings_category_article_list">Список статей</string>
+    <string name="settings_category_article_text">Текст статьи</string>
+    <string name="vibrate_on_article_list_entry_swype">Вибрация при свайпе</string>
+    <string name="vibrate_on_article_list_entry_swype_summary">элемента списка статей</string>
+    <string name="show_mark_all_as_read_button">Кнопка пометить все как прочитанное</string>
+    <string name="show_mark_all_as_read_button_summary">Показывать кнопку Пометить все статьи, как прочитанные. Иначе это действие доступно через меню </string>
+    <string name="entry_marked_unfavourite">Статья убрана из избранного</string>
+    <string name="entry_marked_favourite">Статья добавлена в избранное</string>
+    <string name="new_feed_was_added">Добавлена новая лента</string>
+    <string name="entry_marked_unread">Статья отмечена как непрочитанная</string>
+    <string name="lock_orientation">Горизонтальная ориентацию</string>
+    <string name="markAsStarred">Поместить в избранное</string>
+    <string name="markedAsStarred">Статья помечена избранной</string>
+    <string name="deleteAllEntries">Удалить все неотмеченные статьи?</string>
+    <string name="question">Вопрос</string>
+    <string name="settings_entry_margins">Отступы</string>
+    <string name="settings_entry_margins_description">по бокам</string>
+    <string name="entry_text_align_justify">Выравнивать по содержимому</string>
+    <string name="entry_text_align_justify_description">иначе по левому краю</string>
+    <string name="reload_full_text_with_tags">Перезагрузить с разметкой</string>
+    <string name="filter_hint">Все фильтры объединяются по ИЛИ. Загружать перевешивает Не загружать</string>
+    <string name="keyword">Ключевое слово</string>
+    <string name="loadTypeWeb">Web (загружать все ссылки)</string>
+    <string name="loadTypeRSS">Лента RSS или ключевое слово</string>
+    <string name="loadType">Тип загрузки:</string>
+    <string name="global_filter">Глобальный фильтр ...</string>
+    <string name="global_filter_descr">Фильтр, применяемый к каждой ленте. Для отключения оставьте текст фильтра (и регулярного выражения) пустым</string>
+    <string name="global_marks_as_star_filter_apply_to_title_descr">в противном случае применить к содержимому</string>
+    <string name="rule_text">Текст правила</string>
+    <string name="settings_min_update_battery_level">Min уровень батареи</string>
+    <string name="global_marks_as_star_filter_rule_descr">Каждое правило на своей строке</string>
 
 </resources>

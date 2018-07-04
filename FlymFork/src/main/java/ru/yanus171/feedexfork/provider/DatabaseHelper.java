@@ -50,18 +50,21 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.os.Handler;
 
+import java.io.File;
+
+import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.parser.OPML;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
 import ru.yanus171.feedexfork.provider.FeedData.TaskColumns;
-
-import java.io.File;
+import ru.yanus171.feedexfork.service.FetcherService;
 
 class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "FeedEx.db";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 15;
 
     private static final String ALTER_TABLE = "ALTER TABLE ";
     private static final String ADD = " ADD ";
@@ -158,6 +161,23 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
         if (oldVersion < 10)
             executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.IS_GROUP_EXPANDED + ' ' + FeedData.TYPE_BOOLEAN);
+
+        if (oldVersion < 11)
+            executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.IS_AUTO_REFRESH + ' ' + FeedData.TYPE_BOOLEAN);
+
+        if (oldVersion < 12) {
+            executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.IS_IMAGE_AUTO_LOAD + ' ' + FeedData.TYPE_BOOLEAN);
+            executeCatchedSQL(database, ALTER_TABLE + EntryColumns.TABLE_NAME + ADD + EntryColumns.SCROLL_POS + ' ' + FeedData.TYPE_INT);
+        }
+
+        if (oldVersion < 14)
+            executeCatchedSQL(database, ALTER_TABLE + FilterColumns.TABLE_NAME + ADD + FilterColumns.IS_MARK_STARRED + ' ' + FeedData.TYPE_BOOLEAN);
+
+        if (oldVersion < 15)
+            executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.OPTIONS + ' ' + FeedData.TYPE_TEXT);
+
+        //if (oldVersion < 16)
+        //    executeCatchedSQL(database, "DELETE FROM " + FeedColumns.TABLE_NAME + " WHERE " + FeedColumns.FETCH_MODE  + " = " + FetcherService.FETCHMODE_EXERNAL_LINK);
     }
 
     private void executeCatchedSQL(SQLiteDatabase database, String query) {

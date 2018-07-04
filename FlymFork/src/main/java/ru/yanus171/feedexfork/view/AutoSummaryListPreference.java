@@ -32,13 +32,17 @@ public class AutoSummaryListPreference extends android.preference.ListPreference
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
         if (positiveResult) {
-            setSummary(getEntry());
+            setSummary(GetSummary());
         }
+    }
+
+    private CharSequence GetSummary() {
+        return getEntry().toString().replace( "%", "%%" );
     }
 
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         super.onSetInitialValue(restoreValue, defaultValue);
-        setSummary(getEntry());
+        setSummary(GetSummary());
     }
 }

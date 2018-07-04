@@ -23,11 +23,20 @@
             android:checked="true"
             android:text="@string/reject"
             android:textColor="#CC0000"/>
+
+        <RadioButton
+            android:id="@+id/markAsStarredRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/markAsStarred"
+            android:textColor="@android:color/holo_blue_dark"/>
     </RadioGroup>
 
     <EditText
         android:id="@+id/filterText"
         android:layout_width="match_parent"
+        android:hint="@string/keyword"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp">
 
@@ -57,6 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/filter_apply_to_content"/>
+
     </RadioGroup>
 
 </LinearLayout>

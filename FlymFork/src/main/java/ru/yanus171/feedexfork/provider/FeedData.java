@@ -50,6 +50,7 @@ import android.provider.BaseColumns;
 import android.text.TextUtils;
 
 import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.service.FetcherService;
 
 public class FeedData {
     public static final String PACKAGE_NAME = "ru.yanus171.feedexfork";
@@ -107,6 +108,9 @@ public class FeedData {
         public static final String FETCH_MODE = "fetchmode";
         public static final String SHOW_TEXT_IN_ENTRY_LIST = "show_text_in_entry_list";
         public static final String IS_GROUP_EXPANDED = "is_group_expanded";
+        public static final String IS_AUTO_REFRESH = "is_auto_refresh";
+        public static final String IS_IMAGE_AUTO_LOAD = "is_image_auto_load";
+        public static final String OPTIONS = "options";
         public static final String[] PROJECTION_ID = new String[]{FeedColumns._ID};
         public static final String[] PROJECTION_GROUP_ID = new String[]{FeedColumns.GROUP_ID};
         public static final String[] PROJECTION_PRIORITY = new String[]{FeedColumns.PRIORITY};
@@ -121,7 +125,8 @@ public class FeedData {
 
         public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {URL, TYPE_TEXT_UNIQUE}, {NAME, TYPE_TEXT}, {IS_GROUP, TYPE_BOOLEAN},
                 {GROUP_ID, TYPE_EXTERNAL_ID}, {LAST_UPDATE, TYPE_DATE_TIME}, {REAL_LAST_UPDATE, TYPE_DATE_TIME}, {RETRIEVE_FULLTEXT, TYPE_BOOLEAN},
-                {ICON, "BLOB"}, {ERROR, TYPE_TEXT}, {PRIORITY, TYPE_INT}, {FETCH_MODE, TYPE_INT}, {SHOW_TEXT_IN_ENTRY_LIST, TYPE_BOOLEAN}, {IS_GROUP_EXPANDED, TYPE_BOOLEAN}};
+                {ICON, "BLOB"}, {ERROR, TYPE_TEXT}, {PRIORITY, TYPE_INT}, {FETCH_MODE, TYPE_INT}, {SHOW_TEXT_IN_ENTRY_LIST, TYPE_BOOLEAN},
+                {IS_GROUP_EXPANDED, TYPE_BOOLEAN}, {IS_AUTO_REFRESH, TYPE_BOOLEAN}, {IS_IMAGE_AUTO_LOAD, TYPE_BOOLEAN}, {OPTIONS, TYPE_TEXT}};
 
         public static Uri GROUPS_CONTENT_URI(String groupId) {
             return Uri.parse(CONTENT_AUTHORITY + "/groups/" + groupId);
@@ -145,6 +150,8 @@ public class FeedData {
         public static final Uri GROUPED_FEEDS_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/grouped_feeds");
 
         public static final Uri GROUPS_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/groups");
+
+        public static final Uri GROUPS_AND_ROOT_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/groups_and_root");
     }
 
     public static class FilterColumns implements BaseColumns {
@@ -155,6 +162,7 @@ public class FeedData {
         public static final String IS_REGEX = "isregex";
         public static final String IS_APPLIED_TO_TITLE = "isappliedtotitle";
         public static final String IS_ACCEPT_RULE = "isacceptrule";
+        public static final String IS_MARK_STARRED = "ismarkstarred";
 
         public static Uri FILTERS_FOR_FEED_CONTENT_URI(String feedId) {
             return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/filters");
@@ -165,7 +173,7 @@ public class FeedData {
         }
 
         public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {FEED_ID, TYPE_EXTERNAL_ID}, {FILTER_TEXT, TYPE_TEXT},
-                {IS_REGEX, TYPE_BOOLEAN}, {IS_APPLIED_TO_TITLE, TYPE_BOOLEAN}, {IS_ACCEPT_RULE, TYPE_BOOLEAN}};
+                {IS_REGEX, TYPE_BOOLEAN}, {IS_APPLIED_TO_TITLE, TYPE_BOOLEAN}, {IS_ACCEPT_RULE, TYPE_BOOLEAN}, {IS_MARK_STARRED, TYPE_BOOLEAN}};
 
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/filters");
     }
@@ -186,7 +194,24 @@ public class FeedData {
         public static final String GUID = "guid";
         public static final String AUTHOR = "author";
         public static final String IMAGE_URL = "image_url";
+        public static final String SCROLL_POS = "scroll_pos";
         public static final String[] PROJECTION_ID = new String[]{EntryColumns._ID};
+        public static final String[] PROJECTION_WITHOUT_TEXT =
+                new String[]{EntryColumns._ID,
+                             EntryColumns.AUTHOR,
+                             EntryColumns.DATE,
+                             EntryColumns.FEED_ID,
+                             EntryColumns.FETCH_DATE,
+                             EntryColumns.GUID,
+                             EntryColumns.IMAGE_URL,
+                             EntryColumns.IS_FAVORITE,
+                             EntryColumns.IS_READ,
+                             EntryColumns.LINK,
+                             EntryColumns.SCROLL_POS,
+                             EntryColumns.TITLE,
+                             EntryColumns.DATE,
+                             String.format( "substr( %s, 1, 5 ) AS %s", EntryColumns.MOBILIZED_HTML, EntryColumns.MOBILIZED_HTML ), 
+                             FeedColumns.NAME};
         public static final String WHERE_READ = EntryColumns.IS_READ + Constants.DB_IS_TRUE;
         public static final String WHERE_UNREAD = "(" + EntryColumns.IS_READ + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_READ + Constants.DB_IS_FALSE + ')';
         public static final String WHERE_NOT_FAVORITE = "(" + EntryColumns.IS_FAVORITE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_FAVORITE + Constants.DB_IS_FALSE + ')';
@@ -197,7 +222,7 @@ public class FeedData {
 
         public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {FEED_ID, TYPE_EXTERNAL_ID}, {TITLE, TYPE_TEXT},
                 {ABSTRACT, TYPE_TEXT}, {MOBILIZED_HTML, TYPE_TEXT}, {DATE, TYPE_DATE_TIME}, {FETCH_DATE, TYPE_DATE_TIME}, {IS_READ, TYPE_BOOLEAN}, {LINK, TYPE_TEXT},
-                {IS_FAVORITE, TYPE_BOOLEAN}, {ENCLOSURE, TYPE_TEXT}, {GUID, TYPE_TEXT}, {AUTHOR, TYPE_TEXT}, {IMAGE_URL, TYPE_TEXT}};
+                {IS_FAVORITE, TYPE_BOOLEAN}, {ENCLOSURE, TYPE_TEXT}, {GUID, TYPE_TEXT}, {AUTHOR, TYPE_TEXT}, {IMAGE_URL, TYPE_TEXT}, {SCROLL_POS, TYPE_INT}};
 
         public static Uri UNREAD_ENTRIES_FOR_FEED_CONTENT_URI(long feedId) {
             return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/unread_entries");
@@ -271,4 +296,9 @@ public class FeedData {
 
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/tasks");
     }
+
+    public static String getWhereNotExternal() {
+        return Constants.DB_AND + "(" + FeedColumns.FETCH_MODE + "<>" + FetcherService.FETCHMODE_EXERNAL_LINK + Constants.DB_OR + FeedColumns.FETCH_MODE + Constants.DB_IS_NULL + ")";
+    }
+
 }

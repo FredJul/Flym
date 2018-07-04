@@ -7,25 +7,25 @@ android {
         //incremental true
     }*/
 
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 26
+    //buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId 'ru.yanus171.feedexfork'
         //applicationId 'net.fred.feedex'
         minSdkVersion 14
-        targetSdkVersion 23
-        versionCode 69
-        versionName '0.5.5'
-        }
+        targetSdkVersion 26
+        versionCode 104
+        versionName '0.7.6'
+    }
     lintOptions {
         checkReleaseBuilds false
         // if true, stop the gradle build if errors are found
         abortOnError false
     }
-    compileOptions {
+    /*compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
-    }
+    }*/
 
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -36,8 +36,9 @@ android {
             def buildType = variant.buildType // e. g. debug
             def variantName = variant.name // e. g. freeDebug
 
-            def apkName = appId + '_' + /*variantName + '_' +*/ versionName + '_' + versionCode + '.apk';
-            output.outputFile = new File(output.outputFile.parentFile, apkName)
+            def apkName = appId + '_' + /*variantName + '_' +*/ versionName + '_' + versionCode + '.apk'
+            //output.outputFileName  = new File(output.outputFile.parentFile, apkName)
+            output.outputFileName  = new File(apkName)
         }
     }
 
@@ -59,6 +60,7 @@ android {
                 keyPassword KEY_PASSWORD
             }
         }
+		
     }
     buildTypes {
         release {
@@ -67,28 +69,34 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+        releaseDebugkey {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
     }
     productFlavors {
     }
 }
 
-repositories {
+/*repositories {
     maven {
         url 'http://dl.bintray.com/amulyakhare/maven'
     }
-}
+}*/
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     //wearApp project(':wear')
     //compile 'com.google.android.gms:play-services-wearable:+'
-    compile 'com.android.support:appcompat-v7:23.2.1'
+    implementation 'com.android.support:appcompat-v7:23.2.1'
     //compile 'com.android.support:appcompat-v7:+'
-    compile 'com.android.support:design:23.2.1'
+    implementation 'com.android.support:design:23.2.1'
     //compile 'com.android.support:design:+'
-    compile 'com.google.android.gms:play-services-gcm:+'
-    compile 'org.jsoup:jsoup:+'
-    compile 'com.github.bumptech.glide:glide:+'
-    compile 'com.amulyakhare:com.amulyakhare.textdrawable:+'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:+'
+    implementation 'com.google.android.gms:play-services-gcm:+'
+    implementation 'org.jsoup:jsoup:1.10.3'
+    implementation 'com.github.bumptech.glide:glide:+'
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:+'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:+'
 }

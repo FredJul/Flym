@@ -20,8 +20,15 @@
 package ru.yanus171.feedexfork;
 
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.os.Build;
+import android.os.StrictMode;
 
+import java.lang.reflect.Method;
+
+import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 
 public class MainApplication extends Application {
@@ -32,11 +39,32 @@ public class MainApplication extends Application {
         return mContext;
     }
 
+    public static final String NOTIFICATION_CHANNEL_ID = "main_channel";
+
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
 
+        if (Build.VERSION.SDK_INT >= 24) {
+            try {
+                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                m.invoke(null);
+            } catch (Exception e) {
+                Dog.e("disableDeathOnFileUriExposure", e);
+            }
+        }
         PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false); // init
+
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            Context context = MainApplication.getContext();
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW);
+            channel.setDescription(context.getString(R.string.app_name));
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+
     }
 }
