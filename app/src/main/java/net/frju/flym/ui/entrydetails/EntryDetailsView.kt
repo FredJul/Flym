@@ -25,7 +25,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.support.v4.content.FileProvider.getUriForFile
-import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -139,8 +138,7 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
                 settings.blockNetworkImage = true
             }
 
-            val subtitle = StringBuilder(DateFormat.getLongDateFormat(context).format(entry.publicationDate)).append(' ').append(
-                    DateFormat.getTimeFormat(context).format(entry.publicationDate))
+            val subtitle = StringBuilder(entry.getReadablePublicationDate(context))
             if (entry.author?.isNotEmpty() == true) {
                 subtitle.append(" &mdash; ").append(entry.author)
             }

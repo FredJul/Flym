@@ -48,6 +48,7 @@
 		android:id="@+id/feed_name_layout"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
+		android:layout_marginEnd="8dp"
 		android:layout_marginStart="8dp"
 		android:layout_marginTop="8dp"
 		android:alpha="0.7"
@@ -57,25 +58,23 @@
 		android:textColor="@color/colored_read_state"
 		android:textIsSelectable="false"
 		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toStartOf="@+id/date"
 		app:layout_constraintStart_toEndOf="@+id/main_icon"
 		app:layout_constraintTop_toBottomOf="@+id/title"
 		tools:text="feed name" />
 
 	<TextView
 		android:id="@+id/date"
-		android:layout_width="0dp"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginEnd="8dp"
-		android:layout_marginStart="8dp"
-		android:drawablePadding="3dp"
-		android:alpha="0.7"
+		android:alpha="0.3"
 		android:maxLines="1"
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:textColor="@color/read_state"
 		android:textIsSelectable="false"
 		app:layout_constraintBottom_toBottomOf="@+id/feed_name_layout"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toEndOf="@+id/feed_name_layout"
 		app:layout_constraintTop_toTopOf="@+id/feed_name_layout"
 		tools:text="24/12/2006 12:45" />
 

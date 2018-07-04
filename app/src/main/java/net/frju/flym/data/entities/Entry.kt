@@ -21,8 +21,11 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
+import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
+import android.text.format.DateFormat
+import android.text.format.DateUtils
 import com.rometools.rome.feed.synd.SyndEntry
 import net.frju.flym.utils.sha1
 import paperparcel.PaperParcel
@@ -75,6 +78,14 @@ open class Entry : Parcelable {
     }
 
     override fun hashCode(): Int = id.hashCode()
+
+    fun getReadablePublicationDate(context: Context) =
+            if (DateUtils.isToday(publicationDate.time)) {
+                DateFormat.getTimeFormat(context).format(publicationDate)
+            } else {
+                DateFormat.getMediumDateFormat(context).format(publicationDate) + ' ' +
+                        DateFormat.getTimeFormat(context).format(publicationDate)
+            }
 }
 
 fun SyndEntry.toDbFormat(feed: Feed): Entry {
