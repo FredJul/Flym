@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     feedGroups += newFeedGroups
                     feedAdapter.notifyParentDataSetChanged(true)
 
-					if (hasFetchingError(feedGroups)) {
+					if (hasFetchingError()) {
 						drawer_hint.textColor = Color.RED
 						drawer_hint.textResource = R.string.drawer_fetch_error_explanation
 					} else {
@@ -390,7 +390,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		return false
 	}
 
-	private fun hasFetchingError(newFeedGroups: List<FeedGroup>): Boolean {
+	private fun hasFetchingError(): Boolean {
 		// Also need to check all sub groups (can't be checked in FeedGroup's equals)
 		feedGroups.forEach { feedGroup ->
 			if (feedGroup.feed.fetchError || feedGroup.subFeeds.any { it.fetchError }) {
@@ -467,7 +467,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 			} catch (e: Exception) {
 				try {
 					// We try to remove the opml version number, it may work better in some cases
-					val fixedReader = StringReader(file.readText().replace("<opml version='[0-9]\\.[0-9]'>".toRegex(), "<opml>"))
+					val fixedReader = StringReader(file.readText().replace("<opml version=['\"][0-9]\\.[0-9]['\"]>".toRegex(), "<opml>"))
 					parseOpml(fixedReader)
 				} catch (e: Exception) {
 					uiThread { toast(R.string.cannot_find_feeds) }
