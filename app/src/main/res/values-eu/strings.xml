@@ -25,21 +25,21 @@
     <!-- GENERAL -->
     <string name="app_name">Flym</string>
     <string name="about_flym">Flymi buruz</string>
-    <string name="welcome_title">Ongi etorri Flymera. Jario bat gehitu nahiko al zenuke?</string>
-    <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
-    <string name="cannot_find_feeds">No feeds has been found</string>
+    <string name="welcome_title">Ongi etorri Flymera. Jario bat gehitu nahi al zenuke?</string>
+    <string name="welcome_title_with_opml_import">Flymeko aurreko jarioak inportatu nahi al zenituzke?</string>
+    <string name="cannot_find_feeds">Ez da jariorik aurkitu</string>
     <string name="menu_settings">Ezarpenak</string>
-    <string name="menu_rename_feed">Rename</string>
-    <string name="menu_reorder">Reorder feeds</string>
-    <string name="menu_delete">Delete</string>
-    <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
-    <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
+    <string name="menu_rename_feed">Berrizendatu</string>
+    <string name="menu_reorder">Jarioak berrantolatu</string>
+    <string name="menu_delete">Ezabatu</string>
+    <string name="menu_enable_full_text_retrieval">Testu osoa jasotzea gaitu</string>
+    <string name="menu_disable_full_text_retrieval">Testu osoa jasotzea ezgaitu</string>
     <string name="menu_all_read">Markatu dena irakurrita bezala</string>
-    <string name="flym_feeds">Flym jarioak</string>
+    <string name="flym_feeds">Flymeko jarioak</string>
     <string name="error">Akatsa</string>
     <string name="network_error">Sarea ez dago konfiguratuta</string>
-    <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
-    <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
+    <string name="drawer_explanation">Ongi etorri!\n\nSakatu luze jarioetan aukerak ikusteko ▼</string>
+    <string name="drawer_fetch_error_explanation">Zure jarioetako batzuk ez dira behar bezala freskatu ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Jarioak</string>
@@ -53,15 +53,15 @@
 	<string name="error_external_storage_not_available">Kanpoko biltegia (adib. SD-txartela) ez dago
         eskuragarri.
     </string>
-    <string name="feed_search">Jario bilaketa</string>
-	<string name="feed_search_hint">Enter feed link or keyword</string>
-    <string name="feed_added">Feed added to the list</string>
+    <string name="feed_search">Jarioen bilaketa</string>
+	<string name="feed_search_hint">Idatz ezazu lotura edo gako hitza</string>
+    <string name="feed_added">Jarioa zerrendara gehitu da</string>
     <string name="question_delete_feed">Benetan jario hau ezabatu nahi al duzu?</string>
 	<string name="question_delete_group">Benetan talde hau eta bere jario guztiak ezabatu nahi
         al dituzu?
     </string>
-    <string name="add_group_title">Hautatu talde izena</string>
-    <string name="message_exported_to">%sra esportatuta.</string>
+    <string name="add_group_title">Hautatu taldearen izena</string>
+    <string name="message_exported_to">%s(e)ra esportatuta.</string>
     <string name="to_group_title">Jario mugitze ekintza</string>
 	<string name="to_group_message">Jario hau talde honetan edo honen gainean jar dezakezu. Zer egin
         nahi duzu?
@@ -71,13 +71,13 @@
     <string name="google_news_top_stories">Berri nagusiak</string>
     <string name="google_news_world">Mundua</string>
     <string name="google_news_business">Negozioak</string>
-    <string name="google_news_science_technology">Zientzia &amp; Teknologia</string>
+    <string name="google_news_science_technology">Zientzia eta teknologia</string>
     <string name="google_news_entertainment">Denbora-pasa</string>
     <string name="google_news_sports">Kirolak</string>
     <string name="google_news_health">Osasuna</string>
 
     <!-- ENTRIES -->
-    <string name="all_entries">All entries</string>
+    <string name="all_entries">Sarrera guztiak</string>
     <string name="menu_star">Gogokoenetara gehitu</string>
     <string name="menu_unstar">Gogokoenetatik kendu</string>
     <string name="menu_share">Partekatu</string>
@@ -86,12 +86,12 @@
     <string name="original_text">Jatorrizko testua erakutsi</string>
 	<string name="open_in_browser">Nabigatzailean ikusi</string>
     <string name="cant_open_link">Ez da aplikaziorik aurkitu esteka honetarako</string>
-    <string name="unreads">Unreads</string>
-    <string name="all">All</string>
-    <string name="favorites">Favorites</string>
-    <string name="no_entries">No items\nPlease pull down to refresh</string>
-    <string name="undo">Undo</string>
-    <string name="marked_as_read">Marked as read</string>
+    <string name="unreads">Irakurri gabekoak</string>
+    <string name="all">Guztia</string>
+    <string name="favorites">Gogokoenak</string>
+    <string name="no_entries">Elementurik ez\nMesedez tiratu beherantz freskatzeko</string>
+    <string name="undo">Desegin</string>
+    <string name="marked_as_read">Irakurrita bezala markatuta</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Freskatze automatikoa</string>
@@ -99,12 +99,12 @@
     <string name="settings_refresh_enabled_description">Jarioen freskatze automatikoa gaitu
     </string>
     <string name="settings_refresh_interval">Freskatze tartea</string>
-    <string name="settings_category_content_presentation">Eduki aurkezpena</string>
+    <string name="settings_category_content_presentation">Edukien aurkezpena</string>
     <string name="settings_keep_time">Sarrerak gordeta mantenduko diren denbora</string>
     <string name="settings_display_images">Irudiak erakutsi</string>
     <string name="settings_display_images_description">Irudiak erakutsi sarreretan</string>
     <string name="settings_preload_image_mode">Irudiak aurretik kargatu</string>
-    <string name="settings_font_size">Testu neurria</string>
+    <string name="settings_font_size">Testuaren neurria</string>
     <string name="settings_refresh_wifi_only">Freskatu soilik Wi-Fipean</string>
     <string name="settings_refresh_wifi_only_description">Freskatze automatikoa soilik Wi-Fi konexioa eskuragarri badago egingo da
     </string>
