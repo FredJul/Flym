@@ -191,8 +191,11 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                                                 val newName = input.text.toString()
                                                 if (newName.isNotBlank()) {
                                                     doAsync {
-                                                        feed.title = newName
-                                                        App.db.feedDao().insert(feed)
+														// Need to do a copy to not directly modify the memory and being able to detect changes
+														val newFeed = feed.copy().apply {
+															title = newName
+														}
+														App.db.feedDao().update(newFeed)
                                                     }
                                                 }
                                             }
