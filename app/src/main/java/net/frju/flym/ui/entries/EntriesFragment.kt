@@ -30,6 +30,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -52,10 +53,11 @@ import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
+import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.uiThread
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
-import java.util.Date
+import java.util.*
 
 
 class EntriesFragment : Fragment() {
@@ -282,6 +284,44 @@ class EntriesFragment : Fragment() {
 		refresh_layout.setOnRefreshListener {
 			startRefresh()
 		}
+
+		val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+			private val VELOCITY = dip(800).toFloat()
+
+			override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+				return false
+			}
+
+			override fun getSwipeEscapeVelocity(defaultValue: Float): Float {
+				return VELOCITY
+			}
+
+			override fun getSwipeVelocityThreshold(defaultValue: Float): Float {
+				return VELOCITY
+			}
+
+			override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+				adapter.currentList?.get(viewHolder.adapterPosition)?.let { entry ->
+					if (!entry.read) {
+						entry.read = true
+						doAsync {
+							App.db.entryDao().update(entry)
+
+							if (bottom_navigation.selectedItemId != R.id.unreads) {
+								uiThread {
+									adapter.notifyItemChanged(viewHolder.adapterPosition)
+								}
+							}
+						}
+					} else {
+						adapter.notifyItemChanged(viewHolder.adapterPosition)
+					}
+				}
+			}
+		}
+
+		// attaching the touch helper to recycler view
+		ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recycler_view)
 
 		recycler_view.emptyView = empty_view
 

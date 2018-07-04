@@ -6,7 +6,7 @@ Flym News Reader
 
 Light and modern Android feed reader (Atom/RSS).
 
-It is [free/open-source software](https://www.gnu.org/philosophy/free-sw.html) under the GPLv3 license. You're are free to modify it as long as your respect the license and keep it open-source.
+It is [free/open-source software](https://www.gnu.org/philosophy/free-sw.html) under the GPLv3 license. You're are free to modify it as long as you respect the license and keep it open-source.
 
 [<img src="https://f-droid.org/badge/get-it-on.png"
       alt="Get it on F-Droid"
