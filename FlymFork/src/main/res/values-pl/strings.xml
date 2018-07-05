@@ -27,14 +27,14 @@
     <string name="about_flym">O programie / Pomoc / Kontakt z Autorem. </string>
     <string name="welcome_title">Witaj we Flym Fork. Chciał(a)byś dodać nowy kanał RSS?</string>
     <string name="never">Nigdy.</string>
-    <string name="update">Aktualizuj...</string>
+    <string name="update">Aktualizacja...</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Ustawienia</string>
     <string name="menu_refresh">Odśwież</string>
     <string name="menu_all_read">Oznacz wszystkie jako przeczytane.</string>
     <string name="flym_feeds">Kanały Flym Fork.</string>
     <string name="error">Błąd.</string>
-    <string name="network_error">Sieć nie jest (poprawnie) skonfigurowana.</string>
+    <string name="network_error">Sieć nie jest skonfigurowana.</string>
     <string name="loading">Wczytuję…</string>
     <string name="no_result">Brak wyników.</string>
     <string name="drawer_open">Otwórz panel nawigacyjny.</string>
@@ -124,7 +124,7 @@
     <string name="share_favorites_title">Flym Fork: Ulubione artykuły.</string>
     <string name="copied_clipboard">Link skopiowany.</string>
     <string name="get_full_text">Pokaż pełny artykuł.</string>
-    <string name="show_text_in_entry_list">Pokazuj zajawki na liście artykułów.</string>
+    <string name="show_text_in_entry_list">Pokazuj tekst oryginalny na liście artykułów.</string>
     <string name="original_text">Pokaż zajawkę.</string>
     <string name="see_enclosure">Wczytaj załącznik.</string>
     <string name="see_link">Otwórz w przeglądarce.</string>
@@ -230,7 +230,7 @@
     <string name="share_all_text">Udostępnij cały tekst.</string>
     <string name="group">Dodaj do grupy.</string>
     <string name="auto_image_load">Automatycznie wczytuj obrazki.</string>
-    <string name="show_progress_info">Szczegółowe informacje techniczne.</string>
+    <string name="show_progress_info">Szczegółowe informacje techniczne o postępie.</string>
     <string name="show_progress_info_descr">Pokazuje szczegółowe informacje nt. aktualnie przeprowadzanej operacji.</string>
     <string name="filter_apply_to_url">Zastosuj do adresu URL.</string>
     <string name="show_article_url">Pokaż adres URL artykułu.</string>
@@ -242,8 +242,8 @@
     <string name="settings_category_article_text">Tekst artykułu.</string>
     <string name="vibrate_on_article_list_entry_swype">Wibruj przy przesunięciu w lewo/prawo.</string>
     <string name="vibrate_on_article_list_entry_swype_summary">w artykule na liście</string>
-    <string name="show_mark_all_as_read_button">Przycisk 'Oznacz wszystko jako przeczytane'.</string>
-    <string name="show_mark_all_as_read_button_summary">Pokaż przycisk 'Oznacz wszystkie artykuły jako przeczytane'. W przeciwnym razie znajdziesz tą funkcję w menu.</string>
+    <string name="show_mark_all_as_read_button">Przycisk Oznacz wszystko jako przeczytane.</string>
+    <string name="show_mark_all_as_read_button_summary">Pokaż przycisk Oznacz wszystkie artykuły jako przeczytane. W przeciwnym razie znajdziesz tą funkcję w menu.</string>
     <string name="entry_marked_unfavourite">Artykuł został usunięty z Ulubionych.</string>
     <string name="entry_marked_favourite">Artykuł został dodany do Ulubionych.</string>
     <string name="new_feed_was_added">Nowy kanał został dodany.</string>
