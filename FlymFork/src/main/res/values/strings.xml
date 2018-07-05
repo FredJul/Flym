@@ -27,12 +27,12 @@
     <string name="about_flym">About the app / Help / Contact developer. </string>
     <string name="welcome_title">Welcome to Flym Fork. Would you like to add a feed?</string>
     <string name="never">never</string>
-    <string name="update">Update</string>
+    <string name="update">Updating...</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_refresh">Refresh</string>
     <string name="menu_all_read">Mark all as read</string>
-    <string name="flym_feeds">Flym feeds</string>
+    <string name="flym_feeds">Flym Feeds</string>
     <string name="error">Error</string>
     <string name="network_error">The network is not set up</string>
     <string name="loading">Loading…</string>
@@ -42,16 +42,16 @@
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
-    <string name="menu_add_feed">Add feed</string>
+    <string name="menu_add_feed">Add a feed</string>
     <string name="no_feeds">No feeds</string>
     <string name="no_filters">No rules</string>
     <string name="context_menu_delete">Delete</string>
-    <string name="edit_feed_title">Edit feed</string>
+    <string name="edit_feed_title">Edit a feed</string>
     <string name="new_feed_title">New feed</string>
     <string name="context_menu_edit">Edit</string>
-    <string name="menu_add_group">Add group</string>
-    <string name="menu_import">Import from OPML</string>
-    <string name="menu_export">Export to OPML</string>
+    <string name="menu_add_group">Add a group</string>
+    <string name="menu_import">Import from an OPML file</string>
+    <string name="menu_export">Export to an OPML file</string>
     <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_error">The feed website is unreachable.</string>
     <string name="error_feed_process">The feed can not be processed.</string>
@@ -69,13 +69,13 @@
     <string name="filter_add_title">Add a rule</string>
     <string name="filter_delete_title">Delete a rule</string>
     <string name="filter_edit_title">Edit a rule</string>
-    <string name="filter_is_regex">Is a regular expression</string>
-    <string name="filter_apply_to_title">Apply to title or link adress</string>
+    <string name="filter_is_regex">...is a regular expression</string>
+    <string name="filter_apply_to_title">Apply to title or link address</string>
     <string name="filter_apply_to_content">Apply to content</string>
     <string name="accept">ACCEPT</string>
     <string name="reject">REJECT</string>
     <string name="feed_search">Feed search</string>
-    <string name="select_file">Select file (SD-root)</string>
+    <string name="select_file">Select a file (SD-root)</string>
     <string name="question_delete_feed">Do you really want to delete this feed?</string>
     <string name="question_delete_group">Do you really want to delete this group and all of its feeds?</string>
     <string name="question_delete_filter">Do you really want to delete this filter?</string>
@@ -83,8 +83,8 @@
     <string name="edit_group_title">Edit the group name</string>
     <string name="message_exported_to">Exported into %s.</string>
     <string name="to_group_title">Feed move action</string>
-    <string name="to_group_message">You can either put this feed into or above this group. What do you want to do?</string>
-    <string name="to_group_above">Above the group</string>
+    <string name="to_group_message">Would You like to put this feed inside or outside this group?</string>
+    <string name="to_group_above">Outside the group</string>
     <string name="to_group_into">Into the group</string>
     <string name="add_custom_feed">Add a custom feed or search for one</string>
     <string name="google_news_title">Google News topics</string>
@@ -120,12 +120,12 @@
     <string name="menu_mark_as_unfavorite">Unmark as favorite</string>
     <string name="menu_mark_as_unread">Mark as unread</string>
     <string name="menu_reload_full_text">Reload full text</string>
-    <string name="menu_reload_full_text_without_mobilizer">Reload without mobilizer</string>
-    <string name="share_favorites_title">Flym: starred entries</string>
+    <string name="menu_reload_full_text_without_mobilizer">Reload without Mobilizer</string>
+    <string name="share_favorites_title">Flym Fork: starred entries</string>
     <string name="copied_clipboard">Link copied</string>
-    <string name="get_full_text">Load article full text</string>
-    <string name="show_text_in_entry_list">Show article text in list</string>
-    <string name="original_text">Show original text</string>
+    <string name="get_full_text">Load full article.</string>
+    <string name="show_text_in_entry_list">Show original text on article list.</string>
+    <string name="original_text">Show an excerpt</string>
     <string name="see_enclosure">Load the attachment</string>
     <string name="see_link">View in browser</string>
     <string name="cant_open_link">No application found for this link</string>
@@ -180,21 +180,21 @@
     <string name="settings_widget_background_description">Color and transparency of the widget background</string>
     <string name="all_feeds">All feeds (incl. future)</string>
     <string name="settings_display_text_color_description">in dark theme (0..255)</string>
-    <string name="downloadImage">Download image</string>
-    <string name="loadFullText">load FullText</string>
+    <string name="downloadImage">Downloading images...</string>
+    <string name="loadFullText">Loading full text...</string>
     <string name="deleteOldEntries">Delete old articles</string>
     <string name="AllImages">All images</string>
     <string name="EntryImages">Entry images</string>
-    <string name="mobilizeAll">mobilize all</string>
-    <string name="RefreshFeeds">Refresh feeds</string>
+    <string name="mobilizeAll">Mobilizing...</string>
+    <string name="RefreshFeeds">Updating feeds...</string>
     <string name="deleteImages">Delete images</string>
     <string name="applyOperations">Apply operations</string>
-    <string name="extractContent">Extract content</string>
-    <string name="improveHtmlContent">Improve HTML content</string>
-    <string name="parseXml">Parse XML</string>
+    <string name="extractContent">Extracting content...</string>
+    <string name="improveHtmlContent">Improving HTML content...</string>
+    <string name="parseXml">Parsing XML...</string>
     <string name="setupConnection">Setup connection</string>
     <string name="settings_content_extract_rules">Content extract rules</string>
-    <string name="settings_content_extract_rules_description">set for each site (base HTML knoledges needed)</string>
+    <string name="settings_content_extract_rules_description">set for each site (base HTML knowledge needed)</string>
     <string name="settings_tapZones">Tap Zones</string>
     <string name="settings_additional">Additional</string>
     <string name="settings_load_comments">Load comments</string>
@@ -203,13 +203,13 @@
     <string name="settings_tap_zones_dialogtitle">only for info, changes unavailable</string>
     <string name="settings_max_image_download_count_description">per one article</string>
     <string name="downloadNext">"Download next "</string>
-    <string name="loadingLink">Loading link</string>
+    <string name="loadingLink">Loading links...</string>
     <string name="loadLink">Read</string>
     <string name="loadLinkLater">Read later</string>
-    <string name="addFeed">Add feed</string>
+    <string name="addFeed">Add a feed</string>
     <string name="externalLinks">External links</string>
     <string name="markAllAsRead">Mark all as read</string>
-    <string name="settings_remember_last_entry">Remeber last article</string>
+    <string name="settings_remember_last_entry">Remember last article</string>
     <string name="settings_remeber_last_entry_description">Open last viewed article on startup, otherwise all entries list</string>
     <string name="pageUp">page up</string>
     <string name="pageDown">page down</string>
@@ -226,11 +226,11 @@
     <string name="fontsize_entrylist">Font size in articles'\ list</string>
     <string name="settings_volume_buttons_action">Action by volume buttons</string>
     <string name="behaviour">Behavior</string>
-    <string name="question_delete_entry">Delete article ?</string>
+    <string name="question_delete_entry">Delete this article?</string>
     <string name="share_all_text">Share whole text</string>
     <string name="group">Group</string>
     <string name="auto_image_load">Auto images load</string>
-    <string name="show_progress_info">Detailed progress info</string>
+    <string name="show_progress_info">Detailed progress technical info</string>
     <string name="show_progress_info_descr">Show detailed info about current operation</string>
     <string name="filter_apply_to_url">Apply to URL</string>
     <string name="show_article_url">Show article URL</string>
@@ -239,13 +239,13 @@
     <string name="show_article_icon_descr">Turn off to gain more space of the screen</string>
     <string name="menu_fix_order">Fix articles\' order</string>
     <string name="settings_category_article_list">Articles' list</string>
-    <string name="settings_category_article_text">Article' text</string>
+    <string name="settings_category_article_text">Article's text</string>
     <string name="vibrate_on_article_list_entry_swype">Vibrate on swipe</string>
     <string name="vibrate_on_article_list_entry_swype_summary">on article list entry</string>
     <string name="show_mark_all_as_read_button">Mark all as read button</string>
-    <string name="show_mark_all_as_read_button_summary">Show button Mark all articles as read. Overwise this action is accessible through menu</string>
-    <string name="entry_marked_unfavourite">The article was removed from favorites</string>
-    <string name="entry_marked_favourite">The article was added to favorites</string>
+    <string name="show_mark_all_as_read_button_summary">Show Mark all articles as read button. Otherwise You will find this option in menu.</string>
+    <string name="entry_marked_unfavourite">The article was removed from Favorites</string>
+    <string name="entry_marked_favourite">The article was added to Favorites</string>
     <string name="new_feed_was_added">New feed was added</string>
     <string name="entry_marked_unread">The article was marked as unread</string>
     <string name="lock_orientation">Landscape orientation</string>
@@ -256,18 +256,18 @@
     <string name="settings_entry_margins">Margins</string>
     <string name="settings_entry_margins_description">left|right</string>
     <string name="entry_text_align_justify">Justified text</string>
-    <string name="entry_text_align_justify_description">otherwise align left</string>
+    <string name="entry_text_align_justify_description">otherwise align to the left</string>
     <string name="reload_full_text_with_tags">Reload with tags</string>
     <string name="filter_hint">A filter\'s action will be initiated if at least one condition (rule) is met. \'Accept\' overrides \'Reject\'</string>
-    <string name="keyword">keyword</string>
+    <string name="keyword">keyword(s)</string>
     <string name="loadTypeWeb">Web (load all links)</string>
-    <string name="loadTypeRSS">RSS feed or keyword</string>
+    <string name="loadTypeRSS">RSS feed or keyword(s)</string>
     <string name="loadType">Load type:</string>
     <string name="global_filter">Global filter ...</string>
     <string name="global_filter_descr">A filter that apply to every feed. Leave filter text (and regex text) empty to disable</string>
     <string name="global_marks_as_star_filter_apply_to_title_descr">otherwise apply to content</string>
     <string name="rule_text">Rule\'s text</string>
-    <string name="settings_min_update_battery_level">Min battery level</string>
+    <string name="settings_min_update_battery_level">Min. battery level</string>
     <string name="global_marks_as_star_filter_rule_descr">Rule per line</string>
 
 
@@ -325,7 +325,7 @@
 
     <string-array name="settings_volume_buttons_action">
         <item>Default</item>
-        <item>Swith to next|previous article</item>
+        <item>Switch to next|previous article</item>
         <item>Page up|down</item>
     </string-array>
 
