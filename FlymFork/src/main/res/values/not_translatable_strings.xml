@@ -118,4 +118,44 @@
         <item>WIFI_ONLY_PRELOAD</item>
         <item>ALWAYS_PRELOAD</item>
     </string-array>
+
+    <string-array name="languageList" >
+        <item>System</item>
+        <item>Български</item>
+        <item>Català</item>
+        <item>Český</item>
+        <item>Deutsch</item>
+        <item>English</item>
+        <item>Español</item>
+        <item>Eesti</item>
+        <item>Français</item>
+        <item>Italiano</item>
+        <item>Dutch (Nederlands)</item>
+        <item>Polski</item>
+        <item>Português</item>
+        <item>Русский</item>
+        <item>Svenska</item>
+        <item>Српски</item>
+        <item>Український</item>
+    </string-array>
+    <string-array name="languageValueList" >
+        <item>System</item>
+        <item>bg</item>
+        <item>ca</item>
+        <item>cs</item>
+        <item>de</item>
+        <item>en</item>
+        <item>es</item>
+        <item>et</item>
+        <item>fr</item>
+        <item>it</item>
+        <item>nl</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>ru</item>
+        <item>sv</item>
+        <item>sr</item>
+        <item>uk</item>
+    </string-array>
+
 </resources>

@@ -239,95 +239,94 @@ public class FetcherService extends IntentService {
         if ( isFromAutoRefresh && Build.VERSION.SDK_INT < 26 && AutoRefreshService.isBatteryLow(this) )
             return;
 
-        if (ACTION_MOBILIZE_FEEDS.equals(intent.getAction())) {
-            mobilizeAllEntries(isFromAutoRefresh);
-            downloadAllImages();
-        } else if (ACTION_LOAD_LINK.equals(intent.getAction())) {
-            startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( getString(R.string.loadingLink) ) );
-            LoadLink( GetExtrenalLinkFeedID(),
-                      intent.getStringExtra( Constants.URL_TO_LOAD ),
-                      intent.getStringExtra( Constants.TITLE_TO_LOAD ),
-                      FetcherService.ForceReload.No,
-                      true);
-            downloadAllImages();
-            stopForeground( true );
-        } else if (ACTION_DOWNLOAD_IMAGES.equals(intent.getAction())) {
-            downloadAllImages();
-        } else { // == Constants.ACTION_REFRESH_FEEDS
+            if (ACTION_MOBILIZE_FEEDS.equals(intent.getAction())) {
+                mobilizeAllEntries(isFromAutoRefresh);
+                downloadAllImages();
+            } else if (ACTION_LOAD_LINK.equals(intent.getAction())) {
+                startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( getString(R.string.loadingLink) ) ); try {
+                    LoadLink(GetExtrenalLinkFeedID(),
+                            intent.getStringExtra(Constants.URL_TO_LOAD),
+                            intent.getStringExtra(Constants.TITLE_TO_LOAD),
+                            FetcherService.ForceReload.No,
+                            true);
+                    downloadAllImages();
+                } finally { stopForeground( true ); }
+            } else if (ACTION_DOWNLOAD_IMAGES.equals(intent.getAction())) {
+                downloadAllImages();
+            } else { // == Constants.ACTION_REFRESH_FEEDS
+                startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( getString(R.string.loading) ) ); try {
 
-            startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( getString(R.string.loading) ) );
+                    int status = Status().Start(getString(R.string.RefreshFeeds) + ": "); try {
+                        PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);
+                        mCancelRefresh = false;
 
-            int status = Status().Start(getString(R.string.RefreshFeeds) + ": "); try {
-                PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);
-                mCancelRefresh = false;
+                        long keepTime = Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l;
+                        long keepDateBorderTime = keepTime > 0 ? System.currentTimeMillis() - keepTime : 0;
 
-                long keepTime = Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l;
-                long keepDateBorderTime = keepTime > 0 ? System.currentTimeMillis() - keepTime : 0;
+                        deleteOldEntries(keepDateBorderTime);
 
-                deleteOldEntries(keepDateBorderTime);
+                        String feedId = intent.getStringExtra(Constants.FEED_ID);
+                        String groupId = intent.getStringExtra(Constants.GROUP_ID);
 
-                String feedId = intent.getStringExtra(Constants.FEED_ID);
-                String groupId = intent.getStringExtra(Constants.GROUP_ID);
+                        mMarkAsStarredFoundList.clear();
+                        int newCount = 0;
+                        try {
+                            newCount = (feedId == null ?
+                                        refreshFeeds(keepDateBorderTime, groupId, isFromAutoRefresh) :
+                                        refreshFeed(feedId, keepDateBorderTime, isFromAutoRefresh));
 
-                mMarkAsStarredFoundList.clear();
-                int newCount = 0;
-                try {
-                    newCount = (feedId == null ?
-                                refreshFeeds(keepDateBorderTime, groupId, isFromAutoRefresh) :
-                                refreshFeed(feedId, keepDateBorderTime, isFromAutoRefresh));
-
-                } finally {
-                    if (mMarkAsStarredFoundList.size() > 3) {
-                        ArrayList<String> list = new ArrayList<String>();
-                        for (MarkItem item : mMarkAsStarredFoundList)
-                            list.add(item.mCaption);
-                        ShowNotification(TextUtils.join(", ", list),
-                                R.string.markedAsStarred,
-                                new Intent(FetcherService.this, HomeActivity.class)
-                                        .setData(EntryColumns.FAVORITES_CONTENT_URI),
-                                null);
-                    } else if (mMarkAsStarredFoundList.size() > 0)
-                        for (MarkItem item : mMarkAsStarredFoundList) {
-                            Uri entryUri = getEntryUri(item.mLink, item.mFeedID);
-                            ShowNotification(item.mCaption,
-                                    R.string.markedAsStarred,
-                                    new Intent(Intent.ACTION_VIEW, entryUri),
-                                    entryUri);
+                        } finally {
+                            if (mMarkAsStarredFoundList.size() > 3) {
+                                ArrayList<String> list = new ArrayList<String>();
+                                for (MarkItem item : mMarkAsStarredFoundList)
+                                    list.add(item.mCaption);
+                                ShowNotification(TextUtils.join(", ", list),
+                                        R.string.markedAsStarred,
+                                        new Intent(FetcherService.this, HomeActivity.class)
+                                                .setData(EntryColumns.FAVORITES_CONTENT_URI),
+                                        null);
+                            } else if (mMarkAsStarredFoundList.size() > 0)
+                                for (MarkItem item : mMarkAsStarredFoundList) {
+                                    Uri entryUri = getEntryUri(item.mLink, item.mFeedID);
+                                    ShowNotification(item.mCaption,
+                                            R.string.markedAsStarred,
+                                            new Intent(Intent.ACTION_VIEW, entryUri),
+                                            entryUri);
+                                }
                         }
-                }
-
-                if (newCount > 0) {
-                    if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
-                        Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{Constants.DB_COUNT}, EntryColumns.WHERE_UNREAD, null, null);
-
-                        cursor.moveToFirst();
-                        newCount = cursor.getInt(0); // The number has possibly changed
-                        cursor.close();
 
                         if (newCount > 0) {
-                            ShowNotification(getResources().getQuantityString(R.plurals.number_of_new_entries, newCount, newCount),
-                                             R.string.flym_feeds,
-                                             new Intent(this, HomeActivity.class),
-                                             null);
+                            if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_ENABLED, true)) {
+                                Cursor cursor = getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{Constants.DB_COUNT}, EntryColumns.WHERE_UNREAD, null, null);
+
+                                cursor.moveToFirst();
+                                newCount = cursor.getInt(0); // The number has possibly changed
+                                cursor.close();
+
+                                if (newCount > 0) {
+                                    ShowNotification(getResources().getQuantityString(R.plurals.number_of_new_entries, newCount, newCount),
+                                                     R.string.flym_feeds,
+                                                     new Intent(this, HomeActivity.class),
+                                                     null);
+                                }
+                            } else if (Constants.NOTIF_MGR != null) {
+                                Constants.NOTIF_MGR.cancel(0);
+                            }
                         }
-                    } else if (Constants.NOTIF_MGR != null) {
-                        Constants.NOTIF_MGR.cancel(0);
-                    }
+
+                        mobilizeAllEntries( isFromAutoRefresh );
+                        downloadAllImages();
+
+                } finally {
+                    Status().End( status );
                 }
 
-                mobilizeAllEntries( isFromAutoRefresh );
-                downloadAllImages();
+                PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false);
 
-            } finally {
-                Status().End( status );
+                //Constants.NOTIF_MGR.cancel( StatusText.NOTIFICATION_ID );
+                } finally { stopForeground( true ); }
+
             }
-
-            PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false);
-
-            //Constants.NOTIF_MGR.cancel( StatusText.NOTIFICATION_ID );
-            stopForeground( true );
-
-        }
         synchronized ( mCancelRefresh ) {
             mCancelRefresh = false;
         }
@@ -560,8 +559,6 @@ public class FetcherService extends IntentService {
                                              final String title,
                                              final ForceReload forceReload,
                                              final boolean isCorrectTitle) {
-                //MainApplication.getContext().startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( "" ) );
-
         Uri entryUri;
         boolean load = false;
 

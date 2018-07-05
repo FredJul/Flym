@@ -294,6 +294,14 @@
             android:dialogTitle="site_url:id=XXX\nsite_url:class=XXX\n"
             android:title="@string/settings_content_extract_rules"
             android:summary="@string/settings_content_extract_rules_description"/>
+
+        <ru.yanus171.feedexfork.view.LanguageSelectPreference
+            android:defaultValue="System"
+            android:entries="@array/languageList"
+            android:entryValues="@array/languageValueList"
+            android:key="language"
+            android:title="Language" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

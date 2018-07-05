@@ -400,5 +400,6 @@
     <string name="rule_text">Текст правила</string>
     <string name="settings_min_update_battery_level">Min уровень батареи</string>
     <string name="global_marks_as_star_filter_rule_descr">Каждое правило на своей строке</string>
+    <string name="restart_app_apply_changes">Приложение будет перезапущено для применения настроек</string>
 
 </resources>

@@ -37,22 +37,23 @@ public class AutoRefreshJobService extends JobService {
         if (Build.VERSION.SDK_INT >= 25) {
 
             JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-            if (AutoRefreshService.isAutoUpdateEnabled()) {
-
-                ComponentName serviceComponent = new ComponentName(context, AutoRefreshJobService.class);
-                JobInfo.Builder builder =
-                        new JobInfo.Builder(AUTO_UPDATE_JOB_ID, serviceComponent)
-                                .setPeriodic(AutoRefreshService.getTimeIntervalInMSecs())
-                                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                                .setRequiresCharging(false)
-                                .setPersisted(true)
-                                //.setRequiresDeviceIdle(true)
-                                ;
-                if (Build.VERSION.SDK_INT >= 26) {
-                    builder.setRequiresStorageNotLow(true)
-                            .setRequiresBatteryNotLow(true);
+            if (AutoRefreshService.isAutoUpdateEnabled() ) {
+                if ( jobScheduler.getPendingJob( AUTO_UPDATE_JOB_ID ) == null ) {
+                    ComponentName serviceComponent = new ComponentName(context, AutoRefreshJobService.class);
+                    JobInfo.Builder builder =
+                            new JobInfo.Builder(AUTO_UPDATE_JOB_ID, serviceComponent)
+                                    .setPeriodic(AutoRefreshService.getTimeIntervalInMSecs())
+                                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                                    .setRequiresCharging(false)
+                                    .setPersisted(true)
+                            //.setRequiresDeviceIdle(true)
+                            ;
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        builder.setRequiresStorageNotLow(true)
+                                .setRequiresBatteryNotLow(true);
+                    }
+                    jobScheduler.schedule(builder.build());
                 }
-                jobScheduler.schedule(builder.build());
             } else
                 jobScheduler.cancel(AUTO_UPDATE_JOB_ID);
 

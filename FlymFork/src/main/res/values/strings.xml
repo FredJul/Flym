@@ -269,6 +269,7 @@
     <string name="rule_text">Rule\'s text</string>
     <string name="settings_min_update_battery_level">Min battery level</string>
     <string name="global_marks_as_star_filter_rule_descr">Rule per line</string>
+    <string name="restart_app_apply_changes">The app would be restarted to apply changes</string>
 
 
     <plurals name="number_of_new_entries">
