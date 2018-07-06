@@ -82,6 +82,7 @@ class EntryDetailsFragment : Fragment() {
 	private var previousId: String? = null
 	private var nextId: String? = null
 	private var isMobilizingLiveData: LiveData<Int>? = null
+	private var isMobilizing = false
 	private var preferFullText = true
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -100,7 +101,9 @@ class EntryDetailsFragment : Fragment() {
 				R.color.colorAccent,
 				R.color.colorPrimaryDark)
 
-		refresh_layout.isEnabled = false
+		refresh_layout.setOnRefreshListener {
+			switchFullTextMode()
+		}
 
 		doAsync {
 			// getting the parcelable on UI thread can make it sluggish
@@ -149,6 +152,7 @@ class EntryDetailsFragment : Fragment() {
 		}
 
 		preferFullText = true
+		isMobilizing = false
 		entry_view.setEntry(entry, preferFullText)
 
 		initDataObservers()
@@ -163,6 +167,7 @@ class EntryDetailsFragment : Fragment() {
 		isMobilizingLiveData = App.db.taskDao().observeItemMobilizationTasksCount(entry.id)
 		isMobilizingLiveData?.observe(this, Observer<Int> { count ->
 			if (count ?: 0 > 0) {
+				isMobilizing = true
 				refresh_layout.isRefreshing = true
 
 				// If the service is not started, start it here to avoid an infinite loading
@@ -170,7 +175,7 @@ class EntryDetailsFragment : Fragment() {
 					context?.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_MOBILIZE_FEEDS))
 				}
 			} else {
-				if (refresh_layout.isRefreshing) {
+				if (isMobilizing) {
 					doAsync {
 						App.db.entryDao().findByIdWithFeed(entry.id)?.let { newEntry ->
 							uiThread {
@@ -183,6 +188,7 @@ class EntryDetailsFragment : Fragment() {
 					}
 				}
 
+				isMobilizing = false
 				refresh_layout.isRefreshing = false
 			}
 		})
@@ -241,29 +247,10 @@ class EntryDetailsFragment : Fragment() {
 						))
 					}
 					R.id.menu_entry_details__fulltext -> {
-						if (entry.mobilizedContent == null) {
-							this@EntryDetailsFragment.context?.let { c ->
-								if (c.isOnline()) {
-									doAsync {
-										FetcherService.addEntriesToMobilize(listOf(entry.id))
-										c.startService(Intent(c, FetcherService::class.java).setAction(FetcherService.ACTION_MOBILIZE_FEEDS))
-									}
-								} else {
-									toast(R.string.network_error).show()
-								}
-							}
-						} else {
-							preferFullText = true
-							entry_view.setEntry(entry, preferFullText)
-
-							setupToolbar()
-						}
+						switchFullTextMode()
 					}
 					R.id.menu_entry_details__original_text -> {
-						preferFullText = false
-						entry_view.setEntry(entry, preferFullText)
-
-						setupToolbar()
+						switchFullTextMode()
 					}
 					R.id.menu_entry_details__mark_as_unread -> {
 						doAsync {
@@ -279,6 +266,36 @@ class EntryDetailsFragment : Fragment() {
 
 				true
 			}
+		}
+	}
+
+	private fun switchFullTextMode() {
+		if (entry.mobilizedContent == null || !preferFullText) {
+			if (entry.mobilizedContent == null) {
+				this@EntryDetailsFragment.context?.let { c ->
+					if (c.isOnline()) {
+						doAsync {
+							FetcherService.addEntriesToMobilize(listOf(entry.id))
+							c.startService(Intent(c, FetcherService::class.java).setAction(FetcherService.ACTION_MOBILIZE_FEEDS))
+						}
+					} else {
+						refresh_layout.isRefreshing = false
+						toast(R.string.network_error).show()
+					}
+				}
+			} else {
+				refresh_layout.isRefreshing = false
+				preferFullText = true
+				entry_view.setEntry(entry, preferFullText)
+
+				setupToolbar()
+			}
+		} else {
+			refresh_layout.isRefreshing = isMobilizing
+			preferFullText = false
+			entry_view.setEntry(entry, preferFullText)
+
+			setupToolbar()
 		}
 	}
 
