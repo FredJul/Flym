@@ -82,7 +82,7 @@ public class MainApplication extends Application {
     // ----------------------------------------------------------------
     public static Locale GetLocale(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String lang = prefs.getString("language", defaultLanguage);
+        String lang = prefs.getString(PrefUtils.LANGUAGE, defaultLanguage);
         if (lang.equals(defaultLanguage)) {
             if (context.getResources().getConfiguration().locale != null) {
                 lang = context.getResources().getConfiguration().locale.getLanguage();

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.NotificationCompat;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -96,27 +97,28 @@ public class StatusText implements Observer {
                 public void run() {
                     synchronized ( mList ) {
                         String s = "";
-                        //final int cRowcount = 3;
-                        for( java.util.Map.Entry<Integer,String> item: mList.entrySet() ) {
-                            //int index = mList.size() - i - 1;
-                            //if ( index >= 0 ) {
-                                //String item = mList.get(index);
-                                s += item.getValue();
-                                s += " ";
-                            //}
-                        }
+                        if ( PrefUtils.getBoolean( PrefUtils.SHOW_PROGRESS_INFO, false ) )
+                            //s += TextUtils.join( " ", mList.entrySet() );
+                            for( java.util.Map.Entry<Integer,String> item: mList.entrySet() )
+                                    s += item.getValue() + " ";
+
+
+
+
                         //if ( mList.size() > cRowcount )
                         //s = "... " + s;
                         if ( mErrorText != null && !mErrorText.isEmpty() )
                             s += " " + mErrorText;
-                        if ( !mProgressText.isEmpty() )
-                            s += " " + mProgressText;
-                        if ( !mList.isEmpty() && !mDBText.isEmpty() )
-                            s += " " + mDBText;
-                        if ( !mList.isEmpty() && FetcherService.mCancelRefresh )
-                            s += "\n cancel Refresh";
-                        if ( mBytesRecievedLast > 0 )
-                            s = String.format( "(%.2f MB) ", ( float ) mBytesRecievedLast / 1024 / 1024 ) + s;
+                        if ( PrefUtils.getBoolean( PrefUtils.SHOW_PROGRESS_INFO, false ) ) {
+                            if (!mProgressText.isEmpty())
+                                s += " " + mProgressText;
+                            if (!mList.isEmpty() && !mDBText.isEmpty())
+                                s += " " + mDBText;
+                            if (!mList.isEmpty() && FetcherService.mCancelRefresh)
+                                s += "\n cancel Refresh";
+                            if (mBytesRecievedLast > 0)
+                                s = String.format("(%.2f MB) ", (float) mBytesRecievedLast / 1024 / 1024) + s;
+                        }
                         notifyObservers(s);
                         if ( PrefUtils.getBoolean( PrefUtils.IS_REFRESHING, false ) &&
                            ( ( new Date() ).getTime() - mLastNotificationUpdateTime  > 1000 ) ) {
@@ -211,7 +213,7 @@ public class StatusText implements Observer {
         NotificationCompat.BigTextStyle bigxtstyle =
                 new NotificationCompat.BigTextStyle();
         bigxtstyle.bigText(text);
-        bigxtstyle.setBigContentTitle(context.getString(R.string.update));
+        bigxtstyle.setBigContentTitle(context.getString(R.string.updating));
         android.support.v4.app.NotificationCompat.Builder builder = new NotificationCompat.Builder(MainApplication.getContext()) //
                 //.setContentIntent(NULL) //
                 .setSmallIcon(R.drawable.refresh) //

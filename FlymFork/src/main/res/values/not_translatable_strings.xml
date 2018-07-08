@@ -106,6 +106,9 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
     </string-array>
     <string-array name="settings_volume_buttons_action_values" translatable="false">
         <item>Default</item>
@@ -121,41 +124,41 @@
 
     <string-array name="languageList" >
         <item>System</item>
-        <item>Български</item>
         <item>Català</item>
         <item>Český</item>
         <item>Deutsch</item>
-        <item>English</item>
         <item>Español</item>
-        <item>Eesti</item>
+        <item>English</item>
+        <item>Basque</item>
+        <item>Finnish</item>
         <item>Français</item>
         <item>Italiano</item>
-        <item>Dutch (Nederlands)</item>
+        <item>한국어</item>
         <item>Polski</item>
-        <item>Português</item>
         <item>Русский</item>
-        <item>Svenska</item>
+        <item>Slovenskej</item>
         <item>Српски</item>
-        <item>Український</item>
+        <item>Svenska</item>
+        <item>中国</item>
     </string-array>
     <string-array name="languageValueList" >
         <item>System</item>
-        <item>bg</item>
         <item>ca</item>
         <item>cs</item>
         <item>de</item>
-        <item>en</item>
         <item>es</item>
-        <item>et</item>
+        <item>en</item>
+        <item>eu</item>
+        <item>fi</item>
         <item>fr</item>
         <item>it</item>
-        <item>nl</item>
+        <item>ko</item>
         <item>pl</item>
-        <item>pt</item>
         <item>ru</item>
-        <item>sv</item>
+        <item>sk</item>
         <item>sr</item>
-        <item>uk</item>
+        <item>sv</item>
+        <item>zh</item>
     </string-array>
 
 </resources>

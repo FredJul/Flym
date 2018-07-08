@@ -27,7 +27,8 @@
     <string name="about_flym">O programie / Pomoc / Kontakt z Autorem. </string>
     <string name="welcome_title">Witaj we Flym Fork. Chciał(a)byś dodać nowy kanał RSS?</string>
     <string name="never">Nigdy.</string>
-    <string name="update">Aktualizacja...</string>
+    <string name="update">Aktualizacja</string>
+    <string name="updating">Aktualizacja...</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Ustawienia</string>
     <string name="menu_refresh">Odśwież</string>
@@ -295,16 +296,6 @@
         <item>2 miesiące</item>
         <item>3 miesiące</item>
         <item>na zawsze</item>
-    </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>@string/standard</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
-        <item>+4</item>
-        <item>+5</item>
     </string-array>
 
     <string-array name="settings_volume_buttons_action">

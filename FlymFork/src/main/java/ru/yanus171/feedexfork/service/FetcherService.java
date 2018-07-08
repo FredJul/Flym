@@ -117,6 +117,8 @@ import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.view.EntryView;
 import ru.yanus171.feedexfork.view.StatusText;
 
+import static ru.yanus171.feedexfork.MainApplication.NOTIFICATION_CHANNEL_ID;
+
 public class FetcherService extends IntentService {
 
     public static final String ACTION_REFRESH_FEEDS = FeedData.PACKAGE_NAME + ".REFRESH";
@@ -866,6 +868,8 @@ public class FetcherService extends IntentService {
                 .setAutoCancel(true) //
                 .setContentTitle(getString(captionID)) //
                 .setLights(0xffffffff, 0, 0);
+        if (Build.VERSION.SDK_INT >= 26 )
+            notifBuilder.setChannelId( NOTIFICATION_CHANNEL_ID );
 
         if (PrefUtils.getBoolean(PrefUtils.NOTIFICATIONS_VIBRATE, false)) {
             notifBuilder.setVibrate(new long[]{0, 1000});
@@ -896,6 +900,7 @@ public class FetcherService extends IntentService {
             }
             Constants.NOTIF_MGR.notify(captionID + i, nf);
         }
+
     }
 
     private Uri getEntryUri(String entryLink, String feedID) {
@@ -928,6 +933,7 @@ public class FetcherService extends IntentService {
         String content = outputStream.toString(encoding.name()).replace(" & ", " &amp; ");
         content = content.replaceAll( "<[a-z]+?:", "<" );
         content = content.replaceAll( "</[a-z]+?:", "</" );
+        content = content.replace( "&mdash;", "-" );
 
         return content;
     }

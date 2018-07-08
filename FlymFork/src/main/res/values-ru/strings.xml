@@ -26,6 +26,7 @@
     <string name="welcome_title">Добавить канал?</string>
     <string name="never">никогда</string>
     <string name="update">Обновление</string>
+    <string name="updating">Обновление...</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Настройки</string>
     <string name="menu_refresh">Обновить</string>
@@ -401,5 +402,7 @@
     <string name="settings_min_update_battery_level">Min уровень батареи</string>
     <string name="global_marks_as_star_filter_rule_descr">Каждое правило на своей строке</string>
     <string name="restart_app_apply_changes">Приложение будет перезапущено для применения настроек</string>
+    <string name="show_read_article_count">Число прочитанных статей лент</string>
+    <string name="show_read_article_count_descr">в списке лент</string>
 
 </resources>

@@ -56,6 +56,7 @@ import android.text.TextUtils;
 
 import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
+import ru.yanus171.feedexfork.activity.HomeActivity;
 import ru.yanus171.feedexfork.service.AutoRefreshService;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 
@@ -78,9 +79,7 @@ public class GeneralPrefsFragment extends PreferenceFragment {
 
         addPreferencesFromResource(R.xml.general_preferences);
 
-
         setRingtoneSummary();
-
 
         Preference preference = findPreference(PrefUtils.REFRESH_ENABLED);
         preference.setOnPreferenceChangeListener(mOnRefreshChangeListener);
@@ -102,11 +101,30 @@ public class GeneralPrefsFragment extends PreferenceFragment {
             }
         });
 
+        preference = findPreference(PrefUtils.LANGUAGE);
+        preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                PrefUtils.putString(PrefUtils.LANGUAGE, (String)newValue);
+                PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit().commit(); // to be sure all prefs are written
+                android.os.Process.killProcess(android.os.Process.myPid()); // Restart the app
+                // this return statement will never be reached
+                return true;
+            }
+        });
+
 //        for(  int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++ ) {
 //            Preference pref = getPreferenceScreen().getPreference( i );
 //            if ( pref instanceof PreferenceCategory )
 //                pref.setLayoutResource( PrefUtils.IsLightTheme() ? R.layout.preference_category_light : R.layout.preference_category);
 //        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        HomeActivity.mFeedSetupChanged = true;
+        super.onDestroy();
     }
 
     @Override

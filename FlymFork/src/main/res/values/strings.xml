@@ -27,7 +27,8 @@
     <string name="about_flym">About the app / Help / Contact developer. </string>
     <string name="welcome_title">Welcome to Flym Fork. Would you like to add a feed?</string>
     <string name="never">never</string>
-    <string name="update">Updating...</string>
+    <string name="update">Update</string>
+    <string name="updating">Updating...</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_refresh">Refresh</string>
@@ -269,7 +270,8 @@
     <string name="rule_text">Rule\'s text</string>
     <string name="settings_min_update_battery_level">Min. battery level</string>
     <string name="global_marks_as_star_filter_rule_descr">Rule per line</string>
-    <string name="restart_app_apply_changes">The app would be restarted to apply changes</string>
+    <string name="show_read_article_count">Show read article count</string>
+    <string name="show_read_article_count_descr">in feed list</string>
 
 
     <plurals name="number_of_new_entries">
@@ -322,6 +324,9 @@
         <item>+3</item>
         <item>+4</item>
         <item>+5</item>
+        <item>+6</item>
+        <item>+7</item>
+        <item>+8</item>
     </string-array>
 
     <string-array name="settings_volume_buttons_action">

@@ -287,6 +287,12 @@
             android:title="@string/show_progress_info"
             android:summary="@string/show_progress_info_descr"/>
 
+        <CheckBoxPreference
+            android:key="show_read_article_count"
+            android:defaultValue="false"
+            android:title="@string/show_read_article_count"
+            android:summary="@string/show_read_article_count_descr"/>
+
         <EditTextPreference
             android:key="content_extract_rules"
             android:inputType="text|textMultiLine"
@@ -295,7 +301,7 @@
             android:title="@string/settings_content_extract_rules"
             android:summary="@string/settings_content_extract_rules_description"/>
 
-        <ru.yanus171.feedexfork.view.LanguageSelectPreference
+        <ListPreference
             android:defaultValue="System"
             android:entries="@array/languageList"
             android:entryValues="@array/languageValueList"

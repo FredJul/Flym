@@ -39,6 +39,7 @@ import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
+import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.StringUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
 
@@ -204,7 +205,7 @@ public class DrawerAdapter extends BaseAdapter {
                 }
 
                 int read = mFeedsCursor.getInt(POS_ALL) - mFeedsCursor.getInt(POS_UNREAD);
-                holder.allTxt.setText(read > 0 ? String.valueOf(read) : "");
+                holder.allTxt.setText(read > 0 && PrefUtils.getBoolean( "show_read_article_count", false ) ? String.valueOf(read) : "");
 
                 holder.autoRefreshIcon.setVisibility( isAutoRefresh( position )  ? View.VISIBLE : View.GONE );
             }
