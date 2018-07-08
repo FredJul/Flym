@@ -25,6 +25,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,6 +115,7 @@ public class DrawerAdapter extends BaseAdapter {
         holder.titleTxt.setText("");
         holder.titleTxt.setTextColor(NORMAL_TEXT_COLOR);
         holder.titleTxt.setAllCaps(false);
+        holder.titleTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18 + PrefUtils.getFontSizeEntryList() );
         holder.stateTxt.setVisibility(View.GONE);
         holder.unreadTxt.setText("");
         holder.allTxt.setText("");
