@@ -79,7 +79,7 @@ open class Entry : Parcelable {
 
     override fun hashCode(): Int = id.hashCode()
 
-    fun getReadablePublicationDate(context: Context) =
+    fun getReadablePublicationDate(context: Context): String =
             if (DateUtils.isToday(publicationDate.time)) {
                 DateFormat.getTimeFormat(context).format(publicationDate)
             } else {

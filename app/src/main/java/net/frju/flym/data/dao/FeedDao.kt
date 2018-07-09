@@ -20,7 +20,10 @@ package net.frju.flym.data.dao
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import net.frju.flym.data.entities.Feed
+import net.frju.flym.data.entities.FeedWithCount
 
+private const val SUB_FEEDS = "(SELECT feedId FROM feeds WHERE groupId = f.feedId)"
+private const val ENTRY_COUNT = "(SELECT COUNT(*) FROM entries WHERE (feedId IS f.feedId OR feedId IN $SUB_FEEDS) AND read = 0)"
 
 @Dao
 interface FeedDao {
@@ -32,6 +35,9 @@ interface FeedDao {
 
     @get:Query("SELECT * FROM feeds ORDER BY groupId DESC, displayPriority ASC, feedId ASC")
     val observeAll: LiveData<List<Feed>>
+
+    @get:Query("SELECT *, $ENTRY_COUNT AS entryCount FROM feeds AS f ORDER BY groupId DESC, displayPriority ASC, feedId ASC")
+    val observeAllWithCount: LiveData<List<FeedWithCount>>
 
     @Query("SELECT * FROM feeds WHERE feedId IS :id LIMIT 1")
     fun findById(id: Long): Feed?

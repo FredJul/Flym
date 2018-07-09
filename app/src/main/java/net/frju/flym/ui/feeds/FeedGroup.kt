@@ -18,12 +18,12 @@
 package net.frju.flym.ui.feeds
 
 import com.bignerdranch.expandablerecyclerview.model.Parent
-import net.frju.flym.data.entities.Feed
+import net.frju.flym.data.entities.FeedWithCount
 
 
-class FeedGroup(val feed: Feed, val subFeeds: List<Feed>) : Parent<Feed> {
+class FeedGroup(val feed: FeedWithCount, val subFeeds: List<FeedWithCount>) : Parent<FeedWithCount> {
 
-    override fun getChildList(): List<Feed> {
+    override fun getChildList(): List<FeedWithCount> {
         return subFeeds
     }
 
@@ -38,12 +38,12 @@ class FeedGroup(val feed: Feed, val subFeeds: List<Feed>) : Parent<Feed> {
 
         other as FeedGroup
 
-        if (feed.id != other.feed.id) return false
+        if (feed.feed.id != other.feed.feed.id) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return feed.id.hashCode()
+        return feed.feed.id.hashCode()
     }
 }

@@ -20,6 +20,7 @@ package net.frju.flym.ui.feeds
 import android.os.Bundle
 import android.view.View
 import net.frju.flym.data.entities.Feed
+import net.frju.flym.data.entities.FeedWithCount
 import org.jetbrains.anko.sdk21.listeners.onClick
 
 
@@ -33,20 +34,20 @@ open class FeedAdapter(groups: List<FeedGroup>) : BaseFeedAdapter(groups) {
 			field = newValue
 		}
 
-	override fun bindItem(itemView: View, feed: Feed) {
-		itemView.isSelected = selectedItemId == feed.id
+	override fun bindItem(itemView: View, feed: FeedWithCount) {
+		itemView.isSelected = selectedItemId == feed.feed.id
 
 		itemView.onClick {
-			selectedItemId = feed.id
+			selectedItemId = feed.feed.id
 			feedClickListener?.invoke(itemView, feed)
 		}
 	}
 
 	override fun bindItem(itemView: View, group: FeedGroup) {
-		itemView.isSelected = selectedItemId == group.feed.id
+		itemView.isSelected = selectedItemId == group.feed.feed.id
 
 		itemView.onClick {
-			selectedItemId = group.feed.id
+			selectedItemId = group.feed.feed.id
 			feedClickListener?.invoke(itemView, group.feed)
 		}
 	}

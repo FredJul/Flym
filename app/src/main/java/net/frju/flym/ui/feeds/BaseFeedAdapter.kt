@@ -27,41 +27,42 @@ import com.bignerdranch.expandablerecyclerview.ParentViewHolder
 import kotlinx.android.synthetic.main.view_feed.view.*
 import net.fred.feedex.R
 import net.frju.flym.data.entities.Feed
+import net.frju.flym.data.entities.FeedWithCount
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.sdk21.listeners.onLongClick
 
 
-abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup, Feed, BaseFeedAdapter.FeedGroupViewHolder, BaseFeedAdapter.FeedViewHolder>(groups) {
+abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdapter<FeedGroup, FeedWithCount, BaseFeedAdapter.FeedGroupViewHolder, BaseFeedAdapter.FeedViewHolder>(groups) {
 
 	companion object {
 		const val TYPE_TOP_LEVEL = 0
 		const val TYPE_CHILD = 1
 	}
 
-	var feedClickListener: ((View, Feed) -> Unit)? = null
-	var feedLongClickListener: ((View, Feed) -> Unit)? = null
+	var feedClickListener: ((View, FeedWithCount) -> Unit)? = null
+	var feedLongClickListener: ((View, FeedWithCount) -> Unit)? = null
 
 	open val layoutId = R.layout.view_feed
 
-	open fun bindItem(itemView: View, feed: Feed) {
+	open fun bindItem(itemView: View, feed: FeedWithCount) {
 	}
 
 	open fun bindItem(itemView: View, group: FeedGroup) {
 	}
 
-	fun onFeedClick(listener: (View, Feed) -> Unit) {
+	fun onFeedClick(listener: (View, FeedWithCount) -> Unit) {
 		feedClickListener = listener
 	}
 
-	fun onFeedLongClick(listener: (View, Feed) -> Unit) {
+	fun onFeedLongClick(listener: (View, FeedWithCount) -> Unit) {
 		feedLongClickListener = listener
 	}
 
 	override fun getItemId(position: Int) =
-			getFeedAtPos(position).id
+			getFeedAtPos(position).feed.id
 
-	fun getFeedAtPos(position: Int): Feed {
+	fun getFeedAtPos(position: Int): FeedWithCount {
 		val item = mFlatItemList[position]
 		return if (item.isParent) {
 			mFlatItemList[position].parent.feed
@@ -92,15 +93,15 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 		groupViewHolder.bindItem(group)
 	}
 
-	override fun onBindChildViewHolder(feedViewHolder: FeedViewHolder, parentPosition: Int, childPosition: Int, feed: Feed) {
+	override fun onBindChildViewHolder(feedViewHolder: FeedViewHolder, parentPosition: Int, childPosition: Int, feed: FeedWithCount) {
 		feedViewHolder.bindItem(feed)
 	}
 
 	inner class FeedGroupViewHolder(itemView: View)
-		: ParentViewHolder<FeedGroup, Feed>(itemView) {
+		: ParentViewHolder<FeedGroup, FeedWithCount>(itemView) {
 
 		fun bindItem(group: FeedGroup) {
-			if (group.feed.isGroup) {
+			if (group.feed.feed.isGroup) {
 				if (isExpanded) {
 					itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_up_white_24dp)
 				} else {
@@ -119,14 +120,15 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 				}
 			} else {
 				itemView.icon.isClickable = false
-				if (group.feed.id == Feed.ALL_ENTRIES_ID) {
+				if (group.feed.feed.id == Feed.ALL_ENTRIES_ID) {
 					itemView.icon.setImageResource(R.drawable.ic_list_white_24dp)
 				} else {
-					itemView.icon.setImageDrawable(group.feed.getLetterDrawable(true))
+					itemView.icon.setImageDrawable(group.feed.feed.getLetterDrawable(true))
 				}
 			}
-			itemView.title.text = group.feed.title
-			if (group.feed.fetchError) { //TODO better
+			itemView.title.text = group.feed.feed.title
+			itemView.entry_count?.text = group.feed.getEntryCountString()
+			if (group.feed.feed.fetchError) { //TODO better
 				itemView.title.setTextColor(Color.RED)
 			} else {
 				itemView.title.setTextColor(Color.WHITE)
@@ -146,17 +148,18 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 		override fun shouldItemViewClickToggleExpansion(): Boolean = false
 	}
 
-	inner class FeedViewHolder(itemView: View) : ChildViewHolder<Feed>(itemView) {
+	inner class FeedViewHolder(itemView: View) : ChildViewHolder<FeedWithCount>(itemView) {
 
-		fun bindItem(feed: Feed) {
-			itemView.title.text = feed.title
-			if (feed.fetchError) { //TODO better
+		fun bindItem(feed: FeedWithCount) {
+			itemView.title.text = feed.feed.title
+			itemView.entry_count?.text = feed.getEntryCountString()
+			if (feed.feed.fetchError) { //TODO better
 				itemView.title.setTextColor(Color.RED)
 			} else {
 				itemView.title.setTextColor(Color.WHITE)
 			}
 			itemView.icon.isClickable = false
-			itemView.icon.setImageDrawable(feed.getLetterDrawable(true))
+			itemView.icon.setImageDrawable(feed.feed.getLetterDrawable(true))
 			itemView.setPadding(itemView.dip(30), 0, 0, 0)
 			itemView.onClick {
 				feedClickListener?.invoke(itemView, feed)
