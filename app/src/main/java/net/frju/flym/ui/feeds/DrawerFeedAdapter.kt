@@ -34,21 +34,21 @@ open class FeedAdapter(groups: List<FeedGroup>) : BaseFeedAdapter(groups) {
 			field = newValue
 		}
 
-	override fun bindItem(itemView: View, feed: FeedWithCount) {
-		itemView.isSelected = selectedItemId == feed.feed.id
+	override fun bindItem(itemView: View, feedWithCount: FeedWithCount) {
+		itemView.isSelected = selectedItemId == feedWithCount.feed.id
 
 		itemView.onClick {
-			selectedItemId = feed.feed.id
-			feedClickListener?.invoke(itemView, feed)
+			selectedItemId = feedWithCount.feed.id
+			feedClickListener?.invoke(itemView, feedWithCount)
 		}
 	}
 
 	override fun bindItem(itemView: View, group: FeedGroup) {
-		itemView.isSelected = selectedItemId == group.feed.feed.id
+		itemView.isSelected = selectedItemId == group.feedWithCount.feed.id
 
 		itemView.onClick {
-			selectedItemId = group.feed.feed.id
-			feedClickListener?.invoke(itemView, group.feed)
+			selectedItemId = group.feedWithCount.feed.id
+			feedClickListener?.invoke(itemView, group.feedWithCount)
 		}
 	}
 

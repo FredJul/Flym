@@ -164,27 +164,27 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 					}
                 }
 
-                feedAdapter.onFeedClick { view, feed ->
-					goToEntriesList(feed.feed)
+				feedAdapter.onFeedClick { view, feedWithCount ->
+					goToEntriesList(feedWithCount.feed)
                     closeDrawer()
                 }
 
-                feedAdapter.onFeedLongClick { view, feed ->
+				feedAdapter.onFeedLongClick { view, feedWithCount ->
                     PopupMenu(this, view).apply {
                         setOnMenuItemClickListener { item ->
                             when (item.itemId) {
                                 R.id.mark_all_as_read -> doAsync {
                                     when {
-										feed.feed.id == Feed.ALL_ENTRIES_ID -> App.db.entryDao().markAllAsRead()
-										feed.feed.isGroup -> App.db.entryDao().markGroupAsRead(feed.feed.id)
-										else -> App.db.entryDao().markAsRead(feed.feed.id)
+										feedWithCount.feed.id == Feed.ALL_ENTRIES_ID -> App.db.entryDao().markAllAsRead()
+										feedWithCount.feed.isGroup -> App.db.entryDao().markGroupAsRead(feedWithCount.feed.id)
+										else -> App.db.entryDao().markAsRead(feedWithCount.feed.id)
                                     }
                                 }
 								R.id.edit_feed -> {
 									@SuppressLint("InflateParams")
 									val input = layoutInflater.inflate(R.layout.dialog_edit_feed, null, false).apply {
-										feed_name.setText(feed.feed.title)
-										feed_link.setText(feed.feed.link)
+										feed_name.setText(feedWithCount.feed.title)
+										feed_link.setText(feedWithCount.feed.link)
 									}
 
                                     AlertDialog.Builder(this@MainActivity)
@@ -196,7 +196,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 												if (newName.isNotBlank() && newLink.isNotBlank()) {
                                                     doAsync {
 														// Need to do a copy to not directly modify the memory and being able to detect changes
-														val newFeed = feed.feed.copy().apply {
+														val newFeed = feedWithCount.feed.copy().apply {
 															title = newName
 															link = newLink
 														}
@@ -210,33 +210,33 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                                 R.id.reorder -> startActivity<FeedListEditActivity>()
                                 R.id.delete -> {
                                     AlertDialog.Builder(this@MainActivity)
-											.setTitle(feed.feed.title)
-											.setMessage(if (feed.feed.isGroup) R.string.question_delete_group else R.string.question_delete_feed)
+											.setTitle(feedWithCount.feed.title)
+											.setMessage(if (feedWithCount.feed.isGroup) R.string.question_delete_group else R.string.question_delete_feed)
                                             .setPositiveButton(android.R.string.yes) { _, _ ->
-												doAsync { App.db.feedDao().delete(feed.feed) }
+												doAsync { App.db.feedDao().delete(feedWithCount.feed) }
                                             }.setNegativeButton(android.R.string.no, null)
                                             .show()
                                 }
-								R.id.enable_full_text_retrieval -> doAsync { App.db.feedDao().enableFullTextRetrieval(feed.feed.id) }
-								R.id.disable_full_text_retrieval -> doAsync { App.db.feedDao().disableFullTextRetrieval(feed.feed.id) }
+								R.id.enable_full_text_retrieval -> doAsync { App.db.feedDao().enableFullTextRetrieval(feedWithCount.feed.id) }
+								R.id.disable_full_text_retrieval -> doAsync { App.db.feedDao().disableFullTextRetrieval(feedWithCount.feed.id) }
                             }
                             true
                         }
                         inflate(R.menu.menu_drawer_feed)
 
                         when {
-							feed.feed.id == Feed.ALL_ENTRIES_ID -> {
+							feedWithCount.feed.id == Feed.ALL_ENTRIES_ID -> {
 								menu.findItem(R.id.edit_feed).isVisible = false
                                 menu.findItem(R.id.delete).isVisible = false
                                 menu.findItem(R.id.reorder).isVisible = false
                                 menu.findItem(R.id.enable_full_text_retrieval).isVisible = false
                                 menu.findItem(R.id.disable_full_text_retrieval).isVisible = false
                             }
-							feed.feed.isGroup -> {
+							feedWithCount.feed.isGroup -> {
                                 menu.findItem(R.id.enable_full_text_retrieval).isVisible = false
                                 menu.findItem(R.id.disable_full_text_retrieval).isVisible = false
                             }
-							feed.feed.retrieveFullText -> menu.findItem(R.id.enable_full_text_retrieval).isVisible = false
+							feedWithCount.feed.retrieveFullText -> menu.findItem(R.id.enable_full_text_retrieval).isVisible = false
                             else -> menu.findItem(R.id.disable_full_text_retrieval).isVisible = false
                         }
 
@@ -288,7 +288,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         // If we just clicked on the notification, let's go back to the default view
         if (intent?.getBooleanExtra(EXTRA_FROM_NOTIF, false) == true && feedGroups.isNotEmpty()) {
             feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
-			goToEntriesList(feedGroups[0].feed.feed)
+			goToEntriesList(feedGroups[0].feedWithCount.feed)
             bottom_navigation.selectedItemId = R.id.unreads
         }
     }
@@ -390,7 +390,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
 		// Also need to check all sub groups (can't be checked in FeedGroup's equals)
 		feedGroups.forEachIndexed { index, feedGroup ->
-            if (feedGroup.feed != newFeedGroups[index].feed || feedGroup.subFeeds != newFeedGroups[index].subFeeds) {
+			if (feedGroup.feedWithCount != newFeedGroups[index].feedWithCount || feedGroup.subFeeds != newFeedGroups[index].subFeeds) {
 				return true
 			}
 		}
@@ -401,7 +401,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	private fun hasFetchingError(): Boolean {
 		// Also need to check all sub groups (can't be checked in FeedGroup's equals)
 		feedGroups.forEach { feedGroup ->
-			if (feedGroup.feed.feed.fetchError || feedGroup.subFeeds.any { it.feed.fetchError }) {
+			if (feedGroup.feedWithCount.feed.fetchError || feedGroup.subFeeds.any { it.feed.fetchError }) {
 				return true
 			}
 		}

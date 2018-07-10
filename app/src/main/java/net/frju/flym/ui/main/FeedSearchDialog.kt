@@ -33,10 +33,15 @@ import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.service.FetcherService
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.hintTextColor
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.warn
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.*
+import java.util.ArrayList
 
 
 private const val FEED_SEARCH_TITLE = "title"
@@ -105,7 +110,7 @@ class FeedSearchDialog(context: Context, private val defaultFeeds: List<SearchFe
                                     for (i in 0 until entries.length()) {
                                         try {
                                             val entry = entries.get(i) as JSONObject
-                                            val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
+											val url = entry.get(FEED_SEARCH_URL).toString().replace("feedWithCount/", "")
                                             if (!url.isEmpty() && !FEED_SEARCH_BLACKLIST.contains(url)) {
                                                 @Suppress("DEPRECATION")
                                                 array.add(
@@ -120,7 +125,7 @@ class FeedSearchDialog(context: Context, private val defaultFeeds: List<SearchFe
                             }
                         }
                     } catch (t: Throwable) {
-                        warn("error during feed search", t)
+						warn("error during feedWithCount search", t)
                     }
                 } else {
                     array.addAll(defaultFeeds)

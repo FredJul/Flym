@@ -21,7 +21,7 @@ import com.bignerdranch.expandablerecyclerview.model.Parent
 import net.frju.flym.data.entities.FeedWithCount
 
 
-class FeedGroup(val feed: FeedWithCount, val subFeeds: List<FeedWithCount>) : Parent<FeedWithCount> {
+class FeedGroup(val feedWithCount: FeedWithCount, val subFeeds: List<FeedWithCount>) : Parent<FeedWithCount> {
 
     override fun getChildList(): List<FeedWithCount> {
         return subFeeds
@@ -38,17 +38,17 @@ class FeedGroup(val feed: FeedWithCount, val subFeeds: List<FeedWithCount>) : Pa
 
         other as FeedGroup
 
-        if (feed.feed.id != other.feed.feed.id) return false
+        if (feedWithCount.feed.id != other.feedWithCount.feed.id) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return feed.feed.id.hashCode()
+        return feedWithCount.feed.id.hashCode()
     }
 
     fun getEntryCountString(): String {
-        val entryCount = if (subFeeds.isNotEmpty()) subFeeds.sumBy { it.entryCount } else feed.entryCount
+        val entryCount = if (subFeeds.isNotEmpty()) subFeeds.sumBy { it.entryCount } else feedWithCount.entryCount
         return if (entryCount > 0) entryCount.toString() else ""
     }
 }

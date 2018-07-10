@@ -17,7 +17,11 @@
 
 package net.frju.flym.data.entities
 
-import android.arch.persistence.room.*
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.Index
+import android.arch.persistence.room.PrimaryKey
 import android.os.Parcelable
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
@@ -74,7 +78,7 @@ data class Feed(
 			imageLink = feed.image?.url
 		}
 
-		// no error anymore since we just got a feed
+		// no error anymore since we just got a feedWithCount
 		fetchError = false
 	}
 

@@ -287,7 +287,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 								}
 							}
 						} catch (t: Throwable) {
-							error("Can't mobilize feed ${entry.link}", t)
+							error("Can't mobilize feedWithCount ${entry.link}", t)
 						}
 					}
 				}
@@ -344,7 +344,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 					try {
 						result = refreshFeed(feed, keepDateBorderTime)
 					} catch (e: Exception) {
-						error("Can't fetch feed ${feed.link}", e)
+						error("Can't fetch feedWithCount ${feed.link}", e)
 					}
 
 					result

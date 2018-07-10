@@ -65,7 +65,7 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 	fun getFeedAtPos(position: Int): FeedWithCount {
 		val item = mFlatItemList[position]
 		return if (item.isParent) {
-			mFlatItemList[position].parent.feed
+			mFlatItemList[position].parent.feedWithCount
 		} else {
 			mFlatItemList[position].child
 		}
@@ -101,7 +101,7 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 		: ParentViewHolder<FeedGroup, FeedWithCount>(itemView) {
 
 		fun bindItem(group: FeedGroup) {
-			if (group.feed.feed.isGroup) {
+			if (group.feedWithCount.feed.isGroup) {
 				if (isExpanded) {
 					itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_up_white_24dp)
 				} else {
@@ -120,25 +120,25 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 				}
 			} else {
 				itemView.icon.isClickable = false
-				if (group.feed.feed.id == Feed.ALL_ENTRIES_ID) {
+				if (group.feedWithCount.feed.id == Feed.ALL_ENTRIES_ID) {
 					itemView.icon.setImageResource(R.drawable.ic_list_white_24dp)
 				} else {
-					itemView.icon.setImageDrawable(group.feed.feed.getLetterDrawable(true))
+					itemView.icon.setImageDrawable(group.feedWithCount.feed.getLetterDrawable(true))
 				}
 			}
-			itemView.title.text = group.feed.feed.title
+			itemView.title.text = group.feedWithCount.feed.title
 			itemView.entry_count?.text = group.getEntryCountString()
-			if (group.feed.feed.fetchError) { //TODO better
+			if (group.feedWithCount.feed.fetchError) { //TODO better
 				itemView.title.setTextColor(Color.RED)
 			} else {
 				itemView.title.setTextColor(Color.WHITE)
 			}
 			itemView.setPadding(0, 0, 0, 0)
 			itemView.onClick {
-				feedClickListener?.invoke(itemView, group.feed)
+				feedClickListener?.invoke(itemView, group.feedWithCount)
 			}
 			itemView.onLongClick {
-				feedLongClickListener?.invoke(itemView, group.feed)
+				feedLongClickListener?.invoke(itemView, group.feedWithCount)
 				true
 			}
 
@@ -150,26 +150,26 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 
 	inner class FeedViewHolder(itemView: View) : ChildViewHolder<FeedWithCount>(itemView) {
 
-		fun bindItem(feed: FeedWithCount) {
-			itemView.title.text = feed.feed.title
-			itemView.entry_count?.text = feed.getEntryCountString()
-			if (feed.feed.fetchError) { //TODO better
+		fun bindItem(feedWithCount: FeedWithCount) {
+			itemView.title.text = feedWithCount.feed.title
+			itemView.entry_count?.text = feedWithCount.getEntryCountString()
+			if (feedWithCount.feed.fetchError) { //TODO better
 				itemView.title.setTextColor(Color.RED)
 			} else {
 				itemView.title.setTextColor(Color.WHITE)
 			}
 			itemView.icon.isClickable = false
-			itemView.icon.setImageDrawable(feed.feed.getLetterDrawable(true))
+			itemView.icon.setImageDrawable(feedWithCount.feed.getLetterDrawable(true))
 			itemView.setPadding(itemView.dip(30), 0, 0, 0)
 			itemView.onClick {
-				feedClickListener?.invoke(itemView, feed)
+				feedClickListener?.invoke(itemView, feedWithCount)
 			}
 			itemView.onLongClick {
-				feedLongClickListener?.invoke(itemView, feed)
+				feedLongClickListener?.invoke(itemView, feedWithCount)
 				true
 			}
 
-			bindItem(itemView, feed)
+			bindItem(itemView, feedWithCount)
 		}
 	}
 }
