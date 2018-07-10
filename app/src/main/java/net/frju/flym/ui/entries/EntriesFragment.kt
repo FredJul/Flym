@@ -90,7 +90,7 @@ class EntriesFragment : Fragment() {
 	private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
 	private val adapter = EntryAdapter({ entryWithFeed ->
-		navigator.goToEntryDetails(entryWithFeed, entryIds!!)
+		navigator.goToEntryDetails(entryWithFeed.entry.id, entryIds!!)
 	}, { entryWithFeed, view ->
 		entryWithFeed.entry.favorite = !entryWithFeed.entry.favorite
 

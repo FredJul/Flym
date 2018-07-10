@@ -45,7 +45,6 @@ import kotlinx.android.synthetic.main.view_main_containers.*
 import kotlinx.android.synthetic.main.view_main_drawer_header.*
 import net.fred.feedex.R
 import net.frju.flym.App
-import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.FeedWithCount
 import net.frju.flym.data.utils.PrefUtils
@@ -348,12 +347,12 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		}
 	}
 
-	override fun goToEntryDetails(entryWithFeed: EntryWithFeed, allEntryIds: List<String>) {
+	override fun goToEntryDetails(entryId: String, allEntryIds: List<String>) {
 		closeKeyboard()
 
 		if (containers_layout.hasTwoColumns()) {
 			containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
-			val fragment = EntryDetailsFragment.newInstance(entryWithFeed, allEntryIds)
+			val fragment = EntryDetailsFragment.newInstance(entryId, allEntryIds)
 			supportFragmentManager
 					.beginTransaction()
 					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -361,9 +360,9 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 					.commitAllowingStateLoss()
 
 			val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
-			listFragment.setSelectedEntryId(entryWithFeed.entry.id)
+			listFragment.setSelectedEntryId(entryId)
 		} else {
-			startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY to entryWithFeed, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds)
+			startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY_ID to entryId, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds)
 		}
 	}
 

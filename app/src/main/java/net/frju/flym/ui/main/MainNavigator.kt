@@ -17,7 +17,6 @@
 
 package net.frju.flym.ui.main
 
-import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
 
 interface MainNavigator {
@@ -28,7 +27,7 @@ interface MainNavigator {
 
     fun goToEntriesList(feed: Feed?)
 
-	fun goToEntryDetails(entryWithFeed: EntryWithFeed, allEntryIds: List<String>)
+	fun goToEntryDetails(entryId: String, allEntryIds: List<String>)
 
 	fun goToAboutMe()
 
