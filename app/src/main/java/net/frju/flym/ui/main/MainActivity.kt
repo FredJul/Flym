@@ -348,12 +348,12 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		}
 	}
 
-	override fun goToEntryDetails(entry: EntryWithFeed, allEntryIds: List<String>) {
+	override fun goToEntryDetails(entryWithFeed: EntryWithFeed, allEntryIds: List<String>) {
 		closeKeyboard()
 
 		if (containers_layout.hasTwoColumns()) {
 			containers_layout.state = MainNavigator.State.TWO_COLUMNS_WITH_DETAILS
-			val fragment = EntryDetailsFragment.newInstance(entry, allEntryIds)
+			val fragment = EntryDetailsFragment.newInstance(entryWithFeed, allEntryIds)
 			supportFragmentManager
 					.beginTransaction()
 					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -361,9 +361,9 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 					.commitAllowingStateLoss()
 
 			val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
-			listFragment.setSelectedEntryId(entry.id)
+			listFragment.setSelectedEntryId(entryWithFeed.entry.id)
 		} else {
-			startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY to entry, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds)
+			startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY to entryWithFeed, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds)
 		}
 	}
 

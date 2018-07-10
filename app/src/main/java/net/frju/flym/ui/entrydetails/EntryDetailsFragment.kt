@@ -60,12 +60,12 @@ class EntryDetailsFragment : Fragment() {
 
 	private val navigator: MainNavigator? by lazy { activity as? MainNavigator }
 
-	private lateinit var entry: EntryWithFeed
+	private lateinit var entryWithFeed: EntryWithFeed
 	private var allEntryIds = emptyList<String>()
 		set(value) {
 			field = value
 
-			val currentIdx = value.indexOf(entry.id)
+			val currentIdx = value.indexOf(entryWithFeed.entry.id)
 
 			previousId = if (currentIdx <= 0) {
 				null
@@ -107,7 +107,7 @@ class EntryDetailsFragment : Fragment() {
 
 		doAsync {
 			// getting the parcelable on UI thread can make it sluggish
-			entry = arguments?.getParcelable(ARG_ENTRY)!!
+			entryWithFeed = arguments?.getParcelable(ARG_ENTRY)!!
 			allEntryIds = arguments?.getStringArrayList(ARG_ALL_ENTRIES_IDS)!!
 
 			uiThread {
@@ -118,7 +118,7 @@ class EntryDetailsFragment : Fragment() {
 								App.db.entryDao().findByIdWithFeed(nextId)?.let { newEntry ->
 									uiThread {
 										setEntry(newEntry, allEntryIds)
-										navigator?.setSelectedEntryId(newEntry.id)
+										navigator?.setSelectedEntryId(newEntry.entry.id)
 									}
 								}
 							}
@@ -132,7 +132,7 @@ class EntryDetailsFragment : Fragment() {
 								App.db.entryDao().findByIdWithFeed(previousId)?.let { newEntry ->
 									uiThread {
 										setEntry(newEntry, allEntryIds)
-										navigator?.setSelectedEntryId(newEntry.id)
+										navigator?.setSelectedEntryId(newEntry.entry.id)
 									}
 								}
 							}
@@ -148,12 +148,12 @@ class EntryDetailsFragment : Fragment() {
 
 	private fun updateUI() {
 		doAsync {
-			App.db.entryDao().markAsRead(listOf(entry.id))
+			App.db.entryDao().markAsRead(listOf(entryWithFeed.entry.id))
 		}
 
 		preferFullText = true
 		isMobilizing = false
-		entry_view.setEntry(entry, preferFullText)
+		entry_view.setEntry(entryWithFeed, preferFullText)
 
 		initDataObservers()
 
@@ -164,7 +164,7 @@ class EntryDetailsFragment : Fragment() {
 		isMobilizingLiveData?.removeObservers(this)
 		refresh_layout.isRefreshing = false
 
-		isMobilizingLiveData = App.db.taskDao().observeItemMobilizationTasksCount(entry.id)
+		isMobilizingLiveData = App.db.taskDao().observeItemMobilizationTasksCount(entryWithFeed.entry.id)
 		isMobilizingLiveData?.observe(this, Observer<Int> { count ->
 			if (count ?: 0 > 0) {
 				isMobilizing = true
@@ -177,10 +177,10 @@ class EntryDetailsFragment : Fragment() {
 			} else {
 				if (isMobilizing) {
 					doAsync {
-						App.db.entryDao().findByIdWithFeed(entry.id)?.let { newEntry ->
+						App.db.entryDao().findByIdWithFeed(entryWithFeed.entry.id)?.let { newEntry ->
 							uiThread {
-								entry = newEntry
-								entry_view.setEntry(entry, preferFullText)
+								entryWithFeed = newEntry
+								entry_view.setEntry(entryWithFeed, preferFullText)
 
 								setupToolbar()
 							}
@@ -196,7 +196,7 @@ class EntryDetailsFragment : Fragment() {
 
 	private fun setupToolbar() {
 		toolbar.apply {
-			title = entry.feedTitle
+			title = entryWithFeed.feedTitle
 
 			menu.clear()
 			inflateMenu(R.menu.menu_fragment_entry_details)
@@ -206,14 +206,14 @@ class EntryDetailsFragment : Fragment() {
 				setNavigationOnClickListener { activity?.onBackPressed() }
 			}
 
-			if (entry.favorite) {
+			if (entryWithFeed.entry.favorite) {
 				menu.findItem(R.id.menu_entry_details__favorite)
 						.setTitle(R.string.menu_unstar)
 						.setIcon(R.drawable.ic_star_white_24dp)
 			}
 
 
-			if (entry.mobilizedContent == null || !preferFullText) {
+			if (entryWithFeed.entry.mobilizedContent == null || !preferFullText) {
 				menu.findItem(R.id.menu_entry_details__fulltext).isVisible = true
 				menu.findItem(R.id.menu_entry_details__original_text).isVisible = false
 			} else {
@@ -224,25 +224,25 @@ class EntryDetailsFragment : Fragment() {
 			setOnMenuItemClickListener { item ->
 				when (item?.itemId) {
 					R.id.menu_entry_details__favorite -> {
-						entry.favorite = !entry.favorite
-						entry.read = true // otherwise it marked it as unread again
+						entryWithFeed.entry.favorite = !entryWithFeed.entry.favorite
+						entryWithFeed.entry.read = true // otherwise it marked it as unread again
 
-						if (entry.favorite) {
+						if (entryWithFeed.entry.favorite) {
 							item.setTitle(R.string.menu_unstar).setIcon(R.drawable.ic_star_white_24dp)
 						} else {
 							item.setTitle(R.string.menu_star).setIcon(R.drawable.ic_star_border_white_24dp)
 						}
 
 						doAsync {
-							App.db.entryDao().update(entry)
+							App.db.entryDao().update(entryWithFeed.entry)
 						}
 					}
 					R.id.menu_entry_details__open_browser -> {
-						startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entry.link)))
+						startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entryWithFeed.entry.link)))
 					}
 					R.id.menu_entry_details__share -> {
 						startActivity(Intent.createChooser(
-								Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, entry.title).putExtra(Intent.EXTRA_TEXT, entry.link)
+								Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, entryWithFeed.entry.title).putExtra(Intent.EXTRA_TEXT, entryWithFeed.entry.link)
 										.setType("text/plain"), getString(R.string.menu_share)
 						))
 					}
@@ -254,7 +254,7 @@ class EntryDetailsFragment : Fragment() {
 					}
 					R.id.menu_entry_details__mark_as_unread -> {
 						doAsync {
-							App.db.entryDao().markAsUnread(listOf(entry.id))
+							App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
 						}
 						if (activity?.containers_layout?.hasTwoColumns() != true) {
 							activity?.onBackPressed()
@@ -270,12 +270,12 @@ class EntryDetailsFragment : Fragment() {
 	}
 
 	private fun switchFullTextMode() {
-		if (entry.mobilizedContent == null || !preferFullText) {
-			if (entry.mobilizedContent == null) {
+		if (entryWithFeed.entry.mobilizedContent == null || !preferFullText) {
+			if (entryWithFeed.entry.mobilizedContent == null) {
 				this@EntryDetailsFragment.context?.let { c ->
 					if (c.isOnline()) {
 						doAsync {
-							FetcherService.addEntriesToMobilize(listOf(entry.id))
+							FetcherService.addEntriesToMobilize(listOf(entryWithFeed.entry.id))
 							c.startService(Intent(c, FetcherService::class.java).setAction(FetcherService.ACTION_MOBILIZE_FEEDS))
 						}
 					} else {
@@ -286,21 +286,21 @@ class EntryDetailsFragment : Fragment() {
 			} else {
 				refresh_layout.isRefreshing = false
 				preferFullText = true
-				entry_view.setEntry(entry, preferFullText)
+				entry_view.setEntry(entryWithFeed, preferFullText)
 
 				setupToolbar()
 			}
 		} else {
 			refresh_layout.isRefreshing = isMobilizing
 			preferFullText = false
-			entry_view.setEntry(entry, preferFullText)
+			entry_view.setEntry(entryWithFeed, preferFullText)
 
 			setupToolbar()
 		}
 	}
 
 	fun setEntry(entry: EntryWithFeed, allEntryIds: List<String>) {
-		this.entry = entry
+		this.entryWithFeed = entry
 		this.allEntryIds = allEntryIds
 		arguments?.putParcelable(ARG_ENTRY, entry)
 		arguments?.putStringArrayList(ARG_ALL_ENTRIES_IDS, ArrayList(allEntryIds))

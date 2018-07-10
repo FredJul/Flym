@@ -487,7 +487,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 				IMAGE_FOLDER_FILE.listFiles().forEach { file ->
 					// If old file and not part of a favorite entry
-					if (file.lastModified() < keepDateBorderTime && !favorites.any { file.name.startsWith(it.id + ID_SEPARATOR) }) {
+					if (file.lastModified() < keepDateBorderTime && !favorites.any { file.name.startsWith(it.entry.id + ID_SEPARATOR) }) {
 						file.delete()
 					}
 				}

@@ -84,11 +84,6 @@ dependencies {
 	implementation "com.android.support:cardview-v7:$support_version"
 	implementation "com.android.support:recyclerview-v7:$support_version"
 
-	def paperparcel_version = '2.0.6'
-	implementation "nz.bradcampbell:paperparcel:$paperparcel_version"
-	implementation "nz.bradcampbell:paperparcel-kotlin:$paperparcel_version"
-	kapt "nz.bradcampbell:paperparcel-compiler:$paperparcel_version"
-
 	def anko_version = '0.10.5'
 	implementation "org.jetbrains.anko:anko-sdk21:$anko_version"
 	implementation "org.jetbrains.anko:anko-sdk21-listeners:$anko_version"

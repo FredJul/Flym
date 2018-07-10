@@ -28,7 +28,7 @@ interface MainNavigator {
 
     fun goToEntriesList(feed: Feed?)
 
-    fun goToEntryDetails(entry: EntryWithFeed, allEntryIds: List<String>)
+	fun goToEntryDetails(entryWithFeed: EntryWithFeed, allEntryIds: List<String>)
 
 	fun goToAboutMe()
 

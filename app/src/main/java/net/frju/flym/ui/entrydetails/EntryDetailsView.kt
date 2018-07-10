@@ -119,15 +119,15 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    fun setEntry(entry: EntryWithFeed?, preferFullText: Boolean) {
-        if (entry == null) {
+    fun setEntry(entryWithFeed: EntryWithFeed?, preferFullText: Boolean) {
+        if (entryWithFeed == null) {
             loadDataWithBaseURL("", "", TEXT_HTML, UTF8, null)
         } else {
-			var contentText = if (preferFullText) entry.mobilizedContent
-					?: entry.description.orEmpty() else entry.description.orEmpty()
+            var contentText = if (preferFullText) entryWithFeed.entry.mobilizedContent
+                    ?: entryWithFeed.entry.description.orEmpty() else entryWithFeed.entry.description.orEmpty()
 
             if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
-                contentText = HtmlUtils.replaceImageURLs(contentText, entry.id)
+                contentText = HtmlUtils.replaceImageURLs(contentText, entryWithFeed.entry.id)
                 if (settings.blockNetworkImage) {
                     // setBlockNetworkImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
                     loadData("", TEXT_HTML, UTF8)
@@ -138,14 +138,14 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
                 settings.blockNetworkImage = true
             }
 
-            val subtitle = StringBuilder(entry.getReadablePublicationDate(context))
-            if (entry.author?.isNotEmpty() == true) {
-                subtitle.append(" &mdash; ").append(entry.author)
+            val subtitle = StringBuilder(entryWithFeed.entry.getReadablePublicationDate(context))
+            if (entryWithFeed.entry.author?.isNotEmpty() == true) {
+                subtitle.append(" &mdash; ").append(entryWithFeed.entry.author)
             }
 
             val html = StringBuilder(CSS)
                     .append(BODY_START)
-                    .append(TITLE_START).append(entry.link).append(TITLE_MIDDLE).append(entry.title).append(TITLE_END)
+                    .append(TITLE_START).append(entryWithFeed.entry.link).append(TITLE_MIDDLE).append(entryWithFeed.entry.title).append(TITLE_END)
                     .append(SUBTITLE_START).append(subtitle).append(SUBTITLE_END)
                     .append(contentText)
                     .append(BODY_END)
