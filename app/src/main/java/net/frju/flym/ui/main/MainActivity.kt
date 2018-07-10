@@ -59,13 +59,25 @@ import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textResource
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.*
+import java.io.File
+import java.io.FileReader
+import java.io.FileWriter
+import java.io.Reader
+import java.io.StringReader
+import java.io.Writer
 import java.net.URL
-import java.util.*
+import java.util.Date
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -128,7 +140,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 				val all = FeedWithCount(feed = Feed().apply {
 					id = Feed.ALL_ENTRIES_ID
 					title = getString(R.string.all_entries)
-				}, entryCount = it.filter { it.feed.groupId == null }.sumBy { it.entryCount })
+				}, entryCount = it.sumBy { it.entryCount })
                 newFeedGroups.add(FeedGroup(all, listOf()))
 
 				val subFeedMap = it.groupBy { it.feed.groupId }

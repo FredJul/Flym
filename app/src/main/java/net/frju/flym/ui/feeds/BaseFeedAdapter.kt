@@ -127,7 +127,7 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 				}
 			}
 			itemView.title.text = group.feed.feed.title
-			itemView.entry_count?.text = group.feed.getEntryCountString()
+			itemView.entry_count?.text = group.getEntryCountString()
 			if (group.feed.feed.fetchError) { //TODO better
 				itemView.title.setTextColor(Color.RED)
 			} else {

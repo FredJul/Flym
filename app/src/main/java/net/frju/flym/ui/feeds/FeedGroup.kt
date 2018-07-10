@@ -46,4 +46,9 @@ class FeedGroup(val feed: FeedWithCount, val subFeeds: List<FeedWithCount>) : Pa
     override fun hashCode(): Int {
         return feed.feed.id.hashCode()
     }
+
+    fun getEntryCountString(): String {
+        val entryCount = if (subFeeds.isNotEmpty()) subFeeds.sumBy { it.entryCount } else feed.entryCount
+        return if (entryCount > 0) entryCount.toString() else ""
+    }
 }
