@@ -110,7 +110,7 @@ class FeedSearchDialog(context: Context, private val defaultFeeds: List<SearchFe
                                     for (i in 0 until entries.length()) {
                                         try {
                                             val entry = entries.get(i) as JSONObject
-											val url = entry.get(FEED_SEARCH_URL).toString().replace("feedWithCount/", "")
+                                            val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
                                             if (!url.isEmpty() && !FEED_SEARCH_BLACKLIST.contains(url)) {
                                                 @Suppress("DEPRECATION")
                                                 array.add(
