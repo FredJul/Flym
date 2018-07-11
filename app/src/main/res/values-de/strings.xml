@@ -27,7 +27,7 @@
     <!-- GENERAL -->
     <string name="app_name">Flym</string>
     <string name="about_flym">Über Flym</string>
-    <string name="welcome_title">Wilkommen in Flym. Willst du einen Feed hinzufügen?</string>
+    <string name="welcome_title">Willkommen bei Flym. Willst du einen Feed hinzufügen?</string>
     <string name="welcome_title_with_opml_import">Möchtest du frühere Flym-Feeds importieren?</string>
     <string name="cannot_find_feeds">Keine Feeds gefunden</string>
     <string name="menu_settings">Einstellungen</string>
@@ -65,12 +65,12 @@
     <string name="google_news_top_stories">Schlagzeilen</string>
     <string name="google_news_world">International</string>
     <string name="google_news_business">Wirtschaft</string>
-    <string name="google_news_science_technology">Panorama &amp; Wissen/Technik</string>
+    <string name="google_news_science_technology">Wissenschaft &amp; Technik</string>
     <string name="google_news_entertainment">Unterhaltung</string>
     <string name="google_news_sports">Sport</string>
     <string name="google_news_health">Gesundheit</string>
-    <string name="feed_name">Feed name</string>
-    <string name="feed_link">Feed link</string>
+    <string name="feed_name">Feed-Name</string>
+    <string name="feed_link">Feed-Link</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Alle Einträge</string>
