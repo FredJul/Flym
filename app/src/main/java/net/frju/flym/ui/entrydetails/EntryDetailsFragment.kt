@@ -19,7 +19,6 @@ package net.frju.flym.ui.entrydetails
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -209,8 +208,8 @@ class EntryDetailsFragment : Fragment() {
 						R.id.menu_entry_details__open_browser -> {
 							try {
 								startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entryWithFeed.entry.link)))
-							} catch (e: ActivityNotFoundException) {
-								toast(R.string.error) // TODO better error message
+							} catch (e: Exception) {
+								toast(R.string.error) // TODO better error message, can be ActivityNotFoundException if no browser or NPE if no link
 							}
 						}
 						R.id.menu_entry_details__share -> {
