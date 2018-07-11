@@ -483,11 +483,11 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			if (IMAGE_FOLDER_FILE.exists()) {
 
 				// We need to exclude favorite entries images to this cleanup
-				val favorites = App.db.entryDao().favorites
+				val favoriteIds = App.db.entryDao().favoriteIds
 
 				IMAGE_FOLDER_FILE.listFiles().forEach { file ->
 					// If old file and not part of a favorite entry
-					if (file.lastModified() < keepDateBorderTime && !favorites.any { file.name.startsWith(it.entry.id + ID_SEPARATOR) }) {
+					if (file.lastModified() < keepDateBorderTime && !favoriteIds.any { file.name.startsWith(it + ID_SEPARATOR) }) {
 						file.delete()
 					}
 				}

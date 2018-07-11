@@ -103,7 +103,11 @@ class EntriesFragment : Fragment() {
 		}
 
 		doAsync {
-			App.db.entryDao().insert(entryWithFeed.entry)
+			if (entryWithFeed.entry.favorite) {
+				App.db.entryDao().markAsFavorite(entryWithFeed.entry.id)
+			} else {
+				App.db.entryDao().markAsNotFavorite(entryWithFeed.entry.id)
+			}
 		}
 	})
 	private var listDisplayDate = Date().time
@@ -304,7 +308,11 @@ class EntriesFragment : Fragment() {
 				adapter.currentList?.get(viewHolder.adapterPosition)?.let { entryWithFeed ->
 					entryWithFeed.entry.read = !entryWithFeed.entry.read
 					doAsync {
-						App.db.entryDao().update(entryWithFeed.entry)
+						if (entryWithFeed.entry.read) {
+							App.db.entryDao().markAsRead(listOf(entryWithFeed.entry.id))
+						} else {
+							App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
+						}
 
 						if (bottom_navigation.selectedItemId != R.id.unreads) {
 							uiThread {
