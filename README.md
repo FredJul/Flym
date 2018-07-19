@@ -21,3 +21,7 @@ It is [free/open-source software](https://www.gnu.org/philosophy/free-sw.html) u
 ![](https://lh3.googleusercontent.com/Ie5lLGF242xxPPuSpDznKvK4OTfYI21xPnipG8p8Gtg7qUS1UPVNP3c0iwL0DLMOOw=w1440-h620-rw) _
 ![](https://lh3.googleusercontent.com/LqORvNPrsJC0VB30oD6mtnIfQTVcxyTkKVVLQnElQ6i9__Kq7bwZGj74FmB3wZ4jWw=w1440-h620-rw) _
 ![](https://lh3.googleusercontent.com/WxTPChHUjJr3EKUj6Kq8pfsT827swCz9HSBH_Cqya1UGaIJjO8SQM6RDrRJHkghMWKE=w1440-h620-rw)
+
+## Bitcoin donation
+
+3DprwFMg5bXGz8QimyiaoEE7mmCkj2DGf5
