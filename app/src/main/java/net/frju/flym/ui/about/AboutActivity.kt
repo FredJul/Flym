@@ -17,8 +17,6 @@
 
 package net.frju.flym.ui.about
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
@@ -46,9 +44,6 @@ class AboutActivity : AppCompatActivity() {
                 .setWrapScrollView(true)
                 .setLinksAnimated(true)
                 .setShowAsCard(true)
-                .addDonateAction {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.me/fredericjulian")))
-                }
                 .build()
 
         setContentView(view)
