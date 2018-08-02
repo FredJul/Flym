@@ -26,14 +26,16 @@ import android.content.Context
 import net.frju.flym.data.converters.Converters
 import net.frju.flym.data.dao.EntryDao
 import net.frju.flym.data.dao.FeedDao
+import net.frju.flym.data.dao.FilterDao
 import net.frju.flym.data.dao.TaskDao
 import net.frju.flym.data.entities.Entry
 import net.frju.flym.data.entities.Feed
+import net.frju.flym.data.entities.Filter
 import net.frju.flym.data.entities.Task
 import org.jetbrains.anko.doAsync
 
 
-@Database(entities = [Feed::class, Entry::class, Task::class], version = 1)
+@Database(entities = [Feed::class, Entry::class, Task::class, Filter::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -108,6 +110,7 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
     abstract fun feedDao(): FeedDao
+    abstract fun filterDao(): FilterDao
     abstract fun entryDao(): EntryDao
     abstract fun taskDao(): TaskDao
 }

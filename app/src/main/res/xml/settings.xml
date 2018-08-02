@@ -46,12 +46,13 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:defaultValue="true"
-			android:key="display_images"
+			android:key="remove_duplicates"
 			android:summary="@string/settings_remove_duplicates_description"
 			android:title="@string/settings_remove_duplicates_description_title"/>
 
 		<EditTextPreference
-			android:title="@string/filter"/>
+			android:title="@string/filter"
+			android:key="filter_keywords"/>
 		
 	</PreferenceCategory>
 
