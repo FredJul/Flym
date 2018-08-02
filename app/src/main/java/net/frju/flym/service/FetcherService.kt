@@ -428,8 +428,18 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				}
 			}
 
-			// Update everything
-			App.db.entryDao().insert(*(entriesToInsert.toTypedArray()))
+			if(!PrefUtils.getBoolean(PrefUtils.REMOVE_DUPLICATES, true)) {
+				// Update everything
+				App.db.entryDao().insert(*(entriesToInsert.toTypedArray()))
+			}
+			else {
+				entriesToInsert.forEach { entry ->
+					var entryInDb = App.db.entryDao().findByTitle(entry.title.toString())
+					if (entryInDb == null) {
+						App.db.entryDao().insert(entry)
+					}
+				}
+			}
 
 			if (feed.retrieveFullText) {
 				FetcherService.addEntriesToMobilize(entries.map { it.id })

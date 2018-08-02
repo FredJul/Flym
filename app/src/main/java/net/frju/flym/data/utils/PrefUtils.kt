@@ -25,6 +25,8 @@ import org.jetbrains.anko.defaultSharedPreferences
 
 object PrefUtils {
 
+	const val REMOVE_DUPLICATES = "remove_duplicates"
+
 	const val FIRST_OPEN = "first_open"
 
 	const val IS_REFRESHING = "is_refreshing"
