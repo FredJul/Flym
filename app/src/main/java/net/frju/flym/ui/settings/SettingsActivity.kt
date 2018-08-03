@@ -21,6 +21,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import net.fred.feedex.R
+import net.frju.flym.data.utils.PrefUtils
+import net.frju.flym.data.tasks.DeleteAllFiltersTask
+import net.frju.flym.data.tasks.InsertFiltersTask
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -32,6 +35,11 @@ class SettingsActivity : AppCompatActivity() {
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 	}
 
+	override fun onBackPressed() {
+		super.onBackPressed()
+		updateFilters()
+	}
+
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		when (item.itemId) {
 			android.R.id.home -> {
@@ -39,5 +47,36 @@ class SettingsActivity : AppCompatActivity() {
 			}
 		}
 		return true
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+		updateFilters()
+	}
+
+	fun updateFilters() {
+		var deleteAllTask = DeleteAllFiltersTask()
+		deleteAllTask.execute()
+
+		var filterString = PrefUtils.getString(PrefUtils.FILTER_KEYWORDS, "")
+
+		if(filterString != null && !filterString.isNullOrEmpty() && !filterString.isBlank()) {
+			var filterStrings = filterString.split("\n")
+			var finalFilters = ArrayList<String>()
+
+			if(filterStrings != null) {
+				for (currentFilterString in filterStrings) {
+					var finalFilterString = currentFilterString.trim()
+					if(finalFilterString != null
+							&& !finalFilterString.isBlank()
+							&& !finalFilterString.isEmpty()) {
+						finalFilters.add(finalFilterString)
+					}
+				}
+			}
+
+			var insertAllTask = InsertFiltersTask()
+			insertAllTask.execute(finalFilters)
+		}
 	}
 }
