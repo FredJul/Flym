@@ -174,7 +174,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                     final int minX = 40;
                     final int minY = 20;
                     final int VIBRATE_DURATION = 25;
-
+                    final int MIN_X_TO_VIEW_ARTICLE = 30;
                     final ViewHolder holder = (ViewHolder) ( (ViewGroup)v.getParent() ).getTag(R.id.holder);
                     if ( event.getAction() == MotionEvent.ACTION_DOWN) {
                         Dog.v( "onTouch ACTION_DOWN" );
@@ -229,7 +229,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                         isPress = false;
                         if ( event.getAction() == MotionEvent.ACTION_UP ) {
                             Dog.v("onTouch ACTION_UP" );
-                            if ( Math.abs( paddingX ) < minX &&
+                            if ( currentx > MIN_X_TO_VIEW_ARTICLE &&
+                                 Math.abs( paddingX ) < minX &&
                                  Math.abs( paddingY ) < minY &&
                                  android.os.SystemClock.elapsedRealtime() - downTime < ViewConfiguration.getLongPressTimeout() )
                                 v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, holder.entryID)));
