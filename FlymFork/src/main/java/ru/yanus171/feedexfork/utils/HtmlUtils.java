@@ -151,7 +151,7 @@ public class HtmlUtils {
 
                     } else if (needDownloadPictures) {
                         String imgTagText = matcher.group(0);
-                        if ( ( index < FetcherService.mMaxImageDownloadCount ) || ( FetcherService.mMaxImageDownloadCount == 0 ) ) {
+                        if ( ( index <= FetcherService.mMaxImageDownloadCount ) || ( FetcherService.mMaxImageDownloadCount == 0 ) ) {
                             imagesToDl.add(srcText);
                             content = content.replace(imgTagText, //getDownloadImageHtml(srcText) +
                                                                   imgTagText.replace(srcText, Constants.FILE_SCHEME + imgPath)
