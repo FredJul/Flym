@@ -148,8 +148,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             mDrawerLayout.setDrawerListener(mDrawerToggle);
         }
 
-        if (!PrefUtils.getBoolean(PrefUtils.REMEBER_LAST_ENTRY, true))
-            selectDrawerItem(0);
+        //if (!PrefUtils.getBoolean(PrefUtils.REMEBER_LAST_ENTRY, true))
+        //    selectDrawerItem(0);
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
