@@ -243,6 +243,14 @@ class EntryDetailsFragment : Fragment() {
 	}
 
 	private fun switchFullTextMode() {
+		// Enable this to test new manual mobilization
+//		doAsync {
+//			entryWithFeed?.entry?.let {
+//				it.mobilizedContent = null
+//				App.db.entryDao().insert(it)
+//			}
+//		}
+
 		entryWithFeed?.let { entryWithFeed ->
 			if (entryWithFeed.entry.mobilizedContent == null || !preferFullText) {
 				if (entryWithFeed.entry.mobilizedContent == null) {
