@@ -97,11 +97,11 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         setContentView(R.layout.activity_main)
 
         more.onClick {
-            it?.let {
-                PopupMenu(this@MainActivity, it).apply {
+			it?.let { view ->
+				PopupMenu(this@MainActivity, view).apply {
                     menuInflater.inflate(R.menu.menu_drawer_header, menu)
-                    setOnMenuItemClickListener {
-                        when (it.itemId) {
+					setOnMenuItemClickListener { item ->
+						when (item.itemId) {
 							R.id.reorder -> startActivity<FeedListEditActivity>()
 							R.id.import_feeds -> pickOpml()
 							R.id.export_feeds -> exportOpml()
@@ -121,17 +121,17 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 			FeedSearchDialog(this).show()
         }
 
-		App.db.feedDao().observeAllWithCount.observe(this@MainActivity, Observer {
-            it?.let {
-                val newFeedGroups = mutableListOf<FeedGroup>()
+		App.db.feedDao().observeAllWithCount.observe(this@MainActivity, Observer { nullableFeeds ->
+			nullableFeeds?.let { feeds ->
+				val newFeedGroups = mutableListOf<FeedGroup>()
 
 				val all = FeedWithCount(feed = Feed().apply {
 					id = Feed.ALL_ENTRIES_ID
 					title = getString(R.string.all_entries)
-				}, entryCount = it.sumBy { it.entryCount })
+				}, entryCount = feeds.sumBy { it.entryCount })
                 newFeedGroups.add(FeedGroup(all, listOf()))
 
-				val subFeedMap = it.groupBy { it.feed.groupId }
+				val subFeedMap = feeds.groupBy { it.feed.groupId }
 
                 newFeedGroups.addAll(
 						subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.feed.id].orEmpty()) }.orEmpty()
@@ -240,6 +240,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             }
         })
 
+		setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
         toolbar.setNavigationOnClickListener { toggleDrawer() }
 
@@ -482,23 +483,23 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		var id = 1L
 		val feedList = mutableListOf<Feed>()
 		val opml = WireFeedInput().build(opmlReader) as Opml
-		opml.outlines.forEach {
-			if (it.xmlUrl != null || it.children.isNotEmpty()) {
+		opml.outlines.forEach { outline ->
+			if (outline.xmlUrl != null || outline.children.isNotEmpty()) {
 				val topLevelFeed = Feed()
 				topLevelFeed.id = id++
-				topLevelFeed.title = it.title
+				topLevelFeed.title = outline.title
 
-				if (it.xmlUrl != null) {
-					if (!it.xmlUrl.startsWith(OLD_GNEWS_TO_IGNORE)) {
-						topLevelFeed.link = it.xmlUrl
-						topLevelFeed.retrieveFullText = it.getAttributeValue(RETRIEVE_FULLTEXT_OPML_ATTR) == "true"
+				if (outline.xmlUrl != null) {
+					if (!outline.xmlUrl.startsWith(OLD_GNEWS_TO_IGNORE)) {
+						topLevelFeed.link = outline.xmlUrl
+						topLevelFeed.retrieveFullText = outline.getAttributeValue(RETRIEVE_FULLTEXT_OPML_ATTR) == "true"
 						feedList.add(topLevelFeed)
 					}
 				} else {
 					topLevelFeed.isGroup = true
 					feedList.add(topLevelFeed)
 
-					it.children.filter { it.xmlUrl != null && !it.xmlUrl.startsWith(OLD_GNEWS_TO_IGNORE) }.forEach {
+					outline.children.filter { it.xmlUrl != null && !it.xmlUrl.startsWith(OLD_GNEWS_TO_IGNORE) }.forEach {
 						val subLevelFeed = Feed()
 						subLevelFeed.id = id++
 						subLevelFeed.title = it.title
@@ -523,16 +524,16 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 			feedType = OPML20Generator().type
 			encoding = "utf-8"
 			created = Date()
-			outlines = feeds[null]?.map {
-				Outline(it.title, if (it.link.isNotBlank()) URL(it.link) else null, null).apply {
-					children = feeds[it.id]?.map {
+			outlines = feeds[null]?.map { feed ->
+				Outline(feed.title, if (feed.link.isNotBlank()) URL(feed.link) else null, null).apply {
+					children = feeds[feed.id]?.map {
 						Outline(it.title, if (it.link.isNotBlank()) URL(it.link) else null, null).apply {
 							if (it.retrieveFullText) {
 								attributes.add(Attribute(RETRIEVE_FULLTEXT_OPML_ATTR, "true"))
 							}
 						}
 					}
-					if (it.retrieveFullText) {
+					if (feed.retrieveFullText) {
 						attributes.add(Attribute(RETRIEVE_FULLTEXT_OPML_ATTR, "true"))
 					}
 				}
