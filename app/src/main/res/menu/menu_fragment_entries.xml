@@ -10,6 +10,11 @@
 		app:actionViewClass="android.support.v7.widget.SearchView"/>
 
 	<item
+		android:id="@+id/menu_entries__share"
+		android:title="@string/menu_share"
+		app:showAsAction="never" />
+
+	<item
 		android:id="@+id/menu_entries__settings"
 		android:title="@string/menu_settings"
 		app:showAsAction="never"/>

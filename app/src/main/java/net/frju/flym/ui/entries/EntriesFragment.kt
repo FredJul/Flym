@@ -57,7 +57,7 @@ import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.uiThread
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
-import java.util.Date
+import java.util.*
 
 
 class EntriesFragment : Fragment() {
@@ -148,6 +148,8 @@ class EntriesFragment : Fragment() {
 				initDataObservers()
 				recycler_view.scrollToPosition(0)
 			}
+
+			activity?.toolbar?.menu?.findItem(R.id.menu_entries__share)?.isVisible = it.itemId == R.id.favorites
 			true
 		}
 
@@ -157,20 +159,20 @@ class EntriesFragment : Fragment() {
 			badgeBackgroundColor = ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark)
 		}
 
-		read_all_fab.onClick {
+		read_all_fab.onClick { _ ->
 			entryIds?.let { entryIds ->
 				if (entryIds.isNotEmpty()) {
 					doAsync {
 						// TODO check if limit still needed
-						entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
+						entryIds.withIndex().groupBy { it.index / 300 }.map { pair -> pair.value.map { it.value } }.forEach {
 							App.db.entryDao().markAsRead(it)
 						}
 					}
 
-					longSnackbar(coordinator, R.string.marked_as_read, R.string.undo) {
+					longSnackbar(coordinator, R.string.marked_as_read, R.string.undo) { _ ->
 						doAsync {
 							// TODO check if limit still needed
-							entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
+							entryIds.withIndex().groupBy { it.index / 300 }.map { pair -> pair.value.map { it.value } }.forEach {
 								App.db.entryDao().markAsUnread(it)
 							}
 
@@ -362,6 +364,8 @@ class EntriesFragment : Fragment() {
 			menu.clear()
 			inflateMenu(R.menu.menu_fragment_entries)
 
+			menu.findItem(R.id.menu_entries__share).isVisible = bottom_navigation.selectedItemId == R.id.favorites
+
 			val searchItem = menu.findItem(R.id.menu_entries__search)
 			val searchView = searchItem.actionView as SearchView
 			if (searchText != null) {
@@ -408,16 +412,25 @@ class EntriesFragment : Fragment() {
 
 			setOnMenuItemClickListener { item ->
 				when (item.itemId) {
+					R.id.menu_entries__share -> {
+						// TODO: will only work for the visible 30 items, need to find something better
+						adapter.currentList?.joinToString("\n\n") { it.entry.title + ": " + it.entry.link }?.let { content ->
+							val title = getString(R.string.app_name) + " " + getString(R.string.favorites)
+							startActivity(Intent.createChooser(
+									Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, content)
+											.setType("text/plain"), getString(R.string.menu_share)
+							))
+						}
+					}
 					R.id.menu_entries__about -> {
 						navigator.goToAboutMe()
-						true
 					}
 					R.id.menu_entries__settings -> {
 						navigator.goToSettings()
-						true
 					}
-					else -> false
 				}
+
+				true
 			}
 		}
 	}

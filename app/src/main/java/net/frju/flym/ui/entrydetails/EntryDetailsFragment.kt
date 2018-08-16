@@ -232,8 +232,6 @@ class EntryDetailsFragment : Fragment() {
 								activity?.onBackPressed()
 							}
 						}
-						else -> {
-						}
 					}
 
 					true
