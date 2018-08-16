@@ -31,6 +31,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
+import androidx.core.view.isGone
 import com.codekidlabs.storagechooser.StorageChooser
 import com.rometools.opml.feed.opml.Attribute
 import com.rometools.opml.feed.opml.Opml
@@ -58,25 +59,13 @@ import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textResource
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
-import java.io.Reader
-import java.io.StringReader
-import java.io.Writer
+import java.io.*
 import java.net.URL
-import java.util.Date
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -183,7 +172,11 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 									@SuppressLint("InflateParams")
 									val input = layoutInflater.inflate(R.layout.dialog_edit_feed, null, false).apply {
 										feed_name.setText(feedWithCount.feed.title)
-										feed_link.setText(feedWithCount.feed.link)
+										if (feedWithCount.feed.isGroup) {
+											feed_link.isGone = true
+										} else {
+											feed_link.setText(feedWithCount.feed.link)
+										}
 									}
 
                                     AlertDialog.Builder(this@MainActivity)
@@ -192,12 +185,14 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                                             .setPositiveButton(android.R.string.ok) { dialog, which ->
 												val newName = input.feed_name.text.toString()
 												val newLink = input.feed_link.text.toString()
-												if (newName.isNotBlank() && newLink.isNotBlank()) {
+												if (newName.isNotBlank() && (newLink.isNotBlank() || feedWithCount.feed.isGroup)) {
                                                     doAsync {
 														// Need to do a copy to not directly modify the memory and being able to detect changes
 														val newFeed = feedWithCount.feed.copy().apply {
 															title = newName
-															link = newLink
+															if (!feedWithCount.feed.isGroup) {
+																link = newLink
+															}
 														}
 														App.db.feedDao().update(newFeed)
                                                     }
