@@ -22,6 +22,7 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
+import android.arch.persistence.room.migration.Migration
 import android.content.Context
 import net.frju.flym.data.converters.Converters
 import net.frju.flym.data.dao.EntryDao
@@ -33,15 +34,23 @@ import net.frju.flym.data.entities.Task
 import org.jetbrains.anko.doAsync
 
 
-@Database(entities = [Feed::class, Entry::class, Task::class], version = 1)
+@Database(entities = [Feed::class, Entry::class, Task::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         private const val DATABASE_NAME = "db"
 
+        private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("DELETE FROM entries WHERE rowid NOT IN (SELECT MIN(rowid) FROM entries GROUP BY link)")
+                database.execSQL("CREATE UNIQUE INDEX index_entries_link ON entries(link)")
+            }
+        }
+
         fun createDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, DATABASE_NAME)
+                    .addMigrations(MIGRATION_1_2)
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
