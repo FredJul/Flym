@@ -53,7 +53,7 @@ class EntryDetailsFragment : Fragment() {
 
 		fun newInstance(entryId: String, allEntryIds: List<String>): EntryDetailsFragment {
 			return EntryDetailsFragment().apply {
-                arguments = bundleOf(ARG_ENTRY_ID to entryId, ARG_ALL_ENTRIES_IDS to allEntryIds.toMutableList()) // toMutableList() just in case the the list is seen as Serializable instead of ArrayList
+                arguments = bundleOf(ARG_ENTRY_ID to entryId, ARG_ALL_ENTRIES_IDS to allEntryIds)
 			}
 		}
 	}
