@@ -358,12 +358,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
             listFragment.setSelectedEntryId(entryId)
         } else {
-            try {
-                startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY_ID to entryId, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds.toMutableList()) // toMutableList() just in case the the list is seen as Serializable instead of ArrayList
-            } catch (_: Throwable) {
-                // in case the list is too big to be serialized into an Intent
-                startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY_ID to entryId, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds.take(allEntryIds.size / 2).toMutableList())
-            }
+            startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY_ID to entryId, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds.take(500).toMutableList()) // take() to avoid TransactionTooLargeException and toMutableList() just in case the the list is seen as Serializable instead of ArrayList
         }
     }
 
