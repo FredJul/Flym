@@ -72,8 +72,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		}
 
 		private val HTTP_CLIENT: OkHttpClient = OkHttpClient.Builder()
-				.connectTimeout(4, TimeUnit.SECONDS)
-				.readTimeout(4, TimeUnit.SECONDS)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
 				.cookieJar(JavaNetCookieJar(COOKIE_MANAGER))
 				.build()
 
