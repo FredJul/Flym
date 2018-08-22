@@ -86,11 +86,11 @@ class FeedListEditFragment : Fragment() {
             }
         }
 
-        App.db.feedDao().observeAllWithCount.observe(this, Observer {
-            it?.let {
+        App.db.feedDao().observeAllWithCount.observe(this, Observer { nullableFeeds ->
+            nullableFeeds?.let { feeds ->
                 feedGroups.clear()
 
-                val subFeedMap = it.groupBy { it.feed.groupId }
+                val subFeedMap = feeds.groupBy { it.feed.groupId }
 
                 feedGroups.addAll(
                         subFeedMap[null]?.map { FeedGroup(it, subFeedMap[it.feed.id].orEmpty()) }.orEmpty()

@@ -26,7 +26,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
@@ -41,17 +40,14 @@ import net.frju.flym.data.entities.*
 import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.ui.main.MainActivity
 import net.frju.flym.utils.HtmlUtils
+import net.frju.flym.utils.isOnline
 import net.frju.flym.utils.sha1
 import okhttp3.Call
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.connectivityManager
-import org.jetbrains.anko.error
-import org.jetbrains.anko.notificationManager
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.*
 import org.jsoup.Jsoup
 import java.io.File
 import java.io.FileOutputStream
@@ -73,8 +69,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		}
 
 		private val HTTP_CLIENT: OkHttpClient = OkHttpClient.Builder()
-				.connectTimeout(4, TimeUnit.SECONDS)
-				.readTimeout(4, TimeUnit.SECONDS)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
 				.cookieJar(JavaNetCookieJar(COOKIE_MANAGER))
 				.build()
 
@@ -103,14 +99,13 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				return
 			}
 
-			val networkInfo = context.connectivityManager.activeNetworkInfo
 			// Connectivity issue, we quit
-			if (networkInfo == null || networkInfo.state != NetworkInfo.State.CONNECTED) {
+			if (!context.isOnline()) {
 				return
 			}
 
 			val skipFetch = isFromAutoRefresh && PrefUtils.getBoolean(PrefUtils.REFRESH_WIFI_ONLY, false)
-					&& networkInfo.type != ConnectivityManager.TYPE_WIFI
+					&& context.connectivityManager.activeNetworkInfo?.type != ConnectivityManager.TYPE_WIFI
 			// We need to skip the fetching process, so we quit
 			if (skipFetch) {
 				return
@@ -191,8 +186,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				if (PrefUtils.PRELOAD_IMAGE_MODE__ALWAYS == fetchPictureMode) {
 					return true
 				} else if (PrefUtils.PRELOAD_IMAGE_MODE__WIFI_ONLY == fetchPictureMode) {
-					val ni = App.context.connectivityManager.activeNetworkInfo
-					if (ni != null && ni.type == ConnectivityManager.TYPE_WIFI) {
+					if (App.context.connectivityManager.activeNetworkInfo?.type == ConnectivityManager.TYPE_WIFI) {
 						return true
 					}
 				}
@@ -221,9 +215,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				val newTasks = mutableListOf<Task>()
 				for ((key, value) in imgUrlsToDownload) {
 					for (img in value) {
-						val task = Task()
-						task.entryId = key
-						task.imageLinkToDl = img
+						val task = Task().apply {
+							entryId = key
+							imageLinkToDl = img
+						}
 						newTasks.add(task)
 					}
 				}
@@ -235,8 +230,9 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		fun addEntriesToMobilize(entryIds: List<String>) {
 			val newTasks = mutableListOf<Task>()
 			for (id in entryIds) {
-				val task = Task()
-				task.entryId = id
+				val task = Task().apply {
+					entryId = id
+				}
 				newTasks.add(task)
 			}
 
@@ -554,9 +550,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 		val isFromAutoRefresh = intent.getBooleanExtra(FROM_AUTO_REFRESH, false)
 
-		val networkInfo = connectivityManager.activeNetworkInfo
 		// Connectivity issue, we quit
-		if (networkInfo == null || networkInfo.state != NetworkInfo.State.CONNECTED) {
+		if (!isOnline()) {
 			if (ACTION_REFRESH_FEEDS == intent.action && !isFromAutoRefresh) {
 				// Display a toast in that case
 				handler.post { toast(R.string.network_error).show() }

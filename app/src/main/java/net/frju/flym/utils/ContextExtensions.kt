@@ -22,7 +22,7 @@ import android.content.Context
 import org.jetbrains.anko.connectivityManager
 import org.jetbrains.anko.inputMethodManager
 
-fun Context.isOnline() = connectivityManager.activeNetworkInfo?.isConnectedOrConnecting == true
+fun Context.isOnline() = connectivityManager.activeNetworkInfo?.isConnected == true
 
 fun Activity.closeKeyboard() {
 	currentFocus?.let {
