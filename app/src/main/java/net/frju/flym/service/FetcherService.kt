@@ -443,7 +443,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 		private fun filterItem(it: Entry, entries: MutableList<Entry>) {
 			if (PrefUtils.getBoolean(PrefUtils.REMOVE_DUPLICATES, true)) {
-				if (App.db.entryDao().findByTitle(it.title.toString()) != null) {
+				if (App.db.entryDao().findByTitle(it.title.toString()) != null
+						|| App.db.entryDao().findByLink(it.link.toString())!= null) {
 					return
 				}
 				if(!entryFilteredByKeyword(it)) {
