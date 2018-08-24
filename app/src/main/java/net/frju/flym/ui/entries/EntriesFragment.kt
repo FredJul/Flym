@@ -31,10 +31,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.fragment_entries.*
@@ -48,6 +45,7 @@ import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.closeKeyboard
+import org.jetbrains.anko.appcompat.v7.titleResource
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
@@ -57,7 +55,7 @@ import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.uiThread
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
-import java.util.Date
+import java.util.*
 
 
 class EntriesFragment : Fragment() {
@@ -83,7 +81,7 @@ class EntriesFragment : Fragment() {
 		set(value) {
 			field = value
 
-			setupToolbar()
+			setupTitle()
 			bottom_navigation.post { initDataObservers() } // Needed to retrieve the correct selected tab position
 		}
 
@@ -125,6 +123,10 @@ class EntriesFragment : Fragment() {
 		}
 	}
 
+	init {
+		setHasOptionsMenu(true)
+	}
+
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
 			inflater.inflate(R.layout.fragment_entries, container, false)
 
@@ -148,6 +150,8 @@ class EntriesFragment : Fragment() {
 				initDataObservers()
 				recycler_view.scrollToPosition(0)
 			}
+
+			activity?.toolbar?.menu?.findItem(R.id.menu_entries__share)?.isVisible = it.itemId == R.id.favorites
 			true
 		}
 
@@ -157,20 +161,20 @@ class EntriesFragment : Fragment() {
 			badgeBackgroundColor = ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark)
 		}
 
-		read_all_fab.onClick {
+		read_all_fab.onClick { _ ->
 			entryIds?.let { entryIds ->
 				if (entryIds.isNotEmpty()) {
 					doAsync {
 						// TODO check if limit still needed
-						entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
+						entryIds.withIndex().groupBy { it.index / 300 }.map { pair -> pair.value.map { it.value } }.forEach {
 							App.db.entryDao().markAsRead(it)
 						}
 					}
 
-					longSnackbar(coordinator, R.string.marked_as_read, R.string.undo) {
+					longSnackbar(coordinator, R.string.marked_as_read, R.string.undo) { _ ->
 						doAsync {
 							// TODO check if limit still needed
-							entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
+							entryIds.withIndex().groupBy { it.index / 300 }.map { pair -> pair.value.map { it.value } }.forEach {
 								App.db.entryDao().markAsUnread(it)
 							}
 
@@ -351,75 +355,89 @@ class EntriesFragment : Fragment() {
 		refresh_layout.postDelayed({ refreshSwipeProgress() }, 500)
 	}
 
-	private fun setupToolbar() {
+	private fun setupTitle() {
 		activity?.toolbar?.apply {
 			if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
-				setTitle(R.string.all_entries)
+				titleResource = R.string.all_entries
 			} else {
 				title = feed?.title
 			}
+		}
+	}
 
-			menu.clear()
-			inflateMenu(R.menu.menu_fragment_entries)
+	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+		super.onCreateOptionsMenu(menu, inflater)
 
-			val searchItem = menu.findItem(R.id.menu_entries__search)
-			val searchView = searchItem.actionView as SearchView
-			if (searchText != null) {
-				searchItem.expandActionView()
-				searchView.post {
-					searchView.setQuery(searchText, false)
-					searchView.clearFocus()
-				}
-			}
+		inflater.inflate(R.menu.menu_fragment_entries, menu)
 
-			searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-				override fun onQueryTextSubmit(query: String): Boolean {
-					return false
-				}
+		menu.findItem(R.id.menu_entries__share).isVisible = bottom_navigation.selectedItemId == R.id.favorites
 
-				override fun onQueryTextChange(newText: String): Boolean {
-					if (searchText != null) { // needed because it can actually be called after the onMenuItemActionCollapse event
-						searchText = newText
-
-						// In order to avoid plenty of request, we add a small throttle time
-						searchHandler.removeCallbacksAndMessages(null)
-						searchHandler.postDelayed({
-							initDataObservers()
-						}, 700)
-					}
-					return false
-				}
-			})
-			searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-				override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-					searchText = ""
-					initDataObservers()
-					bottom_navigation.isGone = true
-					return true
-				}
-
-				override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-					searchText = null
-					initDataObservers()
-					bottom_navigation.isVisible = true
-					return true
-				}
-			})
-
-			setOnMenuItemClickListener { item ->
-				when (item.itemId) {
-					R.id.menu_entries__about -> {
-						navigator.goToAboutMe()
-						true
-					}
-					R.id.menu_entries__settings -> {
-						navigator.goToSettings()
-						true
-					}
-					else -> false
-				}
+		val searchItem = menu.findItem(R.id.menu_entries__search)
+		val searchView = searchItem.actionView as SearchView
+		if (searchText != null) {
+			searchItem.expandActionView()
+			searchView.post {
+				searchView.setQuery(searchText, false)
+				searchView.clearFocus()
 			}
 		}
+
+		searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+			override fun onQueryTextSubmit(query: String): Boolean {
+				return false
+			}
+
+			override fun onQueryTextChange(newText: String): Boolean {
+				if (searchText != null) { // needed because it can actually be called after the onMenuItemActionCollapse event
+					searchText = newText
+
+					// In order to avoid plenty of request, we add a small throttle time
+					searchHandler.removeCallbacksAndMessages(null)
+					searchHandler.postDelayed({
+						initDataObservers()
+					}, 700)
+				}
+				return false
+			}
+		})
+		searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+			override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+				searchText = ""
+				initDataObservers()
+				bottom_navigation.isGone = true
+				return true
+			}
+
+			override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+				searchText = null
+				initDataObservers()
+				bottom_navigation.isVisible = true
+				return true
+			}
+		})
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		when (item.itemId) {
+			R.id.menu_entries__share -> {
+				// TODO: will only work for the visible 30 items, need to find something better
+				adapter.currentList?.joinToString("\n\n") { it.entry.title + ": " + it.entry.link }?.let { content ->
+					val title = getString(R.string.app_name) + " " + getString(R.string.favorites)
+					startActivity(Intent.createChooser(
+							Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, content)
+									.setType("text/plain"), getString(R.string.menu_share)
+					))
+				}
+			}
+			R.id.menu_entries__about -> {
+				navigator.goToAboutMe()
+			}
+			R.id.menu_entries__settings -> {
+				navigator.goToSettings()
+			}
+		}
+
+		return true
 	}
 
 	fun setSelectedEntryId(selectedEntryId: String) {

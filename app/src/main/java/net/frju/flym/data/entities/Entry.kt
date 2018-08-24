@@ -28,13 +28,12 @@ import android.text.format.DateUtils
 import com.rometools.rome.feed.synd.SyndEntry
 import kotlinx.android.parcel.Parcelize
 import net.frju.flym.utils.sha1
-import java.util.Date
-import java.util.UUID
+import java.util.*
 
 
 @Parcelize
 @Entity(tableName = "entries",
-		indices = [(Index(value = ["feedId"]))],
+		indices = [(Index(value = ["feedId"])), (Index(value = ["link"], unique = true))],
 		foreignKeys = [(ForeignKey(entity = Feed::class,
 				parentColumns = ["feedId"],
 				childColumns = ["feedId"],

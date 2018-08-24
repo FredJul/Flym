@@ -128,8 +128,8 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 			}
 			itemView.title.text = group.feedWithCount.feed.title
 			itemView.entry_count?.text = group.getEntryCountString()
-			if (group.feedWithCount.feed.fetchError) { //TODO better
-				itemView.title.setTextColor(Color.RED)
+            if (group.feedWithCount.feed.fetchError || group.subFeeds.any { it.feed.fetchError }) {
+                itemView.title.setTextColor(Color.RED) //TODO better
 			} else {
 				itemView.title.setTextColor(Color.WHITE)
 			}

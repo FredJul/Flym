@@ -19,16 +19,11 @@ package net.frju.flym.data.dao
 
 import android.arch.lifecycle.LiveData
 import android.arch.paging.DataSource
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
-import android.arch.persistence.room.Update
+import android.arch.persistence.room.*
 import net.frju.flym.data.entities.Entry
 import net.frju.flym.data.entities.EntryWithFeed
 
-private const val LIGHT_SELECT = "id, entries.feedId, feedLink, feedTitle, fetchDate, publicationDate, title, description, imageLink, read, favorite"
+private const val LIGHT_SELECT = "id, entries.feedId, feedLink, feedTitle, fetchDate, publicationDate, title, link, description, imageLink, read, favorite"
 private const val ORDER_BY = "ORDER BY publicationDate DESC, id"
 private const val JOIN = "entries INNER JOIN feeds ON entries.feedId = feeds.feedId"
 private const val OLDER = "fetchDate <= :maxDate"

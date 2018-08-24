@@ -53,7 +53,7 @@ class EntryDetailsFragment : Fragment() {
 
 		fun newInstance(entryId: String, allEntryIds: List<String>): EntryDetailsFragment {
 			return EntryDetailsFragment().apply {
-				arguments = bundleOf(ARG_ENTRY_ID to entryId, ARG_ALL_ENTRIES_IDS to allEntryIds)
+                arguments = bundleOf(ARG_ENTRY_ID to entryId, ARG_ALL_ENTRIES_IDS to allEntryIds)
 			}
 		}
 	}
@@ -232,8 +232,6 @@ class EntryDetailsFragment : Fragment() {
 								activity?.onBackPressed()
 							}
 						}
-						else -> {
-						}
 					}
 
 					true
@@ -243,6 +241,14 @@ class EntryDetailsFragment : Fragment() {
 	}
 
 	private fun switchFullTextMode() {
+		// Enable this to test new manual mobilization
+//		doAsync {
+//			entryWithFeed?.entry?.let {
+//				it.mobilizedContent = null
+//				App.db.entryDao().insert(it)
+//			}
+//		}
+
 		entryWithFeed?.let { entryWithFeed ->
 			if (entryWithFeed.entry.mobilizedContent == null || !preferFullText) {
 				if (entryWithFeed.entry.mobilizedContent == null) {
