@@ -21,13 +21,17 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.ViewGroup
 import android.webkit.URLUtil
+import android.widget.EditText
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
+import ir.mirrajabi.searchdialog.adapters.SearchDialogAdapter
 import ir.mirrajabi.searchdialog.core.BaseFilter
 import ir.mirrajabi.searchdialog.core.SearchResultListener
+import kotlinx.android.synthetic.main.abc_search_view.view.*
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
@@ -63,7 +67,7 @@ private fun generateDefaultFeeds(context: Context) =
             SearchFeedResult(link, context.getString(name))
         }
 
-class FeedSearchDialog(context: Context, private val defaultFeeds: List<SearchFeedResult> = generateDefaultFeeds(context))
+class FeedSearchDialog(context: Context, search : String = "", private var defaultFeeds: List<SearchFeedResult> = generateDefaultFeeds(context))
     : SimpleSearchDialogCompat<SearchFeedResult>(context,
         context.getString(R.string.feed_search),
         context.getString(R.string.feed_search_hint),
@@ -125,7 +129,7 @@ class FeedSearchDialog(context: Context, private val defaultFeeds: List<SearchFe
                             }
                         }
                     } catch (t: Throwable) {
-						warn("error during feedWithCount search", t)
+                        warn("error during feedWithCount search", t)
                     }
                 } else {
                     array.addAll(defaultFeeds)
@@ -143,6 +147,12 @@ class FeedSearchDialog(context: Context, private val defaultFeeds: List<SearchFe
                 }
                 doAfterFiltering()
             }
+        }
+
+        if (search.isNotBlank()) {
+            this.setSearchHint(search)
+            this.items = arrayListOf() //Do not show default search results before the search is completed
+            filter.filter(search.subSequence(0, search.length))
         }
     }
 
