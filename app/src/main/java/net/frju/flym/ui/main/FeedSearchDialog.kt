@@ -21,17 +21,13 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
 import android.view.ViewGroup
 import android.webkit.URLUtil
-import android.widget.EditText
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
 import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat
-import ir.mirrajabi.searchdialog.adapters.SearchDialogAdapter
 import ir.mirrajabi.searchdialog.core.BaseFilter
 import ir.mirrajabi.searchdialog.core.SearchResultListener
-import kotlinx.android.synthetic.main.abc_search_view.view.*
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed

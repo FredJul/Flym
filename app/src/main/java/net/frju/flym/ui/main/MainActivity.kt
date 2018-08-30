@@ -24,7 +24,6 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.FragmentTransaction
@@ -32,7 +31,6 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
-import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.widget.toast
 import com.codekidlabs.storagechooser.StorageChooser
@@ -51,7 +49,6 @@ import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.FeedWithCount
-import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.service.AutoRefreshJobService
 import net.frju.flym.ui.about.AboutActivity
@@ -78,7 +75,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         const val EXTRA_FROM_NOTIF = "EXTRA_FROM_NOTIF"
 
         var isInForeground = false
-        var hasHandeledOnStartIntent = false
 
         private const val TAG_DETAILS = "TAG_DETAILS"
         private const val TAG_MASTER = "TAG_MASTER"
@@ -281,6 +277,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
         AutoRefreshJobService.initAutoRefresh(this)
 
+        handleImplicitIntent(intent)
 
     }
 
@@ -296,14 +293,16 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
         //Add feed urls from Open with
         if (intent?.action.equals(Intent.ACTION_VIEW)) {
-            var data : Uri? = intent?.data
-            FeedSearchDialog(this, data.toString()).show()
+            var search : String = intent?.data.toString()
+            var searchDialog = FeedSearchDialog(this, search)
+            searchDialog.show()
         }
         // Add feed urls from Share menu
         if (intent?.action.equals(Intent.ACTION_SEND)) {
-            this.toast(intent?.hasExtra(Intent.EXTRA_TEXT).toString())
-            if (intent?.hasExtra(Intent.EXTRA_TEXT) as Boolean) {
-                FeedSearchDialog(this, intent.getStringExtra(Intent.EXTRA_TEXT)).show()
+            if (intent?.hasExtra(Intent.EXTRA_TEXT) == true) {
+                var search = intent.getStringExtra(Intent.EXTRA_TEXT)
+                var searchDialog = FeedSearchDialog(this, search)
+                searchDialog.show()
             }
         }
 
@@ -313,17 +312,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             goToEntriesList(feedGroups[0].feedWithCount.feed)
             bottom_navigation.selectedItemId = R.id.unreads
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        if (!hasHandeledOnStartIntent) {
-            handleImplicitIntent(intent)
-            hasHandeledOnStartIntent = true
-        }
-
-        isInForeground = true
     }
 
     override fun onResume() {
