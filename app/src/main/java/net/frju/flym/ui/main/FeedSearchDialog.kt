@@ -146,7 +146,6 @@ class FeedSearchDialog(context: Context, search : String = "", private var defau
         }
 
         if (search.isNotBlank()) {
-            this.setSearchHint(search)
             this.items = arrayListOf() //Do not show default search results before the search is completed
             filter.filter(search.subSequence(0, search.length))
         }
