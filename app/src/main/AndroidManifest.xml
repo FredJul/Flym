@@ -26,6 +26,65 @@
 
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
+
+			<intent-filter>
+				<action android:name="android.intent.action.SEND"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+				<data android:mimeType="text/plain"/>
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+
+				<data android:scheme="http" />
+				<data android:scheme="https" />
+				<data android:host="*" />
+				<data android:pathPattern=".*\\.xml" />
+				<data android:pathPattern=".*\\.rss" />
+				<data android:pathPattern=".*/rss" />
+				<data android:pathPattern=".*rss/*" />
+				<data android:pathPattern=".*/feed" />
+				<data android:pathPattern=".*feed/*" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+
+				<data android:scheme="http" />
+				<data android:scheme="https" />
+				<data android:host="feeds.feedburner.com" />
+				<data android:host="feedproxy.google.com" />
+				<data android:host="feeds2.feedburner.com" />
+				<data android:host="feedsproxy.google.com" />
+			</intent-filter>
+
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+
+				<data android:scheme="http" />
+				<data android:scheme="https" />
+				<data android:mimeType="text/xml" />
+				<data android:mimeType="application/rss+xml" />
+				<data android:mimeType="application/rdf+xml" />
+				<data android:mimeType="application/atom+xml" />
+				<data android:mimeType="application/xml" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+
+				<category android:name="android.intent.category.BROWSABLE" />
+				<category android:name="android.intent.category.DEFAULT" />
+
+				<data android:scheme="feed" />
+				<data android:scheme="rss" />
+			</intent-filter>
 		</activity>
 
 		<activity
@@ -43,6 +102,7 @@
 			android:name="net.frju.flym.ui.about.AboutActivity"
 			android:label="@string/about_flym"
 			android:launchMode="singleTask"/>
+
 
 		<activity
 			android:name="net.frju.flym.ui.settings.SettingsActivity"

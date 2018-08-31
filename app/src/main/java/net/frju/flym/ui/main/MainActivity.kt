@@ -32,6 +32,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
 import androidx.core.view.isGone
+import androidx.core.widget.toast
 import com.codekidlabs.storagechooser.StorageChooser
 import com.rometools.opml.feed.opml.Attribute
 import com.rometools.opml.feed.opml.Opml
@@ -275,10 +276,39 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
 
         AutoRefreshJobService.initAutoRefresh(this)
+
+        handleImplicitIntent(intent)
+
     }
+
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+
+        handleImplicitIntent(intent)
+    }
+
+    private fun handleImplicitIntent(intent: Intent?) {
+        // Has to be called on onStart (when the app is closed) and on onNewIntent (when the app is in the background)
+
+        //Add feed urls from Open with
+        if (intent?.action.equals(Intent.ACTION_VIEW)) {
+            var search : String = intent?.data.toString()
+            var searchDialog = FeedSearchDialog(this, search)
+            searchDialog.show()
+            searchDialog.searchBox.setText(search.subSequence(0, search.length))
+            searchDialog.searchBox.setSelection(search.length)
+        }
+        // Add feed urls from Share menu
+        if (intent?.action.equals(Intent.ACTION_SEND)) {
+            if (intent?.hasExtra(Intent.EXTRA_TEXT) == true) {
+                var search = intent.getStringExtra(Intent.EXTRA_TEXT)
+                var searchDialog = FeedSearchDialog(this, search)
+                searchDialog.show()
+                searchDialog.searchBox.setText(search.subSequence(0, search.length))
+                searchDialog.searchBox.setSelection(search.length)
+            }
+        }
 
         // If we just clicked on the notification, let's go back to the default view
         if (intent?.getBooleanExtra(EXTRA_FROM_NOTIF, false) == true && feedGroups.isNotEmpty()) {
