@@ -297,6 +297,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             var searchDialog = FeedSearchDialog(this, search)
             searchDialog.show()
             searchDialog.searchBox.setText(search.subSequence(0, search.length))
+            searchDialog.searchBox.setSelection(search.length)
         }
         // Add feed urls from Share menu
         if (intent?.action.equals(Intent.ACTION_SEND)) {
@@ -305,6 +306,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                 var searchDialog = FeedSearchDialog(this, search)
                 searchDialog.show()
                 searchDialog.searchBox.setText(search.subSequence(0, search.length))
+                searchDialog.searchBox.setSelection(search.length)
             }
         }
 
