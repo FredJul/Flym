@@ -99,6 +99,10 @@
     <string name="settings_font_size">文字大小</string>
     <string name="settings_refresh_wifi_only">Wi-Fi环境才自动刷新</string>
     <string name="settings_refresh_wifi_only_description">自动刷新仅在Wi-Fi环境启用</string>
+    <string name="settings_category_filter">Filters</string>
+    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
+    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
+    <string name="filter">Remove items containing keywords (coma-separated list)</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="other">%d 条新消息</item>

@@ -39,6 +39,10 @@ object PrefUtils {
 	const val PRELOAD_IMAGE_MODE__WIFI_ONLY = "WIFI_ONLY_PRELOAD"
 	const val PRELOAD_IMAGE_MODE__ALWAYS = "ALWAYS_PRELOAD"
 
+    const val REMOVE_DUPLICATES = "remove_duplicates"
+
+    const val FILTER_KEYWORDS = "filter_keywords"
+
 	const val KEEP_TIME = "keep_time"
 
 	const val FONT_SIZE = "font_size"

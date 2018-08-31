@@ -114,6 +114,9 @@ interface EntryDao {
 	@Query("SELECT * FROM $JOIN WHERE id IS :id LIMIT 1")
 	fun findByIdWithFeed(id: String): EntryWithFeed?
 
+    @Query("SELECT title FROM entries WHERE title IN (:titles)")
+    fun findAlreadyExistingTitles(titles: List<String>): List<String>
+
 	@Query("SELECT id FROM entries WHERE feedId IS (:feedId)")
 	fun idsForFeed(feedId: Long): List<String>
 

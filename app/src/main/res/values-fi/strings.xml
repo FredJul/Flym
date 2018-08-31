@@ -105,6 +105,10 @@
     <string name="settings_refresh_wifi_only">Vain Wi-Fi -yhteyden kautta</string>
     <string name="settings_refresh_wifi_only_description">Syötteet päivitetään automaattisesti ainoastaan kun Wi-Fi -yhteys on käytettävissä
     </string>
+    <string name="settings_category_filter">Filters</string>
+    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
+    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
+    <string name="filter">Remove items containing keywords (coma-separated list)</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Yksi uusi artikkeli</item>

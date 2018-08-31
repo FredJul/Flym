@@ -100,6 +100,10 @@
     <string name="settings_font_size">글자 크기</string>
     <string name="settings_refresh_wifi_only">Wi-Fi에서만 새로 고침</string>
     <string name="settings_refresh_wifi_only_description">Wi-Fi를 사용할 때만 자동으로 새로 고침</string>
+    <string name="settings_category_filter">Filters</string>
+    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
+    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
+    <string name="filter">Remove items containing keywords (coma-separated list)</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="other">새 항목 %d개</item>
