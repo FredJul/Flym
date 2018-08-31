@@ -114,6 +114,12 @@ interface EntryDao {
 	@Query("SELECT * FROM $JOIN WHERE id IS :id LIMIT 1")
 	fun findByIdWithFeed(id: String): EntryWithFeed?
 
+	@Query("SELECT * FROM $JOIN WHERE title IS :title LIMIT 1")
+	fun findByTitle(title: String): EntryWithFeed?
+
+	@Query("SELECT * FROM $JOIN WHERE link IS :link LIMIT 1")
+	fun findByLink(link: String): EntryWithFeed?
+
 	@Query("SELECT id FROM entries WHERE feedId IS (:feedId)")
 	fun idsForFeed(feedId: Long): List<String>
 
@@ -143,6 +149,9 @@ interface EntryDao {
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	fun insert(vararg entries: Entry)
+
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	fun insert(entry: Entry)
 
 	@Update
 	fun update(vararg entries: Entry)

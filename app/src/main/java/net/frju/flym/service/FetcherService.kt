@@ -36,10 +36,7 @@ import com.rometools.rome.io.XmlReader
 import net.dankito.readability4j.extended.Readability4JExtended
 import net.fred.feedex.R
 import net.frju.flym.App
-import net.frju.flym.data.entities.Entry
-import net.frju.flym.data.entities.Feed
-import net.frju.flym.data.entities.Task
-import net.frju.flym.data.entities.toDbFormat
+import net.frju.flym.data.entities.*
 import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.ui.main.MainActivity
 import net.frju.flym.utils.HtmlUtils
@@ -371,7 +368,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				createCall(feed.link).execute().use { response ->
 					val input = SyndFeedInput()
 					val romeFeed = input.build(XmlReader(response.body()!!.byteStream()))
-					romeFeed.entries.filter { it.publishedDate?.time ?: Long.MAX_VALUE > keepDateBorderTime }.map { it.toDbFormat(feed) }.forEach { entries.add(it) }
+					romeFeed.entries.filter { it.publishedDate?.time ?: Long.MAX_VALUE > keepDateBorderTime }.map { it.toDbFormat(feed) }.forEach {
+						filterItem(it, entries)
+					}
+
 					feed.update(romeFeed)
 				}
 			} catch (t: Throwable) {
@@ -397,7 +397,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 				if (entry.publicationDate != entry.fetchDate || !foundExisting) { // we try to not put back old entries, even when there is no date
 					if (!existingIds.contains(entry.id)) {
-						entriesToInsert.add(entry)
+						filterItem(entry, entriesToInsert)
 
 						entry.title = entry.title?.replace("\n", " ")?.trim()
 						entry.description?.let { desc ->
@@ -424,6 +424,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				}
 			}
 
+
 			// Update everything
 			App.db.entryDao().insert(*(entriesToInsert.toTypedArray()))
 
@@ -435,6 +436,46 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 			return entries.size
 		}
+
+		private fun filterItem(it: Entry, entries: MutableList<Entry>) {
+			if (PrefUtils.getBoolean(PrefUtils.REMOVE_DUPLICATES, true)) {
+				if (App.db.entryDao().findByTitle(it.title.toString()) != null
+						|| App.db.entryDao().findByLink(it.link.toString())!= null) {
+					return
+				}
+				if(!entryFilteredByKeyword(it)) {
+					entries.add(it)
+				}
+			}
+		}
+
+		private fun entryFilteredByKeyword(entry: Entry): Boolean {
+			var filters = App.db.filterDao().all
+			if (filters != null && filters.size > 0) {
+				var filters = App.db.filterDao().all
+				for (filter in filters) {
+					if ((fieldContainsKeyword(entry.title, filter.keywordToIgnore))
+							|| (fieldContainsKeyword(entry.description, filter.keywordToIgnore))
+							|| (fieldContainsKeyword(entry.mobilizedContent, filter.keywordToIgnore)))
+						return true
+				}
+			}
+			return false
+		}
+
+		private fun fieldContainsKeyword(value: String?, keyword: String?): Boolean {
+			if(value == null || keyword == null) {
+				return false
+			}
+			else {
+				if(value.toLowerCase().contains(keyword.trim().toLowerCase())) {
+					return true
+				}
+			}
+			return false
+		}
+
+
 
 		private fun deleteOldEntries(keepDateBorderTime: Long) {
 			if (keepDateBorderTime > 0) {
