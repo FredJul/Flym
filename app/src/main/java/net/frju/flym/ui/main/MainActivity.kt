@@ -293,21 +293,17 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
         //Add feed urls from Open with
         if (intent?.action.equals(Intent.ACTION_VIEW)) {
-            var search : String = intent?.data.toString()
-            var searchDialog = FeedSearchDialog(this, search)
-            searchDialog.show()
-            searchDialog.searchBox.setText(search.subSequence(0, search.length))
-            searchDialog.searchBox.setSelection(search.length)
+            val search: String = intent?.data.toString()
+            FeedSearchDialog(this, search).show()
+            setIntent(null)
         }
         // Add feed urls from Share menu
         if (intent?.action.equals(Intent.ACTION_SEND)) {
             if (intent?.hasExtra(Intent.EXTRA_TEXT) == true) {
-                var search = intent.getStringExtra(Intent.EXTRA_TEXT)
-                var searchDialog = FeedSearchDialog(this, search)
-                searchDialog.show()
-                searchDialog.searchBox.setText(search.subSequence(0, search.length))
-                searchDialog.searchBox.setSelection(search.length)
+                val search = intent.getStringExtra(Intent.EXTRA_TEXT)
+                FeedSearchDialog(this, search).show()
             }
+            setIntent(null)
         }
 
         // If we just clicked on the notification, let's go back to the default view
@@ -510,14 +506,15 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     }
 
     private fun parseOpml(opmlReader: Reader) {
-        var id = 1L
+        var genId = 1L
         val feedList = mutableListOf<Feed>()
         val opml = WireFeedInput().build(opmlReader) as Opml
         opml.outlines.forEach { outline ->
             if (outline.xmlUrl != null || outline.children.isNotEmpty()) {
-                val topLevelFeed = Feed()
-                topLevelFeed.id = id++
-                topLevelFeed.title = outline.title
+                val topLevelFeed = Feed().apply {
+                    id = genId++
+                    title = outline.title
+                }
 
                 if (outline.xmlUrl != null) {
                     if (!outline.xmlUrl.startsWith(OLD_GNEWS_TO_IGNORE)) {
@@ -530,12 +527,14 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     feedList.add(topLevelFeed)
 
                     outline.children.filter { it.xmlUrl != null && !it.xmlUrl.startsWith(OLD_GNEWS_TO_IGNORE) }.forEach {
-                        val subLevelFeed = Feed()
-                        subLevelFeed.id = id++
-                        subLevelFeed.title = it.title
-                        subLevelFeed.link = it.xmlUrl
-                        subLevelFeed.retrieveFullText = it.getAttributeValue(RETRIEVE_FULLTEXT_OPML_ATTR) == "true"
-                        subLevelFeed.groupId = topLevelFeed.id
+                        val subLevelFeed = Feed().apply {
+                            id = genId++
+                            title = it.title
+                            link = it.xmlUrl
+                            retrieveFullText = it.getAttributeValue(RETRIEVE_FULLTEXT_OPML_ATTR) == "true"
+                            groupId = topLevelFeed.id
+                        }
+
                         feedList.add(subLevelFeed)
                     }
                 }

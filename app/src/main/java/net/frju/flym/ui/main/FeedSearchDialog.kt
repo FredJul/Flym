@@ -33,15 +33,10 @@ import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.service.FetcherService
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.hintTextColor
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.warn
+import org.jetbrains.anko.*
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.ArrayList
+import java.util.*
 
 
 private const val FEED_SEARCH_TITLE = "title"
@@ -63,7 +58,7 @@ private fun generateDefaultFeeds(context: Context) =
             SearchFeedResult(link, context.getString(name))
         }
 
-class FeedSearchDialog(context: Context, search : String = "", private var defaultFeeds: List<SearchFeedResult> = generateDefaultFeeds(context))
+class FeedSearchDialog(context: Context, val search: String = "", private var defaultFeeds: List<SearchFeedResult> = generateDefaultFeeds(context))
     : SimpleSearchDialogCompat<SearchFeedResult>(context,
         context.getString(R.string.feed_search),
         context.getString(R.string.feed_search_hint),
@@ -144,11 +139,6 @@ class FeedSearchDialog(context: Context, search : String = "", private var defau
                 doAfterFiltering()
             }
         }
-
-        if (search.isNotBlank()) {
-            this.items = arrayListOf() //Do not show default search results before the search is completed
-            filter.filter(search.subSequence(0, search.length))
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -160,6 +150,11 @@ class FeedSearchDialog(context: Context, search : String = "", private var defau
 
             // Hack to avoid being able to dismiss the popup by taping around the edit text
             (parent.parent as ViewGroup).isClickable = true
+
+            if (search.isNotBlank()) {
+                setText(search.subSequence(0, search.length))
+                setSelection(search.length)
+            }
         }
     }
 }
