@@ -4,7 +4,7 @@
 # v1 db file
 V1="FeedEx.db"
 # v2 db file
-V2="db"
+V2="db.empty"
 
 OUT="v2"
 
@@ -12,6 +12,15 @@ echo destroying "$OUT"
 > "$OUT"
 
 sqlite3 "$V2" .dump |  sqlite3 "$OUT"
+# a small cleanup
+sqlite3 "$OUT" "
+	drop index index_feeds_groupId;
+	drop index index_feeds_feedId_feedLink;
+	drop index index_entries_feedId;
+	drop index index_entries_link;
+	drop index index_tasks_entryId;
+	drop trigger feed_insert_priority;
+"
 sqlite3 "$V1" .dump | \
 	grep -A999999 "CREATE TABLE feeds" | \
 	grep -B999999 "CREATE TABLE tasks" | head -n -1 | \
