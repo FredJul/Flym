@@ -158,7 +158,7 @@ class EntriesFragment : Fragment() {
 		unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
 			setGravityOffset(35F, 0F, true)
 			isShowShadow = false
-			badgeBackgroundColor = ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark)
+			badgeBackgroundColor = ContextCompat.getColor(requireContext(), if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.color.colorPrimaryDark else R.color.colorPrimaryLight )
 		}
 
 		read_all_fab.onClick { _ ->
@@ -285,9 +285,9 @@ class EntriesFragment : Fragment() {
 		recycler_view.adapter = adapter
 
 		refresh_layout.setColorScheme(R.color.colorAccent,
-				R.color.colorPrimaryDark,
+				if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.color.colorPrimaryDark else R.color.colorPrimaryLight,
 				R.color.colorAccent,
-				R.color.colorPrimaryDark)
+				if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.color.colorPrimaryDark else R.color.colorPrimaryLight)
 
 		refresh_layout.setOnRefreshListener {
 			startRefresh()

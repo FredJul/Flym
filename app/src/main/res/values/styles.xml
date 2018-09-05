@@ -22,4 +22,26 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <!-- App Light theme -->
+    <style name="AppThemeLight" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryLight</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorBackgroundLight</item>
+    </style>
+
+    <style name="AppThemeLight.ActionBar" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryLight</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppThemeLight.ActionBar.Details" parent="AppThemeLight.ActionBar" />
+
+    <style name="AppThemeLight.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 </resources>

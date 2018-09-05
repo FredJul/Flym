@@ -33,6 +33,7 @@ object PrefUtils {
 	const val REFRESH_INTERVAL = "refresh_interval"
 	const val REFRESH_WIFI_ONLY = "refresh_wifi_only"
 
+	const val DARK_THEME = "dark_theme"
 	const val DISPLAY_IMAGES = "display_images"
 
 	const val PRELOAD_IMAGE_MODE = "preload_image_mode"
