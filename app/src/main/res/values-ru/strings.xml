@@ -50,9 +50,6 @@
     <string name="error_feed_export">Экспорт не удался. Удостоверьтесь, что карта памяти имеет
         возможность записи.
     </string>
-    <string name="error_external_storage_not_available">Внешнее хранилище (например, карта памяти)
-        недоступно.
-    </string>
     <string name="feed_search">Поиск лент</string>
 	<string name="feed_search_hint">Введите ссылку или ключевое слово</string>
     <string name="feed_added">Лента добавлена в список</string>

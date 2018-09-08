@@ -50,9 +50,6 @@
     <string name="error_feed_export">Esportazioak huts egin du. Egiaztatu idatz daitekeen SD-txartel bat
         muntatuta duzula.
     </string>
-	<string name="error_external_storage_not_available">Kanpoko biltegia (adib. SD-txartela) ez dago
-        eskuragarri.
-    </string>
     <string name="feed_search">Jarioen bilaketa</string>
 	<string name="feed_search_hint">Idatz ezazu lotura edo gako hitza</string>
     <string name="feed_added">Jarioa zerrendara gehitu da</string>

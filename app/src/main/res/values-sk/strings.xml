@@ -49,7 +49,6 @@
     <string name="menu_export">Export do OPML</string>
     <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_export">Export zlyhal. Na pripojenú SD kartu sa pravdepodobne nedá zapisovať.</string>
-    <string name="error_external_storage_not_available">Externý úložný priestor (napr. SD karta) nie je dostupný.</string>
     <string name="feed_search">Prehľadať zdroj</string>
 	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>

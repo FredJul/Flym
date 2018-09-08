@@ -51,9 +51,6 @@
     <string name="error_feed_export">Export selhal. Ujistěte se, že se na připojenou SD kartu
         dá zapisovat.
     </string>
-    <string name="error_external_storage_not_available">Externí úložný prostor (např. SD karta) není
-        dostupný.
-    </string>
     <string name="feed_search">Prohledat zdroj</string>
 	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>

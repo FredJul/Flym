@@ -48,7 +48,6 @@
     <string name="menu_export">Esporta file OPML</string>
     <string name="storage_request_explanation">Per poter importare/esportare i feed da/su file, è necessario consentire all\'applicazione di accedere alla memoria di archiviazione.</string>
     <string name="error_feed_export">L\'esportazione è fallita. Controllare di avere una scheda SD scrivibile e correttamente montata.</string>
-    <string name="error_external_storage_not_available">L\'archivio esterno (per esempio la scheda SD) non è disponibile.</string>
     <string name="feed_search">Ricerca feed</string>
     <string name="feed_search_hint">Inserisci il link di un feed o una parola chiave</string>
     <string name="feed_added">Feed aggiunto alla lista</string>
