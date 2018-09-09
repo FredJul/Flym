@@ -31,7 +31,7 @@
                 android:scrollbars="vertical" />
         </net.frju.flym.ui.views.SwipeRefreshLayout>
 
-        <TextView
+		<TextView
 			android:id="@+id/empty_view"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
 		android:layout_marginBottom="0dp"
 		android:layout_marginEnd="0dp"
 		android:layout_marginStart="0dp"
-		android:background="@color/colorPrimary"
+		android:background="?attr/colorPrimary"
 		app:itemIconTint="@color/bottom_navigation_item"
 		app:itemTextColor="@color/bottom_navigation_item"
 		app:layout_constraintBottom_toBottomOf="parent"

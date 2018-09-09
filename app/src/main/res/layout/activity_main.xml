@@ -17,7 +17,7 @@
         android:layout_width="@dimen/nav_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/colorBackground"
+        android:background="?attr/colorBackground"
         android:clickable="true"
         android:focusable="true"
         android:fitsSystemWindows="true">

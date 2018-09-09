@@ -11,7 +11,7 @@
     <color name="bottom_navigation_disable">#7bffffff</color>
 
     <!-- Light Theme specific colors -->
-    <color name="colorPrimaryLight">#247ab0</color>
+    <color name="colorPrimaryLight">#00665C</color>
     <color name="colorBackgroundLight">#f6f6f6</color>
     <color name="color_unread_light">#000000</color>
     <color name="color_read_light">#9e9e9e</color>

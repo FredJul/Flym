@@ -1,0 +1,5 @@
+<resources>
+    <attr name="colorReadState" format="reference" />
+    <attr name="colorColoredReadState" format="reference"/>
+    <attr name="colorBackground" format="reference"/>
+</resources>

@@ -6,7 +6,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorBackground">@color/colorBackground</item>
         <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="colorReadState">@color/read_state</item>
+        <item name="colorColoredReadState">@color/colored_read_state</item>
     </style>
 
     <style name="AppTheme.ActionBar" parent="Theme.AppCompat">
@@ -28,12 +31,16 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryLight</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorBackground">@color/colorBackgroundLight</item>
         <item name="android:windowBackground">@color/colorBackgroundLight</item>
+        <item name="colorReadState">@color/read_state_light</item>
+        <item name="colorColoredReadState">@color/colored_read_state_light</item>
+        <item name="android:textColor">@color/color_unread_light</item>
     </style>
 
     <style name="AppThemeLight.ActionBar" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryLight</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
