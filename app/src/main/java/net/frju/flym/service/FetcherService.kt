@@ -448,7 +448,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 }
             }
 
-            // Update everything
+            // Insert everything
             App.db.entryDao().insert(*(entriesToInsert.toTypedArray()))
 
             if (feed.retrieveFullText) {
