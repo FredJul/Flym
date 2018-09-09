@@ -433,16 +433,16 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     }
 
     private fun pickOpml() {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.type = "text/*"
-            startActivityForResult(intent, READ_OPML_REQUEST_CODE)
+        startActivityForResult(intent, READ_OPML_REQUEST_CODE)
     }
 
     private fun exportOpml() {
-            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.type = "text/*"
-            intent.putExtra(Intent.EXTRA_TITLE, "Flym_" + System.currentTimeMillis()+ ".opml")
-            startActivityForResult(intent, WRITE_OPML_REQUEST_CODE)
+        intent.putExtra(Intent.EXTRA_TITLE, "Flym_" + System.currentTimeMillis() + ".opml")
+        startActivityForResult(intent, WRITE_OPML_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int,
