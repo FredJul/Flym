@@ -84,10 +84,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         private const val OLD_GNEWS_TO_IGNORE = "http://news.google.com/news?"
 
         private const val AUTO_IMPORT_OPML_REQUEST_CODE = 1
-        private const val CHOOSE_OPML_REQUEST_CODE = 2
-        private const val EXPORT_OPML_REQUEST_CODE = 3
-        private const val WRITE_OPML_REQUEST_CODE = 4
-        private const val READ_OPML_REQUEST_CODE = 5
+        private const val WRITE_OPML_REQUEST_CODE = 2
+        private const val READ_OPML_REQUEST_CODE = 3
         private val NEEDED_PERMS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
         private const val RETRIEVE_FULLTEXT_OPML_ATTR = "retrieveFullText"
@@ -434,27 +432,17 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         return false
     }
 
-    @AfterPermissionGranted(CHOOSE_OPML_REQUEST_CODE)
     private fun pickOpml() {
-        if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
-            EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation), CHOOSE_OPML_REQUEST_CODE, *NEEDED_PERMS)
-        } else {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-            intent.type = "text/x-opml"
+        intent.type = "text/*"
             startActivityForResult(intent, READ_OPML_REQUEST_CODE)
-        }
     }
 
-    @AfterPermissionGranted(EXPORT_OPML_REQUEST_CODE)
     private fun exportOpml() {
-        if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
-            EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation), EXPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
-        } else {
             val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-            intent.type = "text/x-opml"
+        intent.type = "text/*"
             intent.putExtra(Intent.EXTRA_TITLE, "Flym_" + System.currentTimeMillis()+ ".opml")
             startActivityForResult(intent, WRITE_OPML_REQUEST_CODE)
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int,
@@ -490,7 +478,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             } catch (e: Exception) {
                 try {
                     // We try to remove the opml version number, it may work better in some cases
-                    var content = BufferedInputStream(contentResolver.openInputStream(uri)).bufferedReader().use { it.readText() }
+                    val content = BufferedInputStream(contentResolver.openInputStream(uri)).bufferedReader().use { it.readText() }
                     val fixedReader = StringReader(content.replace("<opml version=['\"][0-9]\\.[0-9]['\"]>".toRegex(), "<opml>"))
                     parseOpml(fixedReader)
                 } catch (e: Exception) {
@@ -504,10 +492,9 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         doAsync {
             try {
                 exportOpml(OutputStreamWriter(contentResolver.openOutputStream(uri), Charsets.UTF_8))
-                val cursor = contentResolver.query(uri, null, null, null, null)
-                cursor.use {
+                contentResolver.query(uri, null, null, null, null).use { cursor ->
                     if (cursor.moveToFirst()) {
-                        var fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                        val fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
                         uiThread { toast(String.format(getString(R.string.message_exported_to), fileName)) }
                     }
                 }
