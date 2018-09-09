@@ -29,7 +29,7 @@ class EntryDetailsActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 
 		//Choose theme
-		setTheme(if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.style.AppThemeLight_NoActionBar else R.style.AppThemeLight_NoActionBar )
+		setTheme(if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.style.AppTheme_NoActionBar else R.style.AppThemeLight_NoActionBar )
 
 		if (savedInstanceState == null) {
 			val fragment = EntryDetailsFragment().apply {

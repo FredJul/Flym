@@ -2,4 +2,5 @@
     <attr name="colorReadState" format="reference" />
     <attr name="colorColoredReadState" format="reference"/>
     <attr name="colorBackground" format="reference"/>
+    <attr name="colorText" format="reference"/>
 </resources>

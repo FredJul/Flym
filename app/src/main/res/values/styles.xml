@@ -26,7 +26,7 @@
     </style>
 
     <!-- App Light theme -->
-    <style name="AppThemeLight" parent="Theme.AppCompat.Light">
+    <style name="AppThemeLight" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryLight</item>
@@ -35,10 +35,9 @@
         <item name="android:windowBackground">@color/colorBackgroundLight</item>
         <item name="colorReadState">@color/read_state_light</item>
         <item name="colorColoredReadState">@color/colored_read_state_light</item>
-        <item name="android:textColor">@color/color_unread_light</item>
     </style>
 
-    <style name="AppThemeLight.ActionBar" parent="Theme.AppCompat.Light">
+    <style name="AppThemeLight.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
