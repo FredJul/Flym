@@ -256,29 +256,32 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 App.db.entryDao().findById(task.entryId)?.let { entry ->
                     entry.link?.let { link ->
                         try {
-                            createCall(link).execute().use {
-                                it.body()?.byteStream()?.let { input ->
+                            createCall(link).execute().use { response ->
+                                response.body()?.byteStream()?.let { input ->
                                     Readability4JExtended(link, Jsoup.parse(input, null, link)).parse().articleContent?.html()?.let {
                                         val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(link))
 
-                                        if (downloadPictures) {
-                                            val imagesList = HtmlUtils.getImageURLs(mobilizedHtml)
-                                            if (imagesList.isNotEmpty()) {
-                                                if (entry.imageLink == null) {
-                                                    entry.imageLink = HtmlUtils.getMainImageURL(imagesList)
+                                        @Suppress("DEPRECATION")
+                                        if (Html.fromHtml(it).length > Html.fromHtml(entry.description).length) { // If the retrieved text is smaller than the original one, then we certainly failed...
+                                            if (downloadPictures) {
+                                                val imagesList = HtmlUtils.getImageURLs(mobilizedHtml)
+                                                if (imagesList.isNotEmpty()) {
+                                                    if (entry.imageLink == null) {
+                                                        entry.imageLink = HtmlUtils.getMainImageURL(imagesList)
+                                                    }
+                                                    imgUrlsToDownload[entry.id] = imagesList
                                                 }
-                                                imgUrlsToDownload[entry.id] = imagesList
+                                            } else if (entry.imageLink == null) {
+                                                entry.imageLink = HtmlUtils.getMainImageURL(mobilizedHtml)
                                             }
-                                        } else if (entry.imageLink == null) {
-                                            entry.imageLink = HtmlUtils.getMainImageURL(mobilizedHtml)
+
+                                            success = true
+
+                                            entry.mobilizedContent = mobilizedHtml
+                                            App.db.entryDao().update(entry)
+
+                                            App.db.taskDao().delete(task)
                                         }
-
-                                        success = true
-
-                                        entry.mobilizedContent = mobilizedHtml
-                                        App.db.entryDao().update(entry)
-
-                                        App.db.taskDao().delete(task)
                                     }
                                 }
                             }
