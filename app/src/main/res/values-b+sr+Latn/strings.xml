@@ -27,7 +27,6 @@
     <string name="menu_export">Izvezi u OPML</string>
     <string name="storage_request_explanation">Da bi uvoz/izvoz dovoda bio moguć u ili iz datoteke, neophodno je da dozvolite aplikaciji pristup internom skladištu.</string>
     <string name="error_feed_export">Izvoz nije završen uspešno. Proverite da li uređaj ima SD karticu montiranu u sistemu.</string>
-    <string name="error_external_storage_not_available">Spoljna memorija (SD kartica) nije dostupna.</string>
     <string name="feed_search">Pretraga dovoda</string>
     <string name="feed_search_hint">Unesite vezu do dovoda ili ključnu reč</string>
     <string name="feed_added">Dovod je dodat u listu</string>

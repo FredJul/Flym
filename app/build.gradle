@@ -111,5 +111,4 @@ dependencies {
 	implementation 'net.dankito.readability4j:readability4j:1.0.1'
 	implementation 'pub.devrel:easypermissions:1.2.0'
 	implementation 'com.rometools:rome-opml:1.10.0'
-	implementation 'com.github.codekidX:storage-chooser:2.0.3'
 }
