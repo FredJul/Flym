@@ -46,7 +46,7 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 
 	open val layoutId = R.layout.view_feed
 
-	open fun bindItem(itemView: View, feed: FeedWithCount) {
+	open fun bindItem(itemView: View, feedWithCount: FeedWithCount) {
 	}
 
 	open fun bindItem(itemView: View, group: FeedGroup) {

@@ -37,6 +37,7 @@ import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.isOnline
+import org.jetbrains.anko.attr
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.toast
@@ -98,9 +99,9 @@ class EntryDetailsFragment : Fragment() {
 		super.onActivityCreated(savedInstanceState)
 
 		refresh_layout.setColorScheme(R.color.colorAccent,
-				if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.color.colorPrimaryDark else R.color.colorPrimaryLight,
+				requireContext().attr(R.attr.colorPrimaryDark).resourceId,
 				R.color.colorAccent,
-				if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.color.colorPrimaryDark else R.color.colorPrimaryLight)
+				requireContext().attr(R.attr.colorPrimaryDark).resourceId)
 
 		refresh_layout.setOnRefreshListener {
 			switchFullTextMode()

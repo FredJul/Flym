@@ -137,7 +137,7 @@ class DragNDropRecyclerView @JvmOverloads constructor(context: Context, attrs: A
             val bitmap = Bitmap.createBitmap(item.drawingCache)
             item.isDrawingCacheEnabled = false
 
-            setBackgroundResource(R.color.colorPrimaryDark)
+            setBackgroundResource(R.color.colorAccent)
             setImageBitmap(bitmap)
         }
 
