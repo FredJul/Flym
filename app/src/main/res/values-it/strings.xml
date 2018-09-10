@@ -85,6 +85,7 @@
     <string name="no_entries">Nessun feed\nPer favore effettua lo swipe verso il basso per aggiornare</string>
     <string name="undo">Annulla</string>
     <string name="marked_as_read">Contrassegnato come letto</string>
+    <string name="marked_as_unread">Marked as unread</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Aggiornamento automatico</string>

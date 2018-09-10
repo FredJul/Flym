@@ -91,6 +91,7 @@
     <string name="no_entries">Нет записей\nПотяните вниз чтобы обновить</string>
     <string name="undo">Отмена</string>
     <string name="marked_as_read">Помечены как прочитанные</string>
+    <string name="marked_as_unread">Marked as unread</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Автоматическое обновление</string>

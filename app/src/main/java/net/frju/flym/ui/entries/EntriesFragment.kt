@@ -26,7 +26,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
@@ -313,6 +312,16 @@ class EntriesFragment : Fragment() {
 							App.db.entryDao().markAsRead(listOf(entryWithFeed.entry.id))
 						} else {
 							App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
+						}
+
+						longSnackbar(coordinator, R.string.marked_as_read, R.string.undo) { _ ->
+							doAsync {
+								if (entryWithFeed.entry.read) {
+									App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
+								} else {
+									App.db.entryDao().markAsRead(listOf(entryWithFeed.entry.id))
+								}
+							}
 						}
 
 						if (bottom_navigation.selectedItemId != R.id.unreads) {

@@ -64,6 +64,7 @@
     <string name="no_entries">Нема чланака\nМолимо да превучете прстом надоле за освежавање листе чланака</string>
     <string name="undo">Поништи</string>
     <string name="marked_as_read">Означено као прочитано</string>
+    <string name="marked_as_unread">Marked as unread</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Аутоматско освежавање</string>

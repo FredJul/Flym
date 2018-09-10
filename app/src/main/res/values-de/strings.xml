@@ -87,6 +87,7 @@
     <string name="no_entries">Keine Artikel\nZum Aktualisieren bitte nach unten ziehen</string>
     <string name="undo">Rückgängig</string>
     <string name="marked_as_read">Als gelesen markieren</string>
+    <string name="marked_as_unread">Marked as unread</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>

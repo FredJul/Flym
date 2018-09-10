@@ -84,7 +84,8 @@
     <string name="favorites">Favoris</string>
     <string name="no_entries">Aucun article\nGlissez vers le bas pour raffraichir</string>
     <string name="undo">Annuler</string>
-    <string name="marked_as_read">Marqués comme lus</string>
+    <string name="marked_as_read">Marqué comme lu</string>
+    <string name="marked_as_unread">Marqué comme non lu</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Mise à jour automatique</string>
@@ -93,16 +94,16 @@
     <string name="settings_refresh_interval">Intervalle de mise à jour</string>
     <string name="settings_category_content_presentation">Présentation des flux</string>
     <string name="settings_keep_time">Délai de conservation des flux</string>
-    <string name="settings_display_images">Display images</string>
-    <string name="settings_display_images_description">Display images in entries</string>
+    <string name="settings_display_images">Afficher les images</string>
+    <string name="settings_display_images_description">Afficher les images dans les articles</string>
     <string name="settings_preload_image_mode">Préchargement des images</string>
     <string name="settings_font_size">Taille du texte</string>
     <string name="settings_refresh_wifi_only">Mise à jour en WiFi uniquement</string>
     <string name="settings_refresh_wifi_only_description">La mise à jour auto ne se fera que si le Wifi est activé</string>
     <string name="settings_category_filter">Filters</string>
-    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
-    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
+    <string name="settings_remove_duplicates_description_title">Supprimer les doublons</string>
+    <string name="settings_remove_duplicates_description">Supprime les articles ayant le même titre que ceux déjà chargés</string>
+    <string name="filter">Filtre les articles contenant des mots-clés (séparés par des virgules)</string>
     <string name="settings_dark_theme">Activer thème sombre</string>
     <string name="settings_dark_theme_description">Change les couleurs de l\'interface pour un meilleur confort dans les environnements sous-éclairés</string>
 

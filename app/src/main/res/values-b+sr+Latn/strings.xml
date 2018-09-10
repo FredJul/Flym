@@ -64,6 +64,7 @@
     <string name="no_entries">Nema članaka\nMolimo da prevučete prstom nadole za osvežavanje liste članaka</string>
     <string name="undo">Poništi</string>
     <string name="marked_as_read">Označeno kao pročitano</string>
+    <string name="marked_as_unread">Marked as unread</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatsko osvežavanje</string>
