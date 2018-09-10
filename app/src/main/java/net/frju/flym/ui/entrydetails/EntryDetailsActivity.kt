@@ -26,10 +26,11 @@ import net.frju.flym.data.utils.PrefUtils
 class EntryDetailsActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
+        //Choose theme
+		setTheme(if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.style.AppTheme_NoActionBar else R.style.AppThemeLight_NoActionBar)
 
-		//Choose theme
-		setTheme(if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.style.AppTheme_NoActionBar else R.style.AppThemeLight_NoActionBar )
+        super.onCreate(savedInstanceState)
+
 
 		if (savedInstanceState == null) {
 			val fragment = EntryDetailsFragment().apply {

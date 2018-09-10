@@ -45,14 +45,11 @@ import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.closeKeyboard
+import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.design.longSnackbar
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.support.v4.dip
-import org.jetbrains.anko.uiThread
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
 import java.util.*
@@ -158,7 +155,7 @@ class EntriesFragment : Fragment() {
 		unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
 			setGravityOffset(35F, 0F, true)
 			isShowShadow = false
-			badgeBackgroundColor = ContextCompat.getColor(requireContext(), if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.color.colorPrimaryDark else R.color.colorPrimaryLight )
+			badgeBackgroundColor = requireContext().colorAttr(R.attr.colorPrimaryDark)
 		}
 
 		read_all_fab.onClick { _ ->
@@ -285,9 +282,9 @@ class EntriesFragment : Fragment() {
 		recycler_view.adapter = adapter
 
 		refresh_layout.setColorScheme(R.color.colorAccent,
-				if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.color.colorPrimaryDark else R.color.colorPrimaryLight,
+				requireContext().attr(R.attr.colorPrimaryDark).resourceId,
 				R.color.colorAccent,
-				if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.color.colorPrimaryDark else R.color.colorPrimaryLight)
+				requireContext().attr(R.attr.colorPrimaryDark).resourceId)
 
 		refresh_layout.setOnRefreshListener {
 			startRefresh()

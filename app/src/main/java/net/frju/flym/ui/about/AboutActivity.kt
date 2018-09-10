@@ -28,10 +28,10 @@ import net.frju.flym.data.utils.PrefUtils
 class AboutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         //Choose theme
-        setTheme(if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.style.AppTheme else R.style.AppThemeLight )
+        setTheme(if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.style.AppTheme else R.style.AppThemeLight)
+
+        super.onCreate(savedInstanceState)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
