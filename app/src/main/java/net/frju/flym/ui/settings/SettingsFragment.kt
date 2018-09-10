@@ -23,6 +23,8 @@ import android.preference.PreferenceFragment
 import net.fred.feedex.R
 import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.service.AutoRefreshJobService
+import net.frju.flym.ui.main.MainActivity
+import org.jetbrains.anko.startActivity
 
 
 class SettingsFragment : PreferenceFragment() {
@@ -39,5 +41,11 @@ class SettingsFragment : PreferenceFragment() {
 
 		findPreference(PrefUtils.REFRESH_ENABLED)?.onPreferenceChangeListener = onRefreshChangeListener
 		findPreference(PrefUtils.REFRESH_INTERVAL)?.onPreferenceChangeListener = onRefreshChangeListener
+
+		findPreference(PrefUtils.DARK_THEME)?.setOnPreferenceChangeListener { preference, any ->
+			activity.finishAffinity()
+            startActivity<MainActivity>()
+			true
+		}
 	}
 }
