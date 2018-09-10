@@ -29,9 +29,6 @@
     <string name="error_feed_export">No s\'ha pogut exportar el fitxer. Comproveu la memòria
         externa.
     </string>
-    <string name="error_external_storage_not_available">The external storage (e.g. SD-card) is not
-        available.
-    </string>
     <string name="feed_search">Cerca canals</string>
 	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>

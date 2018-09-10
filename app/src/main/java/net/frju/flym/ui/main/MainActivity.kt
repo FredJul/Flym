@@ -19,13 +19,16 @@ package net.frju.flym.ui.main
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.OpenableColumns
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
@@ -33,7 +36,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
 import androidx.core.view.isGone
 import androidx.core.widget.toast
-import com.codekidlabs.storagechooser.StorageChooser
 import com.rometools.opml.feed.opml.Attribute
 import com.rometools.opml.feed.opml.Opml
 import com.rometools.opml.feed.opml.Outline
@@ -82,8 +84,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         private const val OLD_GNEWS_TO_IGNORE = "http://news.google.com/news?"
 
         private const val AUTO_IMPORT_OPML_REQUEST_CODE = 1
-        private const val CHOOSE_OPML_REQUEST_CODE = 2
-        private const val EXPORT_OPML_REQUEST_CODE = 3
+        private const val WRITE_OPML_REQUEST_CODE = 2
+        private const val READ_OPML_REQUEST_CODE = 3
         private val NEEDED_PERMS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
         private const val RETRIEVE_FULLTEXT_OPML_ATTR = "retrieveFullText"
@@ -433,48 +435,28 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         return false
     }
 
-    @AfterPermissionGranted(CHOOSE_OPML_REQUEST_CODE)
     private fun pickOpml() {
-        if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
-            EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation), CHOOSE_OPML_REQUEST_CODE, *NEEDED_PERMS)
-        } else {
-            StorageChooser.Builder()
-                    .withActivity(this)
-                    .withFragmentManager(fragmentManager)
-                    .withMemoryBar(true)
-                    .allowCustomPath(true)
-                    .setType(StorageChooser.FILE_PICKER)
-                    .customFilter(arrayListOf("xml", "opml"))
-                    .build()
-                    .run {
-                        show()
-                        setOnSelectListener {
-                            importOpml(File(it))
-                        }
-                    }
-        }
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.type = "text/*"
+        startActivityForResult(intent, READ_OPML_REQUEST_CODE)
     }
 
-    @AfterPermissionGranted(EXPORT_OPML_REQUEST_CODE)
     private fun exportOpml() {
-        if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
-            EasyPermissions.requestPermissions(this, getString(R.string.storage_request_explanation), EXPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
-        } else {
-            if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED || Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED_READ_ONLY) {
-                doAsync {
-                    try {
-                        val opmlFileName = "Flym_" + System.currentTimeMillis() + ".opml"
-                        val opmlFilePath = Environment.getExternalStorageDirectory().toString() + "/" + opmlFileName
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+        intent.type = "text/*"
+        intent.putExtra(Intent.EXTRA_TITLE, "Flym_" + System.currentTimeMillis() + ".opml")
+        startActivityForResult(intent, WRITE_OPML_REQUEST_CODE)
+    }
 
-                        exportOpml(FileWriter(opmlFilePath))
-
-                        uiThread { toast(String.format(getString(R.string.message_exported_to), opmlFileName)) }
-                    } catch (e: Exception) {
-                        uiThread { toast(R.string.error_feed_export) }
-                    }
-                }
-            } else {
-                toast(R.string.error_external_storage_not_available)
+    override fun onActivityResult(requestCode: Int, resultCode: Int,
+                                  resultData: Intent?) {
+        if (requestCode == READ_OPML_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (resultData != null) {
+                importOpml(resultData.data)
+            }
+        } else if (requestCode == WRITE_OPML_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (resultData != null) {
+                exportOpml(resultData.data)
             }
         }
     }
@@ -485,25 +467,42 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             EasyPermissions.requestPermissions(this, getString(R.string.welcome_title_with_opml_import), AUTO_IMPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
         } else {
             if (BACKUP_OPML.exists()) {
-                importOpml(BACKUP_OPML)
+                importOpml(Uri.fromFile(BACKUP_OPML))
             } else {
                 toast(R.string.cannot_find_feeds)
             }
         }
     }
 
-    private fun importOpml(file: File) {
+    private fun importOpml(uri: Uri) {
         doAsync {
             try {
-                parseOpml(FileReader(file))
+                parseOpml(InputStreamReader(contentResolver.openInputStream(uri)))
             } catch (e: Exception) {
                 try {
                     // We try to remove the opml version number, it may work better in some cases
-                    val fixedReader = StringReader(file.readText().replace("<opml version=['\"][0-9]\\.[0-9]['\"]>".toRegex(), "<opml>"))
+                    val content = BufferedInputStream(contentResolver.openInputStream(uri)).bufferedReader().use { it.readText() }
+                    val fixedReader = StringReader(content.replace("<opml version=['\"][0-9]\\.[0-9]['\"]>".toRegex(), "<opml>"))
                     parseOpml(fixedReader)
                 } catch (e: Exception) {
                     uiThread { toast(R.string.cannot_find_feeds) }
                 }
+            }
+        }
+    }
+
+    private fun exportOpml(uri: Uri) {
+        doAsync {
+            try {
+                exportOpml(OutputStreamWriter(contentResolver.openOutputStream(uri), Charsets.UTF_8))
+                contentResolver.query(uri, null, null, null, null).use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        val fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                        uiThread { toast(String.format(getString(R.string.message_exported_to), fileName)) }
+                    }
+                }
+            } catch (e: Exception) {
+                uiThread { toast(R.string.error_feed_export) }
             }
         }
     }

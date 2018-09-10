@@ -27,7 +27,6 @@
     <string name="menu_export">Извези у ОПМЛ</string>
     <string name="storage_request_explanation">Да би увоз/извоз довода био могућ у или из датотеке, неопходно је да дозволите апликацији приступ интерном складишту.</string>
     <string name="error_feed_export">Извоз није завршен успешно. Проверите да ли уређај има СД картицу монтирану у систему.</string>
-    <string name="error_external_storage_not_available">Спољна меморија (СД картица) није доступна.</string>
     <string name="feed_search">Претрага довода</string>
     <string name="feed_search_hint">Унесите везу до довода или кључну реч</string>
     <string name="feed_added">Довод је додат у листу</string>

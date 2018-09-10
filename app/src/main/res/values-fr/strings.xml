@@ -48,7 +48,6 @@
     <string name="menu_export">Exporter vers OPML</string>
     <string name="storage_request_explanation">Pour pouvoir importer ou exporter les flux dans un fichier, vous devez authoriser l\'application à accéder à la mémoire de stockage.</string>
     <string name="error_feed_export">L\'export a échoué. Assurez-vous d\'avoir une carte SD montée et autorisée en écriture.</string>
-    <string name="error_external_storage_not_available">Le stockage externe (comme la carte SD) n\'est pas disponible.</string>
     <string name="feed_search">Recherche de flux</string>
     <string name="feed_search_hint">Entrez un lien de flux ou un mot-clé</string>
     <string name="feed_added">Flux ajouté à votre liste</string>

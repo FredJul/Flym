@@ -27,7 +27,6 @@
     <string name="menu_export">Export to OPML</string>
     <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_export">The export has failed. Make sure you have a writable SD-card mounted.</string>
-    <string name="error_external_storage_not_available">The external storage (e.g. SD-card) is not available.</string>
     <string name="feed_search">Feed search</string>
     <string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>

@@ -27,7 +27,6 @@
     <string name="menu_export">Exporteren naar OPML</string>
     <string name="storage_request_explanation">Als je feeds van/naar een bestand wilt importeren/exporteren, dan moet je de app toegang geven tot je opslag.</string>
     <string name="error_feed_export">Het exporteren is mislukt. Zorg ervoor dat je een beschrijfbare SD-kaart in de telefoon hebt gestopt.</string>
-    <string name="error_external_storage_not_available">De externe opslag (bijv. de SD-kaart) is niet beschikbaar.</string>
     <string name="feed_search">Feeds zoeken</string>
     <string name="feed_search_hint">Voeg een feedlink toe of een zoekterm in</string>
     <string name="feed_added">Feed toegevoegd aan lijst</string>
