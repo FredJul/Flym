@@ -6,7 +6,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorBackground">@color/colorBackground</item>
         <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="colorReadState">@color/read_state</item>
+        <item name="colorColoredReadState">@color/colored_read_state</item>
+        <item name="colorQuoteBackground">@color/quote_background_dark</item>
+        <item name="colorQuoteLeft">@color/quote_left_dark</item>
+        <item name="colorArticleText">@color/article_text_dark</item>
+        <item name="colorSubtitle">@color/subtitle_dark</item>
+        <item name="colorSubtitleBorder">@color/subtitle_border_dark</item>
     </style>
 
     <style name="AppTheme.ActionBar" parent="Theme.AppCompat">
@@ -18,6 +26,36 @@
     <style name="AppTheme.ActionBar.Details" parent="AppTheme.ActionBar" />
 
     <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- App Light theme -->
+    <style name="AppThemeLight" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryLight</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorBackground">@color/colorBackgroundLight</item>
+        <item name="android:windowBackground">@color/colorBackgroundLight</item>
+        <item name="colorReadState">@color/read_state_light</item>
+        <item name="colorColoredReadState">@color/colored_read_state_light</item>
+        <item name="colorQuoteBackground">@color/quote_background_light</item>
+        <item name="colorQuoteLeft">@color/quote_left_light</item>
+        <item name="colorArticleText">@color/article_text_light</item>
+        <item name="colorSubtitle">@color/subtitle_light</item>
+        <item name="colorSubtitleBorder">@color/subtitle_border_light</item>
+    </style>
+
+    <style name="AppThemeLight.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppThemeLight.ActionBar.Details" parent="AppThemeLight.ActionBar" />
+
+    <style name="AppThemeLight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

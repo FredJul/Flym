@@ -41,6 +41,12 @@
         android:layout_height="wrap_content"
         android:title="@string/settings_category_content_presentation">
 
+        <CheckBoxPreference
+            android:id="@+id/dark_theme"
+            android:defaultValue="true"
+            android:key="dark_theme"
+            android:summary="@string/settings_dark_theme_description"
+            android:title="@string/settings_dark_theme" />
         <net.frju.flym.ui.views.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -98,9 +98,9 @@ class EntryDetailsFragment : Fragment() {
 		super.onActivityCreated(savedInstanceState)
 
 		refresh_layout.setColorScheme(R.color.colorAccent,
-				R.color.colorPrimaryDark,
+				if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.color.colorPrimaryDark else R.color.colorPrimaryLight,
 				R.color.colorAccent,
-				R.color.colorPrimaryDark)
+				if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.color.colorPrimaryDark else R.color.colorPrimaryLight)
 
 		refresh_layout.setOnRefreshListener {
 			switchFullTextMode()
