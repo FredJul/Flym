@@ -31,23 +31,30 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -331,9 +338,56 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         mEntryPagerAdapter.onPause();
     }
 
+    /**
+     * Updates a menu item in the dropdown to show it's icon that was declared in XML.
+     *
+     * @param item
+     *         the item to update
+     * @param color
+     *         the color to tint with
+     */
+    private static void updateMenuWithIcon(@NonNull final MenuItem item) {
+        SpannableStringBuilder builder = new SpannableStringBuilder()
+                .append("*") // the * will be replaced with the icon via ImageSpan
+                .append("    ") // This extra space acts as padding. Adjust as you wish
+                .append(item.getTitle());
+
+
+
+        // Retrieve the icon that was declared in XML and assigned during inflation
+        if (item.getIcon() != null && item.getIcon().getConstantState() != null) {
+            Drawable drawable = item.getIcon().getConstantState().newDrawable();
+
+            // Mutate this drawable so the tint only applies here
+            // drawable.mutate().setTint(color);
+
+            // Needs bounds, or else it won't show up (doesn't know how big to be)
+            //drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+            drawable.setBounds(0, 0, DpToPx( 30 ), DpToPx( 30 ) );
+            ImageSpan imageSpan = new ImageSpan(drawable);
+            builder.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            item.setTitle(builder);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    public static int DpToPx( float dp) {
+        Resources r = MainApplication.getContext().getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+        return (int) px;
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.entry, menu);
+
+        //int color = ContextCompat.getColor(getContext(), R.color.common_google_signin_btn_text_dark);
+        updateMenuWithIcon(menu.findItem(R.id.menu_cancel_refresh));
+        updateMenuWithIcon(menu.findItem(R.id.menu_mark_as_favorite));
+        updateMenuWithIcon(menu.findItem(R.id.menu_mark_as_unfavorite));
+        updateMenuWithIcon(menu.findItem(R.id.menu_reload_full_text));
+        updateMenuWithIcon(menu.findItem(R.id.menu_reload_full_text_without_mobilizer));
+        updateMenuWithIcon(menu.findItem(R.id.menu_reload_full_text_with_tags));
 
         if (mFavorite) {
             MenuItem item = menu.findItem(R.id.menu_star);

@@ -111,7 +111,7 @@
     <string name="menu_unstar">Unstar</string>
     <string name="menu_share">Share</string>
     <string name="menu_full_screen">Full screen</string>
-    <string name="menu_font_bold">Full screen</string>
+    <string name="menu_font_bold">Bold font</string>
     <string name="menu_copy_clipboard">Copy link</string>
     <string name="menu_cancel_refresh">Cancel update</string>
     <string name="menu_delete_all">Delete all</string>

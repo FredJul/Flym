@@ -80,10 +80,8 @@ public class AutoRefreshService extends GcmTaskService {
 
     public static void initAutoRefresh(Context context) {
         if (Build.VERSION.SDK_INT >= 25 )
-
             AutoRefreshJobService.initAutoRefresh( context );
         else {
-
             GcmNetworkManager gcmNetworkManager = GcmNetworkManager.getInstance(context);
             if (isAutoUpdateEnabled()) {
                 PeriodicTask task = new PeriodicTask.Builder()

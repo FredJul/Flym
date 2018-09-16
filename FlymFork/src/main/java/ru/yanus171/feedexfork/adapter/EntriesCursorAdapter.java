@@ -50,6 +50,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -73,6 +74,8 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.MainApplication;
@@ -307,14 +310,14 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
         holder.entryID = cursor.getLong(mIdPos);
 
-        //mBackgroundColorLight = mShowEntryText && cursor.getPosition() % 2 == 1;
+
+        //mBackgroundColorLight =  daysTo % 2 == 1; //mShowEntryText && cursor.getPosition() % 2 == 1;
         final int backgroundColor;
         //if ( mBackgroundColorLight )
         //    backgroundColor = PrefUtils.IsLightTheme() ?  R.color.light_background_light : R.color.dark_background_ligth;
         //else
             backgroundColor = PrefUtils.IsLightTheme() ?  R.color.light_background : R.color.dark_background;
         view.findViewById(R.id.layout_with_background).setBackgroundColor(ContextCompat.getColor( context, backgroundColor ));
-
 
         holder.readToggleSwypeBtnView.setVisibility( View.GONE );
         holder.starToggleSwypeBtnView.setVisibility( View.GONE );
@@ -323,6 +326,11 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         String titleText = cursor.getString(mTitlePos);
         holder.titleTextView.setText(titleText);
+        Calendar date = Calendar.getInstance();
+        date.setTimeInMillis(cursor.getLong(mDatePos));
+        Calendar currentDate = Calendar.getInstance();
+        boolean isToday = currentDate.get( Calendar.DAY_OF_YEAR ) == date.get( Calendar.DAY_OF_YEAR );
+        holder.titleTextView.setTypeface( isToday ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT );
 
         holder.urlTextView.setText(cursor.getString(mUrlPos));
 

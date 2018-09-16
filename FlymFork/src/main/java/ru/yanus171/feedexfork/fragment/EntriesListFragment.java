@@ -27,9 +27,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -37,8 +39,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.SearchView;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -52,7 +58,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.support.v7.view.menu.MenuBuilder;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -66,6 +74,7 @@ import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
 import ru.yanus171.feedexfork.service.FetcherService;
 import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.PrefUtils;
+import ru.yanus171.feedexfork.utils.Timer;
 import ru.yanus171.feedexfork.utils.UiUtils;
 import ru.yanus171.feedexfork.view.StatusText;
 
@@ -98,23 +107,29 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            Timer timer = new Timer( "EntriesListFragment.onCreateLoader" );
+
             String entriesOrder = PrefUtils.getBoolean(PrefUtils.DISPLAY_OLDEST_FIRST, false) || mShowTextInEntryList ? Constants.DB_ASC : Constants.DB_DESC;
             String where = "(" + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + ')';
             String[] projection = mShowTextInEntryList ? null : EntryColumns.PROJECTION_WITHOUT_TEXT;
             CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, projection, where, null, EntryColumns.DATE + entriesOrder);
             cursorLoader.setUpdateThrottle(150);
+            timer.End();
             return cursorLoader;
         }
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            Timer.End(ENTRIES_LOADER_ID);
+            Timer timer = new Timer( "EntriesListFragment.onCreateLoader" );
+
             mEntriesCursorAdapter.swapCursor(data);
             if ( mShowTextInEntryList && mNeedSetSelection ) {
                 mNeedSetSelection = false;
                 mListView.setSelection(mEntriesCursorAdapter.GetFirstUnReadPos());
 
             }
-            //mAutoScrolSetIsReadEnabled = true;
+            timer.End();
         }
 
         @Override
@@ -183,16 +198,21 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            Timer timer = new Timer( "EntriesListFragment.mEntriesNumberLoader.onCreateLoader" );
+
             CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
             cursorLoader.setUpdateThrottle(150);
+            timer.End();
             return cursorLoader;
         }
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            Timer.End(NEW_ENTRIES_NUMBER_LOADER_ID);
             if ( data == null )
                 return;
 
+            Timer timer = new Timer( "EntriesListFragment.mEntriesNumberLoader.onLoadFinished" );
             data.moveToFirst();
             mNewEntriesNumber = data.getInt(0);
             mOldUnreadEntriesNumber = data.getInt(1);
@@ -205,6 +225,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             }
 
             mAutoRefreshDisplayDate = false;
+
+            timer.End();
         }
 
         @Override
@@ -215,6 +237,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Timer timer = new Timer( "EntriesListFragment.onCreate" );
+
         setHasOptionsMenu(true);
 
         Dog.v( "EntriesListFragment.onCreate" );
@@ -237,12 +261,14 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         } else
             mShowUnRead = PrefUtils.getBoolean( STATE_SHOW_UNREAD, false );
 
-
+        timer.End();
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        Timer timer = new Timer( "EntriesListFragment.onStart" );
+
         refreshUI(); // Should not be useful, but it's a security
         //refreshSwipeProgress();
         PrefUtils.registerOnPrefChangeListener(mPrefListener);
@@ -268,6 +294,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             restartLoaders();
         }
         UpdateActions();
+        timer.End();
     }
 
     @Override
@@ -283,6 +310,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     //@Override
     //public View inflateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Timer timer = new Timer( "EntriesListFragment.onCreateView" );
+
         View rootView = inflater.inflate(R.layout.fragment_entry_list, container, true);
         new StatusText( (TextView)rootView.findViewById( R.id.statusText1 ),
                         FetcherService.Status()/*,
@@ -385,6 +414,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
 
         //disableSwipe();
 
+        timer.End();
         return rootView;
     }
 
@@ -447,6 +477,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mCurrentUri, id)));
         }
     }*/
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -659,6 +690,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     }
 
     public void setData(Uri uri, boolean showFeedInfo, boolean isSearchUri, boolean showTextInEntryList) {
+        Timer timer = new Timer( "EntriesListFragment.setData" );
+
         Dog.v( String.format( "EntriesListFragment.setData( %s )", uri.toString() ) );
         mCurrentUri = uri;
         if (!isSearchUri) {
@@ -686,14 +719,17 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         //getActivity().invalidateOptionsMenu();
         //if (showTextInEntryList)
             //setSelection( mEntriesCursorAdapter.GetFirstUnReadPos() );//    setSelection( mEntriesCursorAdapter.getCount() - 1 );
-
+        timer.End();
     }
 
     private void restartLoaders() {
+
         LoaderManager loaderManager = getLoaderManager();
 
         //HACK: 2 times to workaround a hard-to-reproduce bug with non-refreshing loaders...
+        Timer.Start( ENTRIES_LOADER_ID, "EntriesListFr.restartLoaders() mEntriesLoader" );
         loaderManager.restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+        Timer.Start( NEW_ENTRIES_NUMBER_LOADER_ID, "EntriesListFr.restartLoaders() mEntriesNumberLoader" );
         loaderManager.restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
 
         loaderManager.restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);

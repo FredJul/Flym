@@ -88,8 +88,10 @@ public class HtmlUtils {
             content = START_BR_PATTERN.matcher(content).replaceAll("");
             content = END_BR_PATTERN.matcher(content).replaceAll("");
             content = MULTIPLE_BR_PATTERN.matcher(content).replaceAll("<br><br>");
-            content = REF_REPLY_PATTERN.matcher(content).replaceAll("");
-            content = IMG_USER_PATTERN.matcher(content).replaceAll("");
+            if ( !baseUri.contains( "user" ) ) {
+                content = REF_REPLY_PATTERN.matcher(content).replaceAll("");
+                content = IMG_USER_PATTERN.matcher(content).replaceAll("");
+            }
 
             // xml
             content = content.replace( "&lt;", "<" );

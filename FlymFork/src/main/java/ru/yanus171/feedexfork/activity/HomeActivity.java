@@ -65,6 +65,7 @@ import ru.yanus171.feedexfork.service.AutoRefreshService;
 import ru.yanus171.feedexfork.service.FetcherService;
 import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
+import ru.yanus171.feedexfork.utils.Timer;
 import ru.yanus171.feedexfork.utils.UiUtils;
 
 import static ru.yanus171.feedexfork.provider.FeedData.EntryColumns.FAVORITES_CONTENT_URI;
@@ -95,6 +96,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Timer timer = new Timer( "HomeActivity.onCreate" );
         UiUtils.setPreferenceTheme(this);
         super.onCreate(savedInstanceState);
 
@@ -151,6 +153,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         //if (!PrefUtils.getBoolean(PrefUtils.REMEBER_LAST_ENTRY, true))
         //    selectDrawerItem(0);
 
+        Timer.Start( LOADER_ID, "HomeActivity.initLoader" );
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
         AutoRefreshService.initAutoRefresh(this);
@@ -181,6 +184,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         mHandler = new Handler();
         FetcherService.Status().setHandler(mHandler);
+
+        timer.End();
     }
 
     private void CloseDrawer() {
@@ -205,6 +210,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public void onResume() {
         super.onResume();
+
+        Timer timer = new Timer( "HomeActivity.onResume" );
 
         final Intent intent = getIntent();
         if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEND) && intent.hasExtra(Intent.EXTRA_TEXT)) {
@@ -243,10 +250,13 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(lastUri)));
         }
 
-        if ( mFeedSetupChanged )
+        if ( mFeedSetupChanged ) {
+            Timer.Start( LOADER_ID, "HomeActivity.restartLoader LOADER_ID" );
             getLoaderManager().restartLoader(LOADER_ID, null, this);
+        }
         //if ( mDrawerAdapter != null  )
         //    selectDrawerItem( mCurrentDrawerPos );
+        timer.End();
     }
 
     @Override
@@ -332,6 +342,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        Timer timer = new Timer( "HomeActivity.onCreateLoader" );
         CursorLoader cursorLoader =
                 new CursorLoader(this,
                         FeedColumns.GROUPED_FEEDS_CONTENT_URI,
@@ -347,6 +358,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                         null,
                         null);
         cursorLoader.setUpdateThrottle(Constants.UPDATE_THROTTLE_DELAY);
+        timer.End();
         return cursorLoader;
     }
 
@@ -354,7 +366,8 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     public static Uri mNewFeedUri = Uri.EMPTY;
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-
+        Timer.End( LOADER_ID );
+        Timer timer = new Timer( "HomeActivity.onLoadFinished" );
         synchronized (mFeedSetupChanged) {
             boolean needSelect = false;
             if (mDrawerAdapter != null ) {
@@ -386,7 +399,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                     }
                 });
         }
-
+        timer.End();
     }
 
     @Override
@@ -395,7 +408,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     private void selectDrawerItem(int position) {
-
+        Timer timer = new Timer( "HomeActivity.selectDrawerItem" );
 
         mCurrentDrawerPos = position;
 
@@ -432,6 +445,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 mTitle = mDrawerAdapter.getItemName(position);
 
                 break;
+
         }
 
         //if (!newUri.equals(mEntriesFragment.getUri()))
@@ -507,6 +521,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         // Put the good menu
         invalidateOptionsMenu();
+        timer.End();
     }
 
     @Override

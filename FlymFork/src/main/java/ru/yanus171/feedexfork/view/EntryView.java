@@ -76,6 +76,7 @@ import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.FileUtils;
 import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
+import ru.yanus171.feedexfork.utils.Timer;
 
 public class EntryView extends WebView implements Observer {
 
@@ -205,6 +206,8 @@ public class EntryView extends WebView implements Observer {
                         long timestamp,
                         boolean preferFullText,
                         EntryActivity activity) {
+        Timer timer = new Timer( "EntryView.setHtml" );
+
         mActivity = activity;
         mEntryId = entryId;
         //getSettings().setBlockNetworkLoads(true);
@@ -233,9 +236,12 @@ public class EntryView extends WebView implements Observer {
         // do not put 'null' to the base url...
         mData = generateHtmlContent(title, link, contentText, enclosure, author, timestamp, preferFullText);
         loadDataWithBaseURL("", mData, TEXT_HTML, Constants.UTF8, null);
+        timer.End();
     }
 
     private String generateHtmlContent(String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
+        Timer timer = new Timer( "EntryView.generateHtmlContent" );
+
         StringBuilder content = new StringBuilder(GetCSS()).append(BODY_START);
 
         if (link == null) {
@@ -271,11 +277,15 @@ public class EntryView extends WebView implements Observer {
 
         content.append(BUTTON_SECTION_END).append(BODY_END);
 
+        timer.End();
         return content.toString();
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     private void init() {
+
+        Timer timer = new Timer( "EntryView.init" );
+
         if ( mHandler == null )
             mHandler = new Handler();
         mImageDownloadObservable.addObserver(this);
@@ -392,7 +402,7 @@ public class EntryView extends WebView implements Observer {
             }
         });
 
-
+        timer.End();
     }
 
 
