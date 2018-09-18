@@ -87,7 +87,7 @@
     <string name="no_entries">Keine Artikel\nZum Aktualisieren bitte nach unten ziehen</string>
     <string name="undo">Rückgängig</string>
     <string name="marked_as_read">Als gelesen markieren</string>
-    <string name="marked_as_unread">Marked as unread</string>
+    <string name="marked_as_unread">Als ungelesen markieren</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>
@@ -102,12 +102,12 @@
     <string name="settings_font_size">Textgröße</string>
     <string name="settings_refresh_wifi_only">Nur über WLAN aktualisieren</string>
     <string name="settings_refresh_wifi_only_description">Die automatische Aktualisierung wird nur bei aktiver WLAN-Verbindung durchgeführt</string>
-    <string name="settings_category_filter">Filters</string>
-    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
-    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <string name="settings_dark_theme">Enable dark theme</string>
-    <string name="settings_dark_theme_description">Change the interface colors for better comfort in low light environements</string>
+    <string name="settings_category_filter">Filter</string>
+    <string name="settings_remove_duplicates_description_title">Duplikate entfernen</string>
+    <string name="settings_remove_duplicates_description">Untersucht Titel von neu heruntergeladenen Einträgen. Überspringt, wenn ein Eintrag mit demselben Titel bereits vorhanden ist</string>
+    <string name="filter">Einträge, welche nachfolgende Schlüsselworte beinhalten, entfernen (kommaseparierte Liste)</string>
+    <string name="settings_dark_theme">Dunkles Thema aktivieren</string>
+    <string name="settings_dark_theme_description">Verändert die Farben der Oberfläche, um ein besseres Erlebnis bei gedimmten Umgebungen zu erreichen</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Eintrag</item>
