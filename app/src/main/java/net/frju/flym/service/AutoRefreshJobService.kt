@@ -23,7 +23,9 @@ import android.app.job.JobScheduler
 import android.app.job.JobService
 import android.content.ComponentName
 import android.content.Context
-import net.frju.flym.data.utils.PrefUtils
+import net.frju.flym.data.utils.PrefConstants
+import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.getPrefString
 import org.jetbrains.anko.doAsync
 
 class AutoRefreshJobService : JobService() {
@@ -37,9 +39,9 @@ class AutoRefreshJobService : JobService() {
             // DO NOT USE ANKO TO RETRIEVE THE SERVICE HERE (crash on API 21)
             val jobSchedulerService = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
 
-            val time = Math.max(300, PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, TWO_HOURS).toInt())
+            val time = Math.max(300, context.getPrefString(PrefConstants.REFRESH_INTERVAL, TWO_HOURS).toInt())
 
-            if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
+            if (context.getPrefBoolean(PrefConstants.REFRESH_ENABLED, true)) {
                 val builder = JobInfo.Builder(JOB_ID, ComponentName(context, AutoRefreshJobService::class.java))
                         .setPeriodic(time * 1000L)
                         .setPersisted(true)
@@ -53,7 +55,7 @@ class AutoRefreshJobService : JobService() {
     }
 
     override fun onStartJob(params: JobParameters): Boolean {
-        if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+        if (!getPrefBoolean(PrefConstants.IS_REFRESHING, false)) {
             doAsync {
                 FetcherService.fetch(this@AutoRefreshJobService, true, FetcherService.ACTION_REFRESH_FEEDS)
                 jobFinished(params, false)

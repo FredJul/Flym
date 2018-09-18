@@ -21,7 +21,8 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import net.frju.flym.data.AppDatabase
-import net.frju.flym.data.utils.PrefUtils
+import net.frju.flym.data.utils.PrefConstants
+import net.frju.flym.utils.putPrefBoolean
 
 
 class App : Application() {
@@ -43,6 +44,6 @@ class App : Application() {
         context = applicationContext
         db = AppDatabase.createDatabase(context)
 
-        PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false) // init
+        context.putPrefBoolean(PrefConstants.IS_REFRESHING, false) // init
     }
 }

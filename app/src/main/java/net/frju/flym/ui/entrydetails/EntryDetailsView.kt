@@ -32,10 +32,8 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import net.fred.feedex.R
 import net.frju.flym.data.entities.EntryWithFeed
-import net.frju.flym.data.utils.PrefUtils
-import net.frju.flym.utils.FILE_SCHEME
-import net.frju.flym.utils.HtmlUtils
-import net.frju.flym.utils.UTF8
+import net.frju.flym.data.utils.PrefConstants
+import net.frju.flym.utils.*
 import org.jetbrains.anko.colorAttr
 import java.io.File
 import java.io.IOException
@@ -89,7 +87,7 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
         setBackgroundColor(Color.parseColor(BACKGROUND_COLOR))
 
         // Text zoom level from preferences
-		val fontSize = PrefUtils.getString(PrefUtils.FONT_SIZE, "0").toInt()
+        val fontSize = context.getPrefString(PrefConstants.FONT_SIZE, "0").toInt()
         if (fontSize != 0) {
             settings.textZoom = 100 + fontSize * 20
         }
@@ -127,7 +125,7 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
             var contentText = if (preferFullText) entryWithFeed.entry.mobilizedContent
                     ?: entryWithFeed.entry.description.orEmpty() else entryWithFeed.entry.description.orEmpty()
 
-            if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
+            if (context.getPrefBoolean(PrefConstants.DISPLAY_IMAGES, true)) {
                 contentText = HtmlUtils.replaceImageURLs(contentText, entryWithFeed.entry.id)
                 if (settings.blockNetworkImage) {
                     // setBlockNetworkImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards

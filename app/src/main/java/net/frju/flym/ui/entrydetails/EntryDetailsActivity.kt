@@ -21,13 +21,14 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import net.fred.feedex.R
-import net.frju.flym.data.utils.PrefUtils
+import net.frju.flym.data.utils.PrefConstants
+import net.frju.flym.utils.getPrefBoolean
 
 class EntryDetailsActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
         //Choose theme
-		setTheme(if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.style.AppTheme_NoActionBar else R.style.AppThemeLight_NoActionBar)
+		setTheme(if (getPrefBoolean(PrefConstants.DARK_THEME, true)) R.style.AppTheme_NoActionBar else R.style.AppThemeLight_NoActionBar)
 
         super.onCreate(savedInstanceState)
 

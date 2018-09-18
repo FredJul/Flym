@@ -36,15 +36,14 @@ import com.rometools.rome.io.XmlReader
 import net.dankito.readability4j.extended.Readability4JExtended
 import net.fred.feedex.R
 import net.frju.flym.App
+import net.frju.flym.App.Companion.context
 import net.frju.flym.data.entities.Entry
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.Task
 import net.frju.flym.data.entities.toDbFormat
-import net.frju.flym.data.utils.PrefUtils
+import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.ui.main.MainActivity
-import net.frju.flym.utils.HtmlUtils
-import net.frju.flym.utils.isOnline
-import net.frju.flym.utils.sha1
+import net.frju.flym.utils.*
 import okhttp3.Call
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
@@ -98,7 +97,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 .build())
 
         fun fetch(context: Context, isFromAutoRefresh: Boolean, action: String, feedId: Long = 0L) {
-            if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+            if (context.getPrefBoolean(PrefConstants.IS_REFRESHING, false)) {
                 return
             }
 
@@ -107,7 +106,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 return
             }
 
-            val skipFetch = isFromAutoRefresh && PrefUtils.getBoolean(PrefUtils.REFRESH_WIFI_ONLY, false)
+            val skipFetch = isFromAutoRefresh && context.getPrefBoolean(PrefConstants.REFRESH_WIFI_ONLY, false)
                     && context.connectivityManager.activeNetworkInfo?.type != ConnectivityManager.TYPE_WIFI
             // We need to skip the fetching process, so we quit
             if (skipFetch) {
@@ -121,9 +120,9 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 }
                 ACTION_DOWNLOAD_IMAGES == action -> downloadAllImages()
                 else -> { // == Constants.ACTION_REFRESH_FEEDS
-                    PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true)
+                    context.putPrefBoolean(PrefConstants.IS_REFRESHING, true)
 
-                    val keepTime = PrefUtils.getString(PrefUtils.KEEP_TIME, "4").toLong() * 86400000L
+                    val keepTime = context.getPrefString(PrefConstants.KEEP_TIME, "4").toLong() * 86400000L
                     val keepDateBorderTime = if (keepTime > 0) System.currentTimeMillis() - keepTime else 0
 
                     deleteOldEntries(keepDateBorderTime)
@@ -177,18 +176,18 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                     mobilizeAllEntries()
                     downloadAllImages()
 
-                    PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false)
+                    context.putPrefBoolean(PrefConstants.IS_REFRESHING, false)
                 }
             }
         }
 
         fun shouldDownloadPictures(): Boolean {
-            val fetchPictureMode = PrefUtils.getString(PrefUtils.PRELOAD_IMAGE_MODE, PrefUtils.PRELOAD_IMAGE_MODE__WIFI_ONLY)
+            val fetchPictureMode = context.getPrefString(PrefConstants.PRELOAD_IMAGE_MODE, PrefConstants.PRELOAD_IMAGE_MODE__WIFI_ONLY)
 
-            if (PrefUtils.getBoolean(PrefUtils.DISPLAY_IMAGES, true)) {
-                if (PrefUtils.PRELOAD_IMAGE_MODE__ALWAYS == fetchPictureMode) {
+            if (context.getPrefBoolean(PrefConstants.DISPLAY_IMAGES, true)) {
+                if (PrefConstants.PRELOAD_IMAGE_MODE__ALWAYS == fetchPictureMode) {
                     return true
-                } else if (PrefUtils.PRELOAD_IMAGE_MODE__WIFI_ONLY == fetchPictureMode) {
+                } else if (PrefConstants.PRELOAD_IMAGE_MODE__WIFI_ONLY == fetchPictureMode) {
                     if (App.context.connectivityManager.activeNetworkInfo?.type == ConnectivityManager.TYPE_WIFI) {
                         return true
                     }
@@ -390,13 +389,13 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             entries.removeAll { it.id in existingIds }
 
             // Second, we filter items with same title than one we already have
-            if (PrefUtils.getBoolean(PrefUtils.REMOVE_DUPLICATES, true)) {
+            if (context.getPrefBoolean(PrefConstants.REMOVE_DUPLICATES, true)) {
                 val existingTitles = App.db.entryDao().findAlreadyExistingTitles(entries.mapNotNull { it.title })
                 entries.removeAll { it.title in existingTitles }
             }
 
             // Third, we filter items containing forbidden keywords
-            val filterKeywordString = PrefUtils.getString(PrefUtils.FILTER_KEYWORDS, "")
+            val filterKeywordString = context.getPrefString(PrefConstants.FILTER_KEYWORDS, "")
             if (filterKeywordString.isNotBlank()) {
                 val keywordLists = filterKeywordString.split(',').map { it.trim() }
 

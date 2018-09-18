@@ -51,7 +51,7 @@ import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.FeedWithCount
-import net.frju.flym.data.utils.PrefUtils
+import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.service.AutoRefreshJobService
 import net.frju.flym.ui.about.AboutActivity
 import net.frju.flym.ui.entries.EntriesFragment
@@ -62,6 +62,8 @@ import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
+import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.putPrefBoolean
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
 import pub.devrel.easypermissions.AfterPermissionGranted
@@ -96,7 +98,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //Choose theme
-        setTheme(if (PrefUtils.getBoolean(PrefUtils.DARK_THEME, true)) R.style.AppTheme_NoActionBar else R.style.AppThemeLight_NoActionBar)
+        setTheme(if (getPrefBoolean(PrefConstants.DARK_THEME, true)) R.style.AppTheme_NoActionBar else R.style.AppThemeLight_NoActionBar)
 
         super.onCreate(savedInstanceState)
 
@@ -253,8 +255,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
         if (savedInstanceState == null) {
             // First open => we open the drawer for you
-            if (PrefUtils.getBoolean(PrefUtils.FIRST_OPEN, true)) {
-                PrefUtils.putBoolean(PrefUtils.FIRST_OPEN, false)
+            if (getPrefBoolean(PrefConstants.FIRST_OPEN, true)) {
+                putPrefBoolean(PrefConstants.FIRST_OPEN, false)
                 openDrawer()
 
                 if (isOldFlymAppInstalled()) {

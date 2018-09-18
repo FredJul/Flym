@@ -40,10 +40,13 @@ import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
-import net.frju.flym.data.utils.PrefUtils
+import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.closeKeyboard
+import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.registerOnPrefChangeListener
+import net.frju.flym.utils.unregisterOnPrefChangeListener
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource
 import org.jetbrains.anko.design.longSnackbar
@@ -114,7 +117,7 @@ class EntriesFragment : Fragment() {
 	private val searchHandler = Handler()
 
 	private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
-		if (PrefUtils.IS_REFRESHING == key) {
+		if (PrefConstants.IS_REFRESHING == key) {
 			refreshSwipeProgress()
 		}
 	}
@@ -255,13 +258,13 @@ class EntriesFragment : Fragment() {
 
 	override fun onStart() {
 		super.onStart()
-		PrefUtils.registerOnPrefChangeListener(prefListener)
+		context?.registerOnPrefChangeListener(prefListener)
 		refreshSwipeProgress()
 	}
 
 	override fun onStop() {
 		super.onStop()
-		PrefUtils.unregisterOnPrefChangeListener(prefListener)
+		context?.unregisterOnPrefChangeListener(prefListener)
 	}
 
 	override fun onSaveInstanceState(outState: Bundle) {
@@ -348,7 +351,7 @@ class EntriesFragment : Fragment() {
 	}
 
 	private fun startRefresh() {
-		if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+		if (context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false) == false) {
 			if (feed?.isGroup == false && feed?.id != Feed.ALL_ENTRIES_ID) {
 				context?.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.EXTRA_FEED_ID,
 						feed?.id))
@@ -451,6 +454,6 @@ class EntriesFragment : Fragment() {
 	}
 
 	private fun refreshSwipeProgress() {
-		refresh_layout.isRefreshing = PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)
+		refresh_layout.isRefreshing = context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false) ?: false
 	}
 }
