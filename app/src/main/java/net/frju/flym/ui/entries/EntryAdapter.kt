@@ -78,9 +78,9 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
             date.text = entryWithFeed.entry.getReadablePublicationDate(context)
 
             if (entryWithFeed.entry.favorite) {
-                favorite_icon.setImageResource(R.drawable.ic_star_white_24dp)
+                favorite_icon.setImageResource(R.drawable.ic_star_24dp)
             } else {
-                favorite_icon.setImageResource(R.drawable.ic_star_border_white_24dp)
+                favorite_icon.setImageResource(R.drawable.ic_star_border_24dp)
             }
             favorite_icon.onClick { favoriteClickListener(entryWithFeed, favorite_icon) }
 

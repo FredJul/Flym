@@ -90,9 +90,9 @@ class EntriesFragment : Fragment() {
 
 		view.favorite_icon?.let {
 			if (entryWithFeed.entry.favorite) {
-				it.setImageResource(R.drawable.ic_star_white_24dp)
+				it.setImageResource(R.drawable.ic_star_24dp)
 			} else {
-				it.setImageResource(R.drawable.ic_star_border_white_24dp)
+				it.setImageResource(R.drawable.ic_star_border_24dp)
 			}
 		}
 
