@@ -30,7 +30,6 @@ import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.ui.views.DragNDropListener
 import org.jetbrains.anko.doAsync
-import java.util.*
 
 
 class FeedListEditFragment : Fragment() {
@@ -78,7 +77,7 @@ class FeedListEditFragment : Fragment() {
                                     fromFeed.feed.groupId = toFeed.feed.groupId
                                     changeItemPriority(fromFeed.feed, toFeed.feed.displayPriority)
                                 }.show()
-                    } else {
+                    } else if (fromFeed.feed.isGroup == false || toFeed.feed.groupId == null) { // can't move group inside another one
                         fromFeed.feed.groupId = toFeed.feed.groupId
                         changeItemPriority(fromFeed.feed, toFeed.feed.displayPriority)
                     }
@@ -108,7 +107,7 @@ class FeedListEditFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-		inflater.inflate(R.menu.menu_fragment_feed_list_edit, menu)
+        inflater.inflate(R.menu.menu_fragment_feed_list_edit, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -143,7 +142,6 @@ class FeedListEditFragment : Fragment() {
     }
 
     private fun changeItemPriority(fromFeed: Feed, newDisplayPriority: Int) {
-        fromFeed.lastManualActionUid = UUID.randomUUID().toString() // Needed hack to avoid recursive trigger
         fromFeed.displayPriority = newDisplayPriority
 
         doAsync {

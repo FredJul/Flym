@@ -43,18 +43,21 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("DELETE FROM entries WHERE rowid NOT IN (SELECT MIN(rowid) FROM entries GROUP BY link)")
-                database.execSQL("CREATE UNIQUE INDEX index_entries_link ON entries(link)")
+                database.run {
+                    execSQL("DELETE FROM entries WHERE rowid NOT IN (SELECT MIN(rowid) FROM entries GROUP BY link)")
+                    execSQL("CREATE UNIQUE INDEX index_entries_link ON entries(link)")
+                }
             }
         }
 
         private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("DROP TRIGGER feed_update_decrease_priority")
-                database.execSQL("DROP TRIGGER feed_update_increase_priority")
-                database.execSQL("DROP TRIGGER feed_update_decrease_priority_same_group")
-                database.execSQL("DROP TRIGGER feed_update_increase_priority_same_group")
-                database.execSQL("""
+                database.run {
+                    execSQL("DROP TRIGGER feed_update_decrease_priority")
+                    execSQL("DROP TRIGGER feed_update_increase_priority")
+                    execSQL("DROP TRIGGER feed_update_decrease_priority_same_group")
+                    execSQL("DROP TRIGGER feed_update_increase_priority_same_group")
+                    execSQL("""
                                 CREATE TRIGGER feed_update_priority_group
                                     AFTER UPDATE
                                     ON feeds
@@ -63,7 +66,8 @@ abstract class AppDatabase : RoomDatabase() {
                                     UPDATE feeds SET displayPriority = (SELECT COUNT() FROM feeds f JOIN feeds fl ON fl.displayPriority <= f.displayPriority AND fl.groupId IS f.groupId WHERE f.feedId = feeds.feedId GROUP BY f.feedId) WHERE feedId != NEW.feedId;
                                     UPDATE feeds SET displayPriority = (SELECT COUNT() + 1 FROM feeds f WHERE f.displayPriority < NEW.displayPriority AND f.groupId IS NEW.groupId ) WHERE feedId = NEW.feedId;
                                 END;
-                                """.trimIndent())
+                                """)
+                }
             }
         }
 
@@ -78,25 +82,25 @@ abstract class AppDatabase : RoomDatabase() {
                             doAsync {
                                 // insert => add max priority for the group
                                 db.execSQL("""
-                                CREATE TRIGGER feed_insert_priority
-                                    AFTER INSERT
-                                    ON feeds
-                                BEGIN
-                                   UPDATE feeds SET displayPriority = IFNULL((SELECT MAX(displayPriority) FROM feeds WHERE groupId IS NEW.groupId), 0) + 1 WHERE feedId = NEW.feedId;
-                                END;
-                                """.trimIndent())
+                                    CREATE TRIGGER feed_insert_priority
+                                        AFTER INSERT
+                                        ON feeds
+                                    BEGIN
+                                       UPDATE feeds SET displayPriority = IFNULL((SELECT MAX(displayPriority) FROM feeds WHERE groupId IS NEW.groupId), 0) + 1 WHERE feedId = NEW.feedId;
+                                    END;
+                                    """)
 
                                 // update priority of some group's feeds
                                 db.execSQL("""
-                                CREATE TRIGGER feed_update_priority_group
-                                    AFTER UPDATE
-                                    ON feeds
-                                    WHEN NOT(OLD.groupId IS NEW.groupId) OR NEW.displayPriority != OLD.displayPriority
-                                BEGIN
-                                    UPDATE feeds SET displayPriority = (SELECT COUNT() FROM feeds f JOIN feeds fl ON fl.displayPriority <= f.displayPriority AND fl.groupId IS f.groupId WHERE f.feedId = feeds.feedId GROUP BY f.feedId) WHERE feedId != NEW.feedId;
-                                    UPDATE feeds SET displayPriority = (SELECT COUNT() + 1 FROM feeds f WHERE f.displayPriority < NEW.displayPriority AND f.groupId IS NEW.groupId ) WHERE feedId = NEW.feedId;
-                                END;
-                                """.trimIndent())
+                                    CREATE TRIGGER feed_update_priority_group
+                                        AFTER UPDATE
+                                        ON feeds
+                                        WHEN NOT(OLD.groupId IS NEW.groupId) OR NEW.displayPriority != OLD.displayPriority
+                                    BEGIN
+                                        UPDATE feeds SET displayPriority = (SELECT COUNT() FROM feeds f JOIN feeds fl ON fl.displayPriority <= f.displayPriority AND fl.groupId IS f.groupId WHERE f.feedId = feeds.feedId GROUP BY f.feedId) WHERE feedId != NEW.feedId;
+                                        UPDATE feeds SET displayPriority = (SELECT COUNT() + 1 FROM feeds f WHERE f.displayPriority < NEW.displayPriority AND f.groupId IS NEW.groupId ) WHERE feedId = NEW.feedId;
+                                    END;
+                                    """)
                             }
                         }
                     })
