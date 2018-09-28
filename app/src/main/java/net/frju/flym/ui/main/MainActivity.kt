@@ -63,6 +63,7 @@ import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
 import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.getPrefString
 import net.frju.flym.utils.putPrefBoolean
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
@@ -98,7 +99,12 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //Choose theme
-        setTheme(if (getPrefBoolean(PrefConstants.DARK_THEME, true)) R.style.AppTheme_NoActionBar else R.style.AppThemeLight_NoActionBar)
+        setTheme(when (getPrefString(PrefConstants.THEME, "DARK")) {
+            "LIGHT" -> R.style.AppThemeLight_NoActionBar
+            "DARK" -> R.style.AppTheme_NoActionBar
+            "BLACK" -> R.style.AppThemeBlack_NoActionBar
+            else -> R.style.AppTheme_NoActionBar
+        })
 
         super.onCreate(savedInstanceState)
 

@@ -23,14 +23,19 @@ import android.view.MenuItem
 import com.vansuita.materialabout.builder.AboutBuilder
 import net.fred.feedex.R
 import net.frju.flym.data.utils.PrefConstants
-import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.getPrefString
 
 
 class AboutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //Choose theme
-        setTheme(if (getPrefBoolean(PrefConstants.DARK_THEME, true)) R.style.AppTheme else R.style.AppThemeLight)
+        setTheme(when (getPrefString(PrefConstants.THEME, "DARK")) {
+            "LIGHT" -> R.style.AppThemeLight
+            "DARK" -> R.style.AppTheme
+            "BLACK" -> R.style.AppThemeBlack
+            else -> R.style.AppTheme
+        })
 
         super.onCreate(savedInstanceState)
 

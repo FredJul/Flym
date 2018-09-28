@@ -42,9 +42,9 @@ class SettingsFragment : PreferenceFragment() {
 		findPreference(PrefConstants.REFRESH_ENABLED)?.onPreferenceChangeListener = onRefreshChangeListener
 		findPreference(PrefConstants.REFRESH_INTERVAL)?.onPreferenceChangeListener = onRefreshChangeListener
 
-		findPreference(PrefConstants.DARK_THEME)?.setOnPreferenceChangeListener { preference, any ->
+		findPreference(PrefConstants.THEME)?.setOnPreferenceChangeListener { preference, any ->
 			activity.finishAffinity()
-            startActivity<MainActivity>()
+			startActivity<MainActivity>()
 			true
 		}
 	}
