@@ -34,4 +34,9 @@
         <item>WIFI_ONLY_PRELOAD</item>
         <item>ALWAYS_PRELOAD</item>
     </string-array>
+    <string-array name="settings_themes_values">
+        <item>LIGHT</item>
+        <item>DARK</item>
+        <item>BLACK</item>
+    </string-array>
 </resources>

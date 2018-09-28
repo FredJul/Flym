@@ -83,8 +83,7 @@
     <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
     <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <string name="settings_dark_theme">Enable dark theme</string>
-    <string name="settings_dark_theme_description">Change the interface colors for better comfort in low light environements</string>
+    <string name="settings_theme">Theme</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Jedan novi članak</item>
@@ -124,5 +123,10 @@
         <item>Nikada</item>
         <item>Samo preko bežične mreže (Wi-Fi)</item>
         <item>Uvek</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Black</item>
     </string-array>
 </resources>

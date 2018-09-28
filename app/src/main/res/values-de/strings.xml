@@ -106,8 +106,7 @@
     <string name="settings_remove_duplicates_description_title">Duplikate entfernen</string>
     <string name="settings_remove_duplicates_description">Untersucht Titel von neu heruntergeladenen Einträgen. Überspringt, wenn ein Eintrag mit demselben Titel bereits vorhanden ist</string>
     <string name="filter">Einträge, welche nachfolgende Schlüsselworte beinhalten, entfernen (kommaseparierte Liste)</string>
-    <string name="settings_dark_theme">Dunkles Thema aktivieren</string>
-    <string name="settings_dark_theme_description">Verändert die Farben der Oberfläche, um ein besseres Erlebnis bei gedimmten Umgebungen zu erreichen</string>
+    <string name="settings_theme">Thema</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Eintrag</item>
@@ -147,6 +146,11 @@
         <item>Niemals</item>
         <item>Nur über WLAN</item>
         <item>Immer</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Light</item>
+        <item>Dunkles</item>
+        <item>Black</item>
     </string-array>
 
 </resources>
