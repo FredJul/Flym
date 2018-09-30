@@ -262,7 +262,7 @@ public class FetcherService extends IntentService {
                         PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);
                         mCancelRefresh = false;
 
-                        long keepTime = Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l;
+                        long keepTime = (long) (Float.parseFloat(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l);
                         long keepDateBorderTime = keepTime > 0 ? System.currentTimeMillis() - keepTime : 0;
 
                         deleteOldEntries(keepDateBorderTime);
@@ -730,6 +730,8 @@ public class FetcherService extends IntentService {
                         public void run() {
                             int status = Status().Start(MainApplication.getContext().getString(R.string.deleteOldEntries)); try {
                                 mIsDeletingOld = true;
+                                
+                                DeleteOldEntries( feedID, keepDateBorderTime );
                                     String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
                                 // Delete the entries, the cache files will be deleted by the content provider
                                 MainApplication.getContext().getContentResolver().delete(EntryColumns.CONTENT_URI, where, null);

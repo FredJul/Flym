@@ -382,12 +382,17 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         inflater.inflate(R.menu.entry, menu);
 
         //int color = ContextCompat.getColor(getContext(), R.color.common_google_signin_btn_text_dark);
-        updateMenuWithIcon(menu.findItem(R.id.menu_cancel_refresh));
         updateMenuWithIcon(menu.findItem(R.id.menu_mark_as_favorite));
         updateMenuWithIcon(menu.findItem(R.id.menu_mark_as_unfavorite));
         updateMenuWithIcon(menu.findItem(R.id.menu_reload_full_text));
-        updateMenuWithIcon(menu.findItem(R.id.menu_reload_full_text_without_mobilizer));
-        updateMenuWithIcon(menu.findItem(R.id.menu_reload_full_text_with_tags));
+        //updateMenuWithIcon(menu.findItem(R.id.menu_reload_full_text_without_mobilizer));
+        //updateMenuWithIcon(menu.findItem(R.id.menu_reload_full_text_with_tags));
+        updateMenuWithIcon(menu.findItem(R.id.menu_load_all_images));
+        updateMenuWithIcon(menu.findItem(R.id.menu_share_all_text));
+        updateMenuWithIcon(menu.findItem(R.id.menu_open_link));
+        updateMenuWithIcon(menu.findItem(R.id.menu_cancel_refresh));
+
+
 
         if (mFavorite) {
             MenuItem item = menu.findItem(R.id.menu_star);

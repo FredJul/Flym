@@ -186,6 +186,8 @@
     </string-array>
 
     <string-array name="settings_keep_times">
+        <item>1 hour</item>
+        <item>12 hours</item>
         <item>1 deň</item>
         <item>2 dni</item>
         <item>4 dni</item>

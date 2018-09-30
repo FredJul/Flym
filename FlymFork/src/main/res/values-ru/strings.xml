@@ -239,6 +239,8 @@
         <item>1 день</item>
     </string-array>
     <string-array name="settings_keep_times">
+        <item>1 час</item>
+        <item>12 часов</item>
         <item>1 день</item>
         <item>2 дня</item>
         <item>4 дня</item>

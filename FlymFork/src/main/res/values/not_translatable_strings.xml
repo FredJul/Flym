@@ -87,6 +87,8 @@
         <item>86400000</item>
     </string-array>
     <string-array name="settings_keep_time_values" translatable="false">
+        <item>0.04</item>
+        <item>0.5</item>
         <item>1</item>
         <item>2</item>
         <item>4</item>

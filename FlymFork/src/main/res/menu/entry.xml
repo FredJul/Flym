@@ -47,20 +47,21 @@
         android:title="@string/menu_reload_full_text"/>
     <item
         android:id="@+id/menu_reload_full_text_without_mobilizer"
-        android:icon="@drawable/refresh"
         android:title="@string/menu_reload_full_text_without_mobilizer"/>
     <item
         android:id="@+id/menu_reload_full_text_with_tags"
-        android:icon="@drawable/refresh"
         android:title="@string/reload_full_text_with_tags"/>
     <item
         android:id="@+id/menu_load_all_images"
+        android:icon="@android:drawable/ic_menu_gallery"
         android:title="@string/menu_load_all_images"/>
     <item
         android:id="@+id/menu_share_all_text"
+        android:icon="@android:drawable/ic_menu_share"
         android:title="@string/share_all_text"/>
     <item
         android:id="@+id/menu_open_link"
+        android:icon="@android:drawable/ic_menu_send"
         android:title="@string/open_link"/>
     <item
         android:id="@+id/menu_cancel_refresh"

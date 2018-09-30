@@ -181,6 +181,8 @@
         <item>1 天</item>
     </string-array>
     <string-array name="settings_keep_times">
+        <item>1 hour</item>
+        <item>12 hours</item>
         <item>1 天</item>
         <item>2 天</item>
         <item>4 天</item>

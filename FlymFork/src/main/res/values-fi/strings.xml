@@ -188,6 +188,8 @@
         <item>1 päivä</item>
     </string-array>
     <string-array name="settings_keep_times">
+        <item>1 hour</item>
+        <item>12 hours</item>
         <item>1 päivä</item>
         <item>2 päivää</item>
         <item>4 päivää</item>

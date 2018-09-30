@@ -305,6 +305,8 @@
 
 
     <string-array name="settings_keep_times">
+        <item>1 hour</item>
+        <item>12 hours</item>
         <item>1 day</item>
         <item>2 days</item>
         <item>4 days</item>
