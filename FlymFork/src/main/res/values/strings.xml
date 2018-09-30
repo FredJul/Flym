@@ -272,6 +272,7 @@
     <string name="global_marks_as_star_filter_rule_descr">Rule per line</string>
     <string name="show_read_article_count">Show read article count</string>
     <string name="show_read_article_count_descr">in feed list</string>
+    <string name="customKeepTime">Custom articles keep time</string>
 
 
     <plurals name="number_of_new_entries">

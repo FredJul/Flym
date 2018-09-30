@@ -406,5 +406,6 @@
     <string name="restart_app_apply_changes">Приложение будет перезапущено для применения настроек</string>
     <string name="show_read_article_count">Число прочитанных статей лент</string>
     <string name="show_read_article_count_descr">в списке лент</string>
+    <string name="customKeepTime">Особое время хранения статей</string>
 
 </resources>

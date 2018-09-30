@@ -165,6 +165,7 @@ public class NetworkUtils {
 
     public static synchronized void deleteEntriesImagesCache(Uri entriesUri, String selection, String[] selectionArgs) {
         if (FileUtils.GetImagesFolder().exists()) {
+            Context context = MainApplication.getContext();
             PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
 
             Cursor cursor = MainApplication.getContext().getContentResolver().query(entriesUri, FeedData.EntryColumns.PROJECTION_ID, selection, selectionArgs, null);
@@ -174,7 +175,10 @@ public class NetworkUtils {
 
                 File[] files = FileUtils.GetImagesFolder().listFiles(filenameFilter);
                 if (files != null) {
+                    int i = 0;
                     for (File file : files) {
+                        i++;
+                        FetcherService.Status().ChangeProgress(context.getString(R.string.deleteImages) + String.format( " %d/%d", i, files.length ) );
                         file.delete();
                     }
                 }

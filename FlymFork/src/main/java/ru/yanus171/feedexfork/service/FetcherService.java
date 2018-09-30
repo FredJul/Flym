@@ -139,6 +139,7 @@ public class FetcherService extends IntentService {
 
     private static final String HTML_BODY = "<body";
     private static final String ENCODING = "encoding=\"";
+    public static final String CUSTOM_KEEP_TIME = "customKeepTime";
 
     public static Boolean mCancelRefresh = false;
     public static ArrayList<Long> mActiveEntryIDList = new ArrayList<Long>();
@@ -262,7 +263,7 @@ public class FetcherService extends IntentService {
                         PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);
                         mCancelRefresh = false;
 
-                        long keepTime = (long) (Float.parseFloat(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l);
+                        long keepTime = (long) (GetDefaultKeepTime() * 86400000l);
                         long keepDateBorderTime = keepTime > 0 ? System.currentTimeMillis() - keepTime : 0;
 
                         deleteOldEntries(keepDateBorderTime);
@@ -332,6 +333,10 @@ public class FetcherService extends IntentService {
         synchronized ( mCancelRefresh ) {
             mCancelRefresh = false;
         }
+    }
+
+    public static float GetDefaultKeepTime() {
+        return Float.parseFloat(PrefUtils.getString(PrefUtils.KEEP_TIME, "4"));
     }
 
     public static boolean isCancelRefresh() {
@@ -722,42 +727,58 @@ public class FetcherService extends IntentService {
     }
 
 
-    private void deleteOldEntries(final long keepDateBorderTime) {
-        if (keepDateBorderTime > 0) {
-                if ( !mIsDeletingOld )
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            int status = Status().Start(MainApplication.getContext().getString(R.string.deleteOldEntries)); try {
-                                mIsDeletingOld = true;
-                                
-                                DeleteOldEntries( feedID, keepDateBorderTime );
-                                    String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
-                                // Delete the entries, the cache files will be deleted by the content provider
-                                MainApplication.getContext().getContentResolver().delete(EntryColumns.CONTENT_URI, where, null);
-
-                                Status().ChangeProgress(R.string.deleteImages);
-                                File[] files = FileUtils.GetImagesFolder().listFiles(new FileFilter() {//NetworkUtils.IMAGE_FOLDER_FILE.listFiles(new FileFilter() {
-                                    @Override
-                                    public boolean accept(File pathname) {
-                                        return (pathname.lastModified() < keepDateBorderTime);
-                                                }
-                                });
-                                if ( files != null ) {
-                                    int i = 0;
-                                    for( File file: files ) {
-                                        i++;
-                                        Status().ChangeProgress(getString(R.string.deleteImages) + String.format( " %d/%d", i, files.length ) );
-                                        file.delete();
-                                    }
-                                }
-                                Status().ChangeProgress("");
-                            } finally {
-                                Status().End( status );
-                                mIsDeletingOld = false;
-                            }
+    private void deleteOldEntries(final long defaultkeepDateBorderTime) {
+    if ( !mIsDeletingOld )
+        new Thread() {
+            @Override
+            public void run() {
+                int status = Status().Start(MainApplication.getContext().getString(R.string.deleteOldEntries));
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                final Cursor cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID_OPTIONS, null, null, null); try {
+                    mIsDeletingOld = true;
+                    while ( cursor.moveToNext() ) {
+                        long keepDateBorderTime = defaultkeepDateBorderTime;
+                        try {
+                            JSONObject jsonOptions = new JSONObject(cursor.getString(1));
+                            if (jsonOptions.has(CUSTOM_KEEP_TIME))
+                                keepDateBorderTime = System.currentTimeMillis() - (long) (jsonOptions.getDouble(CUSTOM_KEEP_TIME) * 86400000l);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    }.start();
+                        DeleteOldEntries( cursor.getLong( 0 ), keepDateBorderTime );
+                    }
+                } finally {
+                    Status().End( status );
+                    cursor.close();
+                    mIsDeletingOld = false;
+                }
+            }
+        }.start();
+    }
+
+    private void DeleteOldEntries(long feedID, long keepDateBorderTime) {
+        if (keepDateBorderTime > 0) {
+            ContentResolver cr = MainApplication.getContext().getContentResolver();
+
+            String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
+            // Delete the entries, the cache files will be deleted by the content provider
+            cr.delete(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedID), where, null);
+
+            /*Status().ChangeProgress(R.string.deleteImages);
+            File[] files = FileUtils.GetImagesFolder().listFiles(new FileFilter() {//NetworkUtils.IMAGE_FOLDER_FILE.listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File pathname) {
+                    return (pathname.lastModified() < keepDateBorderTime);
+                }
+            });
+            if ( files != null ) {
+                int i = 0;
+                for( File file: files ) {
+                    i++;
+                    Status().ChangeProgress(getString(R.string.deleteImages) + String.format( " %d/%d", i, files.length ) );
+                    file.delete();
+                }
+            }*/
         }
     }
 

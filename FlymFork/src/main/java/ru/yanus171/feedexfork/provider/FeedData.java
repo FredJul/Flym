@@ -112,6 +112,7 @@ public class FeedData {
         public static final String IS_IMAGE_AUTO_LOAD = "is_image_auto_load";
         public static final String OPTIONS = "options";
         public static final String[] PROJECTION_ID = new String[]{FeedColumns._ID};
+        public static final String[] PROJECTION_ID_OPTIONS = new String[]{FeedColumns._ID, FeedColumns.OPTIONS};
         public static final String[] PROJECTION_GROUP_ID = new String[]{FeedColumns.GROUP_ID};
         public static final String[] PROJECTION_PRIORITY = new String[]{FeedColumns.PRIORITY};
 

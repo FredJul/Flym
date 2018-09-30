@@ -111,6 +111,8 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     private static final String STATE_CURRENT_TAB = "STATE_CURRENT_TAB";
     private static final String[] FEED_PROJECTION =
         new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.IS_GROUP, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH, FeedColumns.GROUP_ID, FeedColumns.IS_IMAGE_AUTO_LOAD, FeedColumns.OPTIONS  };
+    private String[] mKeepTimeValues;
+
     private final ActionMode.Callback mFilterActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -175,6 +177,8 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             mFiltersListView.invalidateViews();
         }
     };
+    private Spinner mKeepTimeSpinner = null;
+    private CheckBox mKeepTimeCB = null;
 
     public void EditFilter() {
         Cursor c = mFiltersCursorAdapter.getCursor();
@@ -270,6 +274,23 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         mIsAutoImageLoadCb =  (CheckBox) findViewById(R.id.auto_image_load);
         mFiltersListView = (ListView) findViewById(android.R.id.list);
         mGroupSpinner = (Spinner) findViewById(R.id.spin_group);
+
+        mKeepTimeCB = (CheckBox) findViewById(R.id.cbCustomKeepTime);
+        mKeepTimeCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                UpdateSpinnerKeepTime();
+            }
+        });
+        mKeepTimeValues = getResources().getStringArray(R.array.settings_keep_time_values);
+        mKeepTimeSpinner = (Spinner) findViewById(R.id.spin_keeptime);
+        mKeepTimeSpinner.setSelection( 4 );
+        for ( int i = 0; i < mKeepTimeValues.length; i ++ )
+            if ( Double.parseDouble( mKeepTimeValues[i] ) == FetcherService.GetDefaultKeepTime() ) {
+                mKeepTimeSpinner.setSelection( i );
+                break;
+            }
+
         mHasGroupCb = (CheckBox) findViewById(R.id.has_group);
         mHasGroupCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -279,6 +300,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         });
         mLoadTypeRG = (RadioGroup) findViewById(R.id.rgLoadType);
         View tabWidget = findViewById(android.R.id.tabs);
+
 
         mIsAutoRefreshCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -295,26 +317,6 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                 mRetrieveFulltextCb.setEnabled( i == R.id.rbRss );
             }
         });
-
-        /*mUrlEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String text = charSequence.toString();
-                boolean isRss = FetcherService.isRss( text );
-                boolean isUrl = text.startsWith( "http://" ) || text.startsWith( "https://" );
-                mRetrieveFulltextCb.setEnabled( !isUrl || isRss );
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });*/
 
         mTabHost.setup();
         mTabHost.addTab(mTabHost.newTabSpec("feedTab").setIndicator(getString(R.string.tab_feed_title)).setContent(R.id.feed_tab));
@@ -360,6 +362,8 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             mIsAutoImageLoadCb.setChecked( true );
 
             UpdateSpinnerGroup();
+            mKeepTimeCB.setChecked( false );
+            UpdateSpinnerKeepTime();
 
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
@@ -408,6 +412,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     mIsAutoRefreshCb.setChecked(cursor.getInt(5) == 1);
                     mIsAutoImageLoadCb.setChecked(cursor.isNull(7) || cursor.getInt(7) == 1);
                     mGroupSpinner.setSelection( -1);
+                    //mKeepTimeSpinner.setSelection( -1);
                     mHasGroupCb.setChecked(!cursor.isNull(6));
                     UpdateSpinnerGroup();
                     if ( !cursor.isNull(6) )
@@ -420,9 +425,20 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     try {
                         JSONObject jsonOptions  = new JSONObject( cursor.getString( cursor.getColumnIndex(FeedColumns.OPTIONS) ) );
                         mLoadTypeRG.check( jsonOptions.getBoolean( "isRss" ) ? R.id.rbRss : R.id.rbWeb );
+                        mKeepTimeCB.setChecked( jsonOptions.has( FetcherService.CUSTOM_KEEP_TIME ) );
+                        UpdateSpinnerKeepTime();
+                        if ( mKeepTimeCB.isChecked() ) {
+                            for ( int i = 0; i < mKeepTimeValues.length; i ++ )
+                                if ( Double.parseDouble( mKeepTimeValues[i] ) == jsonOptions.getDouble( FetcherService.CUSTOM_KEEP_TIME ) ) {
+                                    mKeepTimeSpinner.setSelection( i );
+                                    break;
+                                }
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    //mKeepTimeSpinner.setVisibility( mKeepTimeCB.isChecked() ? View.VISIBLE : View.GONE );
+
                     if (cursor.getInt(3) == 1) { // if it's a group, we cannot edit it
                         finish();
                     }
@@ -441,7 +457,9 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     private void UpdateSpinnerGroup() {
         mGroupSpinner.setVisibility( mHasGroupCb.isChecked() ? View.VISIBLE : View.GONE );
     }
-
+    private void UpdateSpinnerKeepTime() {
+        mKeepTimeSpinner.setVisibility( mKeepTimeCB.isChecked() ? View.VISIBLE : View.GONE );
+    }
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(STATE_CURRENT_TAB, mTabHost.getCurrentTab());
@@ -508,6 +526,10 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         JSONObject jsonOptions = new JSONObject();
         try {
             jsonOptions.put( "isRss", mLoadTypeRG.getCheckedRadioButtonId() == R.id.rbRss );
+            if ( mKeepTimeCB.isChecked()  )
+                jsonOptions.put( FetcherService.CUSTOM_KEEP_TIME, mKeepTimeValues[mKeepTimeSpinner.getSelectedItemPosition()] );
+            else
+                jsonOptions.remove( FetcherService.CUSTOM_KEEP_TIME );
         } catch (JSONException e) {
             e.printStackTrace();
         }
