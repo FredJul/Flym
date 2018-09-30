@@ -148,9 +148,9 @@
         <item>Immer</item>
     </string-array>
     <string-array name="settings_themes">
-        <item>Light</item>
-        <item>Dunkles</item>
-        <item>Black</item>
+        <item>Hell</item>
+        <item>Dunkel</item>
+        <item>Schwarz</item>
     </string-array>
 
 </resources>
