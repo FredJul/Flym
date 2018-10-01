@@ -21,22 +21,14 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import net.fred.feedex.R
-import net.frju.flym.data.utils.PrefConstants
-import net.frju.flym.utils.getPrefString
+import net.frju.flym.utils.setupTheme
 
 class FeedListEditActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
-		//Choose theme
-		setTheme(when (getPrefString(PrefConstants.THEME, "DARK")) {
-			"LIGHT" -> R.style.AppThemeLight
-			"DARK" -> R.style.AppTheme
-			"BLACK" -> R.style.AppThemeBlack
-			else -> R.style.AppTheme
-		})
+		setupTheme()
 
 		super.onCreate(savedInstanceState)
-
 
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

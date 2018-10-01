@@ -63,15 +63,27 @@ import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.closeKeyboard
 import net.frju.flym.utils.getPrefBoolean
-import net.frju.flym.utils.getPrefString
 import net.frju.flym.utils.putPrefBoolean
-import org.jetbrains.anko.*
+import net.frju.flym.utils.setupNoActionBarTheme
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textResource
+import org.jetbrains.anko.uiThread
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.File
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.io.Reader
+import java.io.StringReader
+import java.io.Writer
 import java.net.URL
-import java.util.*
+import java.util.Date
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -98,13 +110,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     private val feedAdapter = FeedAdapter(feedGroups)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //Choose theme
-        setTheme(when (getPrefString(PrefConstants.THEME, "DARK")) {
-            "LIGHT" -> R.style.AppThemeLight_NoActionBar
-            "DARK" -> R.style.AppTheme_NoActionBar
-            "BLACK" -> R.style.AppThemeBlack_NoActionBar
-            else -> R.style.AppTheme_NoActionBar
-        })
+        setupNoActionBarTheme()
 
         super.onCreate(savedInstanceState)
 
