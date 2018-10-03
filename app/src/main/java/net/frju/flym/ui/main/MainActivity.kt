@@ -451,28 +451,28 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     }
 
     private fun pickOpml() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        intent.type = "text/*"
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            type = "text/*"
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
         startActivityForResult(intent, READ_OPML_REQUEST_CODE)
     }
 
     private fun exportOpml() {
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-        intent.type = "text/*"
-        intent.putExtra(Intent.EXTRA_TITLE, "Flym_" + System.currentTimeMillis() + ".opml")
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            type = "text/*"
+            addCategory(Intent.CATEGORY_OPENABLE)
+            putExtra(Intent.EXTRA_TITLE, "Flym_" + System.currentTimeMillis() + ".opml")
+        }
         startActivityForResult(intent, WRITE_OPML_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int,
                                   resultData: Intent?) {
         if (requestCode == READ_OPML_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            if (resultData != null) {
-                importOpml(resultData.data)
-            }
+            resultData?.data?.also { uri -> importOpml(uri) }
         } else if (requestCode == WRITE_OPML_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            if (resultData != null) {
-                exportOpml(resultData.data)
-            }
+            resultData?.data?.also { uri -> exportOpml(uri) }
         }
     }
 
@@ -492,7 +492,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     private fun importOpml(uri: Uri) {
         doAsync {
             try {
-                parseOpml(InputStreamReader(contentResolver.openInputStream(uri)))
+                InputStreamReader(contentResolver.openInputStream(uri)).use { reader -> parseOpml(reader) }
             } catch (e: Exception) {
                 try {
                     // We try to remove the opml version number, it may work better in some cases
@@ -509,7 +509,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     private fun exportOpml(uri: Uri) {
         doAsync {
             try {
-                exportOpml(OutputStreamWriter(contentResolver.openOutputStream(uri), Charsets.UTF_8))
+                OutputStreamWriter(contentResolver.openOutputStream(uri), Charsets.UTF_8).use { writer -> exportOpml(writer) }
                 contentResolver.query(uri, null, null, null, null).use { cursor ->
                     if (cursor.moveToFirst()) {
                         val fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
