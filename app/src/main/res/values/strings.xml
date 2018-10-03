@@ -82,7 +82,7 @@
     <string name="settings_category_filter">Filters</string>
     <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
+    <string name="filter">Remove items containing keywords (comma-separated list)</string>
     <string name="settings_dark_theme">Enable dark theme</string>
     <string name="settings_dark_theme_description">Change the interface colors for better comfort in low light environements</string>
     <string name="settings_theme">Theme</string>
