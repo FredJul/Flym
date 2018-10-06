@@ -25,20 +25,20 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">Om Flym</string>
     <string name="welcome_title">Välkommen till Flym. Skulle du vilja lägga till en feed?</string>
-    <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
-    <string name="cannot_find_feeds">No feeds has been found</string>
+    <string name="welcome_title_with_opml_import">Skulle du vilja importera tidigare Flym feeds?</string>
+    <string name="cannot_find_feeds">Inga feeds hittades</string>
     <string name="menu_settings">Inställningar</string>
     <string name="menu_edit_feed">Redigera feed</string>
-    <string name="menu_reorder">Reorder feeds</string>
+    <string name="menu_reorder">Ordna om feeds</string>
     <string name="menu_delete">Radera</string>
-    <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
-    <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
+    <string name="menu_enable_full_text_retrieval">Hämta i fulltext</string>
+    <string name="menu_disable_full_text_retrieval">Hämta inte i fulltext</string>
     <string name="menu_all_read">Mark som läst</string>
     <string name="flym_feeds">Flym feeds</string>
     <string name="error">Fel</string>
     <string name="network_error">Nätverket är inte tillgängligt</string>
-    <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
-    <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
+    <string name="drawer_explanation">Välkommen!\n\nEtt långt tryck på en feed visar menun ▼</string>
+    <string name="drawer_fetch_error_explanation">Några feeds uppdaterades inte rätt ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
@@ -48,7 +48,7 @@
     <string name="storage_request_explanation">För att kunna importera eller exportera en fil, du måste ge appen behörighet att läsa och spara på minneskort.</string>
     <string name="error_feed_export">Exporten har misslyckats. Försäkra dig om att du har ett skrivbart SD-kort monterat.</string>
     <string name="feed_search">Sök efter feed</string>
-	<string name="feed_search_hint">Enter feed link or keyword</string>
+	<string name="feed_search_hint">Inskriva feed link eller nyckelord</string>
     <string name="feed_added">Feed added to the list</string>
     <string name="question_delete_feed">Vill du radera denna feed?</string>
     <string name="question_delete_group">Vill du radera denna grupp och alla dess feeds?</string>
@@ -80,8 +80,8 @@
     <string name="cant_open_link">Inget lämpligt program hittades för denna länk</string>
     <string name="unreads">Unreads</string>
     <string name="all">All</string>
-    <string name="favorites">Favorites</string>
-    <string name="no_entries">No items\nPlease pull down to refresh</string>
+    <string name="favorites">Favoriter</string>
+    <string name="no_entries">Inga inlägg\nDra ner för att uppdatera</string>
     <string name="undo">Avmarkera</string>
     <string name="marked_as_read">Markerade som läst</string>
     <string name="marked_as_unread">Marked as unread</string>
@@ -99,11 +99,11 @@
     <string name="settings_font_size">Typsnittsstorlek</string>
     <string name="settings_refresh_wifi_only">Uppdatera endast via Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Uppdatera automatisk endast när ett Wi-Fi-nätverk är tillgänglig</string>
-    <string name="settings_category_filter">Filters</string>
-    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
-    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <string name="settings_theme">Theme</string>
+    <string name="settings_category_filter">Filter</string>
+    <string name="settings_remove_duplicates_description_title">Radera duplikat</string>
+    <string name="settings_remove_duplicates_description">Kontrollera titeln på en ny inlägg, och förbigå om den redan finns</string>
+    <string name="filter">Radera inlägg med nyckelord (lista separerade med komma)</string>
+    <string name="settings_theme">Tema</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Ett nytt inlägg</item>
@@ -145,9 +145,9 @@
         <item>Alltid</item>
     </string-array>
     <string-array name="settings_themes">
-        <item>Light</item>
-        <item>Dark</item>
-        <item>Black</item>
+        <item>Ljus</item>
+        <item>Mörk</item>
+        <item>Svart</item>
     </string-array>
 
 </resources>
