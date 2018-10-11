@@ -214,7 +214,7 @@ class EntryDetailsFragment : Fragment() {
 							}
 						}
 						R.id.menu_entry_details__share -> {
-							share(entryWithFeed.entry.title.orEmpty(), entryWithFeed.entry.link.orEmpty())
+							share(entryWithFeed.entry.link.orEmpty(), entryWithFeed.entry.title.orEmpty())
 						}
 						R.id.menu_entry_details__fulltext -> {
 							switchFullTextMode()

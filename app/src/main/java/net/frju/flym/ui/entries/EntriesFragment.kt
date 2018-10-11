@@ -433,7 +433,7 @@ class EntriesFragment : Fragment() {
 				// TODO: will only work for the visible 30 items, need to find something better
 				adapter.currentList?.joinToString("\n\n") { it.entry.title + ": " + it.entry.link }?.let { content ->
 					val title = getString(R.string.app_name) + " " + getString(R.string.favorites)
-                    share(title, content.take(300000)) // take() to avoid crashing with a too big intent
+					share(content.take(300000), title) // take() to avoid crashing with a too big intent
 				}
 			}
 			R.id.menu_entries__about -> {
