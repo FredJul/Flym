@@ -19,11 +19,16 @@
 
 package ru.yanus171.feedexfork.utils;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 
 import ru.yanus171.feedexfork.MainApplication;
+import ru.yanus171.feedexfork.activity.HomeActivity;
 
 public class PrefUtils {
 
@@ -171,6 +176,17 @@ public class PrefUtils {
 
     public static boolean IsLightTheme() {
         return getBoolean(LIGHT_THEME, false);
+    }
+
+    public static void ToogleTheme( Intent intent ) {
+        PrefUtils.putBoolean( PrefUtils.LIGHT_THEME, !PrefUtils.IsLightTheme());
+        Context context = MainApplication.getContext();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().commit(); // to be sure all prefs are written
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
+        //System.exit(0);
+        android.os.Process.killProcess( android.os.Process.myPid() );
     }
 
 }

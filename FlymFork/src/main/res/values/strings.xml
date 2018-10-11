@@ -273,6 +273,7 @@
     <string name="show_read_article_count">Show read article count</string>
     <string name="show_read_article_count_descr">in feed list</string>
     <string name="customKeepTime">Custom articles keep time</string>
+    <string name="menu_toggle_theme">Change theme</string>
 
 
     <plurals name="number_of_new_entries">

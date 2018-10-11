@@ -110,7 +110,6 @@
                 android:alpha="0.7"
                 android:drawablePadding="3dp"
                 android:singleLine="false"
-                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?attr/colorReadState"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="5dp"

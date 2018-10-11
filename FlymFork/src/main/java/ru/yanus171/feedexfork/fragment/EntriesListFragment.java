@@ -19,7 +19,9 @@
 
 package ru.yanus171.feedexfork.fragment;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,6 +32,7 @@ import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -67,6 +70,7 @@ import java.util.Date;
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
+import ru.yanus171.feedexfork.activity.HomeActivity;
 import ru.yanus171.feedexfork.adapter.EntriesCursorAdapter;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
@@ -534,6 +538,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
             case R.id.menu_share_starred: {
                 if (mEntriesCursorAdapter != null) {
                     String starredList = "";
@@ -554,14 +559,23 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
                 }
                 return true;
             }
+
             case R.id.menu_refresh: {
                 startRefresh();
                 return true;
             }
+
             case R.id.menu_cancel_refresh: {
                 FetcherService.cancelRefresh();
                 return true;
             }
+
+            case R.id.menu_toggle_theme: {
+                PrefUtils.ToogleTheme( new Intent(getContext(), HomeActivity.class) );
+                return true;
+            }
+
+
             case R.id.menu_delete_all: {
                 if ( FeedDataContentProvider.URI_MATCHER.match(mCurrentUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED ) {
                     new AlertDialog.Builder(getContext()) //
@@ -611,6 +625,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     public void markAllAsRead() {
         if (mEntriesCursorAdapter != null) {

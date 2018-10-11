@@ -317,7 +317,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         //    backgroundColor = PrefUtils.IsLightTheme() ?  R.color.light_background_light : R.color.dark_background_ligth;
         //else
             backgroundColor = PrefUtils.IsLightTheme() ?  R.color.light_background : R.color.dark_background;
-        view.findViewById(R.id.layout_with_background).setBackgroundColor(ContextCompat.getColor( context, backgroundColor ));
+        view.findViewById(R.id.layout_vertval).setBackgroundColor(ContextCompat.getColor( context, backgroundColor ));
 
         holder.readToggleSwypeBtnView.setVisibility( View.GONE );
         holder.starToggleSwypeBtnView.setVisibility( View.GONE );

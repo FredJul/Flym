@@ -67,6 +67,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.security.KeyStore;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -75,6 +76,7 @@ import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.activity.BaseActivity;
 import ru.yanus171.feedexfork.activity.EntryActivity;
+import ru.yanus171.feedexfork.activity.HomeActivity;
 import ru.yanus171.feedexfork.adapter.DrawerAdapter;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
@@ -458,6 +460,13 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                     }
                     break;
                 }
+
+                case R.id.menu_toggle_theme: {
+                    mEntryPagerAdapter.SaveScrollPos( false );
+                    PrefUtils.ToogleTheme(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mBaseUri, getCurrentEntryID())));
+                    return true;
+                }
+
                 case R.id.menu_full_screen: {
                     EntryActivity activity1 = (EntryActivity) getActivity();
                     activity1.setFullScreen( true, true );

@@ -407,5 +407,6 @@
     <string name="show_read_article_count">Число прочитанных статей лент</string>
     <string name="show_read_article_count_descr">в списке лент</string>
     <string name="customKeepTime">Особое время хранения статей</string>
+    <string name="menu_toggle_theme">Сменить тему</string>
 
 </resources>

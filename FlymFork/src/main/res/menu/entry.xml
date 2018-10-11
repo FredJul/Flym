@@ -16,6 +16,12 @@
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"/>
     <item
+        android:id="@+id/menu_toggle_theme"
+        app:showAsAction="collapseActionView"
+        android:visible="true"
+        android:title="@string/menu_toggle_theme"/>
+
+    <item
         android:id="@+id/menu_full_screen"
         android:icon="@drawable/full_screen"
         android:title="@string/menu_full_screen"

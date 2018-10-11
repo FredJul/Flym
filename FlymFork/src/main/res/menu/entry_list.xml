@@ -14,6 +14,11 @@
         android:visible="false"
         android:title="@string/menu_cancel_refresh"/>
     <item
+        android:id="@+id/menu_toggle_theme"
+        app:showAsAction="collapseActionView"
+        android:visible="true"
+        android:title="@string/menu_toggle_theme"/>
+    <item
         android:id="@+id/menu_mark_all_as_read"
         android:title="@string/markAllAsRead"/>
     <item
