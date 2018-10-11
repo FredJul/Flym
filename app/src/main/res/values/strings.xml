@@ -86,6 +86,8 @@
     <string name="settings_dark_theme">Enable dark theme</string>
     <string name="settings_dark_theme_description">Change the interface colors for better comfort in low light environements</string>
     <string name="settings_theme">Theme</string>
+    <string name="open_browser_direct">This opens the feedentry directly in your favorite browser!</string>
+    <string name="open_browser_direct_title">Open in browser</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new entry</item>

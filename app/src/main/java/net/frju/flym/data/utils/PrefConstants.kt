@@ -42,4 +42,6 @@ object PrefConstants {
     const val KEEP_TIME = "keep_time"
 
     const val FONT_SIZE = "font_size"
+
+    const val OPEN_BROWSER_DIRECTLY = "open_browser_directly"
 }
