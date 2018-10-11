@@ -25,7 +25,7 @@
     <string name="menu_add_group">Додај групу</string>
     <string name="menu_import">Увези из ОПМЛ</string>
     <string name="menu_export">Извези у ОПМЛ</string>
-    <string name="storage_request_explanation">Да би увоз/извоз довода био могућ у или из датотеке, неопходно је да дозволите апликацији приступ интерном складишту.</string>
+    <string name="storage_request_explanation">Да би увоз/извоз довода био могућ у/из датотеке, неопходно је да дозволите апликацији приступ интерном складишту.</string>
     <string name="error_feed_export">Извоз није завршен успешно. Проверите да ли уређај има СД картицу монтирану у систему.</string>
     <string name="feed_search">Претрага довода</string>
     <string name="feed_search_hint">Унесите везу до довода или кључну реч</string>
@@ -45,8 +45,8 @@
     <string name="google_news_entertainment">Забава</string>
     <string name="google_news_sports">Спорт</string>
     <string name="google_news_health">Здравље</string>
-    <string name="feed_name">Feed name</string>
-    <string name="feed_link">Feed link</string>
+    <string name="feed_name">Име довода</string>
+    <string name="feed_link">Хипервеза довода</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Сви чланци</string>
@@ -64,26 +64,28 @@
     <string name="no_entries">Нема чланака\nМолимо да превучете прстом надоле за освежавање листе чланака</string>
     <string name="undo">Поништи</string>
     <string name="marked_as_read">Означено као прочитано</string>
-    <string name="marked_as_unread">Marked as unread</string>
+    <string name="marked_as_unread">Означено као непрочитано</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Аутоматско освежавање</string>
     <string name="settings_refresh_enabled">Омогући аутоматско освежавање</string>
     <string name="settings_refresh_enabled_description">Омогући аутоматско освежавање довода</string>
     <string name="settings_refresh_interval">Интервал освежења</string>
-    <string name="settings_category_content_presentation">Презентација садржаја</string>
+    <string name="settings_category_content_presentation">Приказ садржаја</string>
     <string name="settings_keep_time">Време чувања чланака</string>
     <string name="settings_display_images">Прикажи слике</string>
     <string name="settings_display_images_description">Прикажи слике унутар чланака</string>
     <string name="settings_preload_image_mode">Унапред учитај слике</string>
     <string name="settings_font_size">Величина текста</string>
     <string name="settings_refresh_wifi_only">Освежи само преко бежичне мреже (Wi-Fi)</string>
-    <string name="settings_refresh_wifi_only_description">Аутоматско освежавање ће бити извршено само ако је доступна бежична конекција (Wi-Fi)</string>
-    <string name="settings_category_filter">Filters</string>
-    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
-    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <string name="settings_theme">Theme</string>
+    <string name="settings_refresh_wifi_only_description">Аутоматско освежавање довода ће бити извршено само ако је доступна бежична конекција (Wi-Fi)</string>
+    <string name="settings_category_filter">Филтери</string>
+    <string name="settings_remove_duplicates_description_title">Уклони дупликате</string>
+    <string name="settings_remove_duplicates_description">Проверава наслове чланака који су преузети и прескаче ако исти већ постоје како би се избегао дупли садржај (дупли чланци)</string>
+    <string name="filter">Уклони чланке који садрже кључне речи (листа раздвојена запетом тј. \"coma-separated list\")</string>
+    <string name="settings_dark_theme">Омогући тамну тему</string>
+    <string name="settings_dark_theme_description">Промени боје сучеља за пријатнији угођај у окружењима без довољно осветљења</string>
+    <string name="settings_theme">Теме</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Један нови чланак</item>
@@ -125,8 +127,8 @@
         <item>Увек</item>
     </string-array>
     <string-array name="settings_themes">
-        <item>Light</item>
-        <item>Dark</item>
-        <item>Black</item>
+        <item>Светла</item>
+        <item>Тамна</item>
+        <item>Црна</item>
     </string-array>
 </resources>
