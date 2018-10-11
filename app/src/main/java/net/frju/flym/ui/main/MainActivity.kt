@@ -404,7 +404,24 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
             listFragment.setSelectedEntryId(entryId)
         } else {
-            startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY_ID to entryId, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds.take(500)) // take() to avoid TransactionTooLargeException
+            if (getPrefBoolean(PrefConstants.OPEN_BROWSER_DIRECTLY, false)) {
+                openInBrowser(entryId)
+            }else{
+                startActivity<EntryDetailsActivity>(EntryDetailsFragment.ARG_ENTRY_ID to entryId, EntryDetailsFragment.ARG_ALL_ENTRIES_IDS to allEntryIds.take(500)) // take() to avoid TransactionTooLargeException
+            }
+        }
+    }
+
+    fun openInBrowser(entryId: String) {
+
+        doAsync {
+            var linkentry = App.db.entryDao().findByIdWithFeed(entryId)
+            App.db.entryDao().markAsRead(listOf(entryId))
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(linkentry?.entry?.link)))
+            } catch (e: Exception) {
+                toast(R.string.error) // TODO better error message, can be ActivityNotFoundException if no browser or NPE if no link
+            }
         }
     }
 
