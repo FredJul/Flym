@@ -82,7 +82,7 @@
     <string name="settings_category_filter">Filteri</string>
     <string name="settings_remove_duplicates_description_title">Ukloni duplikate</string>
     <string name="settings_remove_duplicates_description">Proverava naslove članaka koji su preuzeti i preskače ako isti već postoje kako bi se izbegao dupli sadržaj (dupli članci)</string>
-    <string name="filter">Ukloni članke koji sadrže ključne reči (lista razdvojena zapetom tj. \"coma-separated list\")</string>
+    <string name="filter">Ukloni članke koji sadrže ključne reči (lista razdvojena zapetom)</string>
     <string name="settings_theme">Teme</string>
     <string name="open_browser_direct">Open entries directly in your default browser</string>
     <string name="open_browser_direct_title">Open in browser</string>
