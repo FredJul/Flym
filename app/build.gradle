@@ -9,13 +9,13 @@ androidExtensions {
 
 android {
 	compileSdkVersion 27
-	buildToolsVersion "28.0.2"
+	buildToolsVersion "28.0.3"
 	defaultConfig {
 		applicationId "net.frju.flym"
 		minSdkVersion 21
 		targetSdkVersion 27
-		versionCode 17
-		versionName "2.2.2"
+		versionCode 18
+		versionName "2.2.3"
 	}
 
 	lintOptions {
