@@ -453,7 +453,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
     private fun pickOpml() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            type = "text/*"
+            type = "*/*" // https://github.com/FredJul/Flym/issues/407
             addCategory(Intent.CATEGORY_OPENABLE)
         }
         startActivityForResult(intent, READ_OPML_REQUEST_CODE)
