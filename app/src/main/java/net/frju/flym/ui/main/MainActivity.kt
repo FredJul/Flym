@@ -65,25 +65,13 @@ import net.frju.flym.utils.closeKeyboard
 import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.putPrefBoolean
 import net.frju.flym.utils.setupNoActionBarTheme
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textResource
-import org.jetbrains.anko.uiThread
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.BufferedInputStream
-import java.io.File
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.io.Reader
-import java.io.StringReader
-import java.io.Writer
+import java.io.*
 import java.net.URL
-import java.util.Date
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -412,19 +400,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
-    fun openInBrowser(entryId: String) {
-
-        doAsync {
-            var linkentry = App.db.entryDao().findByIdWithFeed(entryId)
-            App.db.entryDao().markAsRead(listOf(entryId))
-            try {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(linkentry?.entry?.link)))
-            } catch (e: Exception) {
-                toast(R.string.error) // TODO better error message, can be ActivityNotFoundException if no browser or NPE if no link
-            }
-        }
-    }
-
     override fun setSelectedEntryId(selectedEntryId: String) {
         val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
         listFragment.setSelectedEntryId(selectedEntryId)
@@ -436,6 +411,15 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
     override fun goToSettings() {
         startActivity<SettingsActivity>()
+    }
+
+    private fun openInBrowser(entryId: String) {
+        doAsync {
+            App.db.entryDao().findByIdWithFeed(entryId)?.entry?.link?.let { url ->
+                App.db.entryDao().markAsRead(listOf(entryId))
+                browse(url)
+            }
+        }
     }
 
     private fun isOldFlymAppInstalled() =
@@ -484,8 +468,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         startActivityForResult(intent, WRITE_OPML_REQUEST_CODE)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int,
-                                  resultData: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         if (requestCode == READ_OPML_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             resultData?.data?.also { uri -> importOpml(uri) }
         } else if (requestCode == WRITE_OPML_REQUEST_CODE && resultCode == Activity.RESULT_OK) {

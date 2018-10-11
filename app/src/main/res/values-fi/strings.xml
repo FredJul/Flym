@@ -109,6 +109,8 @@
     <string name="settings_remove_duplicates_description">Tarkista uuden artikkeli otsikko ja jätä se väliin, jos artikkeli on jo haettuna</string>
     <string name="filter">Poista artikkelit joissa esiintyy avainsanat (pilkulla erotettu lista)</string>
     <string name="settings_theme">Teema</string>
+    <string name="open_browser_direct">Open entries directly in your default browser</string>
+    <string name="open_browser_direct_title">Open in browser</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Yksi uusi artikkeli</item>

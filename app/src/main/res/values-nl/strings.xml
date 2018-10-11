@@ -84,6 +84,8 @@
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
     <string name="filter">Remove items containing keywords (coma-separated list)</string>
     <string name="settings_theme">Theme</string>
+    <string name="open_browser_direct">Open entries directly in your default browser</string>
+    <string name="open_browser_direct_title">Open in browser</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Eén nieuw item</item>

@@ -104,6 +104,8 @@
     <string name="settings_remove_duplicates_description">Kontrollera titeln på en ny inlägg, och förbigå om den redan finns</string>
     <string name="filter">Radera inlägg med nyckelord (lista separerade med komma)</string>
     <string name="settings_theme">Tema</string>
+    <string name="open_browser_direct">Open entries directly in your default browser</string>
+    <string name="open_browser_direct_title">Open in browser</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Ett nytt inlägg</item>

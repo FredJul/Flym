@@ -52,6 +52,7 @@ import org.jetbrains.anko.appcompat.v7.titleResource
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.support.v4.dip
+import org.jetbrains.anko.support.v4.share
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
 import java.util.*
@@ -432,10 +433,7 @@ class EntriesFragment : Fragment() {
 				// TODO: will only work for the visible 30 items, need to find something better
 				adapter.currentList?.joinToString("\n\n") { it.entry.title + ": " + it.entry.link }?.let { content ->
 					val title = getString(R.string.app_name) + " " + getString(R.string.favorites)
-					startActivity(Intent.createChooser(
-							Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, title).putExtra(Intent.EXTRA_TEXT, content)
-									.setType("text/plain"), getString(R.string.menu_share)
-					))
+                    share(title, content)
 				}
 			}
 			R.id.menu_entries__about -> {

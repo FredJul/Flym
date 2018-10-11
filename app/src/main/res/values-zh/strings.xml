@@ -105,6 +105,8 @@
     <string name="settings_remove_duplicates_description">检查已下载的新项的标题并忽略相同标题的项目</string>
     <string name="filter">移除包含这些关键词的项 (由半角逗号分隔)</string>
     <string name="settings_theme">主题</string>
+    <string name="open_browser_direct">Open entries directly in your default browser</string>
+    <string name="open_browser_direct_title">Open in browser</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="other">%d 条新消息</item>

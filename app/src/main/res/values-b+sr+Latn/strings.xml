@@ -83,9 +83,9 @@
     <string name="settings_remove_duplicates_description_title">Ukloni duplikate</string>
     <string name="settings_remove_duplicates_description">Proverava naslove članaka koji su preuzeti i preskače ako isti već postoje kako bi se izbegao dupli sadržaj (dupli članci)</string>
     <string name="filter">Ukloni članke koji sadrže ključne reči (lista razdvojena zapetom tj. \"coma-separated list\")</string>
-    <string name="settings_dark_theme">Omogući tamnu temu</string>
-    <string name="settings_dark_theme_description">Promeni boje sučelja za prijatniji ugođaj u okruženjima bez dovoljno osvetljenja</string>
     <string name="settings_theme">Teme</string>
+    <string name="open_browser_direct">Open entries directly in your default browser</string>
+    <string name="open_browser_direct_title">Open in browser</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Jedan novi članak</item>
