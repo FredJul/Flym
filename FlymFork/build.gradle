@@ -14,8 +14,8 @@ android {
         //applicationId 'net.fred.feedex'
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 111
-        versionName '0.7.13'
+        versionCode 112
+        versionName '0.7.14'
     }
     lintOptions {
         checkReleaseBuilds false

@@ -68,7 +68,11 @@ public class AutoRefreshService extends GcmTaskService {
 
     @Override
     public int onRunTask(TaskParams taskParams) {
-        getBaseContext().startService(getFetcherServiceIntent( getBaseContext() ));
+        Intent intent =  getFetcherServiceIntent( getBaseContext() );
+        if (Build.VERSION.SDK_INT >= 26)
+            getBaseContext().startForegroundService(intent);
+        else
+            getBaseContext().startService( intent );
 
         return GcmNetworkManager.RESULT_SUCCESS;
     }
