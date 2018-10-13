@@ -1322,4 +1322,16 @@ public class FetcherService extends IntentService {
 
         }
 
+    public static void StartService(Intent intent) {
+        Context context = MainApplication.getContext();
+        if (Build.VERSION.SDK_INT >= 26)
+            context.startForegroundService(intent);
+        else
+            context.startService( intent );
     }
+
+    static Intent GetStartIntent() {
+        return new Intent(MainApplication.getContext(), FetcherService.class)
+                .setAction( FetcherService.ACTION_REFRESH_FEEDS );
+    }
+}

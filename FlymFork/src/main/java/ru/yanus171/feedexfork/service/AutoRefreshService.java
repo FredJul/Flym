@@ -44,9 +44,6 @@
 
 package ru.yanus171.feedexfork.service;
 
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -68,19 +65,13 @@ public class AutoRefreshService extends GcmTaskService {
 
     @Override
     public int onRunTask(TaskParams taskParams) {
-        Intent intent =  getFetcherServiceIntent( getBaseContext() );
-        if (Build.VERSION.SDK_INT >= 26)
-            getBaseContext().startForegroundService(intent);
-        else
-            getBaseContext().startService( intent );
-
+        FetcherService.StartService(GetAutoRefreshServiceIntent());
         return GcmNetworkManager.RESULT_SUCCESS;
     }
 
-    static Intent getFetcherServiceIntent( Context context ) {
-        return new Intent(context, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(Constants.FROM_AUTO_REFRESH, true);
+    static public Intent GetAutoRefreshServiceIntent() {
+        return FetcherService.GetStartIntent().putExtra( Constants.FROM_AUTO_REFRESH, true );
     }
-
 
     public static void initAutoRefresh(Context context) {
         if (Build.VERSION.SDK_INT >= 25 )

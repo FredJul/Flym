@@ -1,6 +1,5 @@
 package ru.yanus171.feedexfork.service;
 
-import android.app.Service;
 import android.app.job.JobInfo;
 import android.app.job.JobParameters;
 import android.app.job.JobScheduler;
@@ -9,7 +8,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.IBinder;
 
 public class AutoRefreshJobService extends JobService {
     public static final int AUTO_UPDATE_JOB_ID = 1;
@@ -20,7 +18,7 @@ public class AutoRefreshJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         if (AutoRefreshService.isAutoUpdateEnabled() ) {
-            Intent intent = AutoRefreshService.getFetcherServiceIntent(getBaseContext());
+            Intent intent = AutoRefreshService.GetAutoRefreshServiceIntent();
             if (Build.VERSION.SDK_INT >= 26)
                 getBaseContext().startForegroundService(intent);
             else
