@@ -23,6 +23,7 @@ import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 import android.content.Context
 import android.os.Parcelable
+import android.text.Html
 import android.text.format.DateFormat
 import android.text.format.DateUtils
 import com.rometools.rome.feed.synd.SyndEntry
@@ -66,7 +67,8 @@ fun SyndEntry.toDbFormat(feed: Feed): Entry {
 	item.id = (feed.id.toString() + "_" + (link ?: uri ?: title
 	?: UUID.randomUUID().toString())).sha1()
 	item.feedId = feed.id
-	item.title = title
+    @Suppress("DEPRECATION")
+    item.title = Html.fromHtml(title).toString()
 	item.description = contents.getOrNull(0)?.value ?: description?.value
 	item.link = link
 	//TODO item.imageLink = null

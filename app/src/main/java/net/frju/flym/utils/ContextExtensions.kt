@@ -17,66 +17,58 @@
 
 package net.frju.flym.utils
 
-import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import org.jetbrains.anko.connectivityManager
 import org.jetbrains.anko.defaultSharedPreferences
-import org.jetbrains.anko.inputMethodManager
 
 fun Context.isOnline() = connectivityManager.activeNetworkInfo?.isConnected == true
 
 fun Context.getPrefBoolean(key: String, defValue: Boolean) =
-        defaultSharedPreferences.getBoolean(key, defValue)
+		defaultSharedPreferences.getBoolean(key, defValue)
 
 fun Context.putPrefBoolean(key: String, value: Boolean) =
-        defaultSharedPreferences.edit { putBoolean(key, value) }
+		defaultSharedPreferences.edit { putBoolean(key, value) }
 
 
 fun Context.getPrefInt(key: String, defValue: Int) =
-        defaultSharedPreferences.getInt(key, defValue)
+		defaultSharedPreferences.getInt(key, defValue)
 
 fun Context.putPrefInt(key: String, value: Int) =
-        defaultSharedPreferences.edit { putInt(key, value) }
+		defaultSharedPreferences.edit { putInt(key, value) }
 
 fun Context.getPrefLong(key: String, defValue: Long) =
-        defaultSharedPreferences.getLong(key, defValue)
+		defaultSharedPreferences.getLong(key, defValue)
 
 fun Context.putPrefLong(key: String, value: Long) =
-        defaultSharedPreferences.edit { putLong(key, value) }
+		defaultSharedPreferences.edit { putLong(key, value) }
 
 fun Context.getPrefString(key: String, defValue: String) =
-        defaultSharedPreferences.getString(key, defValue)
+		defaultSharedPreferences.getString(key, defValue)
 
 fun Context.putPrefString(key: String, value: String) =
-        defaultSharedPreferences.edit { putString(key, value) }
+		defaultSharedPreferences.edit { putString(key, value) }
 
 fun Context.getPrefStringSet(key: String, defValue: MutableSet<String>) =
-        defaultSharedPreferences.getStringSet(key, defValue)
+		defaultSharedPreferences.getStringSet(key, defValue)
 
 fun Context.putPrefStringSet(key: String, value: MutableSet<String>) =
-        defaultSharedPreferences.edit { putStringSet(key, value) }
+		defaultSharedPreferences.edit { putStringSet(key, value) }
 
 fun Context.removePref(key: String) =
-        defaultSharedPreferences.edit { remove(key) }
+		defaultSharedPreferences.edit { remove(key) }
 
 fun Context.registerOnPrefChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
-    try {
-        defaultSharedPreferences.registerOnSharedPreferenceChangeListener(listener)
-    } catch (ignored: Exception) { // Seems to be possible to have a NPE here... Why??
-    }
+	try {
+		defaultSharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+	} catch (ignored: Exception) { // Seems to be possible to have a NPE here... Why??
+	}
 }
 
 fun Context.unregisterOnPrefChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
-    try {
-        defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
-    } catch (ignored: Exception) { // Seems to be possible to have a NPE here... Why??
-    }
-}
-
-fun Activity.closeKeyboard() {
-    currentFocus?.let {
-        inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
-    }
+	try {
+		defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
+	} catch (ignored: Exception) { // Seems to be possible to have a NPE here... Why??
+	}
 }

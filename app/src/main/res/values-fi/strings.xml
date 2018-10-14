@@ -25,20 +25,20 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">Tietoja Flymista</string>
     <string name="welcome_title">Tervetuloa Flym:iin. Haluaisitko lisätä syötteen?</string>
-    <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
-    <string name="cannot_find_feeds">No feeds has been found</string>
+    <string name="welcome_title_with_opml_import">Haluatko tuoda aiemmat Flym-syötteet?</string>
+    <string name="cannot_find_feeds">Syötteitä ei löydy</string>
     <string name="menu_settings">Asetukset</string>
     <string name="menu_edit_feed">Muokkaa syötettä</string>
-    <string name="menu_reorder">Reorder feeds</string>
-    <string name="menu_delete">Delete</string>
-    <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
-    <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
+    <string name="menu_reorder">Järjestä syötteitä</string>
+    <string name="menu_delete">Poista</string>
+    <string name="menu_enable_full_text_retrieval">Koko tekstin haku päälle</string>
+    <string name="menu_disable_full_text_retrieval">Koko tekstin haku pois päältä</string>
     <string name="menu_all_read">Merkitse kaikki luetuiksi</string>
     <string name="flym_feeds">Flym-syötteet</string>
     <string name="error">Virhe</string>
     <string name="network_error">Ei verkkoyhteyttä</string>
-    <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
-    <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
+    <string name="drawer_explanation">Tervetuloa!\n\nPitkä painallus syötteen otsikon kohdalla näyttää valikon ▼</string>
+    <string name="drawer_fetch_error_explanation">Osa syötteistä ei päivittynyt oikein ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Syötteet</string>
@@ -49,8 +49,8 @@
     <string name="error_feed_export">Vienti epäonnistui. Varmista, että SD-kortille voidaan kirjoittaa.
     </string>
     <string name="feed_search">Hae syötteitä</string>
-	<string name="feed_search_hint">Enter feed link or keyword</string>
-    <string name="feed_added">Feed added to the list</string>
+	<string name="feed_search_hint">Anna syötteen osoite tai avainsana</string>
+    <string name="feed_added">Syöte lisätty listaan</string>
     <string name="question_delete_feed">Haluatko poistaa tämän syötteen?</string>
     <string name="question_delete_group">Haluatko poistaa tämän ryhmän ja kaikki siinä olevat syötteet?
     </string>
@@ -68,8 +68,8 @@
     <string name="google_news_entertainment">Viihde</string>
     <string name="google_news_sports">Urheilu</string>
     <string name="google_news_health">Terveys</string>
-    <string name="feed_name">Feed name</string>
-    <string name="feed_link">Feed link</string>
+    <string name="feed_name">Syötteen nimi</string>
+    <string name="feed_link">Syötteen osoite</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Kaikki </string>
@@ -81,13 +81,13 @@
     <string name="original_text">Näytä alkuperäinen teksti</string>
 	<string name="open_in_browser">Avaa selaimessa</string>
     <string name="cant_open_link">Linkin avaamiseen kykenevää sovellusta ei löydy.</string>
-    <string name="unreads">Unreads</string>
-    <string name="all">All</string>
-    <string name="favorites">Favorites</string>
-    <string name="no_entries">No items\nPlease pull down to refresh</string>
+    <string name="unreads">Lukemattomat</string>
+    <string name="all">Kaikki</string>
+    <string name="favorites">Merkityt</string>
+    <string name="no_entries">Ei artikkeleita\nVedä alas päivittääksesi</string>
     <string name="undo">Peru</string>
     <string name="marked_as_read">Merkitty luetuksi</string>
-    <string name="marked_as_unread">Marked as unread</string>
+    <string name="marked_as_unread">Merkitty lukemattomaksi</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automaattinen päivitys</string>
@@ -102,14 +102,15 @@
     <string name="settings_preload_image_mode">Esilataa kuvat</string>
     <string name="settings_font_size">Kirjasintyypin koko</string>
     <string name="settings_refresh_wifi_only">Vain Wi-Fi -yhteyden kautta</string>
-    <string name="settings_refresh_wifi_only_description">Syötteet päivitetään automaattisesti ainoastaan kun Wi-Fi -yhteys on käytettävissä
+    <string name="settings_refresh_wifi_only_description">Päivitä syötteet automaattisesti ainoastaan kun Wi-Fi -yhteys on käytettävissä
     </string>
-    <string name="settings_category_filter">Filters</string>
-    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
-    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <string name="settings_dark_theme">Enable dark theme</string>
-    <string name="settings_dark_theme_description">Change the interface colors for better comfort in low light environements</string>
+    <string name="settings_category_filter">Suodattimet</string>
+    <string name="settings_remove_duplicates_description_title">Poista kahdesti esiintyvät</string>
+    <string name="settings_remove_duplicates_description">Tarkista uuden artikkeli otsikko ja jätä se väliin, jos artikkeli on jo haettuna</string>
+    <string name="filter">Poista artikkelit joissa esiintyy avainsanat (pilkulla erotettu lista)</string>
+    <string name="settings_theme">Teema</string>
+    <string name="open_browser_direct">Open entries directly in your default browser</string>
+    <string name="open_browser_direct_title">Open in browser</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Yksi uusi artikkeli</item>
@@ -149,6 +150,11 @@
         <item>Ei koskaan</item>
         <item>Vain Wi-Fi -yhteyden kautta</item>
         <item>Aina</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Vaalea</item>
+        <item>Tumma</item>
+        <item>Musta</item>
     </string-array>
 
 </resources>

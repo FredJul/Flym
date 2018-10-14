@@ -159,7 +159,7 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     private fun colorString(resourceInt: Int): String {
-        var color = context.colorAttr(resourceInt)
+        val color = context.colorAttr(resourceInt)
         return String.format("#%06X", 0xFFFFFF and color)
     }
 }

@@ -43,13 +43,22 @@ import net.frju.flym.data.entities.Task
 import net.frju.flym.data.entities.toDbFormat
 import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.ui.main.MainActivity
-import net.frju.flym.utils.*
+import net.frju.flym.utils.HtmlUtils
+import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.getPrefString
+import net.frju.flym.utils.isOnline
+import net.frju.flym.utils.putPrefBoolean
+import net.frju.flym.utils.sha1
 import okhttp3.Call
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.connectivityManager
+import org.jetbrains.anko.error
+import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.toast
 import org.jsoup.Jsoup
 import java.io.File
 import java.io.FileOutputStream
@@ -373,7 +382,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 createCall(feed.link).execute().use { response ->
                     val input = SyndFeedInput()
                     val romeFeed = input.build(XmlReader(response.body()!!.byteStream()))
-                    romeFeed.entries.filter { it.publishedDate?.time ?: Long.MAX_VALUE > keepDateBorderTime }.map { it.toDbFormat(feed) }.forEach { entries.add(it) }
+                    entries.addAll(romeFeed.entries.asSequence().filter { it.publishedDate?.time ?: Long.MAX_VALUE > keepDateBorderTime }.map { it.toDbFormat(feed) })
                     feed.update(romeFeed)
                 }
             } catch (t: Throwable) {

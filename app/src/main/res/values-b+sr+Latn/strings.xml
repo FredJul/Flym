@@ -8,7 +8,7 @@
     <string name="welcome_title_with_opml_import">Da li želite da uvezete prethodne Flim dovode?</string>
     <string name="cannot_find_feeds">Dovodi nisu pronađeni</string>
     <string name="menu_settings">Podešavanja</string>
-    <string name="menu_edit_feed">Edit feed</string>
+    <string name="menu_edit_feed">Uređivanje dovoda</string>
     <string name="menu_reorder">Organizuj redosled dovoda</string>
     <string name="menu_delete">Izbriši</string>
     <string name="menu_enable_full_text_retrieval">Omogući preuzimanje kompletnog teksta</string>
@@ -25,7 +25,7 @@
     <string name="menu_add_group">Dodaj grupu</string>
     <string name="menu_import">Uvezi iz OPML</string>
     <string name="menu_export">Izvezi u OPML</string>
-    <string name="storage_request_explanation">Da bi uvoz/izvoz dovoda bio moguć u ili iz datoteke, neophodno je da dozvolite aplikaciji pristup internom skladištu.</string>
+    <string name="storage_request_explanation">Da bi uvoz/izvoz dovoda bio moguć u/iz datoteke, neophodno je da dozvolite aplikaciji pristup internom skladištu.</string>
     <string name="error_feed_export">Izvoz nije završen uspešno. Proverite da li uređaj ima SD karticu montiranu u sistemu.</string>
     <string name="feed_search">Pretraga dovoda</string>
     <string name="feed_search_hint">Unesite vezu do dovoda ili ključnu reč</string>
@@ -45,8 +45,8 @@
     <string name="google_news_entertainment">Zabava</string>
     <string name="google_news_sports">Sport</string>
     <string name="google_news_health">Zdravlje</string>
-    <string name="feed_name">Feed name</string>
-    <string name="feed_link">Feed link</string>
+    <string name="feed_name">Ime dovoda</string>
+    <string name="feed_link">Hiperveza dovoda</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Svi članci</string>
@@ -64,27 +64,28 @@
     <string name="no_entries">Nema članaka\nMolimo da prevučete prstom nadole za osvežavanje liste članaka</string>
     <string name="undo">Poništi</string>
     <string name="marked_as_read">Označeno kao pročitano</string>
-    <string name="marked_as_unread">Marked as unread</string>
+    <string name="marked_as_unread">Označeno kao nepročitano</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatsko osvežavanje</string>
     <string name="settings_refresh_enabled">Omogući automatsko osvežavanje</string>
     <string name="settings_refresh_enabled_description">Omogući automatsko osvežavanje dovoda</string>
     <string name="settings_refresh_interval">Interval osveženja</string>
-    <string name="settings_category_content_presentation">Prezentacija sadržaja</string>
+    <string name="settings_category_content_presentation">Prikaz sadržaja</string>
     <string name="settings_keep_time">Vreme čuvanja članaka</string>
     <string name="settings_display_images">Prikaži slike</string>
     <string name="settings_display_images_description">Prikaži slike unutar članaka</string>
     <string name="settings_preload_image_mode">Unapred učitaj slike</string>
     <string name="settings_font_size">Veličina teksta</string>
     <string name="settings_refresh_wifi_only">Osveži samo preko bežične mreže (Wi-Fi)</string>
-    <string name="settings_refresh_wifi_only_description">Automatsko osvežavanje će biti izvršeno samo ako je dostupna bežična konekcija (Wi-Fi)</string>
-    <string name="settings_category_filter">Filters</string>
-    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
-    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <string name="settings_dark_theme">Enable dark theme</string>
-    <string name="settings_dark_theme_description">Change the interface colors for better comfort in low light environements</string>
+    <string name="settings_refresh_wifi_only_description">Automatsko osvežavanje dovoda će biti izvršeno samo ako je dostupna bežična konekcija (Wi-Fi)</string>
+    <string name="settings_category_filter">Filteri</string>
+    <string name="settings_remove_duplicates_description_title">Ukloni duplikate</string>
+    <string name="settings_remove_duplicates_description">Proverava naslove članaka koji su preuzeti i preskače ako isti već postoje kako bi se izbegao dupli sadržaj (dupli članci)</string>
+    <string name="filter">Ukloni članke koji sadrže ključne reči (lista razdvojena zapetom)</string>
+    <string name="settings_theme">Teme</string>
+    <string name="open_browser_direct">Open entries directly in your default browser</string>
+    <string name="open_browser_direct_title">Open in browser</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Jedan novi članak</item>
@@ -124,5 +125,10 @@
         <item>Nikada</item>
         <item>Samo preko bežične mreže (Wi-Fi)</item>
         <item>Uvek</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Svetla</item>
+        <item>Tamna</item>
+        <item>Crna</item>
     </string-array>
 </resources>

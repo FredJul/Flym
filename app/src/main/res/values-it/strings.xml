@@ -104,8 +104,9 @@
     <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
     <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <string name="settings_dark_theme">Enable dark theme</string>
-    <string name="settings_dark_theme_description">Change the interface colors for better comfort in low light environements</string>
+    <string name="settings_theme">Theme</string>
+    <string name="open_browser_direct">Open entries directly in your default browser</string>
+    <string name="open_browser_direct_title">Open in browser</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Un nuovo articolo</item>
@@ -145,6 +146,11 @@
         <item>Mai</item>
         <item>Solo con Wi-Fi</item>
         <item>Sempre</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Black</item>
     </string-array>
 
 </resources>

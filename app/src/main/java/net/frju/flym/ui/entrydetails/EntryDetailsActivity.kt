@@ -20,18 +20,14 @@ package net.frju.flym.ui.entrydetails
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import net.fred.feedex.R
-import net.frju.flym.data.utils.PrefConstants
-import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.setupNoActionBarTheme
 
 class EntryDetailsActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
-        //Choose theme
-		setTheme(if (getPrefBoolean(PrefConstants.DARK_THEME, true)) R.style.AppTheme_NoActionBar else R.style.AppThemeLight_NoActionBar)
+		setupNoActionBarTheme()
 
-        super.onCreate(savedInstanceState)
-
+		super.onCreate(savedInstanceState)
 
 		if (savedInstanceState == null) {
 			val fragment = EntryDetailsFragment().apply {

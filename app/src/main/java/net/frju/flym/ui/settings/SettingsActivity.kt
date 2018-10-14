@@ -21,18 +21,14 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import net.fred.feedex.R
-import net.frju.flym.App.Companion.context
-import net.frju.flym.data.utils.PrefConstants
-import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.setupTheme
 
 class SettingsActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
-		//Choose theme
-        setTheme(if (context.getPrefBoolean(PrefConstants.DARK_THEME, true)) R.style.AppTheme else R.style.AppThemeLight)
+		setupTheme()
 
 		super.onCreate(savedInstanceState)
-
 
 		setContentView(R.layout.activity_settings)
 
