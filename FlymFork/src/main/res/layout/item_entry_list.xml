@@ -26,13 +26,12 @@
     <FrameLayout
         android:id="@+id/layout_root"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
         <LinearLayout
             android:id="@+id/layout_vertval"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
+            android:layout_height="match_parent"
             android:background="@color/dark_background">
             <LinearLayout
                 android:id="@+id/layout_with_background"
@@ -133,7 +132,7 @@
             android:id="@+id/btnLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="top|right"
             android:paddingBottom="0dp"
             android:paddingLeft="10dp"
             android:paddingRight="5dp"
