@@ -19,9 +19,7 @@
 
 package ru.yanus171.feedexfork.fragment;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,12 +27,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -42,12 +37,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.SearchView;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ImageSpan;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -61,9 +52,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.support.v7.view.menu.MenuBuilder;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -91,6 +80,9 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     private static final String STATE_SHOW_TEXT_IN_ENTRY_LIST = "STATE_SHOW_TEXT_IN_ENTRY_LIST";
     private static final String STATE_ORIGINAL_URI_SHOW_TEXT_IN_ENTRY_LIST = "STATE_ORIGINAL_URI_SHOW_TEXT_IN_ENTRY_LIST";
     private static final String STATE_SHOW_UNREAD = "STATE_SHOW_UNREAD";
+    private static final String STATE_LAST_VISIBLE_ENTRY_ID = "STATE_LAST_VISIBLE_ENTRY_ID";
+    private static final String STATE_LAST_VISIBLE_OFFSET = "STATE_LAST_VISIBLE_OFFSET";
+
 
     private static final int ENTRIES_LOADER_ID = 1;
     private static final int NEW_ENTRIES_NUMBER_LOADER_ID = 2;
@@ -106,6 +98,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     private ProgressBar mProgressBar = null;
     public boolean mShowUnRead = false;
     private boolean mNeedSetSelection = false;
+    private long mLastVisibleTopEntryID = 0;
+    private int mLastListViewTopOffset = 0;
     private Menu mMenu = null;
     private long mListDisplayDate = new Date().getTime();
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
@@ -131,7 +125,11 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             if ( mShowTextInEntryList && mNeedSetSelection ) {
                 mNeedSetSelection = false;
                 mListView.setSelection(mEntriesCursorAdapter.GetFirstUnReadPos());
-
+            }
+            if ( mLastVisibleTopEntryID != -1 ) {
+                int pos = mEntriesCursorAdapter.GetPosByID(mLastVisibleTopEntryID);
+                if ( pos != -1 )
+                    mListView.setSelectionFromTop(pos, mLastListViewTopOffset);
             }
             timer.End();
         }
@@ -259,8 +257,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             mShowUnRead = savedInstanceState.getBoolean(STATE_SHOW_UNREAD, PrefUtils.getBoolean( STATE_SHOW_UNREAD, false ));
             Dog.v( String.format( "EntriesListFragment.onCreate mShowUnRead = %b", mShowUnRead ) );
 
-            if ( mShowTextInEntryList )
-                mNeedSetSelection = true;
+            //if ( mShowTextInEntryList )
+            //    mNeedSetSelection = true;
             mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo, mShowTextInEntryList, mShowUnRead);
         } else
             mShowUnRead = PrefUtils.getBoolean( STATE_SHOW_UNREAD, false );
@@ -294,9 +292,10 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             } else {
                 mAutoRefreshDisplayDate = true; // We will try to update the list after if necessary
             }
-
             restartLoaders();
         }
+        mLastVisibleTopEntryID = PrefUtils.getLong( STATE_LAST_VISIBLE_ENTRY_ID, -1 );
+        mLastListViewTopOffset = PrefUtils.getInt( STATE_LAST_VISIBLE_OFFSET, 0 );
         UpdateActions();
         timer.End();
     }
@@ -343,12 +342,17 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
                             EntriesCursorAdapter.mMarkAsReadList.add(uri);
                         }
                     }
+                else if ( firstVisibleItem > 0 ) {
+                    mLastVisibleTopEntryID = mEntriesCursorAdapter.getItemId(firstVisibleItem);
+                    View v = mListView.getChildAt(0);
+                    mLastListViewTopOffset = (v == null) ? 0 : (v.getTop() - mListView.getPaddingTop());
+                }
             }
         });
 
         if (mEntriesCursorAdapter != null) {
             //mListView.setListAdapter(mEntriesCursorAdapter);
-            mListView.setAdapter(mEntriesCursorAdapter);
+            SetListViewAdapter();
         }
 
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_TIP, true) && mListView instanceof ListView ) {
@@ -422,6 +426,11 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         return rootView;
     }
 
+    public void SetListViewAdapter() {
+        mListView.setAdapter(mEntriesCursorAdapter);
+        mNeedSetSelection = true;
+    }
+
     public static void ShowDeleteDialog(Context context, final String title, final long id) {
         new AlertDialog.Builder(context) //
                 .setIcon(android.R.drawable.ic_dialog_alert) //
@@ -447,6 +456,9 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
 
         PrefUtils.putBoolean( STATE_SHOW_UNREAD, mShowUnRead );
+        PrefUtils.putLong( STATE_LAST_VISIBLE_ENTRY_ID, mLastVisibleTopEntryID );
+        PrefUtils.putInt( STATE_LAST_VISIBLE_OFFSET, mLastListViewTopOffset );
+
 
         if (mJustMarkedAsReadEntries != null && !mJustMarkedAsReadEntries.isClosed()) {
             mJustMarkedAsReadEntries.close();
@@ -717,13 +729,12 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         mShowFeedInfo = showFeedInfo;
         mShowTextInEntryList = showTextInEntryList;
 
-        if ( mShowTextInEntryList )
-            mNeedSetSelection = true;
+        //if ( mShowTextInEntryList )
+        //    mNeedSetSelection = true;
         mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo, mShowTextInEntryList, mShowUnRead);
-        mListView.setAdapter(mEntriesCursorAdapter);
+        SetListViewAdapter();
         if ( mListView instanceof ListView )
             ( ( ListView )mListView ).setDividerHeight( mShowTextInEntryList ? 10 : 0 );
-
         mListDisplayDate = new Date().getTime();
         if (mCurrentUri != null) {
             restartLoaders();

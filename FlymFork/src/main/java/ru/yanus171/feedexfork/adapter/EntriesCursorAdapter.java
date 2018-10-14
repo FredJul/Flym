@@ -531,6 +531,11 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     }
 
     @Override
+    public int getCount() {
+        return super.getCount();
+    }
+
+    @Override
     public Cursor swapCursor(Cursor newCursor) {
         //SetIsReadMakredList();
         reinit(newCursor);
@@ -587,6 +592,17 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             Cursor cursor = (Cursor) getItem(i);
             if ( cursor.isNull( mIsReadPos ) )
                 return i;
+        }
+        return -1;
+    }
+    public int GetPosByID( long id ) {
+        if ( !isEmpty() ) {
+            final int fiID = ((Cursor) getItem(0)).getColumnIndex(EntryColumns._ID);
+            for (int i = 0; i < getCount(); i++) {
+                Cursor cursor = (Cursor) getItem(i);
+                if (cursor.getLong(fiID) == id)
+                    return i;
+            }
         }
         return -1;
     }
