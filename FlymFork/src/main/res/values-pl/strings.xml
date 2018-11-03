@@ -23,9 +23,9 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="app_name">Flym Fork</string>
+    <string name="app_name">Handy News Reader</string>
     <string name="about_flym">O programie / Pomoc / Kontakt z Autorem. </string>
-    <string name="welcome_title">Witaj we Flym Fork. Chciał(a)byś dodać nowy kanał RSS?</string>
+    <string name="welcome_title">Witaj we Handy News Reader. Chciał(a)byś dodać nowy kanał RSS?</string>
     <string name="never">Nigdy.</string>
     <string name="update">Aktualizacja</string>
     <string name="updating">Aktualizacja...</string>
@@ -33,7 +33,7 @@
     <string name="menu_settings">Ustawienia</string>
     <string name="menu_refresh">Odśwież</string>
     <string name="menu_all_read">Oznacz wszystkie jako przeczytane.</string>
-    <string name="flym_feeds">Kanały Flym Fork.</string>
+    <string name="flym_feeds">Kanały Handy News Reader.</string>
     <string name="error">Błąd.</string>
     <string name="network_error">Sieć nie jest skonfigurowana.</string>
     <string name="loading">Wczytuję…</string>
@@ -53,7 +53,7 @@
     <string name="menu_add_group">Dodaj grupę.</string>
     <string name="menu_import">Importuj z pliku OPML.</string>
     <string name="menu_export">Eksportuj do pliku OPML.</string>
-    <string name="storage_request_explanation">Aby importować lub eksportować kanały z/do pliku, potrzebujesz zezwolić Flymowi na dostęp do pamięci.</string>
+    <string name="storage_request_explanation">Aby importować lub eksportować kanały z/do pliku, potrzebujesz zezwolić Handy News Reader na dostęp do pamięci.</string>
     <string name="error_feed_error">Witryna kanału nieosiągalna.</string>
     <string name="error_feed_process">Kanał nie może być przetwarzany.</string>
     <string name="error_feed_url_exists">Taki adres już istnieje.</string>
@@ -122,7 +122,7 @@
     <string name="menu_mark_as_unread">Oznacz jako nieprzeczytane.</string>
     <string name="menu_reload_full_text">Przeładuj pełną treść.</string>
     <string name="menu_reload_full_text_without_mobilizer">Przeładuj bez Mobilizera.</string>
-    <string name="share_favorites_title">Flym Fork: Ulubione artykuły.</string>
+    <string name="share_favorites_title">Handy News Reader: Ulubione artykuły.</string>
     <string name="copied_clipboard">Link skopiowany.</string>
     <string name="get_full_text">Pokaż pełny artykuł.</string>
     <string name="show_text_in_entry_list">Pokazuj tekst oryginalny na liście artykułów.</string>

@@ -23,14 +23,14 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="welcome_title">Bienvenue sur Flym. Voulez vous ajouter un flux ?</string>
+    <string name="welcome_title">Bienvenue sur Handy News Reader. Voulez vous ajouter un flux ?</string>
     <string name="never">jamais</string>
     <string name="update">Mise à jour</string>
     <string name="colon">\u00A0:\u00A0</string>
     <string name="menu_settings">Paramètres</string>
     <string name="menu_refresh">Actualiser</string>
     <string name="menu_all_read">Marquer tout comme lu</string>
-    <string name="flym_feeds">Flux Flym</string>
+    <string name="flym_feeds">Flux Handy News Reader</string>
     <string name="error">Erreur</string>
     <string name="network_error">Pas de connexion disponible</string>
     <string name="loading">Chargement en cours…</string>
@@ -117,7 +117,7 @@
     <string name="menu_full_screen">Plein écran</string>
     <string name="menu_copy_clipboard">Copier le lien</string>
     <string name="menu_mark_as_unread">Marquer comme non lu</string>
-    <string name="share_favorites_title">Flym : articles favoris</string>
+    <string name="share_favorites_title">Handy News Reader: articles favoris</string>
     <string name="copied_clipboard">Lien copié</string>
     <string name="get_full_text">Récupérer le texte complet</string>
     <string name="original_text">Affiche le texte original</string>

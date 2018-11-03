@@ -23,9 +23,9 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="app_name">Flym Fork</string>
+    <string name="app_name">Handy News Reader</string>
     <string name="about_flym">About the app / Help / Contact developer. </string>
-    <string name="welcome_title">Welcome to Flym Fork. Would you like to add a feed?</string>
+    <string name="welcome_title">Welcome to Handy News Reader. Would you like to add a feed?</string>
     <string name="never">never</string>
     <string name="update">Update</string>
     <string name="updating">Updating...</string>
@@ -33,7 +33,7 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_refresh">Refresh</string>
     <string name="menu_all_read">Mark all as read</string>
-    <string name="flym_feeds">Flym Feeds</string>
+    <string name="flym_feeds">Handy News Reader Feeds</string>
     <string name="error">Error</string>
     <string name="network_error">The network is not set up</string>
     <string name="loading">Loading…</string>
@@ -122,7 +122,7 @@
     <string name="menu_mark_as_unread">Mark as unread</string>
     <string name="menu_reload_full_text">Reload full text</string>
     <string name="menu_reload_full_text_without_mobilizer">Reload without Mobilizer</string>
-    <string name="share_favorites_title">Flym Fork: starred entries</string>
+    <string name="share_favorites_title">Handy News Reader: starred entries</string>
     <string name="copied_clipboard">Link copied</string>
     <string name="get_full_text">Load full article.</string>
     <string name="show_text_in_entry_list">Show original text on article list.</string>

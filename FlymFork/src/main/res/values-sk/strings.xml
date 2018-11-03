@@ -24,15 +24,15 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">O aplikácii Flym / Help / Contact developer</string>
-    <string name="welcome_title">Vitajte v aplikácii Flym. Chcete pridať nový zdroj?</string>
+    <string name="about_flym">O aplikácii Handy News Reader/ Help / Contact developer</string>
+    <string name="welcome_title">Vitajte v aplikácii Handy News Reader. Chcete pridať nový zdroj?</string>
     <string name="never">nikdy</string>
     <string name="update">aktualizované</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Nastavenia</string>
     <string name="menu_refresh">Obnoviť</string>
     <string name="menu_all_read">Označiť všetko ako prečítané</string>
-    <string name="flym_feeds">Flym zdroje</string>
+    <string name="flym_feeds">Handy News Reader zdroje</string>
     <string name="error">Chyba</string>
     <string name="network_error">Sieť nie je nastavená</string>
     <string name="loading">Načítávam…</string>
@@ -111,7 +111,7 @@
     <string name="menu_full_screen">Na celú obrazovku</string>
     <string name="menu_copy_clipboard">Zkopírovať odkaz</string>
     <string name="menu_mark_as_unread">Označiť ako neprečítané</string>
-    <string name="share_favorites_title">Flym: označené články</string>
+    <string name="share_favorites_title">Handy News Reader: označené články</string>
     <string name="copied_clipboard">Link zkopírovaný</string>
     <string name="get_full_text">Stiahnúť celý text</string>
     <string name="original_text">Zobraziť originálny text</string>

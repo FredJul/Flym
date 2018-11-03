@@ -22,6 +22,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="app_name">Удобное чтение новостей</string>
     <string name="about_flym">О приложении / Помощь / Связь с разработчиком </string>
     <string name="welcome_title">Добавить канал?</string>
     <string name="never">никогда</string>
@@ -274,7 +275,7 @@
     Ссылка на <a href=\"http://4pda.ru/forum/index.php?showtopic=510993&st=120#entry63119542\">4pda</a>  <br/>
 
     <br/>
-    <a href=\"mailto:workyalex@mail.ru?subject=Flym Fork RSS Reader question\">Написать разработчику</a><br/>
+    <a href=\"mailto:workyalex@mail.ru?subject=Handy News Reader question\">Написать разработчику</a><br/>
 
     <br/>
     <b>Основные функции:</b> <br/>
@@ -308,7 +309,7 @@
     <br/>
     <b>Помочь проекту:</b><br/>
     - <a href=\"https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork\">оценить</a> приложение<br/>
-    - <a href=\"mailto:workyalex@mail.ru?subject=Flym Fork RSS Reader idea\">предложить </a> супер идею
+    - <a href=\"mailto:workyalex@mail.ru?subject=Handy News Reader idea\">предложить </a> супер идею
 
 
     <br/>
@@ -323,7 +324,7 @@
     • Mikko Huhtala<br/>
     • Paul Schaub<br/>
     • RyDroid<br/>
-    • Sergii Pylypenko<br/>
+    • Sergii Pylypenko<br/>+
     • Shapochkin Mihail<br/>
     • Suyash Bhatt<br/>
     • Zhaofeng Li<br/>

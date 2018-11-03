@@ -23,14 +23,14 @@
 
     <!-- GENERAL -->
 
-    <string name="welcome_title">Tervetuloa Flym:iin. Haluaisitko lisätä syötteen?</string>
+    <string name="welcome_title">Tervetuloa Handy News Reader:iin. Haluaisitko lisätä syötteen?</string>
     <string name="never">ei koskaan</string>
     <string name="update">Päivitetty</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Asetukset</string>
     <string name="menu_refresh">Päivitä</string>
     <string name="menu_all_read">Merkitse kaikki luetuiksi</string>
-    <string name="flym_feeds">Flym-syötteet</string>
+    <string name="flym_feeds">Handy News Reader-syötteet</string>
     <string name="error">Virhe</string>
     <string name="network_error">Ei verkkoyhteyttä</string>
     <string name="loading">Lataa…</string>
@@ -109,7 +109,7 @@
     <string name="menu_full_screen">Koko ruutu</string>
     <string name="menu_copy_clipboard">Kopioi linkki</string>
     <string name="menu_mark_as_unread">Merkitse lukemattomaksi</string>
-    <string name="share_favorites_title">Flym: tähdellä merkityt</string>
+    <string name="share_favorites_title">Handy News Reader: tähdellä merkityt</string>
     <string name="copied_clipboard">Linkki kopioitu</string>
     <string name="get_full_text">Hae koko teksti</string>
     <string name="original_text">Näytä alkuperäinen teksti</string>

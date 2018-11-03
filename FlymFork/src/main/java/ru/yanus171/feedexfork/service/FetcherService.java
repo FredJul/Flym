@@ -307,10 +307,10 @@ public class FetcherService extends IntentService {
                                 cursor.close();
 
                                 if (newCount > 0) {
-                                    ShowNotification(getResources().getQuantityString(R.plurals.number_of_new_entries, newCount, newCount),
-                                                     R.string.flym_feeds,
-                                                     new Intent(this, HomeActivity.class),
-                                                     null);
+                                    ShowNotification( getResources().getQuantityString(R.plurals.number_of_new_entries, newCount, newCount),
+                                                      R.string.flym_feeds,
+                                                      new Intent(this, HomeActivity.class),
+                                                      null);
                                 }
                             } else if (Constants.NOTIF_MGR != null) {
                                 Constants.NOTIF_MGR.cancel(0);
