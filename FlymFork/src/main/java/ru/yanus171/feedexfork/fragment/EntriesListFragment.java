@@ -94,7 +94,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     private EntriesCursorAdapter mEntriesCursorAdapter;
     private Cursor mJustMarkedAsReadEntries;
     private FloatingActionButton mFab;
-    private AbsListView mListView;
+    private ListView mListView;
     private ProgressBar mProgressBar = null;
     public boolean mShowUnRead = false;
     private boolean mNeedSetSelection = false;
@@ -322,7 +322,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
 
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
-        mListView = (AbsListView) rootView.findViewById(android.R.id.list);
+        mListView = rootView.findViewById(android.R.id.list);
         //mListView.setOnTouchListener(new SwipeGestureListener(mListView.getContext()));
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -332,7 +332,6 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                boolean b;
                 if ( mShowTextInEntryList )
                     for ( int i = firstVisibleItem - 2; i <= firstVisibleItem - 2 && i < totalItemCount; i++ ) {
                         long id = mEntriesCursorAdapter.getItemId(i);

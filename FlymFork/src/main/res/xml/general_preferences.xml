@@ -212,6 +212,12 @@
             android:summary="@string/entry_text_align_justify_description"
             android:title="@string/entry_text_align_justify"/>
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="entry_auto_unstart_at_bottom"
+            android:summary="@string/auto_unstart_at_bottom_descr"
+            android:title="@string/auto_unstart_at_bottom"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory

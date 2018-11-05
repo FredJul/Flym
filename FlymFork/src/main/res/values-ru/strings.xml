@@ -409,5 +409,7 @@
     <string name="show_read_article_count_descr">в списке лент</string>
     <string name="customKeepTime">Особое время хранения статей</string>
     <string name="menu_toggle_theme">Сменить тему</string>
+    <string name="auto_unstart_at_bottom">Убирать звезду по прочтении</string>
+    <string name="auto_unstart_at_bottom_descr">Автоматически убирать статью из избранного при достижении ее нижнего края</string>
 
 </resources>

@@ -711,21 +711,26 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 				// Mark the previous opened article as read
 				//if (entryCursor.getInt(mIsReadPos) != 1) {
 				if ( !mMarkAsUnreadOnFinish && mLastPagerPos != -1 && mEntryPagerAdapter.getCursor(mLastPagerPos).getInt(mIsReadPos) != 1 ) {
-					final Uri uri = ContentUris.withAppendedId(mBaseUri, mEntriesIds[mLastPagerPos]);
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							ContentResolver cr = MainApplication.getContext().getContentResolver();
-							cr.update(uri, FeedData.getReadContentValues(), null, null);
+                    class ReadWriter implements Runnable {
+					    private int mPagerPos;
+                        public ReadWriter( int pagerPos ){
+                            mPagerPos = pagerPos;
+                        }
+					    @Override
+                        public void run() {
+                            final Uri uri = ContentUris.withAppendedId(mBaseUri, mEntriesIds[mPagerPos]);
+                            ContentResolver cr = MainApplication.getContext().getContentResolver();
+                            cr.update(uri, FeedData.getReadContentValues(), null, null);
 
-							// Update the cursor
-							Cursor updatedCursor = cr.query(uri, null, null, null, null);
-							updatedCursor.moveToFirst();
-							mEntryPagerAdapter.setUpdatedCursor(mLastPagerPos, updatedCursor);
-						}
-					}).start();
-				}
-			}
+                            // Update the cursor
+                            Cursor updatedCursor = cr.query(uri, null, null, null, null);
+                            updatedCursor.moveToFirst();
+                            mEntryPagerAdapter.setUpdatedCursor(mPagerPos, updatedCursor);
+                        }
+                    }
+                    new Thread(new ReadWriter( mLastPagerPos )).start();
+                }
+            }
 		} catch ( IllegalStateException e ) {
 			e.printStackTrace();
 		}
@@ -1030,12 +1035,16 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
             container.addView(view);
             view.setListener(EntryFragment.this);
             getLoaderManager().restartLoader(position, null, EntryFragment.this);
-            view.setTag("EntryView" + position);
+            view.setTag(null);
 
             view.mScrollChangeListener = new Runnable(){
                 @Override
                 public void run() {
+                    if ( !mFavorite )
+                        return;
                     if ( mRetrieveFullText && !mIsFullTextShown )
+                        return;
+                    if ( !PrefUtils.getBoolean("entry_auto_unstart_at_bottom", true) )
                         return;
                     if ( view.IsScrolAtBottom() )
                         SetIsFavourite(false);
@@ -1129,7 +1138,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
         public Cursor getCursor(int pagerPos) {
             EntryView view = mEntryViews.get(pagerPos);
-            if (view != null && ( view.getTag() instanceof Cursor ) ) {
+            if (view != null ) {
                 return (Cursor) view.getTag();
             }
             return null;
@@ -1138,14 +1147,11 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         public void setUpdatedCursor(int pagerPos, Cursor newCursor) {
             EntryView view = mEntryViews.get(pagerPos);
             if (view != null ) {
-                if ( view.getTag(R.id.updated_cursor) instanceof Cursor ) {
-                    Cursor previousUpdatedOne = (Cursor) view.getTag(R.id.updated_cursor);
+                    Cursor previousUpdatedOne = (Cursor) view.getTag();
                     if (previousUpdatedOne != null) {
                         previousUpdatedOne.close();
                     }
-                }
                 view.setTag(newCursor);
-                view.setTag(R.id.updated_cursor, newCursor);
             }
         }
 

@@ -274,6 +274,8 @@
     <string name="show_read_article_count_descr">in feed list</string>
     <string name="customKeepTime">Custom articles keep time</string>
     <string name="menu_toggle_theme">Change theme</string>
+    <string name="auto_unstart_at_bottom">Auto unstar at bottom</string>
+    <string name="auto_unstart_at_bottom_descr">Auto remove the article from favorites when the article bottom was reached</string>
 
 
     <plurals name="number_of_new_entries">

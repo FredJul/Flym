@@ -270,7 +270,9 @@
     <string name="rule_text">słowo lub fraza</string>
     <string name="settings_min_update_battery_level">Min. poziom baterii.</string>
     <string name="global_marks_as_star_filter_rule_descr">każde kolejne umieść w nowej linii</string>
-    <string name="restart_app_apply_changes">Aplikacja zostanie uruchomiona ponownie by zastosować zmiany.</string>	
+    <string name="restart_app_apply_changes">Aplikacja zostanie uruchomiona ponownie by zastosować zmiany.</string>
+    <string name="auto_unstart_at_bottom">Usuń z Ulubionych po przeczytaniu.</string>
+    <string name="auto_unstart_at_bottom_descr">Automatycznie usuń artykuł z ulubionych po osiągnięciu dołu artykułu</string>
 
 
     <plurals name="number_of_new_entries">
