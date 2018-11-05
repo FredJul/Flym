@@ -114,7 +114,7 @@
     <string name="favorites">Избранное</string>
     <string name="context_menu_share_starred">Поделиться избранными новостями</string>
     <string name="downloadOneImage">Загрузить изображение</string>
-    <string name="menu_star">Поместить в избранное</string>
+    <string name="menu_star">В избранное</string>
     <string name="menu_unstar">Убрать из избранного</string>
     <string name="menu_share">Поделиться</string>
     <string name="menu_full_screen">Полный экран</string>
