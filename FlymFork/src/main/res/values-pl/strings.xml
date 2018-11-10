@@ -211,7 +211,7 @@
     <string name="externalLinks">Linki zewnętrzne.</string>
     <string name="markAllAsRead">Oznacz wszystko jako przeczytane.</string>
     <string name="settings_remember_last_entry">Pamiętaj ostatnio wyświetlany artykuł.</string>
-    <string name="settings_remeber_last_entry_description">Otwórz ostatnio wyświetlany artykuł przy uruchomieniu - w przeciwnym razie pokaż listę artykułów.</string>
+    <string name="settings_remeber_last_entry_description">Otworzyć ostatnio wyświetlane artykuł po uruchomieniu - w przeciwnym razie pokaż listę nieprzeczytanych artykułów</string>
     <string name="pageUp">strona w górę</string>
     <string name="pageDown">strona w dół</string>
     <string name="fullScreenToggle">przełącznik pełnego ekranu</string>

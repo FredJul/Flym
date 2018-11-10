@@ -211,7 +211,7 @@
     <string name="externalLinks">External links</string>
     <string name="markAllAsRead">Mark all as read</string>
     <string name="settings_remember_last_entry">Remember last article</string>
-    <string name="settings_remeber_last_entry_description">Open last viewed article on startup, otherwise all entries list</string>
+    <string name="settings_remeber_last_entry_description">Open last viewed article on startup, otherwise unread entries list</string>
     <string name="pageUp">page up</string>
     <string name="pageDown">page down</string>
     <string name="fullScreenToggle">Full screen toggle</string>
@@ -276,6 +276,8 @@
     <string name="menu_toggle_theme">Change theme</string>
     <string name="auto_unstart_at_bottom">Auto unstar at bottom</string>
     <string name="auto_unstart_at_bottom_descr">Auto remove the article from favorites when the article bottom was reached</string>
+    <string name="show_full_text_indicator">Full text indicator</string>
+    <string name="show_full_text_indicator_descr">Show small diskette icon to indicate that article full text was loaded</string>
 
 
     <plurals name="number_of_new_entries">

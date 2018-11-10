@@ -145,6 +145,12 @@
             android:summary="@string/show_mark_all_as_read_button_summary"
             android:title="@string/show_mark_all_as_read_button"/>
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="show_full_text_indicator"
+            android:summary="@string/show_full_text_indicator_descr"
+            android:title="@string/show_full_text_indicator"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory

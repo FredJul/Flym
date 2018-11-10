@@ -151,7 +151,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.mainImgView = (ImageView) view.findViewById(R.id.main_icon);
             holder.starImgView = (ImageView) view.findViewById(R.id.favorite_icon);
             holder.mobilizedImgView = (ImageView) view.findViewById(R.id.mobilized_icon);
-            holder.readImgView = (ImageView) view.findViewById(R.id.read_icon);
+            view.findViewById(R.id.read_icon).setVisibility( View.GONE ); //holder.readImgView = (ImageView) view.findViewById(R.id.read_icon);
             holder.textLayout = (LinearLayout)view.findViewById(R.id.textLayout);
             holder.readToggleSwypeBtnView = view.findViewById(R.id.swype_btn_toggle_read);
             holder.starToggleSwypeBtnView = view.findViewById(R.id.swype_btn_toggle_star);
@@ -391,26 +391,26 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         holder.textTextView.setOnClickListener( listener );*/
 
         UpdateStarImgView(holder);
-        holder.starImgView.setOnClickListener(new View.OnClickListener() {
+        /*holder.starImgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleFavoriteState(holder.entryID, view);
             }
-        });
+        });*/
 
-        holder.mobilizedImgView.setVisibility(holder.isMobilized ? View.VISIBLE : View.INVISIBLE);
+        holder.mobilizedImgView.setVisibility(holder.isMobilized && PrefUtils.getBoolean( "show_full_text_indicator", false ) ? View.VISIBLE : View.GONE);
 
-        UpdateReadImgView(holder);
-        holder.readImgView.setOnClickListener(new View.OnClickListener() {
+        //UpdateReadImgView(holder);
+        /*holder.readImgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleReadState(holder.entryID, view);
             }
-        });
+        });*/
 
         if ( mShowEntryText ) {
             holder.textTextView.setVisibility(View.VISIBLE);
-            holder.textTextView.setText(Html.fromHtml( cursor.getString(mAbstractPos) == null ? "" : cursor.getString(mAbstractPos).toString() ));
+            holder.textTextView.setText(Html.fromHtml( cursor.getString(mAbstractPos) == null ? "" : cursor.getString(mAbstractPos) ));
             holder.textTextView.setEnabled(!holder.isRead);
         } else
             holder.textTextView.setVisibility(View.GONE);
@@ -426,13 +426,15 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     private void UpdateStarImgView(ViewHolder holder) {
         int startID = PrefUtils.IsLightTheme() ? R.drawable.star_gray_solid : R.drawable.star_yellow;
-        holder.starImgView.setImageResource(holder.isFavorite ? startID : R.drawable.star_empty_gray );
+        if ( holder.isFavorite )
+            holder.starImgView.setImageResource(startID );
+        holder.starImgView.setVisibility( holder.isFavorite ? View.VISIBLE : View.GONE );
     }
-    private void UpdateReadImgView(ViewHolder holder) {
+    /*private void UpdateReadImgView(ViewHolder holder) {
         holder.readImgView.setVisibility( mShowEntryText ? View.GONE : View.VISIBLE );
         if ( !mShowEntryText )
             holder.readImgView.setImageResource(holder.isRead ? R.drawable.rounded_checbox_gray : R.drawable.rounded_empty_gray);
-    }
+    }*/
 
     public void toggleReadState(final long id, View view) {
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
@@ -447,7 +449,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 holder.titleTextView.setEnabled(true);
                 holder.dateTextView.setEnabled(true);
             }
-            UpdateReadImgView( holder );
+            //UpdateReadImgView( holder );
             UpdateStarImgView( holder );
 
             SetIsRead(EntryUri(id), holder.isRead, 0);
@@ -579,7 +581,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         public ImageView mainImgView;
         public ImageView starImgView;
         public ImageView mobilizedImgView;
-        public ImageView readImgView;
+        //public ImageView readImgView;
         public View readToggleSwypeBtnView;
         public View starToggleSwypeBtnView;
         public LinearLayout textLayout;
