@@ -716,6 +716,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     }
 
     public void setData(Uri uri, boolean showFeedInfo, boolean isSearchUri, boolean showTextInEntryList) {
+        if ( getActivity() == null ) // during configuration changes
+            return;
         Timer timer = new Timer( "EntriesListFragment.setData" );
 
         Dog.v( String.format( "EntriesListFragment.setData( %s )", uri.toString() ) );
