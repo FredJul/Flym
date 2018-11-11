@@ -210,7 +210,7 @@ public class EntryView extends WebView implements Observer {
                         String enclosure,
                         String author,
                         long timestamp,
-                        boolean preferFullText,
+                        final boolean preferFullText,
                         EntryActivity activity) {
         Timer timer = new Timer( "EntryView.setHtml" );
 
