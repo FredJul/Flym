@@ -270,9 +270,13 @@
     <string name="rule_text">słowo lub fraza</string>
     <string name="settings_min_update_battery_level">Min. poziom baterii.</string>
     <string name="global_marks_as_star_filter_rule_descr">każde kolejne umieść w nowej linii</string>
+	<string name="show_read_article_count">Pokaż licznik przeczytanych artykułów</string>
+	<string name="show_read_article_count_descr">na liście źródeł</string>
+	<string name="customKeepTime">	Własny czas przechowywania artykułów</string>
+	<string name="menu_toggle_theme">Zmień motyw</string>
     <string name="restart_app_apply_changes">Aplikacja zostanie uruchomiona ponownie by zastosować zmiany.</string>
     <string name="auto_unstart_at_bottom">Usuń z Ulubionych po przeczytaniu.</string>
-    <string name="auto_unstart_at_bottom_descr">Automatycznie usuń artykuł z ulubionych po osiągnięciu dołu artykułu</string>
+    <string name="auto_unstart_at_bottom_descr">Automatycznie usuń artykuł z Ulubionych po przewinięciu do jego końca.</string>
 
 
     <plurals name="number_of_new_entries">
@@ -291,9 +295,10 @@
         <item>12 godzin</item>
         <item>1 dzień</item>
     </string-array>
+	
     <string-array name="settings_keep_times">
-        <item>1 hour</item>
-        <item>12 hours</item>
+        <item>1 godzina</item>
+        <item>12 godzin</item>
         <item>1 dzień</item>
         <item>2 dni</item>
         <item>4 dni</item>
