@@ -346,7 +346,7 @@
 
     ]]></string>
     <string name="settings_remember_last_entry">Запоминать статью</string>
-    <string name="settings_remeber_last_entry_description">Открывать последнюю просмотренную статью при запуске, иначе список всех статей</string>
+    <string name="settings_remeber_last_entry_description">Открывать последнюю просмотренную статью при запуске, иначе список непрочитанных статей</string>
     <string name="pageUp">Страница вверх</string>
     <string name="pageDown">Страница вниз</string>
     <string name="fullScreenToggle">Пркл. полный экран</string>
@@ -411,5 +411,7 @@
     <string name="menu_toggle_theme">Сменить тему</string>
     <string name="auto_unstart_at_bottom">Убирать звезду по прочтении</string>
     <string name="auto_unstart_at_bottom_descr">Автоматически убирать статью из избранного при достижении ее нижнего края</string>
+    <string name="show_full_text_indicator">Индикация полного текста</string>
+    <string name="show_full_text_indicator_descr">Показывать иконку маленькой дискеты, если для статьи загружен полный текст</string>
 
 </resources>

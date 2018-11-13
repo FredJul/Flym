@@ -136,10 +136,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             }
         });
 
-        if (savedInstanceState != null)
-            mCurrentDrawerPos = savedInstanceState.getInt(STATE_CURRENT_DRAWER_POS);
-        else
-            mCurrentDrawerPos = PrefUtils.getInt(STATE_CURRENT_DRAWER_POS, 1);
+        mCurrentDrawerPos = 0;
+        if ( PrefUtils.getBoolean(PrefUtils.REMEBER_LAST_ENTRY, true) )
+            mCurrentDrawerPos = PrefUtils.getInt(STATE_CURRENT_DRAWER_POS, mCurrentDrawerPos);
 
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -261,7 +260,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(STATE_CURRENT_DRAWER_POS, mCurrentDrawerPos);
+        //outState.putInt(STATE_CURRENT_DRAWER_POS, mCurrentDrawerPos);
         super.onSaveInstanceState(outState);
     }
 

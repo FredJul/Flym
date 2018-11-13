@@ -588,10 +588,10 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
                 cr.update(uri, values, null, null);
 
-                // Update the cursor
+                /*// Update the cursor
                 Cursor updatedCursor = cr.query(uri, null, null, null, null);
                 updatedCursor.moveToFirst();
-                mEntryPagerAdapter.setUpdatedCursor(mCurrentPagerPos, updatedCursor);
+                mEntryPagerAdapter.setUpdatedCursor(mCurrentPagerPos, updatedCursor);*/
 
             }
         }.start();
@@ -722,10 +722,10 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                             ContentResolver cr = MainApplication.getContext().getContentResolver();
                             cr.update(uri, FeedData.getReadContentValues(), null, null);
 
-                            // Update the cursor
+                            /*// Update the cursor
                             Cursor updatedCursor = cr.query(uri, null, null, null, null);
                             updatedCursor.moveToFirst();
-                            mEntryPagerAdapter.setUpdatedCursor(mPagerPos, updatedCursor);
+                            mEntryPagerAdapter.setUpdatedCursor(mPagerPos, updatedCursor);*/
                         }
                     }
                     new Thread(new ReadWriter( mLastPagerPos )).start();
