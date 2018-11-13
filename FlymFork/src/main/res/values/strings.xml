@@ -275,14 +275,14 @@
     <string name="customKeepTime">Custom articles keep time</string>
     <string name="menu_toggle_theme">Change theme</string>
     <string name="auto_unstart_at_bottom">Auto unstar when finish reading</string>
-    <string name="auto_unstart_at_bottom_descr">Auto remove the article from Favorites when the article bottom was reached</string>
-    <string name="show_full_text_indicator">Full text indicator</string>
+<<< <string name="auto_unstart_at_bottom_descr">Auto remove the article from Favorites when the article bottom was reached</string>
+=== <string name="show_full_text_indicator">Full text indicator</string>
     <string name="show_full_text_indicator_descr">Show small diskette icon to indicate that article full text was loaded</string>
 
 
     <plurals name="number_of_new_entries">
-        <item quantity="one">One new article</item>
-        <item quantity="other">%d new articles</item>
+        <item quantity="one">One new article.</item>
+        <item quantity="other">%d new articles.</item>
     </plurals>
 
     <string-array name="settings_intervals">
