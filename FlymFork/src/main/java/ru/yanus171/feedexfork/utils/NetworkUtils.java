@@ -302,7 +302,7 @@ public class NetworkUtils {
     }
 
     private static class PictureFilenameFilter implements FilenameFilter {
-        private static final String REGEX = "__[^\\.]*\\.[A-Za-z]*";
+        private static final String REGEX = "__.*";
 
         private Pattern mPattern;
 
