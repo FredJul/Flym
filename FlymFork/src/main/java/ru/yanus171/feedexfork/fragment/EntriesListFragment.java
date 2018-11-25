@@ -128,7 +128,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             }
             if ( mLastVisibleTopEntryID != -1 ) {
                 int pos = mEntriesCursorAdapter.GetPosByID(mLastVisibleTopEntryID);
-                if ( pos != -1 )
+                if ( pos != -1 &&
+                        ( pos > mListView.getLastVisiblePosition() || pos < mListView.getFirstVisiblePosition() )  )
                     mListView.setSelectionFromTop(pos, mLastListViewTopOffset);
             }
             timer.End();
