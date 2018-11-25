@@ -105,6 +105,10 @@ public class PrefUtils {
         }
     }
 
+    public static boolean IsShowReadCheckbox() {
+        return getBoolean( "show_read_checkbox", false );
+    }
+
     public static boolean getBoolean(String key, boolean defValue) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());
         return settings.getBoolean(key, defValue);

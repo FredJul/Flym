@@ -151,7 +151,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.mainImgView = (ImageView) view.findViewById(R.id.main_icon);
             holder.starImgView = (ImageView) view.findViewById(R.id.favorite_icon);
             holder.mobilizedImgView = (ImageView) view.findViewById(R.id.mobilized_icon);
-            view.findViewById(R.id.read_icon).setVisibility( View.GONE ); //holder.readImgView = (ImageView) view.findViewById(R.id.read_icon);
+            holder.readImgView = (ImageView) view.findViewById(R.id.read_icon);
+            holder.readImgView.setVisibility( PrefUtils.IsShowReadCheckbox() ? View.VISIBLE : View.GONE ); //
             holder.textLayout = (LinearLayout)view.findViewById(R.id.textLayout);
             holder.readToggleSwypeBtnView = view.findViewById(R.id.swype_btn_toggle_read);
             holder.starToggleSwypeBtnView = view.findViewById(R.id.swype_btn_toggle_star);
@@ -400,13 +401,13 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         holder.mobilizedImgView.setVisibility(holder.isMobilized && PrefUtils.getBoolean( "show_full_text_indicator", false ) ? View.VISIBLE : View.GONE);
 
-        //UpdateReadImgView(holder);
-        /*holder.readImgView.setOnClickListener(new View.OnClickListener() {
+        UpdateReadImgView(holder);
+        holder.readImgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleReadState(holder.entryID, view);
             }
-        });*/
+        });
 
         if ( mShowEntryText ) {
             holder.textTextView.setVisibility(View.VISIBLE);
@@ -430,11 +431,10 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.starImgView.setImageResource(startID );
         holder.starImgView.setVisibility( holder.isFavorite ? View.VISIBLE : View.GONE );
     }
-    /*private void UpdateReadImgView(ViewHolder holder) {
-        holder.readImgView.setVisibility( mShowEntryText ? View.GONE : View.VISIBLE );
-        if ( !mShowEntryText )
-            holder.readImgView.setImageResource(holder.isRead ? R.drawable.rounded_checbox_gray : R.drawable.rounded_empty_gray);
-    }*/
+    private void UpdateReadImgView(ViewHolder holder) {
+        holder.readImgView.setVisibility( PrefUtils.IsShowReadCheckbox() && !mShowEntryText ? View.VISIBLE : View.GONE );
+        holder.readImgView.setImageResource(holder.isRead ? R.drawable.rounded_checbox_gray : R.drawable.rounded_empty_gray);
+    }
 
     public void toggleReadState(final long id, View view) {
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
@@ -449,7 +449,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 holder.titleTextView.setEnabled(true);
                 holder.dateTextView.setEnabled(true);
             }
-            //UpdateReadImgView( holder );
+            UpdateReadImgView( holder );
             UpdateStarImgView( holder );
 
             SetIsRead(EntryUri(id), holder.isRead, 0);
@@ -581,7 +581,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         public ImageView mainImgView;
         public ImageView starImgView;
         public ImageView mobilizedImgView;
-        //public ImageView readImgView;
+        public ImageView readImgView;
         public View readToggleSwypeBtnView;
         public View starToggleSwypeBtnView;
         public LinearLayout textLayout;

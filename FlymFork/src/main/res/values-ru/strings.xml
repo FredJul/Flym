@@ -413,5 +413,7 @@
     <string name="auto_unstart_at_bottom_descr">Автоматически убирать статью из избранного при достижении ее нижнего края</string>
     <string name="show_full_text_indicator">Индикация полного текста</string>
     <string name="show_full_text_indicator_descr">Показывать иконку маленькой дискеты, если для статьи загружен полный текст</string>
+    <string name="show_read_checkbox">Галка прочитанного</string>
+    <string name="show_read_checkbox_descr">Показывать галку прочитанного</string>
 
 </resources>

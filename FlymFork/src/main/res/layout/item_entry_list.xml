@@ -128,25 +128,26 @@
                 android:text="text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text "
                 android:textIsSelectable="false"/>
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/btnLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|right"
-            android:paddingBottom="0dp"
+            android:layout_gravity="bottom|right"
+            android:orientation="vertical"
             android:paddingLeft="10dp"
-            android:paddingRight="5dp"
             android:paddingTop="0dp"
-            android:orientation="vertical">
+            android:paddingRight="5dp"
+            android:paddingBottom="0dp">
 
             <ImageView
                 android:id="@+id/mobilized_icon"
                 android:layout_width="30dp"
-                android:layout_gravity="right"
                 android:layout_height="30dp"
-                android:scaleType="fitCenter"
+                android:layout_gravity="right"
                 android:alpha="0.5"
-                android:src="@drawable/disket_gray"/>
+                android:scaleType="fitCenter"
+                android:src="@drawable/disket_gray" />
 
 
             <LinearLayout
@@ -158,18 +159,18 @@
                     android:id="@+id/read_icon"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:scaleType="fitCenter"
-                    android:paddingRight="5dp"
                     android:alpha="0.5"
+                    android:paddingRight="5dp"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/rounded_checbox_white" />
 
                 <ImageView
                     android:id="@+id/favorite_icon"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:scaleType="fitCenter"
-                    android:paddingRight="5dp"
                     android:alpha="0.5"
+                    android:paddingRight="5dp"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/star_yellow" />
             </LinearLayout>
 

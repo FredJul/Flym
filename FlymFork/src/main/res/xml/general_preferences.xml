@@ -147,6 +147,12 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="show_read_checkbox"
+            android:summary="@string/show_read_checkbox_descr"
+            android:title="@string/show_read_checkbox"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="show_full_text_indicator"
             android:summary="@string/show_full_text_indicator_descr"
             android:title="@string/show_full_text_indicator"/>
