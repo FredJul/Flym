@@ -207,9 +207,9 @@ public class NetworkUtils {
 
     public static String getBaseUrl(String link) {
         String baseUrl = link;
-        int index = link.indexOf('/', 8); // this also covers https://
+        int index = link.lastIndexOf('/'); // this also covers https://
         if (index > -1) {
-            baseUrl = link.substring(0, index);
+            baseUrl = link.substring(0, index + 1);
         }
 
         return baseUrl;
