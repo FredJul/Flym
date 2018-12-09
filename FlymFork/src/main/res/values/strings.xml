@@ -134,7 +134,7 @@
     <string name="file">File</string>
     <string name="download_and_save">Download and save</string>
     <string name="open_link">Open link</string>
-    <string name="tip_sentence">Tip: slide left to mark as read</string>
+    <string name="tip_sentence">Tip: slide right to mark as read, left to add to favorities</string>
     <string name="undo">Undo</string>
     <string name="marked_as_read">Marked as read</string>
 
@@ -261,8 +261,8 @@
     <string name="reload_full_text_with_tags">Reload with tags</string>
     <string name="filter_hint">A filter\'s action will be initiated if at least one condition (rule) is met. \'Accept\' overrides \'Reject\'</string>
     <string name="keyword">keyword(s)</string>
-    <string name="loadTypeWeb">Web (load all links)</string>
-    <string name="loadTypeRSS">RSS feed or keyword(s)</string>
+    <string name="loadTypeWeb">Web (load all links from page)</string>
+    <string name="loadTypeRSS">RSS (feed or site link or keywords)</string>
     <string name="loadType">Load type:</string>
     <string name="global_filter">Global filter ...</string>
     <string name="global_filter_descr">A filter that apply to every feed. Leave filter text (and regex text) empty to disable</string>

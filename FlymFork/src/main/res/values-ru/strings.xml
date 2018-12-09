@@ -395,8 +395,8 @@
     <string name="reload_full_text_with_tags">Перезагрузить с разметкой</string>
     <string name="filter_hint">Все фильтры объединяются по ИЛИ. Загружать перевешивает Не загружать</string>
     <string name="keyword">Ключевое слово</string>
-    <string name="loadTypeWeb">Web (загружать все ссылки)</string>
-    <string name="loadTypeRSS">Лента RSS или ключевое слово</string>
+    <string name="loadTypeRSS">RSS (адрес ленты или сайта или ключевое слово)</string>
+    <string name="loadTypeWeb">Web (загружать все ссылки со страницы)</string>
     <string name="loadType">Тип загрузки:</string>
     <string name="global_filter">Глобальный фильтр ...</string>
     <string name="global_filter_descr">Фильтр, применяемый к каждой ленте. Для отключения оставьте текст фильтра (и регулярного выражения) пустым</string>
