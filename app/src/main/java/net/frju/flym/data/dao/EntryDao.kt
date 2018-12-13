@@ -141,7 +141,7 @@ interface EntryDao {
 	@Query("UPDATE entries SET favorite = 0 WHERE id IS :id")
 	fun markAsNotFavorite(id: String)
 
-	@Query("DELETE FROM entries WHERE fetchDate < :keepDateBorderTime AND favorite = 0 AND read = 1")
+	@Query("DELETE FROM entries WHERE fetchDate < :keepDateBorderTime AND favorite = 0")
 	fun deleteOlderThan(keepDateBorderTime: Long)
 
 	@Insert(onConflict = OnConflictStrategy.IGNORE) // Ignore because we don't want to delete previously starred entries
