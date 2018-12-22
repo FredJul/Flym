@@ -2,6 +2,8 @@
     <!--
  Copyright (c) 2012-2015 Frederic Julian
  Copyright (c) 2010-2012 Stefan Handschuh
+ modified 2014-2016 Matthias Dill
+ modified 2018 Ronny Steiner
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +25,9 @@
 -->
 <resources>
     <!-- GENERAL -->
-    <string name="app_name">Flym Fork</string>
+    <string name="app_name">Handy News Reader</string>
     <string name="about_flym">Info - Hilfe - Support</string>
-    <string name="welcome_title">Willkommen bei Flym Fork. Möchten Sie einen Feed hinzufügen?</string>
+    <string name="welcome_title">Willkommen bei Handy News Reader. Möchten Sie einen Feed hinzufügen?</string>
     <string name="never">nie</string>
     <string name="update">Aktualisierung</string>
     <string name="updating">Aktualisiere...</string>
@@ -33,7 +35,7 @@
     <string name="menu_settings">Einstellungen</string>
     <string name="menu_refresh">Aktualisieren</string>
     <string name="menu_all_read">Alle als gelesen markieren</string>
-    <string name="flym_feeds">Flym-Feeds</string>
+    <string name="flym_feeds">Feeds</string>
     <string name="error">Fehler</string>
     <string name="network_error">Kein Netzwerk eingerichtet</string>
     <string name="loading">Lade…</string>
@@ -120,7 +122,7 @@
     <string name="menu_mark_as_unread">Als ungelesen markieren</string>
     <string name="menu_reload_full_text">Gesamten Text neu laden</string>
     <string name="menu_reload_full_text_without_mobilizer">Ohne Mobilizer neu laden</string>
-    <string name="share_favorites_title">Flym Fork: Favoriten</string>
+    <string name="share_favorites_title">Handy News Reader: Favoriten</string>
     <string name="copied_clipboard">Link kopiert</string>
     <string name="get_full_text">Gesamten Artikel laden.</string>
     <string name="show_text_in_entry_list">Originaltext in der Artikelliste zeigen.</string>
@@ -189,6 +191,7 @@
     <string name="improveHtmlContent">HTML-Inhalt verbessern</string>
     <string name="parseXml">XML analysieren</string>
     <string name="setupConnection">Verbindung einstellen</string>
+    <string name="settings_content_extract_rules">Regeln zum Extrahieren des Inhaltes</string>
     <string name="settings_tapZones">Tipp-Zonen</string>
     <string name="settings_additional">Weiteres</string>
     <string name="settings_load_comments">Kommentare laden</string>
