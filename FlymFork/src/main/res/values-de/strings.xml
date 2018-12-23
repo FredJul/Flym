@@ -299,8 +299,6 @@
         <item>0 %</item>
     </string-array>
     <string-array name="settings_keep_times">
-        <item>3 Monate</item>
-        <item>Für immer</item>
         <item>1 Stunde</item>
         <item>12 Stunden</item>
         <item>1 Tag</item>
@@ -310,10 +308,13 @@
         <item>2 Wochen</item>
         <item>1 Monat</item>
         <item>2 Monate</item>
+        <item>3 Monate</item>
+        <item>Für immer</item>
     </string-array>
     <string-array name="settings_font_sizes">
         <item>-2</item>
         <item>-1</item>
+        <item>@string/standard</item>
         <item>+1</item>
         <item>+2</item>
         <item>+3</item>
@@ -324,7 +325,6 @@
         <item>+8</item>
     </string-array>
     <string-array name="settings_volume_buttons_action">
-        <item>Funktion der Lautstärketasten</item>
         <item>Standard</item>
         <item>Zum nächsten/vorherigen Artikel springen</item>
         <item>Seite hoch/runter</item>
