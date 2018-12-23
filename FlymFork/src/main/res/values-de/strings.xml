@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
+    <!--
+ Copyright (c) 2012-2015 Frederic Julian
  Copyright (c) 2010-2012 Stefan Handschuh
- Copyright (c) 2012-2014 Frederic Julian
-      modified 2014-2016 Matthias Dill
+ modified 2014-2016 Matthias Dill
+ modified 2018 Ronny Steiner
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,24 +24,24 @@
  THE SOFTWARE.
 -->
 <resources>
-
     <!-- GENERAL -->
-    <string name="about_flym">Über app / Help / Contact developer </string>
-    <string name="welcome_title">Wilkommen in Handy News Reader. Willst du einen Feed hinzufügen?</string>
+    <string name="app_name">Handy News Reader</string>
+    <string name="about_flym">Info - Hilfe - Support</string>
+    <string name="welcome_title">Willkommen bei Handy News Reader. Möchten Sie einen Feed hinzufügen?</string>
     <string name="never">nie</string>
-    <string name="update">aktualisiert</string>
-    <string name="colon">:\u00A0</string>
+    <string name="update">Aktualisierung</string>
+    <string name="updating">Aktualisiere...</string>
+    <string name="colon">:\u00a0</string>
     <string name="menu_settings">Einstellungen</string>
     <string name="menu_refresh">Aktualisieren</string>
     <string name="menu_all_read">Alle als gelesen markieren</string>
     <string name="flym_feeds">Handy News Reader Feeds</string>
     <string name="error">Fehler</string>
-    <string name="network_error">Kein Internet</string>
-    <string name="loading">Laden…</string>
+    <string name="network_error">Kein Netzwerk eingerichtet</string>
+    <string name="loading">Lade…</string>
     <string name="no_result">Kein Ergebnis</string>
     <string name="drawer_open">Navigationsleiste öffnen</string>
     <string name="drawer_close">Navigationsleiste schließen</string>
-
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
     <string name="menu_add_feed">Feed hinzufügen</string>
@@ -51,129 +52,222 @@
     <string name="new_feed_title">Neuer Feed</string>
     <string name="context_menu_edit">Bearbeiten</string>
     <string name="menu_add_group">Gruppe erstellen</string>
-    <string name="menu_import">Aus OPML importieren</string>
-    <string name="menu_export">Nach OPML exportieren</string>
-    <string name="storage_request_explanation">Um Feeds aus/in eine(r) Datei zu importieren/exportieren, muss das Program die Berechtigung haben auf den Speicher zuzugreifen.</string>
+    <string name="menu_import">OPML-Datei importieren</string>
+    <string name="menu_export">OPML-Datei exportieren</string>
+    <string name="storage_request_explanation">Für den Import und Export von Feeds benötigt diese App die Berechtigung auf den Speicher zuzugreifen.</string>
     <string name="error_feed_error">Zugriff auf Feed-Adresse nicht möglich.</string>
-    <string name="error_feed_process">Der Feed kann nicht bearbeitet werden.</string>
-    <string name="error_feed_url_exists">Diese Adresse existiert schon.</string>
+    <string name="error_feed_process">Der Feed kann nicht verarbeitet werden.</string>
+    <string name="error_feed_url_exists">Diese Adresse existiert bereits.</string>
     <string name="error_feed_import">Die ausgewählte Datei konnte nicht importiert werden.</string>
-    <string name="error_feed_export">Der Export ist fehlgeschlagen. Stelle sicher, dass eine beschreibbare SD-Karte eingelegt ist.</string>
+    <string name="error_feed_export">Der Export ist fehlgeschlagen. Stellen Sie sicher, dass der Speicher beschreibbar ist.</string>
     <string name="error_external_storage_not_available">Der externe Speicher (z.B. SD-Karte) ist nicht verfügbar.</string>
     <string name="feed_url">URL-Adresse</string>
     <string name="optional">(optional)</string>
-    <string name="website_or_feed">(Website oder Feed)</string>
+    <string name="website_or_feed">(Feed-URL oder Suchbegriff)</string>
     <string name="tab_feed_title">Feed</string>
     <string name="tab_filters_title">Filter</string>
     <string name="feed_title">TITEL</string>
-    <string name="feed_filters">AUSSCHLUSS-FILTER</string>
+    <string name="feed_filters">FILTER-REGELN</string>
     <string name="filter_add_title">Filter hinzufügen</string>
     <string name="filter_delete_title">Filter entfernen</string>
     <string name="filter_edit_title">Filter bearbeiten</string>
-    <string name="filter_is_regex">ist ein regulärer Ausdruck</string>
-    <string name="filter_apply_to_title">Auf den Titel anwenden (or link adress)</string>
+    <string name="filter_is_regex">...ist ein regulärer Ausdruck</string>
+    <string name="filter_apply_to_title">Auf Titel oder URL anwenden</string>
     <string name="filter_apply_to_content">Auf den Inhalt anwenden</string>
-    <string name="accept">Annehmen</string>
-    <string name="reject">Zurückweisen</string>
+    <string name="accept">ZULASSEN</string>
+    <string name="reject">ABLEHNEN</string>
     <string name="feed_search">Feed-Suche</string>
-    <string name="select_file">Datei auswählen(SD-root)</string>
-    <string name="question_delete_feed">Willst du diesen Feed wirklich löschen?</string>
-    <string name="question_delete_group">Willst du diese Gruppe mit allen Feeds wirklich löschen?</string>
-    <string name="question_delete_filter">Willst du diesen Filter wirklich löschen?</string>
+    <string name="select_file">Datei auswählen (SD-Stammverzeichnis)</string>
+    <string name="question_delete_feed">Möchten Sie diesen Feed wirklich löschen?</string>
+    <string name="question_delete_group">Möchten Sie diese Gruppe mit allen Feeds wirklich löschen?</string>
+    <string name="question_delete_filter">Möchten Sie diesen Filter wirklich löschen?</string>
     <string name="add_group_title">Gruppenname wählen</string>
-    <string name="edit_group_title">Gruppennamen bearbeiten</string>
+    <string name="edit_group_title">Gruppenname bearbeiten</string>
     <string name="message_exported_to">Nach %s exportiert.</string>
-    <string name="to_group_title">Feed-Verschiebung</string>
-    <string name="to_group_message">Du kannst den Feed entweder in oder über dieser Gruppe positionieren. Was willst du tun?</string>
-    <string name="to_group_above">Über die Gruppe</string>
+    <string name="to_group_title">Feed verschieben</string>
+    <string name="to_group_message">Möchten Sie den Feed in die Gruppe verschieben oder außerhalb der Gruppe positionieren?</string>
+    <string name="to_group_above">Außerhalb der Gruppe</string>
     <string name="to_group_into">In die Gruppe</string>
-    <string name="add_custom_feed">Füge einen benutzerdefinierten Feed hinzu oder suche einen</string>
-    <string name="google_news_title">Google News</string>
+    <string name="add_custom_feed">Feed hinzufügen oder suchen</string>
+    <string name="google_news_title">Google News Themen</string>
     <string name="google_news_indicator">Wähle ein oder mehrere Themen aus. Möglicherweise werden sie von Google nicht in deiner Sprache angeboten.</string>
-    <string name="google_news_top_stories">Schlagzeilen</string>
-    <string name="google_news_world">International</string>
+    <string name="google_news_top_stories">Top-Meldungen</string>
+    <string name="google_news_world">Welt</string>
     <string name="google_news_business">Wirtschaft</string>
-    <string name="google_news_technology">Wissen/Technik</string>
+    <string name="google_news_technology">Technik</string>
     <string name="google_news_entertainment">Unterhaltung</string>
     <string name="google_news_sports">Sport</string>
     <string name="google_news_science">Panorama</string>
     <string name="google_news_health">Gesundheit</string>
     <string name="google_news_custom_topic">Eigenes Thema</string>
-
     <!-- ENTRIES -->
-    <string name="unread_entries">Ungelesene Einträge</string>
-    <string name="all_entries">Alle Einträge</string>
-    <string name="no_entries">Keine Einträge</string>
-    <string name="favorites">Favorisiert</string>
-    <string name="context_menu_share_starred">Favorisierte Einträge teilen</string>
-    <string name="menu_star">Favorisieren</string>
-    <string name="menu_unstar">Entfavorisieren</string>
+    <string name="unread_entries">Ungelesene Artikel</string>
+    <string name="all_entries">Alle Artikel</string>
+    <string name="no_entries">Keine Artikel</string>
+    <string name="downloadOneImage">Bild herunterladen</string>
+    <string name="favorites">Favoriten</string>
+    <string name="context_menu_share_starred">Favoriten teilen</string>
+    <string name="menu_star">Favorit</string>
+    <string name="menu_unstar">Kein Favorit</string>
     <string name="menu_share">Teilen</string>
     <string name="menu_full_screen">Vollbild</string>
+    <string name="menu_font_bold">Vollbild</string>
     <string name="menu_copy_clipboard">Link kopieren</string>
+    <string name="menu_cancel_refresh">Aktualisierung abbrechen</string>
+    <string name="menu_delete_all">Alle löschen</string>
+    <string name="menu_toogle_unread_all">Ungelesen|Alle</string>
+    <string name="menu_load_all_images">Alle Bilder laden</string>
+    <string name="menu_mark_as_favorite">Als Favorit markieren</string>
+    <string name="menu_mark_as_unfavorite">Favorit-Markierung entfernen</string>
     <string name="menu_mark_as_unread">Als ungelesen markieren</string>
-    <string name="share_favorites_title">Handy News Reader: favorisierte Einträge</string>
+    <string name="menu_reload_full_text">Gesamten Text neu laden</string>
+    <string name="menu_reload_full_text_without_mobilizer">Ohne Mobilizer neu laden</string>
+    <string name="share_favorites_title">Handy News Reader: Favoriten</string>
     <string name="copied_clipboard">Link kopiert</string>
-    <string name="get_full_text">Vollen Text abrufen</string>
-    <string name="original_text">Ursprünglichen Text anzeigen</string>
-    <string name="see_enclosure">Anhang ansehen</string>
+    <string name="get_full_text">Gesamten Artikel laden.</string>
+    <string name="show_text_in_entry_list">Originaltext in der Artikelliste zeigen.</string>
+    <string name="original_text">Originaltext anzeigen</string>
+    <string name="see_enclosure">Anhang laden</string>
     <string name="see_link">Im Browser ansehen</string>
     <string name="cant_open_link">Keine Anwendung für diesen Link gefunden</string>
-    <string name="open_enclosure">Öffne Anhang</string>
+    <string name="open_enclosure">Anhang öffnen</string>
     <string name="file">Datei</string>
     <string name="download_and_save">Herunterladen und speichern</string>
     <string name="open_link">Link öffnen</string>
     <string name="tip_sentence">Tipp: Nach links wischen um Artikel als gelesen zu markieren</string>
     <string name="undo">Rückgängig</string>
-    <string name="marked_as_read">Als gelesen markieren</string>
-
+    <string name="marked_as_read">Als gelesen markiert</string>
     <!-- WIDGET -->
     <string name="red">Rot</string>
     <string name="green">Grün</string>
     <string name="blue">Blau</string>
     <string name="transparency">Transparenz</string>
-
     <!-- SETTINGS -->
-    <string name="settings_category_refresh">Automatisches Aktualisieren</string>
-    <string name="settings_refresh_enabled">Automatisches Aktualisieren</string>
+    <string name="settings_category_refresh">Automatische Aktualisierung</string>
+    <string name="settings_refresh_enabled">Aktualisierung aktivieren</string>
     <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren aller Feeds</string>
     <string name="settings_refresh_interval">Aktualisierungsintervall</string>
     <string name="settings_category_notifications">Benachrichtigungen</string>
     <string name="settings_notifications_enabled">Benachrichtigungen aktivieren</string>
-    <string name="settings_notifications_enabled_description">Aktiviert Benachrichtigungen bei neuen Einträgen</string>
-    <string name="settings_notifications_ringtone">Klingelton</string>
+    <string name="settings_notifications_enabled_description">Aktiviert Benachrichtigungen bei neuen Artikeln</string>
+    <string name="settings_notifications_ringtone">Benachrichtigungston</string>
     <string name="settings_notifications_ringtone_none">Keiner</string>
     <string name="settings_notifications_vibrate">Vibration</string>
-    <string name="settings_notifications_vibrate_description">Aktiviert Vibration bei neuen Einträgen</string>
-    <string name="settings_notifications_light">Licht</string>
-    <string name="settings_notifications_light_description">Aktiviert das Benachrichtungslicht bei neuen Einträgen</string>
+    <string name="settings_notifications_vibrate_description">Aktiviert das Vibrieren bei neuen Artikeln</string>
+    <string name="settings_notifications_light">Benachrichtungslicht</string>
+    <string name="settings_notifications_light_description">Aktiviert das Benachrichtungslicht bei neuen Artikeln</string>
     <string name="settings_category_content_presentation">Anzeige der Inhalte</string>
     <string name="settings_light_theme">Helles Thema</string>
     <string name="settings_light_theme_description">Helles Thema nutzen</string>
-    <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
+    <string name="settings_keep_time">Zeit wie lange Artikel aufgehoben werden</string>
     <string name="settings_display_images">Bilder anzeigen</string>
-    <string name="settings_display_images_description">Bilder in den Einträgen anzeigen</string>
+    <string name="settings_display_images_description">Bilder in den Artikeln anzeigen</string>
     <string name="settings_preload_image_mode">Bilder vorab laden</string>
     <string name="settings_font_size">Textgröße</string>
     <string name="settings_display_oldest_first">Anzeigereihenfolge</string>
-    <string name="settings_display_oldest_first_description">Zeige älteste Einträge zuerst</string>
-    <string name="settings_display_entries_fullscreen">Einträge im Vollbild anzeigen</string>
-    <string name="settings_display_entries_fullscreen_description">Einträge automatisch im Vollbild anzeigen</string>
+    <string name="settings_display_oldest_first_description">Älteste Einträge zuerst anzeigen</string>
+    <string name="settings_display_entries_fullscreen">Artikel im Vollbild anzeigen</string>
+    <string name="settings_display_entries_fullscreen_description">Artikel automatisch im Vollbild anzeigen</string>
     <string name="settings_refresh_on_open">Feeds beim Öffnen aktualisieren</string>
-    <string name="settings_refresh_on_open_description">Aktualisiert alle Feeds beim Öffnen der Anwendung</string>
+    <string name="settings_refresh_on_open_description">Aktualisiert alle Feeds beim Öffnen der App</string>
     <string name="settings_refresh_wifi_only">Nur über WLAN aktualisieren</string>
     <string name="settings_refresh_wifi_only_description">Die automatische Aktualisierung wird nur bei aktiver WLAN-Verbindung durchgeführt</string>
+    <string name="settings_display_text_color">Texthelligkeit</string>
+    <string name="settings_max_image_download_count">Höchstzahl der heruntergeladenen Bilder</string>
     <string name="settings_visible_feeds">Sichtbare Feeds</string>
     <string name="settings_widget_background">Hintergrund</string>
     <string name="settings_widget_background_description">Farbe und Transparenz des Widget-Hintergrundes</string>
     <string name="all_feeds">Alle Feeds (auch zukünftige)</string>
-    <string name="settings_category_article_list">Artikel Liste</string>
-
+    <string name="settings_display_text_color_description">im dunklen Thema (0..255)</string>
+    <string name="downloadImage">Herunterladen der Bilder</string>
+    <string name="loadFullText">Laden des gesamten Textes</string>
+    <string name="deleteOldEntries">Alte Artikel löschen</string>
+    <string name="AllImages">Alle Bilder</string>
+    <string name="EntryImages">Artikelbilder</string>
+    <string name="RefreshFeeds">Feeds aktualisieren</string>
+    <string name="deleteImages">Bilder löschen</string>
+    <string name="applyOperations">Operationen anwenden</string>
+    <string name="extractContent">Inhalt extrahieren</string>
+    <string name="improveHtmlContent">HTML-Inhalt verbessern</string>
+    <string name="parseXml">XML analysieren</string>
+    <string name="setupConnection">Verbindung einstellen</string>
+    <string name="settings_content_extract_rules">Regeln zum Extrahieren des Inhaltes</string>
+    <string name="settings_tapZones">Tipp-Zonen</string>
+    <string name="settings_additional">Weiteres</string>
+    <string name="settings_load_comments">Kommentare laden</string>
+    <string name="settings_load_comments_description">im gesamten Artikeltext</string>
+    <string name="settings_tap_zones_description">Antipp-Zonen in der Artikelansicht</string>
+    <string name="settings_tap_zones_dialogtitle">Nur zur Information, Änderungen sind nicht möglich</string>
+    <string name="settings_max_image_download_count_description">Maximale Anzahl der Bilder pro Artikel</string>
+    <string name="loadingLink">Links laden</string>
+    <string name="loadLink">Lesen</string>
+    <string name="loadLinkLater">Später lesen</string>
+    <string name="addFeed">Feed hinzufügen</string>
+    <string name="externalLinks">Externe Links</string>
+    <string name="markAllAsRead">Alle als gelesen markieren</string>
+    <string name="settings_remember_last_entry">Letzten Artikel merken</string>
+    <string name="settings_remeber_last_entry_description">Beim Start den zuletzt gelesenen Artikel öffnen, ansonsten die Liste aller Artikel</string>
+    <string name="pageUp">Seite nach oben</string>
+    <string name="pageDown">Seite nach unten</string>
+    <string name="fullScreenToggle">Vollbild umschalten</string>
+    <string name="auto_refresh_feed">Feed automatisch aktualisieren</string>
+    <string name="settings_refresh_only_selected">Nur ausgewählte</string>
+    <string name="settings_refresh_only_selected_summary">Nur ausgewählte Feeds automatisch aktualisieren</string>
+    <string name="actionBarToggle">Aktionsleiste umschalten</string>
+    <string name="settings_show_tap_zones">Tipp-Zonen anzeigen</string>
+    <string name="settings_show_tap_zone_description">als transparente Quadrate in der Artikelansicht</string>
+    <string name="settings_max_image_download_size_kb">Maximale Bildgröße (kB)</string>
+    <string name="settings_max_image_download_size_kb_summary">Größere Bilder nicht automatisch laden</string>
+    <string name="standard">Standard</string>
+    <string name="fontsize_entrylist">Schriftgröße in der Artikelliste</string>
+    <string name="settings_volume_buttons_action">Funktion der Lautstärketasten</string>
+    <string name="behaviour">Verhalten</string>
+    <string name="question_delete_entry">Diesen Artikel löschen?</string>
+    <string name="share_all_text">Gesamten Text teilen</string>
+    <string name="group">Gruppe</string>
+    <string name="auto_image_load">Bilder automatisch laden</string>
+    <string name="show_progress_info">Detaillierte technische Informationen</string>
+    <string name="show_progress_info_descr">Zeigt detaillierte Informationen der aktuellen Vorgänge</string>
+    <string name="filter_apply_to_url">Auf URL anwenden</string>
+    <string name="show_article_url">Artikel-URL anzeigen</string>
+    <string name="show_article_url_descr">in der Artikelliste</string>
+    <string name="show_article_icon">Vorschaubild anzeigen</string>
+    <string name="show_article_icon_descr">Abschalten, um Platz in der Liste zu sparen</string>
+    <string name="settings_category_article_list">Artikelliste</string>
+    <string name="settings_category_article_text">Artikeltext</string>
+    <string name="vibrate_on_article_list_entry_swype">Beim Wischen vibrieren</string>
+    <string name="vibrate_on_article_list_entry_swype_summary">Beim Wischen eines Eintrages in der Artikelliste</string>
+    <string name="show_mark_all_as_read_button">Alles-gelesen-Taste anzeigen</string>
+    <string name="show_mark_all_as_read_button_summary">Wenn deaktiviert, ist diese Option im Menü zu finden.</string>
+    <string name="entry_marked_unfavourite">Artikel wurde aus den Favoriten entfernt</string>
+    <string name="entry_marked_favourite">Artikel wurde zu den Favoriten hinzugefügt</string>
+    <string name="new_feed_was_added">Neuer Feed wurde hinzugefügt</string>
+    <string name="entry_marked_unread">Artikel wurde als ungelesen markiert</string>
+    <string name="lock_orientation">Querformat</string>
+    <string name="markAsStarred">Als Favorit markieren</string>
+    <string name="markedAsStarred">Artikel wurde als Favorit markiert:</string>
+    <string name="deleteAllEntries">Alle Artikel löschen, welche nicht als Favorit markiert sind</string>
+    <string name="question">Frage</string>
+    <string name="settings_entry_margins">Ränder</string>
+    <string name="settings_entry_margins_description">links|rechts</string>
+    <string name="entry_text_align_justify">Blocksatz</string>
+    <string name="entry_text_align_justify_description">Wenn nicht aktiviert, wird der Text links ausgerichtet</string>
+    <string name="reload_full_text_with_tags">Mit Tags erneut laden</string>
+    <string name="keyword">Schlüsselwort(e)</string>
+    <string name="loadTypeWeb">Web (alle Links laden)</string>
+    <string name="loadTypeRSS">RSS-Feed oder Schlüsselwort(e)</string>
+    <string name="loadType">Art des Ladens:</string>
+    <string name="global_filter">Globaler Filter...</string>
+    <string name="global_filter_descr">Ein Filter, welcher bei allen Feeds angewendet wird. Zum Deaktivieren Filtertext und Regex frei lassen.</string>
+    <string name="global_marks_as_star_filter_apply_to_title_descr">sonst auf Inhalt anwenden</string>
+    <string name="rule_text">Filtertext</string>
+    <string name="settings_min_update_battery_level">Mindest-Batterieladung</string>
+    <string name="show_read_article_count">Anzahl der gelesenen Artikel zeigen</string>
+    <string name="show_read_article_count_descr">in der Feedliste</string>
     <plurals name="number_of_new_entries">
-        <item quantity="one">Ein neuer Eintrag</item>
-        <item quantity="other">%d neue Einträge</item>
+        <item quantity="one">Ein neuer Artikel</item>
+        <item quantity="other">%d neue Artikel</item>
     </plurals>
-
     <string-array name="settings_intervals">
         <item>1 Minute</item>
         <item>5 Minuten</item>
@@ -184,6 +278,17 @@
         <item>6 Stunden</item>
         <item>12 Stunden</item>
         <item>1 Tag</item>
+    </string-array>
+    <string-array name="settings_battery_level">
+        <item>50 %</item>
+        <item>40 %</item>
+        <item>30 %</item>
+        <item>20 %</item>
+        <item>15 %</item>
+        <item>10 %</item>
+        <item>5 %</item>
+        <item>3 %</item>
+        <item>0 %</item>
     </string-array>
     <string-array name="settings_keep_times">
         <item>1 Stunde</item>
@@ -198,12 +303,27 @@
         <item>3 Monate</item>
         <item>Für immer</item>
     </string-array>
-    <string name="standard">Standard</string>
-
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+        <item>+4</item>
+        <item>+5</item>
+        <item>+6</item>
+        <item>+7</item>
+        <item>+8</item>
+    </string-array>
+    <string-array name="settings_volume_buttons_action">
+        <item>Funktion der Lautstärketasten</item>
+        <item>Standard</item>
+        <item>Zum nächsten/vorherigen Artikel springen</item>
+        <item>Seite hoch/runter</item>
+    </string-array>
     <string-array name="settings_preload_image_modes">
         <item>Niemals</item>
         <item>Nur über WLAN</item>
         <item>Immer</item>
     </string-array>
-
 </resources>
