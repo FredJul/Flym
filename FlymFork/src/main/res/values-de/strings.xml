@@ -111,7 +111,7 @@
     <string name="menu_unstar">Kein Favorit</string>
     <string name="menu_share">Teilen</string>
     <string name="menu_full_screen">Vollbild</string>
-    <string name="menu_font_bold">Vollbild</string>
+    <string name="menu_font_bold">Fettschrift</string>
     <string name="menu_copy_clipboard">Link kopieren</string>
     <string name="menu_cancel_refresh">Aktualisierung abbrechen</string>
     <string name="menu_delete_all">Alle löschen</string>
@@ -134,7 +134,7 @@
     <string name="file">Datei</string>
     <string name="download_and_save">Herunterladen und speichern</string>
     <string name="open_link">Link öffnen</string>
-    <string name="tip_sentence">Tipp: Nach links wischen um Artikel als gelesen zu markieren</string>
+    <string name="tip_sentence">Tipp: Nach rechts wischen um Artikel als gelesen und nach links als Favorit zu markieren</string>
     <string name="undo">Rückgängig</string>
     <string name="marked_as_read">Als gelesen markiert</string>
     <!-- WIDGET -->
@@ -206,7 +206,7 @@
     <string name="externalLinks">Externe Links</string>
     <string name="markAllAsRead">Alle als gelesen markieren</string>
     <string name="settings_remember_last_entry">Letzten Artikel merken</string>
-    <string name="settings_remeber_last_entry_description">Beim Start den zuletzt gelesenen Artikel öffnen, ansonsten die Liste aller Artikel</string>
+    <string name="settings_remeber_last_entry_description">Beim Start den zuletzt gelesenen Artikel öffnen, ansonsten die Liste ungelesener Artikel</string>
     <string name="pageUp">Seite nach oben</string>
     <string name="pageDown">Seite nach unten</string>
     <string name="fullScreenToggle">Vollbild umschalten</string>
@@ -255,7 +255,7 @@
     <string name="reload_full_text_with_tags">Mit Tags erneut laden</string>
     <string name="keyword">Schlüsselwort(e)</string>
     <string name="loadTypeWeb">Web (alle Links laden)</string>
-    <string name="loadTypeRSS">RSS-Feed oder Schlüsselwort(e)</string>
+    <string name="loadTypeRSS">RSS (Feed, Link oder Schlüsselworte)</string>
     <string name="loadType">Art des Ladens:</string>
     <string name="global_filter">Globaler Filter...</string>
     <string name="global_filter_descr">Ein Filter, welcher bei allen Feeds angewendet wird. Zum Deaktivieren Filtertext und Regex frei lassen.</string>
@@ -264,9 +264,17 @@
     <string name="settings_min_update_battery_level">Mindest-Batterieladung</string>
     <string name="show_read_article_count">Anzahl der gelesenen Artikel zeigen</string>
     <string name="show_read_article_count_descr">in der Feedliste</string>
+    <string name="customKeepTime">Benutzerdefinierte Artikel-Aufbewahrzeit</string>
+    <string name="menu_toggle_theme">Thema ändern</string>
+    <string name="auto_unstart_at_bottom">Automatisch aus den Favoriten entfernen, wenn gelesen</string>
+    <string name="auto_unstart_at_bottom_descr">Entfernt den Artikel aus den Favoriten, wenn das Artikelende erreicht wurde</string>
+    <string name="show_full_text_indicator">Symbol für vollständigen Text</string>
+    <string name="show_full_text_indicator_descr">Zeigt ein kleines Diskettensymbol an, wenn der Artikeltext vollständig geladen wurde</string>
+    <string name="show_read_checkbox">Gelesen-Markierung</string>
+    <string name="show_read_checkbox_descr">Zeigt ein kleines Kontrollkästchen an, wenn der Artikel gelesen wurde</string>
     <plurals name="number_of_new_entries">
-        <item quantity="one">Ein neuer Artikel</item>
-        <item quantity="other">%d neue Artikel</item>
+        <item quantity="one">Ein neuer Artikel.</item>
+        <item quantity="other">%d neue Artikel.</item>
     </plurals>
     <string-array name="settings_intervals">
         <item>1 Minute</item>
@@ -306,6 +314,7 @@
     <string-array name="settings_font_sizes">
         <item>-2</item>
         <item>-1</item>
+        <item>@string/standard</item>
         <item>+1</item>
         <item>+2</item>
         <item>+3</item>
@@ -316,7 +325,6 @@
         <item>+8</item>
     </string-array>
     <string-array name="settings_volume_buttons_action">
-        <item>Funktion der Lautstärketasten</item>
         <item>Standard</item>
         <item>Zum nächsten/vorherigen Artikel springen</item>
         <item>Seite hoch/runter</item>
