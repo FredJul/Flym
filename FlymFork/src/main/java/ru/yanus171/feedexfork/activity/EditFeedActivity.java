@@ -88,13 +88,14 @@ import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.adapter.FiltersCursorAdapter;
 import ru.yanus171.feedexfork.fragment.EditFeedsListFragment;
 import ru.yanus171.feedexfork.loader.BaseLoader;
-import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
 import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
@@ -111,6 +112,8 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     private static final String STATE_CURRENT_TAB = "STATE_CURRENT_TAB";
     private static final String[] FEED_PROJECTION =
         new String[]{FeedColumns.NAME, FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.IS_GROUP, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH, FeedColumns.GROUP_ID, FeedColumns.IS_IMAGE_AUTO_LOAD, FeedColumns.OPTIONS  };
+    private String[] mKeepTimeValues;
+
     private final ActionMode.Callback mFilterActionModeCallback = new ActionMode.Callback() {
 
         // Called when the action mode is created; startActionMode() was called
@@ -175,6 +178,8 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             mFiltersListView.invalidateViews();
         }
     };
+    private Spinner mKeepTimeSpinner = null;
+    private CheckBox mKeepTimeCB = null;
 
     public void EditFilter() {
         Cursor c = mFiltersCursorAdapter.getCursor();
@@ -270,6 +275,23 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         mIsAutoImageLoadCb =  (CheckBox) findViewById(R.id.auto_image_load);
         mFiltersListView = (ListView) findViewById(android.R.id.list);
         mGroupSpinner = (Spinner) findViewById(R.id.spin_group);
+
+        mKeepTimeCB = (CheckBox) findViewById(R.id.cbCustomKeepTime);
+        mKeepTimeCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                UpdateSpinnerKeepTime();
+            }
+        });
+        mKeepTimeValues = getResources().getStringArray(R.array.settings_keep_time_values);
+        mKeepTimeSpinner = (Spinner) findViewById(R.id.spin_keeptime);
+        mKeepTimeSpinner.setSelection( 4 );
+        for ( int i = 0; i < mKeepTimeValues.length; i ++ )
+            if ( Double.parseDouble( mKeepTimeValues[i] ) == FetcherService.GetDefaultKeepTime() ) {
+                mKeepTimeSpinner.setSelection( i );
+                break;
+            }
+
         mHasGroupCb = (CheckBox) findViewById(R.id.has_group);
         mHasGroupCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -279,6 +301,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         });
         mLoadTypeRG = (RadioGroup) findViewById(R.id.rgLoadType);
         View tabWidget = findViewById(android.R.id.tabs);
+
 
         mIsAutoRefreshCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -295,26 +318,6 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                 mRetrieveFulltextCb.setEnabled( i == R.id.rbRss );
             }
         });
-
-        /*mUrlEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String text = charSequence.toString();
-                boolean isRss = FetcherService.isRss( text );
-                boolean isUrl = text.startsWith( "http://" ) || text.startsWith( "https://" );
-                mRetrieveFulltextCb.setEnabled( !isUrl || isRss );
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });*/
 
         mTabHost.setup();
         mTabHost.addTab(mTabHost.newTabSpec("feedTab").setIndicator(getString(R.string.tab_feed_title)).setContent(R.id.feed_tab));
@@ -360,6 +363,8 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             mIsAutoImageLoadCb.setChecked( true );
 
             UpdateSpinnerGroup();
+            mKeepTimeCB.setChecked( false );
+            UpdateSpinnerKeepTime();
 
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
@@ -408,6 +413,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     mIsAutoRefreshCb.setChecked(cursor.getInt(5) == 1);
                     mIsAutoImageLoadCb.setChecked(cursor.isNull(7) || cursor.getInt(7) == 1);
                     mGroupSpinner.setSelection( -1);
+                    //mKeepTimeSpinner.setSelection( -1);
                     mHasGroupCb.setChecked(!cursor.isNull(6));
                     UpdateSpinnerGroup();
                     if ( !cursor.isNull(6) )
@@ -420,9 +426,20 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     try {
                         JSONObject jsonOptions  = new JSONObject( cursor.getString( cursor.getColumnIndex(FeedColumns.OPTIONS) ) );
                         mLoadTypeRG.check( jsonOptions.getBoolean( "isRss" ) ? R.id.rbRss : R.id.rbWeb );
+                        mKeepTimeCB.setChecked( jsonOptions.has( FetcherService.CUSTOM_KEEP_TIME ) );
+                        UpdateSpinnerKeepTime();
+                        if ( mKeepTimeCB.isChecked() ) {
+                            for ( int i = 0; i < mKeepTimeValues.length; i ++ )
+                                if ( Double.parseDouble( mKeepTimeValues[i] ) == jsonOptions.getDouble( FetcherService.CUSTOM_KEEP_TIME ) ) {
+                                    mKeepTimeSpinner.setSelection( i );
+                                    break;
+                                }
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    //mKeepTimeSpinner.setVisibility( mKeepTimeCB.isChecked() ? View.VISIBLE : View.GONE );
+
                     if (cursor.getInt(3) == 1) { // if it's a group, we cannot edit it
                         finish();
                     }
@@ -441,7 +458,9 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
     private void UpdateSpinnerGroup() {
         mGroupSpinner.setVisibility( mHasGroupCb.isChecked() ? View.VISIBLE : View.GONE );
     }
-
+    private void UpdateSpinnerKeepTime() {
+        mKeepTimeSpinner.setVisibility( mKeepTimeCB.isChecked() ? View.VISIBLE : View.GONE );
+    }
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(STATE_CURRENT_TAB, mTabHost.getCurrentTab());
@@ -508,6 +527,10 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         JSONObject jsonOptions = new JSONObject();
         try {
             jsonOptions.put( "isRss", mLoadTypeRG.getCheckedRadioButtonId() == R.id.rbRss );
+            if ( mKeepTimeCB.isChecked()  )
+                jsonOptions.put( FetcherService.CUSTOM_KEEP_TIME, mKeepTimeValues[mKeepTimeSpinner.getSelectedItemPosition()] );
+            else
+                jsonOptions.remove( FetcherService.CUSTOM_KEEP_TIME );
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -551,92 +574,11 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                     UiUtils.showMessage(EditFeedActivity.this, R.string.error_feed_error);
                 }
 
-                if (!urlOrSearch.contains(".") || !urlOrSearch.contains("/") || urlOrSearch.contains(" ")) {
-                    final ProgressDialog pd = new ProgressDialog(EditFeedActivity.this);
-                    pd.setMessage(getString(R.string.loading));
-                    pd.setCancelable(true);
-                    pd.setIndeterminate(true);
-                    pd.show();
-
-                    getLoaderManager().restartLoader(1, null, new LoaderManager.LoaderCallbacks<ArrayList<HashMap<String, String>>>() {
-
-                        @Override
-                        public Loader<ArrayList<HashMap<String, String>>> onCreateLoader(int id, Bundle args) {
-                            String encodedSearchText = urlOrSearch;
-                            try {
-                                encodedSearchText = URLEncoder.encode(urlOrSearch, Constants.UTF8);
-                            } catch (UnsupportedEncodingException ignored) {
-                            }
-
-                            return new GetFeedSearchResultsLoader(EditFeedActivity.this, encodedSearchText);
-                        }
-
-                        @Override
-                        public void onLoadFinished(Loader<ArrayList<HashMap<String, String>>> loader, final ArrayList<HashMap<String, String>> data) {
-                            pd.cancel();
-
-                            if (data == null) {
-                                UiUtils.showMessage(EditFeedActivity.this, R.string.error);
-                            } else if (data.isEmpty()) {
-                                UiUtils.showMessage(EditFeedActivity.this, R.string.no_result);
-                            } else {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(EditFeedActivity.this);
-                                builder.setTitle(R.string.feed_search);
-
-                                // create the grid item mapping
-                                String[] from = new String[]{FEED_SEARCH_TITLE, FEED_SEARCH_DESC};
-                                int[] to = new int[]{android.R.id.text1, android.R.id.text2};
-
-                                // fill in the grid_item layout
-                                SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.item_search_result, from, to);
-                                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Uri newFeedUri =
-                                                FeedDataContentProvider.addFeed(EditFeedActivity.this,
-                                                        data.get(which).get(FEED_SEARCH_URL),
-                                                        name.isEmpty() ? data.get(which).get(FEED_SEARCH_TITLE) : name,
-                                                        mHasGroupCb.isChecked() ? mGroupSpinner.getSelectedItemId() : null,
-                                                        mRetrieveFulltextCb.isChecked(),
-                                                        mShowTextInEntryListCb.isChecked(),
-                                                        mIsAutoImageLoadCb.isChecked(),
-                                                        getOptionsJsonString());
-                                        UiUtils.toast( EditFeedActivity.this, R.string.new_feed_was_added);
-
-                                        EditFeedActivity.this.startService(new Intent(EditFeedActivity.this, FetcherService.class)
-                                                .setAction(FetcherService.ACTION_REFRESH_FEEDS)
-                                                .putExtra(Constants.FEED_ID, newFeedUri.getLastPathSegment()) );
-                                        HomeActivity.mNewFeedUri = newFeedUri;
-                                        setResult(RESULT_OK);
-                                        finish();
-                                    }
-                                });
-                                builder.show();
-                            }
-                        }
-
-                        @Override
-                        public void onLoaderReset(Loader<ArrayList<HashMap<String, String>>> loader) {
-                        }
-                    });
+                if ( !urlOrSearch.toLowerCase().contains("www") &&
+                        ( !urlOrSearch.contains(".") || !urlOrSearch.contains("/") || urlOrSearch.contains(" ")) ) {
+                    AddFeedFromUserSelection(name, new GetFeedSearchResultsLoader(EditFeedActivity.this, urlOrSearch));
                 } else {
-                    Uri newFeedUri =
-                        FeedDataContentProvider.addFeed(EditFeedActivity.this,
-                                                        urlOrSearch,
-                                                        name,
-                                                        mHasGroupCb.isChecked() ? mGroupSpinner.getSelectedItemId() : null,
-                                                        mRetrieveFulltextCb.isChecked(),
-                                                        mShowTextInEntryListCb.isChecked(),
-                                                        mIsAutoImageLoadCb.isChecked(),
-                                                        getOptionsJsonString());
-
-                    EditFeedActivity.this.startService(new Intent(EditFeedActivity.this, FetcherService.class)
-                            .setAction(FetcherService.ACTION_REFRESH_FEEDS)
-                            .putExtra(Constants.FEED_ID, newFeedUri.getLastPathSegment()) );
-                    HomeActivity.mNewFeedUri = newFeedUri;
-
-                    setResult(RESULT_OK);
-                    finish();
+                    AddFeedFromUserSelection(name, new GetSiteAlternateListLoader(EditFeedActivity.this, urlOrSearch));
                 }
                 return true;
             case R.id.menu_add_filter: {
@@ -679,6 +621,79 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
         }
     }
 
+    private void AddFeedFromUserSelection(final String name, final Loader<ArrayList<HashMap<String, String>>> loader) {
+        final ProgressDialog pd = new ProgressDialog(EditFeedActivity.this);
+        pd.setMessage(getString(R.string.loading));
+        pd.setCancelable(true);
+        pd.setIndeterminate(true);
+        pd.show();
+
+        getLoaderManager().restartLoader(1, null, new LoaderManager.LoaderCallbacks<ArrayList<HashMap<String, String>>>() {
+
+            @Override
+            public Loader<ArrayList<HashMap<String, String>>> onCreateLoader(int id, Bundle args) {
+                return loader;
+            }
+
+            @Override
+            public void onLoadFinished(final Loader<ArrayList<HashMap<String, String>>> loader,
+                                       final ArrayList<HashMap<String, String>> data) {
+                pd.cancel();
+
+                if (data == null) {
+                    UiUtils.showMessage(EditFeedActivity.this, R.string.error);
+                } else if (data.isEmpty()) {
+                    UiUtils.showMessage(EditFeedActivity.this, R.string.no_result);
+                } else if ( data.size() == 1 ) {
+                    AddFeed(data.get(0));
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EditFeedActivity.this);
+                    builder.setTitle(R.string.feed_search);
+
+                    // create the grid item mapping
+                    String[] from = new String[]{FEED_SEARCH_TITLE, FEED_SEARCH_DESC};
+                    int[] to = new int[]{android.R.id.text1, android.R.id.text2};
+
+                    // fill in the grid_item layout
+                    SimpleAdapter adapter = new SimpleAdapter(EditFeedActivity.this, data, R.layout.item_search_result, from, to);
+                    builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            AddFeed(data.get(which));
+                        }
+
+
+                    });
+                    builder.show();
+                }
+            }
+
+            @Override
+            public void onLoaderReset(Loader<ArrayList<HashMap<String, String>>> loader) {
+            }
+
+            private void AddFeed(HashMap<String, String> dataItem) {
+                Uri newFeedUri =
+                    FeedDataContentProvider.addFeed(EditFeedActivity.this,
+                        dataItem.get(FEED_SEARCH_URL),
+                        name.isEmpty() ? dataItem.get(FEED_SEARCH_TITLE) : name,
+                        mHasGroupCb.isChecked() ? mGroupSpinner.getSelectedItemId() : null,
+                        mRetrieveFulltextCb.isChecked(),
+                        mShowTextInEntryListCb.isChecked(),
+                        mIsAutoImageLoadCb.isChecked(),
+                        getOptionsJsonString());
+                UiUtils.toast( EditFeedActivity.this, R.string.new_feed_was_added);
+
+                EditFeedActivity.this.startService(new Intent(EditFeedActivity.this, FetcherService.class)
+                        .setAction(FetcherService.ACTION_REFRESH_FEEDS)
+                        .putExtra(Constants.FEED_ID, newFeedUri.getLastPathSegment()) );
+                HomeActivity.mNewFeedUri = newFeedUri;
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader cursorLoader = new CursorLoader(this, FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(getIntent().getData().getLastPathSegment()),
@@ -702,11 +717,15 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
  * A custom Loader that loads feed search results from the google WS.
  */
 class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, String>>> {
-    private final String mSearchText;
+    private String mSearchText;
 
     public GetFeedSearchResultsLoader(Context context, String searchText) {
         super(context);
         mSearchText = searchText;
+        try {
+            mSearchText = URLEncoder.encode(searchText, Constants.UTF8);
+        } catch (UnsupportedEncodingException ignored) {
+        }
     }
 
     /**
@@ -716,7 +735,7 @@ class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, St
     @Override
     public ArrayList<HashMap<String, String>> loadInBackground() {
         try {
-        //    HttpURLConnection conn = NetworkUtils.setupConnection("https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=" + mSearchText);
+            //    HttpURLConnection conn = NetworkUtils.setupConnection("https://ajax.googleapis.com/ajax/services/feed/find?v=1.0&q=" + mSearchText);
             HttpURLConnection conn = NetworkUtils.setupConnection("http://cloud.feedly.com/v3/search/feeds/?count=20&query=" + mSearchText);
             try {
                 String jsonStr = new String(NetworkUtils.getBytes(conn.getInputStream()));
@@ -724,7 +743,6 @@ class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, St
 
                 // Parse results
                 final ArrayList<HashMap<String, String>> results = new ArrayList<>();
-                //JSONObject response = new JSONObject(jsonStr).getJSONObject("responseData");
                 JSONArray entries = new JSONObject(jsonStr).getJSONArray("results");
                 for (int i = 0; i < entries.length(); i++) {
                     try {
@@ -752,4 +770,79 @@ class GetFeedSearchResultsLoader extends BaseLoader<ArrayList<HashMap<String, St
             return null;
         }
     }
+
+
+}
+
+class GetSiteAlternateListLoader extends BaseLoader<ArrayList<HashMap<String, String>>> {
+    private final String mUrl;
+
+    public GetSiteAlternateListLoader(Context context, String url) {
+        super(context);
+        mUrl = url;
+    }
+
+    /**
+     * This is where the bulk of our work is done. This function is called in a background thread and should generate a new set of data to be
+     * published by the loader.
+     */
+    @Override
+    public ArrayList<HashMap<String, String>> loadInBackground() {
+        final ArrayList<HashMap<String, String>> results = new ArrayList<>();
+
+        try {
+            HttpURLConnection conn = NetworkUtils.setupConnection(mUrl);
+            try {
+                String content = new String(NetworkUtils.getBytes(conn.getInputStream()));
+
+                final Pattern TITLE_PATTERN = Pattern.compile("title=\"(.+?)\"", Pattern.CASE_INSENSITIVE);
+                final Pattern HREF_PATTERN = Pattern.compile("href=\"(.+?)\"", Pattern.CASE_INSENSITIVE);
+
+                final Matcher matcher = FetcherService.FEED_LINK_PATTERN.matcher(content);
+                //final String HREF = "href=\"";
+
+                while (matcher.find()) { // not "while" as only one link is needed
+                    final String line = matcher.group();
+                    Matcher urlMatcher = HREF_PATTERN.matcher( line );
+                    if ( urlMatcher.find() ) {
+                        String url = urlMatcher.group( 1 );
+                        if ( !url.toLowerCase().contains( "rss" ) &&
+                             !url.toLowerCase().contains( "feed" ) &&
+                             !url.toLowerCase().contains( "atom" ) )
+                            continue;
+                        if (url.startsWith(Constants.SLASH)) {
+                            int index = mUrl.indexOf('/', 8);
+                            if (index > -1) {
+                                url = mUrl.substring(0, index) + url;
+                            } else {
+                                url = mUrl + url;
+                            }
+                        } else if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME)) {
+                            url = mUrl + '/' + url;
+                        }
+                        final Matcher titleMatcher = TITLE_PATTERN.matcher( line );
+                        final String title = titleMatcher.find() ?  titleMatcher.group( 1 ) : url;
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put(EditFeedActivity.FEED_SEARCH_TITLE, title);
+                        map.put(EditFeedActivity.FEED_SEARCH_DESC, url);
+                        map.put(EditFeedActivity.FEED_SEARCH_URL, url);
+                        results.add(map);
+                    }
+                }
+                if ( results.isEmpty() ) {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put(EditFeedActivity.FEED_SEARCH_TITLE, "");
+                    map.put(EditFeedActivity.FEED_SEARCH_URL, mUrl);
+                    results.add(map);
+                }
+                return results;
+            } finally {
+                conn.disconnect();
+            }
+        } catch (Exception e) {
+            Dog.e("Error", e);
+            return null;
+        }
+    }
+
 }

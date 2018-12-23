@@ -176,7 +176,30 @@
                             android:layout_below="@+id/auto_refresh"
                             android:layout_alignParentRight="true"
                             android:text="@string/auto_image_load" />
-                    </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/layout_keeptime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/feed_title"
+                            android:layout_alignParentRight="true"
+                            android:orientation="horizontal">
+
+                            <CheckBox
+                                android:id="@+id/cbCustomKeepTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/customKeepTime" />
+
+                            <Spinner
+                                android:id="@+id/spin_keeptime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:choiceMode="singleChoice"
+                                android:entries="@array/settings_keep_times" />
+                        </LinearLayout>
+
+
+                        </LinearLayout>
                     </ScrollView>
 
                 </LinearLayout>

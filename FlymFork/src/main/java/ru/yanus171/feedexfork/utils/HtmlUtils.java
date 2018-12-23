@@ -50,6 +50,8 @@ public class HtmlUtils {
     private static final Pattern A_IMG_PATTERN = Pattern.compile("<a href([^>]+)>([^<]?)<img(.)*?</a>", Pattern.CASE_INSENSITIVE);
     private static final Pattern ADS_PATTERN = Pattern.compile("<div class=('|\")mf-viral('|\")><table border=('|\")0('|\")>.*", Pattern.CASE_INSENSITIVE);
     private static final Pattern LAZY_LOADING_PATTERN = Pattern.compile("\\s+src=[^>]+\\s+original[-]*src=(\"|')", Pattern.CASE_INSENSITIVE);
+    private static final Pattern LAZY_LOADING_PATTERN2 = Pattern.compile("src=\\\"[^\\\"]+?lazy[^\\\"]+\"", Pattern.CASE_INSENSITIVE);
+    private static final Pattern DATA_SRC_PATTERN = Pattern.compile("data-src=\\\"([^\\\"]+)\"", Pattern.CASE_INSENSITIVE);
     private static final Pattern EMPTY_IMAGE_PATTERN = Pattern.compile("<img\\s+(height=['\"]1['\"]\\s+width=['\"]1['\"]|width=['\"]1['\"]\\s+height=['\"]1['\"])\\s+[^>]*src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE);
     private static final Pattern NON_HTTP_IMAGE_PATTERN = Pattern.compile("\\s+(href|src)=(\"|')//", Pattern.CASE_INSENSITIVE);
     private static final Pattern BAD_IMAGE_PATTERN = Pattern.compile("<img\\s+[^>]*src=\\s*['\"]([^'\"]+)\\.img['\"][^>]*>", Pattern.CASE_INSENSITIVE);
@@ -73,6 +75,8 @@ public class HtmlUtils {
             content = ADS_PATTERN.matcher(content).replaceAll("");
             // remove lazy loading images stuff
             content = LAZY_LOADING_PATTERN.matcher(content).replaceAll(" src=$1");
+            content = LAZY_LOADING_PATTERN2.matcher(content).replaceAll("");
+            content = DATA_SRC_PATTERN.matcher(content).replaceAll(" src=$1");
 
             // clean by JSoup
             content = Jsoup.clean(content, baseUri, JSOUP_WHITELIST);
@@ -88,8 +92,10 @@ public class HtmlUtils {
             content = START_BR_PATTERN.matcher(content).replaceAll("");
             content = END_BR_PATTERN.matcher(content).replaceAll("");
             content = MULTIPLE_BR_PATTERN.matcher(content).replaceAll("<br><br>");
-            content = REF_REPLY_PATTERN.matcher(content).replaceAll("");
-            content = IMG_USER_PATTERN.matcher(content).replaceAll("");
+            if ( !baseUri.contains( "user" ) ) {
+                content = REF_REPLY_PATTERN.matcher(content).replaceAll("");
+                content = IMG_USER_PATTERN.matcher(content).replaceAll("");
+            }
 
             // xml
             content = content.replace( "&lt;", "<" );
@@ -151,7 +157,7 @@ public class HtmlUtils {
 
                     } else if (needDownloadPictures) {
                         String imgTagText = matcher.group(0);
-                        if ( ( index < FetcherService.mMaxImageDownloadCount ) || ( FetcherService.mMaxImageDownloadCount == 0 ) ) {
+                        if ( ( index <= FetcherService.mMaxImageDownloadCount ) || ( FetcherService.mMaxImageDownloadCount == 0 ) ) {
                             imagesToDl.add(srcText);
                             content = content.replace(imgTagText, //getDownloadImageHtml(srcText) +
                                                                   imgTagText.replace(srcText, Constants.FILE_SCHEME + imgPath)

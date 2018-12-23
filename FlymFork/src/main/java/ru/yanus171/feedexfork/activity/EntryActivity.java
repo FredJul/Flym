@@ -185,8 +185,6 @@ public class EntryActivity extends BaseActivity {
     }
 
     public void setFullScreen(boolean statusBarHidden, boolean actionBarHidden) {
-        //mIsStatusBarHidden = statusBarHidden;
-        //mIsActionBarHidden = actionBarHidden;
         PrefUtils.putBoolean(STATE_IS_STATUSBAR_HIDDEN, statusBarHidden);
         PrefUtils.putBoolean(STATE_IS_ACTIONBAR_HIDDEN, actionBarHidden);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -212,6 +210,7 @@ public class EntryActivity extends BaseActivity {
             mEntryFragment.UpdateProgress();
             mEntryFragment.UpdateClock();
         }
+        invalidateOptionsMenu();
     }
 
     public void setFullScreenWithNavBar() {

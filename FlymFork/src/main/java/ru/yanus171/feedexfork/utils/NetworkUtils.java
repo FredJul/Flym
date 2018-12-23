@@ -165,6 +165,7 @@ public class NetworkUtils {
 
     public static synchronized void deleteEntriesImagesCache(Uri entriesUri, String selection, String[] selectionArgs) {
         if (FileUtils.GetImagesFolder().exists()) {
+            Context context = MainApplication.getContext();
             PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
 
             Cursor cursor = MainApplication.getContext().getContentResolver().query(entriesUri, FeedData.EntryColumns.PROJECTION_ID, selection, selectionArgs, null);
@@ -174,7 +175,10 @@ public class NetworkUtils {
 
                 File[] files = FileUtils.GetImagesFolder().listFiles(filenameFilter);
                 if (files != null) {
+                    int i = 0;
                     for (File file : files) {
+                        i++;
+                        FetcherService.Status().ChangeProgress(context.getString(R.string.deleteImages) + String.format( " %d/%d", i, files.length ) );
                         file.delete();
                     }
                 }
@@ -203,9 +207,9 @@ public class NetworkUtils {
 
     public static String getBaseUrl(String link) {
         String baseUrl = link;
-        int index = link.indexOf('/', 8); // this also covers https://
+        int index = link.lastIndexOf('/'); // this also covers https://
         if (index > -1) {
-            baseUrl = link.substring(0, index);
+            baseUrl = link.substring(0, index + 1);
         }
 
         return baseUrl;
@@ -298,7 +302,7 @@ public class NetworkUtils {
     }
 
     private static class PictureFilenameFilter implements FilenameFilter {
-        private static final String REGEX = "__[^\\.]*\\.[A-Za-z]*";
+        private static final String REGEX = "__.*";
 
         private Pattern mPattern;
 

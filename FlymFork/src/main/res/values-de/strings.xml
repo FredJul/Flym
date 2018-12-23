@@ -35,7 +35,7 @@
     <string name="menu_settings">Einstellungen</string>
     <string name="menu_refresh">Aktualisieren</string>
     <string name="menu_all_read">Alle als gelesen markieren</string>
-    <string name="flym_feeds">Feeds</string>
+    <string name="flym_feeds">Handy News Reader Feeds</string>
     <string name="error">Fehler</string>
     <string name="network_error">Kein Netzwerk eingerichtet</string>
     <string name="loading">Lade…</string>
@@ -291,6 +291,8 @@
         <item>0 %</item>
     </string-array>
     <string-array name="settings_keep_times">
+        <item>1 Stunde</item>
+        <item>12 Stunden</item>
         <item>1 Tag</item>
         <item>2 Tage</item>
         <item>4 Tage</item>

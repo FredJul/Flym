@@ -22,14 +22,14 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
+    <string name="welcome_title">Welcome to Handy News. Would you like to add one feed?</string>
     <string name="never">mai</string>
     <string name="update">Actualitza</string>
     <string name="colon">:u00A0</string>
     <string name="menu_settings">Paràmetres</string>
     <string name="menu_refresh">Refresca</string>
     <string name="menu_all_read">Marca\'ls tots com a llegits</string>
-    <string name="flym_feeds">Canals de Flym</string>
+    <string name="flym_feeds">Canals de Handy News Reader</string>
     <string name="error">Error</string>
     <string name="network_error">No hi ha connectivitat</string>
     <string name="loading">S\'està carregant.</string>
@@ -114,7 +114,7 @@
     <string name="menu_full_screen">Pantalla completa</string>
     <string name="menu_copy_clipboard">Copia l\'enllaç</string>
     <string name="menu_mark_as_unread">Marca com a no llegit</string>
-    <string name="share_favorites_title">Flym: entrades destacades</string>
+    <string name="share_favorites_title">Handy News Reader: entrades destacades</string>
     <string name="copied_clipboard">S\'ha copiat l\'enllaç</string>
     <string name="get_full_text">Descarrega el text complet</string>
     <string name="original_text">Mostra el text original</string>
@@ -196,6 +196,8 @@
         <item>1 dia</item>
     </string-array>
     <string-array name="settings_keep_times">
+        <item>1 hour</item>
+        <item>12 hours</item>
         <item>1 dia</item>
         <item>2 dies</item>
         <item>4 dies</item>

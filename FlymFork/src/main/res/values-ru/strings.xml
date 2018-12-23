@@ -22,6 +22,7 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="app_name">Удобное чтение новостей</string>
     <string name="about_flym">О приложении / Помощь / Связь с разработчиком </string>
     <string name="welcome_title">Добавить канал?</string>
     <string name="never">никогда</string>
@@ -113,7 +114,7 @@
     <string name="favorites">Избранное</string>
     <string name="context_menu_share_starred">Поделиться избранными новостями</string>
     <string name="downloadOneImage">Загрузить изображение</string>
-    <string name="menu_star">Поместить в избранное</string>
+    <string name="menu_star">В избранное</string>
     <string name="menu_unstar">Убрать из избранного</string>
     <string name="menu_share">Поделиться</string>
     <string name="menu_full_screen">Полный экран</string>
@@ -239,6 +240,8 @@
         <item>1 день</item>
     </string-array>
     <string-array name="settings_keep_times">
+        <item>1 час</item>
+        <item>12 часов</item>
         <item>1 день</item>
         <item>2 дня</item>
         <item>4 дня</item>
@@ -272,7 +275,7 @@
     Ссылка на <a href=\"http://4pda.ru/forum/index.php?showtopic=510993&st=120#entry63119542\">4pda</a>  <br/>
 
     <br/>
-    <a href=\"mailto:workyalex@mail.ru?subject=Flym Fork RSS Reader question\">Написать разработчику</a><br/>
+    <a href=\"mailto:workyalex@mail.ru?subject=Handy News Reader question\">Написать разработчику</a><br/>
 
     <br/>
     <b>Основные функции:</b> <br/>
@@ -306,7 +309,7 @@
     <br/>
     <b>Помочь проекту:</b><br/>
     - <a href=\"https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork\">оценить</a> приложение<br/>
-    - <a href=\"mailto:workyalex@mail.ru?subject=Flym Fork RSS Reader idea\">предложить </a> супер идею
+    - <a href=\"mailto:workyalex@mail.ru?subject=Handy News Reader idea\">предложить </a> супер идею
 
 
     <br/>
@@ -321,7 +324,7 @@
     • Mikko Huhtala<br/>
     • Paul Schaub<br/>
     • RyDroid<br/>
-    • Sergii Pylypenko<br/>
+    • Sergii Pylypenko<br/>+
     • Shapochkin Mihail<br/>
     • Suyash Bhatt<br/>
     • Zhaofeng Li<br/>
@@ -343,7 +346,7 @@
 
     ]]></string>
     <string name="settings_remember_last_entry">Запоминать статью</string>
-    <string name="settings_remeber_last_entry_description">Открывать последнюю просмотренную статью при запуске, иначе список всех статей</string>
+    <string name="settings_remeber_last_entry_description">Открывать последнюю просмотренную статью при запуске, иначе список непрочитанных статей</string>
     <string name="pageUp">Страница вверх</string>
     <string name="pageDown">Страница вниз</string>
     <string name="fullScreenToggle">Пркл. полный экран</string>
@@ -392,8 +395,8 @@
     <string name="reload_full_text_with_tags">Перезагрузить с разметкой</string>
     <string name="filter_hint">Все фильтры объединяются по ИЛИ. Загружать перевешивает Не загружать</string>
     <string name="keyword">Ключевое слово</string>
-    <string name="loadTypeWeb">Web (загружать все ссылки)</string>
-    <string name="loadTypeRSS">Лента RSS или ключевое слово</string>
+    <string name="loadTypeRSS">RSS (адрес ленты или сайта или ключевое слово)</string>
+    <string name="loadTypeWeb">Web (загружать все ссылки со страницы)</string>
     <string name="loadType">Тип загрузки:</string>
     <string name="global_filter">Глобальный фильтр ...</string>
     <string name="global_filter_descr">Фильтр, применяемый к каждой ленте. Для отключения оставьте текст фильтра (и регулярного выражения) пустым</string>
@@ -404,5 +407,13 @@
     <string name="restart_app_apply_changes">Приложение будет перезапущено для применения настроек</string>
     <string name="show_read_article_count">Число прочитанных статей лент</string>
     <string name="show_read_article_count_descr">в списке лент</string>
+    <string name="customKeepTime">Особое время хранения статей</string>
+    <string name="menu_toggle_theme">Сменить тему</string>
+    <string name="auto_unstart_at_bottom">Убирать звезду по прочтении</string>
+    <string name="auto_unstart_at_bottom_descr">Автоматически убирать статью из избранного при достижении ее нижнего края</string>
+    <string name="show_full_text_indicator">Индикация полного текста</string>
+    <string name="show_full_text_indicator_descr">Показывать иконку маленькой дискеты, если для статьи загружен полный текст</string>
+    <string name="show_read_checkbox">Галка прочитанного</string>
+    <string name="show_read_checkbox_descr">Показывать галку прочитанного</string>
 
 </resources>

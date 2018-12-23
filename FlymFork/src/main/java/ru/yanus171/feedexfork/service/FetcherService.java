@@ -139,6 +139,7 @@ public class FetcherService extends IntentService {
 
     private static final String HTML_BODY = "<body";
     private static final String ENCODING = "encoding=\"";
+    public static final String CUSTOM_KEEP_TIME = "customKeepTime";
 
     public static Boolean mCancelRefresh = false;
     public static ArrayList<Long> mActiveEntryIDList = new ArrayList<Long>();
@@ -149,7 +150,7 @@ public class FetcherService extends IntentService {
     public static final ArrayList<MarkItem> mMarkAsStarredFoundList = new ArrayList<MarkItem>();
 
     /* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
-    private static final Pattern FEED_LINK_PATTERN = Pattern.compile(
+    public static final Pattern FEED_LINK_PATTERN = Pattern.compile(
             "[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>",
             Pattern.CASE_INSENSITIVE);
     public static int mMaxImageDownloadCount = PrefUtils.getImageDownloadCount();
@@ -262,7 +263,7 @@ public class FetcherService extends IntentService {
                         PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);
                         mCancelRefresh = false;
 
-                        long keepTime = Long.parseLong(PrefUtils.getString(PrefUtils.KEEP_TIME, "4")) * 86400000l;
+                        long keepTime = (long) (GetDefaultKeepTime() * 86400000l);
                         long keepDateBorderTime = keepTime > 0 ? System.currentTimeMillis() - keepTime : 0;
 
                         deleteOldEntries(keepDateBorderTime);
@@ -306,10 +307,10 @@ public class FetcherService extends IntentService {
                                 cursor.close();
 
                                 if (newCount > 0) {
-                                    ShowNotification(getResources().getQuantityString(R.plurals.number_of_new_entries, newCount, newCount),
-                                                     R.string.flym_feeds,
-                                                     new Intent(this, HomeActivity.class),
-                                                     null);
+                                    ShowNotification( getResources().getQuantityString(R.plurals.number_of_new_entries, newCount, newCount),
+                                                      R.string.flym_feeds,
+                                                      new Intent(this, HomeActivity.class),
+                                                      null);
                                 }
                             } else if (Constants.NOTIF_MGR != null) {
                                 Constants.NOTIF_MGR.cancel(0);
@@ -332,6 +333,10 @@ public class FetcherService extends IntentService {
         synchronized ( mCancelRefresh ) {
             mCancelRefresh = false;
         }
+    }
+
+    public static float GetDefaultKeepTime() {
+        return Float.parseFloat(PrefUtils.getString(PrefUtils.KEEP_TIME, "4"));
     }
 
     public static boolean isCancelRefresh() {
@@ -722,40 +727,58 @@ public class FetcherService extends IntentService {
     }
 
 
-    private void deleteOldEntries(final long keepDateBorderTime) {
-        if (keepDateBorderTime > 0) {
-                if ( !mIsDeletingOld )
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            int status = Status().Start(MainApplication.getContext().getString(R.string.deleteOldEntries)); try {
-                                mIsDeletingOld = true;
-                                    String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
-                                // Delete the entries, the cache files will be deleted by the content provider
-                                MainApplication.getContext().getContentResolver().delete(EntryColumns.CONTENT_URI, where, null);
-
-                                Status().ChangeProgress(R.string.deleteImages);
-                                File[] files = FileUtils.GetImagesFolder().listFiles(new FileFilter() {//NetworkUtils.IMAGE_FOLDER_FILE.listFiles(new FileFilter() {
-                                    @Override
-                                    public boolean accept(File pathname) {
-                                        return (pathname.lastModified() < keepDateBorderTime);
-                                                }
-                                });
-                                if ( files != null ) {
-                                    int i = 0;
-                                    for( File file: files ) {
-                                        i++;
-                                        Status().ChangeProgress(getString(R.string.deleteImages) + String.format( " %d/%d", i, files.length ) );
-                                        file.delete();
-                                    }
-                                }
-                                Status().ChangeProgress("");
-                            } finally {
-                                Status().End( status );
-                                mIsDeletingOld = false;
-                            }
+    private void deleteOldEntries(final long defaultkeepDateBorderTime) {
+    if ( !mIsDeletingOld )
+        new Thread() {
+            @Override
+            public void run() {
+                int status = Status().Start(MainApplication.getContext().getString(R.string.deleteOldEntries));
+                ContentResolver cr = MainApplication.getContext().getContentResolver();
+                final Cursor cursor = cr.query(FeedColumns.CONTENT_URI, FeedColumns.PROJECTION_ID_OPTIONS, null, null, null); try {
+                    mIsDeletingOld = true;
+                    while ( cursor.moveToNext() ) {
+                        long keepDateBorderTime = defaultkeepDateBorderTime;
+                        try {
+                            JSONObject jsonOptions = new JSONObject(cursor.getString(1));
+                            if (jsonOptions.has(CUSTOM_KEEP_TIME))
+                                keepDateBorderTime = System.currentTimeMillis() - (long) (jsonOptions.getDouble(CUSTOM_KEEP_TIME) * 86400000l);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    }.start();
+                        DeleteOldEntries( cursor.getLong( 0 ), keepDateBorderTime );
+                    }
+                } finally {
+                    Status().End( status );
+                    cursor.close();
+                    mIsDeletingOld = false;
+                }
+            }
+        }.start();
+    }
+
+    private void DeleteOldEntries(long feedID, long keepDateBorderTime) {
+        if (keepDateBorderTime > 0) {
+            ContentResolver cr = MainApplication.getContext().getContentResolver();
+
+            String where = EntryColumns.DATE + '<' + keepDateBorderTime + Constants.DB_AND + EntryColumns.WHERE_NOT_FAVORITE;
+            // Delete the entries, the cache files will be deleted by the content provider
+            cr.delete(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedID), where, null);
+
+            /*Status().ChangeProgress(R.string.deleteImages);
+            File[] files = FileUtils.GetImagesFolder().listFiles(new FileFilter() {//NetworkUtils.IMAGE_FOLDER_FILE.listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File pathname) {
+                    return (pathname.lastModified() < keepDateBorderTime);
+                }
+            });
+            if ( files != null ) {
+                int i = 0;
+                for( File file: files ) {
+                    i++;
+                    Status().ChangeProgress(getString(R.string.deleteImages) + String.format( " %d/%d", i, files.length ) );
+                    file.delete();
+                }
+            }*/
         }
     }
 
@@ -961,59 +984,6 @@ public class FetcherService extends IntentService {
             boolean autoDownloadImages = cursor.isNull(autoImageDownloadPosition) || cursor.getInt(autoImageDownloadPosition) == 1;
 
             if (fetchMode == 0) {
-                if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-                    String line;
-                    int posStart = -1;
-
-
-                    while ((line = reader.readLine()) != null) {
-                        FetcherService.Status().AddBytes(line.length());
-                        if (line.contains(HTML_BODY)) {
-                            break;
-                        } else {
-                            Matcher matcher = FEED_LINK_PATTERN.matcher(line);
-
-                            if (matcher.find()) { // not "while" as only one link is needed
-                                line = matcher.group();
-                                posStart = line.indexOf(HREF);
-
-                                if (posStart > -1) {
-                                    String url = line.substring(posStart + 6, line.indexOf('"', posStart + 10)).replace(Constants.AMP_SG,
-                                            Constants.AMP);
-
-                                    ContentValues values = new ContentValues();
-
-                                    if (url.startsWith(Constants.SLASH)) {
-                                        int index = feedUrl.indexOf('/', 8);
-
-                                        if (index > -1) {
-                                            url = feedUrl.substring(0, index) + url;
-                                        } else {
-                                            url = feedUrl + url;
-                                        }
-                                    } else if (!url.startsWith(Constants.HTTP_SCHEME) && !url.startsWith(Constants.HTTPS_SCHEME)) {
-                                        url = feedUrl + '/' + url;
-                                    }
-                                    values.put(FeedColumns.URL, url);
-                                    cr.update(FeedColumns.CONTENT_URI(feedId), values, null, null);
-                                    connection.disconnect();
-                                    connection = NetworkUtils.setupConnection(url);
-                                    contentType = connection.getContentType();
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    // this indicates a badly configured feed
-                    if (posStart == -1) {
-                        connection.disconnect();
-                        connection = NetworkUtils.setupConnection(feedUrl);
-                        contentType = connection.getContentType();
-                    }
-                }
-
                 if (contentType != null) {
                     int index = contentType.indexOf(CHARSET);
 
@@ -1186,35 +1156,23 @@ public class FetcherService extends IntentService {
         encoding,
                 ContentHandler contentHandler) throws IOException, SAXException {
             Status().ChangeProgress(R.string.parseXml);
-            //Xml.Parse(in, encoding, contentHandler);
-            //if (isRss(feedUrl))
             Xml.parse(ToString(in, encoding), contentHandler);
-            //else
-            //    HTMLParser.Parse( feedID, feedUrl, ToString( in, encoding ) );
             Status().ChangeProgress("");
             Status().AddBytes(contentHandler.toString().length());
         }
-
-        /*public static boolean isRss (String feedUrl){
-            return feedUrl.toLowerCase().contains("feed") || feedUrl.toLowerCase().contains("rss");
-        }*/
 
         private static void parseXml (Reader reader,
                 ContentHandler contentHandler) throws IOException, SAXException {
             Status().ChangeProgress(R.string.parseXml);
             Xml.parse(reader, contentHandler);
-            //Xml.Parse( ToString( in, encoding ), contentHandler );
             Status().ChangeProgress("");
             Status().AddBytes(contentHandler.toString().length());
         }
 
         public static void cancelRefresh () {
-            //if (PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
             synchronized (mCancelRefresh) {
                 mCancelRefresh = true;
-
             }
-            //}
         }
 
         public static void deleteAllFeedEntries (String feedID ){
@@ -1299,4 +1257,16 @@ public class FetcherService extends IntentService {
 
         }
 
+    public static void StartService(Intent intent) {
+        Context context = MainApplication.getContext();
+        if (Build.VERSION.SDK_INT >= 26)
+            context.startForegroundService(intent);
+        else
+            context.startService( intent );
     }
+
+    static Intent GetStartIntent() {
+        return new Intent(MainApplication.getContext(), FetcherService.class)
+                .setAction( FetcherService.ACTION_REFRESH_FEEDS );
+    }
+}

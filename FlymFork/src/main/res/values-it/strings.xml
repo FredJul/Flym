@@ -22,14 +22,14 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="welcome_title">Benvenuto in Flym. Vorresti aggiungere un feed?</string>
+    <string name="welcome_title">Benvenuto in Handy News Reader. Vorresti aggiungere un feed?</string>
     <string name="never">mai</string>
     <string name="update">Aggiornamento</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">Impostazioni</string>
     <string name="menu_refresh">Aggiorna</string>
     <string name="menu_all_read">Segna tutti come letti</string>
-    <string name="flym_feeds">Feed di Flym</string>
+    <string name="flym_feeds">Feed di Handy News Reader</string>
     <string name="error">Errore</string>
     <string name="network_error">Nessuna connessione disponibile</string>
     <string name="loading">Caricamento in corso…</string>
@@ -114,7 +114,7 @@
     <string name="menu_full_screen">A tutto schermo</string>
     <string name="menu_copy_clipboard">Copia il link</string>
     <string name="menu_mark_as_unread">Segna come non letto</string>
-    <string name="share_favorites_title">Flym: articoli preferiti</string>
+    <string name="share_favorites_title">Handy News Reader: articoli preferiti</string>
     <string name="copied_clipboard">Link copiato</string>
     <string name="get_full_text">Recupera il testo completo</string>
     <string name="original_text">Mostra testo originale</string>
@@ -197,6 +197,8 @@
         <item>1 giorno</item>
     </string-array>
     <string-array name="settings_keep_times">
+        <item>1 hour</item>
+        <item>12 hours</item>
         <item>1 giorno</item>
         <item>2 giorni</item>
         <item>4 giorni</item>

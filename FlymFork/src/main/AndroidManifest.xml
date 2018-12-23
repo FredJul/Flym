@@ -40,7 +40,7 @@
         <provider
             android:name=".provider.FeedDataContentProvider"
             android:authorities="ru.yanus171.feedexfork.provider.FeedData"
-            android:exported="true"
+            android:exported="false"
             android:writePermission="ru.yanus171.feedexfork.provider.WRITE_PERMISSION" />
 
         <activity

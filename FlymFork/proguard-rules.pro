@@ -3,7 +3,7 @@
 -keepnames class *
 
 -keepclassmembers class * {
-    @android.webkit.JavascriptInterface <methods>;
+    *; #@android.webkit.JavascriptInterface <methods>;
 }
 
 # for the search

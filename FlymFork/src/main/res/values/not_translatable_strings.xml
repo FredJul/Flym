@@ -13,7 +13,7 @@
     Link to <a href=\"https://forum.xda-developers.com/android/apps-games/app-flym-fork-rss-reader-t3802126\">XDA </a>  <br/>
 
     <br/>
-    <a href=\"mailto:workyalex@mail.ru?subject=Flym Fork RSS Reader question\">Mail to developer</a><br/>
+    <a href=\"mailto:workyalex@mail.ru?subject=Handy News Reader question\">Mail to developer</a><br/>
 
     <br/>
 
@@ -27,7 +27,7 @@
     <br/>
     <b>To help the project:</b><br/>
     - <a href=\"https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork\">rate </a> an app <br/>
-    - <a href=\"mailto:workyalex@mail.ru?subject=Flym Fork RSS Reader idea\">suggest</a> an idea
+    - <a href=\"mailto:workyalex@mail.ru?subject=Handy News Reader idea\">suggest</a> an idea
 
     <br/>
     Sources on <a href=\"https://github.com/yanus171/Flym">github</a> <br/>
@@ -87,6 +87,8 @@
         <item>86400000</item>
     </string-array>
     <string-array name="settings_keep_time_values" translatable="false">
+        <item>0.04</item>
+        <item>0.5</item>
         <item>1</item>
         <item>2</item>
         <item>4</item>

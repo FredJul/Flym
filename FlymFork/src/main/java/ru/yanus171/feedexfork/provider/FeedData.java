@@ -59,7 +59,7 @@ public class FeedData {
     public static final String CONTENT_AUTHORITY = CONTENT + AUTHORITY;
     public static final String FEEDS_TABLE_WITH_GROUP_PRIORITY = FeedColumns.TABLE_NAME + " LEFT JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.PRIORITY +
             " AS group_priority FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + FeedColumns.TABLE_NAME + '.' + FeedColumns.GROUP_ID + " = f.joined_feed_id)";
-    public static final String ENTRIES_TABLE_WITH_FEED_INFO = EntryColumns.TABLE_NAME + " JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.NAME + ", " + FeedColumns.URL + ", " +
+    public static final String ENTRIES_TABLE_WITH_FEED_INFO = EntryColumns.TABLE_NAME + " JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.RETRIEVE_FULLTEXT + ", " + FeedColumns.NAME + ", " + FeedColumns.URL + ", " +
             FeedColumns.ICON + ", " + FeedColumns.GROUP_ID + " FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + EntryColumns.TABLE_NAME + '.' + EntryColumns.FEED_ID + " = f.joined_feed_id)";
     public static final String ALL_UNREAD_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)";
     public static final String FAVORITES_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ')';
@@ -112,6 +112,7 @@ public class FeedData {
         public static final String IS_IMAGE_AUTO_LOAD = "is_image_auto_load";
         public static final String OPTIONS = "options";
         public static final String[] PROJECTION_ID = new String[]{FeedColumns._ID};
+        public static final String[] PROJECTION_ID_OPTIONS = new String[]{FeedColumns._ID, FeedColumns.OPTIONS};
         public static final String[] PROJECTION_GROUP_ID = new String[]{FeedColumns.GROUP_ID};
         public static final String[] PROJECTION_PRIORITY = new String[]{FeedColumns.PRIORITY};
 
@@ -210,7 +211,7 @@ public class FeedData {
                              EntryColumns.SCROLL_POS,
                              EntryColumns.TITLE,
                              EntryColumns.DATE,
-                             String.format( "substr( %s, 1, 5 ) AS %s", EntryColumns.MOBILIZED_HTML, EntryColumns.MOBILIZED_HTML ), 
+                             String.format( "substr( %s, 1, 5 ) AS %s", EntryColumns.MOBILIZED_HTML, EntryColumns.MOBILIZED_HTML ),
                              FeedColumns.NAME};
         public static final String WHERE_READ = EntryColumns.IS_READ + Constants.DB_IS_TRUE;
         public static final String WHERE_UNREAD = "(" + EntryColumns.IS_READ + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_READ + Constants.DB_IS_FALSE + ')';
