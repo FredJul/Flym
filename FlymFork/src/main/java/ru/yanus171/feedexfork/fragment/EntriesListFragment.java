@@ -59,6 +59,7 @@ import java.util.Date;
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
+import ru.yanus171.feedexfork.activity.HomeActivity;
 import ru.yanus171.feedexfork.adapter.EntriesCursorAdapter;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
@@ -66,6 +67,7 @@ import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
 import ru.yanus171.feedexfork.service.FetcherService;
 import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.PrefUtils;
+import ru.yanus171.feedexfork.utils.Timer;
 import ru.yanus171.feedexfork.utils.UiUtils;
 import ru.yanus171.feedexfork.view.StatusText;
 
@@ -78,6 +80,9 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     private static final String STATE_SHOW_TEXT_IN_ENTRY_LIST = "STATE_SHOW_TEXT_IN_ENTRY_LIST";
     private static final String STATE_ORIGINAL_URI_SHOW_TEXT_IN_ENTRY_LIST = "STATE_ORIGINAL_URI_SHOW_TEXT_IN_ENTRY_LIST";
     private static final String STATE_SHOW_UNREAD = "STATE_SHOW_UNREAD";
+    private static final String STATE_LAST_VISIBLE_ENTRY_ID = "STATE_LAST_VISIBLE_ENTRY_ID";
+    private static final String STATE_LAST_VISIBLE_OFFSET = "STATE_LAST_VISIBLE_OFFSET";
+
 
     private static final int ENTRIES_LOADER_ID = 1;
     private static final int NEW_ENTRIES_NUMBER_LOADER_ID = 2;
@@ -89,32 +94,45 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     private EntriesCursorAdapter mEntriesCursorAdapter;
     private Cursor mJustMarkedAsReadEntries;
     private FloatingActionButton mFab;
-    private AbsListView mListView;
+    private ListView mListView;
     private ProgressBar mProgressBar = null;
     public boolean mShowUnRead = false;
     private boolean mNeedSetSelection = false;
+    private long mLastVisibleTopEntryID = 0;
+    private int mLastListViewTopOffset = 0;
     private Menu mMenu = null;
     private long mListDisplayDate = new Date().getTime();
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            Timer timer = new Timer( "EntriesListFragment.onCreateLoader" );
+
             String entriesOrder = PrefUtils.getBoolean(PrefUtils.DISPLAY_OLDEST_FIRST, false) || mShowTextInEntryList ? Constants.DB_ASC : Constants.DB_DESC;
             String where = "(" + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + ')';
             String[] projection = mShowTextInEntryList ? null : EntryColumns.PROJECTION_WITHOUT_TEXT;
             CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, projection, where, null, EntryColumns.DATE + entriesOrder);
             cursorLoader.setUpdateThrottle(150);
+            timer.End();
             return cursorLoader;
         }
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            Timer.End(ENTRIES_LOADER_ID);
+            Timer timer = new Timer( "EntriesListFragment.onCreateLoader" );
+
             mEntriesCursorAdapter.swapCursor(data);
             if ( mShowTextInEntryList && mNeedSetSelection ) {
                 mNeedSetSelection = false;
                 mListView.setSelection(mEntriesCursorAdapter.GetFirstUnReadPos());
-
             }
-            //mAutoScrolSetIsReadEnabled = true;
+            if ( mLastVisibleTopEntryID != -1 ) {
+                int pos = mEntriesCursorAdapter.GetPosByID(mLastVisibleTopEntryID);
+                if ( pos != -1 &&
+                        ( pos > mListView.getLastVisiblePosition() || pos < mListView.getFirstVisiblePosition() )  )
+                    mListView.setSelectionFromTop(pos, mLastListViewTopOffset);
+            }
+            timer.End();
         }
 
         @Override
@@ -183,16 +201,21 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            Timer timer = new Timer( "EntriesListFragment.mEntriesNumberLoader.onCreateLoader" );
+
             CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
             cursorLoader.setUpdateThrottle(150);
+            timer.End();
             return cursorLoader;
         }
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            Timer.End(NEW_ENTRIES_NUMBER_LOADER_ID);
             if ( data == null )
                 return;
 
+            Timer timer = new Timer( "EntriesListFragment.mEntriesNumberLoader.onLoadFinished" );
             data.moveToFirst();
             mNewEntriesNumber = data.getInt(0);
             mOldUnreadEntriesNumber = data.getInt(1);
@@ -205,6 +228,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             }
 
             mAutoRefreshDisplayDate = false;
+
+            timer.End();
         }
 
         @Override
@@ -215,6 +240,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Timer timer = new Timer( "EntriesListFragment.onCreate" );
+
         setHasOptionsMenu(true);
 
         Dog.v( "EntriesListFragment.onCreate" );
@@ -231,18 +258,20 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             mShowUnRead = savedInstanceState.getBoolean(STATE_SHOW_UNREAD, PrefUtils.getBoolean( STATE_SHOW_UNREAD, false ));
             Dog.v( String.format( "EntriesListFragment.onCreate mShowUnRead = %b", mShowUnRead ) );
 
-            if ( mShowTextInEntryList )
-                mNeedSetSelection = true;
+            //if ( mShowTextInEntryList )
+            //    mNeedSetSelection = true;
             mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo, mShowTextInEntryList, mShowUnRead);
         } else
             mShowUnRead = PrefUtils.getBoolean( STATE_SHOW_UNREAD, false );
 
-
+        timer.End();
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        Timer timer = new Timer( "EntriesListFragment.onStart" );
+
         refreshUI(); // Should not be useful, but it's a security
         //refreshSwipeProgress();
         PrefUtils.registerOnPrefChangeListener(mPrefListener);
@@ -264,10 +293,12 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             } else {
                 mAutoRefreshDisplayDate = true; // We will try to update the list after if necessary
             }
-
             restartLoaders();
         }
+        mLastVisibleTopEntryID = PrefUtils.getLong( STATE_LAST_VISIBLE_ENTRY_ID, -1 );
+        mLastListViewTopOffset = PrefUtils.getInt( STATE_LAST_VISIBLE_OFFSET, 0 );
         UpdateActions();
+        timer.End();
     }
 
     @Override
@@ -283,6 +314,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     //@Override
     //public View inflateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Timer timer = new Timer( "EntriesListFragment.onCreateView" );
+
         View rootView = inflater.inflate(R.layout.fragment_entry_list, container, true);
         new StatusText( (TextView)rootView.findViewById( R.id.statusText1 ),
                         FetcherService.Status()/*,
@@ -290,7 +323,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
 
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
-        mListView = (AbsListView) rootView.findViewById(android.R.id.list);
+        mListView = rootView.findViewById(android.R.id.list);
         //mListView.setOnTouchListener(new SwipeGestureListener(mListView.getContext()));
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -300,7 +333,6 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                boolean b;
                 if ( mShowTextInEntryList )
                     for ( int i = firstVisibleItem - 2; i <= firstVisibleItem - 2 && i < totalItemCount; i++ ) {
                         long id = mEntriesCursorAdapter.getItemId(i);
@@ -310,12 +342,17 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
                             EntriesCursorAdapter.mMarkAsReadList.add(uri);
                         }
                     }
+                else if ( firstVisibleItem > 0 ) {
+                    mLastVisibleTopEntryID = mEntriesCursorAdapter.getItemId(firstVisibleItem);
+                    View v = mListView.getChildAt(0);
+                    mLastListViewTopOffset = (v == null) ? 0 : (v.getTop() - mListView.getPaddingTop());
+                }
             }
         });
 
         if (mEntriesCursorAdapter != null) {
             //mListView.setListAdapter(mEntriesCursorAdapter);
-            mListView.setAdapter(mEntriesCursorAdapter);
+            SetListViewAdapter();
         }
 
         if (PrefUtils.getBoolean(PrefUtils.DISPLAY_TIP, true) && mListView instanceof ListView ) {
@@ -385,7 +422,13 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
 
         //disableSwipe();
 
+        timer.End();
         return rootView;
+    }
+
+    public void SetListViewAdapter() {
+        mListView.setAdapter(mEntriesCursorAdapter);
+        mNeedSetSelection = true;
     }
 
     public static void ShowDeleteDialog(Context context, final String title, final long id) {
@@ -413,6 +456,9 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         PrefUtils.unregisterOnPrefChangeListener(mPrefListener);
 
         PrefUtils.putBoolean( STATE_SHOW_UNREAD, mShowUnRead );
+        PrefUtils.putLong( STATE_LAST_VISIBLE_ENTRY_ID, mLastVisibleTopEntryID );
+        PrefUtils.putInt( STATE_LAST_VISIBLE_OFFSET, mLastListViewTopOffset );
+
 
         if (mJustMarkedAsReadEntries != null && !mJustMarkedAsReadEntries.isClosed()) {
             mJustMarkedAsReadEntries.close();
@@ -447,6 +493,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mCurrentUri, id)));
         }
     }*/
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -503,6 +550,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
             case R.id.menu_share_starred: {
                 if (mEntriesCursorAdapter != null) {
                     String starredList = "";
@@ -523,14 +571,23 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
                 }
                 return true;
             }
+
             case R.id.menu_refresh: {
                 startRefresh();
                 return true;
             }
+
             case R.id.menu_cancel_refresh: {
                 FetcherService.cancelRefresh();
                 return true;
             }
+
+            case R.id.menu_toggle_theme: {
+                PrefUtils.ToogleTheme( new Intent(getContext(), HomeActivity.class) );
+                return true;
+            }
+
+
             case R.id.menu_delete_all: {
                 if ( FeedDataContentProvider.URI_MATCHER.match(mCurrentUri) == FeedDataContentProvider.URI_ENTRIES_FOR_FEED ) {
                     new AlertDialog.Builder(getContext()) //
@@ -580,6 +637,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     public void markAllAsRead() {
         if (mEntriesCursorAdapter != null) {
@@ -659,6 +717,10 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     }
 
     public void setData(Uri uri, boolean showFeedInfo, boolean isSearchUri, boolean showTextInEntryList) {
+        if ( getActivity() == null ) // during configuration changes
+            return;
+        Timer timer = new Timer( "EntriesListFragment.setData" );
+
         Dog.v( String.format( "EntriesListFragment.setData( %s )", uri.toString() ) );
         mCurrentUri = uri;
         if (!isSearchUri) {
@@ -669,13 +731,12 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         mShowFeedInfo = showFeedInfo;
         mShowTextInEntryList = showTextInEntryList;
 
-        if ( mShowTextInEntryList )
-            mNeedSetSelection = true;
+        //if ( mShowTextInEntryList )
+        //    mNeedSetSelection = true;
         mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo, mShowTextInEntryList, mShowUnRead);
-        mListView.setAdapter(mEntriesCursorAdapter);
+        SetListViewAdapter();
         if ( mListView instanceof ListView )
             ( ( ListView )mListView ).setDividerHeight( mShowTextInEntryList ? 10 : 0 );
-
         mListDisplayDate = new Date().getTime();
         if (mCurrentUri != null) {
             restartLoaders();
@@ -686,14 +747,17 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         //getActivity().invalidateOptionsMenu();
         //if (showTextInEntryList)
             //setSelection( mEntriesCursorAdapter.GetFirstUnReadPos() );//    setSelection( mEntriesCursorAdapter.getCount() - 1 );
-
+        timer.End();
     }
 
     private void restartLoaders() {
+
         LoaderManager loaderManager = getLoaderManager();
 
         //HACK: 2 times to workaround a hard-to-reproduce bug with non-refreshing loaders...
+        Timer.Start( ENTRIES_LOADER_ID, "EntriesListFr.restartLoaders() mEntriesLoader" );
         loaderManager.restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);
+        Timer.Start( NEW_ENTRIES_NUMBER_LOADER_ID, "EntriesListFr.restartLoaders() mEntriesNumberLoader" );
         loaderManager.restartLoader(NEW_ENTRIES_NUMBER_LOADER_ID, null, mEntriesNumberLoader);
 
         loaderManager.restartLoader(ENTRIES_LOADER_ID, null, mEntriesLoader);

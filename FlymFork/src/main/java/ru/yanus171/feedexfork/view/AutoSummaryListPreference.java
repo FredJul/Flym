@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.yanus171.feedexfork.view;
+package ru.yanus171.feedexfork.view ;
 
 import android.content.Context;
 import android.util.AttributeSet;

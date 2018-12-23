@@ -46,6 +46,9 @@ package ru.yanus171.feedexfork.view;
 
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -69,13 +72,16 @@ import java.util.Observable;
 import java.util.Observer;
 
 import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.activity.EntryActivity;
+import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.service.FetcherService;
 import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.FileUtils;
 import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
+import ru.yanus171.feedexfork.utils.Timer;
 
 public class EntryView extends WebView implements Observer {
 
@@ -87,6 +93,7 @@ public class EntryView extends WebView implements Observer {
 
 
     private long mEntryId = -1;
+    public Runnable mScrollChangeListener = null;
 
     //private static final String TEXT_COLOR_BRIGHTNESS = PrefUtils.getBoolean(PrefUtils.LIGHT_THEME, false) ? "#000000" : "#C0C0C0";
     private static String GetTextColor() {return PrefUtils.IsLightTheme() ? "#000000" : getTextColorDarkTheme();}
@@ -203,8 +210,10 @@ public class EntryView extends WebView implements Observer {
                         String enclosure,
                         String author,
                         long timestamp,
-                        boolean preferFullText,
+                        final boolean preferFullText,
                         EntryActivity activity) {
+        Timer timer = new Timer( "EntryView.setHtml" );
+
         mActivity = activity;
         mEntryId = entryId;
         //getSettings().setBlockNetworkLoads(true);
@@ -233,9 +242,12 @@ public class EntryView extends WebView implements Observer {
         // do not put 'null' to the base url...
         mData = generateHtmlContent(title, link, contentText, enclosure, author, timestamp, preferFullText);
         loadDataWithBaseURL("", mData, TEXT_HTML, Constants.UTF8, null);
+        timer.End();
     }
 
     private String generateHtmlContent(String title, String link, String contentText, String enclosure, String author, long timestamp, boolean preferFullText) {
+        Timer timer = new Timer( "EntryView.generateHtmlContent" );
+
         StringBuilder content = new StringBuilder(GetCSS()).append(BODY_START);
 
         if (link == null) {
@@ -271,11 +283,15 @@ public class EntryView extends WebView implements Observer {
 
         content.append(BUTTON_SECTION_END).append(BODY_END);
 
+        timer.End();
         return content.toString();
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     private void init() {
+
+        Timer timer = new Timer( "EntryView.init" );
+
         if ( mHandler == null )
             mHandler = new Handler();
         mImageDownloadObservable.addObserver(this);
@@ -392,7 +408,7 @@ public class EntryView extends WebView implements Observer {
             }
         });
 
-
+        timer.End();
     }
 
 
@@ -408,13 +424,17 @@ public class EntryView extends WebView implements Observer {
     @Override
     protected void onScrollChanged (int l, int t, int oldl, int oldt) {
         FetcherService.Status().HideByScroll();
-        int height = (int) Math.floor(GetContentHeight());
-        int webViewHeight = getMeasuredHeight();
+        //int contentHeight = (int) Math.floor(GetContentHeight());
+        //int webViewHeight = getMeasuredHeight();
         mActivity.mEntryFragment.UpdateProgress();
         mActivity.mEntryFragment.UpdateClock();
+        if ( mScrollChangeListener != null )
+            mScrollChangeListener.run();
     }
 
-
+    public boolean IsScrolAtBottom() {
+        return getScrollY() + getMeasuredHeight() >= (int) Math.floor(GetContentHeight());
+    }
     @Override
     public void update(Observable observable, Object data) {
         if ( ( data != null ) && ( (Long)data == mEntryId ) )  {

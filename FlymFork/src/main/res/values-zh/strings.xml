@@ -22,15 +22,15 @@
 <resources>
 
     <!-- GENERAL -->
-    <string name="about_flym">关于Flym / Help / Contact developer</string>
-    <string name="welcome_title">欢迎使用Flym。需要添加一个源吗？</string>
+    <string name="about_flym">关于 Handy News Reader / Help / Contact developer</string>
+    <string name="welcome_title">欢迎使用 Handy News Reader。需要添加一个源吗？</string>
     <string name="never">从未</string>
     <string name="update">更新</string>
     <string name="colon">:\u00A0</string>
     <string name="menu_settings">设置</string>
     <string name="menu_refresh">刷新</string>
     <string name="menu_all_read">标记全部为已读</string>
-    <string name="flym_feeds">Flym源</string>
+    <string name="flym_feeds">Handy News Reader 源</string>
     <string name="error">错误</string>
     <string name="network_error">网络不可用</string>
     <string name="loading">加载中…</string>
@@ -181,6 +181,8 @@
         <item>1 天</item>
     </string-array>
     <string-array name="settings_keep_times">
+        <item>1 hour</item>
+        <item>12 hours</item>
         <item>1 天</item>
         <item>2 天</item>
         <item>4 天</item>

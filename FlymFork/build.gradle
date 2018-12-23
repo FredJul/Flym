@@ -14,8 +14,8 @@ android {
         //applicationId 'net.fred.feedex'
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 107
-        versionName '0.7.9'
+        versionCode 119
+        versionName '0.7.21'
     }
     lintOptions {
         checkReleaseBuilds false
@@ -95,8 +95,9 @@ dependencies {
     implementation 'com.android.support:design:23.2.1'
     //compile 'com.android.support:design:+'
     implementation 'com.google.android.gms:play-services-gcm:+'
-    implementation 'org.jsoup:jsoup:1.10.3'
-    implementation 'com.github.bumptech.glide:glide:+'
+    //implementation 'org.jsoup:jsoup:1.10.3'
+    implementation 'org.jsoup:jsoup:+'
+    implementation 'com.github.bumptech.glide:glide:3.6.1'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:+'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:+'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.11.0'
 }

@@ -50,6 +50,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -73,6 +74,8 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.MainApplication;
@@ -149,6 +152,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.starImgView = (ImageView) view.findViewById(R.id.favorite_icon);
             holder.mobilizedImgView = (ImageView) view.findViewById(R.id.mobilized_icon);
             holder.readImgView = (ImageView) view.findViewById(R.id.read_icon);
+            holder.readImgView.setVisibility( PrefUtils.IsShowReadCheckbox() ? View.VISIBLE : View.GONE ); //
             holder.textLayout = (LinearLayout)view.findViewById(R.id.textLayout);
             holder.readToggleSwypeBtnView = view.findViewById(R.id.swype_btn_toggle_read);
             holder.starToggleSwypeBtnView = view.findViewById(R.id.swype_btn_toggle_star);
@@ -174,7 +178,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                     final int minX = 40;
                     final int minY = 20;
                     final int VIBRATE_DURATION = 25;
-
+                    final int MIN_X_TO_VIEW_ARTICLE = 30;
                     final ViewHolder holder = (ViewHolder) ( (ViewGroup)v.getParent() ).getTag(R.id.holder);
                     if ( event.getAction() == MotionEvent.ACTION_DOWN) {
                         Dog.v( "onTouch ACTION_DOWN" );
@@ -229,7 +233,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                         isPress = false;
                         if ( event.getAction() == MotionEvent.ACTION_UP ) {
                             Dog.v("onTouch ACTION_UP" );
-                            if ( Math.abs( paddingX ) < minX &&
+                            if ( currentx > MIN_X_TO_VIEW_ARTICLE &&
+                                 Math.abs( paddingX ) < minX &&
                                  Math.abs( paddingY ) < minY &&
                                  android.os.SystemClock.elapsedRealtime() - downTime < ViewConfiguration.getLongPressTimeout() )
                                 v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(mUri, holder.entryID)));
@@ -306,14 +311,14 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         final ViewHolder holder = (ViewHolder) view.getTag(R.id.holder);
         holder.entryID = cursor.getLong(mIdPos);
 
-        //mBackgroundColorLight = mShowEntryText && cursor.getPosition() % 2 == 1;
+
+        //mBackgroundColorLight =  daysTo % 2 == 1; //mShowEntryText && cursor.getPosition() % 2 == 1;
         final int backgroundColor;
         //if ( mBackgroundColorLight )
         //    backgroundColor = PrefUtils.IsLightTheme() ?  R.color.light_background_light : R.color.dark_background_ligth;
         //else
             backgroundColor = PrefUtils.IsLightTheme() ?  R.color.light_background : R.color.dark_background;
-        view.findViewById(R.id.layout_with_background).setBackgroundColor(ContextCompat.getColor( context, backgroundColor ));
-
+        view.findViewById(R.id.layout_vertval).setBackgroundColor(ContextCompat.getColor( context, backgroundColor ));
 
         holder.readToggleSwypeBtnView.setVisibility( View.GONE );
         holder.starToggleSwypeBtnView.setVisibility( View.GONE );
@@ -322,6 +327,11 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         String titleText = cursor.getString(mTitlePos);
         holder.titleTextView.setText(titleText);
+        Calendar date = Calendar.getInstance();
+        date.setTimeInMillis(cursor.getLong(mDatePos));
+        Calendar currentDate = Calendar.getInstance();
+        boolean isToday = currentDate.get( Calendar.DAY_OF_YEAR ) == date.get( Calendar.DAY_OF_YEAR );
+        holder.titleTextView.setTypeface( isToday ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT );
 
         holder.urlTextView.setText(cursor.getString(mUrlPos));
 
@@ -382,14 +392,14 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         holder.textTextView.setOnClickListener( listener );*/
 
         UpdateStarImgView(holder);
-        holder.starImgView.setOnClickListener(new View.OnClickListener() {
+        /*holder.starImgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleFavoriteState(holder.entryID, view);
             }
-        });
+        });*/
 
-        holder.mobilizedImgView.setVisibility(holder.isMobilized ? View.VISIBLE : View.INVISIBLE);
+        holder.mobilizedImgView.setVisibility(holder.isMobilized && PrefUtils.getBoolean( "show_full_text_indicator", false ) ? View.VISIBLE : View.GONE);
 
         UpdateReadImgView(holder);
         holder.readImgView.setOnClickListener(new View.OnClickListener() {
@@ -401,7 +411,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
         if ( mShowEntryText ) {
             holder.textTextView.setVisibility(View.VISIBLE);
-            holder.textTextView.setText(Html.fromHtml( cursor.getString(mAbstractPos) == null ? "" : cursor.getString(mAbstractPos).toString() ));
+            holder.textTextView.setText(Html.fromHtml( cursor.getString(mAbstractPos) == null ? "" : cursor.getString(mAbstractPos) ));
             holder.textTextView.setEnabled(!holder.isRead);
         } else
             holder.textTextView.setVisibility(View.GONE);
@@ -417,12 +427,13 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     private void UpdateStarImgView(ViewHolder holder) {
         int startID = PrefUtils.IsLightTheme() ? R.drawable.star_gray_solid : R.drawable.star_yellow;
-        holder.starImgView.setImageResource(holder.isFavorite ? startID : R.drawable.star_empty_gray );
+        if ( holder.isFavorite )
+            holder.starImgView.setImageResource(startID );
+        holder.starImgView.setVisibility( holder.isFavorite ? View.VISIBLE : View.GONE );
     }
     private void UpdateReadImgView(ViewHolder holder) {
-        holder.readImgView.setVisibility( mShowEntryText ? View.GONE : View.VISIBLE );
-        if ( !mShowEntryText )
-            holder.readImgView.setImageResource(holder.isRead ? R.drawable.rounded_checbox_gray : R.drawable.rounded_empty_gray);
+        holder.readImgView.setVisibility( PrefUtils.IsShowReadCheckbox() && !mShowEntryText ? View.VISIBLE : View.GONE );
+        holder.readImgView.setImageResource(holder.isRead ? R.drawable.rounded_checbox_gray : R.drawable.rounded_empty_gray);
     }
 
     public void toggleReadState(final long id, View view) {
@@ -522,6 +533,11 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     }
 
     @Override
+    public int getCount() {
+        return super.getCount();
+    }
+
+    @Override
     public Cursor swapCursor(Cursor newCursor) {
         //SetIsReadMakredList();
         reinit(newCursor);
@@ -578,6 +594,17 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             Cursor cursor = (Cursor) getItem(i);
             if ( cursor.isNull( mIsReadPos ) )
                 return i;
+        }
+        return -1;
+    }
+    public int GetPosByID( long id ) {
+        if ( !isEmpty() ) {
+            final int fiID = ((Cursor) getItem(0)).getColumnIndex(EntryColumns._ID);
+            for (int i = 0; i < getCount(); i++) {
+                Cursor cursor = (Cursor) getItem(i);
+                if (cursor.getLong(fiID) == id)
+                    return i;
+            }
         }
         return -1;
     }

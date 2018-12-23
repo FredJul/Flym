@@ -7,19 +7,26 @@
         android:id="@+id/menu_star"
         android:icon="@drawable/rating_not_important"
         android:title="@string/menu_star"
-        app:showAsAction="always"
-        tools:ignore="AlwaysShowAction"/>
+        app:showAsAction="ifRoom"
+        android:orderInCategory="1"/>
     <item
         android:id="@+id/menu_share"
         android:icon="@drawable/social_share"
         android:title="@string/menu_share"
-        app:showAsAction="always"
-        tools:ignore="AlwaysShowAction"/>
+        app:showAsAction="ifRoom"
+        android:orderInCategory="3"/>
+    <item
+        android:id="@+id/menu_toggle_theme"
+        app:showAsAction="never"
+        android:visible="true"
+        android:title="@string/menu_toggle_theme"/>
+
     <item
         android:id="@+id/menu_full_screen"
         android:icon="@drawable/full_screen"
         android:title="@string/menu_full_screen"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="4"
         tools:ignore="AlwaysShowAction"/>
     <item
         android:id="@+id/menu_copy_clipboard"
@@ -27,17 +34,18 @@
         android:title="@string/menu_copy_clipboard"/>
     <item
         android:id="@+id/menu_mark_as_unread"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="5"
         android:icon="@drawable/rounded_checbox_white"
         android:title="@string/menu_mark_as_unread"/>
-    <item
-        android:id="@+id/menu_mark_as_favorite"
-        android:icon="@drawable/rating_important"
-        android:title="@string/menu_mark_as_favorite"/>
-    <item
-        android:id="@+id/menu_mark_as_unfavorite"
-        android:icon="@drawable/rating_not_important"
-        android:title="@string/menu_mark_as_unfavorite"/>
+    <!--<item-->
+        <!--android:id="@+id/menu_mark_as_favorite"-->
+        <!--android:icon="@drawable/rating_important"-->
+        <!--android:title="@string/menu_mark_as_favorite"/>-->
+    <!--<item-->
+        <!--android:id="@+id/menu_mark_as_unfavorite"-->
+        <!--android:icon="@drawable/rating_not_important"-->
+        <!--android:title="@string/menu_mark_as_unfavorite"/>-->
     <item
         android:id="@+id/menu_font_bold"
         android:title="@string/menu_font_bold"/>
@@ -47,24 +55,26 @@
         android:title="@string/menu_reload_full_text"/>
     <item
         android:id="@+id/menu_reload_full_text_without_mobilizer"
-        android:icon="@drawable/refresh"
         android:title="@string/menu_reload_full_text_without_mobilizer"/>
     <item
         android:id="@+id/menu_reload_full_text_with_tags"
-        android:icon="@drawable/refresh"
         android:title="@string/reload_full_text_with_tags"/>
     <item
         android:id="@+id/menu_load_all_images"
+        android:icon="@android:drawable/ic_menu_gallery"
         android:title="@string/menu_load_all_images"/>
     <item
         android:id="@+id/menu_share_all_text"
+        android:icon="@android:drawable/ic_menu_share"
         android:title="@string/share_all_text"/>
     <item
         android:id="@+id/menu_open_link"
+        android:icon="@android:drawable/ic_menu_send"
         android:title="@string/open_link"/>
     <item
         android:id="@+id/menu_cancel_refresh"
         android:icon="@drawable/ic_action_cancel_gray"
+        android:orderInCategory="0"
         android:visible="true"
         android:title="@string/menu_cancel_refresh"/>
     <item
