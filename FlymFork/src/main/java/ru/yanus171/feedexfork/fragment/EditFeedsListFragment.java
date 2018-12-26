@@ -499,7 +499,7 @@ public class EditFeedsListFragment extends ListFragment {
 
                 return true;
             }
-            case R.id.menu_fix_order: {
+            /*case R.id.menu_fix_order: {
                 FeedDataContentProvider.mPriorityManagement = false;
 
                 final ProgressDialog pd = new ProgressDialog(getContext());
@@ -561,7 +561,7 @@ public class EditFeedsListFragment extends ListFragment {
 
 
                 return true;
-            }
+            }*/
         }
 
         return super.onOptionsItemSelected(item);

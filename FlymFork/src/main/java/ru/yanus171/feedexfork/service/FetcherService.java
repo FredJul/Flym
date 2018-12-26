@@ -246,7 +246,7 @@ public class FetcherService extends IntentService {
                 mobilizeAllEntries(isFromAutoRefresh);
                 downloadAllImages();
             } else if (ACTION_LOAD_LINK.equals(intent.getAction())) {
-                startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( getString(R.string.loadingLink) ) ); try {
+                startForeground(Constants.NOTIFICATION_ID_REFRESH_SERVICE, StatusText.GetNotification( getString(R.string.loadingLink) ) ); try {
                     LoadLink(GetExtrenalLinkFeedID(),
                             intent.getStringExtra(Constants.URL_TO_LOAD),
                             intent.getStringExtra(Constants.TITLE_TO_LOAD),
@@ -257,7 +257,7 @@ public class FetcherService extends IntentService {
             } else if (ACTION_DOWNLOAD_IMAGES.equals(intent.getAction())) {
                 downloadAllImages();
             } else { // == Constants.ACTION_REFRESH_FEEDS
-                startForeground(StatusText.NOTIFICATION_ID, StatusText.GetNotification( getString(R.string.loading) ) ); try {
+                startForeground(Constants.NOTIFICATION_ID_REFRESH_SERVICE, StatusText.GetNotification( getString(R.string.loading) ) ); try {
 
                     int status = Status().Start(getString(R.string.RefreshFeeds) + ": "); try {
                         PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, true);
@@ -287,14 +287,25 @@ public class FetcherService extends IntentService {
                                         R.string.markedAsStarred,
                                         new Intent(FetcherService.this, HomeActivity.class)
                                                 .setData(EntryColumns.FAVORITES_CONTENT_URI),
-                                        null);
+                                        null,
+                                        Constants.NOTIFICATION_ID_MANY_ITEMS_MARKED_STARRED);
                             } else if (mMarkAsStarredFoundList.size() > 0)
                                 for (MarkItem item : mMarkAsStarredFoundList) {
                                     Uri entryUri = getEntryUri(item.mLink, item.mFeedID);
+
+                                    int ID = -1;
+                                    try {
+                                        if ( entryUri != null )
+                                            ID = Integer.parseInt( entryUri.getLastPathSegment() );
+                                    } catch ( Throwable th ) {
+
+                                    }
+
                                     ShowNotification(item.mCaption,
                                             R.string.markedAsStarred,
                                             new Intent(Intent.ACTION_VIEW, entryUri),
-                                            entryUri);
+                                            entryUri,
+                                            ID);
                                 }
                         }
 
@@ -310,7 +321,8 @@ public class FetcherService extends IntentService {
                                     ShowNotification( getResources().getQuantityString(R.plurals.number_of_new_entries, newCount, newCount),
                                                       R.string.flym_feeds,
                                                       new Intent(this, HomeActivity.class),
-                                                      null);
+                                                      null,
+                                                      Constants.NOTIFICATION_ID_NEW_ITEMS_COUNT);
                                 }
                             } else if (Constants.NOTIF_MGR != null) {
                                 Constants.NOTIF_MGR.cancel(0);
@@ -876,9 +888,7 @@ public class FetcherService extends IntentService {
         return newCount;
     }
 
-
-
-    private void ShowNotification (String text, int captionID, Intent intent, Uri entryUri){
+    private void ShowNotification(String text, int captionID, Intent intent, Uri entryUri, int ID){
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -914,14 +924,7 @@ public class FetcherService extends IntentService {
             nf = new Notification.BigTextStyle(notifBuilder.setContentText(text)).bigText(text).build();
 
         if (Constants.NOTIF_MGR != null) {
-            int i = 0;
-            try {
-                if ( entryUri != null )
-                    i = Integer.parseInt( entryUri.getLastPathSegment() );
-            } catch ( Throwable th ) {
-
-            }
-            Constants.NOTIF_MGR.notify(captionID + i, nf);
+            Constants.NOTIF_MGR.notify(ID, nf);
         }
 
     }

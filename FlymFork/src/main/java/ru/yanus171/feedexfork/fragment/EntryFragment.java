@@ -198,8 +198,11 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
                 PrefUtils.putString(PrefUtils.LAST_ENTRY_URI, ContentUris.withAppendedId(mBaseUri, getCurrentEntryID()).toString());
 
+                CancelStarNotification();
+
                 refreshUI(mEntryPagerAdapter.getCursor(i));
                 mLastPagerPos = i;
+
             }
 
             @Override
@@ -241,6 +244,11 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         SetOrientation();
 
         return rootView;
+    }
+
+    private void CancelStarNotification() {
+        if ( Constants.NOTIF_MGR != null )
+            Constants.NOTIF_MGR.cancel( (int) getCurrentEntryID() );
     }
 
     private void SetOrientation() {
@@ -650,6 +658,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                     if (mEntriesIds[i] == mInitialEntryId) {
                         mCurrentPagerPos = i; // To immediately display the good entry
                         mLastPagerPos = i;
+                        CancelStarNotification();
                     }
                     i++;
                 }
