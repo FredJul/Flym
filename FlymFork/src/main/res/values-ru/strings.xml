@@ -215,7 +215,7 @@
     <string name="settings_max_image_download_count_description">на одну статью</string>
     <string name="downloadNext">"Загрузить следующие "</string>
     <string name="loadingLink">Загрузка ссылки</string>
-    <string name="loadLink">Читать</string>
+    <string name="loadLink">Читать сейчас</string>
     <string name="loadLinkLater">Читать позже</string>
     <string name="addFeed">Добавить канал</string>
     <string name="externalLinks">Внешние ссылки</string>
@@ -415,5 +415,6 @@
     <string name="show_full_text_indicator_descr">Показывать иконку маленькой дискеты, если для статьи загружен полный текст</string>
     <string name="show_read_checkbox">Галка прочитанного</string>
     <string name="show_read_checkbox_descr">Показывать галку прочитанного</string>
+    <string name="turnOn">Включить</string>
 
 </resources>

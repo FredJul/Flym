@@ -205,7 +205,7 @@
     <string name="settings_max_image_download_count_description">per one article</string>
     <string name="downloadNext">"Download next "</string>
     <string name="loadingLink">Loading links</string>
-    <string name="loadLink">Read</string>
+    <string name="loadLink">Read now</string>
     <string name="loadLinkLater">Read later</string>
     <string name="addFeed">Add a feed</string>
     <string name="externalLinks">External links</string>
@@ -280,6 +280,7 @@
     <string name="show_full_text_indicator_descr">Show small diskette icon to indicate that article full text was loaded</string>
     <string name="show_read_checkbox">Read checkbox</string>
     <string name="show_read_checkbox_descr">Show small checkbox to indicate that article is read</string>
+    <string name="turnOn">Turn on</string>
 
 
     <plurals name="number_of_new_entries">
