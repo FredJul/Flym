@@ -262,7 +262,7 @@
     <string name="filter_hint">Akcja przypisana filtrom zostanie wykonana przy spełnieniu co najmniej jednego z warunków (reguł). 'Akceptuj' nadpisuje 'Odrzuć'.</string>
     <string name="keyword">słowo kluczowe</string>
     <string name="loadTypeWeb">Web (wczytuj wszystkie linki).</string>
-    <string name="loadTypeRSS">RSS (adres taśmy lub strony internetowej lub słowo kluczowe)</string>
+    <string name="loadTypeRSS">RSS (adres kanału lub strony internetowej) lub słowo kluczowe</string>
     <string name="loadType">Wczytuj:</string>
     <string name="global_filter">Filtr globalny.</string>
     <string name="global_filter_descr">Filtr stosowany do wszystkich kanałów. Nie wypełniaj pól, jeśli ma być nieaktywny,</string>
@@ -277,6 +277,11 @@
     <string name="restart_app_apply_changes">Aplikacja zostanie uruchomiona ponownie by zastosować zmiany.</string>
     <string name="auto_unstart_at_bottom">Usuń z Ulubionych po przeczytaniu.</string>
     <string name="auto_unstart_at_bottom_descr">Automatycznie usuń artykuł z Ulubionych po przewinięciu do jego końca.</string>
+	<string name="show_full_text_indicator">Wskaźnik pełnego tekstu</string>
+    <string name="show_full_text_indicator_descr">Wyświetla małą ikonkę dyskietki by wskazać że został wczytany pełny tekst artykułu.</string>
+    <string name="show_read_checkbox">Pole oznaczające że artykuł został przeczytany.</string>
+    <string name="show_read_checkbox_descr">Wyświetla małą ikonkę sygnalizującą iż artykuł został przeczytany.</string>
+    <string name="turnOn">Włącz.</string>
 
 
     <plurals name="number_of_new_entries">
