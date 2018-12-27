@@ -1,4 +1,4 @@
-Flym Fork RSS Reader
+Handy News Reader
 ==================
 
 Light and modern Android feed reader, based on Flym.
