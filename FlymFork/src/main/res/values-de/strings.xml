@@ -71,7 +71,7 @@
     <string name="filter_add_title">Filter hinzufügen</string>
     <string name="filter_delete_title">Filter entfernen</string>
     <string name="filter_edit_title">Filter bearbeiten</string>
-    <string name="filter_is_regex">...ist ein regulärer Ausdruck</string>
+    <string name="filter_is_regex">Reguläre(r) Ausdruck/Ausdrücke</string>
     <string name="filter_apply_to_title">Auf Titel oder URL anwenden</string>
     <string name="filter_apply_to_content">Auf den Inhalt anwenden</string>
     <string name="accept">ZULASSEN</string>
@@ -248,7 +248,7 @@
     <string name="new_feed_was_added">Neuer Feed wurde hinzugefügt</string>
     <string name="entry_marked_unread">Artikel wurde als ungelesen markiert</string>
     <string name="lock_orientation">Querformat</string>
-    <string name="markAsStarred">Als Favorit markieren</string>
+    <string name="markAsStarred">Automatische Favoriten</string>
     <string name="markedAsStarred">Artikel wurde als Favorit markiert:</string>
     <string name="deleteAllEntries">Alle Artikel löschen, welche nicht als Favorit markiert sind</string>
     <string name="question">Frage</string>
@@ -262,12 +262,12 @@
     <string name="loadTypeWeb">Web (alle Links laden)</string>
     <string name="loadTypeRSS">RSS (Feed, Link oder Schlüsselworte)</string>
     <string name="loadType">Art des Ladens:</string>
-    <string name="global_filter">Globaler Filter...</string>
-    <string name="global_filter_descr">Ein Filter, welcher bei allen Feeds angewendet wird. Zum Deaktivieren Filtertext und Regex frei lassen.</string>
-    <string name="global_marks_as_star_filter_apply_to_title_descr">sonst auf Inhalt anwenden</string>
-    <string name="rule_text">Filtertext</string>
+    <string name="global_filter">Automatische Favoriten...</string>
+    <string name="global_filter_descr">Regel(n) zum automatischen Markieren als Favorit. Wird auf alle Feeds angewendet.</string>
+    <string name="global_marks_as_star_filter_apply_to_title_descr">Wenn deaktiviert, auf Inhalt anwenden</string>
+    <string name="rule_text">Schlüsselwort(e)/Regeln</string>
     <string name="settings_min_update_battery_level">Mindest-Batterieladung</string>
-    <string name="global_marks_as_star_filter_rule_descr">eine Regel pro Zeile</string>
+    <string name="global_marks_as_star_filter_rule_descr">Ein Schlüsselwort bzw. Ausdruck pro Zeile</string>
     <string name="show_read_article_count">Anzahl der gelesenen Artikel zeigen</string>
     <string name="show_read_article_count_descr">in der Feedliste</string>
     <string name="customKeepTime">Benutzerdefinierte Artikel-Aufbewahrzeit</string>
