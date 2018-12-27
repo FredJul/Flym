@@ -85,4 +85,9 @@ public final class Constants {
     public static final String FETCH_PICTURE_MODE_ALWAYS_PRELOAD = "ALWAYS_PRELOAD";
 
     public static final MatrixCursor EMPTY_CURSOR = new MatrixCursor(new String[]{BaseColumns._ID});
+
+    public static final int NOTIFICATION_ID_REFRESH_SERVICE = 0;
+    public static final int NOTIFICATION_ID_MANY_ITEMS_MARKED_STARRED = -1;
+    public static final int NOTIFICATION_ID_NEW_ITEMS_COUNT = -2;
+
 }

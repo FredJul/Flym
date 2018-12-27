@@ -274,7 +274,7 @@
             <CheckBoxPreference
                 android:key="global_marks_as_star_filter_on"
                 android:defaultValue="false"
-                android:title="Turn on"/>
+                android:title="@string/turnOn"/>
             <ru.yanus171.feedexfork.view.AutoSummaryEditPreference
                 android:key="global_marks_as_star_filter_rule"
                 android:dependency="global_marks_as_star_filter_on"

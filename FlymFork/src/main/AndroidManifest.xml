@@ -52,14 +52,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter android:label="@string/loadLink">
+            <intent-filter android:label="@string/loadLink" android:icon="@drawable/load_now">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="text/plain" />
             </intent-filter>
-            <intent-filter android:label="@string/loadLink">
+            <intent-filter android:label="@string/loadLink" android:icon="@drawable/load_now">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -89,14 +89,14 @@
             android:launchMode="singleInstance"
             android:noHistory="true"
             android:theme="@android:style/Theme.NoDisplay">
-            <intent-filter android:label="@string/loadLinkLater">
+            <intent-filter android:label="@string/loadLinkLater" android:icon="@drawable/load_later">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="text/plain" />
             </intent-filter>
-            <intent-filter android:label="@string/loadLinkLater">
+            <intent-filter android:label="@string/loadLinkLater" android:icon="@drawable/load_later">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -150,14 +150,14 @@
 
                 <data android:mimeType="vnd.android.cursor.dir/vnd.flymfork.feed" />
             </intent-filter>
-            <intent-filter android:label="@string/addFeed">
+            <intent-filter android:label="@string/addFeed" android:icon="@drawable/add_feed">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="text/plain" />
             </intent-filter>
-            <intent-filter android:label="@string/addFeed">
+            <intent-filter android:label="@string/addFeed" android:icon="@drawable/add_feed">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -171,7 +171,7 @@
                 <data android:pathPattern=".*/feed" />
                 <data android:pathPattern=".*feed/*" />
             </intent-filter>
-            <intent-filter android:label="@string/addFeed">
+            <intent-filter android:label="@string/addFeed" android:icon="@drawable/add_feed">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -179,10 +179,10 @@
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data android:host="feeds.feedburner.com" />
+                <!--<data android:host="feeds.feedburner.com" />
                 <data android:host="feedproxy.google.com" />
                 <data android:host="feeds2.feedburner.com" />
-                <data android:host="feedsproxy.google.com" />
+                <data android:host="feedsproxy.google.com" />-->
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

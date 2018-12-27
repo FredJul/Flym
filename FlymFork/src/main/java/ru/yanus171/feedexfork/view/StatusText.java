@@ -71,7 +71,6 @@ public class StatusText implements Observer {
         });
     }
 
-    public static final int NOTIFICATION_ID = 1;
 
     public static class FetcherObservable extends Observable {
         private Handler mHandler = null;
@@ -122,7 +121,7 @@ public class StatusText implements Observer {
                         notifyObservers(s);
                         if ( PrefUtils.getBoolean( PrefUtils.IS_REFRESHING, false ) &&
                            ( ( new Date() ).getTime() - mLastNotificationUpdateTime  > 1000 ) ) {
-                            Constants.NOTIF_MGR.notify(NOTIFICATION_ID, GetNotification(s));
+                            Constants.NOTIF_MGR.notify(Constants.NOTIFICATION_ID_REFRESH_SERVICE, GetNotification(s));
                             mLastNotificationUpdateTime = ( new Date() ).getTime();
                         }
                         Dog.v("Status Update " + s.replace("\n", " "));
