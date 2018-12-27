@@ -184,6 +184,7 @@
     <string name="deleteOldEntries">Alte Artikel löschen</string>
     <string name="AllImages">Alle Bilder</string>
     <string name="EntryImages">Artikelbilder</string>
+    <string name="mobilizeAll">Mobilizing</string>
     <string name="RefreshFeeds">Feeds aktualisieren</string>
     <string name="deleteImages">Bilder löschen</string>
     <string name="applyOperations">Operationen anwenden</string>
@@ -192,6 +193,7 @@
     <string name="parseXml">XML analysieren</string>
     <string name="setupConnection">Verbindung einstellen</string>
     <string name="settings_content_extract_rules">Regeln zum Extrahieren des Inhaltes</string>
+    <string name="settings_content_extract_rules_description">Einstellung pro Seite (HTML-Kenntnisse erforderlich)</string>
     <string name="settings_tapZones">Tipp-Zonen</string>
     <string name="settings_additional">Weiteres</string>
     <string name="settings_load_comments">Kommentare laden</string>
@@ -199,8 +201,9 @@
     <string name="settings_tap_zones_description">Antipp-Zonen in der Artikelansicht</string>
     <string name="settings_tap_zones_dialogtitle">Nur zur Information, Änderungen sind nicht möglich</string>
     <string name="settings_max_image_download_count_description">Maximale Anzahl der Bilder pro Artikel</string>
+    <string name="downloadNext">"Nachfolgendes herunterladen "</string>
     <string name="loadingLink">Links laden</string>
-    <string name="loadLink">Lesen</string>
+    <string name="loadLink">Jetzt Lesen</string>
     <string name="loadLinkLater">Später lesen</string>
     <string name="addFeed">Feed hinzufügen</string>
     <string name="externalLinks">Externe Links</string>
@@ -233,6 +236,7 @@
     <string name="show_article_url_descr">in der Artikelliste</string>
     <string name="show_article_icon">Vorschaubild anzeigen</string>
     <string name="show_article_icon_descr">Abschalten, um Platz in der Liste zu sparen</string>
+    <string name="menu_fix_order">Fix articles\' order</string>
     <string name="settings_category_article_list">Artikelliste</string>
     <string name="settings_category_article_text">Artikeltext</string>
     <string name="vibrate_on_article_list_entry_swype">Beim Wischen vibrieren</string>
@@ -253,6 +257,7 @@
     <string name="entry_text_align_justify">Blocksatz</string>
     <string name="entry_text_align_justify_description">Wenn nicht aktiviert, wird der Text links ausgerichtet</string>
     <string name="reload_full_text_with_tags">Mit Tags erneut laden</string>
+    <string name="filter_hint">Ein Filter wird dann aktiv, wenn mindestens eine Bedingung (Regel) zutrifft. \'Zulassen\' überschreibt \'Ablehnen\'</string>
     <string name="keyword">Schlüsselwort(e)</string>
     <string name="loadTypeWeb">Web (alle Links laden)</string>
     <string name="loadTypeRSS">RSS (Feed, Link oder Schlüsselworte)</string>
@@ -262,6 +267,7 @@
     <string name="global_marks_as_star_filter_apply_to_title_descr">sonst auf Inhalt anwenden</string>
     <string name="rule_text">Filtertext</string>
     <string name="settings_min_update_battery_level">Mindest-Batterieladung</string>
+    <string name="global_marks_as_star_filter_rule_descr">eine Regel pro Zeile</string>
     <string name="show_read_article_count">Anzahl der gelesenen Artikel zeigen</string>
     <string name="show_read_article_count_descr">in der Feedliste</string>
     <string name="customKeepTime">Benutzerdefinierte Artikel-Aufbewahrzeit</string>
@@ -272,6 +278,7 @@
     <string name="show_full_text_indicator_descr">Zeigt ein kleines Diskettensymbol an, wenn der Artikeltext vollständig geladen wurde</string>
     <string name="show_read_checkbox">Gelesen-Markierung</string>
     <string name="show_read_checkbox_descr">Zeigt ein kleines Kontrollkästchen an, wenn der Artikel gelesen wurde</string>
+    <string name="turnOn">Aktivieren</string>
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Artikel.</item>
         <item quantity="other">%d neue Artikel.</item>
