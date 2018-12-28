@@ -59,7 +59,7 @@ public class DragNDropExpandableListView extends ExpandableListView {
         final int x = (int) ev.getX(0);
         final int y = (int) ev.getY(0);
 
-        if (action == MotionEvent.ACTION_DOWN && x > getWidth() - 80) { // drag on the right part of the item only
+        if (action == MotionEvent.ACTION_DOWN && x > getWidth() - getResources().getDisplayMetrics().xdpi / 2.5) { // drag on the right part of the item only
             mDragMode = true;
         }
 
