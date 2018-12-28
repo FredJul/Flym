@@ -671,19 +671,27 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
                 @Override
                 public void run() {
                     ContentResolver cr = MainApplication.getContext().getContentResolver();
-                    String where = EntryColumns.WHERE_UNREAD + Constants.DB_AND + '(' + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + ')';
+                    //String where = EntryColumns.WHERE_UNREAD + Constants.DB_AND + '(' + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + ')';
+                    String where = EntryColumns.WHERE_UNREAD;
                     if (mJustMarkedAsReadEntries != null && !mJustMarkedAsReadEntries.isClosed()) {
                         mJustMarkedAsReadEntries.close();
                     }
                     mJustMarkedAsReadEntries = cr.query(mCurrentUri, new String[]{BaseColumns._ID}, where, null, null);
+                    if ( mCurrentUri != null && Constants.NOTIF_MGR != null  ) {
+                        Constants.NOTIF_MGR.cancel( Constants.NOTIFICATION_ID_NEW_ITEMS_COUNT );
+                        Constants.NOTIF_MGR.cancel( Constants.NOTIFICATION_ID_MANY_ITEMS_MARKED_STARRED );
+                        if ( mJustMarkedAsReadEntries.moveToFirst() )
+                            do {
+                                Constants.NOTIF_MGR.cancel( mJustMarkedAsReadEntries.getInt(0) );
+                            } while ( mJustMarkedAsReadEntries.moveToNext());
+                        mJustMarkedAsReadEntries.moveToFirst();
+                    }
+
                     cr.update(mCurrentUri, FeedData.getReadContentValues(), where, null);
                 }
             }.start();
 
-            // If we are on "all items" uri, we can remove the notification here
-            if (mCurrentUri != null && Constants.NOTIF_MGR != null && (EntryColumns.CONTENT_URI.equals(mCurrentUri) || EntryColumns.UNREAD_ENTRIES_CONTENT_URI.equals(mCurrentUri))) {
-                Constants.NOTIF_MGR.cancel(0);
-            }
+
         }
     }
 

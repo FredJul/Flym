@@ -325,7 +325,7 @@ public class FetcherService extends IntentService {
                                                       Constants.NOTIFICATION_ID_NEW_ITEMS_COUNT);
                                 }
                             } else if (Constants.NOTIF_MGR != null) {
-                                Constants.NOTIF_MGR.cancel(0);
+                                Constants.NOTIF_MGR.cancel(Constants.NOTIFICATION_ID_NEW_ITEMS_COUNT);
                             }
                         }
 
@@ -338,10 +338,13 @@ public class FetcherService extends IntentService {
 
                 PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false);
 
-                //Constants.NOTIF_MGR.cancel( StatusText.NOTIFICATION_ID );
-                } finally { stopForeground( true ); }
 
+            } finally {
+                stopForeground( true );
+                Constants.NOTIF_MGR.cancel( Constants.NOTIFICATION_ID_REFRESH_SERVICE );
             }
+
+        }
         synchronized ( mCancelRefresh ) {
             mCancelRefresh = false;
         }

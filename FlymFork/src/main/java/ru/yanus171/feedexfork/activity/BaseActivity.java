@@ -73,7 +73,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         if (Constants.NOTIF_MGR != null) {
-            Constants.NOTIF_MGR.cancel(0);
+            Constants.NOTIF_MGR.cancel(Constants.NOTIFICATION_ID_REFRESH_SERVICE);
         }
 
         super.onResume();
