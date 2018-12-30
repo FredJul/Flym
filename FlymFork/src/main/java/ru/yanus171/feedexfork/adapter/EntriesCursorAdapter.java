@@ -522,7 +522,8 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                     ContentResolver cr = MainApplication.getContext().getContentResolver();
                     Uri entryUri = ContentUris.withAppendedId(mUri, id);
                     cr.update(entryUri, values, null, null);
-                    CancelStarNotification( id );
+                    if ( !holder.isFavorite )
+                        CancelStarNotification( id );
                 }
             }.start();
 
