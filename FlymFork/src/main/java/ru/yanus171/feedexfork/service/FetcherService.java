@@ -279,7 +279,7 @@ public class FetcherService extends IntentService {
                                         refreshFeed(feedId, keepDateBorderTime, isFromAutoRefresh));
 
                         } finally {
-                            if (mMarkAsStarredFoundList.size() > 3) {
+                            if (mMarkAsStarredFoundList.size() > 5) {
                                 ArrayList<String> list = new ArrayList<String>();
                                 for (MarkItem item : mMarkAsStarredFoundList)
                                     list.add(item.mCaption);
@@ -393,6 +393,14 @@ public class FetcherService extends IntentService {
     public static void setDownloadImageCursorNeedsRequery( boolean value ) {
         synchronized (mIsDownloadImageCursorNeedsRequery) {
             mIsDownloadImageCursorNeedsRequery = value;
+        }
+    }
+
+    public static void CancelStarNotification( long entryID ) {
+        if ( Constants.NOTIF_MGR != null ) {
+            Constants.NOTIF_MGR.cancel((int) entryID);
+            Constants.NOTIF_MGR.cancel(Constants.NOTIFICATION_ID_MANY_ITEMS_MARKED_STARRED);
+            Constants.NOTIF_MGR.cancel(Constants.NOTIFICATION_ID_NEW_ITEMS_COUNT);
         }
     }
 

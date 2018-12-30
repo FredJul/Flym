@@ -167,7 +167,7 @@ public class HTMLParser {
 
 					if (filters.isMarkAsStarred(cursor.getString(0), cursor.getString(1), item.mUrl, "")) {
 						synchronized ( FetcherService.mMarkAsStarredFoundList ) {
-							FetcherService.mMarkAsStarredFoundList.add(new MarkItem(feedID, cursor.getString(0), item.mUrl));
+							FetcherService.mMarkAsStarredFoundList.add(new MarkItem(feedID, cursor.getString(0),  item.mUrl));
 						}
 						{
 							ContentValues values = new ContentValues();

@@ -177,7 +177,6 @@ public class RssAtomParser extends DefaultHandler {
     private long mNow = System.currentTimeMillis();
     private StringBuilder mGuid;
     private StringBuilder mAuthor, mTmpAuthor;
-    private boolean mStarred = false;
 
     public RssAtomParser(Date realLastUpdateDate, long keepDateBorderTime, final String id, String feedName, String url, boolean retrieveFullText) {
         //mKeepDateBorder = new Date(keepDateBorderTime);
@@ -426,14 +425,6 @@ public class RssAtomParser extends DefaultHandler {
                         }
                     }
 
-                    mStarred = false;
-                    if ( mFilters.isMarkAsStarred(improvedTitle, improvedAuthor, entryLinkString, improvedContent) ) {
-                        synchronized ( FetcherService.mMarkAsStarredFoundList ) {
-                            FetcherService.mMarkAsStarredFoundList.add(new MarkItem(mId, improvedTitle, entryLinkString));
-                        }
-                        mStarred = true;
-                    }
-
                     // Try to find if the entry is not filtered and need to be processed
                     if (!mFilters.isEntryFiltered(improvedTitle, improvedAuthor, entryLinkString, improvedContent)) {
 
@@ -468,6 +459,7 @@ public class RssAtomParser extends DefaultHandler {
                         boolean isUpdated = (!entryLinkString.isEmpty() || guidString != null)
                                 && cr.update(mFeedEntriesUri, values, existenceStringBuilder.toString(), existenceValues) != 0;
 
+
                         // Insert it only if necessary
                         if (!isUpdated && !updateOnly) {
                             // We put the date only for new entry (no need to change the past, you may already read it)
@@ -479,8 +471,12 @@ public class RssAtomParser extends DefaultHandler {
 
                             values.put(EntryColumns.LINK, entryLinkString);
 
-                            if ( mStarred )
+                            if ( mFilters.isMarkAsStarred(improvedTitle, improvedAuthor, entryLinkString, improvedContent) ) {
+                                synchronized ( FetcherService.mMarkAsStarredFoundList ) {
+                                    FetcherService.mMarkAsStarredFoundList.add(new MarkItem(mId, improvedTitle, entryLinkString));
+                                }
                                 values.put(EntryColumns.IS_FAVORITE, 1);
+                            }
 
                             // We cannot update, we need to insert it
                             mInsertedEntriesImages.add(imagesUrls);

@@ -52,6 +52,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.CancellationSignal;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
@@ -89,6 +90,8 @@ import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.StringUtils;
+
+import static ru.yanus171.feedexfork.service.FetcherService.CancelStarNotification;
 
 public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
@@ -485,10 +488,11 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 }
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
                 //Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                Cursor cur = cr.query( entryUri, new String[]{ EntryColumns.IS_READ }, isRead ? EntryColumns.WHERE_UNREAD : null, null, null );
-                if ( cur.moveToFirst()  )
+                //Cursor cur = cr.query( entryUri, new String[]{ EntryColumns.IS_READ }, isRead ? EntryColumns.WHERE_UNREAD : null, null, null );
+                //if ( cur.moveToFirst()  )
                     cr.update(entryUri, isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
-                cur.close();
+                //cur.close();
+                CancelStarNotification( Long.parseLong(entryUri.getLastPathSegment()) );
             }
         }.start();
     }
@@ -518,6 +522,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                     ContentResolver cr = MainApplication.getContext().getContentResolver();
                     Uri entryUri = ContentUris.withAppendedId(mUri, id);
                     cr.update(entryUri, values, null, null);
+                    CancelStarNotification( id );
                 }
             }.start();
 

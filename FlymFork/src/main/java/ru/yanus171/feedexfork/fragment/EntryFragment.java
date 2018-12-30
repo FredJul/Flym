@@ -88,6 +88,7 @@ import ru.yanus171.feedexfork.utils.UiUtils;
 import ru.yanus171.feedexfork.view.EntryView;
 import ru.yanus171.feedexfork.view.StatusText;
 
+import static ru.yanus171.feedexfork.service.FetcherService.CancelStarNotification;
 import static ru.yanus171.feedexfork.utils.PrefUtils.DISPLAY_ENTRIES_FULLSCREEN;
 import static ru.yanus171.feedexfork.utils.PrefUtils.getBoolean;
 
@@ -198,7 +199,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
                 PrefUtils.putString(PrefUtils.LAST_ENTRY_URI, ContentUris.withAppendedId(mBaseUri, getCurrentEntryID()).toString());
 
-                CancelStarNotification();
+                CancelStarNotification( getCurrentEntryID() );
 
                 refreshUI(mEntryPagerAdapter.getCursor(i));
                 mLastPagerPos = i;
@@ -246,10 +247,6 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         return rootView;
     }
 
-    private void CancelStarNotification() {
-        if ( Constants.NOTIF_MGR != null )
-            Constants.NOTIF_MGR.cancel( (int) getCurrentEntryID() );
-    }
 
     private void SetOrientation() {
 		int or = mLockLandOrientation ?
@@ -658,7 +655,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                     if (mEntriesIds[i] == mInitialEntryId) {
                         mCurrentPagerPos = i; // To immediately display the good entry
                         mLastPagerPos = i;
-                        CancelStarNotification();
+                        CancelStarNotification( getCurrentEntryID() );
                     }
                     i++;
                 }
