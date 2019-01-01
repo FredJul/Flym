@@ -86,7 +86,7 @@
     • Jozef Jaroščiak<br/>
     • Matthias Dill<br/>
     • Mladen Pejaković<br/>
-    • SIRSteiner<br/>
+    • Ronny Steiner<br/>
     • Thomas Leigh<br/>
     <br/>
 
@@ -293,7 +293,7 @@
     <string name="settings_max_image_download_size_kb">Max image size</string>
     <string name="settings_max_image_download_size_kb_summary">(in kb). Do not auto load images larger than</string>
     <string name="standard">Standard</string>
-    <string name="fontsize_entrylist">Font size in articles'\ list</string>
+    <string name="fontsize_entrylist">Font size in article\'s list</string>
     <string name="settings_volume_buttons_action">Action by volume buttons</string>
     <string name="behaviour">Behavior</string>
     <string name="question_delete_entry">Delete this article?</string>
