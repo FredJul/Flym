@@ -1,67 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_us_copyright" translatable="false"></string>
-    <string name="about_us_content" translatable="true"><![CDATA[
 
-    This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. See http://www.gnu.org/licenses<br/><br/>
-    This app is based on \'Flym RSS Reader\', Copyright 2013–2016 Frédéric Julian, under the GNU GPL.<br/>
-
-    <br/>
-    Link to <a href=\"https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork\">Google play</a>  <br/>
-
-    <br/>
-    Link to <a href=\"https://forum.xda-developers.com/android/apps-games/app-flym-fork-rss-reader-t3802126\">XDA </a>  <br/>
-
-    <br/>
-    <a href=\"mailto:workyalex@mail.ru?subject=Handy News Reader question\">Mail to developer</a><br/>
-
-    <br/>
-
-    Among features added to this fork are:<br/>
-    • feed group exanding<br/>
-    • invisible fullscreen page up|down buttons<br/>
-    • max image per feed download count<br/>
-    • ability to cancel refresh process<br/>
-    • ...<br/>
-
-    <br/>
-    <b>To help the project:</b><br/>
-    - <a href=\"https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork\">rate </a> an app <br/>
-    - <a href=\"mailto:workyalex@mail.ru?subject=Handy News Reader idea\">suggest</a> an idea
-
-    <br/>
-    Sources on <a href=\"https://github.com/yanus171/Flym">github</a> <br/>
-
-    <br/>
-    <b>Developers</b><br/>
-    • eighthave<br/>
-    • equiem<br/>
-    • Frédéric Julian<br/>
-    • madx666<br/>
-    • Mikko Huhtala<br/>
-    • Paul Schaub<br/>
-    • RyDroid<br/>
-    • Sergii Pylypenko<br/>
-    • Shapochkin Mihail<br/>
-    • Suyash Bhatt<br/>
-    • Zhaofeng Li<br/>
-    • yanus171<br/>
-
-    <br/>
-    <b>Translators</b><br/>
-    • Aitor Beriain<br/>
-    • Benjamin Schütte<br/>
-    • Changwoo Ryu<br/>
-    • chenjia404<br/>
-    • Danilo Treffiletti<br/>
-    • Enric Morales<br/>
-    • Jaroslav Lichtblau<br/>
-    • Jozef Jaroščiak<br/>
-    • Matthias Dill<br/>
-    • Mladen Pejaković<br/><br/>
-
-
-    ]]></string>
 
     <string-array name="settings_battery_level_values">
         <item>50</item>

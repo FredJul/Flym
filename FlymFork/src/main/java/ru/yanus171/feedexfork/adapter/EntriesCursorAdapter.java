@@ -526,8 +526,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                         CancelStarNotification( id );
                 }
             }.start();
-
-
         }
     }
 

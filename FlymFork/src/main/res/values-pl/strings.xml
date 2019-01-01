@@ -164,7 +164,7 @@
     <string name="settings_keep_time">Czas przez jaki artykuły będą zachowane.</string>
     <string name="settings_display_images">Wyświetlaj obrazki.</string>
     <string name="settings_display_images_description">Wyświetlaj obrazki w artykułach.</string>
-    <string name="settings_preload_image_mode">Wczytuj obrazki 'na zapas'.</string>
+    <string name="settings_preload_image_mode">Wczytuj obrazki \'na zapas\'.</string>
     <string name="settings_font_size">Rozmiar tekstu.</string>
     <string name="settings_display_oldest_first">Kolejność artykułów.</string>
     <string name="settings_display_oldest_first_description">Najstarsze na początku.</string>
@@ -259,7 +259,7 @@
     <string name="entry_text_align_justify">Tekst justowany.</string>
     <string name="entry_text_align_justify_description">W przeciwnym razie wyrównany do lewej.</string>
     <string name="reload_full_text_with_tags">Przeładuj z tagami.</string>
-    <string name="filter_hint">Akcja przypisana filtrom zostanie wykonana przy spełnieniu co najmniej jednego z warunków (reguł). 'Akceptuj' nadpisuje 'Odrzuć'.</string>
+    <string name="filter_hint">Akcja przypisana filtrom zostanie wykonana przy spełnieniu co najmniej jednego z warunków (reguł). \'Akceptuj\' nadpisuje \'Odrzuć\'.</string>
     <string name="keyword">słowo kluczowe</string>
     <string name="loadTypeWeb">Web (wczytuj wszystkie linki).</string>
     <string name="loadTypeRSS">RSS (adres kanału lub strony internetowej) lub słowo kluczowe</string>
