@@ -60,7 +60,10 @@ import org.jsoup.select.Elements;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -83,6 +86,12 @@ public class HTMLParser {
 		int result = 0;
             FetcherService.Status().ChangeProgress( "Loading main page");
 
+		{
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DATE, 1);
+			Date date = new Date( cal.getTimeInMillis() );
+			feedUrl = feedUrl.replace("{tomorrow YYYY-MM-DD}", new SimpleDateFormat( "yyyy-MM-dd" ).format( date ) );
+		}
 		/* check and optionally find favicon */
 		try {
 			NetworkUtils.retrieveFavicon(MainApplication.getContext(), new URL(feedUrl), feedID);
