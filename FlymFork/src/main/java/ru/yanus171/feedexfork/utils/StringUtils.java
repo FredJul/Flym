@@ -56,7 +56,8 @@ public class StringUtils {
         calTimestamp.setTimeInMillis(timestamp);
         Calendar calCurrent = Calendar.getInstance();
 
-        if (calCurrent.getTimeInMillis() - timestamp < SIX_HOURS || calCurrent.get(Calendar.DAY_OF_MONTH) == calTimestamp.get(Calendar.DAY_OF_MONTH)) {
+        if ( Math.abs( calCurrent.getTimeInMillis() - timestamp ) < SIX_HOURS ||
+             calCurrent.get(Calendar.DAY_OF_MONTH) == calTimestamp.get(Calendar.DAY_OF_MONTH)) {
             outString = TIME_FORMAT.format(date);
         } else {
             outString = DATE_SHORT_FORMAT.format(date) + ' ' + TIME_FORMAT.format(date);

@@ -81,17 +81,21 @@ import ru.yanus171.feedexfork.utils.NetworkUtils;
 
 
 public class HTMLParser {
+
+	static final String TOMORROW_YYYY_MM_DD = "{tomorrow YYYY-MM-DD}";
+
 	static public int Parse(final String feedID, String feedUrl ) {
 		//if (!TextUtils.isEmpty(content)) {
 		int result = 0;
-            FetcherService.Status().ChangeProgress( "Loading main page");
+        FetcherService.Status().ChangeProgress( "Loading main page");
 
+		final boolean isTomorrow = feedUrl.contains( TOMORROW_YYYY_MM_DD );
 		{
-			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.DATE, 1);
-			Date date = new Date( cal.getTimeInMillis() );
-			feedUrl = feedUrl.replace("{tomorrow YYYY-MM-DD}", new SimpleDateFormat( "yyyy-MM-dd" ).format( date ) );
+			Calendar date = Calendar.getInstance();
+			date.add(Calendar.DATE, 1);
+			feedUrl = feedUrl.replace(TOMORROW_YYYY_MM_DD, new SimpleDateFormat( "yyyy-MM-dd" ).format( new Date( date.getTimeInMillis() ) ) );
 		}
+
 		/* check and optionally find favicon */
 		try {
 			NetworkUtils.retrieveFavicon(MainApplication.getContext(), new URL(feedUrl), feedID);
@@ -178,12 +182,14 @@ public class HTMLParser {
 						synchronized ( FetcherService.mMarkAsStarredFoundList ) {
 							FetcherService.mMarkAsStarredFoundList.add(new MarkItem(feedID, cursor.getString(0),  item.mUrl));
 						}
-						{
-							ContentValues values = new ContentValues();
-							values.put(EntryColumns.IS_FAVORITE, 1);
-							cr.update(uri, values, null, null);
-						}
-
+						ContentValues values = new ContentValues();
+						values.put(EntryColumns.IS_FAVORITE, 1);
+						cr.update(uri, values, null, null);
+					}
+					if (  isTomorrow ) {
+						ContentValues values = new ContentValues();
+						values.put( EntryColumns.DATE, System.currentTimeMillis() + Constants.MILLS_IN_DAY );
+						cr.update( uri, values, null, null);
 					}
 					cursor.close();
 
@@ -199,9 +205,10 @@ public class HTMLParser {
 			values.put( FeedColumns.LAST_UPDATE, System.currentTimeMillis() );
 			cr.update( FeedColumns.CONTENT_URI( feedID ), values, null, null );
 		}
+
 		{
 			ContentValues values = new ContentValues();
-			values.put( EntryColumns.DATE, System.currentTimeMillis() );
+			values.put( EntryColumns.DATE, System.currentTimeMillis() + ( isTomorrow ? Constants.MILLS_IN_DAY : 0 ) );
 			values.put( EntryColumns.SCROLL_POS, 0 );
 			values.putNull( EntryColumns.IS_READ );
 			cr.update( uriMainEntry, values, null, null );

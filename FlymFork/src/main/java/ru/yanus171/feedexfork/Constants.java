@@ -89,5 +89,5 @@ public final class Constants {
     public static final int NOTIFICATION_ID_REFRESH_SERVICE = 0;
     public static final int NOTIFICATION_ID_MANY_ITEMS_MARKED_STARRED = -1;
     public static final int NOTIFICATION_ID_NEW_ITEMS_COUNT = -2;
-
+    public static final long MILLS_IN_DAY = 1000 * 60 * 60 * 24;
 }
