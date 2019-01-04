@@ -34,12 +34,14 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -58,7 +60,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -75,6 +79,7 @@ import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.activity.BaseActivity;
 import ru.yanus171.feedexfork.activity.EntryActivity;
 import ru.yanus171.feedexfork.adapter.DrawerAdapter;
+import ru.yanus171.feedexfork.adapter.EntriesCursorAdapter;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
@@ -242,6 +247,74 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         rootView.findViewById(R.id.statusText).setVisibility(View.GONE);
 
         mLockLandOrientation = PrefUtils.getBoolean(STATE_LOCK_LAND_ORIENTATION, false );
+
+        rootView.findViewById(R.id.dimFrame).setOnTouchListener(new View.OnTouchListener() {
+            private int paddingX = 0;
+            private int paddingY = 0;
+            private int initialx = 0;
+            private int initialy = 0;
+            private int currentx = 0;
+            private int currenty = 0;
+            private int mInitialAlpha = 0;
+            private final int WIDTH = UiUtils.mmToPixel( 5 );
+            private final int MIN_DY = 10;
+
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if ( view.getParent() != null )
+                    view.getParent().requestDisallowInterceptTouchEvent(false);
+
+                if ( event.getAction() == MotionEvent.ACTION_DOWN) {
+                    paddingX = 0;
+                    paddingY = 0;
+                    initialx = (int) event.getX();
+                    initialy = (int) event.getY();
+                    currentx = (int) event.getX();
+                    currenty = (int) event.getY();
+                    mInitialAlpha = Color.alpha( ( ( ColorDrawable)view.getBackground() ).getColor());
+                    if ( initialx < WIDTH ) {
+                        Dog.v( "onTouch ACTION_DOWN" );
+                        return true;
+                    }
+                } else  if ( event.getAction() == MotionEvent.ACTION_MOVE) {
+
+                    currentx = (int) event.getX();
+                    currenty = (int) event.getY();
+                    paddingX = currentx - initialx;
+                    paddingY = currenty - initialy;
+
+                    /*//allow vertical scrolling
+                    if ( ( initialx < minX * 2 || Math.abs( paddingY ) > Math.abs( paddingX ) ) &&
+                            Math.abs( initialy - event.getY() ) > minY &&
+                            view.getParent() != null )
+                        view.getParent().requestDisallowInterceptTouchEvent(false);*/
+                    //allow horizontal scrolling
+                    if ( Math.abs( paddingY ) > Math.abs( paddingX ) &&
+                            Math.abs( initialy - event.getY() ) > MIN_DY &&
+                            view.getParent() != null ) {
+                        //view.getParent().requestDisallowInterceptTouchEvent(false);
+                        //if ( paddingY > MIN_DY ) {
+                        Dog.v( "onTouch ACTION_MOVE " + paddingX + ", " + paddingY );
+                        int color = (( ColorDrawable)view.getBackground() ).getColor();
+                        int currentAlpha = Color.alpha( color );
+                        currentAlpha = mInitialAlpha + 255 / 1 * paddingY / view.getHeight();
+                        if ( currentAlpha > 255 )
+                            currentAlpha = 255;
+                        else if ( currentAlpha < 1 )
+                            currentAlpha = 1;
+                        int newColor = Color.argb( currentAlpha, Color.red( color ),  Color.green( color ),  Color.blue( color ) );
+                        view.setBackgroundColor( newColor );
+                        //Toast.makeText( view.getContext(), , Toast.LENGTH_SHORT  ).show();
+                    }
+                    return true;
+                } else  if ( event.getAction() == MotionEvent.ACTION_UP) {
+                    return false;
+                }
+
+                return false;
+            }
+        });
+
         SetOrientation();
 
         return rootView;

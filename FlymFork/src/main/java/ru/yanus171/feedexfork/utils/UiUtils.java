@@ -49,7 +49,9 @@ public class UiUtils {
     static public int dpToPixel(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, MainApplication.getContext().getResources().getDisplayMetrics());
     }
-
+    static public int mmToPixel(int mm) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, mm, MainApplication.getContext().getResources().getDisplayMetrics());
+    }
     static public void addEmptyFooterView(ListView listView, int dp) {
         View view = new View(listView.getContext());
         view.setMinimumHeight(dpToPixel(dp));
