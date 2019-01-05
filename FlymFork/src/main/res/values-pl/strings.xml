@@ -23,6 +23,75 @@
 <resources>
 
     <!-- GENERAL -->
+    <string name="about_us_content" translatable="true"><![CDATA[
+
+    Niniejszy program stanowi wolne oprogramowanie: możesz go rozpowszechniać i/lub modyfikować na zasadach Licencji GNU General Public License, opublikowanej przez Fundację Wolnego Oprogramowania, w wersji 3 lub (opcjonalnie) jakiejkolwiek późniejszej. Zobacz http://www.gnu.org/licenses<br/><br/>
+    Ta aplikacja jest tworzona na podstawie \'Flym RSS Reader\', Copyright 2013–2016 Frédéric Julian, under the GNU GPL.<br/>
+
+
+    <br/>
+
+    <a href=\"https://handynewsreader.blogspot.com/\">Strona internetowa</a>  <br/>
+
+    <br/>
+    Link do <a href=\"https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork\">Google Play</a>  <br/>
+
+    <br/>
+    Link do <a href=\"https://forum.xda-developers.com/android/apps-games/app-flym-fork-rss-reader-t3802126\">forum XDA</a>  <br/>
+
+    <br/>
+    <a href=\"mailto:workyalex@mail.ru?subject=Handy News Reader question\">Napisz do dewelopera</a><br/>
+
+    <br/>
+
+    Pośród funkcji dodanych w tym forku znajdują się:<br/>
+    • rozwijalne grupy kanałów<br/>
+    • niewidzialne przyciski przewijania strony w górę|dół w trybie pełnoekranowym<br/>
+    • limit pobieranych obrazków dla poszczególnych kanałów z osobna<br/>
+    • możliwość anulowania procesu odświeżania<br/>
+    • ...<br/>
+
+    <br/>
+    <b>By wspomóc projekt:</b><br/>
+    - <a href=\"https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork\">oceń</a> aplikację <br/>
+    - <a href=\"mailto:workyalex@mail.ru?subject=Handy News Reader idea\">zasugeruj</a> pomysł
+
+    <br/>
+    Źródła na <a href=\"https://github.com/yanus171/Flym\">GitHub</a> <br/>
+
+    <br/>
+    <b>Deweloperzy:</b><br/>
+    • eighthave<br/>
+    • equiem<br/>
+    • Frédéric Julian<br/>
+    • madx666<br/>
+    • Mikko Huhtala<br/>
+    • Paul Schaub<br/>
+    • RyDroid<br/>
+    • Sergii Pylypenko<br/>
+    • Shapochkin Mihail<br/>
+    • Suyash Bhatt<br/>
+    • Zhaofeng Li<br/>
+    • yanus171<br/>
+
+    <br/>
+    <b>Tłumacze:</b><br/>
+    • Aitor Beriain<br/>
+    • Benjamin Schütte<br/>
+    • Changwoo Ryu<br/>
+    • chenjia404<br/>
+    • Danilo Treffiletti<br/>
+    • Enric Morales<br/>
+    • Jaroslav Lichtblau<br/>
+    • Jozef Jaroščiak<br/>
+    • Matthias Dill<br/>
+    • Mladen Pejaković<br/>
+    • Ronny Steiner<br/>
+    • Thomas Leigh<br/>
+    <br/>
+
+
+    ]]></string>
     <string name="app_name">Handy News Reader</string>
     <string name="about_flym">O programie / Pomoc / Kontakt z Autorem. </string>
     <string name="welcome_title">Witaj we Handy News Reader. Chciał(a)byś dodać nowy kanał RSS?</string>
