@@ -270,7 +270,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                     initialy = (int) event.getY();
                     currentx = (int) event.getX();
                     currenty = (int) event.getY();
-                    mInitialAlpha = Color.alpha( ( ( ColorDrawable)mDimFrame.getBackground() ).getColor());
+                    mInitialAlpha = GetBrightness();
                     Dog.v( "onTouch ACTION_DOWN" );
                     /*if ( initialx < WIDTH ) {
 
@@ -289,14 +289,12 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                         //view.getParent().requestDisallowInterceptTouchEvent(false);
                         //if ( paddingY > MIN_DY ) {
                         Dog.v( "onTouch ACTION_MOVE " + paddingX + ", " + paddingY );
-                        int color = (( ColorDrawable)mDimFrame.getBackground() ).getColor();
                         int currentAlpha = mInitialAlpha + 255 / 1 * paddingY / mDimFrame.getHeight();
                         if ( currentAlpha > 255 )
                             currentAlpha = 255;
                         else if ( currentAlpha < 1 )
                             currentAlpha = 1;
-                        int newColor = Color.argb( currentAlpha, Color.red( color ),  Color.green( color ),  Color.blue( color ) );
-                        mDimFrame.setBackgroundColor( newColor );
+                        SetBrightness(currentAlpha);
                         //Toast.makeText( view.getContext(), , Toast.LENGTH_SHORT  ).show();
                     }
                     return true;
@@ -311,6 +309,11 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         SetOrientation();
 
         return rootView;
+    }
+
+    private void SetBrightness(int currentAlpha) {
+        int newColor = Color.argb( currentAlpha, 0,  0,  0 );
+        mDimFrame.setBackgroundColor( newColor );
     }
 
 
@@ -389,6 +392,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         super.onResume();
         mEntryPagerAdapter.onResume();
         mMarkAsUnreadOnFinish = false;
+        SetBrightness( PrefUtils.getInt( PrefUtils.LAST_BRIGHTNESS, 0 ) );
     }
 
     @Override
@@ -401,7 +405,13 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
             PrefUtils.putLong(PrefUtils.LAST_ENTRY_ID, getCurrentEntryID());
             PrefUtils.putBoolean(STATE_LOCK_LAND_ORIENTATION, mLockLandOrientation);
         }
+        PrefUtils.putInt( PrefUtils.LAST_BRIGHTNESS, GetBrightness());
+
         mEntryPagerAdapter.onPause();
+    }
+
+    private int GetBrightness() {
+        return Color.alpha( ( (ColorDrawable)mDimFrame.getBackground() ).getColor() );
     }
 
     /**

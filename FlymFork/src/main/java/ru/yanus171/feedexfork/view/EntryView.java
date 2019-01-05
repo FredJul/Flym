@@ -298,7 +298,6 @@ public class EntryView extends WebView implements Observer {
         // For scrolling
         setHorizontalScrollBarEnabled(false);
         getSettings().setUseWideViewPort(true);
-
         // For color
         setBackgroundColor(Color.parseColor(BACKGROUND_COLOR));
 

@@ -72,6 +72,7 @@ public class PrefUtils {
     public static final String LAST_ENTRY_URI = "last_entry_uri";
     public static final String LAST_ENTRY_SCROLL_Y = "last_entry_scroll_y";
     public static final String LAST_ENTRY_ID = "last_entry_id";
+    public static final String LAST_BRIGHTNESS = "last_brightness";
 
 
     public static final String VOLUME_BUTTONS_ACTION_DEFAULT = "Default";
