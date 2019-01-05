@@ -424,5 +424,6 @@
     <string name="show_read_checkbox">Галка прочитанного</string>
     <string name="show_read_checkbox_descr">Показывать галку прочитанного</string>
     <string name="turnOn">Включить</string>
+    <string name="brightness_change">Измнение яркости</string>
 
 </resources>

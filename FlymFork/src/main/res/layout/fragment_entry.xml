@@ -49,6 +49,14 @@
                 android:text="@string/pageDown"/>
 
             <TextView
+                android:id="@+id/brightnessSlider"
+                style="@style/TapZone"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:text="@string/brightness_change"/>
+
+            <TextView
                 android:id="@+id/toggleFullScreenStatusBarBtn"
                 style="@style/TapZone"
                 android:layout_width="40dp"

@@ -350,6 +350,7 @@
     <string name="show_read_checkbox">Read checkbox</string>
     <string name="show_read_checkbox_descr">Show small checkbox to indicate that article is read</string>
     <string name="turnOn">Turn on</string>
+    <string name="brightness_change">Brightness change</string>
 
 
     <plurals name="number_of_new_entries">

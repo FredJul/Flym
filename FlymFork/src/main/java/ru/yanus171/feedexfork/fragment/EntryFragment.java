@@ -41,7 +41,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -62,7 +61,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -79,7 +77,6 @@ import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.activity.BaseActivity;
 import ru.yanus171.feedexfork.activity.EntryActivity;
 import ru.yanus171.feedexfork.adapter.DrawerAdapter;
-import ru.yanus171.feedexfork.adapter.EntriesCursorAdapter;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
@@ -123,6 +120,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
     private View mToggleFullscreenBtn;
     private View mToggleStatusBarVisbleBtn;
+    private View mDimFrame;
     public ProgressBar mProgressBar;
     TextView mLabelClock;
 
@@ -239,6 +237,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         HideButtonText(rootView, R.id.pageDownBtnVert, true);
         HideButtonText(rootView, R.id.pageDownBtn, true);
         HideButtonText(rootView, R.id.pageUpBtn, true);
+        HideButtonText(rootView, R.id.brightnessSlider, true);
         HideButtonText(rootView, R.id.toggleFullScreenStatusBarBtn, !PrefUtils.getBoolean( PrefUtils.TAP_ZONES_VISIBLE, true ));
         HideButtonText(rootView, R.id.toggleFullscreenBtn, !PrefUtils.getBoolean( PrefUtils.TAP_ZONES_VISIBLE, true ));
 
@@ -247,8 +246,8 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         rootView.findViewById(R.id.statusText).setVisibility(View.GONE);
 
         mLockLandOrientation = PrefUtils.getBoolean(STATE_LOCK_LAND_ORIENTATION, false );
-
-        rootView.findViewById(R.id.dimFrame).setOnTouchListener(new View.OnTouchListener() {
+        mDimFrame = rootView.findViewById( R.id.dimFrame );
+        rootView.findViewById(R.id.brightnessSlider).setOnTouchListener(new View.OnTouchListener() {
             private int paddingX = 0;
             private int paddingY = 0;
             private int initialx = 0;
@@ -256,13 +255,13 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
             private int currentx = 0;
             private int currenty = 0;
             private int mInitialAlpha = 0;
-            private final int WIDTH = UiUtils.mmToPixel( 5 );
-            private final int MIN_DY = 10;
+            //private final int WIDTH = UiUtils.mmToPixel( 5 );
+            //private final int MIN_DY = 10;
 
             @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if ( view.getParent() != null )
-                    view.getParent().requestDisallowInterceptTouchEvent(false);
+            public boolean onTouch(View view1, MotionEvent event) {
+                //if ( view.getParent() != null )
+                //    view.getParent().requestDisallowInterceptTouchEvent(false);
 
                 if ( event.getAction() == MotionEvent.ACTION_DOWN) {
                     paddingX = 0;
@@ -271,11 +270,13 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                     initialy = (int) event.getY();
                     currentx = (int) event.getX();
                     currenty = (int) event.getY();
-                    mInitialAlpha = Color.alpha( ( ( ColorDrawable)view.getBackground() ).getColor());
-                    if ( initialx < WIDTH ) {
-                        Dog.v( "onTouch ACTION_DOWN" );
-                        return true;
-                    }
+                    mInitialAlpha = Color.alpha( ( ( ColorDrawable)mDimFrame.getBackground() ).getColor());
+                    Dog.v( "onTouch ACTION_DOWN" );
+                    /*if ( initialx < WIDTH ) {
+
+
+                    }*/
+                    return true;
                 } else  if ( event.getAction() == MotionEvent.ACTION_MOVE) {
 
                     currentx = (int) event.getX();
@@ -283,27 +284,19 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                     paddingX = currentx - initialx;
                     paddingY = currenty - initialy;
 
-                    /*//allow vertical scrolling
-                    if ( ( initialx < minX * 2 || Math.abs( paddingY ) > Math.abs( paddingX ) ) &&
-                            Math.abs( initialy - event.getY() ) > minY &&
-                            view.getParent() != null )
-                        view.getParent().requestDisallowInterceptTouchEvent(false);*/
-                    //allow horizontal scrolling
                     if ( Math.abs( paddingY ) > Math.abs( paddingX ) &&
-                            Math.abs( initialy - event.getY() ) > MIN_DY &&
-                            view.getParent() != null ) {
+                            Math.abs( initialy - event.getY() ) > view1.getWidth()  ) {
                         //view.getParent().requestDisallowInterceptTouchEvent(false);
                         //if ( paddingY > MIN_DY ) {
                         Dog.v( "onTouch ACTION_MOVE " + paddingX + ", " + paddingY );
-                        int color = (( ColorDrawable)view.getBackground() ).getColor();
-                        int currentAlpha = Color.alpha( color );
-                        currentAlpha = mInitialAlpha + 255 / 1 * paddingY / view.getHeight();
+                        int color = (( ColorDrawable)mDimFrame.getBackground() ).getColor();
+                        int currentAlpha = mInitialAlpha + 255 / 1 * paddingY / mDimFrame.getHeight();
                         if ( currentAlpha > 255 )
                             currentAlpha = 255;
                         else if ( currentAlpha < 1 )
                             currentAlpha = 1;
                         int newColor = Color.argb( currentAlpha, Color.red( color ),  Color.green( color ),  Color.blue( color ) );
-                        view.setBackgroundColor( newColor );
+                        mDimFrame.setBackgroundColor( newColor );
                         //Toast.makeText( view.getContext(), , Toast.LENGTH_SHORT  ).show();
                     }
                     return true;
@@ -355,7 +348,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
     }
 
     void HideButtonText(View rootView, int ID, boolean transparent) {
-        TextView btn = (TextView)rootView.findViewById(ID);
+        TextView btn = rootView.findViewById(ID);
         if ( transparent )
             btn.setBackgroundColor(Color.TRANSPARENT);
         btn.setText("");
