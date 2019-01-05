@@ -355,7 +355,7 @@
     ]]></string>
     <string name="settings_remember_last_entry">Запоминать статью</string>
     <string name="settings_remeber_last_entry_description">Открывать последнюю просмотренную статью при запуске, иначе список непрочитанных статей</string>
-    <string name="pageUp">Страница вверх</string>
+    <string name="pageUp">Страница вверх / Свайп для отметки избранной</string>
     <string name="pageDown">Страница вниз</string>
     <string name="fullScreenToggle">Пркл. полный экран</string>
     <string name="auto_refresh_feed">Обновлять автоматически</string>
@@ -384,7 +384,7 @@
     <string name="settings_category_article_list">Список статей</string>
     <string name="settings_category_article_text">Текст статьи</string>
     <string name="vibrate_on_article_list_entry_swype">Вибрация при свайпе</string>
-    <string name="vibrate_on_article_list_entry_swype_summary">элемента списка статей</string>
+    <string name="vibrate_on_article_list_entry_swype_summary">элемента списка статей или при чтении статьи для помещения ее в избранныее</string>
     <string name="show_mark_all_as_read_button">Кнопка пометить все как прочитанное</string>
     <string name="show_mark_all_as_read_button_summary">Показывать кнопку Пометить все статьи, как прочитанные. Иначе это действие доступно через меню </string>
     <string name="entry_marked_unfavourite">Статья убрана из избранного</string>

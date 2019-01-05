@@ -122,9 +122,27 @@
 
         </RelativeLayout>
     </LinearLayout>
-    <LinearLayout android:id="@+id/dimFrame"
+
+    <LinearLayout
+        android:id="@+id/frameStar"
+        android:layout_width="match_parent"
+        android:layout_height="1mm"
+        android:padding="1mm"
+        android:background="#000000" >
+    <ImageView
+        android:id="@+id/frameStarImage"
+        android:layout_width="match_parent"
+        android:layout_height="10mm"
+        android:src="@drawable/star_empty_gray"
+        android:scaleType="centerInside"
+        android:visibility="visible"
+        android:layout_gravity="top"
+        android:gravity="center" />
+    </LinearLayout>
+<LinearLayout
+        android:id="@+id/dimFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00000000"/>
+        android:background="#00000000" />
 
 </FrameLayout>

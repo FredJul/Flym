@@ -133,11 +133,6 @@
             android:summary="@string/settings_display_oldest_first_description"
             android:title="@string/settings_display_oldest_first"/>
 
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="vibrate_on_article_list_entry_swype"
-            android:summary="@string/vibrate_on_article_list_entry_swype_summary"
-            android:title="@string/vibrate_on_article_list_entry_swype"/>
 
         <CheckBoxPreference
             android:defaultValue="true"
@@ -310,6 +305,12 @@
             android:defaultValue="false"
             android:title="@string/show_read_article_count"
             android:summary="@string/show_read_article_count_descr"/>
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="vibrate_on_article_list_entry_swype"
+            android:summary="@string/vibrate_on_article_list_entry_swype_summary"
+            android:title="@string/vibrate_on_article_list_entry_swype"/>
 
         <EditTextPreference
             android:key="content_extract_rules"

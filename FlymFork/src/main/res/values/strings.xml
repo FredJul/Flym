@@ -281,7 +281,7 @@
     <string name="markAllAsRead">Mark all as read</string>
     <string name="settings_remember_last_entry">Remember last article</string>
     <string name="settings_remeber_last_entry_description">Open last viewed article on startup, otherwise unread entries list</string>
-    <string name="pageUp">page up</string>
+    <string name="pageUp">page up / swype to star </string>
     <string name="pageDown">page down</string>
     <string name="fullScreenToggle">Full screen toggle</string>
     <string name="auto_refresh_feed">Auto refresh feed</string>
@@ -311,7 +311,7 @@
     <string name="settings_category_article_list">Articles\' list</string>
     <string name="settings_category_article_text">Article\'s text</string>
     <string name="vibrate_on_article_list_entry_swype">Vibrate on swipe</string>
-    <string name="vibrate_on_article_list_entry_swype_summary">on article list entry</string>
+    <string name="vibrate_on_article_list_entry_swype_summary">on article list entry and in article text window while starring</string>
     <string name="show_mark_all_as_read_button">Mark all as read button</string>
     <string name="show_mark_all_as_read_button_summary">Show Mark all articles as read button. Otherwise You will find this option in menu.</string>
     <string name="entry_marked_unfavourite">The article was removed from Favorites</string>

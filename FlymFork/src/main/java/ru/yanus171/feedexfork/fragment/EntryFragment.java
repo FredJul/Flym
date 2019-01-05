@@ -41,6 +41,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -63,6 +64,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,8 +93,10 @@ import ru.yanus171.feedexfork.utils.UiUtils;
 import ru.yanus171.feedexfork.view.EntryView;
 import ru.yanus171.feedexfork.view.StatusText;
 
+import static ru.yanus171.feedexfork.Constants.VIBRATE_DURATION;
 import static ru.yanus171.feedexfork.service.FetcherService.CancelStarNotification;
 import static ru.yanus171.feedexfork.utils.PrefUtils.DISPLAY_ENTRIES_FULLSCREEN;
+import static ru.yanus171.feedexfork.utils.PrefUtils.VIBRATE_ON_ARTICLE_LIST_ENTRY_SWYPE;
 import static ru.yanus171.feedexfork.utils.PrefUtils.getBoolean;
 
 
@@ -106,7 +111,6 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
     private int mTitlePos = -1, mDatePos, mMobilizedHtmlPos, mAbstractPos, mLinkPos, mIsFavoritePos, mIsReadPos, mEnclosurePos, mAuthorPos, mFeedNamePos, mFeedUrlPos, mFeedIconPos, mScrollPosPos, mRetrieveFullTextPos;
 
-    ;
 
     private int mCurrentPagerPos = -1, mLastPagerPos = -1;
     private Uri mBaseUri;
@@ -121,6 +125,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
     private View mToggleFullscreenBtn;
     private View mToggleStatusBarVisbleBtn;
     private View mDimFrame;
+    private View mStarFrame;
     public ProgressBar mProgressBar;
     TextView mLabelClock;
 
@@ -277,7 +282,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
                     }*/
                     return true;
-                } else  if ( event.getAction() == MotionEvent.ACTION_MOVE) {
+                } else  if ( event.getAction() == MotionEvent.ACTION_MOVE ) {
 
                     currentx = (int) event.getX();
                     currenty = (int) event.getY();
@@ -306,9 +311,62 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
             }
         });
 
+        final Vibrator vibrator = (Vibrator) getContext().getSystemService( Context.VIBRATOR_SERVICE );
+        mStarFrame = rootView.findViewById(R.id.frameStar);
+        final ImageView frameStarImage  = rootView.findViewById(R.id.frameStarImage);
+        final boolean prefVibrate = PrefUtils.getBoolean(VIBRATE_ON_ARTICLE_LIST_ENTRY_SWYPE, true);
+        rootView.findViewById(R.id.pageUpBtn).setOnTouchListener(new View.OnTouchListener() {
+            //private int initialx = 0;
+            private int initialy = 0;
+            private boolean mWasVibrate = false;
+            private final int MAX_HEIGHT = UiUtils.mmToPixel( 12 );
+            private final int MIN_HEIGHT = UiUtils.mmToPixel( 1 );
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if ( event.getAction() == MotionEvent.ACTION_DOWN) {
+                    Dog.v( "onTouch ACTION_DOWN " );
+                    //initialx = (int) event.getX();
+                    initialy = (int) event.getY();
+                    mWasVibrate = false;
+                    return true;
+                } else if ( event.getAction() == MotionEvent.ACTION_MOVE) {
+                    Dog.v( "onTouch ACTION_MOVE " + ( event.getY() - initialy ) );
+                    int w = (int) (event.getY() - initialy);
+                    SetStarFrameWidth( Math.min( w, MAX_HEIGHT ) );
+                    if ( prefVibrate && w >= MAX_HEIGHT && !mWasVibrate ) {
+                        mWasVibrate = true;
+                        vibrator.vibrate(VIBRATE_DURATION);
+                    } else if ( w < MAX_HEIGHT ) {
+                        mWasVibrate = false;
+                    }
+
+                    frameStarImage.setImageResource( ( w >= MAX_HEIGHT ) == mFavorite ? R.drawable.star_empty_gray : R.drawable.star_yellow );
+                    return true;
+                } else if ( event.getAction() == MotionEvent.ACTION_UP) {
+                    Dog.v( "onTouch ACTION_UP " );
+                    if ( event.getY() - initialy < MIN_HEIGHT ) {
+                        PageUp();
+                    } else if ( event.getY() - initialy >= MAX_HEIGHT ) {
+                        SetIsFavourite(!mFavorite);
+                    }
+                    SetStarFrameWidth(0);
+                    return true;
+                } else
+                    SetStarFrameWidth(0);
+                return false;
+            }
+
+
+        });
+        SetStarFrameWidth(0);
+
         SetOrientation();
 
         return rootView;
+    }
+
+    private void SetStarFrameWidth(int w) {
+        mStarFrame.setLayoutParams( new FrameLayout.LayoutParams( FrameLayout.LayoutParams.FILL_PARENT, w));
     }
 
     private void SetBrightness(int currentAlpha) {

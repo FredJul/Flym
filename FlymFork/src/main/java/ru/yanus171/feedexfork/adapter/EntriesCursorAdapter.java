@@ -91,7 +91,9 @@ import ru.yanus171.feedexfork.utils.NetworkUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.StringUtils;
 
+import static ru.yanus171.feedexfork.Constants.VIBRATE_DURATION;
 import static ru.yanus171.feedexfork.service.FetcherService.CancelStarNotification;
+import static ru.yanus171.feedexfork.utils.PrefUtils.VIBRATE_ON_ARTICLE_LIST_ENTRY_SWYPE;
 
 public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
@@ -180,7 +182,6 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                 public boolean onTouch(View v, MotionEvent event) {
                     final int minX = 40;
                     final int minY = 20;
-                    final int VIBRATE_DURATION = 25;
                     final int MIN_X_TO_VIEW_ARTICLE = 30;
                     final ViewHolder holder = (ViewHolder) ( (ViewGroup)v.getParent() ).getTag(R.id.holder);
                     if ( event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -284,7 +285,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
                     if( Math.abs( paddingX ) > minX || Math.abs( paddingY ) > minY )
                         isPress = false;
 
-                    boolean prefVibrate = PrefUtils.getBoolean("vibrate_on_article_list_entry_swype", true);
+                    final boolean prefVibrate = PrefUtils.getBoolean(VIBRATE_ON_ARTICLE_LIST_ENTRY_SWYPE, true);
                     if( prefVibrate && Math.abs( paddingX ) > Math.abs( paddingY ) && paddingX >= threshold ) {
                         if ( !wasVibrateRead ) {
                             vibrator.vibrate( VIBRATE_DURATION );
