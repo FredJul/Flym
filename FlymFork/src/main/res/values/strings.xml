@@ -281,7 +281,7 @@
     <string name="markAllAsRead">Mark all as read</string>
     <string name="settings_remember_last_entry">Remember last article</string>
     <string name="settings_remeber_last_entry_description">Open last viewed article on startup, otherwise unread entries list</string>
-    <string name="pageUp">page up / swype to star </string>
+    <string name="pageUp">page up / swipe to star </string>
     <string name="pageDown">page down</string>
     <string name="fullScreenToggle">Full screen toggle</string>
     <string name="auto_refresh_feed">Auto refresh feed</string>

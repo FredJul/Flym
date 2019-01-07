@@ -279,8 +279,8 @@
     <string name="markAllAsRead">Alle als gelesen markieren</string>
     <string name="settings_remember_last_entry">Letzten Artikel merken</string>
     <string name="settings_remeber_last_entry_description">Beim Start den zuletzt gelesenen Artikel öffnen, ansonsten die Liste ungelesener Artikel</string>
-    <string name="pageUp">Seite nach oben</string>
-    <string name="pageDown">Seite nach unten</string>
+    <string name="pageUp">Seite hoch / Wischen für Favorit</string>
+    <string name="pageDown">Seite runter</string>
     <string name="fullScreenToggle">Vollbild umschalten</string>
     <string name="auto_refresh_feed">Feed automatisch aktualisieren</string>
     <string name="settings_refresh_only_selected">Nur ausgewählte</string>
@@ -309,7 +309,7 @@
     <string name="settings_category_article_list">Artikelliste</string>
     <string name="settings_category_article_text">Artikeltext</string>
     <string name="vibrate_on_article_list_entry_swype">Beim Wischen vibrieren</string>
-    <string name="vibrate_on_article_list_entry_swype_summary">Beim Wischen eines Eintrages in der Artikelliste</string>
+    <string name="vibrate_on_article_list_entry_swype_summary">Beim Wischen eines Eintrages in der Artikelliste und im Artikel zur Markierung als Favorit</string>
     <string name="show_mark_all_as_read_button">Alles-gelesen-Taste anzeigen</string>
     <string name="show_mark_all_as_read_button_summary">Wenn deaktiviert, ist diese Option im Menü zu finden.</string>
     <string name="entry_marked_unfavourite">Artikel wurde aus den Favoriten entfernt</string>
@@ -321,8 +321,8 @@
     <string name="markedAsStarred">Artikel wurde als Favorit markiert:</string>
     <string name="deleteAllEntries">Alle Artikel löschen, welche nicht als Favorit markiert sind</string>
     <string name="question">Frage</string>
-    <string name="settings_entry_margins">Ränder</string>
-    <string name="settings_entry_margins_description">links|rechts</string>
+    <string name="settings_entry_margins">Ränder hinzufügen</string>
+    <string name="settings_entry_margins_description">Links und rechts in der Artikelanzeige</string>
     <string name="entry_text_align_justify">Blocksatz</string>
     <string name="entry_text_align_justify_description">Wenn nicht aktiviert, wird der Text links ausgerichtet</string>
     <string name="reload_full_text_with_tags">Mit Tags erneut laden</string>
@@ -348,6 +348,7 @@
     <string name="show_read_checkbox">Gelesen-Markierung</string>
     <string name="show_read_checkbox_descr">Zeigt ein kleines Kontrollkästchen an, wenn der Artikel gelesen wurde</string>
     <string name="turnOn">Aktivieren</string>
+    <string name="brightness_change">Helligkeit einstellen</string>
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Artikel.</item>
         <item quantity="other">%d neue Artikel.</item>
