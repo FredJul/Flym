@@ -281,7 +281,7 @@
     <string name="markAllAsRead">Oznacz wszystko jako przeczytane.</string>
     <string name="settings_remember_last_entry">Pamiętaj ostatnio wyświetlany artykuł.</string>
     <string name="settings_remeber_last_entry_description">Otworzyć ostatnio wyświetlane artykuł po uruchomieniu - w przeciwnym razie pokaż listę nieprzeczytanych artykułów</string>
-    <string name="pageUp">strona w górę</string>
+    <string name="pageUp">strona w górę / przesuń w dół by o(d)znaczyć gwiazdką</string>
     <string name="pageDown">strona w dół</string>
     <string name="fullScreenToggle">przełącznik pełnego ekranu</string>
     <string name="auto_refresh_feed">Automatycznie odświeżaj kanał.</string>
@@ -350,7 +350,8 @@
     <string name="show_full_text_indicator_descr">Wyświetla małą ikonkę dyskietki by wskazać że został wczytany pełny tekst artykułu.</string>
     <string name="show_read_checkbox">Pole oznaczające że artykuł został przeczytany.</string>
     <string name="show_read_checkbox_descr">Wyświetla małą ikonkę sygnalizującą iż artykuł został przeczytany.</string>
-    <string name="turnOn">Włącz.</string>
+    <string name="turnOn">Włącz</string>
+	<string name="brightness_change">Regulacja jasności</string>
 
 
     <plurals name="number_of_new_entries">
