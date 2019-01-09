@@ -65,7 +65,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -167,10 +166,10 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
             }
         });
 
-        mProgressBar = (ProgressBar)rootView.findViewById(R.id.progressBar);
+        mProgressBar = rootView.findViewById(R.id.progressBar);
         mProgressBar.setProgress( 0 );
 
-        mLabelClock = (TextView)rootView.findViewById(R.id.textClock);
+        mLabelClock = rootView.findViewById(R.id.textClock);
         mLabelClock.setText("");
 
         mToggleStatusBarVisbleBtn =  rootView.findViewById(R.id.toggleFullScreenStatusBarBtn);
@@ -182,7 +181,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
             }
         });
 
-        mEntryPager = (ViewPager) rootView.findViewById(R.id.pager);
+        mEntryPager = rootView.findViewById(R.id.pager);
         //mEntryPager.setPageTransformer(true, new DepthPageTransformer());
         mEntryPager.setAdapter(mEntryPagerAdapter);
 
@@ -518,7 +517,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         updateMenuWithIcon(menu.findItem(R.id.menu_cancel_refresh));
 
         EntryActivity activity = (EntryActivity) getActivity();
-        menu.findItem(R.id.menu_star).setShowAsAction( activity.GetIsActionBarHidden() ? MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW : MenuItem.SHOW_AS_ACTION_IF_ROOM );
+        menu.findItem(R.id.menu_star).setShowAsAction( EntryActivity.GetIsActionBarHidden() ? MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW : MenuItem.SHOW_AS_ACTION_IF_ROOM );
 
         {
             MenuItem item = menu.findItem(R.id.menu_star);
@@ -1065,34 +1064,35 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (mBaseUri != null && cursor != null) { // can be null if we do a setData(null) before
             try {
-                cursor.moveToFirst();
+                if ( cursor.moveToFirst() ) {
 
-                if (mTitlePos == -1) {
-                    mTitlePos = cursor.getColumnIndex(EntryColumns.TITLE);
-                    mDatePos = cursor.getColumnIndex(EntryColumns.DATE);
-                    mAbstractPos = cursor.getColumnIndex(EntryColumns.ABSTRACT);
-                    mMobilizedHtmlPos = cursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
-                    mLinkPos = cursor.getColumnIndex(EntryColumns.LINK);
-                    mIsFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
-                    mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
-                    mEnclosurePos = cursor.getColumnIndex(EntryColumns.ENCLOSURE);
-                    mAuthorPos = cursor.getColumnIndex(EntryColumns.AUTHOR);
-                    mScrollPosPos = cursor.getColumnIndex(EntryColumns.SCROLL_POS);
-                    mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
-                    mFeedUrlPos = cursor.getColumnIndex(FeedColumns.URL);
-                    mFeedIconPos = cursor.getColumnIndex(FeedColumns.ICON);
-                    mRetrieveFullTextPos = cursor.getColumnIndex(FeedColumns.RETRIEVE_FULLTEXT);
-                }
+                    if (mTitlePos == -1) {
+                        mTitlePos = cursor.getColumnIndex(EntryColumns.TITLE);
+                        mDatePos = cursor.getColumnIndex(EntryColumns.DATE);
+                        mAbstractPos = cursor.getColumnIndex(EntryColumns.ABSTRACT);
+                        mMobilizedHtmlPos = cursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
+                        mLinkPos = cursor.getColumnIndex(EntryColumns.LINK);
+                        mIsFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
+                        mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
+                        mEnclosurePos = cursor.getColumnIndex(EntryColumns.ENCLOSURE);
+                        mAuthorPos = cursor.getColumnIndex(EntryColumns.AUTHOR);
+                        mScrollPosPos = cursor.getColumnIndex(EntryColumns.SCROLL_POS);
+                        mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
+                        mFeedUrlPos = cursor.getColumnIndex(FeedColumns.URL);
+                        mFeedIconPos = cursor.getColumnIndex(FeedColumns.ICON);
+                        mRetrieveFullTextPos = cursor.getColumnIndex(FeedColumns.RETRIEVE_FULLTEXT);
+                    }
 
-                int position = loader.getId();
-                if (position != -1) {
-                    FetcherService.mMaxImageDownloadCount = PrefUtils.getImageDownloadCount();
-                    mEntryPagerAdapter.displayEntry(position, cursor, false);
-                    mRetrieveFullText = cursor.getInt( mRetrieveFullTextPos ) == 1;
-                    EntryActivity activity = (EntryActivity) getActivity();
-                    if (getBoolean(DISPLAY_ENTRIES_FULLSCREEN, false))
-                        activity.setFullScreen(true, true);
+                    int position = loader.getId();
+                    if (position != -1) {
+                        FetcherService.mMaxImageDownloadCount = PrefUtils.getImageDownloadCount();
+                        mEntryPagerAdapter.displayEntry(position, cursor, false);
+                        mRetrieveFullText = cursor.getInt(mRetrieveFullTextPos) == 1;
+                        EntryActivity activity = (EntryActivity) getActivity();
+                        if (getBoolean(DISPLAY_ENTRIES_FULLSCREEN, false))
+                            activity.setFullScreen(true, true);
 
+                    }
                 }
             } catch ( IllegalStateException e ) {
                 FetcherService.Status().SetError( e.getMessage(), e );

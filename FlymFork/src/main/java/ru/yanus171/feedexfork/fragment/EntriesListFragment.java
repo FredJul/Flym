@@ -276,7 +276,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         //refreshSwipeProgress();
         PrefUtils.registerOnPrefChangeListener(mPrefListener);
 
-        mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        mFab = getActivity().findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -321,7 +321,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
                         FetcherService.Status()/*,
                         this*/);
 
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        mProgressBar = rootView.findViewById(R.id.progressBar);
 
         mListView = rootView.findViewById(android.R.id.list);
         //mListView.setOnTouchListener(new SwipeGestureListener(mListView.getContext()));
@@ -368,17 +368,17 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             header.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ( ( ListView )mListView ).removeHeaderView(header);
+                    mListView.removeHeaderView(header);
                     PrefUtils.putBoolean(PrefUtils.DISPLAY_TIP, false);
                 }
             });
-            ( ( ListView )mListView ).addHeaderView(header);
+            mListView.addHeaderView(header);
         }
 
         if ( mListView instanceof ListView )
-            UiUtils.addEmptyFooterView(( ( ListView )mListView ), 90);
+            UiUtils.addEmptyFooterView(mListView, 90);
 
-        mRefreshListBtn = (Button) rootView.findViewById(R.id.refreshListBtn);
+        mRefreshListBtn = rootView.findViewById(R.id.refreshListBtn);
         mRefreshListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -696,18 +696,14 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     }
 
     private void startRefresh() {
-        if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-
-
+        if ( mCurrentUri != null && !PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
             int uriMatcher = FeedDataContentProvider.URI_MATCHER.match(mCurrentUri);
-            if ( mCurrentUri != null &&
-                 ( uriMatcher == FeedDataContentProvider.URI_ENTRIES_FOR_FEED ||
-                   uriMatcher == FeedDataContentProvider.URI_UNREAD_ENTRIES_FOR_FEED ) ) {
+            if ( uriMatcher == FeedDataContentProvider.URI_ENTRIES_FOR_FEED ||
+                 uriMatcher == FeedDataContentProvider.URI_UNREAD_ENTRIES_FOR_FEED ) {
                 getActivity().startService(new Intent(getActivity(), FetcherService.class)
                         .setAction(FetcherService.ACTION_REFRESH_FEEDS)
                         .putExtra(Constants.FEED_ID, mCurrentUri.getPathSegments().get(1)));
-            } else if ( mCurrentUri != null &&
-                        FeedDataContentProvider.URI_MATCHER.match(mCurrentUri) == FeedDataContentProvider.URI_ENTRIES_FOR_GROUP ) {
+            } else if ( FeedDataContentProvider.URI_MATCHER.match(mCurrentUri) == FeedDataContentProvider.URI_ENTRIES_FOR_GROUP ) {
                 getActivity().startService(new Intent(getActivity(), FetcherService.class)
                         .setAction(FetcherService.ACTION_REFRESH_FEEDS)
                         .putExtra(Constants.GROUP_ID, mCurrentUri.getPathSegments().get(1)));
@@ -744,7 +740,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo, mShowTextInEntryList, mShowUnRead);
         SetListViewAdapter();
         if ( mListView instanceof ListView )
-            ( ( ListView )mListView ).setDividerHeight( mShowTextInEntryList ? 10 : 0 );
+            mListView.setDividerHeight( mShowTextInEntryList ? 10 : 0 );
         mListDisplayDate = new Date().getTime();
         if (mCurrentUri != null) {
             restartLoaders();
