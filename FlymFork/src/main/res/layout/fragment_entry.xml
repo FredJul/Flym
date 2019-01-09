@@ -28,7 +28,7 @@
                 android:id="@+id/pageUpBtn"
                 style="@style/TapZone"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="10mm"
                 android:layout_alignParentTop="true"
                 android:text="@string/pageUp"/>
 
@@ -37,13 +37,13 @@
                 style="@style/TapZone"
                 android:text="@string/pageDown"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="10mm"
                 android:layout_alignParentBottom="true"/>
 
             <TextView
                 android:id="@+id/pageDownBtnVert"
                 style="@style/TapZone"
-                android:layout_width="40dp"
+                android:layout_width="10mm"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:text="@string/pageDown"/>
@@ -51,7 +51,7 @@
             <TextView
                 android:id="@+id/brightnessSlider"
                 style="@style/TapZone"
-                android:layout_width="40dp"
+                android:layout_width="10mm"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:text="@string/brightness_change"/>
@@ -59,8 +59,8 @@
             <TextView
                 android:id="@+id/toggleFullScreenStatusBarBtn"
                 style="@style/TapZone"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="10mm"
+                android:layout_height="10mm"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginBottom="5dp"
@@ -70,8 +70,8 @@
 
             <TextView
                 android:id="@+id/toggleFullscreenBtn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="10mm"
+                android:layout_height="10mm"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="5dp"

@@ -92,6 +92,7 @@ import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
 import ru.yanus171.feedexfork.view.EntryView;
 import ru.yanus171.feedexfork.view.StatusText;
+import ru.yanus171.feedexfork.view.TapZonePreviewPreference;
 
 import static ru.yanus171.feedexfork.Constants.VIBRATE_DURATION;
 import static ru.yanus171.feedexfork.service.FetcherService.CancelStarNotification;
@@ -152,6 +153,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_entry, container, true);
+        TapZonePreviewPreference.SetupZoneSizes( rootView );
 
         mStatusText = new StatusText( (TextView)rootView.findViewById( R.id.statusText ),
                                       FetcherService.Status()/*,

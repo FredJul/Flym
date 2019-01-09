@@ -265,7 +265,7 @@
     <string name="setupConnection">Setup connection</string>
     <string name="settings_content_extract_rules">Content extract rules</string>
     <string name="settings_content_extract_rules_description">set for each site (base HTML knowledge needed)</string>
-    <string name="settings_tapZones">Tap Zones</string>
+    <string name="settings_tapZones">Tap Zones preview</string>
     <string name="settings_additional">Additional</string>
     <string name="settings_load_comments">Load comments</string>
     <string name="settings_load_comments_description">in articles\' full text</string>
@@ -351,6 +351,8 @@
     <string name="show_read_checkbox_descr">Show small checkbox to indicate that article is read</string>
     <string name="turnOn">Turn on</string>
     <string name="brightness_change">Brightness change</string>
+    <string name="tap_zone_size">Tap zone size</string>
+    <string name="tap_zone_size_descr">the height or width of all tap zones in millimeters</string>
 
 
     <plurals name="number_of_new_entries">

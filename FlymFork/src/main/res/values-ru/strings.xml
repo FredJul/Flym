@@ -205,7 +205,7 @@
     <string name="setupConnection">Установка соединения</string>
     <string name="settings_content_extract_rules">Правила поиска полных текстов</string>
     <string name="settings_content_extract_rules_description">задаются для отдельных сайтов (необходимы базовые знания HTML)</string>
-    <string name="settings_tapZones">Зоны нажатий</string>
+    <string name="settings_tapZones">Зоны нажатий (предпросмотр)</string>
     <string name="settings_additional">Дополнительно</string>
     <string name="settings_load_comments">Загружать комментарии</string>
     <string name="settings_load_comments_description">в полных текстах статей</string>
@@ -425,5 +425,7 @@
     <string name="show_read_checkbox_descr">Показывать галку прочитанного</string>
     <string name="turnOn">Включить</string>
     <string name="brightness_change">Измнение яркости</string>
+    <string name="tap_zone_size">Размер зоны нажатий</string>
+    <string name="tap_zone_size_descr">Ширина или высота зон нажатий в миллиметрах</string>
 
 </resources>

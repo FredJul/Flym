@@ -181,12 +181,19 @@
             android:title="@string/settings_display_text_color"
             android:summary="@string/settings_display_text_color_description"/>
 
-        <EditTextPreference
+        <ru.yanus171.feedexfork.view.TapZonePreviewPreference
             android:key="settings_tap_zones"
             android:inputType="none"
             android:dialogLayout="@layout/fragment_entry"
             android:dialogTitle="@string/settings_tap_zones_dialogtitle"
             android:title="@string/settings_tapZones"/>
+
+        <ru.yanus171.feedexfork.view.AutoSummaryEditPreference
+            android:key="tap_zone_size"
+            android:inputType="number"
+            android:defaultValue="7"
+            android:title="@string/tap_zone_size"
+            android:summary="@string/tap_zone_size_descr"/>
 
         <CheckBoxPreference
             android:key="settings_tap_zones_visible"
