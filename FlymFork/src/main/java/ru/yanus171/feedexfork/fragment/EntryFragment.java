@@ -262,13 +262,9 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
             private int currentx = 0;
             private int currenty = 0;
             private int mInitialAlpha = 0;
-            //private final int WIDTH = UiUtils.mmToPixel( 5 );
-            //private final int MIN_DY = 10;
 
             @Override
             public boolean onTouch(View view1, MotionEvent event) {
-                //if ( view.getParent() != null )
-                //    view.getParent().requestDisallowInterceptTouchEvent(false);
 
                 if ( event.getAction() == MotionEvent.ACTION_DOWN) {
                     paddingX = 0;
@@ -279,10 +275,6 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                     currenty = (int) event.getY();
                     mInitialAlpha = GetBrightness();
                     Dog.v( "onTouch ACTION_DOWN" );
-                    /*if ( initialx < WIDTH ) {
-
-
-                    }*/
                     return true;
                 } else  if ( event.getAction() == MotionEvent.ACTION_MOVE ) {
 
@@ -293,8 +285,6 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
                     if ( Math.abs( paddingY ) > Math.abs( paddingX ) &&
                             Math.abs( initialy - event.getY() ) > view1.getWidth()  ) {
-                        //view.getParent().requestDisallowInterceptTouchEvent(false);
-                        //if ( paddingY > MIN_DY ) {
                         Dog.v( "onTouch ACTION_MOVE " + paddingX + ", " + paddingY );
                         int currentAlpha = mInitialAlpha + 255 / 1 * paddingY / mDimFrame.getHeight();
                         if ( currentAlpha > 255 )
@@ -302,7 +292,6 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                         else if ( currentAlpha < 1 )
                             currentAlpha = 1;
                         SetBrightness(currentAlpha);
-                        //Toast.makeText( view.getContext(), , Toast.LENGTH_SHORT  ).show();
                     }
                     return true;
                 } else  if ( event.getAction() == MotionEvent.ACTION_UP) {
@@ -318,9 +307,9 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
         final ImageView frameStarImage  = rootView.findViewById(R.id.frameStarImage);
         final boolean prefVibrate = PrefUtils.getBoolean(VIBRATE_ON_ARTICLE_LIST_ENTRY_SWYPE, true);
         rootView.findViewById(R.id.pageUpBtn).setOnTouchListener(new View.OnTouchListener() {
-            //private int initialx = 0;
             private int initialy = 0;
             private boolean mWasVibrate = false;
+            private boolean mWasSwipe = false;
             private final int MAX_HEIGHT = UiUtils.mmToPixel( 12 );
             private final int MIN_HEIGHT = UiUtils.mmToPixel( 1 );
             @Override
@@ -330,23 +319,25 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                     //initialx = (int) event.getX();
                     initialy = (int) event.getY();
                     mWasVibrate = false;
+                    mWasSwipe = false;
                     return true;
                 } else if ( event.getAction() == MotionEvent.ACTION_MOVE) {
                     Dog.v( "onTouch ACTION_MOVE " + ( event.getY() - initialy ) );
-                    int w = (int) (event.getY() - initialy);
+                    int w = Math.max( 0, (int) (event.getY() - initialy) );
                     SetStarFrameWidth( Math.min( w, MAX_HEIGHT ) );
                     if ( prefVibrate && w >= MAX_HEIGHT && !mWasVibrate ) {
                         mWasVibrate = true;
                         vibrator.vibrate(VIBRATE_DURATION);
-                    } else if ( w < MAX_HEIGHT ) {
+                    } else if ( w < MAX_HEIGHT )
                         mWasVibrate = false;
-                    }
+                    if ( w >= MIN_HEIGHT )
+                        mWasSwipe = true;
 
                     frameStarImage.setImageResource( ( w >= MAX_HEIGHT ) == mFavorite ? R.drawable.star_empty_gray : R.drawable.star_yellow );
                     return true;
                 } else if ( event.getAction() == MotionEvent.ACTION_UP) {
                     Dog.v( "onTouch ACTION_UP " );
-                    if ( event.getY() - initialy < MIN_HEIGHT ) {
+                    if ( !mWasSwipe ) {
                         PageUp();
                     } else if ( event.getY() - initialy >= MAX_HEIGHT ) {
                         SetIsFavourite(!mFavorite);
