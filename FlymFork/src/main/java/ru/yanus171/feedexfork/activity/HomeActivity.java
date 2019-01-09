@@ -49,7 +49,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.io.File;
-import java.util.regex.Matcher;
 
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.MainApplication;
@@ -63,7 +62,6 @@ import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.service.AutoRefreshService;
 import ru.yanus171.feedexfork.service.FetcherService;
-import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.Timer;
 import ru.yanus171.feedexfork.utils.UiUtils;
@@ -213,35 +211,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         Timer timer = new Timer( "HomeActivity.onResume" );
 
         final Intent intent = getIntent();
-        if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEND) && intent.hasExtra(Intent.EXTRA_TEXT)) {
-            final String text = intent.getStringExtra(Intent.EXTRA_TEXT);
-            final Matcher m = HtmlUtils.HTTP_PATTERN.matcher(text);
-            if (m.find()) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        FetcherService.OpenLink( FetcherService.LoadLink( FetcherService.GetExtrenalLinkFeedID(),
-                                                 text.substring(m.start(), m.end()),
-                                                 text.substring(0, m.start()),
-                                                 FetcherService.ForceReload.No,
-                                true).first, HomeActivity.this );
-                    }
-                }).start();
-
-            }
-        } else if (intent.getScheme() != null && intent.getScheme().startsWith("http"))
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                FetcherService.OpenLink( FetcherService.LoadLink( FetcherService.GetExtrenalLinkFeedID(),
-                                                                  intent.getDataString(),
-                                                                  intent.getDataString(),
-                                                                  FetcherService.ForceReload.No,
-                                                                  true  ).first,
-                                         HomeActivity.this );
-                }
-            }).start();
-        else if (intent.getData() != null && intent.getData().equals( FAVORITES_CONTENT_URI ) ) {
+        if (intent.getData() != null && intent.getData().equals( FAVORITES_CONTENT_URI ) ) {
             selectDrawerItem( 2 );
         } else if (PrefUtils.getBoolean(PrefUtils.REMEBER_LAST_ENTRY, true)) {
             String lastUri = PrefUtils.getString(PrefUtils.LAST_ENTRY_URI, "");
@@ -451,7 +421,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         mEntriesFragment.setData(newUri,
                 showFeedInfo,
                 false,
-                mDrawerAdapter == null ? false : mDrawerAdapter.isShowTextInEntryList(position));
+                mDrawerAdapter != null && mDrawerAdapter.isShowTextInEntryList(position));
 
         //mDrawerList.setSelection( position );
         mDrawerList.setItemChecked(position, true);

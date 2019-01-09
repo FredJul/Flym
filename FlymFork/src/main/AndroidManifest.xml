@@ -52,22 +52,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter android:label="@string/loadLink" android:icon="@drawable/load_now">
-                <action android:name="android.intent.action.SEND" />
 
-                <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-            <intent-filter android:label="@string/loadLink" android:icon="@drawable/load_now">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.AddGoogleNewsActivity"
@@ -106,6 +92,32 @@
                 <data android:scheme="https" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity.LoadLinkActivity"
+            android:clearTaskOnLaunch="true"
+            android:label="@string/feeds"
+            android:launchMode="singleInstance"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter android:label="@string/loadLink" android:icon="@drawable/load_now">
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter android:label="@string/loadLink" android:icon="@drawable/load_now">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".activity.EntryActivity"
             android:configChanges="orientation|screenSize"

@@ -59,14 +59,12 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.util.Xml;
 import android.widget.Toast;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -76,8 +74,6 @@ import org.xml.sax.SAXException;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -96,21 +92,19 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.activity.HomeActivity;
-import ru.yanus171.feedexfork.parser.RssAtomParser;
 import ru.yanus171.feedexfork.parser.HTMLParser;
+import ru.yanus171.feedexfork.parser.RssAtomParser;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.provider.FeedData.TaskColumns;
 import ru.yanus171.feedexfork.utils.ArticleTextExtractor;
-import ru.yanus171.feedexfork.utils.FileUtils;
 import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
@@ -579,10 +573,11 @@ public class FetcherService extends IntentService {
     }
 
     public enum ForceReload {Yes, No}
-    public static void OpenLink( Uri entryUri, final AppCompatActivity activity ) {
+    public static void OpenLink( Uri entryUri ) {
         PrefUtils.putString(PrefUtils.LAST_ENTRY_URI, entryUri.toString());
         Intent intent = new Intent(MainApplication.getContext(), HomeActivity.class);
-        activity.startActivity( intent );
+        intent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK );
+        MainApplication.getContext().startActivity( intent );
     }
     public static Pair<Uri,Boolean> LoadLink(final String feedID,
                                              final String url,
@@ -596,7 +591,7 @@ public class FetcherService extends IntentService {
             String url1 = url.replace("https:", "http:");
             String url2 = url.replace("http:", "https:");
             ContentResolver cr = MainApplication.getContext().getContentResolver();
-            Cursor cursor = cr.query(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedID),
+            Cursor cursor = cr.query(EntryColumns.CONTENT_URI,
                     new String[]{EntryColumns._ID},
                     EntryColumns.LINK + "='" + url1 + "'" + Constants.DB_OR + EntryColumns.LINK + "='" + url2 + "'",
                     null,
