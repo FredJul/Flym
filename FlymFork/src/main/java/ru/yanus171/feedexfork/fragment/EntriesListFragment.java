@@ -202,8 +202,9 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             Timer timer = new Timer( "EntriesListFragment.mEntriesNumberLoader.onCreateLoader" );
-
-            CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, new String[]{"SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")", "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")"}, null, null, null);
+            final String EXPR_READ_COUNT = "SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")";
+            final String EXPR_UNREAD_COUNT = "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")";
+            CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, new String[]{ EXPR_READ_COUNT, EXPR_UNREAD_COUNT}, null, null, null);
             cursorLoader.setUpdateThrottle(150);
             timer.End();
             return cursorLoader;

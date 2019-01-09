@@ -312,12 +312,13 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         Timer timer = new Timer( "HomeActivity.onCreateLoader" );
+        final String EXPR_FEED_ALL_NUMBER = PrefUtils.getBoolean( "show_read_article_count", false ) ? FEED_ALL_NUMBER : "0";
         CursorLoader cursorLoader =
                 new CursorLoader(this,
                         FeedColumns.GROUPED_FEEDS_CONTENT_URI,
                         new String[]{FeedColumns._ID, FeedColumns.URL, FeedColumns.NAME,
                                 FeedColumns.IS_GROUP, FeedColumns.ICON, FeedColumns.LAST_UPDATE,
-                                FeedColumns.ERROR, FEED_UNREAD_NUMBER, FEED_ALL_NUMBER, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST,
+                                FeedColumns.ERROR, FEED_UNREAD_NUMBER, EXPR_FEED_ALL_NUMBER, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST,
                                 FeedColumns.IS_GROUP_EXPANDED, FeedColumns.IS_AUTO_REFRESH, FeedColumns.OPTIONS},
                         "(" + FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR +
                                 FeedColumns.GROUP_ID + Constants.DB_IS_NULL + Constants.DB_OR +
