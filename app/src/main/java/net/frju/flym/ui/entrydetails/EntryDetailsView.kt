@@ -58,7 +58,7 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
             "a {color: #0099CC}" +
             "h1 a {color: inherit; text-decoration: none}" +
             "img {height: auto} " +
-            "pre {white-space: pre-wrap;} " +
+            "pre {white-space: pre-wrap; direction: ltr;} " +
             "blockquote {border-left: thick solid " + QUOTE_LEFT_COLOR + "; background-color:" + QUOTE_BACKGROUND_COLOR + "; margin: 0.5em 0 0.5em 0em; padding: 0.5em} " +
             "p {margin: 0.8em 0 0.8em 0} " +
             "p.subtitle {color: " + SUBTITLE_COLOR + "; border-top:1px " + SUBTITLE_BORDER_COLOR + "; border-bottom:1px " + SUBTITLE_BORDER_COLOR + "; padding-top:2px; padding-bottom:2px; font-weight:800 } " +
