@@ -46,7 +46,8 @@
         <activity
             android:name=".activity.HomeActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -68,6 +69,7 @@
             android:name=".activity.EditFeedsListActivity"
             android:label="@string/feeds"
             android:launchMode="singleTask" />
+
         <activity
             android:name=".activity.LoadLinkLaterActivity"
             android:clearTaskOnLaunch="true"
@@ -99,7 +101,8 @@
             android:label="@string/feeds"
             android:launchMode="singleInstance"
             android:noHistory="true"
-            android:theme="@android:style/Theme.NoDisplay">
+            android:theme="@style/Theme.Dark">
+
             <intent-filter android:label="@string/loadLink" android:icon="@drawable/load_now">
                 <action android:name="android.intent.action.SEND" />
 
@@ -122,7 +125,8 @@
             android:name=".activity.EntryActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
-            android:parentActivityName=".activity.HomeActivity">
+            android:parentActivityName=".activity.HomeActivity"
+            android:theme="@style/Theme.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

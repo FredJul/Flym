@@ -52,19 +52,16 @@ import android.os.Handler;
 
 import java.io.File;
 
-import ru.yanus171.feedexfork.Constants;
-import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.parser.OPML;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
 import ru.yanus171.feedexfork.provider.FeedData.TaskColumns;
-import ru.yanus171.feedexfork.service.FetcherService;
 
 class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "FeedEx.db";
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 16;
 
     private static final String ALTER_TABLE = "ALTER TABLE ";
     private static final String ADD = " ADD ";
@@ -176,14 +173,15 @@ class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 15)
             executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.OPTIONS + ' ' + FeedData.TYPE_TEXT);
 
-        //if (oldVersion < 16)
-        //    executeCatchedSQL(database, "DELETE FROM " + FeedColumns.TABLE_NAME + " WHERE " + FeedColumns.FETCH_MODE  + " = " + FetcherService.FETCHMODE_EXERNAL_LINK);
+        if (oldVersion < 16)
+            executeCatchedSQL(database, "CREATE INDEX idx_entries_link ON " + EntryColumns.TABLE_NAME + " (" + EntryColumns.LINK  + ")" );
     }
 
     private void executeCatchedSQL(SQLiteDatabase database, String query) {
         try {
             database.execSQL(query);
         } catch (Exception ignored) {
+            ignored.printStackTrace();
         }
     }
 

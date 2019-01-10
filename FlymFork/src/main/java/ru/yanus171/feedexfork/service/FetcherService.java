@@ -108,6 +108,7 @@ import ru.yanus171.feedexfork.utils.ArticleTextExtractor;
 import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
+import ru.yanus171.feedexfork.utils.Timer;
 import ru.yanus171.feedexfork.view.EntryView;
 import ru.yanus171.feedexfork.view.StatusText;
 
@@ -229,9 +230,8 @@ public class FetcherService extends IntentService {
         boolean skipFetch = isFromAutoRefresh && PrefUtils.getBoolean(PrefUtils.REFRESH_WIFI_ONLY, false)
                 && networkInfo.getType() != ConnectivityManager.TYPE_WIFI;
         // We need to skip the fetching process, so we quit
-        if (skipFetch) {
+        if (skipFetch)
             return;
-        }
 
         if ( isFromAutoRefresh && Build.VERSION.SDK_INT < 26 && AutoRefreshService.isBatteryLow(this) )
             return;
@@ -239,7 +239,7 @@ public class FetcherService extends IntentService {
             if (ACTION_MOBILIZE_FEEDS.equals(intent.getAction())) {
                 mobilizeAllEntries(isFromAutoRefresh);
                 downloadAllImages();
-            } else if (ACTION_LOAD_LINK.equals(intent.getAction())) {
+            } else if ( ACTION_LOAD_LINK.equals(intent.getAction())) {
                 startForeground(Constants.NOTIFICATION_ID_REFRESH_SERVICE, StatusText.GetNotification( getString(R.string.loadingLink) ) ); try {
                     LoadLink(GetExtrenalLinkFeedID(),
                             intent.getStringExtra(Constants.URL_TO_LOAD),
@@ -247,7 +247,9 @@ public class FetcherService extends IntentService {
                             FetcherService.ForceReload.No,
                             true);
                     downloadAllImages();
-                } finally { stopForeground( true ); }
+                } finally {
+                    stopForeground( true );
+                }
             } else if (ACTION_DOWNLOAD_IMAGES.equals(intent.getAction())) {
                 downloadAllImages();
             } else { // == Constants.ACTION_REFRESH_FEEDS
@@ -335,7 +337,6 @@ public class FetcherService extends IntentService {
 
             } finally {
                 stopForeground( true );
-                Constants.NOTIF_MGR.cancel( Constants.NOTIFICATION_ID_REFRESH_SERVICE );
             }
 
         }
@@ -579,27 +580,39 @@ public class FetcherService extends IntentService {
         intent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK );
         MainApplication.getContext().startActivity( intent );
     }
+
+    public static Uri GetEnryUri( final String url ) {
+        Timer timer = new Timer( "GetEnryUri" );
+        Uri entryUri = null;
+        String url1 = url.replace("https:", "http:");
+        String url2 = url.replace("http:", "https:");
+        ContentResolver cr = MainApplication.getContext().getContentResolver();
+        Cursor cursor = cr.query(EntryColumns.CONTENT_URI,
+                new String[]{EntryColumns._ID},
+                EntryColumns.LINK + "='" + url1 + "'" + Constants.DB_OR + EntryColumns.LINK + "='" + url2 + "'",
+                null,
+                null);
+        try {
+            if (cursor.moveToFirst())
+                entryUri = EntryColumns.CONTENT_URI(cursor.getLong(0));
+        } finally {
+            cursor.close();
+        }
+        timer.End();
+        return entryUri;
+    }
     public static Pair<Uri,Boolean> LoadLink(final String feedID,
                                              final String url,
                                              final String title,
                                              final ForceReload forceReload,
                                              final boolean isCorrectTitle) {
-        Uri entryUri;
         boolean load = false;
-
+        final ContentResolver cr = MainApplication.getContext().getContentResolver();
         int status = FetcherService.Status().Start(MainApplication.getContext().getString(R.string.loadingLink)); try {
-            String url1 = url.replace("https:", "http:");
-            String url2 = url.replace("http:", "https:");
-            ContentResolver cr = MainApplication.getContext().getContentResolver();
-            Cursor cursor = cr.query(EntryColumns.CONTENT_URI,
-                    new String[]{EntryColumns._ID},
-                    EntryColumns.LINK + "='" + url1 + "'" + Constants.DB_OR + EntryColumns.LINK + "='" + url2 + "'",
-                    null,
-                    null);
-            if (cursor.moveToFirst()) {
-                entryUri = EntryColumns.CONTENT_URI(cursor.getLong(0));
-                load = ( forceReload == ForceReload.Yes );
-                if ( load ) {
+            Uri entryUri = GetEnryUri( url );
+            if ( entryUri != null ) {
+                load = (forceReload == ForceReload.Yes);
+                if (load) {
                     ContentValues values = new ContentValues();
                     values.put(EntryColumns.DATE, (new Date()).getTime());
                     cr.update(entryUri, values, null, null);//operations.add(ContentProviderOperation.newUpdate(entryUri).withValues(values).build());
@@ -629,18 +642,16 @@ public class FetcherService extends IntentService {
             }
             if ( load && !FetcherService.isCancelRefresh() )
                 mobilizeEntry(cr, Long.parseLong(entryUri.getLastPathSegment()), ArticleTextExtractor.MobilizeType.Yes, AutoDownloadEntryImages.Yes, true, isCorrectTitle);
-
-            cursor.close();
-
+            return new Pair<Uri,Boolean>(entryUri, load);
         } finally {
             FetcherService.Status().End(status);
         }
         //stopForeground( true );
-        return new Pair<Uri,Boolean>(entryUri, load);
     }
 
     private static String mExtrenalLinkFeedID = "";
     public static String GetExtrenalLinkFeedID() {
+        //Timer timer = new Timer( "GetExtrenalLinkFeedID()" );
         synchronized ( mExtrenalLinkFeedID ) {
             if (mExtrenalLinkFeedID.isEmpty()) {
 
@@ -660,6 +671,7 @@ public class FetcherService extends IntentService {
                 }
             }
         }
+        //timer.End();
         return mExtrenalLinkFeedID;
     }
 
