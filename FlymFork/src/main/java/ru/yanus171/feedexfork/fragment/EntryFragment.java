@@ -88,6 +88,7 @@ import ru.yanus171.feedexfork.utils.ArticleTextExtractor;
 import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.NetworkUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
+import ru.yanus171.feedexfork.utils.Timer;
 import ru.yanus171.feedexfork.utils.UiUtils;
 import ru.yanus171.feedexfork.view.EntryView;
 import ru.yanus171.feedexfork.view.StatusText;
@@ -752,6 +753,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
     }
 
     public void setData(final Uri uri) {
+        Timer timer = new Timer( "EntryFr.setData" );
         Dog.v( String.format( "EntryFragment.setData( %s )", uri.toString() ) );
 
         mCurrentPagerPos = -1;
@@ -810,6 +812,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 				}).start();
 			}
 		}
+        timer.End();
     }
 
     private void refreshUI(Cursor entryCursor) {
@@ -1055,6 +1058,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Timer.Start( id, "EntryFr.onCreateLoader" );
         CursorLoader cursorLoader = new CursorLoader(getActivity(), EntryColumns.CONTENT_URI(mEntriesIds[id]), null, null, null, null);
         cursorLoader.setUpdateThrottle(100);
         return cursorLoader;
@@ -1062,6 +1066,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        Timer.End( loader.getId() );
         if (mBaseUri != null && cursor != null) { // can be null if we do a setData(null) before
             try {
                 if ( cursor.moveToFirst() ) {

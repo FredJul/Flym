@@ -105,14 +105,13 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            Timer timer = new Timer( "EntriesListFragment.onCreateLoader" );
+            Timer.Start( ENTRIES_LOADER_ID, "EntriesListFragment.onCreateLoader" );
 
             String entriesOrder = PrefUtils.getBoolean(PrefUtils.DISPLAY_OLDEST_FIRST, false) || mShowTextInEntryList ? Constants.DB_ASC : Constants.DB_DESC;
             String where = "(" + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + ')';
             String[] projection = mShowTextInEntryList ? null : EntryColumns.PROJECTION_WITHOUT_TEXT;
             CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, projection, where, null, EntryColumns.DATE + entriesOrder);
             cursorLoader.setUpdateThrottle(150);
-            timer.End();
             return cursorLoader;
         }
 
@@ -201,12 +200,11 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesNumberLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            Timer timer = new Timer( "EntriesListFragment.mEntriesNumberLoader.onCreateLoader" );
+            Timer.Start( NEW_ENTRIES_NUMBER_LOADER_ID, "EntriesListFr.mEntriesNumberLoader" );
             final String EXPR_READ_COUNT = "SUM(" + EntryColumns.FETCH_DATE + '>' + mListDisplayDate + ")";
             final String EXPR_UNREAD_COUNT = "SUM(" + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + Constants.DB_AND + EntryColumns.WHERE_UNREAD + ")";
             CursorLoader cursorLoader = new CursorLoader(getActivity(), mCurrentUri, new String[]{ EXPR_READ_COUNT, EXPR_UNREAD_COUNT}, null, null, null);
             cursorLoader.setUpdateThrottle(150);
-            timer.End();
             return cursorLoader;
         }
 
@@ -216,7 +214,6 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             if ( data == null )
                 return;
 
-            Timer timer = new Timer( "EntriesListFragment.mEntriesNumberLoader.onLoadFinished" );
             data.moveToFirst();
             mNewEntriesNumber = data.getInt(0);
             mOldUnreadEntriesNumber = data.getInt(1);
@@ -230,7 +227,6 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
 
             mAutoRefreshDisplayDate = false;
 
-            timer.End();
         }
 
         @Override

@@ -22,6 +22,8 @@ package ru.yanus171.feedexfork.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -49,6 +51,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.io.File;
+import java.util.Date;
+import java.util.regex.Matcher;
 
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.MainApplication;
@@ -62,11 +66,14 @@ import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.service.AutoRefreshService;
 import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.utils.HtmlUtils;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.Timer;
 import ru.yanus171.feedexfork.utils.UiUtils;
 
 import static ru.yanus171.feedexfork.provider.FeedData.EntryColumns.FAVORITES_CONTENT_URI;
+import static ru.yanus171.feedexfork.service.FetcherService.GetEnryUri;
+import static ru.yanus171.feedexfork.service.FetcherService.GetExtrenalLinkFeedID;
 
 public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -208,15 +215,31 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     public void onResume() {
         super.onResume();
 
-        Timer timer = new Timer( "HomeActivity.onResume" );
-
+        Timer timer = new Timer("HomeActivity.onResume");
         final Intent intent = getIntent();
-        if (intent.getData() != null && intent.getData().equals( FAVORITES_CONTENT_URI ) ) {
+        setIntent( new Intent() );
+        final String TEXT = MainApplication.getContext().getString(R.string.loadingLink) + "...";
+        if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEND) && intent.hasExtra(Intent.EXTRA_TEXT)) {
+            final String text = intent.getStringExtra(Intent.EXTRA_TEXT);
+            final Matcher m = HtmlUtils.HTTP_PATTERN.matcher(text);
+            if (m.find()) {
+                final String url = text.substring(m.start(), m.end());
+                final String title = text.substring(0, m.start());
+                LoadAndOpenLink(url, title, TEXT);
+            }
+        } else if (intent.getScheme() != null && intent.getScheme().startsWith("http")) {
+            final String url = intent.getDataString();
+            final String title = intent.getDataString();
+            LoadAndOpenLink(url, title, TEXT);
+        }
+
+        if ( intent.getData() != null && intent.getData().equals( FAVORITES_CONTENT_URI ) ) {
             selectDrawerItem( 2 );
         } else if (PrefUtils.getBoolean(PrefUtils.REMEBER_LAST_ENTRY, true)) {
             String lastUri = PrefUtils.getString(PrefUtils.LAST_ENTRY_URI, "");
-            if (!lastUri.isEmpty() && !lastUri.contains("-1"))
+            if (!lastUri.isEmpty() && !lastUri.contains("-1")) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(lastUri)));
+            }
         }
 
         if ( mFeedSetupChanged ) {
@@ -242,7 +265,33 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         setIntent( intent );
     }
 
+    private void LoadAndOpenLink(final String url, final String title, final String text) {
+        final ContentResolver cr = MainApplication.getContext().getContentResolver();
+        Uri entryUri = GetEnryUri( url );
+        if ( entryUri == null ) {
+            final String feedID = GetExtrenalLinkFeedID();
+            Timer timer = new Timer( "LoadAndOpenLink insert" );
+            ContentValues values = new ContentValues();
+            values.put(EntryColumns.TITLE, title);
+            values.put(EntryColumns.SCROLL_POS, 0);
+            values.put(EntryColumns.DATE, (new Date()).getTime());
+            values.put(EntryColumns.LINK, url);
+            values.put(EntryColumns.ABSTRACT, text );
+            values.put(EntryColumns.MOBILIZED_HTML, text );
+            entryUri = cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI(feedID), values);
+            entryUri = Uri.withAppendedPath( EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI( feedID ), entryUri.getLastPathSegment() );
+            timer.End();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    FetcherService.LoadLink(feedID, url, title, FetcherService.ForceReload.Yes,true);
+                }
+            }).start();
+        }
 
+        PrefUtils.putString(PrefUtils.LAST_ENTRY_URI, entryUri.toString());//FetcherService.OpenLink(entryUri);
+
+    }
 
 
     public void onBackPressed() {
@@ -396,7 +445,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 newUri = FAVORITES_CONTENT_URI;
                 break;
             case 3:
-                newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI( FetcherService.GetExtrenalLinkFeedID() );
+                newUri = EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI( GetExtrenalLinkFeedID() );
                 showFeedInfo = false;
                 break;
             default:

@@ -15,7 +15,9 @@ public class Timer {
         mStart = new Date();
     }
     public void End() {
-        Log.d( "FFTimer", String.format( "%d msec: %s", new Date().getTime() - mStart.getTime(), mName ) );
+        long delay = new Date().getTime() - mStart.getTime();
+        if ( delay > 200 )
+            Log.d( "FFTimer", String.format( "%d msec: %s", delay, mName ) );
     }
 
     public static void End( int id ) {

@@ -588,13 +588,13 @@ public class FetcherService extends IntentService {
         String url2 = url.replace("http:", "https:");
         ContentResolver cr = MainApplication.getContext().getContentResolver();
         Cursor cursor = cr.query(EntryColumns.CONTENT_URI,
-                new String[]{EntryColumns._ID},
+                new String[]{EntryColumns._ID, EntryColumns.FEED_ID},
                 EntryColumns.LINK + "='" + url1 + "'" + Constants.DB_OR + EntryColumns.LINK + "='" + url2 + "'",
                 null,
                 null);
         try {
             if (cursor.moveToFirst())
-                entryUri = EntryColumns.CONTENT_URI(cursor.getLong(0));
+                entryUri = Uri.withAppendedPath( EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI( cursor.getString(1) ), cursor.getString(0) );
         } finally {
             cursor.close();
         }
