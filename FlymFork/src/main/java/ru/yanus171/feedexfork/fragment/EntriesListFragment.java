@@ -105,7 +105,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            Timer.Start( ENTRIES_LOADER_ID, "EntriesListFragment.onCreateLoader" );
+            Timer.Start( ENTRIES_LOADER_ID, "EntriesListFr.onCreateLoader" );
 
             String entriesOrder = PrefUtils.getBoolean(PrefUtils.DISPLAY_OLDEST_FIRST, false) || mShowTextInEntryList ? Constants.DB_ASC : Constants.DB_DESC;
             String where = "(" + EntryColumns.FETCH_DATE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.FETCH_DATE + "<=" + mListDisplayDate + ')';

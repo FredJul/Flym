@@ -42,6 +42,7 @@ import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.StringUtils;
+import ru.yanus171.feedexfork.utils.Timer;
 import ru.yanus171.feedexfork.utils.UiUtils;
 
 public class DrawerAdapter extends BaseAdapter {
@@ -76,7 +77,7 @@ public class DrawerAdapter extends BaseAdapter {
 
     private final Context mContext;
     private Cursor mFeedsCursor;
-    private int mAllUnreadNumber, mFavoritesNumber;
+    private int mAllUnreadNumber, mFavoritesNumber, mAllNumber;
 
     public DrawerAdapter(Context context, Cursor feedCursor) {
         mContext = context;
@@ -128,20 +129,20 @@ public class DrawerAdapter extends BaseAdapter {
                 case 0:
                     holder.titleTxt.setText(R.string.unread_entries);
                     holder.iconView.setImageResource(R.drawable.ic_statusbar_rss);
-                    if (mAllUnreadNumber != 0) {
+                    if (mAllUnreadNumber != 0)
                         holder.unreadTxt.setText(String.valueOf(mAllUnreadNumber));
-                    }
                     break;
                 case 1:
                     holder.titleTxt.setText(R.string.all_entries);
                     holder.iconView.setImageResource(R.drawable.ic_statusbar_rss);
+                    if (mAllNumber != 0)
+                        holder.unreadTxt.setText(String.valueOf(mAllNumber));
                     break;
                 case 2:
                     holder.titleTxt.setText(R.string.favorites);
                     holder.iconView.setImageResource(R.drawable.rating_important);
-                    if (mFavoritesNumber != 0) {
+                    if (mFavoritesNumber != 0)
                         holder.unreadTxt.setText(String.valueOf(mFavoritesNumber));
-                    }
                     break;
                 case 3:
                     holder.titleTxt.setText(R.string.externalLinks);
@@ -282,17 +283,19 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     private void updateNumbers() {
-        mAllUnreadNumber = mFavoritesNumber = 0;
-
+        mAllUnreadNumber = mFavoritesNumber = mAllNumber = 0;
+        Timer timer = new Timer( "updateNumbers()" );
         // Gets the numbers of entries (should be in a thread, but it's way easier like this and it shouldn't be so slow)
-        Cursor numbers = mContext.getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{FeedData.ALL_UNREAD_NUMBER, FeedData.FAVORITES_NUMBER}, null, null, null);
+        Cursor numbers = mContext.getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{FeedData.ALL_UNREAD_NUMBER, FeedData.FAVORITES_NUMBER, FeedData.ALL_NUMBER, }, null, null, null);
         if (numbers != null) {
             if (numbers.moveToFirst()) {
                 mAllUnreadNumber = numbers.getInt(0);
                 mFavoritesNumber = numbers.getInt(1);
+                mAllNumber = numbers.getInt( 2 );
             }
             numbers.close();
         }
+        timer.End();
     }
 
     private static class ViewHolder {
