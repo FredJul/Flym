@@ -29,6 +29,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.BaseColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -102,6 +103,8 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     private int mLastListViewTopOffset = 0;
     private Menu mMenu = null;
     private long mListDisplayDate = new Date().getTime();
+    boolean mBottomIsReached = false;
+    private Handler mHandler = null;
     private final LoaderManager.LoaderCallbacks<Cursor> mEntriesLoader = new LoaderManager.LoaderCallbacks<Cursor>() {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -239,6 +242,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     public void onCreate(Bundle savedInstanceState) {
         Timer timer = new Timer( "EntriesListFragment.onCreate" );
 
+        mHandler = new Handler();
         setHasOptionsMenu(true);
 
         Dog.v( "EntriesListFragment.onCreate" );
@@ -330,21 +334,24 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if ( mShowTextInEntryList )
-                    for ( int i = firstVisibleItem - 2; i <= firstVisibleItem - 2 && i < totalItemCount; i++ ) {
-                        long id = mEntriesCursorAdapter.getItemId(i);
-                        Uri uri = mEntriesCursorAdapter.EntryUri(id);
-                        if (!EntriesCursorAdapter.mMarkAsReadList.contains(uri)) {
-                            EntriesCursorAdapter.SetIsRead(mEntriesCursorAdapter.EntryUri(id), true, 0);
-                            EntriesCursorAdapter.mMarkAsReadList.add(uri);
-                        }
-                    }
-                else if ( firstVisibleItem > 0 ) {
+                if ( mEntriesCursorAdapter == null )
+                    return;
+                //for ( int i = firstVisibleItem - 2; i <= firstVisibleItem - 2 && i < totalItemCount; i++ ) {
+                int i = firstVisibleItem - 2;
+                    long id = mEntriesCursorAdapter.getItemId(i);
+                    Uri uri = mEntriesCursorAdapter.EntryUri(id);
+                    SetIsOldRead( mEntriesCursorAdapter.EntryUri(id), i, true );
+                //}
+                if ( !mShowTextInEntryList && firstVisibleItem > 0 ) {
                     mLastVisibleTopEntryID = mEntriesCursorAdapter.getItemId(firstVisibleItem);
                     View v = mListView.getChildAt(0);
                     mLastListViewTopOffset = (v == null) ? 0 : (v.getTop() - mListView.getPaddingTop());
                 }
-            }
+                if ( mBottomIsReached && firstVisibleItem + 1 + visibleItemCount <= totalItemCount ) {
+                    SetVisibleItemsAsOldRead(true);
+                }
+                if ( firstVisibleItem + 1 + visibleItemCount >= totalItemCount )
+                    mBottomIsReached = true;            }
         });
 
         if (mEntriesCursorAdapter != null) {
@@ -424,8 +431,49 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
     }
 
     public void SetListViewAdapter() {
+
+
         mListView.setAdapter(mEntriesCursorAdapter);
         mNeedSetSelection = true;
+    }
+
+    private void SetVisibleItemsAsOldRead(boolean wait ) {
+        mBottomIsReached = false;
+        if ( mEntriesCursorAdapter != null )
+            for( int i = mListView.getFirstVisiblePosition(); i <= mListView.getLastVisiblePosition(); i++ ) {
+                Uri uri = mEntriesCursorAdapter.EntryUri(mEntriesCursorAdapter.getItemId(i));
+                SetIsOldRead( uri, i, wait );
+            }
+    }
+
+    private void SetIsOldRead(final Uri entryUri, int entryPos, final boolean wait ) {
+        if ( EntriesCursorAdapter.mMarkAsReadList.contains( entryUri) )
+            return;
+        class Run implements Runnable {
+            private int mEntryPos;
+            Run( final int entryPos ) {
+                mEntryPos = entryPos;
+            }
+            @Override
+            public void run() {
+                if (mEntryPos < mListView.getFirstVisiblePosition() || mEntryPos > mListView.getLastVisiblePosition()) {
+                    EntriesCursorAdapter.mMarkAsReadList.add(entryUri);
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            ContentResolver cr = MainApplication.getContext().getContentResolver();
+                            cr.update(entryUri, FeedData.getOldContentValues(), EntryColumns.WHERE_NEW, null);
+                            if ( mShowTextInEntryList )
+                                cr.update(entryUri, FeedData.getReadContentValues(), EntryColumns.WHERE_UNREAD, null);
+                        }
+                    }.start();
+                }
+            }
+        }
+        if ( wait )
+            mHandler.postDelayed(new Run( entryPos ), 2000);
+        else
+            new Run( entryPos ).run();
     }
 
     public static void ShowDeleteDialog(Context context, final String title, final long id) {
@@ -460,7 +508,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
         if (mJustMarkedAsReadEntries != null && !mJustMarkedAsReadEntries.isClosed()) {
             mJustMarkedAsReadEntries.close();
         }
-
+        SetVisibleItemsAsOldRead( false );
         mFab = null;
 
         super.onStop();
@@ -710,7 +758,6 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             }
         }
 
-        //refreshSwipeProgress();
     }
 
     public Uri getUri() {
@@ -731,9 +778,7 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
 
         mShowFeedInfo = showFeedInfo;
         mShowTextInEntryList = showTextInEntryList;
-
-        //if ( mShowTextInEntryList )
-        //    mNeedSetSelection = true;
+        SetVisibleItemsAsOldRead( false );
         mEntriesCursorAdapter = new EntriesCursorAdapter(getActivity(), mCurrentUri, Constants.EMPTY_CURSOR, mShowFeedInfo, mShowTextInEntryList, mShowUnRead);
         SetListViewAdapter();
         if ( mListView instanceof ListView )
@@ -745,9 +790,6 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
 
         refreshUI();
 
-        //getActivity().invalidateOptionsMenu();
-        //if (showTextInEntryList)
-            //setSelection( mEntriesCursorAdapter.GetFirstUnReadPos() );//    setSelection( mEntriesCursorAdapter.getCount() - 1 );
         timer.End();
     }
 
@@ -773,57 +815,5 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             mRefreshListBtn.setVisibility(View.GONE);
         }
     }
-
-
-    /*private class SwipeGestureListener extends SimpleOnGestureListener implements OnTouchListener {
-        static final int SWIPE_MIN_DISTANCE = 120;
-        static final int SWIPE_MAX_OFF_PATH = 150;
-        static final int SWIPE_THRESHOLD_VELOCITY = 150;
-
-        private final GestureDetector mGestureDetector;
-
-        public SwipeGestureListener(Context context) {
-            mGestureDetector = new GestureDetector(context, this);
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if (mListView != null && e1 != null && e2 != null &&
-                    Math.abs(e1.getY() - e2.getY()) <= SWIPE_MAX_OFF_PATH &&
-                    Math.abs(velocityX) >= SWIPE_THRESHOLD_VELOCITY) {
-                long id = mListView.pointToRowId(Math.round(e2.getX()), Math.round(e2.getY()));
-                int position = mListView.pointToPosition(Math.round(e2.getX()), Math.round(e2.getY()));
-                View view = mListView.getChildAt(position - mListView.getFirstVisiblePosition());
-
-                if (view != null) {
-                    // Just click on views, the adapter will do the real stuff
-                    if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
-                        mEntriesCursorAdapter.toggleReadState(id, view);
-                    } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
-                        mEntriesCursorAdapter.toggleFavoriteState(id, view);
-                    }
-
-                    // Just simulate a CANCEL event to remove the item highlighting
-                    mListView.post(new Runnable() { // In a post to avoid a crash on 4.0.x
-                        @Override
-                        public void run() {
-                            MotionEvent motionEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
-                            mListView.dispatchTouchEvent(motionEvent);
-                            motionEvent.recycle();
-                        }
-                    });
-                    return true;
-                }
-            }
-
-            return super.onFling(e1, e2, velocityX, velocityY);
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            return mGestureDetector.onTouchEvent(event);
-        }
-    }*/
-
 
 }

@@ -61,7 +61,7 @@ import ru.yanus171.feedexfork.provider.FeedData.TaskColumns;
 class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "FeedEx.db";
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
 
     private static final String ALTER_TABLE = "ALTER TABLE ";
     private static final String ADD = " ADD ";
@@ -174,12 +174,14 @@ class DatabaseHelper extends SQLiteOpenHelper {
             executeCatchedSQL(database, ALTER_TABLE + FeedColumns.TABLE_NAME + ADD + FeedColumns.OPTIONS + ' ' + FeedData.TYPE_TEXT);
 
         if (oldVersion < 16)
-            executeCatchedSQL(database, "CREATE INDEX idx_entries_link ON " + EntryColumns.TABLE_NAME + " (" + EntryColumns.LINK  + ")" );
+            executeCatchedSQL(database, "CREATE INDEX idx_entries_link ON " + EntryColumns.TABLE_NAME + " (" + EntryColumns.LINK + ")");
 
         if (oldVersion < 17)
-            executeCatchedSQL(database, "CREATE INDEX idx_entries_feed_id ON " + EntryColumns.TABLE_NAME + " (" + EntryColumns.FEED_ID  + ")" );
-    }
+            executeCatchedSQL(database, "CREATE INDEX idx_entries_feed_id ON " + EntryColumns.TABLE_NAME + " (" + EntryColumns.FEED_ID + ")");
 
+        if (oldVersion < 18)
+            executeCatchedSQL(database, ALTER_TABLE + EntryColumns.TABLE_NAME + ADD + EntryColumns.IS_NEW + ' ' + FeedData.TYPE_BOOLEAN);
+    }
     private void executeCatchedSQL(SQLiteDatabase database, String query) {
         try {
             database.execSQL(query);

@@ -2,4 +2,5 @@
 <resources>
     <dimen name="entry_img_width">35dp</dimen>
     <dimen name="entry_img_height">35dp</dimen>
+    <dimen name="entry_new_icon_size">12dp</dimen>
 </resources>

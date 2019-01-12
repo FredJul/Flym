@@ -1,6 +1,7 @@
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
         android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/swype_btn_toggle_read"
@@ -39,17 +40,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/main_icon"
+                <FrameLayout
+                    android:id="@+id/main_icon_layout"
                     android:layout_width="@dimen/entry_img_width"
                     android:layout_height="@dimen/entry_img_height"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:src="#00000000"
-                    android:scaleType="centerCrop"/>
+                    >
+                    <ImageView
+                        android:id="@+id/main_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_alignParentTop="true"
+                        android:src="#00000000"
+                        android:scaleType="centerCrop"/>
 
+                    <ImageView
+                        android:id="@+id/new_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/new_entry_icon" />
+                </FrameLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

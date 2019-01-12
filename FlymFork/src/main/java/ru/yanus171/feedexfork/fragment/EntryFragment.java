@@ -110,7 +110,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
     private static final String STATE_LOCK_LAND_ORIENTATION = "STATE_LOCK_LAND_ORIENTATION";
 
 
-    private int mTitlePos = -1, mDatePos, mMobilizedHtmlPos, mAbstractPos, mLinkPos, mIsFavoritePos, mIsReadPos, mEnclosurePos, mAuthorPos, mFeedNamePos, mFeedUrlPos, mFeedIconPos, mScrollPosPos, mRetrieveFullTextPos;
+    private int mTitlePos = -1, mDatePos, mMobilizedHtmlPos, mAbstractPos, mLinkPos, mIsFavoritePos, mIsReadPos, mIsNewPos, mEnclosurePos, mAuthorPos, mFeedNamePos, mFeedUrlPos, mFeedIconPos, mScrollPosPos, mRetrieveFullTextPos;
 
 
     private int mCurrentPagerPos = -1, mLastPagerPos = -1;
@@ -845,25 +845,28 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
 
 				// Mark the previous opened article as read
 				//if (entryCursor.getInt(mIsReadPos) != 1) {
-				if ( !mMarkAsUnreadOnFinish && mLastPagerPos != -1 && mEntryPagerAdapter.getCursor(mLastPagerPos).getInt(mIsReadPos) != 1 ) {
-                    class ReadWriter implements Runnable {
-					    private int mPagerPos;
-                        public ReadWriter( int pagerPos ){
+				if ( !mMarkAsUnreadOnFinish && mLastPagerPos != -1 ) {
+                    class ReadAndOldWriter implements Runnable {
+                        private final boolean mSetAsRead;
+                        private final int mPagerPos;
+                        public ReadAndOldWriter(int pagerPos, boolean setAsRead ){
                             mPagerPos = pagerPos;
+                            mSetAsRead = setAsRead;
                         }
 					    @Override
                         public void run() {
                             final Uri uri = ContentUris.withAppendedId(mBaseUri, mEntriesIds[mPagerPos]);
                             ContentResolver cr = MainApplication.getContext().getContentResolver();
-                            cr.update(uri, FeedData.getReadContentValues(), null, null);
-
+                            if ( mSetAsRead )
+                                cr.update(uri, FeedData.getReadContentValues(), EntryColumns.WHERE_UNREAD, null);
+                            cr.update(uri, FeedData.getOldContentValues(), EntryColumns.WHERE_NEW, null);
                             /*// Update the cursor
                             Cursor updatedCursor = cr.query(uri, null, null, null, null);
                             updatedCursor.moveToFirst();
                             mEntryPagerAdapter.setUpdatedCursor(mPagerPos, updatedCursor);*/
                         }
                     }
-                    new Thread(new ReadWriter( mLastPagerPos )).start();
+                    new Thread(new ReadAndOldWriter( mLastPagerPos, mEntryPagerAdapter.getCursor(mLastPagerPos).getInt(mIsReadPos) != 1 )).start();
                 }
             }
 		} catch ( IllegalStateException e ) {
@@ -1079,6 +1082,7 @@ public class EntryFragment extends /*SwipeRefresh*/Fragment implements LoaderMan
                         mLinkPos = cursor.getColumnIndex(EntryColumns.LINK);
                         mIsFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
                         mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
+                        mIsNewPos = cursor.getColumnIndex(EntryColumns.IS_NEW);
                         mEnclosurePos = cursor.getColumnIndex(EntryColumns.ENCLOSURE);
                         mAuthorPos = cursor.getColumnIndex(EntryColumns.AUTHOR);
                         mScrollPosPos = cursor.getColumnIndex(EntryColumns.SCROLL_POS);

@@ -1290,4 +1290,6 @@ public class FetcherService extends IntentService {
         return new Intent(MainApplication.getContext(), FetcherService.class)
                 .setAction( FetcherService.ACTION_REFRESH_FEEDS );
     }
+
+
 }

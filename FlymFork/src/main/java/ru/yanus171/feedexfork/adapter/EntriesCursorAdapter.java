@@ -52,7 +52,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.CancellationSignal;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
@@ -76,7 +75,6 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.MainApplication;
@@ -105,7 +103,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
     public static final ArrayList<Uri> mMarkAsReadList = new ArrayList<Uri>();
 
-    private int mIdPos, mTitlePos, mUrlPos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mMobilizedPos, mFeedIdPos, mFeedNamePos, mAbstractPos ;
+    private int mIdPos, mTitlePos, mUrlPos, mMainImgPos, mDatePos, mIsReadPos, mFavoritePos, mMobilizedPos, mFeedIdPos, mFeedNamePos, mAbstractPos, mIsNewPos;
 
     public EntriesCursorAdapter(Context context, Uri uri, Cursor cursor, boolean showFeedInfo, boolean showEntryText, boolean showUnread) {
         super(context, R.layout.item_entry_list, cursor, 0);
@@ -161,6 +159,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.textLayout = (LinearLayout)view.findViewById(R.id.textLayout);
             holder.readToggleSwypeBtnView = view.findViewById(R.id.swype_btn_toggle_read);
             holder.starToggleSwypeBtnView = view.findViewById(R.id.swype_btn_toggle_star);
+            holder.newImgView = view.findViewById(R.id.new_icon);
 
             holder.titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18 + PrefUtils.getFontSizeEntryList() );
 
@@ -427,6 +426,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.mainImgView.setMaxHeight(  );
         }*/
 
+        holder.newImgView.setVisibility( EntryColumns.IsNew( cursor, mIsNewPos ) ? View.VISIBLE : View.GONE  );
     }
 
     private void UpdateStarImgView(ViewHolder holder) {
@@ -488,11 +488,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
 
                 }
                 ContentResolver cr = MainApplication.getContext().getContentResolver();
-                //Uri entryUri = ContentUris.withAppendedId(mUri, id);
-                //Cursor cur = cr.query( entryUri, new String[]{ EntryColumns.IS_READ }, isRead ? EntryColumns.WHERE_UNREAD : null, null, null );
-                //if ( cur.moveToFirst()  )
-                    cr.update(entryUri, isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
-                //cur.close();
+                cr.update(entryUri, isRead ? FeedData.getReadContentValues() : FeedData.getUnreadContentValues(), null, null);
                 CancelStarNotification( Long.parseLong(entryUri.getLastPathSegment()) );
             }
         }.start();
@@ -570,6 +566,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             mDatePos = cursor.getColumnIndex(EntryColumns.DATE);
             mIsReadPos = cursor.getColumnIndex(EntryColumns.IS_READ);
             mFavoritePos = cursor.getColumnIndex(EntryColumns.IS_FAVORITE);
+            mIsNewPos = cursor.getColumnIndex(EntryColumns.IS_NEW);
             mMobilizedPos = cursor.getColumnIndex(EntryColumns.MOBILIZED_HTML);
             mAbstractPos = cursor.getColumnIndex(EntryColumns.ABSTRACT);
             mFeedNamePos = cursor.getColumnIndex(FeedColumns.NAME);
@@ -587,6 +584,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
         public ImageView starImgView;
         public ImageView mobilizedImgView;
         public ImageView readImgView;
+        public View newImgView;
         public View readToggleSwypeBtnView;
         public View starToggleSwypeBtnView;
         public LinearLayout textLayout;

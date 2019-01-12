@@ -42,16 +42,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/main_icon"
+                <FrameLayout
+                    android:id="@+id/main_icon_layout"
                     android:layout_width="@dimen/entry_img_width"
                     android:layout_height="@dimen/entry_img_height"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="#00000000"
-                    android:scaleType="centerCrop"/>
-
+                    >
+                    <ImageView
+                        android:id="@+id/main_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_alignParentTop="true"
+                        android:src="#00000000"
+                        android:scaleType="centerCrop"/>
+                    <ImageView
+                        android:id="@+id/new_icon"
+                        android:layout_width="@dimen/entry_new_icon_size"
+                        android:layout_height="@dimen/entry_new_icon_size"
+                        android:src="@drawable/new_entry_icon"
+                        android:scaleType="centerCrop"/>
+                </FrameLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

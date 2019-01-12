@@ -45,6 +45,7 @@
 package ru.yanus171.feedexfork.provider;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
@@ -75,6 +76,12 @@ public class FeedData {
     public static ContentValues getReadContentValues() {
         ContentValues values = new ContentValues();
         values.put(EntryColumns.IS_READ, true);
+        return values;
+    }
+
+    public static ContentValues getOldContentValues() {
+        ContentValues values = new ContentValues();
+        values.put(EntryColumns.IS_NEW, false);
         return values;
     }
 
@@ -197,6 +204,8 @@ public class FeedData {
         public static final String AUTHOR = "author";
         public static final String IMAGE_URL = "image_url";
         public static final String SCROLL_POS = "scroll_pos";
+        public static final String IS_NEW = "new";
+
         public static final String[] PROJECTION_ID = new String[]{EntryColumns._ID};
         public static final String[] PROJECTION_WITHOUT_TEXT =
                 new String[]{EntryColumns._ID,
@@ -210,6 +219,7 @@ public class FeedData {
                              EntryColumns.IS_READ,
                              EntryColumns.LINK,
                              EntryColumns.SCROLL_POS,
+                             EntryColumns.IS_NEW,
                              EntryColumns.TITLE,
                              EntryColumns.DATE,
                              String.format( "substr( %s, 1, 5 ) AS %s", EntryColumns.MOBILIZED_HTML, EntryColumns.MOBILIZED_HTML ),
@@ -217,14 +227,18 @@ public class FeedData {
         public static final String WHERE_READ = EntryColumns.IS_READ + Constants.DB_IS_TRUE;
         public static final String WHERE_UNREAD = "(" + EntryColumns.IS_READ + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_READ + Constants.DB_IS_FALSE + ')';
         public static final String WHERE_NOT_FAVORITE = "(" + EntryColumns.IS_FAVORITE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_FAVORITE + Constants.DB_IS_FALSE + ')';
+        public static final String WHERE_NEW = "(" + EntryColumns.IS_NEW + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_NEW + Constants.DB_IS_TRUE  + ")";
 
+        public static boolean IsNew( Cursor cursor, int fieldPos ) {
+            return cursor.isNull( fieldPos ) || cursor.getInt( fieldPos ) == 1;
+        }
         public static Uri ENTRIES_FOR_FEED_CONTENT_URI(String feedId) {
             return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/entries");
         }
 
         public static final String[][] COLUMNS = new String[][]{{_ID, TYPE_PRIMARY_KEY}, {FEED_ID, TYPE_EXTERNAL_ID}, {TITLE, TYPE_TEXT},
                 {ABSTRACT, TYPE_TEXT}, {MOBILIZED_HTML, TYPE_TEXT}, {DATE, TYPE_DATE_TIME}, {FETCH_DATE, TYPE_DATE_TIME}, {IS_READ, TYPE_BOOLEAN}, {LINK, TYPE_TEXT},
-                {IS_FAVORITE, TYPE_BOOLEAN}, {ENCLOSURE, TYPE_TEXT}, {GUID, TYPE_TEXT}, {AUTHOR, TYPE_TEXT}, {IMAGE_URL, TYPE_TEXT}, {SCROLL_POS, TYPE_INT}};
+                {IS_FAVORITE, TYPE_BOOLEAN}, {IS_NEW, TYPE_BOOLEAN}, {ENCLOSURE, TYPE_TEXT}, {GUID, TYPE_TEXT}, {AUTHOR, TYPE_TEXT}, {IMAGE_URL, TYPE_TEXT}, {SCROLL_POS, TYPE_INT}};
 
         public static Uri UNREAD_ENTRIES_FOR_FEED_CONTENT_URI(long feedId) {
             return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/unread_entries");
