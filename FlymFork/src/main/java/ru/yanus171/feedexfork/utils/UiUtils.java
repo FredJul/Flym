@@ -41,9 +41,11 @@ public class UiUtils {
     static private final LongSparseArray<Bitmap> FAVICON_CACHE = new LongSparseArray<>();
 
     static public void setPreferenceTheme(Activity a) {
-        if (!PrefUtils.IsLightTheme()) {
+        if (PrefUtils.IsLightTheme())
+            a.setTheme(R.style.Theme_Light);
+        else
             a.setTheme(R.style.Theme_Dark);
-        }
+
     }
 
     static public int dpToPixel(int dp) {
