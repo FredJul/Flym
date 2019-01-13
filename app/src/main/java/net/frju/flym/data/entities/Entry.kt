@@ -73,7 +73,9 @@ fun SyndEntry.toDbFormat(feed: Feed): Entry {
 	item.link = link
 	//TODO item.imageLink = null
 	item.author = author
-	item.publicationDate = if (publishedDate?.before(item.publicationDate) == true) publishedDate!! else item.publicationDate
+
+	val date = publishedDate ?: updatedDate
+	item.publicationDate = if (date?.before(item.publicationDate) == true) date else item.publicationDate
 
 	return item
 }
