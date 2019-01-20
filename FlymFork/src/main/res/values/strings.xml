@@ -353,6 +353,8 @@
     <string name="brightness_change">Brightness change</string>
     <string name="tap_zone_size">Tap zone size</string>
     <string name="tap_zone_size_descr">the height or width of all tap zones in millimeters</string>
+    <string name="show_new_icon">New article icon</string>
+    <string name="show_new_icon_descr">Little plus icon on new articles (which had never seen)</string>
 
 
     <plurals name="number_of_new_entries">

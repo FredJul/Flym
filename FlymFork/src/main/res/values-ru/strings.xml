@@ -427,5 +427,7 @@
     <string name="brightness_change">Измнение яркости</string>
     <string name="tap_zone_size">Размер зоны нажатий</string>
     <string name="tap_zone_size_descr">Ширина или высота зон нажатий в миллиметрах</string>
+    <string name="show_new_icon">Подкрашивать новые</string>
+    <string name="show_new_icon_descr">Маленькая иконка с полюсом на новых статьях (названия которых еще никогда не были видимы)</string>
 
 </resources>

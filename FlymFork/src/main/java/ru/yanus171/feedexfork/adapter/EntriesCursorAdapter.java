@@ -425,8 +425,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.titleTextView.setSingleLine();
             holder.mainImgView.setMaxHeight(  );
         }*/
-
-        holder.newImgView.setVisibility( EntryColumns.IsNew( cursor, mIsNewPos ) ? View.VISIBLE : View.GONE  );
+        holder.newImgView.setVisibility( PrefUtils.getBoolean( "show_new_icon", false ) && EntryColumns.IsNew( cursor, mIsNewPos ) ? View.VISIBLE : View.GONE );
     }
 
     private void UpdateStarImgView(ViewHolder holder) {

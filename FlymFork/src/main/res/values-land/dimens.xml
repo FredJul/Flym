@@ -2,5 +2,5 @@
 <resources>
     <dimen name="entry_img_width">25dp</dimen>
     <dimen name="entry_img_height">25dp</dimen>
-    <dimen name="entry_new_icon_size">12dp</dimen>
+    <dimen name="entry_new_icon_size">10dp</dimen>
 </resources>

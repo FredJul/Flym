@@ -152,6 +152,12 @@
             android:summary="@string/show_full_text_indicator_descr"
             android:title="@string/show_full_text_indicator"/>
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="show_new_icon"
+            android:summary="@string/show_new_icon_descr"
+            android:title="@string/show_new_icon"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory
