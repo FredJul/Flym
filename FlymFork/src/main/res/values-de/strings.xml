@@ -263,7 +263,7 @@
     <string name="setupConnection">Verbindung einstellen</string>
     <string name="settings_content_extract_rules">Regeln zum Extrahieren des Inhaltes</string>
     <string name="settings_content_extract_rules_description">Einstellung pro Seite (HTML-Kenntnisse erforderlich)</string>
-    <string name="settings_tapZones">Tipp-Zonen</string>
+    <string name="settings_tapZones">Tipp-Zonen-Vorschau</string>
     <string name="settings_additional">Weiteres</string>
     <string name="settings_load_comments">Kommentare laden</string>
     <string name="settings_load_comments_description">im gesamten Artikeltext</string>
@@ -349,6 +349,11 @@
     <string name="show_read_checkbox_descr">Zeigt ein kleines Kontrollkästchen an, wenn der Artikel gelesen wurde</string>
     <string name="turnOn">Aktivieren</string>
     <string name="brightness_change">Helligkeit einstellen</string>
+    <string name="tap_zone_size">Tipp-Zonen-Größe</string>
+    <string name="tap_zone_size_descr">Höhe und Breite der Tipp-Zonen in Millimeter</string>
+    <string name="show_new_icon">Symbol für neue Artikel</string>
+    <string name="show_new_icon_descr">Nie gesehene Artikel durch ein kleines Plus-Symbol markieren</string>
+
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Artikel.</item>
         <item quantity="other">%d neue Artikel.</item>
