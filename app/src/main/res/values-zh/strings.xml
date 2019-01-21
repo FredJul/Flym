@@ -107,6 +107,8 @@
     <string name="settings_theme">主题</string>
     <string name="open_browser_direct">直接在默认浏览器中打开</string>
     <string name="open_browser_direct_title">在浏览器中打开</string>
+    <string name="refresh_on_startup">Refreshes your feeds when launching the app</string>
+    <string name="refresh_on_startup_title">Refresh on startup</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">1 篇新文章</item>

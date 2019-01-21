@@ -94,8 +94,6 @@
     <string name="settings_refresh_enabled">Automatisches Aktualisieren</string>
     <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren aller Feeds</string>
     <string name="settings_refresh_interval">Aktualisierungsintervall</string>
-    <string name="refresh_on_startup">Aktualisiert alle Feeds, sobald die Anwendung gestartet wird</string>
-    <string name="refresh_on_startup_title">Beim Start aktualisieren</string>
     <string name="settings_category_content_presentation">Anzeige der Inhalte</string>
     <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
     <string name="settings_display_images">Bilder anzeigen</string>
@@ -111,6 +109,8 @@
     <string name="settings_theme">Thema</string>
     <string name="open_browser_direct">Einträge direkt in deinem Standardbrowser öffnen</string>
     <string name="open_browser_direct_title">Im Browser öffnen</string>
+    <string name="refresh_on_startup">Aktualisiert alle Feeds, sobald die Anwendung gestartet wird</string>
+    <string name="refresh_on_startup_title">Beim Start aktualisieren</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Eintrag</item>
