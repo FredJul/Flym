@@ -26,6 +26,7 @@ object PrefConstants {
 
     const val REFRESH_ENABLED = "refresh_enabled"
     const val REFRESH_INTERVAL = "refresh_interval"
+    const val REFRESH_ON_STARTUP = "refresh_on_startup"
     const val REFRESH_WIFI_ONLY = "refresh_wifi_only"
 
     const val THEME = "theme"
@@ -44,4 +45,5 @@ object PrefConstants {
     const val FONT_SIZE = "font_size"
 
     const val OPEN_BROWSER_DIRECTLY = "open_browser_directly"
+
 }

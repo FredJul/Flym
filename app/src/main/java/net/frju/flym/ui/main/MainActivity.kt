@@ -53,6 +53,7 @@ import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.FeedWithCount
 import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.service.AutoRefreshJobService
+import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.about.AboutActivity
 import net.frju.flym.ui.entries.EntriesFragment
 import net.frju.flym.ui.entrydetails.EntryDetailsActivity
@@ -281,6 +282,12 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             }
 
             goToEntriesList(null)
+        }
+
+        if (getPrefBoolean(PrefConstants.REFRESH_ON_STARTUP, defValue = true)) {
+            doAsync {
+                FetcherService.fetch( this@MainActivity, false, FetcherService.ACTION_REFRESH_FEEDS)
+            }
         }
 
         AutoRefreshJobService.initAutoRefresh(this)
