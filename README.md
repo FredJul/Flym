@@ -32,7 +32,7 @@ This app does NOT synchronize with online news feed readers (i.e. Feedly)
 
 This app was forked of Flym RSS News Reader.
 
-This application is free, without ads, open source.
+This application is [free, open source](https://www.gnu.org/philosophy/free-sw.html) under GPLv3 license, without ads.
 
 Feedback and suggestions are welcome
 
