@@ -1,7 +1,7 @@
 Handy News Reader
 ==================
 
-Light and modern Android feed reader, based on Flym.
+Light and modern Android RSS New Reader.
 
 This is a separate branch of the Flym RSS reader application
 
@@ -13,7 +13,7 @@ Main functions:
 - filter articles by keywords or regular expressions
 - full screen reading mode
 
-From the modified:
+Additional:
 - collapsing (folding) the groups of feeds
 - the ability to hide read articles per channel
 - bold type of reading articles
@@ -30,11 +30,16 @@ From the modified:
 
 This app does NOT synchronize with online news feed readers (i.e. Feedly)
 
-This application is free, without ads, open source
+This app was forked of Flym RSS News Reader.
+
+This application is free, without ads, open source.
 
 Feedback and suggestions are welcome
 
 PlayStore link:
 https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork
+
+Web Site: 
+https://handynewsreader.blogspot.com/
 
 <img src="/data/FFEntryListEn.png" width="10%"><img src="/data/FFEditFeedFilter.png" width="10%"><img src="/data/FFEntryFullScreen.png" width="10%"><img src="/data/FFEntryContextMenu.png" width="10%"><img src="/data/FFEntryWithActionBar.png" width="10%"><img src="/data/FFShowEntryText.png" width="10%"><img src="/data/FFAddFeedDialog.png" width="10%"><img src="/data/FFAddFeedDialog_Ru.png" width="10%"><img src="/data/FFAddFeedSearchResuls.png" width="10%">
