@@ -80,11 +80,6 @@ android {
     }
 }
 
-/*repositories {
-    maven {
-        url 'http://dl.bintray.com/amulyakhare/maven'
-    }
-}*/
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
