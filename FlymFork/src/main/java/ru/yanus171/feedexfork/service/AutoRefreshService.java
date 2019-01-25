@@ -50,33 +50,34 @@ import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Build;
 
+/*
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
 import com.google.android.gms.gcm.PeriodicTask;
 import com.google.android.gms.gcm.Task;
 import com.google.android.gms.gcm.TaskParams;
-
+*/
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 
-public class AutoRefreshService extends GcmTaskService {
-    public static final String SIXTY_MINUTES = "3600000";
-    public static final String TASK_TAG_PERIODIC = "TASK_TAG_PERIODIC";
+public class AutoRefreshService {
+    private static final String SIXTY_MINUTES = "3600000";
+    //public static final String TASK_TAG_PERIODIC = "TASK_TAG_PERIODIC";
 
-    @Override
+    /*@Override
     public int onRunTask(TaskParams taskParams) {
         FetcherService.StartService(GetAutoRefreshServiceIntent());
         return GcmNetworkManager.RESULT_SUCCESS;
     }
-
-    static public Intent GetAutoRefreshServiceIntent() {
+    */
+    static Intent GetAutoRefreshServiceIntent() {
         return FetcherService.GetStartIntent().putExtra( Constants.FROM_AUTO_REFRESH, true );
     }
 
     public static void initAutoRefresh(Context context) {
-        if (Build.VERSION.SDK_INT >= 25 )
+        if (Build.VERSION.SDK_INT >= 21 )
             AutoRefreshJobService.initAutoRefresh( context );
-        else {
+        /*else {
             GcmNetworkManager gcmNetworkManager = GcmNetworkManager.getInstance(context);
             if (isAutoUpdateEnabled()) {
                 PeriodicTask task = new PeriodicTask.Builder()
@@ -93,10 +94,10 @@ public class AutoRefreshService extends GcmTaskService {
                 gcmNetworkManager.cancelTask(TASK_TAG_PERIODIC, AutoRefreshService.class);
             }
 
-        }
+        }*/
     }
 
-    public static boolean isBatteryLow(Context context) {
+    static boolean isBatteryLow(Context context) {
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         Intent battery = context.registerReceiver(null, ifilter);
         int level = battery.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);

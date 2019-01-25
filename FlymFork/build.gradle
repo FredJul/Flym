@@ -11,7 +11,6 @@ android {
     //buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId 'ru.yanus171.feedexfork'
-        //applicationId 'net.fred.feedex'
         minSdkVersion 14
         targetSdkVersion 26
         versionCode 126
@@ -83,14 +82,8 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    //wearApp project(':wear')
-    //compile 'com.google.android.gms:play-services-wearable:+'
     implementation 'com.android.support:appcompat-v7:23.2.1'
-    //compile 'com.android.support:appcompat-v7:+'
     implementation 'com.android.support:design:23.2.1'
-    //compile 'com.android.support:design:+'
-    implementation 'com.google.android.gms:play-services-gcm:+'
-    //implementation 'org.jsoup:jsoup:1.10.3'
     implementation 'org.jsoup:jsoup:+'
     implementation 'com.github.bumptech.glide:glide:3.6.1'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:+'

@@ -1,14 +1,11 @@
 package ru.yanus171.feedexfork.view;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.NotificationCompat;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -35,7 +32,7 @@ import static ru.yanus171.feedexfork.MainApplication.NOTIFICATION_CHANNEL_ID;
 public class StatusText implements Observer {
     private TextView mView;
     //SwipeRefreshLayout.OnRefreshListener mOnRefreshListener;
-    static int MaxID = 0;
+    private static int MaxID = 0;
 
     public StatusText(final TextView view, final Observable observable /*, SwipeRefreshLayout.OnRefreshListener onRefreshListener*/ ) {
         //mOnRefreshListener = onRefreshListener;
@@ -75,7 +72,7 @@ public class StatusText implements Observer {
     public static class FetcherObservable extends Observable {
         private Handler mHandler = null;
         volatile int mBytesRecievedLast = 0;
-        LinkedHashMap<Integer,String> mList = new LinkedHashMap<Integer,String>();
+        final LinkedHashMap<Integer,String> mList = new LinkedHashMap<>();
         private String mProgressText = "";
         private String mErrorText = "";
         private String mDBText = "";
@@ -209,25 +206,30 @@ public class StatusText implements Observer {
 
     static public Notification GetNotification(String text ) {
         Context context = MainApplication.getContext();
-        NotificationCompat.BigTextStyle bigxtstyle =
-                new NotificationCompat.BigTextStyle();
-        bigxtstyle.bigText(text);
-        bigxtstyle.setBigContentTitle(context.getString(R.string.updating));
-        android.support.v4.app.NotificationCompat.Builder builder = new NotificationCompat.Builder(MainApplication.getContext()) //
-                //.setContentIntent(NULL) //
-                .setSmallIcon(R.drawable.refresh) //
-                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher)) //
-                //.setTicker("") //
-                //.setWhen(System.currentTimeMillis()) //
-                //.setAutoCancel(true) //
-                //.setContentTitle(context.getString(R.string.update)) //
-                //.setContentText(text) //
-                .setStyle( bigxtstyle );
+        if (Build.VERSION.SDK_INT >= 26 ) {
+            Notification.Builder builder;
+            Notification.BigTextStyle bigxtstyle =
+                    new Notification.BigTextStyle();
+            bigxtstyle.bigText(text);
+            bigxtstyle.setBigContentTitle(context.getString(R.string.updating));
+            builder = new Notification.Builder(MainApplication.getContext(), NOTIFICATION_CHANNEL_ID) //
+                    .setSmallIcon(R.drawable.refresh) //
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher)) //
+                    .setStyle( bigxtstyle );
+            return builder.build();
+        } else {
+            NotificationCompat.BigTextStyle bigxtstyle =
+                    new NotificationCompat.BigTextStyle();
+            bigxtstyle.bigText(text);
+            bigxtstyle.setBigContentTitle(context.getString(R.string.updating));
+            android.support.v4.app.NotificationCompat.Builder builder =
+                    new android.support.v4.app.NotificationCompat.Builder(MainApplication.getContext()) //
+                            .setSmallIcon(R.drawable.refresh) //
+                            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher)) //
+                            .setStyle(bigxtstyle);
 
-                //.setLights(0xffffffff, 0, 0)
-        if (Build.VERSION.SDK_INT >= 26 )
-            builder.setChannelId( NOTIFICATION_CHANNEL_ID );
-        return builder.build();
+            return builder.build();
+        }
     }
 
 
