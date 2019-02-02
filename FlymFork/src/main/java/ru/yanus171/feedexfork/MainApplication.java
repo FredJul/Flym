@@ -34,6 +34,7 @@ import java.util.Locale;
 
 import ru.yanus171.feedexfork.utils.Dog;
 import ru.yanus171.feedexfork.utils.PrefUtils;
+import ru.yanus171.feedexfork.utils.DebugApp;
 
 public class MainApplication extends Application {
 
@@ -57,6 +58,7 @@ public class MainApplication extends Application {
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config, null);
 
+        Thread.setDefaultUncaughtExceptionHandler(new DebugApp().new UncaughtExceptionHandler(this));
 
         if (Build.VERSION.SDK_INT >= 24) {
             try {

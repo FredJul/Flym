@@ -160,6 +160,12 @@ public class PrefUtils {
         editor.apply();
     }
 
+    public static void putStringCommit(String key, String value) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
     public static void remove(String key) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).edit();
         editor.remove(key);

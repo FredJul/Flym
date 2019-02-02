@@ -226,6 +226,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.SendErrorActivity" />
+
+
         <receiver android:name=".widget.WidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

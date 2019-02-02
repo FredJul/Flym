@@ -35,7 +35,7 @@ public class AutoRefreshJobService extends JobService {
     static void initAutoRefresh(Context context) {
         JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
         if (AutoRefreshService.isAutoUpdateEnabled() ) {
-            if ( jobScheduler.getPendingJob( AUTO_UPDATE_JOB_ID ) == null ) {
+            if ( GetPendingJobByID( jobScheduler, AUTO_UPDATE_JOB_ID ) == null ) {
                 ComponentName serviceComponent = new ComponentName(context, AutoRefreshJobService.class);
                 JobInfo.Builder builder =
                         new JobInfo.Builder(AUTO_UPDATE_JOB_ID, serviceComponent)
@@ -54,5 +54,16 @@ public class AutoRefreshJobService extends JobService {
         } else
             jobScheduler.cancel(AUTO_UPDATE_JOB_ID);
 
+    }
+
+    private static JobInfo GetPendingJobByID(JobScheduler jobScheduler, int ID) {
+        if ( Build.VERSION.SDK_INT >= 24 ) {
+            return jobScheduler.getPendingJob( ID );
+        } else {
+            for ( JobInfo item: jobScheduler.getAllPendingJobs() )
+                if ( item.getId() == ID )
+                    return item;
+            return null;
+        }
     }
 }

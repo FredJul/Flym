@@ -355,6 +355,11 @@
     <string name="tap_zone_size_descr">the height or width of all tap zones in millimeters</string>
     <string name="show_new_icon">New article icon</string>
     <string name="show_new_icon_descr">Little plus icon on new articles (which had never seen)</string>
+    <string name="criticalErrorOccured">A critical error occurred in thу application. Please send this text to developer</string>
+    <string name="criticalErrorSending">Sending critical error…</string>
+    <string name="copyToClipboard">To clipboard</string>
+    <string name="sendEmail">Send email</string>
+    <string name="toastAppCrashed">The application unexpectedly failed: (Please send a mail to developer)</string>
 
 
     <plurals name="number_of_new_entries">
