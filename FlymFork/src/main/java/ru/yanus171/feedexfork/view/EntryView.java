@@ -51,6 +51,8 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
@@ -363,6 +365,14 @@ public class EntryView extends WebView implements Observer {
                     mEntryViewMgr.onEndVideoFullScreen();
                 }
             }
+            @Override
+            public Bitmap getDefaultVideoPoster() {
+                Bitmap result = super.getDefaultVideoPoster();
+                if ( result == null )
+                    result =  BitmapFactory.decodeResource( MainApplication.getContext().getResources(), android.R.drawable.presence_video_online );
+                return result;
+            }
+
         });
 
         setWebViewClient(new WebViewClient() {

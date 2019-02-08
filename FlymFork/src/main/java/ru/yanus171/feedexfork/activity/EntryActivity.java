@@ -21,6 +21,7 @@ package ru.yanus171.feedexfork.activity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -273,4 +274,11 @@ public class EntryActivity extends BaseActivity {
         Dog.d("onKeyDown isTracking = " + event.isTracking());
         return false;
     }
+
+    @Override
+    public AssetManager getAssets() {
+        return getResources().getAssets();
+    }
+
+
 }
