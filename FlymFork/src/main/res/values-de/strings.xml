@@ -353,6 +353,11 @@
     <string name="tap_zone_size_descr">Höhe und Breite der Tipp-Zonen in Millimeter</string>
     <string name="show_new_icon">Symbol für neue Artikel</string>
     <string name="show_new_icon_descr">Nie gesehene Artikel durch ein kleines Plus-Symbol markieren</string>
+    <string name="criticalErrorOccured">Ein schwerwiegender Fehler ist aufgetreten. Bitte senden Sie diesen Text an den Entwickler</string>
+    <string name="criticalErrorSending">Fehler senden…</string>
+    <string name="copyToClipboard">In die Zwischenablage</string>
+    <string name="sendEmail">E-Mail senden</string>
+    <string name="toastAppCrashed">Die Anwendung wurde unerwartet beendet: (Bitte senden Sie eine E-Mail an den Entwickler)</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Artikel.</item>
