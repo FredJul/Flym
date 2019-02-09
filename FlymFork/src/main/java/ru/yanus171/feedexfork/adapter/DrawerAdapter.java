@@ -45,6 +45,8 @@ import ru.yanus171.feedexfork.utils.StringUtils;
 import ru.yanus171.feedexfork.utils.Timer;
 import ru.yanus171.feedexfork.utils.UiUtils;
 
+import static ru.yanus171.feedexfork.utils.PrefUtils.SHOW_READ_ARTICLE_COUNT;
+
 public class DrawerAdapter extends BaseAdapter {
 
     private static final int POS_ID = 0;
@@ -77,7 +79,7 @@ public class DrawerAdapter extends BaseAdapter {
 
     private final Context mContext;
     private Cursor mFeedsCursor;
-    private int mAllUnreadNumber, mFavoritesNumber, mAllNumber;
+    private int mAllUnreadNumber, mFavoritesNumber, mAllNumber, mExternalUnreadNumber, mExternalReadNumber;
 
     public DrawerAdapter(Context context, Cursor feedCursor) {
         mContext = context;
@@ -103,7 +105,7 @@ public class DrawerAdapter extends BaseAdapter {
             holder.titleTxt = (TextView) convertView.findViewById(android.R.id.text1);
             holder.stateTxt = (TextView) convertView.findViewById(android.R.id.text2);
             holder.unreadTxt = (TextView) convertView.findViewById(R.id.unread_count);
-            holder.allTxt = (TextView) convertView.findViewById(R.id.all_count);
+            holder.readTxt = (TextView) convertView.findViewById(R.id.read_count);
             holder.autoRefreshIcon = (ImageView) convertView.findViewById(R.id.auto_refresh_icon);
             holder.separator = convertView.findViewById(R.id.separator);
             convertView.setTag(R.id.holder, holder);
@@ -119,7 +121,7 @@ public class DrawerAdapter extends BaseAdapter {
         holder.titleTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18 + PrefUtils.getFontSizeEntryList() );
         holder.stateTxt.setVisibility(View.GONE);
         holder.unreadTxt.setText("");
-        holder.allTxt.setText("");
+        holder.readTxt.setText("");
         convertView.setPadding(0, 0, 0, 0);
         holder.separator.setVisibility(View.GONE);
         holder.autoRefreshIcon.setVisibility( View.GONE );
@@ -147,6 +149,10 @@ public class DrawerAdapter extends BaseAdapter {
                 case 3:
                     holder.titleTxt.setText(R.string.externalLinks);
                     holder.iconView.setImageResource(R.drawable.ic_statusbar_rss);
+                    if (mExternalUnreadNumber != 0)
+                        holder.unreadTxt.setText(String.valueOf(mExternalUnreadNumber));
+                    if (mExternalReadNumber != 0)
+                        holder.readTxt.setText(String.valueOf(mExternalReadNumber));
                     break;
             }
         }
@@ -202,16 +208,17 @@ public class DrawerAdapter extends BaseAdapter {
                     holder.iconView.setImageResource(R.mipmap.ic_launcher);
                 }
 
-                int unread = mFeedsCursor.getInt(POS_UNREAD);
-                if (unread != 0) {
-                    holder.unreadTxt.setText(String.valueOf(unread));
-                }
 
-                int read = mFeedsCursor.getInt(POS_ALL) - mFeedsCursor.getInt(POS_UNREAD);
-                holder.allTxt.setText(read > 0 && PrefUtils.getBoolean( "show_read_article_count", false ) ? String.valueOf(read) : "");
 
                 holder.autoRefreshIcon.setVisibility( isAutoRefresh( position )  ? View.VISIBLE : View.GONE );
             }
+            int unread = mFeedsCursor.getInt(POS_UNREAD);
+            if (unread != 0) {
+                holder.unreadTxt.setText(String.valueOf(unread));
+            }
+            int read = mFeedsCursor.getInt(POS_ALL) - mFeedsCursor.getInt(POS_UNREAD);
+            if ( read > 0 )
+                holder.readTxt.setText( String.valueOf(read) );
         }
 
         return convertView;
@@ -283,15 +290,23 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     private void updateNumbers() {
-        mAllUnreadNumber = mFavoritesNumber = mAllNumber = 0;
+        mAllUnreadNumber = mFavoritesNumber = mAllNumber = mExternalReadNumber = mExternalUnreadNumber = 0;
         Timer timer = new Timer( "updateNumbers()" );
         // Gets the numbers of entries (should be in a thread, but it's way easier like this and it shouldn't be so slow)
-        Cursor numbers = mContext.getContentResolver().query(EntryColumns.CONTENT_URI, new String[]{FeedData.ALL_UNREAD_NUMBER, FeedData.FAVORITES_NUMBER, FeedData.ALL_NUMBER, }, null, null, null);
+        Cursor numbers = mContext.getContentResolver().query(EntryColumns.CONTENT_URI,
+                new String[]{FeedData.ALL_UNREAD_NUMBER,
+                             FeedData.FAVORITES_NUMBER,
+                             FeedData.ALL_NUMBER,
+                             FeedData.EXTERNAL_UNREAD_NUMBER,
+                             PrefUtils.getBoolean( SHOW_READ_ARTICLE_COUNT, false ) ? FeedData.EXTERNAL_READ_NUMBER : "0"},
+                null, null, null);
         if (numbers != null) {
             if (numbers.moveToFirst()) {
                 mAllUnreadNumber = numbers.getInt(0);
                 mFavoritesNumber = numbers.getInt(1);
                 mAllNumber = numbers.getInt( 2 );
+                mExternalUnreadNumber = numbers.getInt( 3 );
+                mExternalReadNumber = numbers.getInt( 4 );
             }
             numbers.close();
         }
@@ -303,7 +318,7 @@ public class DrawerAdapter extends BaseAdapter {
         public TextView titleTxt;
         public TextView stateTxt;
         public TextView unreadTxt;
-        public TextView allTxt;
+        public TextView readTxt;
         public ImageView autoRefreshIcon;
 
         public View separator;

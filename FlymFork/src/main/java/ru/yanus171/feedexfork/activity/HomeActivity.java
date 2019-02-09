@@ -71,19 +71,33 @@ import ru.yanus171.feedexfork.utils.PrefUtils;
 import ru.yanus171.feedexfork.utils.Timer;
 import ru.yanus171.feedexfork.utils.UiUtils;
 
+import static ru.yanus171.feedexfork.Constants.DB_AND;
+import static ru.yanus171.feedexfork.Constants.DB_COUNT;
 import static ru.yanus171.feedexfork.provider.FeedData.EntryColumns.FAVORITES_CONTENT_URI;
 import static ru.yanus171.feedexfork.service.FetcherService.GetEnryUri;
 import static ru.yanus171.feedexfork.service.FetcherService.GetExtrenalLinkFeedID;
+import static ru.yanus171.feedexfork.utils.PrefUtils.SHOW_READ_ARTICLE_COUNT;
 
 public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String STATE_CURRENT_DRAWER_POS = "STATE_CURRENT_DRAWER_POS";
 
-    private static final String FEED_UNREAD_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " +
-            EntryColumns.IS_READ + " IS NULL AND " + EntryColumns.FEED_ID + '=' + FeedColumns.TABLE_NAME + '.' + FeedColumns._ID + ')';
+    private static final String FEED_NUMBER( final String where ) {
+        return "(SELECT " + DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " +
+                where + DB_AND  + EntryColumns.FEED_ID + '=' + FeedColumns.TABLE_NAME + '.' + FeedColumns._ID + ')';
+    }
+    private static final String GROUP_NUMBER( final String where ) {
+        return "(SELECT " + DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " +
+                where + DB_AND + EntryColumns.FEED_ID + " IN ( SELECT " + FeedColumns._ID +  " FROM " + FeedColumns.TABLE_NAME + " AS t1"+ " WHERE " + FeedColumns.GROUP_ID +  " = " + FeedColumns.TABLE_NAME + "." + FeedColumns._ID  + ") " + " )";
 
-    private static final String FEED_ALL_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " +
-            EntryColumns.FEED_ID + '=' + FeedColumns.TABLE_NAME + '.' + FeedColumns._ID + ')';
+    }
+    private final String EXPR_NUMBER ( final String where ) {
+        return "CASE WHEN " + FeedColumns.WHERE_GROUP + " THEN " + GROUP_NUMBER( where ) +
+               " ELSE " + FEED_NUMBER( where ) + " END";
+    }
+    //private static final String FEED_ALL_NUMBER = "(SELECT " + DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " +
+    //        EntryColumns.FEED_ID + '=' + FeedColumns.TABLE_NAME + '.' + FeedColumns._ID + ')';
+
 
     private static final int LOADER_ID = 0;
     private static final int PERMISSIONS_REQUEST_IMPORT_FROM_OPML = 1;
@@ -361,17 +375,15 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         Timer.Start( LOADER_ID, "HomeActivity.onCreateLoader" );
-        final String EXPR_FEED_ALL_NUMBER = PrefUtils.getBoolean( "show_read_article_count", false ) ? FEED_ALL_NUMBER : "0";
-        final String EXPR_FEED_UNREAD_NUMBER = FEED_UNREAD_NUMBER;
+        final String EXPR_FEED_ALL_NUMBER = PrefUtils.getBoolean( SHOW_READ_ARTICLE_COUNT, false ) ? EXPR_NUMBER( "1=1" ) : "0";
         CursorLoader cursorLoader =
                 new CursorLoader(this,
                         FeedColumns.GROUPED_FEEDS_CONTENT_URI,
                         new String[]{FeedColumns._ID, FeedColumns.URL, FeedColumns.NAME,
                                 FeedColumns.IS_GROUP, FeedColumns.ICON, FeedColumns.LAST_UPDATE,
-                                FeedColumns.ERROR, EXPR_FEED_UNREAD_NUMBER, EXPR_FEED_ALL_NUMBER, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST,
+                                FeedColumns.ERROR, EXPR_NUMBER( EntryColumns.WHERE_UNREAD ), EXPR_FEED_ALL_NUMBER, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST,
                                 FeedColumns.IS_GROUP_EXPANDED, FeedColumns.IS_AUTO_REFRESH, FeedColumns.OPTIONS},
-                        "(" + FeedColumns.IS_GROUP + Constants.DB_IS_TRUE + Constants.DB_OR +
-                                FeedColumns.GROUP_ID + Constants.DB_IS_NULL + Constants.DB_OR +
+                        "(" + FeedColumns.WHERE_GROUP + Constants.DB_OR + FeedColumns.GROUP_ID + Constants.DB_IS_NULL + Constants.DB_OR +
                                 FeedColumns.GROUP_ID + " IN (SELECT " + FeedColumns._ID +
                                 " FROM " + FeedColumns.TABLE_NAME +
                                 " WHERE " + FeedColumns.IS_GROUP_EXPANDED + Constants.DB_IS_TRUE + "))" + FeedData.getWhereNotExternal(),

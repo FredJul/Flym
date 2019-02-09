@@ -53,18 +53,33 @@ import android.text.TextUtils;
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.service.FetcherService;
 
+import static ru.yanus171.feedexfork.Constants.DB_AND;
+import static ru.yanus171.feedexfork.Constants.DB_COUNT;
+import static ru.yanus171.feedexfork.Constants.DB_IS_FALSE;
+import static ru.yanus171.feedexfork.Constants.DB_IS_NULL;
+import static ru.yanus171.feedexfork.Constants.DB_IS_TRUE;
+import static ru.yanus171.feedexfork.Constants.DB_OR;
+import static ru.yanus171.feedexfork.provider.FeedData.EntryColumns.FEED_ID;
+import static ru.yanus171.feedexfork.provider.FeedData.EntryColumns.WHERE_READ;
+import static ru.yanus171.feedexfork.provider.FeedData.EntryColumns.WHERE_UNREAD;
+import static ru.yanus171.feedexfork.service.FetcherService.GetExtrenalLinkFeedID;
+
 public class FeedData {
     public static final String PACKAGE_NAME = "ru.yanus171.feedexfork";
     public static final String CONTENT = "content://";
     public static final String AUTHORITY = PACKAGE_NAME + ".provider.FeedData";
     public static final String CONTENT_AUTHORITY = CONTENT + AUTHORITY;
-    public static final String FEEDS_TABLE_WITH_GROUP_PRIORITY = FeedColumns.TABLE_NAME + " LEFT JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.PRIORITY +
-            " AS group_priority FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + FeedColumns.TABLE_NAME + '.' + FeedColumns.GROUP_ID + " = f.joined_feed_id)";
+    public static final String FEEDS_TABLE_WITH_GROUP_PRIORITY = FeedColumns.TABLE_NAME +
+            " LEFT JOIN " +
+            "(SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.PRIORITY + " AS group_priority FROM " + FeedColumns.TABLE_NAME + ") AS f " +
+            "ON (" + FeedColumns.TABLE_NAME + '.' + FeedColumns.GROUP_ID + " = f.joined_feed_id)";
     public static final String ENTRIES_TABLE_WITH_FEED_INFO = EntryColumns.TABLE_NAME + " JOIN (SELECT " + FeedColumns._ID + " AS joined_feed_id, " + FeedColumns.RETRIEVE_FULLTEXT + ", " + FeedColumns.NAME + ", " + FeedColumns.URL + ", " +
-            FeedColumns.ICON + ", " + FeedColumns.GROUP_ID + " FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + EntryColumns.TABLE_NAME + '.' + EntryColumns.FEED_ID + " = f.joined_feed_id)";
-    public static final String ALL_UNREAD_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)";
-    public static final String ALL_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + ")";
-    public static final String FAVORITES_NUMBER = "(SELECT " + Constants.DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + Constants.DB_IS_TRUE + ')';
+            FeedColumns.ICON + ", " + FeedColumns.GROUP_ID + " FROM " + FeedColumns.TABLE_NAME + ") AS f ON (" + EntryColumns.TABLE_NAME + '.' + FEED_ID + " = f.joined_feed_id)";
+    public static final String ALL_UNREAD_NUMBER = "(SELECT " + DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_READ + " IS NULL)";
+    public static final String ALL_NUMBER = "(SELECT " + DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + ")";
+    public static final String FAVORITES_NUMBER = "(SELECT " + DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " + EntryColumns.IS_FAVORITE + DB_IS_TRUE + ')';
+    public static final String EXTERNAL_UNREAD_NUMBER = "(SELECT " + DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " + WHERE_UNREAD + DB_AND + FEED_ID + "=" + GetExtrenalLinkFeedID() + ")";
+    public static final String EXTERNAL_READ_NUMBER = "(SELECT " + DB_COUNT + " FROM " + EntryColumns.TABLE_NAME + " WHERE " + WHERE_READ + DB_AND + FEED_ID + "=" + GetExtrenalLinkFeedID() + ")";
     static final String TYPE_PRIMARY_KEY = "INTEGER PRIMARY KEY AUTOINCREMENT";
     static final String TYPE_EXTERNAL_ID = "INTEGER(7)";
     static final String TYPE_TEXT = "TEXT";
@@ -123,6 +138,8 @@ public class FeedData {
         public static final String[] PROJECTION_ID_OPTIONS = new String[]{FeedColumns._ID, FeedColumns.OPTIONS};
         public static final String[] PROJECTION_GROUP_ID = new String[]{FeedColumns.GROUP_ID};
         public static final String[] PROJECTION_PRIORITY = new String[]{FeedColumns.PRIORITY};
+
+        public static String WHERE_GROUP = "(" + FeedColumns.IS_GROUP + DB_IS_TRUE + ")";
 
         public static Uri CONTENT_URI(String feedId) {
             return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId);
@@ -211,7 +228,7 @@ public class FeedData {
                 new String[]{EntryColumns._ID,
                              EntryColumns.AUTHOR,
                              EntryColumns.DATE,
-                             EntryColumns.FEED_ID,
+                             FEED_ID,
                              EntryColumns.FETCH_DATE,
                              EntryColumns.GUID,
                              EntryColumns.IMAGE_URL,
@@ -224,10 +241,10 @@ public class FeedData {
                              EntryColumns.DATE,
                              String.format( "substr( %s, 1, 5 ) AS %s", EntryColumns.MOBILIZED_HTML, EntryColumns.MOBILIZED_HTML ),
                              FeedColumns.NAME};
-        public static final String WHERE_READ = EntryColumns.IS_READ + Constants.DB_IS_TRUE;
-        public static final String WHERE_UNREAD = "(" + EntryColumns.IS_READ + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_READ + Constants.DB_IS_FALSE + ')';
-        public static final String WHERE_NOT_FAVORITE = "(" + EntryColumns.IS_FAVORITE + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_FAVORITE + Constants.DB_IS_FALSE + ')';
-        public static final String WHERE_NEW = "(" + EntryColumns.IS_NEW + Constants.DB_IS_NULL + Constants.DB_OR + EntryColumns.IS_NEW + Constants.DB_IS_TRUE  + ")";
+        public static final String WHERE_READ = IS_READ + DB_IS_TRUE;
+        public static final String WHERE_UNREAD = "(" + IS_READ + DB_IS_NULL + DB_OR + IS_READ + DB_IS_FALSE + ')';
+        public static final String WHERE_NOT_FAVORITE = "(" + IS_FAVORITE + DB_IS_NULL + DB_OR + IS_FAVORITE + DB_IS_FALSE + ')';
+        public static final String WHERE_NEW = "(" + EntryColumns.IS_NEW + DB_IS_NULL + DB_OR + IS_NEW + DB_IS_TRUE  + ")";
 
         public static boolean IsNew( Cursor cursor, int fieldPos ) {
             return cursor.isNull( fieldPos ) || cursor.getInt( fieldPos ) == 1;
@@ -314,7 +331,7 @@ public class FeedData {
     }
 
     public static String getWhereNotExternal() {
-        return Constants.DB_AND + "(" + FeedColumns.FETCH_MODE + "<>" + FetcherService.FETCHMODE_EXERNAL_LINK + Constants.DB_OR + FeedColumns.FETCH_MODE + Constants.DB_IS_NULL + ")";
+        return Constants.DB_AND + "(" + FeedColumns.FETCH_MODE + "<>" + FetcherService.FETCHMODE_EXERNAL_LINK + DB_OR + FeedColumns.FETCH_MODE + DB_IS_NULL + ")";
     }
 
 }

@@ -84,6 +84,8 @@ public class PrefUtils {
     public static final String KEEP_TIME = "keeptime";
 
 
+    public static final String SHOW_READ_ARTICLE_COUNT = "show_read_article_count";
+
     public static int getFontSize() {
         return Integer.parseInt(PrefUtils.getString("fontsize", "0"));
     }
