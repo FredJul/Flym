@@ -52,11 +52,7 @@ public class MainApplication extends Application {
         super.onCreate();
         mContext = getApplicationContext();
 
-        Locale locale = GetLocale(this);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, null);
+        InitLocale();
 
         Thread.setDefaultUncaughtExceptionHandler(new DebugApp().new UncaughtExceptionHandler(this));
 
@@ -68,7 +64,7 @@ public class MainApplication extends Application {
                 Dog.e("disableDeathOnFileUriExposure", e);
             }
         }
-        PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false); // init
+        PrefUtils.putBoolean(PrefUtils.IS_REFRESHING, false);
 
 
         if (Build.VERSION.SDK_INT >= 26) {
@@ -81,8 +77,17 @@ public class MainApplication extends Application {
 
 
     }
+
+    public static void InitLocale() {
+        Locale locale = GetLocale(mContext);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        mContext.getResources().updateConfiguration(config, null);
+    }
+
     // ----------------------------------------------------------------
-    public static Locale GetLocale(Context context) {
+    private static Locale GetLocale(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String lang = prefs.getString(PrefUtils.LANGUAGE, defaultLanguage);
         if (lang.equals(defaultLanguage)) {
@@ -91,5 +96,10 @@ public class MainApplication extends Application {
             }
         }
         return new Locale(lang);
+    }
+    @Override
+    public void onConfigurationChanged (Configuration newConfig) {
+        InitLocale();
+        super.onConfigurationChanged(newConfig);
     }
 }
