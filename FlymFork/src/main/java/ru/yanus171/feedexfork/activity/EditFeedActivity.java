@@ -107,7 +107,7 @@ import ru.yanus171.feedexfork.utils.UiUtils;
 
 public class EditFeedActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     static final String FEED_SEARCH_TITLE = "title";
-    static final String FEED_SEARCH_URL = "website";//"url";
+    static final String FEED_SEARCH_URL = "feedId";//"website";//"url";
     static final String FEED_SEARCH_DESC = "description";//"contentSnippet";
     private static final String STATE_CURRENT_TAB = "STATE_CURRENT_TAB";
     private static final String[] FEED_PROJECTION =
@@ -675,7 +675,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
             private void AddFeed(HashMap<String, String> dataItem) {
                 Uri newFeedUri =
                     FeedDataContentProvider.addFeed(EditFeedActivity.this,
-                        dataItem.get(FEED_SEARCH_URL),
+                        dataItem.get(FEED_SEARCH_URL).replace( "feed/", ""  ),
                         name.isEmpty() ? dataItem.get(FEED_SEARCH_TITLE) : name,
                         mHasGroupCb.isChecked() ? mGroupSpinner.getSelectedItemId() : null,
                         mRetrieveFulltextCb.isChecked(),

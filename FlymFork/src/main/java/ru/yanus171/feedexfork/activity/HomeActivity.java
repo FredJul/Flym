@@ -522,20 +522,19 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
             switch (mCurrentDrawerPos) {
                 case 0:
                     getSupportActionBar().setTitle(R.string.unread_entries);
+                    SetActionbarIndicator( R.mipmap.ic_launcher);
                     break;
                 case 1:
                     getSupportActionBar().setTitle(R.string.all_entries);
+                    SetActionbarIndicator( R.drawable.cup_empty );
                     break;
                 case 2:
                     getSupportActionBar().setTitle(R.string.favorites);
-                    Bitmap original = BitmapFactory.decodeResource(getResources(), R.drawable.rating_important);
-                    int size = UiUtils.dpToPixel( 32 );
-                    Bitmap b = Bitmap.createScaledBitmap( original, size, size, false);
-                    Drawable d = new BitmapDrawable(getResources(), b);
-                    getSupportActionBar().setHomeAsUpIndicator( d );
+                    SetActionbarIndicator( R.drawable.cup_with_star);
                     break;
                 case 3:
                     getSupportActionBar().setTitle(R.string.externalLinks);
+                    SetActionbarIndicator( R.drawable.load_later );
                     break;
                 default:
                     getSupportActionBar().setTitle(mTitle);
@@ -553,6 +552,14 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         // Put the good menu
         invalidateOptionsMenu();
         timer.End();
+    }
+
+    private void SetActionbarIndicator( int imageResource) {
+        Bitmap original = BitmapFactory.decodeResource(getResources(), imageResource);
+        int size = UiUtils.dpToPixel( 32 );
+        Bitmap b = Bitmap.createScaledBitmap( original, size, size, false);
+        Drawable d = new BitmapDrawable(getResources(), b);
+        getSupportActionBar().setHomeAsUpIndicator( d );
     }
 
     @Override

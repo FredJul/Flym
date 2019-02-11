@@ -130,25 +130,25 @@ public class DrawerAdapter extends BaseAdapter {
             switch (position) {
                 case 0:
                     holder.titleTxt.setText(R.string.unread_entries);
-                    holder.iconView.setImageResource(R.drawable.ic_statusbar_rss);
+                    holder.iconView.setImageResource(R.mipmap.ic_launcher);
                     if (mAllUnreadNumber != 0)
                         holder.unreadTxt.setText(String.valueOf(mAllUnreadNumber));
                     break;
                 case 1:
                     holder.titleTxt.setText(R.string.all_entries);
-                    holder.iconView.setImageResource(R.drawable.ic_statusbar_rss);
+                    holder.iconView.setImageResource(R.drawable.cup_empty);
                     if (mAllNumber != 0)
                         holder.unreadTxt.setText(String.valueOf(mAllNumber));
                     break;
                 case 2:
                     holder.titleTxt.setText(R.string.favorites);
-                    holder.iconView.setImageResource(R.drawable.rating_important);
+                    holder.iconView.setImageResource(R.drawable.cup_with_star);
                     if (mFavoritesNumber != 0)
                         holder.unreadTxt.setText(String.valueOf(mFavoritesNumber));
                     break;
                 case 3:
                     holder.titleTxt.setText(R.string.externalLinks);
-                    holder.iconView.setImageResource(R.drawable.ic_statusbar_rss);
+                    holder.iconView.setImageResource(R.drawable.load_later);
                     if (mExternalUnreadNumber != 0)
                         holder.unreadTxt.setText(String.valueOf(mExternalUnreadNumber));
                     if (mExternalReadNumber != 0)
