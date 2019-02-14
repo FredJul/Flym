@@ -93,7 +93,7 @@
 
     ]]></string>
     <string name="app_name">Handy News Reader</string>
-    <string name="about_flym">O programie / Pomoc / Kontakt z Autorem. </string>
+    <string name="about_flym">O programie / Pomoc / Kontakt z Autorem</string>
     <string name="welcome_title">Witaj we Handy News Reader. Chciał(a)byś dodać nowy kanał RSS?</string>
     <string name="never">Nigdy.</string>
     <string name="update">Aktualizacja</string>
@@ -214,42 +214,42 @@
     <string name="transparency">Przezroczystość.</string>
 
     <!-- SETTINGS -->
-    <string name="settings_category_refresh">Automatyczne odświeżanie.</string>
-    <string name="settings_refresh_enabled">Włącz automatyczne odświeżanie.</string>
+    <string name="settings_category_refresh">Automatyczne odświeżanie</string>
+    <string name="settings_refresh_enabled">Włącz automatyczne odświeżanie</string>
     <string name="settings_refresh_enabled_description">Aktywuj automatyczne odświeżanie kanałów.</string>
     <string name="settings_refresh_interval">Odświeżaj co:</string>
-    <string name="settings_category_notifications">Powiadomienia.</string>
-    <string name="settings_notifications_enabled">Włącz powiadomienia.</string>
-    <string name="settings_notifications_enabled_description">Włącz powiadomienia o nowych artykułach.</string>
-    <string name="settings_notifications_ringtone">Dzwonek.</string>
+    <string name="settings_category_notifications">Powiadomienia</string>
+    <string name="settings_notifications_enabled">Włącz powiadomienia</string>
+    <string name="settings_notifications_enabled_description">Włącz powiadomienia o nowych artykułach</string>
+    <string name="settings_notifications_ringtone">Dzwonek</string>
     <string name="settings_notifications_ringtone_none">Brak.</string>
-    <string name="settings_notifications_vibrate">Wibracja.</string>
-    <string name="settings_notifications_vibrate_description">Aktywuj wibrację powiadamiającą o nowych artykułach.</string>
-    <string name="settings_notifications_light">Dioda.</string>
-    <string name="settings_notifications_light_description">Aktywuj diodę powiadamiającą o nowych artykułach.</string>
+    <string name="settings_notifications_vibrate">Wibracja</string>
+    <string name="settings_notifications_vibrate_description">Aktywuj wibrację powiadamiającą o nowych artykułach</string>
+    <string name="settings_notifications_light">Dioda</string>
+    <string name="settings_notifications_light_description">Aktywuj diodę powiadamiającą o nowych artykułach</string>
     <string name="settings_category_content_presentation">Prezentacja treści.</string>
-    <string name="settings_light_theme">Jasny motyw.</string>
+    <string name="settings_light_theme">Jasny motyw</string>
     <string name="settings_light_theme_description">Użyj jasnego motywu.</string>
-    <string name="settings_keep_time">Czas przez jaki artykuły będą zachowane.</string>
-    <string name="settings_display_images">Wyświetlaj obrazki.</string>
+    <string name="settings_keep_time">Czas przez jaki artykuły będą zachowane</string>
+    <string name="settings_display_images">Wyświetlaj obrazki</string>
     <string name="settings_display_images_description">Wyświetlaj obrazki w artykułach.</string>
-    <string name="settings_preload_image_mode">Wczytuj obrazki \'na zapas\'.</string>
-    <string name="settings_font_size">Rozmiar tekstu.</string>
-    <string name="settings_display_oldest_first">Kolejność artykułów.</string>
-    <string name="settings_display_oldest_first_description">Najstarsze na początku.</string>
-    <string name="settings_display_entries_fullscreen">Automatyczny tryb pełnoekranowy.</string>
+    <string name="settings_preload_image_mode">Wczytuj obrazki \'na zapas\'</string>
+    <string name="settings_font_size">Rozmiar tekstu</string>
+    <string name="settings_display_oldest_first">Kolejność artykułów</string>
+    <string name="settings_display_oldest_first_description">Najstarsze na początku</string>
+    <string name="settings_display_entries_fullscreen">Automatyczny tryb pełnoekranowy</string>
     <string name="settings_display_entries_fullscreen_description">Automatycznie wyświetlaj artykuły w trybie pełnoekranowym.</string>
-    <string name="settings_refresh_on_open_description">Odświeża wszystkie kanały po uruchomieniu programu.</string>
-    <string name="settings_refresh_on_open">Odświeżaj kanały przy uruchomieniu.</string>
-    <string name="settings_refresh_wifi_only">Odświeżaj tylko przez Wi-Fi.</string>
-    <string name="settings_refresh_wifi_only_description">Automatyczne odświeżanie będzie miało miejsce tylko przy dostępnym połączeniu Wi-Fi.</string>
-    <string name="settings_display_text_color">Jasność tekstu.</string>
-    <string name="settings_max_image_download_count">Maksymalna ilość pobranych obrazków.</string>
+    <string name="settings_refresh_on_open_description">Odświeża wszystkie kanały po uruchomieniu programu</string>
+    <string name="settings_refresh_on_open">Odświeżaj kanały przy uruchomieniu</string>
+    <string name="settings_refresh_wifi_only">Odświeżaj tylko przez Wi-Fi</string>
+    <string name="settings_refresh_wifi_only_description">Automatyczne odświeżanie będzie miało miejsce tylko przy dostępnym połączeniu Wi-Fi</string>
+    <string name="settings_display_text_color">Jasność tekstu</string>
+    <string name="settings_max_image_download_count">Maksymalna ilość pobranych obrazków</string>
     <string name="settings_visible_feeds">Widoczne kanały.</string>
     <string name="settings_widget_background">Tło.</string>
     <string name="settings_widget_background_description">Kolor i przezroczystość tła widżetu.</string>
     <string name="all_feeds">Wszystkie kanały (w tym przyszłe).</string>
-    <string name="settings_display_text_color_description">w ciemnym motywie (0..255)</string>
+    <string name="settings_display_text_color_description">W ciemnym motywie (0..255)</string>
     <string name="downloadImage">Pobieranie obrazków...</string>
     <string name="loadFullText">Wczytywanie pełnej treści...</string>
     <string name="deleteOldEntries">Usuń stare artykuły.</string>
@@ -264,14 +264,14 @@
     <string name="parseXml">Parsowanie XML...</string>
     <string name="setupConnection">Ustaw połączenie.</string>
     <string name="settings_content_extract_rules">Reguły pozyskiwania treści.</string>
-    <string name="settings_content_extract_rules_description">Ustaw dla poszczególnych witryn (potrzebujesz podstawowej wiedzy o HTML).</string>
-    <string name="settings_tapZones">Strefy Aktywne.</string>
-    <string name="settings_additional">Dodatkowe.</string>
-    <string name="settings_load_comments">Wczytuj komentarze.</string>
-    <string name="settings_load_comments_description">w pełnej treści artykułu</string>
+    <string name="settings_content_extract_rules_description">Ustaw dla poszczególnych witryn (potrzebujesz podstawowej wiedzy o HTML)</string>
+    <string name="settings_tapZones">Strefy Aktywne</string>
+    <string name="settings_additional">Dodatkowe</string>
+    <string name="settings_load_comments">Wczytuj komentarze</string>
+    <string name="settings_load_comments_description">W pełnej treści artykułu</string>
     <string name="settings_tap_zones_description">podczas wyświetlania treści artykułu</string>
     <string name="settings_tap_zones_dialogtitle">tylko informacyjnie, modyfikowanie niedostępne</string>
-    <string name="settings_max_image_download_count_description">na jeden artykuł</string>
+    <string name="settings_max_image_download_count_description">Na jeden artykuł</string>
     <string name="downloadNext">"Pobierz następny."</string>
     <string name="loadingLink">Wczytuję linki...</string>
     <string name="loadLink">Czytaj...</string>
@@ -279,41 +279,41 @@
     <string name="addFeed">Dodaj kanał.</string>
     <string name="externalLinks">Linki zewnętrzne.</string>
     <string name="markAllAsRead">Oznacz wszystko jako przeczytane.</string>
-    <string name="settings_remember_last_entry">Pamiętaj ostatnio wyświetlany artykuł.</string>
-    <string name="settings_remeber_last_entry_description">Otworzyć ostatnio wyświetlane artykuł po uruchomieniu - w przeciwnym razie pokaż listę nieprzeczytanych artykułów</string>
+    <string name="settings_remember_last_entry">Pamiętaj ostatnio wyświetlany artykuł</string>
+    <string name="settings_remeber_last_entry_description">Otwórz ostatnio wyświetlany artykuł po uruchomieniu - w przeciwnym razie pokaż listę nieprzeczytanych artykułów</string>
     <string name="pageUp">strona w górę / przesuń w dół by o(d)znaczyć gwiazdką</string>
     <string name="pageDown">strona w dół</string>
     <string name="fullScreenToggle">przełącznik pełnego ekranu</string>
     <string name="auto_refresh_feed">Automatycznie odświeżaj kanał.</string>
-    <string name="settings_refresh_only_selected">Tylko wybrane.</string>
-    <string name="settings_refresh_only_selected_summary">Automatycznie odświeża tylko wybrane kanały.</string>
+    <string name="settings_refresh_only_selected">Tylko wybrane</string>
+    <string name="settings_refresh_only_selected_summary">Automatycznie odświeża tylko wybrane kanały</string>
     <string name="actionBarToggle">Przełącznik belki akcji.</string>
-    <string name="settings_show_tap_zones">Strefy Aktywne widoczne.</string>
-    <string name="settings_show_tap_zone_description">...jako częściowo przezroczyste kwadraty podczas wyświetlania artykułu.</string>
-    <string name="settings_max_image_download_size_kb">Maksymalna waga obrazka.</string>
+    <string name="settings_show_tap_zones">Strefy Aktywne widoczne</string>
+    <string name="settings_show_tap_zone_description">Jako częściowo przezroczyste kwadraty podczas wyświetlania artykułu</string>
+    <string name="settings_max_image_download_size_kb">Maksymalna waga obrazka</string>
     <string name="settings_max_image_download_size_kb_summary">(w kb). Nie wczytuj obrazków większych niż...</string>
     <string name="standard">Standard.</string>
     <string name="fontsize_entrylist">Rozmiar tekstu na liście artykułów.</string>
-    <string name="settings_volume_buttons_action">Funkcje przycisków głośności.</string>
+    <string name="settings_volume_buttons_action">Funkcje przycisków głośności</string>
     <string name="behaviour">Zachowanie</string>
     <string name="question_delete_entry">Usunąć artykuł?</string>
     <string name="share_all_text">Udostępnij cały tekst.</string>
     <string name="group">Dodaj do grupy.</string>
     <string name="auto_image_load">Automatycznie wczytuj obrazki.</string>
-    <string name="show_progress_info">Szczegółowe informacje techniczne o postępie.</string>
-    <string name="show_progress_info_descr">Pokazuje szczegółowe informacje nt. aktualnie przeprowadzanej operacji.</string>
+    <string name="show_progress_info">Szczegółowe informacje techniczne o postępie</string>
+    <string name="show_progress_info_descr">Pokazuje szczegółowe informacje nt. aktualnie przeprowadzanej operacji</string>
     <string name="filter_apply_to_url">Zastosuj do adresu URL.</string>
-    <string name="show_article_url">Pokaż adres URL artykułu.</string>
+    <string name="show_article_url">Pokaż adres URL artykułu</string>
     <string name="show_article_url_descr">na liście artykułów</string>
-    <string name="show_article_icon">Pokaż ikonę artykułu.</string>
-    <string name="show_article_icon_descr">Wyłącz by uzyskać więcej miejsca na ekranie.</string>
+    <string name="show_article_icon">Pokaż ikonę artykułu</string>
+    <string name="show_article_icon_descr">Wyłącz by uzyskać więcej miejsca na ekranie</string>
     <string name="menu_fix_order">Napraw kolejność artykułów.</string>
-    <string name="settings_category_article_list">Lista artykułów.</string>
-    <string name="settings_category_article_text">Tekst artykułu.</string>
-    <string name="vibrate_on_article_list_entry_swype">Wibruj przy przesunięciu w lewo/prawo.</string>
-    <string name="vibrate_on_article_list_entry_swype_summary">w artykule na liście</string>
-    <string name="show_mark_all_as_read_button">Przycisk Oznacz wszystko jako przeczytane.</string>
-    <string name="show_mark_all_as_read_button_summary">Pokaż przycisk Oznacz wszystkie artykuły jako przeczytane. W przeciwnym razie znajdziesz tą funkcję w menu.</string>
+    <string name="settings_category_article_list">Lista artykułów</string>
+    <string name="settings_category_article_text">Tekst artykułu</string>
+    <string name="vibrate_on_article_list_entry_swype">Wibruj przy przesunięciu w lewo/prawo</string>
+    <string name="vibrate_on_article_list_entry_swype_summary">W artykule na liście oraz w tekście artykułu podczas oznaczania gwiazdką</string>
+    <string name="show_mark_all_as_read_button">Przycisk Oznacz wszystko jako przeczytane</string>
+    <string name="show_mark_all_as_read_button_summary">Pokaż przycisk Oznacz wszystkie artykuły jako przeczytane - w przeciwnym razie znajdziesz tą funkcję w menu</string>
     <string name="entry_marked_unfavourite">Artykuł został usunięty z Ulubionych.</string>
     <string name="entry_marked_favourite">Artykuł został dodany do Ulubionych.</string>
     <string name="new_feed_was_added">Nowy kanał został dodany.</string>
@@ -323,35 +323,45 @@
     <string name="markedAsStarred">Artykuł został dodany do Ulubionych.</string>
     <string name="deleteAllEntries">Usuń wszystkie artykuły poza Ulubionymi.</string>
     <string name="question">Pytanie.</string>
-    <string name="settings_entry_margins">Marginesy.</string>
-    <string name="settings_entry_margins_description">lewy|prawy</string>
-    <string name="entry_text_align_justify">Tekst justowany.</string>
-    <string name="entry_text_align_justify_description">W przeciwnym razie wyrównany do lewej.</string>
+    <string name="settings_entry_margins">Marginesy</string>
+    <string name="settings_entry_margins_description">Lewy | prawy</string>
+    <string name="entry_text_align_justify">Tekst justowany</string>
+    <string name="entry_text_align_justify_description">W przeciwnym razie wyrównany do lewej</string>
     <string name="reload_full_text_with_tags">Przeładuj z tagami.</string>
     <string name="filter_hint">Akcja przypisana filtrom zostanie wykonana przy spełnieniu co najmniej jednego z warunków (reguł). \'Akceptuj\' nadpisuje \'Odrzuć\'.</string>
     <string name="keyword">słowo kluczowe</string>
     <string name="loadTypeWeb">Web (wczytuj wszystkie linki).</string>
     <string name="loadTypeRSS">RSS (adres kanału lub strony internetowej) lub słowo kluczowe</string>
     <string name="loadType">Wczytuj:</string>
-    <string name="global_filter">Filtr globalny.</string>
-    <string name="global_filter_descr">Filtr stosowany do wszystkich kanałów. Nie wypełniaj pól, jeśli ma być nieaktywny,</string>
+    <string name="global_filter">Filtr globalny...</string>
+    <string name="global_filter_descr">Filtr stosowany do wszystkich kanałów - nie wypełniaj pól, jeśli ma być nieaktywny</string>
     <string name="global_marks_as_star_filter_apply_to_title_descr">w przeciwnym razie stosuj do treści</string>
     <string name="rule_text">słowo lub fraza</string>
     <string name="settings_min_update_battery_level">Min. poziom baterii.</string>
     <string name="global_marks_as_star_filter_rule_descr">każde kolejne umieść w nowej linii</string>
 	<string name="show_read_article_count">Pokaż licznik przeczytanych artykułów</string>
-	<string name="show_read_article_count_descr">na liście źródeł</string>
-	<string name="customKeepTime">	Własny czas przechowywania artykułów</string>
+	<string name="show_read_article_count_descr">Na liście źródeł</string>
+	<string name="customKeepTime">Własny czas przechowywania artykułów</string>
 	<string name="menu_toggle_theme">Zmień motyw</string>
     <string name="restart_app_apply_changes">Aplikacja zostanie uruchomiona ponownie by zastosować zmiany.</string>
-    <string name="auto_unstart_at_bottom">Usuń z Ulubionych po przeczytaniu.</string>
-    <string name="auto_unstart_at_bottom_descr">Automatycznie usuń artykuł z Ulubionych po przewinięciu do jego końca.</string>
+    <string name="auto_unstart_at_bottom">Usuń z Ulubionych po przeczytaniu</string>
+    <string name="auto_unstart_at_bottom_descr">Automatycznie usuń artykuł z Ulubionych po przewinięciu do jego końca</string>
 	<string name="show_full_text_indicator">Wskaźnik pełnego tekstu</string>
-    <string name="show_full_text_indicator_descr">Wyświetla małą ikonkę dyskietki by wskazać że został wczytany pełny tekst artykułu.</string>
-    <string name="show_read_checkbox">Pole oznaczające że artykuł został przeczytany.</string>
-    <string name="show_read_checkbox_descr">Wyświetla małą ikonkę sygnalizującą iż artykuł został przeczytany.</string>
+    <string name="show_full_text_indicator_descr">Wyświetla małą ikonkę dyskietki by wskazać że został wczytany pełny tekst artykułu</string>
+    <string name="show_read_checkbox">Pole oznaczające że artykuł został przeczytany</string>
+    <string name="show_read_checkbox_descr">Wyświetla małą ikonkę sygnalizującą iż artykuł został przeczytany</string>
     <string name="turnOn">Włącz</string>
 	<string name="brightness_change">Regulacja jasności</string>
+	<string name="tap_zone_size">Rozmiar Stref Aktywnych</string>
+    <string name="tap_zone_size_descr">Szerokość lub wysokość wszystkich Stref Aktywnych w milimetrach</string>
+    <string name="show_new_icon">Ikonka nowego artykułu</string>
+    <string name="show_new_icon_descr">Mały plusik przy nowych artykułach (które nie były jeszcze widziane)</string>
+    <string name="criticalErrorOccured">Wystąpił błąd krytyczny - pomóż nam go naprawić przesyłając ten tekst deweloperowi</string>
+    <string name="criticalErrorSending">Przesyłanie informacji o błędzie…</string>
+    <string name="copyToClipboard">Do schowka</string>
+    <string name="sendEmail">Wyślij e-mail</string>
+    <string name="toastAppCrashed">Aplikacja została nieoczekiwanie zamknięta - pomóż nam naprawić błąd przesyłając e-maila deweloperowi</string>
+
 
 
     <plurals name="number_of_new_entries">
@@ -386,15 +396,15 @@
     </string-array>
 
     <string-array name="settings_volume_buttons_action">
-        <item>domyślne</item>
-        <item>następny/poprzedni artykuł</item>
-        <item>strona w górę/w dół</item>
+        <item>Domyślne</item>
+        <item>Następny | poprzedni artykuł</item>
+        <item>Strona w górę | w dół</item>
     </string-array>
 
     <string-array name="settings_preload_image_modes">
-        <item>nigdy</item>
-        <item>tylko przez Wi-Fi</item>
-        <item>zawsze</item>
+        <item>Nigdy</item>
+        <item>Tylko przez Wi-Fi</item>
+        <item>Zawsze</item>
     </string-array>
 
 </resources>
