@@ -93,7 +93,7 @@
 
     ]]></string>
     <string name="app_name">Handy News Reader</string>
-    <string name="about_flym">About the app / Help / Contact developer. </string>
+    <string name="about_flym">About the app / Help / Contact developer </string>
     <string name="welcome_title">Welcome to Handy News Reader. Would you like to add a feed?</string>
     <string name="never">never</string>
     <string name="update">Update</string>
@@ -249,7 +249,7 @@
     <string name="settings_widget_background">Background</string>
     <string name="settings_widget_background_description">Color and transparency of the widget background</string>
     <string name="all_feeds">All feeds (incl. future)</string>
-    <string name="settings_display_text_color_description">in dark theme (0..255)</string>
+    <string name="settings_display_text_color_description">In dark theme (0..255)</string>
     <string name="downloadImage">Downloading images</string>
     <string name="loadFullText">Loading full text</string>
     <string name="deleteOldEntries">Delete old articles</string>
@@ -264,14 +264,14 @@
     <string name="parseXml">Parsing XML</string>
     <string name="setupConnection">Setup connection</string>
     <string name="settings_content_extract_rules">Content extract rules</string>
-    <string name="settings_content_extract_rules_description">set for each site (base HTML knowledge needed)</string>
+    <string name="settings_content_extract_rules_description">Set for each site (base HTML knowledge needed)</string>
     <string name="settings_tapZones">Tap Zones preview</string>
     <string name="settings_additional">Additional</string>
     <string name="settings_load_comments">Load comments</string>
-    <string name="settings_load_comments_description">in articles\' full text</string>
+    <string name="settings_load_comments_description">In articles\' full text</string>
     <string name="settings_tap_zones_description">of entry view window</string>
     <string name="settings_tap_zones_dialogtitle">only for info, changes unavailable</string>
-    <string name="settings_max_image_download_count_description">per one article</string>
+    <string name="settings_max_image_download_count_description">Per one article</string>
     <string name="downloadNext">"Download next "</string>
     <string name="loadingLink">Loading links</string>
     <string name="loadLink">Read now</string>
@@ -286,10 +286,10 @@
     <string name="fullScreenToggle">Full screen toggle</string>
     <string name="auto_refresh_feed">Auto refresh feed</string>
     <string name="settings_refresh_only_selected">Only selected</string>
-    <string name="settings_refresh_only_selected_summary">auto refresh only checked feeds</string>
+    <string name="settings_refresh_only_selected_summary">Auto refresh only checked feeds</string>
     <string name="actionBarToggle">Toggle action bar</string>
     <string name="settings_show_tap_zones">Tap Zones are visible</string>
-    <string name="settings_show_tap_zone_description">as transparent squares in entry view</string>
+    <string name="settings_show_tap_zone_description">As transparent squares in entry view</string>
     <string name="settings_max_image_download_size_kb">Max image size</string>
     <string name="settings_max_image_download_size_kb_summary">(in kb). Do not auto load images larger than</string>
     <string name="standard">Standard</string>
@@ -311,9 +311,9 @@
     <string name="settings_category_article_list">Articles\' list</string>
     <string name="settings_category_article_text">Article\'s text</string>
     <string name="vibrate_on_article_list_entry_swype">Vibrate on swipe</string>
-    <string name="vibrate_on_article_list_entry_swype_summary">on article list entry and in article text window while starring</string>
+    <string name="vibrate_on_article_list_entry_swype_summary">On article list entry and in article text window while starring</string>
     <string name="show_mark_all_as_read_button">Mark all as read button</string>
-    <string name="show_mark_all_as_read_button_summary">Show Mark all articles as read button. Otherwise You will find this option in menu.</string>
+    <string name="show_mark_all_as_read_button_summary">Show Mark all articles as read button - otherwise You will find this option in menu</string>
     <string name="entry_marked_unfavourite">The article was removed from Favorites</string>
     <string name="entry_marked_favourite">The article was added to Favorites</string>
     <string name="new_feed_was_added">New feed was added</string>
@@ -324,23 +324,23 @@
     <string name="deleteAllEntries">Delete all feed non starred entries</string>
     <string name="question">Question</string>
     <string name="settings_entry_margins">Margins</string>
-    <string name="settings_entry_margins_description">left|right</string>
+    <string name="settings_entry_margins_description">Left | right</string>
     <string name="entry_text_align_justify">Justified text</string>
-    <string name="entry_text_align_justify_description">otherwise align to the left</string>
+    <string name="entry_text_align_justify_description">Otherwise align to the left</string>
     <string name="reload_full_text_with_tags">Reload with tags</string>
     <string name="filter_hint">A filter\'s action will be initiated if at least one condition (rule) is met. \'Accept\' overrides \'Reject\'</string>
     <string name="keyword">keyword(s)</string>
     <string name="loadTypeWeb">Web (load all links from page)</string>
     <string name="loadTypeRSS">RSS (feed or site link or keywords)</string>
     <string name="loadType">Load type:</string>
-    <string name="global_filter">Global filter ...</string>
-    <string name="global_filter_descr">A filter that apply to every feed. Leave filter text (and regex text) empty to disable</string>
+    <string name="global_filter">Global filter...</string>
+    <string name="global_filter_descr">A filter that apply to every feed - leave filter text (and regex text) empty to disable</string>
     <string name="global_marks_as_star_filter_apply_to_title_descr">otherwise apply to content</string>
     <string name="rule_text">Rule\'s text</string>
     <string name="settings_min_update_battery_level">Min. battery level</string>
     <string name="global_marks_as_star_filter_rule_descr">a rule per line</string>
     <string name="show_read_article_count">Show read article count</string>
-    <string name="show_read_article_count_descr">in feed list</string>
+    <string name="show_read_article_count_descr">In feed list</string>
     <string name="customKeepTime">Custom articles keep time</string>
     <string name="menu_toggle_theme">Change theme</string>
     <string name="auto_unstart_at_bottom">Auto unstar when finish reading</string>
@@ -351,14 +351,14 @@
     <string name="show_read_checkbox_descr">Show small checkbox to indicate that article is read</string>
     <string name="turnOn">Turn on</string>
     <string name="brightness_change">Brightness change</string>
-    <string name="tap_zone_size">Tap zone size</string>
-    <string name="tap_zone_size_descr">the height or width of all tap zones in millimeters</string>
+    <string name="tap_zone_size">Tap Zone size</string>
+    <string name="tap_zone_size_descr">Height or width of all Tap Zones in millimeters</string>
     <string name="show_new_icon">New article icon</string>
     <string name="show_new_icon_descr">Little plus icon on new articles (which had never seen)</string>
     <string name="criticalErrorOccured">A critical error occurred in thу application. Please send this text to developer</string>
     <string name="criticalErrorSending">Sending critical error…</string>
     <string name="copyToClipboard">To clipboard</string>
-    <string name="sendEmail">Send email</string>
+    <string name="sendEmail">Send e-mail</string>
     <string name="toastAppCrashed">The application unexpectedly failed: (Please send a mail to developer)</string>
 
 
@@ -421,8 +421,8 @@
 
     <string-array name="settings_volume_buttons_action">
         <item>Default</item>
-        <item>Switch to next|previous article</item>
-        <item>Page up|down</item>
+        <item>Switch to next | previous article</item>
+        <item>Page up | down</item>
     </string-array>
 
     <string-array name="settings_preload_image_modes">
