@@ -178,7 +178,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         if (PrefUtils.getBoolean(PrefUtils.REFRESH_ON_OPEN_ENABLED, false)) {
             if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-                startService(new Intent(HomeActivity.this, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
+                FetcherService.StartService(new Intent(HomeActivity.this, FetcherService.class).setAction(FetcherService.ACTION_REFRESH_FEEDS));
             }
         }
 

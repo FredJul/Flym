@@ -567,10 +567,10 @@ public class FetcherService extends IntentService {
     }
 
     public static void StartServiceOpenExternalLink( final String url, final String title) {
-        MainApplication.getContext().startService( new Intent(MainApplication.getContext(), FetcherService.class)
+        FetcherService.StartService( new Intent(MainApplication.getContext(), FetcherService.class)
                 .setAction( ACTION_LOAD_LINK )
                 .putExtra(Constants.URL_TO_LOAD, url)
-                .putExtra(Constants.TITLE_TO_LOAD, url));
+                .putExtra(Constants.TITLE_TO_LOAD, url) );
     }
 
     public enum ForceReload {Yes, No}

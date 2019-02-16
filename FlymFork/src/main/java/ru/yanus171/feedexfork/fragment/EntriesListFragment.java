@@ -756,15 +756,15 @@ public class EntriesListFragment extends /*SwipeRefreshList*/Fragment {
             int uriMatcher = FeedDataContentProvider.URI_MATCHER.match(mCurrentUri);
             if ( uriMatcher == FeedDataContentProvider.URI_ENTRIES_FOR_FEED ||
                  uriMatcher == FeedDataContentProvider.URI_UNREAD_ENTRIES_FOR_FEED ) {
-                getActivity().startService(new Intent(getActivity(), FetcherService.class)
+                FetcherService.StartService( new Intent(getActivity(), FetcherService.class)
                         .setAction(FetcherService.ACTION_REFRESH_FEEDS)
                         .putExtra(Constants.FEED_ID, mCurrentUri.getPathSegments().get(1)));
             } else if ( FeedDataContentProvider.URI_MATCHER.match(mCurrentUri) == FeedDataContentProvider.URI_ENTRIES_FOR_GROUP ) {
-                getActivity().startService(new Intent(getActivity(), FetcherService.class)
+                FetcherService.StartService( new Intent(getActivity(), FetcherService.class)
                         .setAction(FetcherService.ACTION_REFRESH_FEEDS)
                         .putExtra(Constants.GROUP_ID, mCurrentUri.getPathSegments().get(1)));
             } else {
-                getActivity().startService(new Intent(getActivity(), FetcherService.class)
+                FetcherService.StartService( new Intent(getActivity(), FetcherService.class)
                         .setAction(FetcherService.ACTION_REFRESH_FEEDS));
             }
         }

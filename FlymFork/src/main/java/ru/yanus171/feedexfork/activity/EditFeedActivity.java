@@ -684,7 +684,7 @@ public class EditFeedActivity extends BaseActivity implements LoaderManager.Load
                         getOptionsJsonString());
                 UiUtils.toast( EditFeedActivity.this, R.string.new_feed_was_added);
 
-                EditFeedActivity.this.startService(new Intent(EditFeedActivity.this, FetcherService.class)
+                FetcherService.StartService( new Intent(EditFeedActivity.this, FetcherService.class)
                         .setAction(FetcherService.ACTION_REFRESH_FEEDS)
                         .putExtra(Constants.FEED_ID, newFeedUri.getLastPathSegment()) );
                 HomeActivity.mNewFeedUri = newFeedUri;
