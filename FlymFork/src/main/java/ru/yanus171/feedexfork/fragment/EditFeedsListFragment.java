@@ -80,6 +80,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,6 +94,7 @@ import ru.yanus171.feedexfork.parser.OPML;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
+import ru.yanus171.feedexfork.utils.FileUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
 import ru.yanus171.feedexfork.view.DragNDropExpandableListView;
 import ru.yanus171.feedexfork.view.DragNDropListener;
@@ -597,9 +599,11 @@ public class EditFeedsListFragment extends ListFragment {
                         try {
                             OPML.importFromFile(data.getData().getPath()); // Try to read it by its path
                         } catch (Exception e) {
+                            e.printStackTrace();
                             try { // Try to read it directly as an InputStream (for Google Drive)
                                 OPML.importFromFile(MainApplication.getContext().getContentResolver().openInputStream(data.getData()));
                             } catch (Exception unused) {
+                                e.printStackTrace();
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -640,6 +644,7 @@ public class EditFeedsListFragment extends ListFragment {
                                 OPML.importFromFile(Environment.getExternalStorageDirectory().toString() + File.separator
                                         + fileNames[which]);
                             } catch (Exception e) {
+                                e.printStackTrace();
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -682,8 +687,7 @@ public class EditFeedsListFragment extends ListFragment {
                 @Override
                 public void run() {
                     try {
-                        final String filename = Environment.getExternalStorageDirectory().toString() + "/Flym_"
-                                + System.currentTimeMillis() + ".opml";
+                        final String filename =  FileUtils.GetFolder() +  "/HandyNewsReader_" + System.currentTimeMillis() + ".opml";
 
                         OPML.exportToFile(filename);
                         getActivity().runOnUiThread(new Runnable() {
@@ -692,7 +696,8 @@ public class EditFeedsListFragment extends ListFragment {
                                 UiUtils.showMessage(getActivity(), String.format(getString(R.string.message_exported_to), filename));
                             }
                         });
-                    } catch (Exception e) {
+                    } catch (IOException e) {
+                        e.printStackTrace();
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

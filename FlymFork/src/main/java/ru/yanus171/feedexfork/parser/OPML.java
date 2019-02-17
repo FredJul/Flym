@@ -66,18 +66,21 @@ import java.io.InputStreamReader;
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
+import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
+
+import static ru.yanus171.feedexfork.Constants.FALSE;
+import static ru.yanus171.feedexfork.Constants.TRUE;
+import static ru.yanus171.feedexfork.provider.FeedData.EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI;
+import static ru.yanus171.feedexfork.provider.FeedData.EntryColumns.WHERE_FAVORITE;
+import static ru.yanus171.feedexfork.provider.FeedData.FeedColumns.SHOW_TEXT_IN_ENTRY_LIST;
+import static ru.yanus171.feedexfork.provider.FeedData.FeedColumns.SHOW_TEXT_IN_ENTRY_LIST;
 
 public class OPML {
 
     public static final String BACKUP_OPML = Environment.getExternalStorageDirectory() + "/Flym_auto_backup.opml";
 
-    private static final String[] FEEDS_PROJECTION = new String[]{FeedColumns._ID, FeedColumns.IS_GROUP, FeedColumns.NAME, FeedColumns.URL,
-            FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH, FeedColumns.IS_IMAGE_AUTO_LOAD, FeedColumns.OPTIONS };
-    private static final String[] FILTERS_PROJECTION = new String[]{FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
-            FilterColumns.IS_APPLIED_TO_TITLE, FilterColumns.IS_ACCEPT_RULE, FilterColumns.IS_MARK_STARRED};
-
-    private static final String START = "<?xml version='1.0' encoding='utf-8'?>\n<opml version='1.1'>\n<head>\n<title>Flym export</title>\n<dateCreated>";
+    private static final String START = "<?xml version='1.0' encoding='utf-8'?>\n<opml version='1.1'>\n<head>\n<title>Handy News Reader export</title>\n<dateCreated>";
     private static final String AFTER_DATE = "</dateCreated>\n</head>\n<body>\n";
     private static final String OUTLINE_TITLE = "\t<outline title='";
     private static final String OUTLINE_XMLURL = "' type='rss' xmlUrl='";
@@ -85,12 +88,20 @@ public class OPML {
     private static final String OUTLINE_INLINE_CLOSING = "'/>\n";
     private static final String OUTLINE_NORMAL_CLOSING = "'>\n";
     private static final String OUTLINE_END = "\t</outline>\n";
+
     private static final String FILTER_TEXT = "\t\t<filter text='";
     private static final String FILTER_IS_REGEX = "' isRegex='";
     private static final String FILTER_IS_APPLIED_TO_TITLE = "' isAppliedToTitle='";
     private static final String FILTER_IS_ACCEPT_RULE = "' isAcceptRule='";
     private static final String FILTER_IS_MARK_AS_STARRED = "' isMarkAsStarred='";
     private static final String FILTER_CLOSING = "'/>\n";
+
+    private static final String TAG_FAV = "fav";
+
+    private static final String TAG_START = "\t\t<%s %s='";
+    private static final String ATTR_VALUE = "' %s='";
+    private static final String TAG_CLOSING = "'/>\n";
+
     private static final String CLOSING = "</body>\n</opml>\n";
 
     private static final OPMLParser mParser = new OPMLParser();
@@ -112,100 +123,151 @@ public class OPML {
         Xml.parse(new InputStreamReader(input), mParser);
     }
 
+
     public static void exportToFile(String filename) throws IOException {
         if (BACKUP_OPML.equals(filename) && !mAutoBackupEnabled) {
             return;
         }
 
-        Cursor cursor = MainApplication.getContext().getContentResolver()
+        Cursor cursorGroupsAndRoot = MainApplication.getContext().getContentResolver()
                 .query(FeedColumns.GROUPS_AND_ROOT_CONTENT_URI, FEEDS_PROJECTION, null, null, null);
 
         StringBuilder builder = new StringBuilder(START);
         builder.append(System.currentTimeMillis());
         builder.append(AFTER_DATE);
 
-        while (cursor.moveToNext()) {
-            builder.append(OUTLINE_TITLE);
-            builder.append(cursor.isNull(2) ? "" : TextUtils.htmlEncode(cursor.getString(2)));
-            if (cursor.getInt(1) == 1) { // If it is a group
+        while (cursorGroupsAndRoot.moveToNext()) {
+            if (cursorGroupsAndRoot.getInt(1) == 1) { // If it is a group
+                builder.append(OUTLINE_TITLE);
+                builder.append(cursorGroupsAndRoot.isNull(2) ? "" : TextUtils.htmlEncode(cursorGroupsAndRoot.getString(2)));
                 builder.append(OUTLINE_NORMAL_CLOSING);
-
-                Cursor cursorChildren = MainApplication.getContext().getContentResolver()
-                        .query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(cursor.getString(0)), FEEDS_PROJECTION, null, null, null);
-                while (cursorChildren.moveToNext()) {
-                    builder.append("\t");
-                    builder.append(OUTLINE_TITLE);
-                    builder.append(cursorChildren.isNull(2) ? "" : TextUtils.htmlEncode(cursorChildren.getString(2)));
-                    builder.append(OUTLINE_XMLURL);
-                    builder.append(TextUtils.htmlEncode(cursorChildren.getString(3)));
-                    builder.append(OUTLINE_RETRIEVE_FULLTEXT);
-                    builder.append(cursorChildren.getInt(4) == 1 ? Constants.TRUE : "false");
-
-                    Cursor cursorFilters = MainApplication.getContext().getContentResolver()
-                            .query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(cursorChildren.getString(0)), FILTERS_PROJECTION, null, null, null);
-                    if (cursorFilters.getCount() != 0) {
-                        builder.append(OUTLINE_NORMAL_CLOSING);
-                        while (cursorFilters.moveToNext()) {
-                            builder.append("\t");
-                            builder.append(FILTER_TEXT);
-                            builder.append(TextUtils.htmlEncode(cursorFilters.getString(0)));
-                            builder.append(FILTER_IS_REGEX);
-                            builder.append(cursorFilters.getInt(1) == 1 ? Constants.TRUE : "false");
-                            builder.append(FILTER_IS_APPLIED_TO_TITLE);
-                            builder.append(cursorFilters.getInt(2) == 1 ? Constants.TRUE : "false");
-                            builder.append(FILTER_IS_ACCEPT_RULE);
-                            builder.append(cursorFilters.getInt(3) == 1 ? Constants.TRUE : "false");
-                            builder.append(FILTER_IS_MARK_AS_STARRED);
-                            builder.append(cursorFilters.getInt(4) == 1 ? Constants.TRUE : "false");
-                            builder.append(FILTER_CLOSING);
-                        }
-                        builder.append("\t");
-                        builder.append(OUTLINE_END);
-                    } else {
-                        builder.append(OUTLINE_INLINE_CLOSING);
-                    }
-                    cursorFilters.close();
+                Cursor cursorFeeds = MainApplication.getContext().getContentResolver()
+                        .query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(cursorGroupsAndRoot.getString(0)), FEEDS_PROJECTION, null, null, null);
+                while (cursorFeeds.moveToNext()) {
+                    ExportFeed(builder, cursorFeeds);
                 }
-                cursorChildren.close();
+                cursorFeeds.close();
 
                 builder.append(OUTLINE_END);
             } else {
-                builder.append(OUTLINE_XMLURL);
-                builder.append(TextUtils.htmlEncode(cursor.getString(3)));
-                builder.append(OUTLINE_RETRIEVE_FULLTEXT);
-                builder.append(cursor.getInt(4) == 1 ? Constants.TRUE : "false");
-                Cursor cursorFilters = MainApplication.getContext().getContentResolver()
-                        .query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(cursor.getString(0)), FILTERS_PROJECTION, null, null, null);
-                if (cursorFilters.getCount() != 0) {
-                    builder.append(OUTLINE_NORMAL_CLOSING);
-                    while (cursorFilters.moveToNext()) {
-                        builder.append(FILTER_TEXT);
-                        builder.append(TextUtils.htmlEncode(cursorFilters.getString(0)));
-                        builder.append(FILTER_IS_REGEX);
-                        builder.append(cursorFilters.getInt(1) == 1 ? Constants.TRUE : "false");
-                        builder.append(FILTER_IS_APPLIED_TO_TITLE);
-                        builder.append(cursorFilters.getInt(2) == 1 ? Constants.TRUE : "false");
-                        builder.append(FILTER_IS_ACCEPT_RULE);
-                        builder.append(cursorFilters.getInt(3) == 1 ? Constants.TRUE : "false");
-                        builder.append(FILTER_IS_MARK_AS_STARRED);
-                        builder.append(cursorFilters.getInt(4) == 1 ? Constants.TRUE : "false");
-                        builder.append(FILTER_CLOSING);
-                    }
-                    builder.append(OUTLINE_END);
-                } else {
-                    builder.append(OUTLINE_INLINE_CLOSING);
-                }
-                cursorFilters.close();
+                ExportFeed(builder, cursorGroupsAndRoot);
             }
         }
         builder.append(CLOSING);
 
-        cursor.close();
+        cursorGroupsAndRoot.close();
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
 
         writer.write(builder.toString());
         writer.close();
+    }
+
+    private static String GetEncoded( final Cursor cursor, final int col ) {
+        return cursor.isNull( col ) ? "" : TextUtils.htmlEncode(cursor.getString(col ) );
+    }
+    private static String GetText( Attributes attr, String attrName  ) {
+        return attr.getValue( attrName );
+    }
+
+    private static final String[] FEEDS_PROJECTION = new String[]{FeedColumns._ID, FeedColumns.IS_GROUP, FeedColumns.NAME, FeedColumns.URL,
+            FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH, FeedColumns.IS_IMAGE_AUTO_LOAD, FeedColumns.OPTIONS };
+
+    private static void ExportFeed(StringBuilder builder, Cursor cursor) {
+        final String feedID = cursor.getString(0);
+        builder.append("\t");
+        builder.append(OUTLINE_TITLE);
+        builder.append(GetEncoded( cursor ,2) );
+        builder.append(OUTLINE_XMLURL);
+        builder.append(GetEncoded( cursor, 3));
+        builder.append(OUTLINE_RETRIEVE_FULLTEXT);
+        builder.append(GetBoolText( cursor, 4 ));
+        builder.append(String.format( ATTR_VALUE, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST ));
+        builder.append(GetBoolText( cursor, 5 ));
+        builder.append(String.format( ATTR_VALUE, FeedColumns.IS_AUTO_REFRESH ));
+        builder.append(GetBoolText( cursor, 6 ));
+        builder.append(String.format( ATTR_VALUE, FeedColumns.IS_IMAGE_AUTO_LOAD ));
+        builder.append(GetBoolText( cursor, 7 ));
+        builder.append(String.format( ATTR_VALUE, FeedColumns.OPTIONS ));
+        builder.append(GetEncoded( cursor, 8 ));
+
+        builder.append(OUTLINE_NORMAL_CLOSING);
+
+        ExportFilters(builder, feedID);
+        ExportFavs(builder, feedID);
+        builder.append(OUTLINE_END);
+    }
+
+    private static final String[] FAVOURITIES_PROJECTION = new String[]{EntryColumns.TITLE, EntryColumns.LINK,
+            EntryColumns.IS_NEW, EntryColumns.IS_READ, EntryColumns.SCROLL_POS, EntryColumns.ABSTRACT,
+            EntryColumns.AUTHOR, EntryColumns.DATE, EntryColumns.FETCH_DATE, EntryColumns.IMAGE_URL};
+
+
+    public static String GetBoolText(Cursor cur, int col) {
+        return cur.getInt(col) == 1 ? TRUE : FALSE;
+    }
+    public static boolean GetBool(Attributes attr, String attrName) {
+        return TRUE.equals( attr.getValue( "", attrName ) );
+    }
+
+
+    public static void ExportFavs(StringBuilder builder, String feedID) {
+        Cursor cur = MainApplication.getContext().getContentResolver()
+                .query(ENTRIES_FOR_FEED_CONTENT_URI( feedID ), FAVOURITIES_PROJECTION, WHERE_FAVORITE, null, null);
+        if (cur.getCount() != 0) {
+            while (cur.moveToNext()) {
+                builder.append("\t");
+                builder.append(String.format( TAG_START, TAG_FAV, EntryColumns.TITLE) );
+                builder.append(cur.isNull( 0 ) ? "" : TextUtils.htmlEncode(cur.getString(0)));
+                builder.append(String.format( ATTR_VALUE, EntryColumns.LINK) );
+                builder.append(cur.isNull( 1 ) ? "" : TextUtils.htmlEncode(cur.getString(1)));
+                builder.append(String.format( ATTR_VALUE, EntryColumns.IS_NEW) );
+                builder.append(GetBoolText( cur, 2));
+                builder.append(String.format( ATTR_VALUE, EntryColumns.IS_READ) );
+                builder.append(GetBoolText( cur, 3));
+                builder.append(String.format( ATTR_VALUE, EntryColumns.SCROLL_POS) );
+                builder.append(cur.getString(4));
+                builder.append(String.format( ATTR_VALUE, EntryColumns.ABSTRACT) );
+                builder.append(cur.isNull( 5 ) ? "" : TextUtils.htmlEncode(cur.getString(5)));
+                builder.append(String.format( ATTR_VALUE, EntryColumns.AUTHOR) );
+                builder.append(cur.isNull( 6 ) ? "" : TextUtils.htmlEncode(cur.getString(6)));
+                builder.append(String.format( ATTR_VALUE, EntryColumns.DATE) );
+                builder.append(cur.getString(7));
+                builder.append(String.format( ATTR_VALUE, EntryColumns.FETCH_DATE) );
+                builder.append(cur.getString(8));
+                builder.append(String.format( ATTR_VALUE, EntryColumns.IMAGE_URL) );
+                builder.append(cur.isNull( 9 ) ? "" : TextUtils.htmlEncode(cur.getString(9)));
+                builder.append(TAG_CLOSING);
+            }
+            builder.append("\t");
+        }
+        cur.close();
+    }
+
+    private static final String[] FILTERS_PROJECTION = new String[]{FilterColumns.FILTER_TEXT, FilterColumns.IS_REGEX,
+            FilterColumns.IS_APPLIED_TO_TITLE, FilterColumns.IS_ACCEPT_RULE, FilterColumns.IS_MARK_STARRED};
+
+    public static void ExportFilters(StringBuilder builder, String feedID) {
+        Cursor cur = MainApplication.getContext().getContentResolver()
+                .query(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(feedID), FILTERS_PROJECTION, null, null, null);
+        if (cur.getCount() != 0) {
+            while (cur.moveToNext()) {
+                builder.append("\t");
+                builder.append(FILTER_TEXT);
+                builder.append(TextUtils.htmlEncode(cur.getString(0)));
+                builder.append(FILTER_IS_REGEX);
+                builder.append(GetBoolText( cur, 1));
+                builder.append(FILTER_IS_APPLIED_TO_TITLE);
+                builder.append(GetBoolText( cur, 2) );
+                builder.append(FILTER_IS_ACCEPT_RULE);
+                builder.append(GetBoolText( cur, 3) );
+                builder.append(FILTER_IS_MARK_AS_STARRED);
+                builder.append(GetBoolText( cur, 4) );
+                builder.append(FILTER_CLOSING);
+            }
+            builder.append("\t");
+        }
+        cur.close();
     }
 
     private static class OPMLParser extends DefaultHandler {
@@ -266,7 +328,12 @@ public class OPML {
                     if (mGroupId != null) {
                         values.put(FeedColumns.GROUP_ID, mGroupId);
                     }
-                    values.put(FeedColumns.RETRIEVE_FULLTEXT, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_RETRIEVE_FULLTEXT)));
+
+                    values.put(FeedColumns.RETRIEVE_FULLTEXT, GetBool( attributes, ATTRIBUTE_RETRIEVE_FULLTEXT));
+                    values.put(FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, GetBool( attributes, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST));
+                    values.put(FeedColumns.IS_AUTO_REFRESH, GetBool( attributes, FeedColumns.IS_AUTO_REFRESH));
+                    values.put(FeedColumns.IS_IMAGE_AUTO_LOAD, GetBool( attributes, FeedColumns.IS_IMAGE_AUTO_LOAD));
+                    values.put(FeedColumns.OPTIONS, GetText( attributes, FeedColumns.OPTIONS));
 
                     Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, FeedColumns.URL + Constants.DB_ARG,
                             new String[]{url}, null);
@@ -280,13 +347,31 @@ public class OPML {
                 if (mFeedEntered && mFeedId != null) {
                     ContentValues values = new ContentValues();
                     values.put(FilterColumns.FILTER_TEXT, attributes.getValue("", ATTRIBUTE_TEXT));
-                    values.put(FilterColumns.IS_REGEX, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_REGEX)));
-                    values.put(FilterColumns.IS_APPLIED_TO_TITLE, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_APPLIED_TO_TITLE)));
-                    values.put(FilterColumns.IS_ACCEPT_RULE, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_ACCEPT_RULE)));
-                    values.put(FilterColumns.IS_MARK_STARRED, Constants.TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_MARK_AS_STARRED)));
+                    values.put(FilterColumns.IS_REGEX, TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_REGEX)));
+                    values.put(FilterColumns.IS_APPLIED_TO_TITLE, TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_APPLIED_TO_TITLE)));
+                    values.put(FilterColumns.IS_ACCEPT_RULE, TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_ACCEPT_RULE)));
+                    values.put(FilterColumns.IS_MARK_STARRED, TRUE.equals(attributes.getValue("", ATTRIBUTE_IS_MARK_AS_STARRED)));
 
                     ContentResolver cr = MainApplication.getContext().getContentResolver();
                     cr.insert(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(mFeedId), values);
+                }
+            } else if (TAG_FAV.equals(localName)) {
+                if (mFeedEntered && mFeedId != null) {
+                    ContentValues values = new ContentValues();
+                    values.put(EntryColumns.IS_NEW, GetBool( attributes, EntryColumns.IS_NEW));
+                    values.put(EntryColumns.IS_READ, GetBool( attributes, EntryColumns.IS_READ));
+                    values.put(EntryColumns.IS_FAVORITE, true);
+                    values.put(EntryColumns.LINK, GetText( attributes, EntryColumns.LINK ));
+                    values.put(EntryColumns.ABSTRACT, GetText( attributes, EntryColumns.ABSTRACT));
+                    values.put(EntryColumns.FETCH_DATE, GetText( attributes, EntryColumns.FETCH_DATE));
+                    values.put(EntryColumns.DATE, GetText( attributes, EntryColumns.DATE));
+                    values.put(EntryColumns.TITLE, GetText( attributes, EntryColumns.TITLE));
+                    values.put(EntryColumns.SCROLL_POS, GetText( attributes, EntryColumns.SCROLL_POS ));
+                    values.put(EntryColumns.AUTHOR, GetText( attributes, EntryColumns.AUTHOR) );
+                    values.put(EntryColumns.IMAGE_URL, GetText( attributes, EntryColumns.IMAGE_URL));
+
+                    ContentResolver cr = MainApplication.getContext().getContentResolver();
+                    cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI( mFeedId ), values);
                 }
             }
         }
