@@ -24,7 +24,7 @@
 
     <!-- GENERAL -->
     <string name="app_name">Flym</string>
-    <string name="about_flym">A proposito di Flym</string>
+    <string name="about_flym">Informazioni su Flym</string>
     <string name="welcome_title">Benvenuto in Flym. Vuoi aggiungere un feed?</string>
     <string name="welcome_title_with_opml_import">Vuoi importare i feed precedenti in Flym?</string>
     <string name="cannot_find_feeds">Nessun feed è stato trovato</string>
@@ -101,14 +101,14 @@
     <string name="settings_refresh_wifi_only">Aggiorna solo in WiFi</string>
     <string name="settings_refresh_wifi_only_description">L\'aggiornamento automatico viene eseguito solo quando si è connessi ad una rete WiFi</string>
     <string name="settings_category_filter">Filters</string>
-    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
-    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <string name="settings_theme">Theme</string>
-    <string name="open_browser_direct">Open entries directly in your default browser</string>
-    <string name="open_browser_direct_title">Open in browser</string>
-    <string name="refresh_on_startup">Refreshes your feeds when launching the app</string>
-    <string name="refresh_on_startup_title">Refresh on startup</string>
+    <string name="settings_remove_duplicates_description_title">Rimuovi duplicati</string>
+    <string name="settings_remove_duplicates_description">Controlla il titolo di ogni nuovo articolo e ignoralo se ha lo stesso nome di uno gia presente</string>
+    <string name="filter">Rimuovi articoli che contengono parole chiave (usare virgola come divisore)</string>
+    <string name="settings_theme">Tema</string>
+    <string name="open_browser_direct">Apri gli articoli direttamente nel tuo browser predefinito</string>
+    <string name="open_browser_direct_title">Apri nel browser</string>
+    <string name="refresh_on_startup">Aggiorna i feed all'avvio dell'applicazione</string>
+    <string name="refresh_on_startup_title">Aggiorna all'avvio</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Un nuovo articolo</item>
@@ -150,9 +150,9 @@
         <item>Sempre</item>
     </string-array>
     <string-array name="settings_themes">
-        <item>Light</item>
-        <item>Dark</item>
-        <item>Black</item>
+        <item>Chiaro</item>
+        <item>Scuro</item>
+        <item>Nero</item>
     </string-array>
 
 </resources>
