@@ -5,6 +5,13 @@ Light and modern Android RSS New Reader.
 
 This is a separate branch of the Flym RSS reader application
 
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/ru.yanus171.feedexfork/)
+
 Main functions:
 - RSS feeds of articles
 - search for a tape by keyword when adding
@@ -35,9 +42,6 @@ This app was forked of Flym RSS News Reader.
 This application is [free, open source](https://www.gnu.org/philosophy/free-sw.html) under GPLv3 license, without ads.
 
 Feedback and suggestions are welcome
-
-PlayStore link:
-https://play.google.com/store/apps/details?id=ru.yanus171.feedexfork
 
 Web Site: 
 https://handynewsreader.blogspot.com/
