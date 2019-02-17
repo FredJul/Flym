@@ -66,8 +66,8 @@
     <string name="google_news_entertainment">Intrattenimento</string>
     <string name="google_news_sports">Sport</string>
     <string name="google_news_health">Salute</string>
-    <string name="feed_name">Feed name</string>
-    <string name="feed_link">Feed link</string>
+    <string name="feed_name">Nome del feed</string>
+    <string name="feed_link">Link del feed</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Tutti gli articoli</string>
@@ -85,7 +85,7 @@
     <string name="no_entries">Nessun feed\nPer favore effettua lo swipe verso il basso per aggiornare</string>
     <string name="undo">Annulla</string>
     <string name="marked_as_read">Contrassegnato come letto</string>
-    <string name="marked_as_unread">Marked as unread</string>
+    <string name="marked_as_unread">Contrassegnato come non letto</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Aggiornamento automatico</string>
@@ -100,7 +100,7 @@
     <string name="settings_font_size">Dimensione testo</string>
     <string name="settings_refresh_wifi_only">Aggiorna solo in WiFi</string>
     <string name="settings_refresh_wifi_only_description">L\'aggiornamento automatico viene eseguito solo quando si è connessi ad una rete WiFi</string>
-    <string name="settings_category_filter">Filters</string>
+    <string name="settings_category_filter">Filtri</string>
     <string name="settings_remove_duplicates_description_title">Rimuovi duplicati</string>
     <string name="settings_remove_duplicates_description">Controlla il titolo di ogni nuovo articolo e ignoralo se ha lo stesso nome di uno gia presente</string>
     <string name="filter">Rimuovi articoli che contengono parole chiave (usare virgola come divisore)</string>
