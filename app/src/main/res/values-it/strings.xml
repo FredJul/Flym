@@ -103,7 +103,7 @@
     <string name="settings_category_filter">Filtri</string>
     <string name="settings_remove_duplicates_description_title">Rimuovi duplicati</string>
     <string name="settings_remove_duplicates_description">Controlla il titolo di ogni nuovo articolo e ignoralo se ha lo stesso nome di uno gia presente</string>
-    <string name="filter">Rimuovi articoli che contengono parole chiave (usare virgola come divisore)</string>
+    <string name="filter">Rimuovi articoli che contengono parole chiave (usa la virgola come divisore)</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Apri gli articoli direttamente nel tuo browser predefinito</string>
     <string name="open_browser_direct_title">Apri nel browser</string>
