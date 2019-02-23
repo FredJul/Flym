@@ -208,10 +208,13 @@ public class FetcherService extends IntentService {
         }
 
         if ( intent.hasExtra( Constants.FROM_AUTO_BACKUP ) ) {
+            startForeground(Constants.NOTIFICATION_ID_REFRESH_SERVICE, StatusText.GetNotification( getString(R.string.exportingToFile) ) );
             try {
                 OPML.exportToFile( OPML.BACKUP_OPML );
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                stopForeground( true );
             }
             return;
         }
