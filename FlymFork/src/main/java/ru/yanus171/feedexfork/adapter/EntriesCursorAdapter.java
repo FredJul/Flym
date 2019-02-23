@@ -372,7 +372,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
             holder.dateTextView.setText(StringUtils.getDateTimeString(cursor.getLong(mDatePos)));
         }
 
-        final boolean isUnread = cursor.isNull(mIsReadPos);
+        final boolean isUnread = !EntryColumns.IsRead( cursor, mIsReadPos );
         holder.titleTextView.setEnabled(isUnread);
         holder.dateTextView.setEnabled(isUnread);
         holder.urlTextView.setEnabled(isUnread);
@@ -594,7 +594,7 @@ public class EntriesCursorAdapter extends ResourceCursorAdapter {
     public int GetFirstUnReadPos() {
         for (int i = 0; i < getCount(); i++) {
             Cursor cursor = (Cursor) getItem(i);
-            if ( cursor.isNull( mIsReadPos ) )
+            if ( !EntryColumns.IsRead( cursor, mIsReadPos ) )
                 return i;
         }
         return -1;

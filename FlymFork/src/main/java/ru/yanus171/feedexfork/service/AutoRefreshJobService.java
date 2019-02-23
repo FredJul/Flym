@@ -17,8 +17,8 @@ public class AutoRefreshJobService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
-        if (AutoRefreshService.isAutoUpdateEnabled() ) {
-            Intent intent = AutoRefreshService.GetAutoRefreshServiceIntent();
+        if (AutoService.isAutoUpdateEnabled() ) {
+            Intent intent = AutoService.GetAutoRefreshServiceIntent();
             if (Build.VERSION.SDK_INT >= 26)
                 getBaseContext().startForegroundService(intent);
             else
@@ -34,12 +34,12 @@ public class AutoRefreshJobService extends JobService {
 
     static void initAutoRefresh(Context context) {
         JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        if (AutoRefreshService.isAutoUpdateEnabled() ) {
-            if ( GetPendingJobByID( jobScheduler, AUTO_UPDATE_JOB_ID ) == null ) {
+        if (AutoService.isAutoUpdateEnabled() ) {
+            if ( AutoService.GetPendingJobByID( jobScheduler, AUTO_UPDATE_JOB_ID ) == null ) {
                 ComponentName serviceComponent = new ComponentName(context, AutoRefreshJobService.class);
                 JobInfo.Builder builder =
                         new JobInfo.Builder(AUTO_UPDATE_JOB_ID, serviceComponent)
-                                .setPeriodic(AutoRefreshService.getTimeIntervalInMSecs())
+                                .setPeriodic(AutoService.getTimeIntervalInMSecs())
                                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                                 .setRequiresCharging(false)
                                 .setPersisted(true)
@@ -56,14 +56,4 @@ public class AutoRefreshJobService extends JobService {
 
     }
 
-    private static JobInfo GetPendingJobByID(JobScheduler jobScheduler, int ID) {
-        if ( Build.VERSION.SDK_INT >= 24 ) {
-            return jobScheduler.getPendingJob( ID );
-        } else {
-            for ( JobInfo item: jobScheduler.getAllPendingJobs() )
-                if ( item.getId() == ID )
-                    return item;
-            return null;
-        }
-    }
 }

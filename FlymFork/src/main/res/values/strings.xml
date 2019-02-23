@@ -360,7 +360,8 @@
     <string name="copyToClipboard">To clipboard</string>
     <string name="sendEmail">Send e-mail</string>
     <string name="toastAppCrashed">The application unexpectedly failed: (Please send a mail to developer)</string>
-
+    <string name="exportingToFile">Exporting to file</string>
+    <string name="importingFromFile">Importing form file</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new article.</item>

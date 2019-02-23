@@ -99,6 +99,7 @@ import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.activity.HomeActivity;
 import ru.yanus171.feedexfork.parser.HTMLParser;
+import ru.yanus171.feedexfork.parser.OPML;
 import ru.yanus171.feedexfork.parser.RssAtomParser;
 import ru.yanus171.feedexfork.provider.FeedData;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
@@ -206,6 +207,15 @@ public class FetcherService extends IntentService {
             return;
         }
 
+        if ( intent.hasExtra( Constants.FROM_AUTO_BACKUP ) ) {
+            try {
+                OPML.exportToFile( OPML.BACKUP_OPML );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
         Status().Clear();
 
         boolean isFromAutoRefresh = intent.getBooleanExtra(Constants.FROM_AUTO_REFRESH, false);
@@ -233,7 +243,7 @@ public class FetcherService extends IntentService {
         if (skipFetch)
             return;
 
-        if ( isFromAutoRefresh && Build.VERSION.SDK_INT < 26 && AutoRefreshService.isBatteryLow(this) )
+        if ( isFromAutoRefresh && Build.VERSION.SDK_INT < 26 && AutoService.isBatteryLow(this) )
             return;
 
             if (ACTION_MOBILIZE_FEEDS.equals(intent.getAction())) {

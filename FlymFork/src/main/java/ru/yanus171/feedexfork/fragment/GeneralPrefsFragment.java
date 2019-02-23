@@ -57,7 +57,7 @@ import android.text.TextUtils;
 import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.activity.HomeActivity;
-import ru.yanus171.feedexfork.service.AutoRefreshService;
+import ru.yanus171.feedexfork.service.AutoService;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 
 public class GeneralPrefsFragment extends PreferenceFragment {
@@ -67,7 +67,7 @@ public class GeneralPrefsFragment extends PreferenceFragment {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             Activity activity = getActivity();
             if (activity != null) {
-                AutoRefreshService.initAutoRefresh(activity);
+                AutoService.init(activity);
             }
             return true;
         }

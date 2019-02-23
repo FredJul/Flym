@@ -44,23 +44,18 @@
 
 package ru.yanus171.feedexfork.service;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Build;
 
-/*
-import com.google.android.gms.gcm.GcmNetworkManager;
-import com.google.android.gms.gcm.GcmTaskService;
-import com.google.android.gms.gcm.PeriodicTask;
-import com.google.android.gms.gcm.Task;
-import com.google.android.gms.gcm.TaskParams;
-*/
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.utils.PrefUtils;
 
-public class AutoRefreshService {
+public class AutoService {
     private static final String SIXTY_MINUTES = "3600000";
     //public static final String TASK_TAG_PERIODIC = "TASK_TAG_PERIODIC";
 
@@ -74,9 +69,11 @@ public class AutoRefreshService {
         return FetcherService.GetStartIntent().putExtra( Constants.FROM_AUTO_REFRESH, true );
     }
 
-    public static void initAutoRefresh(Context context) {
-        if (Build.VERSION.SDK_INT >= 21 )
-            AutoRefreshJobService.initAutoRefresh( context );
+    public static void init(Context context) {
+        if (Build.VERSION.SDK_INT >= 21 ) {
+            AutoRefreshJobService.initAutoRefresh(context);
+            AutoBackupJobService.initAutoBackup( context );
+        }
         /*else {
             GcmNetworkManager gcmNetworkManager = GcmNetworkManager.getInstance(context);
             if (isAutoUpdateEnabled()) {
@@ -125,5 +122,17 @@ public class AutoRefreshService {
         } catch (Exception ignored) {
         }
         return time;
+    }
+
+
+    static JobInfo GetPendingJobByID(JobScheduler jobScheduler, int ID) {
+        if ( Build.VERSION.SDK_INT >= 24 ) {
+            return jobScheduler.getPendingJob( ID );
+        } else {
+            for ( JobInfo item: jobScheduler.getAllPendingJobs() )
+                if ( item.getId() == ID )
+                    return item;
+            return null;
+        }
     }
 }

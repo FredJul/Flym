@@ -101,10 +101,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void exportToOPML() {
-        try {
+        /*try {
             OPML.exportToFile(OPML.BACKUP_OPML);
         } catch (Exception ignored) {
-        }
+        }*/
     }
 
     private String createTable(String tableName, String[][] columns) {

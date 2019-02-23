@@ -65,20 +65,19 @@ import java.io.InputStreamReader;
 
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.MainApplication;
+import ru.yanus171.feedexfork.R;
 import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
+import ru.yanus171.feedexfork.service.FetcherService;
 
 import static ru.yanus171.feedexfork.Constants.FALSE;
 import static ru.yanus171.feedexfork.Constants.TRUE;
 import static ru.yanus171.feedexfork.provider.FeedData.EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI;
-import static ru.yanus171.feedexfork.provider.FeedData.EntryColumns.WHERE_FAVORITE;
-import static ru.yanus171.feedexfork.provider.FeedData.FeedColumns.SHOW_TEXT_IN_ENTRY_LIST;
-import static ru.yanus171.feedexfork.provider.FeedData.FeedColumns.SHOW_TEXT_IN_ENTRY_LIST;
 
 public class OPML {
 
-    public static final String BACKUP_OPML = Environment.getExternalStorageDirectory() + "/Flym_auto_backup.opml";
+    public static final String BACKUP_OPML = Environment.getExternalStorageDirectory() + "/HandyNewsReader_auto_backup.opml";
 
     private static final String START = "<?xml version='1.0' encoding='utf-8'?>\n<opml version='1.1'>\n<head>\n<title>Handy News Reader export</title>\n<dateCreated>";
     private static final String AFTER_DATE = "</dateCreated>\n</head>\n<body>\n";
@@ -96,7 +95,7 @@ public class OPML {
     private static final String FILTER_IS_MARK_AS_STARRED = "' isMarkAsStarred='";
     private static final String FILTER_CLOSING = "'/>\n";
 
-    private static final String TAG_FAV = "fav";
+    private static final String TAG_ENTRY = "entry";
 
     private static final String TAG_START = "\t\t<%s %s='";
     private static final String ATTR_VALUE = "' %s='";
@@ -107,15 +106,16 @@ public class OPML {
     private static final OPMLParser mParser = new OPMLParser();
     private static boolean mAutoBackupEnabled = true;
 
-    public static void importFromFile(String filename) throws IOException, SAXException {
-        if (BACKUP_OPML.equals(filename)) {
+    public static
+    void importFromFile(String filename) throws IOException, SAXException {
+        if (BACKUP_OPML.equals(filename))
             mAutoBackupEnabled = false;  // Do not write the auto backup file while reading it...
-        }
-
+        final int status = FetcherService.Status().Start( MainApplication.getContext().getString(R.string.importingFromFile) );
         try {
             Xml.parse(new InputStreamReader(new FileInputStream(filename)), mParser);
         } finally {
             mAutoBackupEnabled = true;
+            FetcherService.Status().End( status );
         }
     }
 
@@ -125,9 +125,10 @@ public class OPML {
 
 
     public static void exportToFile(String filename) throws IOException {
-        if (BACKUP_OPML.equals(filename) && !mAutoBackupEnabled) {
+        if (BACKUP_OPML.equals(filename) && !mAutoBackupEnabled)
             return;
-        }
+
+        final int status = FetcherService.Status().Start( "Exporting to file ..." );
 
         Cursor cursorGroupsAndRoot = MainApplication.getContext().getContentResolver()
                 .query(FeedColumns.GROUPS_AND_ROOT_CONTENT_URI, FEEDS_PROJECTION, null, null, null);
@@ -161,6 +162,7 @@ public class OPML {
 
         writer.write(builder.toString());
         writer.close();
+        FetcherService.Status().End( status );
     }
 
     private static String GetEncoded( final Cursor cursor, final int col ) {
@@ -194,13 +196,13 @@ public class OPML {
         builder.append(OUTLINE_NORMAL_CLOSING);
 
         ExportFilters(builder, feedID);
-        ExportFavs(builder, feedID);
+        ExportEntries(builder, feedID);
         builder.append(OUTLINE_END);
     }
 
-    private static final String[] FAVOURITIES_PROJECTION = new String[]{EntryColumns.TITLE, EntryColumns.LINK,
+    private static final String[] ENTRIES_PROJECTION = new String[]{EntryColumns.TITLE, EntryColumns.LINK,
             EntryColumns.IS_NEW, EntryColumns.IS_READ, EntryColumns.SCROLL_POS, EntryColumns.ABSTRACT,
-            EntryColumns.AUTHOR, EntryColumns.DATE, EntryColumns.FETCH_DATE, EntryColumns.IMAGE_URL};
+            EntryColumns.AUTHOR, EntryColumns.DATE, EntryColumns.FETCH_DATE, EntryColumns.IMAGE_URL, EntryColumns.IS_FAVORITE };
 
 
     public static String GetBoolText(Cursor cur, int col) {
@@ -211,13 +213,13 @@ public class OPML {
     }
 
 
-    public static void ExportFavs(StringBuilder builder, String feedID) {
+    public static void ExportEntries(StringBuilder builder, String feedID) {
         Cursor cur = MainApplication.getContext().getContentResolver()
-                .query(ENTRIES_FOR_FEED_CONTENT_URI( feedID ), FAVOURITIES_PROJECTION, WHERE_FAVORITE, null, null);
+                .query(ENTRIES_FOR_FEED_CONTENT_URI( feedID ), ENTRIES_PROJECTION, null, null, null);
         if (cur.getCount() != 0) {
             while (cur.moveToNext()) {
                 builder.append("\t");
-                builder.append(String.format( TAG_START, TAG_FAV, EntryColumns.TITLE) );
+                builder.append(String.format( TAG_START, TAG_ENTRY, EntryColumns.TITLE) );
                 builder.append(cur.isNull( 0 ) ? "" : TextUtils.htmlEncode(cur.getString(0)));
                 builder.append(String.format( ATTR_VALUE, EntryColumns.LINK) );
                 builder.append(cur.isNull( 1 ) ? "" : TextUtils.htmlEncode(cur.getString(1)));
@@ -237,6 +239,8 @@ public class OPML {
                 builder.append(cur.getString(8));
                 builder.append(String.format( ATTR_VALUE, EntryColumns.IMAGE_URL) );
                 builder.append(cur.isNull( 9 ) ? "" : TextUtils.htmlEncode(cur.getString(9)));
+                builder.append(String.format( ATTR_VALUE, EntryColumns.IS_FAVORITE) );
+                builder.append(GetBoolText( cur, 10));
                 builder.append(TAG_CLOSING);
             }
             builder.append("\t");
@@ -355,12 +359,12 @@ public class OPML {
                     ContentResolver cr = MainApplication.getContext().getContentResolver();
                     cr.insert(FilterColumns.FILTERS_FOR_FEED_CONTENT_URI(mFeedId), values);
                 }
-            } else if (TAG_FAV.equals(localName)) {
+            } else if (TAG_ENTRY.equals(localName)) {
                 if (mFeedEntered && mFeedId != null) {
                     ContentValues values = new ContentValues();
                     values.put(EntryColumns.IS_NEW, GetBool( attributes, EntryColumns.IS_NEW));
                     values.put(EntryColumns.IS_READ, GetBool( attributes, EntryColumns.IS_READ));
-                    values.put(EntryColumns.IS_FAVORITE, true);
+                    values.put(EntryColumns.IS_FAVORITE, GetBool( attributes, EntryColumns.IS_FAVORITE));
                     values.put(EntryColumns.LINK, GetText( attributes, EntryColumns.LINK ));
                     values.put(EntryColumns.ABSTRACT, GetText( attributes, EntryColumns.ABSTRACT));
                     values.put(EntryColumns.FETCH_DATE, GetText( attributes, EntryColumns.FETCH_DATE));

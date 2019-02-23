@@ -25,6 +25,7 @@ import android.view.WindowManager;
 
 import ru.yanus171.feedexfork.Constants;
 
+
 public abstract class BaseActivity extends AppCompatActivity {
 
     //private static final String STATE_IS_NORMAL_FULLSCREEN = "STATE_IS_NORMAL_FULLSCREEN";

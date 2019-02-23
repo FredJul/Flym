@@ -251,6 +251,9 @@ public class FeedData {
         public static boolean IsNew( Cursor cursor, int fieldPos ) {
             return cursor.isNull( fieldPos ) || cursor.getInt( fieldPos ) == 1;
         }
+        public static boolean IsRead( Cursor cursor, int fieldPos ) {
+            return !cursor.isNull( fieldPos ) && cursor.getInt( fieldPos ) == 1;
+        }
         public static Uri ENTRIES_FOR_FEED_CONTENT_URI(String feedId) {
             return Uri.parse(CONTENT_AUTHORITY + "/feeds/" + feedId + "/entries");
         }
