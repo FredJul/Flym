@@ -185,7 +185,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
 
         // Ask the permission to import the feeds if there is already one backup
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && new File(OPML.BACKUP_OPML).exists()) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && new File(OPML.GetAutoBackupOPMLFileName()).exists()) {
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
@@ -575,7 +575,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                         public void run() {
                             try {
                                 // Perform an automated import of the backup
-                                OPML.importFromFile(OPML.BACKUP_OPML);
+                                OPML.importFromFile(OPML.GetAutoBackupOPMLFileName());
                             } catch (Exception ignored) {
                             }
                         }

@@ -1,4 +1,4 @@
-/**
+/*
  * Flym
  * <p/>
  * Copyright (c) 2012-2015 Frederic Julian
@@ -20,6 +20,7 @@
 package ru.yanus171.feedexfork.utils;
 
 import android.os.Environment;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,18 +53,23 @@ public class FileUtils {
                     }
                 });*/
                 result = new File(MainApplication.getContext().getCacheDir(), "feedex/");
-                result.mkdirs();
+                MakeDirs(result);
             }
 
         return result;
     }
 
+    private static void MakeDirs(File result) {
+        if ( !result.mkdirs() )
+            Toast.makeText( MainApplication.getContext(), "Cannot create dir: " + result.getPath(), Toast.LENGTH_LONG ).show();
+    }
+
     private static File mGetImagesFolder = null;
-    public static File GetImagesFolder() {
+    static File GetImagesFolder() {
         if ( mGetImagesFolder == null ) {
             mGetImagesFolder = new File(GetFolder(), "images/");
             if (!mGetImagesFolder.exists())
-                mGetImagesFolder.mkdirs();
+                MakeDirs( mGetImagesFolder );
         }
                 //Toast.makeText(MainApplication.getContext(), "Cannot create dir " + result.getAbsolutePath(), Toast.LENGTH_LONG ).show();
         return mGetImagesFolder;

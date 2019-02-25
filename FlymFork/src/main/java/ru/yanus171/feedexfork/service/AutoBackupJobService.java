@@ -44,6 +44,7 @@
 
 package ru.yanus171.feedexfork.service;
 
+import android.annotation.TargetApi;
 import android.app.job.JobInfo;
 import android.app.job.JobParameters;
 import android.app.job.JobScheduler;
@@ -54,22 +55,23 @@ import android.content.Intent;
 import android.os.Build;
 
 import ru.yanus171.feedexfork.Constants;
+import ru.yanus171.feedexfork.MainApplication;
 
 public class AutoBackupJobService extends JobService {
-    public static final int AUTO_BACKUP_JOB_ID = 2;
+    public static final int AUTO_BACKUP_JOB_ID = 3;
 
     public AutoBackupJobService() {
     }
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
-        if (AutoService.isAutoUpdateEnabled() ) {
-            Intent intent = FetcherService.GetStartIntent().putExtra( Constants.FROM_AUTO_BACKUP, true );
+        //if (AutoService.isAutoUpdateEnabled() ) {
+            Intent intent = new Intent(MainApplication.getContext(), FetcherService.class).putExtra( Constants.FROM_AUTO_BACKUP, true );
             if (Build.VERSION.SDK_INT >= 26)
                 getBaseContext().startForegroundService(intent);
             else
                 getBaseContext().startService(intent);
-        }
+        //}
         return false;
     }
 
@@ -78,10 +80,11 @@ public class AutoBackupJobService extends JobService {
         return false;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void initAutoBackup(Context context) {
         JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
             if ( AutoService.GetPendingJobByID( jobScheduler, AUTO_BACKUP_JOB_ID ) == null ) {
-                ComponentName serviceComponent = new ComponentName(context, AutoRefreshJobService.class);
+                ComponentName serviceComponent = new ComponentName(context, AutoBackupJobService.class);
                 JobInfo.Builder builder =
                         new JobInfo.Builder(AUTO_BACKUP_JOB_ID, serviceComponent)
                                 .setPeriodic(AutoService.getTimeIntervalInMSecs())

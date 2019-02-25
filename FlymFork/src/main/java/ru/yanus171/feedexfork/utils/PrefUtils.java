@@ -27,6 +27,12 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Map;
+
 import ru.yanus171.feedexfork.MainApplication;
 import ru.yanus171.feedexfork.activity.HomeActivity;
 
@@ -202,5 +208,4 @@ public class PrefUtils {
         //System.exit(0);
         android.os.Process.killProcess( android.os.Process.myPid() );
     }
-
 }

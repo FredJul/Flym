@@ -46,8 +46,10 @@ package ru.yanus171.feedexfork.parser;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Xml;
 
@@ -62,6 +64,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 import ru.yanus171.feedexfork.Constants;
 import ru.yanus171.feedexfork.MainApplication;
@@ -70,6 +73,8 @@ import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.provider.FeedData.EntryColumns;
 import ru.yanus171.feedexfork.provider.FeedData.FilterColumns;
 import ru.yanus171.feedexfork.service.FetcherService;
+import ru.yanus171.feedexfork.utils.FileUtils;
+import ru.yanus171.feedexfork.utils.HtmlUtils;
 
 import static ru.yanus171.feedexfork.Constants.FALSE;
 import static ru.yanus171.feedexfork.Constants.TRUE;
@@ -77,7 +82,7 @@ import static ru.yanus171.feedexfork.provider.FeedData.EntryColumns.ENTRIES_FOR_
 
 public class OPML {
 
-    public static final String BACKUP_OPML = Environment.getExternalStorageDirectory() + "/HandyNewsReader_auto_backup.opml";
+    public static String GetAutoBackupOPMLFileName() { return  FileUtils.GetFolder() + "/HandyNewsReader_auto_backup.opml"; }
 
     private static final String START = "<?xml version='1.0' encoding='utf-8'?>\n<opml version='1.1'>\n<head>\n<title>Handy News Reader export</title>\n<dateCreated>";
     private static final String AFTER_DATE = "</dateCreated>\n</head>\n<body>\n";
@@ -101,18 +106,25 @@ public class OPML {
     private static final String ATTR_VALUE = "' %s='";
     private static final String TAG_CLOSING = "'/>\n";
 
+    private static final String TAG_PREF = "pref";
+    private static final String ATTR_PREF_CLASSNAME = "classname";
+    private static final String ATTR_PREF_VALUE = "value";
+    private static final String ATTR_PREF_KEY = "key";
+
     private static final String CLOSING = "</body>\n</opml>\n";
 
-    private static final OPMLParser mParser = new OPMLParser();
+    //private static final OPMLParser mParser = new OPMLParser();
     private static boolean mAutoBackupEnabled = true;
 
     public static
     void importFromFile(String filename) throws IOException, SAXException {
-        if (BACKUP_OPML.equals(filename))
+        if (GetAutoBackupOPMLFileName().equals(filename))
             mAutoBackupEnabled = false;  // Do not write the auto backup file while reading it...
         final int status = FetcherService.Status().Start( MainApplication.getContext().getString(R.string.importingFromFile) );
         try {
-            Xml.parse(new InputStreamReader(new FileInputStream(filename)), mParser);
+            final OPMLParser parser = new OPMLParser();
+            Xml.parse(new InputStreamReader(new FileInputStream(filename)), parser);
+            parser.mEditor.commit();
         } finally {
             mAutoBackupEnabled = true;
             FetcherService.Status().End( status );
@@ -120,12 +132,14 @@ public class OPML {
     }
 
     public static void importFromFile(InputStream input) throws IOException, SAXException {
-        Xml.parse(new InputStreamReader(input), mParser);
+        final OPMLParser parser = new OPMLParser();
+        Xml.parse(new InputStreamReader(input), parser);
+        parser.mEditor.commit();
     }
 
 
     public static void exportToFile(String filename) throws IOException {
-        if (BACKUP_OPML.equals(filename) && !mAutoBackupEnabled)
+        if (GetAutoBackupOPMLFileName().equals(filename) && !mAutoBackupEnabled)
             return;
 
         final int status = FetcherService.Status().Start( "Exporting to file ..." );
@@ -154,6 +168,7 @@ public class OPML {
                 ExportFeed(builder, cursorGroupsAndRoot);
             }
         }
+        SaveSettings( builder, "\t\t" );
         builder.append(CLOSING);
 
         cursorGroupsAndRoot.close();
@@ -196,7 +211,8 @@ public class OPML {
         builder.append(OUTLINE_NORMAL_CLOSING);
 
         ExportFilters(builder, feedID);
-        ExportEntries(builder, feedID);
+        final boolean saveAbstract = TRUE.equals( GetBoolText( cursor, 4 ) );
+        ExportEntries(builder, feedID, saveAbstract);
         builder.append(OUTLINE_END);
     }
 
@@ -205,15 +221,15 @@ public class OPML {
             EntryColumns.AUTHOR, EntryColumns.DATE, EntryColumns.FETCH_DATE, EntryColumns.IMAGE_URL, EntryColumns.IS_FAVORITE };
 
 
-    public static String GetBoolText(Cursor cur, int col) {
+    private static String GetBoolText(Cursor cur, int col) {
         return cur.getInt(col) == 1 ? TRUE : FALSE;
     }
-    public static boolean GetBool(Attributes attr, String attrName) {
+    private static boolean GetBool(Attributes attr, String attrName) {
         return TRUE.equals( attr.getValue( "", attrName ) );
     }
 
 
-    public static void ExportEntries(StringBuilder builder, String feedID) {
+    private static void ExportEntries(StringBuilder builder, String feedID, boolean saveAbstract) {
         Cursor cur = MainApplication.getContext().getContentResolver()
                 .query(ENTRIES_FOR_FEED_CONTENT_URI( feedID ), ENTRIES_PROJECTION, null, null, null);
         if (cur.getCount() != 0) {
@@ -229,8 +245,10 @@ public class OPML {
                 builder.append(GetBoolText( cur, 3));
                 builder.append(String.format( ATTR_VALUE, EntryColumns.SCROLL_POS) );
                 builder.append(cur.getString(4));
-                builder.append(String.format( ATTR_VALUE, EntryColumns.ABSTRACT) );
-                builder.append(cur.isNull( 5 ) ? "" : TextUtils.htmlEncode(cur.getString(5)));
+                if ( saveAbstract ) {
+                    builder.append(String.format(ATTR_VALUE, EntryColumns.ABSTRACT));
+                    builder.append(cur.isNull(5) ? "" : TextUtils.htmlEncode(cur.getString(5)));
+                }
                 builder.append(String.format( ATTR_VALUE, EntryColumns.AUTHOR) );
                 builder.append(cur.isNull( 6 ) ? "" : TextUtils.htmlEncode(cur.getString(6)));
                 builder.append(String.format( ATTR_VALUE, EntryColumns.DATE) );
@@ -274,6 +292,42 @@ public class OPML {
         cur.close();
     }
 
+    private static final String PREF_CLASS_FLOAT = "Float";
+    private static final String PREF_CLASS_LONG = "Long";
+    private static final String PREF_CLASS_INTEGER = "Integer";
+    private static final String PREF_CLASS_BOOLEAN = "Boolean";
+    private static final String PREF_CLASS_STRING = "String";
+
+    static void SaveSettings(StringBuilder result, final String prefix) {
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());
+        for (final Map.Entry<String, ?> entry : settings.getAll().entrySet()) {
+            String prefClass = entry.getValue().getClass().getName();
+            String prefValue;
+            if (prefClass.contains(PREF_CLASS_STRING)) {
+                prefClass = PREF_CLASS_STRING;
+                prefValue = ((String) entry.getValue()).replace("\n", "\\n");
+            } else if (prefClass.contains(PREF_CLASS_BOOLEAN)) {
+                prefClass = PREF_CLASS_BOOLEAN;
+                prefValue = String.valueOf((Boolean) entry.getValue());
+            } else if (prefClass.contains(PREF_CLASS_INTEGER)) {
+                prefClass = PREF_CLASS_INTEGER;
+                prefValue = String.valueOf((Integer) entry.getValue());
+            } else if (prefClass.contains(PREF_CLASS_LONG)) {
+                prefClass = PREF_CLASS_LONG;
+                prefValue = String.valueOf((Long) entry.getValue());
+            } else if (prefClass.contains(PREF_CLASS_FLOAT)) {
+                prefClass = PREF_CLASS_FLOAT;
+                prefValue = String.valueOf((Float) entry.getValue());
+            } else
+                continue;
+            result.append(prefix + String.format( "<%s %s='%s' %s='%s' %s='%s'/>\n", TAG_PREF,
+                    ATTR_PREF_CLASSNAME, prefClass,
+                    ATTR_PREF_KEY, entry.getKey(),
+                    ATTR_PREF_VALUE, TextUtils.htmlEncode( prefValue ) ) );
+        }
+
+    }
+
     private static class OPMLParser extends DefaultHandler {
         private static final String TAG_BODY = "body";
         private static final String TAG_OUTLINE = "outline";
@@ -286,6 +340,7 @@ public class OPML {
         private static final String ATTRIBUTE_IS_APPLIED_TO_TITLE = "isAppliedToTitle";
         private static final String ATTRIBUTE_IS_ACCEPT_RULE = "isAcceptRule";
         private static final String ATTRIBUTE_IS_MARK_AS_STARRED = "isMarkAsStarred";
+        private final SharedPreferences.Editor mEditor;
 
         private boolean mBodyTagEntered = false;
         private boolean mFeedEntered = false;
@@ -293,8 +348,12 @@ public class OPML {
         private String mGroupId = null;
         private String mFeedId = null;
 
+        public OPMLParser() {
+            mEditor = PreferenceManager.getDefaultSharedPreferences( MainApplication.getContext() ).edit();
+        }
+
         @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        public void startElement(String uri, String localName, String qName, Attributes attributes) {
             if (!mBodyTagEntered) {
                 if (TAG_BODY.equals(localName)) {
                     mBodyTagEntered = true;
@@ -377,11 +436,29 @@ public class OPML {
                     ContentResolver cr = MainApplication.getContext().getContentResolver();
                     cr.insert(EntryColumns.ENTRIES_FOR_FEED_CONTENT_URI( mFeedId ), values);
                 }
+            } else if (TAG_PREF.equals(localName)) {
+                final String className = attributes.getValue( ATTR_PREF_CLASSNAME );
+                final String value = attributes.getValue( ATTR_PREF_VALUE);
+                final String key = attributes.getValue( ATTR_PREF_KEY );
+                if (className.contains(PREF_CLASS_STRING)) {
+                    mEditor.putString(key, value.replace("\\n", "\n"));
+                } else if (className.contains(PREF_CLASS_BOOLEAN)) {
+                    mEditor.putBoolean(key, Boolean.parseBoolean(value));
+                } else if (className.contains(PREF_CLASS_INTEGER)) {
+                    mEditor.putInt(key, Integer.parseInt(value));
+                } else if (className.contains(PREF_CLASS_LONG)) {
+                    mEditor.putLong(key, Long.parseLong(value));
+                } else if (className.contains(PREF_CLASS_FLOAT)) {
+                    mEditor.putFloat(key, Float.parseFloat(value));
+                } else {
+                    // throw new ClassNotFoundException("Unknown type: "
+                    // + prefClass);
+                }
             }
         }
 
         @Override
-        public void endElement(String uri, String localName, String qName) throws SAXException {
+        public void endElement(String uri, String localName, String qName) {
             if (mBodyTagEntered && TAG_BODY.equals(localName)) {
                 mBodyTagEntered = false;
             } else if (TAG_OUTLINE.equals(localName)) {
@@ -394,12 +471,12 @@ public class OPML {
         }
 
         @Override
-        public void warning(SAXParseException e) throws SAXException {
+        public void warning(SAXParseException e) {
             // ignore warnings
         }
 
         @Override
-        public void error(SAXParseException e) throws SAXException {
+        public void error(SAXParseException e) {
             // ignore small errors
         }
 

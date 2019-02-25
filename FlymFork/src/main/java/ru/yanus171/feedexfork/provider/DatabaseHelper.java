@@ -81,7 +81,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(createTable(TaskColumns.TABLE_NAME, TaskColumns.COLUMNS));
 
         // Check if we need to import the backup
-        if (new File(OPML.BACKUP_OPML).exists()) {
+        if (new File(OPML.GetAutoBackupOPMLFileName()).exists()) {
             mHandler.post(new Runnable() { // In order to it after the database is created
                 @Override
                 public void run() {
@@ -90,8 +90,9 @@ class DatabaseHelper extends SQLiteOpenHelper {
                         public void run() {
                             try {
                                 // Perform an automated import of the backup
-                                OPML.importFromFile(OPML.BACKUP_OPML);
-                            } catch (Exception ignored) {
+                                OPML.importFromFile(OPML.GetAutoBackupOPMLFileName());
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                     }).start();

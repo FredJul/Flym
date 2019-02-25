@@ -208,9 +208,11 @@ public class FetcherService extends IntentService {
         }
 
         if ( intent.hasExtra( Constants.FROM_AUTO_BACKUP ) ) {
+            if ( Build.VERSION.SDK_INT < 26 && AutoService.isBatteryLow(this) )
+                return;
             startForeground(Constants.NOTIFICATION_ID_REFRESH_SERVICE, StatusText.GetNotification( getString(R.string.exportingToFile) ) );
             try {
-                OPML.exportToFile( OPML.BACKUP_OPML );
+                OPML.exportToFile( OPML.GetAutoBackupOPMLFileName());
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

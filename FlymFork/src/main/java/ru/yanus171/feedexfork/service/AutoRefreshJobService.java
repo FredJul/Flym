@@ -1,5 +1,6 @@
 package ru.yanus171.feedexfork.service;
 
+import android.annotation.TargetApi;
 import android.app.job.JobInfo;
 import android.app.job.JobParameters;
 import android.app.job.JobScheduler;
@@ -32,6 +33,7 @@ public class AutoRefreshJobService extends JobService {
         return false;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     static void initAutoRefresh(Context context) {
         JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
         if (AutoService.isAutoUpdateEnabled() ) {
