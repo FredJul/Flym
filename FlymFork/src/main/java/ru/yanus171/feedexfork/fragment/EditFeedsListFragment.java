@@ -81,7 +81,9 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,6 +98,7 @@ import ru.yanus171.feedexfork.provider.FeedData.FeedColumns;
 import ru.yanus171.feedexfork.provider.FeedDataContentProvider;
 import ru.yanus171.feedexfork.utils.FileUtils;
 import ru.yanus171.feedexfork.utils.UiUtils;
+import ru.yanus171.feedexfork.utils.WaitDialog;
 import ru.yanus171.feedexfork.view.DragNDropExpandableListView;
 import ru.yanus171.feedexfork.view.DragNDropListener;
 
@@ -593,7 +596,7 @@ public class EditFeedsListFragment extends ListFragment {
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (requestCode == REQUEST_PICK_OPML_FILE) {
             if (resultCode == Activity.RESULT_OK) {
-                new Thread(new Runnable() { // To not block the UI
+                new WaitDialog(getActivity(), R.string.importingFromFile, new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -613,7 +616,7 @@ public class EditFeedsListFragment extends ListFragment {
                             }
                         }
                     }
-                }).start();
+                }).execute();
             } else {
                 displayCustomFilePicker();
             }
@@ -683,11 +686,12 @@ public class EditFeedsListFragment extends ListFragment {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)
                 || Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
 
-            new Thread(new Runnable() { // To not block the UI
+            new WaitDialog(getActivity(), R.string.exportingToFile, new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        final String filename =  FileUtils.GetFolder() +  "/HandyNewsReader_" + System.currentTimeMillis() + ".opml";
+                        final String dateTimeStr = new SimpleDateFormat( "yyyyMMdd_HHmmss" ).format( new Date( System.currentTimeMillis() ) );
+                        final String filename =  FileUtils.GetFolder() +  "/HandyNewsReader_" + dateTimeStr + ".opml";
 
                         OPML.exportToFile(filename);
                         getActivity().runOnUiThread(new Runnable() {
@@ -706,7 +710,7 @@ public class EditFeedsListFragment extends ListFragment {
                         });
                     }
                 }
-            }).start();
+            }).execute();
         } else {
             UiUtils.showMessage(getActivity(), R.string.error_external_storage_not_available);
         }

@@ -211,7 +211,7 @@ public class OPML {
         builder.append(OUTLINE_NORMAL_CLOSING);
 
         ExportFilters(builder, feedID);
-        final boolean saveAbstract = TRUE.equals( GetBoolText( cursor, 4 ) );
+        final boolean saveAbstract = !TRUE.equals( GetBoolText( cursor, 4 ) );
         ExportEntries(builder, feedID, saveAbstract);
         builder.append(OUTLINE_END);
     }

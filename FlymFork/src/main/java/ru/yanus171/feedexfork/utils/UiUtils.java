@@ -20,10 +20,12 @@
 package ru.yanus171.feedexfork.utils;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -105,4 +107,6 @@ public class UiUtils {
 
         return null;
     }
+
+
 }
