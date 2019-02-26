@@ -155,6 +155,8 @@ public class OPML {
             if (cursorGroupsAndRoot.getInt(1) == 1) { // If it is a group
                 builder.append(OUTLINE_TITLE);
                 builder.append(cursorGroupsAndRoot.isNull(2) ? "" : TextUtils.htmlEncode(cursorGroupsAndRoot.getString(2)));
+                builder.append(String.format( ATTR_VALUE, FeedColumns.PRIORITY ));
+                builder.append(GetLong( cursorGroupsAndRoot, 11 ));
                 builder.append(OUTLINE_NORMAL_CLOSING);
                 Cursor cursorFeeds = MainApplication.getContext().getContentResolver()
                         .query(FeedColumns.FEEDS_FOR_GROUPS_CONTENT_URI(cursorGroupsAndRoot.getString(0)), FEEDS_PROJECTION, null, null, null);
@@ -180,6 +182,9 @@ public class OPML {
         FetcherService.Status().End( status );
     }
 
+    private static String GetLong( final Cursor cursor, final int col ) {
+        return cursor.isNull( col ) ? "0" : cursor.getString(col );
+    }
     private static String GetEncoded( final Cursor cursor, final int col ) {
         return cursor.isNull( col ) ? "" : TextUtils.htmlEncode(cursor.getString(col ) );
     }
@@ -187,8 +192,11 @@ public class OPML {
         return attr.getValue( attrName );
     }
 
-    private static final String[] FEEDS_PROJECTION = new String[]{FeedColumns._ID, FeedColumns.IS_GROUP, FeedColumns.NAME, FeedColumns.URL,
-            FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH, FeedColumns.IS_IMAGE_AUTO_LOAD, FeedColumns.OPTIONS };
+
+    private static final String[] FEEDS_PROJECTION = new String[]{FeedColumns._ID, FeedColumns.IS_GROUP, FeedColumns.NAME,
+            FeedColumns.URL, FeedColumns.RETRIEVE_FULLTEXT, FeedColumns.SHOW_TEXT_IN_ENTRY_LIST, FeedColumns.IS_AUTO_REFRESH,
+            FeedColumns.IS_IMAGE_AUTO_LOAD, FeedColumns.OPTIONS, FeedColumns.LAST_UPDATE, FeedColumns.REAL_LAST_UPDATE,
+            FeedColumns.PRIORITY, FeedColumns.FETCH_MODE };
 
     private static void ExportFeed(StringBuilder builder, Cursor cursor) {
         final String feedID = cursor.getString(0);
@@ -207,6 +215,16 @@ public class OPML {
         builder.append(GetBoolText( cursor, 7 ));
         builder.append(String.format( ATTR_VALUE, FeedColumns.OPTIONS ));
         builder.append(GetEncoded( cursor, 8 ));
+        builder.append(String.format( ATTR_VALUE, FeedColumns.LAST_UPDATE ));
+        builder.append(GetLong( cursor, 9 ));
+        builder.append(String.format( ATTR_VALUE, FeedColumns.REAL_LAST_UPDATE ));
+        builder.append(GetLong( cursor, 10 ));
+        builder.append(String.format( ATTR_VALUE, FeedColumns.PRIORITY ));
+        builder.append(GetLong( cursor, 11 ));
+        builder.append(String.format( ATTR_VALUE, FeedColumns.FETCH_MODE ));
+        builder.append(GetLong( cursor, 12 ));
+
+
 
         builder.append(OUTLINE_NORMAL_CLOSING);
 
@@ -373,6 +391,7 @@ public class OPML {
                         ContentValues values = new ContentValues();
                         values.put(FeedColumns.IS_GROUP, true);
                         values.put(FeedColumns.NAME, title);
+                        values.put(FeedColumns.PRIORITY, GetText( attributes, FeedColumns.PRIORITY));
 
                         Cursor cursor = cr.query(FeedColumns.GROUPS_CONTENT_URI, null, FeedColumns.NAME + Constants.DB_ARG, new String[]{title}, null);
 
@@ -397,6 +416,10 @@ public class OPML {
                     values.put(FeedColumns.IS_AUTO_REFRESH, GetBool( attributes, FeedColumns.IS_AUTO_REFRESH));
                     values.put(FeedColumns.IS_IMAGE_AUTO_LOAD, GetBool( attributes, FeedColumns.IS_IMAGE_AUTO_LOAD));
                     values.put(FeedColumns.OPTIONS, GetText( attributes, FeedColumns.OPTIONS));
+                    values.put(FeedColumns.LAST_UPDATE, GetText( attributes, FeedColumns.LAST_UPDATE));
+                    values.put(FeedColumns.REAL_LAST_UPDATE, GetText( attributes, FeedColumns.REAL_LAST_UPDATE));
+                    values.put(FeedColumns.PRIORITY, GetText( attributes, FeedColumns.PRIORITY));
+                    values.put(FeedColumns.FETCH_MODE, GetText( attributes, FeedColumns.FETCH_MODE));
 
                     Cursor cursor = cr.query(FeedColumns.CONTENT_URI, null, FeedColumns.URL + Constants.DB_ARG,
                             new String[]{url}, null);
