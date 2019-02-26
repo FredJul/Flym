@@ -18,13 +18,8 @@ public class AutoRefreshJobService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
-        if (AutoService.isAutoUpdateEnabled() ) {
-            Intent intent = AutoService.GetAutoRefreshServiceIntent();
-            if (Build.VERSION.SDK_INT >= 26)
-                getBaseContext().startForegroundService(intent);
-            else
-                getBaseContext().startService(intent);
-        }
+        if (AutoService.isAutoUpdateEnabled() )
+            FetcherService.StartService( AutoService.GetAutoRefreshServiceIntent() );
         return false;
     }
 

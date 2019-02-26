@@ -97,6 +97,13 @@
             android:title="@string/settings_max_image_download_size_kb"
             android:summary="@string/settings_max_image_download_size_kb_summary"/>
 
+        <EditTextPreference
+            android:key="settings_max_single_refresh_traffic_mb"
+            android:inputType="number"
+            android:defaultValue="50Mb"
+            android:title="@string/max_single_refresh_traffic_mb"
+            android:summary="@string/max_single_refresh_traffic_mb_descr"/>
+
         <CheckBoxPreference
             android:key="load_comments"
             android:title="@string/settings_load_comments"

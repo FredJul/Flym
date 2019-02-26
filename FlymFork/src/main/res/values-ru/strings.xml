@@ -431,5 +431,8 @@
     <string name="show_new_icon_descr">Маленькая иконка с полюсом на новых статьях (названия которых еще никогда не были видимы)</string>
     <string name="exportingToFile">Экспорт в файл</string>
     <string name="importingFromFile">Импорт из файла</string>
+    <string name="max_single_refresh_traffic_mb">Max траффик обновления</string>
+    <string name="max_single_refresh_traffic_mb_descr">Обновление остановится, когда трафик превысит максимальное значение (в МБ)
+</string>
 
 </resources>

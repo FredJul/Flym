@@ -243,6 +243,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widgetinfo" />
         </receiver>
+
         <receiver android:name=".widget.TickerWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

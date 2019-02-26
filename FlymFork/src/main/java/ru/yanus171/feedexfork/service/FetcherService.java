@@ -366,6 +366,11 @@ public class FetcherService extends IntentService {
 
     public static boolean isCancelRefresh() {
         synchronized (mCancelRefresh) {
+            ConnectivityManager cm = (ConnectivityManager) MainApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo ni = cm.getActiveNetworkInfo();
+            final boolean wifi = (ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI );
+            if ( !wifi && Status().mBytesRecievedLast > PrefUtils.getMaxSingleRefreshTraffic() * 1024 * 1024 )
+                return true;
             if (mCancelRefresh) {
                 MainApplication.getContext().getContentResolver().delete( TaskColumns.CONTENT_URI, null, null );
             }

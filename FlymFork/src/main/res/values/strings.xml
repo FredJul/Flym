@@ -362,6 +362,8 @@
     <string name="toastAppCrashed">The application unexpectedly failed: (Please send a mail to developer)</string>
     <string name="exportingToFile">Exporting to file</string>
     <string name="importingFromFile">Importing form file</string>
+    <string name="max_single_refresh_traffic_mb">Max single refresh traffic</string>
+    <string name="max_single_refresh_traffic_mb_descr">The refresh will stop when traffic exceeds max value (in MB)</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new article.</item>

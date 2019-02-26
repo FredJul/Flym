@@ -197,7 +197,7 @@ public class NetworkUtils {
             } else if (Constants.FETCH_PICTURE_MODE_WIFI_ONLY_PRELOAD.equals(fetchPictureMode)) {
                 ConnectivityManager cm = (ConnectivityManager) MainApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo ni = cm.getActiveNetworkInfo();
-                if (ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI) {
+                if (ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI ) {
                     downloadPictures = true;
                 }
             }

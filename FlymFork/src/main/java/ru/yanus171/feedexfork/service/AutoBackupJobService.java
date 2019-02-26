@@ -66,11 +66,7 @@ public class AutoBackupJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         //if (AutoService.isAutoUpdateEnabled() ) {
-            Intent intent = new Intent(MainApplication.getContext(), FetcherService.class).putExtra( Constants.FROM_AUTO_BACKUP, true );
-            if (Build.VERSION.SDK_INT >= 26)
-                getBaseContext().startForegroundService(intent);
-            else
-                getBaseContext().startService(intent);
+            FetcherService.StartService( new Intent(MainApplication.getContext(), FetcherService.class).putExtra( Constants.FROM_AUTO_BACKUP, true ) );
         //}
         return false;
     }

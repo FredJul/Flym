@@ -71,7 +71,7 @@ public class StatusText implements Observer {
 
     public static class FetcherObservable extends Observable {
         private Handler mHandler = null;
-        volatile int mBytesRecievedLast = 0;
+        public volatile int mBytesRecievedLast = 0;
         final LinkedHashMap<Integer,String> mList = new LinkedHashMap<>();
         private String mProgressText = "";
         private String mErrorText = "";

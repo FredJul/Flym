@@ -27,14 +27,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Map;
-
 import ru.yanus171.feedexfork.MainApplication;
-import ru.yanus171.feedexfork.activity.HomeActivity;
 
 public class PrefUtils {
 
@@ -64,6 +57,7 @@ public class PrefUtils {
     public static final String TEXT_COLOR_BRIGHTNESS = "text_color_brightness";
     public static final String MAX_IMAGE_DOWNLOAD_COUNT = "max_image_download_count";
     public static final String MAX_IMAGE_DOWNLOAD_SIZE = "settings_max_image_download_size_kb";
+    public static final String MAX_SINGLE_REFRESH_TRAFFIC = "settings_max_single_refresh_traffic_mb";
     public static final String ENTRY_MAGRINS = "entry_margins";
     public static final String ENTRY_TEXT_ALIGN_JUSTIFY = "entry_text_align_justify";
     public static final String LANGUAGE = "language";
@@ -102,6 +96,14 @@ public class PrefUtils {
     public static int getImageDownloadCount() {
         try {
             return Integer.parseInt(PrefUtils.getString(PrefUtils.MAX_IMAGE_DOWNLOAD_COUNT, "10"));
+        } catch ( NumberFormatException e ) {
+            return 10;
+        }
+    }
+
+    public static int getMaxSingleRefreshTraffic() {
+        try {
+            return Integer.parseInt(PrefUtils.getString(PrefUtils.MAX_SINGLE_REFRESH_TRAFFIC, "50"));
         } catch ( NumberFormatException e ) {
             return 10;
         }
