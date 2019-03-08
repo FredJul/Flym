@@ -107,8 +107,8 @@
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Apri gli articoli direttamente nel tuo browser predefinito</string>
     <string name="open_browser_direct_title">Apri nel browser</string>
-    <string name="refresh_on_startup">Aggiorna i feed all'avvio dell'applicazione</string>
-    <string name="refresh_on_startup_title">Aggiorna all'avvio</string>
+    <string name="refresh_on_startup">Aggiorna i feed all\'avvio dell\'applicazione</string>
+    <string name="refresh_on_startup_title">Aggiorna all\'avvio</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Un nuovo articolo</item>
