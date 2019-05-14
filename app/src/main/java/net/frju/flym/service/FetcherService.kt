@@ -270,7 +270,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                                         val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(link))
 
                                         @Suppress("DEPRECATION")
-                                        if (Html.fromHtml(it).length > Html.fromHtml(entry.description).length) { // If the retrieved text is smaller than the original one, then we certainly failed...
+                                        if (entry.description == null || Html.fromHtml(mobilizedHtml).length > Html.fromHtml(entry.description).length) { // If the retrieved text is smaller than the original one, then we certainly failed...
                                             if (downloadPictures) {
                                                 val imagesList = HtmlUtils.getImageURLs(mobilizedHtml)
                                                 if (imagesList.isNotEmpty()) {
