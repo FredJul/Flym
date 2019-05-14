@@ -23,35 +23,35 @@
 
     <!-- GENERAL -->
     <string name="app_name">Flym</string>
-    <string name="about_flym">About Flym</string>
-    <string name="welcome_title">Welcome to Flym. Would you like to add one feed?</string>
-    <string name="welcome_title_with_opml_import">Would you like to import previous Flym feeds?</string>
-    <string name="cannot_find_feeds">No feeds has been found</string>
+    <string name="about_flym">Sobre Flym</string>
+    <string name="welcome_title">Bienvenido a Flym ¿Quieres añadir una fuente?</string>
+    <string name="welcome_title_with_opml_import">¿Quieres importar fuentes anteriores de Flym?</string>
+    <string name="cannot_find_feeds">No encontré fuentes</string>
     <string name="menu_settings">Configuración</string>
     <string name="menu_edit_feed">Modificar fuente</string>
-    <string name="menu_reorder">Reorder feeds</string>
-    <string name="menu_delete">Delete</string>
-    <string name="menu_enable_full_text_retrieval">Enable full text retrieval</string>
-    <string name="menu_disable_full_text_retrieval">Disable full text retrieval</string>
+    <string name="menu_reorder">Reordenar feeds</string>
+    <string name="menu_delete">Borrar</string>
+    <string name="menu_enable_full_text_retrieval">Hablitar recuperación de texto completo</string>
+    <string name="menu_disable_full_text_retrieval">Deshablitar recuperación de texto completo</string>
     <string name="menu_all_read">Marcar todo como leído</string>
     <string name="flym_feeds">Fuentes de Flym</string>
     <string name="error">Error</string>
     <string name="network_error">No se ha configurado la red</string>
-    <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
-    <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
+    <string name="drawer_explanation">Bienbenido!\n\nPresión larga sobre una fuente para ver sus opciones ▼</string>
+    <string name="drawer_fetch_error_explanation">Algunas fuentes no se han actualizado bien ▼</string>
 
     <!-- FEEDS -->
     <string name="feeds">Fuentes</string>
     <string name="menu_add_group">Añadir grupo</string>
     <string name="menu_import">Importar desde OPML</string>
     <string name="menu_export">Exportar a OPML</string>
-    <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
-    <string name="error_feed_export">No se ha podido exportar las fuentes. Compruebe los permisos en
+    <string name="storage_request_explanation">Para importar o exportar archivos con fuentes debes permitir a la aplicación tener acceso a la memoria de almacenamiento.</string>
+    <string name="error_feed_export">No se han podido exportar las fuentes. Compruebe los permisos en
         la tarjeta SD.
     </string>
     <string name="feed_search">Buscar fuentes</string>
-	<string name="feed_search_hint">Enter feed link or keyword</string>
-    <string name="feed_added">Feed added to the list</string>
+	<string name="feed_search_hint">Introduce enlace a una fuente o palabra clave</string>
+    <string name="feed_added">Fuente añadida a la lista</string>
     <string name="question_delete_feed">¿Seguro que quiere eliminar esta fuente?</string>
     <string name="question_delete_group">¿Seguro que quiere eliminar este grupo de fuentes?</string>
     <string name="add_group_title">Añadir nombre de grupo</string>
@@ -62,19 +62,19 @@
     </string>
     <string name="to_group_above">Encima del grupo</string>
     <string name="to_group_into">Al grupo</string>
-    <string name="google_news_top_stories">Top Stories</string>
-    <string name="google_news_world">World</string>
-    <string name="google_news_business">Business</string>
-    <string name="google_news_science_technology">Science &amp; Technology</string>
-    <string name="google_news_entertainment">Entertainment</string>
-    <string name="google_news_sports">Sports</string>
-    <string name="google_news_health">Health</string>
-    <string name="feed_name">Feed name</string>
-    <string name="feed_link">Feed link</string>
+    <string name="google_news_top_stories">Mejores artículos</string>
+    <string name="google_news_world">Mundo</string>
+    <string name="google_news_business">Negocios</string>
+    <string name="google_news_science_technology">Ciencia &amp; Tecnología</string>
+    <string name="google_news_entertainment">Ocio</string>
+    <string name="google_news_sports">Deportes</string>
+    <string name="google_news_health">Salud</string>
+    <string name="feed_name">Nombre de la fuente</string>
+    <string name="feed_link">Enlace de la fuente</string>
 
     <!-- ENTRIES -->
-    <string name="all_entries">All entries</string>
-    <string name="menu_star">Destaca</string>
+    <string name="all_entries">Todos los artículos</string>
+    <string name="menu_star">Destacar</string>
     <string name="menu_unstar">No destacar</string>
     <string name="menu_share">Compartir</string>
     <string name="menu_mark_as_unread">Marcar como no leído</string>
@@ -82,16 +82,16 @@
     <string name="original_text">Mostrar el texto original</string>
 	<string name="open_in_browser">Ver en el navegador</string>
     <string name="cant_open_link">No se ha encontrado una aplicación para este enlace.</string>
-    <string name="unreads">Unreads</string>
-    <string name="all">All</string>
-    <string name="favorites">Favorites</string>
-    <string name="no_entries">No items\nPlease pull down to refresh</string>
-    <string name="undo">Undo</string>
-    <string name="marked_as_read">Marked as read</string>
-    <string name="marked_as_unread">Marked as unread</string>
+    <string name="unreads">Sin leer</string>
+    <string name="all">Todos</string>
+    <string name="favorites">Favoritos</string>
+    <string name="no_entries">No hay artículos\nDesliza para abajo para actualizar</string>
+    <string name="undo">Deshacer</string>
+    <string name="marked_as_read">Marcado como leído</string>
+    <string name="marked_as_unread">Marcado como leído</string>
 
     <!-- SETTINGS -->
-    <string name="settings_category_refresh">Actualización automáticas</string>
+    <string name="settings_category_refresh">Actualización automática</string>
     <string name="settings_refresh_enabled">Habilitar actualizaciones automáticas</string>
     <string name="settings_refresh_enabled_description">Activa las actualizaciones automáticas de
         las fuentes.
@@ -99,27 +99,27 @@
     <string name="settings_refresh_interval">Intervalo entre actualizaciones</string>
     <string name="settings_category_content_presentation">Modo de presentación</string>
     <string name="settings_keep_time">Tiempo de retención de las entradas</string>
-    <string name="settings_display_images">Display images</string>
-    <string name="settings_display_images_description">Display images in entries</string>
-    <string name="settings_preload_image_mode">Preload images</string>
+    <string name="settings_display_images">Mostrar imágenes</string>
+    <string name="settings_display_images_description">Mostrar imágenes en artículos</string>
+    <string name="settings_preload_image_mode">Precargar imágenes</string>
     <string name="settings_font_size">Tamaño del texto</string>
-    <string name="settings_refresh_wifi_only">Actualizar solo en Wi-Fi.</string>
-    <string name="settings_refresh_wifi_only_description">Solo se actualizarán las entradas cuando
+    <string name="settings_refresh_wifi_only">Actualizar sólo con Wi-Fi</string>
+    <string name="settings_refresh_wifi_only_description">Sólo se actualizarán las entradas cuando
         se esté conectado a una red Wi-Fi.
     </string>
-    <string name="settings_category_filter">Filters</string>
-    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
-    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <string name="settings_theme">Theme</string>
-    <string name="open_browser_direct">Open entries directly in your default browser</string>
-    <string name="open_browser_direct_title">Open in browser</string>
-    <string name="refresh_on_startup">Refreshes your feeds when launching the app</string>
-    <string name="refresh_on_startup_title">Refresh on startup</string>
+    <string name="settings_category_filter">Filtros</string>
+    <string name="settings_remove_duplicates_description_title">Borrar duplicados</string>
+    <string name="settings_remove_duplicates_description">Sólo descarga los artículos cuyo título no coincide con el de otro ya presente.</string>
+    <string name="filter">Elimina artículos con las palabras indicadas (separar con comas)</string>
+    <string name="settings_theme">Modo de presentación</string>
+    <string name="open_browser_direct">Abre artículos directamente en tu navegador por defecto</string>
+    <string name="open_browser_direct_title">Abrir artículo en navegador</string>
+    <string name="refresh_on_startup">Actualizar fuentes al iniciar la aplicación</string>
+    <string name="refresh_on_startup_title">Actualizar al inicio</string>
 
     <plurals name="number_of_new_entries">
-        <item quantity="one">One new entry</item>
-        <item quantity="other">%d new entries</item>
+        <item quantity="one">Un artículo nuevo</item>
+        <item quantity="other">%d artículos nuevos</item>
     </plurals>
 
     <string-array name="settings_intervals">
@@ -152,14 +152,14 @@
         <item>+3</item>
     </string-array>
     <string-array name="settings_preload_image_modes">
-        <item>Never</item>
-        <item>Only over Wi-Fi</item>
-        <item>Always</item>
+        <item>Nunca</item>
+        <item>Sólo con Wi-Fi</item>
+        <item>Siempre</item>
     </string-array>
     <string-array name="settings_themes">
-        <item>Light</item>
-        <item>Dark</item>
-        <item>Black</item>
+        <item>Claro</item>
+        <item>Oscuro</item>
+        <item>Negro</item>
     </string-array>
 
 </resources>
