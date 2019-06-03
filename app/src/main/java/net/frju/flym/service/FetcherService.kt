@@ -134,7 +134,11 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                     val keepTime = context.getPrefString(PrefConstants.KEEP_TIME, "4").toLong() * 86400000L
                     val keepDateBorderTime = if (keepTime > 0) System.currentTimeMillis() - keepTime else 0
 
-                    deleteOldEntries(keepDateBorderTime)
+                    val keepTimeUnread = context.getPrefString(PrefConstants.KEEP_TIME_UNREAD, "0").toLong() * 86400000L
+                    val keepDateBorderTimeUnread = if (keepTimeUnread > 0) System.currentTimeMillis() - keepTimeUnread else 0
+
+                    deleteOldEntries(keepDateBorderTime, 1);
+                    deleteOldEntries(keepDateBorderTimeUnread, 0);
                     COOKIE_MANAGER.cookieStore.removeAll() // Cookies are important for some sites, but we clean them each times
 
                     var newCount = 0
@@ -468,9 +472,9 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             return entries.size
         }
 
-        private fun deleteOldEntries(keepDateBorderTime: Long) {
+        private fun deleteOldEntries(keepDateBorderTime: Long, read:Long) {
             if (keepDateBorderTime > 0) {
-                App.db.entryDao().deleteOlderThan(keepDateBorderTime)
+                App.db.entryDao().deleteOlderThan(keepDateBorderTime, read)
                 // Delete the cache files
                 deleteEntriesImagesCache(keepDateBorderTime)
             }

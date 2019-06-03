@@ -72,7 +72,8 @@
     <string name="settings_refresh_enabled_description">Enable the automatic refresh of feeds</string>
     <string name="settings_refresh_interval">Refresh interval</string>
     <string name="settings_category_content_presentation">Content presentation</string>
-    <string name="settings_keep_time">Time that the entries will be kept</string>
+    <string name="settings_keep_time">Time that the read entries will be kept</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Display images</string>
     <string name="settings_display_images_description">Display images in entries</string>
     <string name="settings_preload_image_mode">Preload images</string>

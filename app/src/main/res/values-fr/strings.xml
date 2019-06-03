@@ -94,6 +94,7 @@
     <string name="settings_refresh_interval">Intervalle de mise à jour</string>
     <string name="settings_category_content_presentation">Présentation des flux</string>
     <string name="settings_keep_time">Délai de conservation des flux</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Afficher les images</string>
     <string name="settings_display_images_description">Afficher les images dans les articles</string>
     <string name="settings_preload_image_mode">Préchargement des images</string>

@@ -101,6 +101,7 @@
     <string name="settings_refresh_interval">Интервал обновления</string>
     <string name="settings_category_content_presentation">Представление содержания</string>
     <string name="settings_keep_time">Время хранения новостей</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Показывать изображения</string>
     <string name="settings_display_images_description">Показывать изображения в новостях</string>
     <string name="settings_preload_image_mode">Предварительно загружать изображения</string>

@@ -41,6 +41,7 @@ object PrefConstants {
     const val FILTER_KEYWORDS = "filter_keywords"
 
     const val KEEP_TIME = "keep_time"
+    const val KEEP_TIME_UNREAD = "keep_time_unread"
 
     const val FONT_SIZE = "font_size"
 

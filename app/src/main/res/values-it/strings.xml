@@ -94,6 +94,7 @@
     <string name="settings_refresh_interval">Intervallo</string>
     <string name="settings_category_content_presentation">Aspetto e contenuti</string>
     <string name="settings_keep_time">Tempo di archiviazione</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Mostra immagini</string>
     <string name="settings_display_images_description">Mostra le immagini degli articoli</string>
     <string name="settings_preload_image_mode">Scarica le immagini in anticipo</string>
