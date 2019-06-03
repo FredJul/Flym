@@ -93,6 +93,7 @@
     <string name="settings_refresh_interval">Uppdateringsintervall</string>
     <string name="settings_category_content_presentation">Innehållspresentation</string>
     <string name="settings_keep_time">Tid som inläggen behållas</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Visa bilder</string>
     <string name="settings_display_images_description">Visa bilder i inlägg</string>
     <string name="settings_preload_image_mode">Förladda bilder</string>

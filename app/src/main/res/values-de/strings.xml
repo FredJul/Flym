@@ -96,6 +96,7 @@
     <string name="settings_refresh_interval">Aktualisierungsintervall</string>
     <string name="settings_category_content_presentation">Anzeige der Inhalte</string>
     <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Bilder anzeigen</string>
     <string name="settings_display_images_description">Bilder in den Einträgen anzeigen</string>
     <string name="settings_preload_image_mode">Bilder vorab laden</string>

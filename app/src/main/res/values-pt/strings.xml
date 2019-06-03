@@ -93,6 +93,7 @@
     <string name="settings_refresh_interval">Intervalo de atualização</string>
     <string name="settings_category_content_presentation">Apresentação de conteúdo</string>
     <string name="settings_keep_time">Tempo que as entradas vão permanecer</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Mostrar imagens</string>
     <string name="settings_display_images_description">Mostrar imagens nas entradas</string>
     <string name="settings_preload_image_mode">Pré-carregar imagens</string>

@@ -134,15 +134,19 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                     val keepTime = context.getPrefString(PrefConstants.KEEP_TIME, "4").toLong() * 86400000L
                     val keepDateBorderTime = if (keepTime > 0) System.currentTimeMillis() - keepTime else 0
 
-                    deleteOldEntries(keepDateBorderTime)
+                    val keepTimeUnread = context.getPrefString(PrefConstants.KEEP_TIME_UNREAD, "0").toLong() * 86400000L
+                    val keepDateBorderTimeUnread = if (keepTimeUnread > 0) System.currentTimeMillis() - keepTimeUnread else 0
+
+                    deleteOldEntries(keepDateBorderTime, 1);
+                    deleteOldEntries(keepDateBorderTimeUnread, 0);
                     COOKIE_MANAGER.cookieStore.removeAll() // Cookies are important for some sites, but we clean them each times
 
                     var newCount = 0
                     if (feedId == 0L) {
-                        newCount = refreshFeeds(keepDateBorderTime)
+                        newCount = refreshFeeds(keepDateBorderTimeUnread)
                     } else {
                         App.db.feedDao().findById(feedId)?.let {
-                            newCount = refreshFeed(it, keepDateBorderTime)
+                            newCount = refreshFeed(it, keepDateBorderTimeUnread)
                         }
                     }
 
@@ -333,7 +337,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             }
         }
 
-        private fun refreshFeeds(keepDateBorderTime: Long): Int {
+        private fun refreshFeeds(keepDateBorderTimeUnread: Long): Int {
 
             val executor = Executors.newFixedThreadPool(THREAD_NUMBER) { r ->
                 Thread(r).apply {
@@ -349,7 +353,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 completionService.submit {
                     var result = 0
                     try {
-                        result = refreshFeed(feed, keepDateBorderTime)
+                        result = refreshFeed(feed, keepDateBorderTimeUnread)
                     } catch (e: Exception) {
                         error("Can't fetch feedWithCount ${feed.link}", e)
                     }
@@ -371,7 +375,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             return globalResult
         }
 
-        private fun refreshFeed(feed: Feed, keepDateBorderTime: Long): Int {
+        private fun refreshFeed(feed: Feed, keepDateBorderTimeUnread: Long): Int {
             val entries = mutableListOf<Entry>()
             val entriesToInsert = mutableListOf<Entry>()
             val imgUrlsToDownload = mutableMapOf<String, List<String>>()
@@ -382,7 +386,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 createCall(feed.link).execute().use { response ->
                     val input = SyndFeedInput()
                     val romeFeed = input.build(XmlReader(response.body()!!.byteStream()))
-                    entries.addAll(romeFeed.entries.asSequence().filter { it.publishedDate?.time ?: Long.MAX_VALUE > keepDateBorderTime }.map { it.toDbFormat(feed) })
+                    entries.addAll(romeFeed.entries.asSequence().filter { it.publishedDate?.time ?: Long.MAX_VALUE > keepDateBorderTimeUnread }.map { it.toDbFormat(feed) })
                     feed.update(romeFeed)
                 }
             } catch (t: Throwable) {
@@ -468,9 +472,9 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             return entries.size
         }
 
-        private fun deleteOldEntries(keepDateBorderTime: Long) {
+        private fun deleteOldEntries(keepDateBorderTime: Long, read:Long) {
             if (keepDateBorderTime > 0) {
-                App.db.entryDao().deleteOlderThan(keepDateBorderTime)
+                App.db.entryDao().deleteOlderThan(keepDateBorderTime, read)
                 // Delete the cache files
                 deleteEntriesImagesCache(keepDateBorderTime)
             }

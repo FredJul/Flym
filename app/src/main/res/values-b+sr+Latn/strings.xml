@@ -73,6 +73,7 @@
     <string name="settings_refresh_interval">Interval osveženja</string>
     <string name="settings_category_content_presentation">Prikaz sadržaja</string>
     <string name="settings_keep_time">Vreme čuvanja članaka</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Prikaži slike</string>
     <string name="settings_display_images_description">Prikaži slike unutar članaka</string>
     <string name="settings_preload_image_mode">Unapred učitaj slike</string>
