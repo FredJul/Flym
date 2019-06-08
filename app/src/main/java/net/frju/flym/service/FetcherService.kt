@@ -43,22 +43,13 @@ import net.frju.flym.data.entities.Task
 import net.frju.flym.data.entities.toDbFormat
 import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.ui.main.MainActivity
-import net.frju.flym.utils.HtmlUtils
-import net.frju.flym.utils.getPrefBoolean
-import net.frju.flym.utils.getPrefString
-import net.frju.flym.utils.isOnline
-import net.frju.flym.utils.putPrefBoolean
-import net.frju.flym.utils.sha1
+import net.frju.flym.utils.*
 import okhttp3.Call
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.connectivityManager
-import org.jetbrains.anko.error
-import org.jetbrains.anko.notificationManager
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.*
 import org.jsoup.Jsoup
 import java.io.File
 import java.io.FileOutputStream
@@ -141,12 +132,15 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                     deleteOldEntries(keepDateBorderTimeUnread, 0);
                     COOKIE_MANAGER.cookieStore.removeAll() // Cookies are important for some sites, but we clean them each times
 
+                    // We need to use the lowest value in order to be sure to not see old entries again
+                    val minKeepDateBorderTime = Math.min(keepDateBorderTime, keepDateBorderTimeUnread)
+
                     var newCount = 0
                     if (feedId == 0L) {
-                        newCount = refreshFeeds(keepDateBorderTimeUnread)
+                        newCount = refreshFeeds(minKeepDateBorderTime)
                     } else {
                         App.db.feedDao().findById(feedId)?.let {
-                            newCount = refreshFeed(it, keepDateBorderTimeUnread)
+                            newCount = refreshFeed(it, minKeepDateBorderTime)
                         }
                     }
 
@@ -337,7 +331,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             }
         }
 
-        private fun refreshFeeds(keepDateBorderTimeUnread: Long): Int {
+        private fun refreshFeeds(keepDateBorderTime: Long): Int {
 
             val executor = Executors.newFixedThreadPool(THREAD_NUMBER) { r ->
                 Thread(r).apply {
@@ -353,7 +347,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 completionService.submit {
                     var result = 0
                     try {
-                        result = refreshFeed(feed, keepDateBorderTimeUnread)
+                        result = refreshFeed(feed, keepDateBorderTime)
                     } catch (e: Exception) {
                         error("Can't fetch feedWithCount ${feed.link}", e)
                     }
@@ -375,7 +369,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             return globalResult
         }
 
-        private fun refreshFeed(feed: Feed, keepDateBorderTimeUnread: Long): Int {
+        private fun refreshFeed(feed: Feed, keepDateBorderTime: Long): Int {
             val entries = mutableListOf<Entry>()
             val entriesToInsert = mutableListOf<Entry>()
             val imgUrlsToDownload = mutableMapOf<String, List<String>>()
@@ -386,7 +380,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 createCall(feed.link).execute().use { response ->
                     val input = SyndFeedInput()
                     val romeFeed = input.build(XmlReader(response.body()!!.byteStream()))
-                    entries.addAll(romeFeed.entries.asSequence().filter { it.publishedDate?.time ?: Long.MAX_VALUE > keepDateBorderTimeUnread }.map { it.toDbFormat(feed) })
+                    entries.addAll(romeFeed.entries.asSequence().filter { it.publishedDate?.time ?: Long.MAX_VALUE > keepDateBorderTime }.map { it.toDbFormat(feed) })
                     feed.update(romeFeed)
                 }
             } catch (t: Throwable) {
@@ -494,7 +488,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
                 try {
                     createCall(realUrl).execute().use { response ->
-                        response?.body()?.let { body ->
+                        response.body()?.let { body ->
                             val fileOutput = FileOutputStream(tempImgPath)
 
                             val sink = Okio.buffer(Okio.sink(fileOutput))
