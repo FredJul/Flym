@@ -14,8 +14,8 @@ android {
 		applicationId "net.frju.flym"
 		minSdkVersion 21
 		targetSdkVersion 27
-		versionCode 21
-		versionName "2.2.6"
+		versionCode 22
+		versionName "2.2.7"
 	}
 
 	lintOptions {
