@@ -23,33 +23,44 @@ import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
+import android.arch.persistence.room.Transaction
 import android.arch.persistence.room.Update
 import net.frju.flym.data.entities.Task
 
 
 @Dao
-interface TaskDao {
-    @get:Query("SELECT * FROM tasks")
-    val all: List<Task>
+abstract class TaskDao {
+	@get:Query("SELECT * FROM tasks")
+	abstract val all: List<Task>
 
-    @get:Query("SELECT * FROM tasks")
-    val observeAll: LiveData<List<Task>>
+	@get:Query("SELECT * FROM tasks")
+	abstract val observeAll: LiveData<List<Task>>
 
-    @get:Query("SELECT * FROM tasks WHERE imageLinkToDl = ''")
-    val mobilizeTasks: List<Task>
+	@get:Query("SELECT * FROM tasks WHERE imageLinkToDl = ''")
+	abstract val mobilizeTasks: List<Task>
 
-    @Query("SELECT COUNT(*) FROM tasks WHERE imageLinkToDl = '' AND entryId = :itemId")
-    fun observeItemMobilizationTasksCount(itemId: String): LiveData<Int>
+	@Query("SELECT COUNT(*) FROM tasks WHERE imageLinkToDl = '' AND entryId = :itemId")
+	abstract fun observeItemMobilizationTasksCount(itemId: String): LiveData<Int>
 
-    @get:Query("SELECT * FROM tasks WHERE imageLinkToDl != ''")
-    val downloadTasks: List<Task>
+	@get:Query("SELECT * FROM tasks WHERE imageLinkToDl != ''")
+	abstract val downloadTasks: List<Task>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(vararg tasks: Task)
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	protected abstract fun insertInternal(task: Task)
 
-    @Update
-    fun update(vararg tasks: Task)
+	@Transaction
+	open fun insert(vararg tasks: Task) {
+		for (task in tasks) {
+			try {
+				insertInternal(task) // Needed to avoid failing on all insert if a single one is failing
+			} catch (t: Throwable) {
+			}
+		}
+	}
 
-    @Delete
-    fun delete(vararg tasks: Task)
+	@Update
+	abstract fun update(vararg tasks: Task)
+
+	@Delete
+	abstract fun delete(vararg tasks: Task)
 }

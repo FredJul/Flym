@@ -30,34 +30,34 @@ import net.frju.flym.data.entities.FeedWithCount
 private const val ENTRY_COUNT = "(SELECT COUNT(*) FROM entries WHERE feedId IS f.feedId AND read = 0)"
 
 @Dao
-interface FeedDao {
+abstract class FeedDao {
     @get:Query("SELECT * FROM feeds WHERE isGroup = 0")
-    val allNonGroupFeeds: List<Feed>
+    abstract val allNonGroupFeeds: List<Feed>
 
     @get:Query("SELECT * FROM feeds ORDER BY groupId DESC, displayPriority ASC, feedId ASC")
-    val all: List<Feed>
+    abstract val all: List<Feed>
 
     @get:Query("SELECT * FROM feeds ORDER BY groupId DESC, displayPriority ASC, feedId ASC")
-    val observeAll: LiveData<List<Feed>>
+    abstract val observeAll: LiveData<List<Feed>>
 
     @get:Query("SELECT *, $ENTRY_COUNT AS entryCount FROM feeds AS f ORDER BY groupId DESC, displayPriority ASC, feedId ASC")
-    val observeAllWithCount: LiveData<List<FeedWithCount>>
+    abstract val observeAllWithCount: LiveData<List<FeedWithCount>>
 
     @Query("SELECT * FROM feeds WHERE feedId IS :id LIMIT 1")
-    fun findById(id: Long): Feed?
+    abstract fun findById(id: Long): Feed?
 
     @Query("UPDATE feeds SET retrieveFullText = 1 WHERE feedId = :feedId")
-    fun enableFullTextRetrieval(feedId: Long)
+    abstract fun enableFullTextRetrieval(feedId: Long)
 
     @Query("UPDATE feeds SET retrieveFullText = 0 WHERE feedId = :feedId")
-    fun disableFullTextRetrieval(feedId: Long)
+    abstract fun disableFullTextRetrieval(feedId: Long)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(vararg feeds: Feed)
+    abstract fun insert(vararg feeds: Feed)
 
     @Update
-    fun update(vararg feeds: Feed)
+    abstract fun update(vararg feeds: Feed)
 
     @Delete
-    fun delete(vararg feeds: Feed)
+    abstract fun delete(vararg feeds: Feed)
 }

@@ -149,7 +149,11 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 						newCount = refreshFeeds(acceptMinDate)
 					} else {
 						App.db.feedDao().findById(feedId)?.let {
-							newCount = refreshFeed(it, acceptMinDate)
+							try {
+								newCount = refreshFeed(it, acceptMinDate)
+							} catch (e: Exception) {
+								error("Can't fetch feed ${it.link}", e)
+							}
 						}
 					}
 
@@ -246,13 +250,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		}
 
 		fun addEntriesToMobilize(entryIds: List<String>) {
-			val newTasks = mutableListOf<Task>()
-			for (id in entryIds) {
-				val task = Task().apply {
-					entryId = id
-				}
-				newTasks.add(task)
-			}
+			val newTasks = entryIds.map { Task(entryId = it) }
 
 			App.db.taskDao().insert(*newTasks.toTypedArray())
 		}
@@ -467,7 +465,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			App.db.entryDao().insert(*(entriesToInsert.toTypedArray()))
 
 			if (feed.retrieveFullText) {
-				FetcherService.addEntriesToMobilize(entries.map { it.id })
+				addEntriesToMobilize(entries.map { it.id })
 			}
 
 			addImagesToDownload(imgUrlsToDownload)
