@@ -89,6 +89,8 @@ class EntriesFragment : Fragment() {
 
 	private val adapter = EntryAdapter({ entryWithFeed ->
 		navigator.goToEntryDetails(entryWithFeed.entry.id, entryIds!!)
+	}, { entryWithFeed ->
+		share(entryWithFeed.entry.link.orEmpty(), entryWithFeed.entry.title.orEmpty())
 	}, { entryWithFeed, view ->
 		entryWithFeed.entry.favorite = !entryWithFeed.entry.favorite
 
