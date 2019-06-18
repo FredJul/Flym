@@ -144,46 +144,73 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                         }
                     }
 
-                    if (newCount > 0) {
-                        if (!MainActivity.isInForeground) {
-                            val unread = App.db.entryDao().countUnread
-
-                            if (unread > 0) {
-                                val text = context.resources.getQuantityString(R.plurals.number_of_new_entries, unread.toInt(), unread)
-
-                                val notificationIntent = Intent(context, MainActivity::class.java).putExtra(MainActivity.EXTRA_FROM_NOTIF, true)
-                                val contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
-                                        PendingIntent.FLAG_UPDATE_CURRENT)
-
-                                val channelId = "notif_channel"
-
-                                @TargetApi(Build.VERSION_CODES.O)
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    val channel = NotificationChannel(channelId, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
-                                    context.notificationManager.createNotificationChannel(channel)
-                                }
-
-                                val notifBuilder = NotificationCompat.Builder(context, channelId)
-                                        .setContentIntent(contentIntent)
-                                        .setSmallIcon(R.drawable.ic_statusbar_rss)
-                                        .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
-                                        .setTicker(text)
-                                        .setWhen(System.currentTimeMillis())
-                                        .setAutoCancel(true)
-                                        .setContentTitle(context.getString(R.string.flym_feeds))
-                                        .setContentText(text)
-
-                                context.notificationManager.notify(0, notifBuilder.build())
-                            }
-                        } else {
-                            context.notificationManager.cancel(0)
-                        }
-                    }
-
+                    displayNotification(newCount)
                     mobilizeAllEntries()
                     downloadAllImages()
 
                     context.putPrefBoolean(PrefConstants.IS_REFRESHING, false)
+                }
+            }
+        }
+
+
+        /**
+         * Send a system notification if we have unread items
+         */
+        fun displayNotification(entryCount: Int = 0) {
+            val shouldDisplayNotification =
+                context.getPrefBoolean(PrefConstants.REFRESH_NOTIFICATION_ENABLED, true)
+            if (shouldDisplayNotification && entryCount > 0) {
+                if (!MainActivity.isInForeground) {
+                    val unread = App.db.entryDao().countUnread
+
+                    if (unread > 0) {
+                        val text = context.resources.getQuantityString(
+                            R.plurals.number_of_new_entries,
+                            unread.toInt(),
+                            unread
+                        )
+
+                        val notificationIntent = Intent(
+                            context,
+                            MainActivity::class.java
+                        ).putExtra(MainActivity.EXTRA_FROM_NOTIF, true)
+                        val contentIntent = PendingIntent.getActivity(
+                            context, 0, notificationIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                        )
+
+                        val channelId = "notif_channel"
+
+                        @TargetApi(Build.VERSION_CODES.O)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            val channel = NotificationChannel(
+                                channelId,
+                                context.getString(R.string.app_name),
+                                NotificationManager.IMPORTANCE_DEFAULT
+                            )
+                            context.notificationManager.createNotificationChannel(channel)
+                        }
+
+                        val notifBuilder = NotificationCompat.Builder(context, channelId)
+                            .setContentIntent(contentIntent)
+                            .setSmallIcon(R.drawable.ic_statusbar_rss)
+                            .setLargeIcon(
+                                BitmapFactory.decodeResource(
+                                    context.resources,
+                                    R.mipmap.ic_launcher
+                                )
+                            )
+                            .setTicker(text)
+                            .setWhen(System.currentTimeMillis())
+                            .setAutoCancel(true)
+                            .setContentTitle(context.getString(R.string.flym_feeds))
+                            .setContentText(text)
+
+                        context.notificationManager.notify(0, notifBuilder.build())
+                    }
+                } else {
+                    context.notificationManager.cancel(0)
                 }
             }
         }
