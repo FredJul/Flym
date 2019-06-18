@@ -29,8 +29,8 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
-import android.support.v4.app.NotificationCompat
 import android.text.Html
+import androidx.core.app.NotificationCompat
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
 import net.dankito.readability4j.extended.Readability4JExtended
@@ -122,10 +122,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				else -> { // == Constants.ACTION_REFRESH_FEEDS
 					context.putPrefBoolean(PrefConstants.IS_REFRESHING, true)
 
-					val readEntriesKeepTime = context.getPrefString(PrefConstants.KEEP_TIME, "4").toLong() * 86400000L
+					val readEntriesKeepTime = context.getPrefString(PrefConstants.KEEP_TIME, "4")!!.toLong() * 86400000L
 					val readEntriesKeepDate = if (readEntriesKeepTime > 0) System.currentTimeMillis() - readEntriesKeepTime else 0
 
-					val unreadEntriesKeepTime = context.getPrefString(PrefConstants.KEEP_TIME_UNREAD, "0").toLong() * 86400000L
+					val unreadEntriesKeepTime = context.getPrefString(PrefConstants.KEEP_TIME_UNREAD, "0")!!.toLong() * 86400000L
 					val unreadEntriesKeepDate = if (unreadEntriesKeepTime > 0) System.currentTimeMillis() - unreadEntriesKeepTime else 0
 
 					deleteOldEntries(readEntriesKeepDate, 1)
@@ -425,7 +425,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			}
 
 			// Third, we filter items containing forbidden keywords
-			val filterKeywordString = context.getPrefString(PrefConstants.FILTER_KEYWORDS, "")
+			val filterKeywordString = context.getPrefString(PrefConstants.FILTER_KEYWORDS, "")!!
 			if (filterKeywordString.isNotBlank()) {
 				val keywordLists = filterKeywordString.split(',').map { it.trim() }
 
@@ -572,6 +572,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			return
 		}
 
-		fetch(this, isFromAutoRefresh, intent.action, intent.getLongExtra(EXTRA_FEED_ID, 0L))
+		fetch(this, isFromAutoRefresh, intent.action!!, intent.getLongExtra(EXTRA_FEED_ID, 0L))
 	}
 }

@@ -24,12 +24,12 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
-import android.support.v4.content.FileProvider.getUriForFile
 import android.util.AttributeSet
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.core.content.FileProvider.getUriForFile
 import net.fred.feedex.R
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.utils.PrefConstants
@@ -87,7 +87,7 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
         setBackgroundColor(Color.parseColor(BACKGROUND_COLOR))
 
         // Text zoom level from preferences
-        val fontSize = context.getPrefString(PrefConstants.FONT_SIZE, "0").toInt()
+        val fontSize = context.getPrefString(PrefConstants.FONT_SIZE, "0")!!.toInt()
         if (fontSize != 0) {
             settings.textZoom = 100 + fontSize * 20
         }

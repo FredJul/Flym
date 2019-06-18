@@ -42,7 +42,7 @@ class AutoRefreshJobService : JobService() {
 			// DO NOT USE ANKO TO RETRIEVE THE SERVICE HERE (crash on API 21)
 			val jobSchedulerService = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
 
-			val time = Math.max(300, context.getPrefString(PrefConstants.REFRESH_INTERVAL, TWO_HOURS).toInt())
+            val time = Math.max(300, context.getPrefString(PrefConstants.REFRESH_INTERVAL, TWO_HOURS)!!.toInt())
 
 			if (context.getPrefBoolean(PrefConstants.REFRESH_ENABLED, true)) {
 				val builder = JobInfo.Builder(JOB_ID, ComponentName(context, AutoRefreshJobService::class.java))

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -41,7 +41,7 @@
 			android:text="@string/no_entries"
 			android:textColor="@android:color/darker_gray" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/read_all_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,9 +49,9 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_read_all_white_24dp" />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
 		android:id="@+id/bottom_navigation"
 		android:layout_width="0dp"
 		android:layout_height="65dp"
@@ -67,4 +67,4 @@
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:menu="@menu/menu_bottom_navigation_items"/>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

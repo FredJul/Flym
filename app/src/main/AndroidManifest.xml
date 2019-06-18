@@ -13,7 +13,8 @@
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
 		android:supportsRtl="true"
-		android:theme="@style/AppTheme">
+		android:theme="@style/AppTheme"
+		android:usesCleartextTraffic="true">
 
 		<activity
 			android:name="net.frju.flym.ui.main.MainActivity"
@@ -117,7 +118,7 @@
 		<service android:name="net.frju.flym.service.FetcherService"/>
 
 		<provider
-			android:name="android.support.v4.content.FileProvider"
+			android:name="androidx.core.content.FileProvider"
 			android:authorities="net.frju.flym.fileprovider"
 			android:exported="false"
 			android:grantUriPermissions="true">

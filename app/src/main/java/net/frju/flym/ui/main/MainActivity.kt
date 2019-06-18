@@ -21,7 +21,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -29,13 +28,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.OpenableColumns
-import android.support.v4.app.FragmentTransaction
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.PopupMenu
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.GravityCompat
 import androidx.core.view.isGone
-import androidx.core.widget.toast
+import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.rometools.opml.feed.opml.Attribute
 import com.rometools.opml.feed.opml.Opml
 import com.rometools.opml.feed.opml.Outline
@@ -66,26 +65,13 @@ import net.frju.flym.utils.closeKeyboard
 import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.putPrefBoolean
 import net.frju.flym.utils.setupNoActionBarTheme
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.browse
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textResource
-import org.jetbrains.anko.uiThread
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.BufferedInputStream
-import java.io.File
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.io.Reader
-import java.io.StringReader
-import java.io.Writer
+import java.io.*
 import java.net.URL
-import java.util.Date
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -530,7 +516,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		doAsync {
 			try {
 				OutputStreamWriter(contentResolver.openOutputStream(uri), Charsets.UTF_8).use { writer -> exportOpml(writer) }
-				contentResolver.query(uri, null, null, null, null).use { cursor ->
+				contentResolver.query(uri, null, null, null, null)?.use { cursor ->
 					if (cursor.moveToFirst()) {
 						val fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
 						uiThread { toast(String.format(getString(R.string.message_exported_to), fileName)) }

@@ -17,7 +17,7 @@
 
 package net.frju.flym.data.converters
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import java.util.*
 
 class Converters {

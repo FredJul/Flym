@@ -17,22 +17,22 @@
 
 package net.frju.flym.ui.entries
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
-import android.arch.paging.LivePagedListBuilder
-import android.arch.paging.PagedList
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_entries.*
 import kotlinx.android.synthetic.main.view_entry.view.*
 import kotlinx.android.synthetic.main.view_main_containers.*
@@ -344,7 +344,7 @@ class EntriesFragment : Fragment() {
 		recycler_view.emptyView = empty_view
 
 		recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-			override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
 				super.onScrollStateChanged(recyclerView, newState)
 				activity?.closeKeyboard()
 			}

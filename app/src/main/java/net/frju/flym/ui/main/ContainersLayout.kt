@@ -25,8 +25,6 @@ import android.animation.ObjectAnimator.ofFloat
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v4.view.animation.FastOutLinearInInterpolator
-import android.support.v4.view.animation.LinearOutSlowInInterpolator
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +32,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import kotlinx.android.synthetic.main.view_main_containers.view.*
 import net.fred.feedex.R
 import net.frju.flym.utils.onLaidOut
@@ -177,8 +177,8 @@ class ContainersLayout @JvmOverloads constructor(context: Context, attrs: Attrib
 	public override fun onRestoreInstanceState(parcelable: Parcelable) {
 		var superParcelable = parcelable
 		if (parcelable is Bundle) {
-			state = MainNavigator.State.valueOf(parcelable.getString(STATE_CONTAINERS_STATE))
-			superParcelable = parcelable.getParcelable<Parcelable>(STATE_SUPER)
+            state = MainNavigator.State.valueOf(parcelable.getString(STATE_CONTAINERS_STATE)!!)
+            superParcelable = parcelable.getParcelable(STATE_SUPER)!!
 		}
 		super.onRestoreInstanceState(superParcelable)
 	}

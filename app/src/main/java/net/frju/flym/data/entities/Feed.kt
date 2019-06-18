@@ -17,8 +17,8 @@
 
 package net.frju.flym.data.entities
 
-import android.arch.persistence.room.*
 import android.os.Parcelable
+import androidx.room.*
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.rometools.rome.feed.synd.SyndFeed
