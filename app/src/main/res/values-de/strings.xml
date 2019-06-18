@@ -93,6 +93,8 @@
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>
     <string name="settings_refresh_enabled">Automatisches Aktualisieren</string>
     <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren aller Feeds</string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Aktualisierungsintervall</string>
     <string name="settings_category_content_presentation">Anzeige der Inhalte</string>
     <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>

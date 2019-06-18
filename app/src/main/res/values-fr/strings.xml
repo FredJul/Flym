@@ -91,6 +91,8 @@
 	<string name="settings_category_refresh">Mise à jour automatique</string>
 	<string name="settings_refresh_enabled">Activer la mise à jour auto</string>
 	<string name="settings_refresh_enabled_description">Active la mise à jour automatique des flux</string>
+	<string name="settings_refresh_enable_notifications">Afficher les notifications de mise à jour</string>
+	<string name="settings_refresh_enable_notifications_description">Affiche une notification système à la fin d\'une mise à jour</string>
 	<string name="settings_refresh_interval">Intervalle de mise à jour</string>
 	<string name="settings_category_content_presentation">Présentation des flux</string>
 	<string name="settings_keep_time">Délai de conservation des flux lus</string>

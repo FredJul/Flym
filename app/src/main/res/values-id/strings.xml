@@ -70,6 +70,8 @@
     <string name="settings_category_refresh">Penyegaran otomatis</string>
     <string name="settings_refresh_enabled">Aktifkan penyegaran otomatis</string>
     <string name="settings_refresh_enabled_description">Mrngaktifkan penyegaran otomatis daftar feed</string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Interval penyegaran</string>
     <string name="settings_category_content_presentation">Presentasi konten</string>
     <string name="settings_keep_time">Lama entri yang sudah dibaca akan disimpan</string>

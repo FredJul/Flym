@@ -70,6 +70,8 @@
     <string name="settings_category_refresh">Automatisch verversen</string>
     <string name="settings_refresh_enabled">Automatisch verversen inschakelen</string>
     <string name="settings_refresh_enabled_description">Feeds automatisch verversen</string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Ververstussenpoos</string>
     <string name="settings_category_content_presentation">Inhoudsweergave</string>
     <string name="settings_keep_time">Hoe lang items moeten worden bewaard</string>

@@ -98,6 +98,8 @@
     <string name="settings_refresh_enabled">Обновлять автоматически</string>
     <string name="settings_refresh_enabled_description">Включить автоматическое обновление лент
     </string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Интервал обновления</string>
     <string name="settings_category_content_presentation">Представление содержания</string>
     <string name="settings_keep_time">Время хранения новостей</string>
