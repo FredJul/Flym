@@ -29,7 +29,7 @@
     <string name="cannot_find_feeds">No encontré fuentes</string>
     <string name="menu_settings">Configuración</string>
     <string name="menu_edit_feed">Modificar fuente</string>
-    <string name="menu_reorder">Reordenar feeds</string>
+    <string name="menu_reorder">Reordenar fuentes</string>
     <string name="menu_delete">Borrar</string>
     <string name="menu_enable_full_text_retrieval">Hablitar recuperación de texto completo</string>
     <string name="menu_disable_full_text_retrieval">Deshablitar recuperación de texto completo</string>
@@ -37,7 +37,7 @@
     <string name="flym_feeds">Fuentes de Flym</string>
     <string name="error">Error</string>
     <string name="network_error">No se ha configurado la red</string>
-    <string name="drawer_explanation">Bienbenido!\n\nPresión larga sobre una fuente para ver sus opciones ▼</string>
+    <string name="drawer_explanation">Bienvenido!\n\nManten pulsado sobre una fuente para ver sus opciones ▼</string>
     <string name="drawer_fetch_error_explanation">Algunas fuentes no se han actualizado bien ▼</string>
 
     <!-- FEEDS -->
