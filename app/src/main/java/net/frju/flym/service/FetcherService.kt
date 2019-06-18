@@ -43,22 +43,13 @@ import net.frju.flym.data.entities.Task
 import net.frju.flym.data.entities.toDbFormat
 import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.ui.main.MainActivity
-import net.frju.flym.utils.HtmlUtils
-import net.frju.flym.utils.getPrefBoolean
-import net.frju.flym.utils.getPrefString
-import net.frju.flym.utils.isOnline
-import net.frju.flym.utils.putPrefBoolean
-import net.frju.flym.utils.sha1
+import net.frju.flym.utils.*
 import okhttp3.Call
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.connectivityManager
-import org.jetbrains.anko.error
-import org.jetbrains.anko.notificationManager
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.*
 import org.jsoup.Jsoup
 import java.io.File
 import java.io.FileOutputStream
@@ -157,46 +148,71 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 						}
 					}
 
-					if (newCount > 0) {
-						if (!MainActivity.isInForeground) {
-							val unread = App.db.entryDao().countUnread
-
-							if (unread > 0) {
-								val text = context.resources.getQuantityString(R.plurals.number_of_new_entries, unread.toInt(), unread)
-
-								val notificationIntent = Intent(context, MainActivity::class.java).putExtra(MainActivity.EXTRA_FROM_NOTIF, true)
-								val contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
-										PendingIntent.FLAG_UPDATE_CURRENT)
-
-								val channelId = "notif_channel"
-
-								@TargetApi(Build.VERSION_CODES.O)
-								if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-									val channel = NotificationChannel(channelId, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
-									context.notificationManager.createNotificationChannel(channel)
-								}
-
-								val notifBuilder = NotificationCompat.Builder(context, channelId)
-										.setContentIntent(contentIntent)
-										.setSmallIcon(R.drawable.ic_statusbar_rss)
-										.setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
-										.setTicker(text)
-										.setWhen(System.currentTimeMillis())
-										.setAutoCancel(true)
-										.setContentTitle(context.getString(R.string.flym_feeds))
-										.setContentText(text)
-
-								context.notificationManager.notify(0, notifBuilder.build())
-							}
-						} else {
-							context.notificationManager.cancel(0)
-						}
-					}
-
+					showRefreshNotification(newCount)
 					mobilizeAllEntries()
 					downloadAllImages()
 
 					context.putPrefBoolean(PrefConstants.IS_REFRESHING, false)
+				}
+			}
+		}
+
+		private fun showRefreshNotification(itemCount: Int = 0) {
+
+			val shouldDisplayNotification =
+				context.getPrefBoolean(PrefConstants.REFRESH_NOTIFICATION_ENABLED, true)
+
+			if (shouldDisplayNotification && itemCount > 0) {
+				if (!MainActivity.isInForeground) {
+					val unread = App.db.entryDao().countUnread
+
+					if (unread > 0) {
+						val text = context.resources.getQuantityString(
+							R.plurals.number_of_new_entries,
+							unread.toInt(),
+							unread
+						)
+
+						val notificationIntent = Intent(
+							context,
+							MainActivity::class.java
+						).putExtra(MainActivity.EXTRA_FROM_NOTIF, true)
+						val contentIntent = PendingIntent.getActivity(
+							context, 0, notificationIntent,
+							PendingIntent.FLAG_UPDATE_CURRENT
+						)
+
+						val channelId = "notif_channel"
+
+						@TargetApi(Build.VERSION_CODES.O)
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+							val channel = NotificationChannel(
+								channelId,
+								context.getString(R.string.app_name),
+								NotificationManager.IMPORTANCE_DEFAULT
+							)
+							context.notificationManager.createNotificationChannel(channel)
+						}
+
+						val notifBuilder = NotificationCompat.Builder(context, channelId)
+							.setContentIntent(contentIntent)
+							.setSmallIcon(R.drawable.ic_statusbar_rss)
+							.setLargeIcon(
+								BitmapFactory.decodeResource(
+									context.resources,
+									R.mipmap.ic_launcher
+								)
+							)
+							.setTicker(text)
+							.setWhen(System.currentTimeMillis())
+							.setAutoCancel(true)
+							.setContentTitle(context.getString(R.string.flym_feeds))
+							.setContentText(text)
+
+						context.notificationManager.notify(0, notifBuilder.build())
+					}
+				} else {
+					context.notificationManager.cancel(0)
 				}
 			}
 		}
