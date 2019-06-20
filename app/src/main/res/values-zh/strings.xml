@@ -91,8 +91,8 @@
     <string name="settings_category_refresh">自动刷新</string>
     <string name="settings_refresh_enabled">开启自动刷新</string>
     <string name="settings_refresh_enabled_description">开启自动刷新</string>
-    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
-    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
+    <string name="settings_refresh_enable_notifications">显示刷新通知</string>
+    <string name="settings_refresh_enable_notifications_description">刷新完成时显示系统通知</string>
     <string name="settings_refresh_interval">刷新间隔</string>
     <string name="settings_category_content_presentation">内容介绍</string>
     <string name="settings_keep_time">已读文章保存时间</string>
