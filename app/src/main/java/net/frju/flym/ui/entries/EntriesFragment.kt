@@ -21,7 +21,12 @@ import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.os.Handler
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -47,15 +52,20 @@ import net.frju.flym.utils.closeKeyboard
 import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.registerOnPrefChangeListener
 import net.frju.flym.utils.unregisterOnPrefChangeListener
-import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource
+import org.jetbrains.anko.attr
+import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.colorAttr
 import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.support.v4.share
+import org.jetbrains.anko.uiThread
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
-import java.util.*
+import java.util.Date
 
 
 class EntriesFragment : Fragment() {
@@ -173,7 +183,7 @@ class EntriesFragment : Fragment() {
 						}
 					}
 
-					longSnackbar(coordinator, R.string.marked_as_read, R.string.undo) { _ ->
+					coordinator.longSnackbar(R.string.marked_as_read, R.string.undo) { _ ->
 						doAsync {
 							// TODO check if limit still needed
 							entryIds.withIndex().groupBy { it.index / 300 }.map { pair -> pair.value.map { it.value } }.forEach {
@@ -320,7 +330,7 @@ class EntriesFragment : Fragment() {
 							App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
 						}
 
-						longSnackbar(coordinator, R.string.marked_as_read, R.string.undo) { _ ->
+						coordinator.longSnackbar(R.string.marked_as_read, R.string.undo) { _ ->
 							doAsync {
 								if (entryWithFeed.entry.read) {
 									App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
@@ -346,7 +356,7 @@ class EntriesFragment : Fragment() {
 		recycler_view.emptyView = empty_view
 
 		recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+			override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
 				super.onScrollStateChanged(recyclerView, newState)
 				activity?.closeKeyboard()
 			}
