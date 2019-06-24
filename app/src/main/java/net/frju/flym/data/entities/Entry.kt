@@ -17,15 +17,15 @@
 
 package net.frju.flym.data.entities
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.Index
-import android.arch.persistence.room.PrimaryKey
 import android.content.Context
 import android.os.Parcelable
 import android.text.Html
 import android.text.format.DateFormat
 import android.text.format.DateUtils
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.rometools.rome.feed.synd.SyndEntry
 import kotlinx.android.parcel.Parcelize
 import net.frju.flym.utils.sha1

@@ -70,9 +70,12 @@
     <string name="settings_category_refresh">Аутоматско освежавање</string>
     <string name="settings_refresh_enabled">Омогући аутоматско освежавање</string>
     <string name="settings_refresh_enabled_description">Омогући аутоматско освежавање довода</string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Интервал освежења</string>
     <string name="settings_category_content_presentation">Приказ садржаја</string>
     <string name="settings_keep_time">Време чувања чланака</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Прикажи слике</string>
     <string name="settings_display_images_description">Прикажи слике унутар чланака</string>
     <string name="settings_preload_image_mode">Унапред учитај слике</string>

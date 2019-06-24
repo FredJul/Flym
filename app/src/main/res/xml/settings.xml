@@ -16,6 +16,14 @@
             android:summary="@string/settings_refresh_enabled_description"
             android:title="@string/settings_refresh_enabled" />
 
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="enable_refresh_notification"
+            android:summary="@string/settings_refresh_enable_notifications_description"
+            android:title="@string/settings_refresh_enable_notifications" />
+
         <net.frju.flym.ui.views.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,6 +75,15 @@
             android:inputType="number"
             android:key="keep_time"
             android:title="@string/settings_keep_time" />
+        <net.frju.flym.ui.views.AutoSummaryListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="0"
+            android:entries="@array/settings_keep_times"
+            android:entryValues="@array/settings_keep_time_values"
+            android:inputType="number"
+            android:key="keep_time_unread"
+            android:title="@string/settings_keep_time_unread" />
 
         <net.frju.flym.ui.views.AutoSummaryListPreference
             android:layout_width="wrap_content"

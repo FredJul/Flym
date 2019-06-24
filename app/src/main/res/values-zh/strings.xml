@@ -91,9 +91,12 @@
     <string name="settings_category_refresh">自动刷新</string>
     <string name="settings_refresh_enabled">开启自动刷新</string>
     <string name="settings_refresh_enabled_description">开启自动刷新</string>
+    <string name="settings_refresh_enable_notifications">显示刷新通知</string>
+    <string name="settings_refresh_enable_notifications_description">刷新完成时显示系统通知</string>
     <string name="settings_refresh_interval">刷新间隔</string>
     <string name="settings_category_content_presentation">内容介绍</string>
-    <string name="settings_keep_time">文章保存时间</string>
+    <string name="settings_keep_time">已读文章保存时间</string>
+    <string name="settings_keep_time_unread">未读文章保存时间</string>
     <string name="settings_display_images">显示图片</string>
     <string name="settings_display_images_description">在文章中显示图片</string>
     <string name="settings_preload_image_mode">预先加载图片</string>
@@ -107,8 +110,8 @@
     <string name="settings_theme">主题</string>
     <string name="open_browser_direct">直接在默认浏览器中打开</string>
     <string name="open_browser_direct_title">在浏览器中打开</string>
-    <string name="refresh_on_startup">Refreshes your feeds when launching the app</string>
-    <string name="refresh_on_startup_title">Refresh on startup</string>
+    <string name="refresh_on_startup">启动应用时刷新你的订阅源</string>
+    <string name="refresh_on_startup_title">启动时刷新</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">1 篇新文章</item>

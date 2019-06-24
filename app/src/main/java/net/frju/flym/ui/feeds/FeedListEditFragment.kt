@@ -18,12 +18,12 @@
 package net.frju.flym.ui.feeds
 
 import android.app.AlertDialog
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import android.widget.EditText
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_feed_list_edit.view.*
 import net.fred.feedex.R
 import net.frju.flym.App

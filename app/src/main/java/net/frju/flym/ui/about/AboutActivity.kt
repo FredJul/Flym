@@ -18,8 +18,8 @@
 package net.frju.flym.ui.about
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.vansuita.materialabout.builder.AboutBuilder
 import net.fred.feedex.R
 import net.frju.flym.utils.setupTheme

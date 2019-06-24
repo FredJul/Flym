@@ -56,7 +56,7 @@
     <string name="menu_mark_as_unread">Markeren als ongelezen</string>
     <string name="get_full_text">Volledige tekst ophalen</string>
     <string name="original_text">Oorspronkelijke tekst tonen</string>
-    <string name="open_in_browser">Bekijken in webbrowser</string>
+    <string name="open_in_browser">Open in webbrowser</string>
     <string name="cant_open_link">Geen app aangetroffen die deze link kan openen</string>
     <string name="unreads">Ongelezen</string>
     <string name="all">Alles</string>
@@ -70,24 +70,27 @@
     <string name="settings_category_refresh">Automatisch verversen</string>
     <string name="settings_refresh_enabled">Automatisch verversen inschakelen</string>
     <string name="settings_refresh_enabled_description">Feeds automatisch verversen</string>
+    <string name="settings_refresh_enable_notifications">Notificatie bij verversen</string>
+    <string name="settings_refresh_enable_notifications_description">Laat een notificatie zien zodra het verversen is voltooid</string>
     <string name="settings_refresh_interval">Ververstussenpoos</string>
     <string name="settings_category_content_presentation">Inhoudsweergave</string>
-    <string name="settings_keep_time">Hoe lang items moeten worden bewaard</string>
+    <string name="settings_keep_time">Hoe lang gelezen items bewaard moeten worden</string>
+    <string name="settings_keep_time_unread">Hoe lang ongelezen items bewaard moeten worden</string>
     <string name="settings_display_images">Afbeeldingen tonen</string>
     <string name="settings_display_images_description">Afbeeldingen tonen in feeditems</string>
-    <string name="settings_preload_image_mode">Afbeeldingen vooraf inladen</string>
+    <string name="settings_preload_image_mode">Afbeeldingen vooraf downloaden</string>
     <string name="settings_font_size">Tekstgrootte</string>
     <string name="settings_refresh_wifi_only">Alleen verversen via Wi-Fi</string>
-    <string name="settings_refresh_wifi_only_description">De app zal alleen automatisch verversen als er een Wi-Fi-verbinding beschikbaar is</string>
+    <string name="settings_refresh_wifi_only_description">De app zal alleen automatisch verversen als er een WiFi-verbinding beschikbaar is</string>
     <string name="settings_category_filter">Filters</string>
-    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
-    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <string name="settings_theme">Theme</string>
-    <string name="open_browser_direct">Open entries directly in your default browser</string>
-    <string name="open_browser_direct_title">Open in browser</string>
-    <string name="refresh_on_startup">Refreshes your feeds when launching the app</string>
-    <string name="refresh_on_startup_title">Refresh on startup</string>
+    <string name="settings_remove_duplicates_description_title">Dubbele items verwijderen</string>
+    <string name="settings_remove_duplicates_description">Controleert de titel van nieuw gedownloadde items en slaat het item over als dezelfde titel al beschikbaar is</string>
+    <string name="filter">Verwijder items adv zoekwoorden (komma-gescheiden lijst)</string>
+    <string name="settings_theme">Thema</string>
+    <string name="open_browser_direct">Open items direct in de standaardbrowser</string>
+    <string name="open_browser_direct_title">Openen in browser</string>
+    <string name="refresh_on_startup">Ververst de feeds wanneer de app gestart wordt</string>
+    <string name="refresh_on_startup_title">Ververs bij opstarten</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Eén nieuw item</item>
@@ -129,8 +132,8 @@
         <item>Altijd</item>
     </string-array>
     <string-array name="settings_themes">
-        <item>Light</item>
-        <item>Dark</item>
-        <item>Black</item>
+        <item>Licht</item>
+        <item>Donker</item>
+        <item>Zwart</item>
     </string-array>
 </resources>

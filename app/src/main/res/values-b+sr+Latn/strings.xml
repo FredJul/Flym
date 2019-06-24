@@ -70,9 +70,12 @@
     <string name="settings_category_refresh">Automatsko osvežavanje</string>
     <string name="settings_refresh_enabled">Omogući automatsko osvežavanje</string>
     <string name="settings_refresh_enabled_description">Omogući automatsko osvežavanje dovoda</string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Interval osveženja</string>
     <string name="settings_category_content_presentation">Prikaz sadržaja</string>
     <string name="settings_keep_time">Vreme čuvanja članaka</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Prikaži slike</string>
     <string name="settings_display_images_description">Prikaži slike unutar članaka</string>
     <string name="settings_preload_image_mode">Unapred učitaj slike</string>

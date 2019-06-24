@@ -92,9 +92,12 @@
     <string name="settings_category_refresh">Automatické načítavanie</string>
     <string name="settings_refresh_enabled">Povoliť automatické načítávanie</string>
     <string name="settings_refresh_enabled_description">Povolí automatické načítavanie článkov</string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Interval načítavania</string>
     <string name="settings_category_content_presentation">Prezentácia obsahu</string>
     <string name="settings_keep_time">Čas na ktorý budú články uložené</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Zobrazovať obrázky</string>
     <string name="settings_display_images_description">Zobrazovať obrázky v článkoch</string>
     <string name="settings_preload_image_mode">Načítať obrázky</string>

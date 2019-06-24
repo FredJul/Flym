@@ -98,9 +98,12 @@
     <string name="settings_refresh_enabled">Freskatze automatikoa gaitu</string>
     <string name="settings_refresh_enabled_description">Jarioen freskatze automatikoa gaitu
     </string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Freskatze tartea</string>
     <string name="settings_category_content_presentation">Edukien aurkezpena</string>
     <string name="settings_keep_time">Sarrerak gordeta mantenduko diren denbora</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Irudiak erakutsi</string>
     <string name="settings_display_images_description">Irudiak erakutsi sarreretan</string>
     <string name="settings_preload_image_mode">Irudiak aurretik kargatu</string>
