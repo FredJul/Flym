@@ -34,8 +34,8 @@
     <string name="menu_edit_feed">Feed bearbeiten</string>
     <string name="menu_reorder">Feeds neu ordnen</string>
     <string name="menu_delete">Löschen</string>
-    <string name="menu_enable_full_text_retrieval">Volltextsuche aktivieren</string>
-    <string name="menu_disable_full_text_retrieval">Volltextsuche deaktivieren</string>
+    <string name="menu_enable_full_text_retrieval">Ganzen Text abrufen</string>
+    <string name="menu_disable_full_text_retrieval">Nur Teaser abrufen</string>
     <string name="menu_all_read">Alle als gelesen markieren</string>
     <string name="flym_feeds">Flym-Feeds</string>
     <string name="error">Fehler</string>
@@ -50,9 +50,8 @@
     <string name="menu_export">Nach OPML exportieren</string>
     <string name="storage_request_explanation">Um Feeds aus/in eine(r) Datei zu importieren/exportieren, muss das Programm die Berechtigung haben auf den Speicher zuzugreifen.</string>
     <string name="error_feed_export">Der Export ist fehlgeschlagen. Stelle sicher, dass eine beschreibbare SD-Karte eingelegt ist.</string>
-    <string name="error_external_storage_not_available">Der externe Speicher (z.B. SD-Karte) ist nicht verfügbar.</string>
     <string name="feed_search">Feed-Suche</string>
-	<string name="feed_search_hint">Feed-Link oder Suchbegriff eingeben</string>
+    <string name="feed_search_hint">Feed-Link oder Suchbegriff eingeben</string>
     <string name="feed_added">Feed zur Liste hinzugefügt</string>
     <string name="question_delete_feed">Willst du diesen Feed wirklich löschen?</string>
     <string name="question_delete_group">Willst du diese Gruppe mit allen Feeds wirklich löschen?</string>
@@ -78,9 +77,9 @@
     <string name="menu_unstar">Entfavorisieren</string>
     <string name="menu_share">Teilen</string>
     <string name="menu_mark_as_unread">Als ungelesen markieren</string>
-    <string name="get_full_text">Vollen Text abrufen</string>
+    <string name="get_full_text">Ganzen Text abrufen</string>
     <string name="original_text">Ursprünglichen Text anzeigen</string>
-	<string name="open_in_browser">Im Browser ansehen</string>
+    <string name="open_in_browser">Im Browser ansehen</string>
     <string name="cant_open_link">Keine Anwendung für diesen Link gefunden</string>
     <string name="unreads">Ungelesen</string>
     <string name="all">Alle</string>
@@ -88,20 +87,33 @@
     <string name="no_entries">Keine Artikel\nZum Aktualisieren bitte nach unten ziehen</string>
     <string name="undo">Rückgängig</string>
     <string name="marked_as_read">Als gelesen markieren</string>
+    <string name="marked_as_unread">Als ungelesen markieren</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>
     <string name="settings_refresh_enabled">Automatisches Aktualisieren</string>
     <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren aller Feeds</string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Aktualisierungsintervall</string>
     <string name="settings_category_content_presentation">Anzeige der Inhalte</string>
     <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Bilder anzeigen</string>
     <string name="settings_display_images_description">Bilder in den Einträgen anzeigen</string>
     <string name="settings_preload_image_mode">Bilder vorab laden</string>
     <string name="settings_font_size">Textgröße</string>
     <string name="settings_refresh_wifi_only">Nur über WLAN aktualisieren</string>
     <string name="settings_refresh_wifi_only_description">Die automatische Aktualisierung wird nur bei aktiver WLAN-Verbindung durchgeführt</string>
+    <string name="settings_category_filter">Filter</string>
+    <string name="settings_remove_duplicates_description_title">Duplikate entfernen</string>
+    <string name="settings_remove_duplicates_description">Untersucht Titel von neu heruntergeladenen Einträgen. Überspringt, wenn ein Eintrag mit demselben Titel bereits vorhanden ist</string>
+    <string name="filter">Einträge, welche nachfolgende Schlüsselworte beinhalten, entfernen (kommaseparierte Liste)</string>
+    <string name="settings_theme">Thema</string>
+    <string name="open_browser_direct">Einträge direkt in deinem Standardbrowser öffnen</string>
+    <string name="open_browser_direct_title">Im Browser öffnen</string>
+    <string name="refresh_on_startup">Aktualisiert alle Feeds, sobald die Anwendung gestartet wird</string>
+    <string name="refresh_on_startup_title">Beim Start aktualisieren</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Eintrag</item>
@@ -142,5 +154,9 @@
         <item>Nur über WLAN</item>
         <item>Immer</item>
     </string-array>
-
+    <string-array name="settings_themes">
+        <item>Hell</item>
+        <item>Dunkel</item>
+        <item>Schwarz</item>
+    </string-array>
 </resources>

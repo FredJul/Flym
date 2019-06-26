@@ -18,16 +18,19 @@
 package net.frju.flym.ui.settings
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import net.fred.feedex.R
 import net.frju.flym.data.utils.PrefUtils
+import net.frju.flym.utils.setupTheme
 import net.frju.flym.data.tasks.DeleteAllFiltersTask
 import net.frju.flym.data.tasks.InsertFiltersTask
 
 class SettingsActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
+		setupTheme()
+
 		super.onCreate(savedInstanceState)
 
 		setContentView(R.layout.activity_settings)

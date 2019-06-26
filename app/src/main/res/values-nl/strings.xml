@@ -27,7 +27,6 @@
     <string name="menu_export">Exporteren naar OPML</string>
     <string name="storage_request_explanation">Als je feeds van/naar een bestand wilt importeren/exporteren, dan moet je de app toegang geven tot je opslag.</string>
     <string name="error_feed_export">Het exporteren is mislukt. Zorg ervoor dat je een beschrijfbare SD-kaart in de telefoon hebt gestopt.</string>
-    <string name="error_external_storage_not_available">De externe opslag (bijv. de SD-kaart) is niet beschikbaar.</string>
     <string name="feed_search">Feeds zoeken</string>
     <string name="feed_search_hint">Voeg een feedlink toe of een zoekterm in</string>
     <string name="feed_added">Feed toegevoegd aan lijst</string>
@@ -57,7 +56,7 @@
     <string name="menu_mark_as_unread">Markeren als ongelezen</string>
     <string name="get_full_text">Volledige tekst ophalen</string>
     <string name="original_text">Oorspronkelijke tekst tonen</string>
-    <string name="open_in_browser">Bekijken in webbrowser</string>
+    <string name="open_in_browser">Open in webbrowser</string>
     <string name="cant_open_link">Geen app aangetroffen die deze link kan openen</string>
     <string name="unreads">Ongelezen</string>
     <string name="all">Alles</string>
@@ -65,20 +64,33 @@
     <string name="no_entries">Geen items\nTrek omlaag om te verversen</string>
     <string name="undo">Ongedaan maken</string>
     <string name="marked_as_read">Gemarkeerd als gelezen</string>
+    <string name="marked_as_unread">Marked as unread</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisch verversen</string>
     <string name="settings_refresh_enabled">Automatisch verversen inschakelen</string>
     <string name="settings_refresh_enabled_description">Feeds automatisch verversen</string>
+    <string name="settings_refresh_enable_notifications">Notificatie bij verversen</string>
+    <string name="settings_refresh_enable_notifications_description">Laat een notificatie zien zodra het verversen is voltooid</string>
     <string name="settings_refresh_interval">Ververstussenpoos</string>
     <string name="settings_category_content_presentation">Inhoudsweergave</string>
-    <string name="settings_keep_time">Hoe lang items moeten worden bewaard</string>
+    <string name="settings_keep_time">Hoe lang gelezen items bewaard moeten worden</string>
+    <string name="settings_keep_time_unread">Hoe lang ongelezen items bewaard moeten worden</string>
     <string name="settings_display_images">Afbeeldingen tonen</string>
     <string name="settings_display_images_description">Afbeeldingen tonen in feeditems</string>
-    <string name="settings_preload_image_mode">Afbeeldingen vooraf inladen</string>
+    <string name="settings_preload_image_mode">Afbeeldingen vooraf downloaden</string>
     <string name="settings_font_size">Tekstgrootte</string>
     <string name="settings_refresh_wifi_only">Alleen verversen via Wi-Fi</string>
-    <string name="settings_refresh_wifi_only_description">De app zal alleen automatisch verversen als er een Wi-Fi-verbinding beschikbaar is</string>
+    <string name="settings_refresh_wifi_only_description">De app zal alleen automatisch verversen als er een WiFi-verbinding beschikbaar is</string>
+    <string name="settings_category_filter">Filters</string>
+    <string name="settings_remove_duplicates_description_title">Dubbele items verwijderen</string>
+    <string name="settings_remove_duplicates_description">Controleert de titel van nieuw gedownloadde items en slaat het item over als dezelfde titel al beschikbaar is</string>
+    <string name="filter">Verwijder items adv zoekwoorden (komma-gescheiden lijst)</string>
+    <string name="settings_theme">Thema</string>
+    <string name="open_browser_direct">Open items direct in de standaardbrowser</string>
+    <string name="open_browser_direct_title">Openen in browser</string>
+    <string name="refresh_on_startup">Ververst de feeds wanneer de app gestart wordt</string>
+    <string name="refresh_on_startup_title">Ververs bij opstarten</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Eén nieuw item</item>
@@ -118,5 +130,10 @@
         <item>Nooit</item>
         <item>Alleen via Wi-Fi</item>
         <item>Altijd</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Licht</item>
+        <item>Donker</item>
+        <item>Zwart</item>
     </string-array>
 </resources>

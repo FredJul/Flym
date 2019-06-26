@@ -28,6 +28,9 @@ import kotlinx.android.synthetic.main.view_feed.view.*
 import net.fred.feedex.R
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.FeedWithCount
+import net.frju.flym.data.utils.PrefConstants
+import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.getPrefString
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.sdk21.listeners.onLongClick
@@ -45,7 +48,7 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 
 	open val layoutId = R.layout.view_feed
 
-	open fun bindItem(itemView: View, feed: FeedWithCount) {
+	open fun bindItem(itemView: View, feedWithCount: FeedWithCount) {
 	}
 
 	open fun bindItem(itemView: View, group: FeedGroup) {
@@ -103,25 +106,45 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 		fun bindItem(group: FeedGroup) {
 			if (group.feedWithCount.feed.isGroup) {
 				if (isExpanded) {
-					itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_up_white_24dp)
+					itemView.icon.setImageResource(
+							when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
+								"LIGHT" -> R.drawable.ic_keyboard_arrow_up_black_24dp
+								else -> R.drawable.ic_keyboard_arrow_up_white_24dp
+							})
 				} else {
-					itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_down_white_24dp)
+					itemView.icon.setImageResource(
+							when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
+								"LIGHT" -> R.drawable.ic_keyboard_arrow_down_black_24dp
+								else -> R.drawable.ic_keyboard_arrow_down_white_24dp
+							})
 				}
 
 				itemView.icon.isClickable = true
 				itemView.icon.onClick {
 					if (isExpanded) {
-						itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_down_white_24dp)
+						itemView.icon.setImageResource(
+								when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
+									"LIGHT" -> R.drawable.ic_keyboard_arrow_down_black_24dp
+									else -> R.drawable.ic_keyboard_arrow_down_white_24dp
+								})
 						collapseView()
 					} else {
-						itemView.icon.setImageResource(R.drawable.ic_keyboard_arrow_up_white_24dp)
+						itemView.icon.setImageResource(
+								when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
+									"LIGHT" -> R.drawable.ic_keyboard_arrow_up_black_24dp
+									else -> R.drawable.ic_keyboard_arrow_up_white_24dp
+								})
 						expandView()
 					}
 				}
 			} else {
 				itemView.icon.isClickable = false
 				if (group.feedWithCount.feed.id == Feed.ALL_ENTRIES_ID) {
-					itemView.icon.setImageResource(R.drawable.ic_list_white_24dp)
+					itemView.icon.setImageResource(
+							when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
+								"LIGHT" -> R.drawable.ic_list_black_24dp
+								else -> R.drawable.ic_list_white_24dp
+							})
 				} else {
 					itemView.icon.setImageDrawable(group.feedWithCount.feed.getLetterDrawable(true))
 				}
@@ -131,7 +154,11 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
             if (group.feedWithCount.feed.fetchError || group.subFeeds.any { it.feed.fetchError }) {
                 itemView.title.setTextColor(Color.RED) //TODO better
 			} else {
-				itemView.title.setTextColor(Color.WHITE)
+                itemView.title.setTextColor(
+						when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
+							"LIGHT" -> Color.BLACK
+							else -> Color.WHITE
+						})
 			}
 			itemView.setPadding(0, 0, 0, 0)
 			itemView.onClick {
@@ -156,7 +183,11 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
 			if (feedWithCount.feed.fetchError) { //TODO better
 				itemView.title.setTextColor(Color.RED)
 			} else {
-				itemView.title.setTextColor(Color.WHITE)
+                itemView.title.setTextColor(
+						when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
+							"LIGHT" -> Color.BLACK
+							else -> Color.WHITE
+						})
 			}
 			itemView.icon.isClickable = false
 			itemView.icon.setImageDrawable(feedWithCount.feed.getLetterDrawable(true))

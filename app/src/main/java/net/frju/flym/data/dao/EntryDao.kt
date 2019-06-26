@@ -17,9 +17,9 @@
 
 package net.frju.flym.data.dao
 
-import android.arch.lifecycle.LiveData
-import android.arch.paging.DataSource
-import android.arch.persistence.room.*
+import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
+import androidx.room.*
 import net.frju.flym.data.entities.Entry
 import net.frju.flym.data.entities.EntryWithFeed
 
@@ -31,88 +31,91 @@ private const val FEED_ID = "entries.feedId IS :feedId"
 private const val LIKE_SEARCH = "LIKE '%' || :searchText || '%'"
 
 @Dao
-interface EntryDao {
+abstract class EntryDao {
 
 	@Query("SELECT $LIGHT_SELECT FROM $JOIN WHERE title $LIKE_SEARCH OR description $LIKE_SEARCH OR mobilizedContent $LIKE_SEARCH $ORDER_BY")
-	fun observeSearch(searchText: String): DataSource.Factory<Int, EntryWithFeed>
+	abstract fun observeSearch(searchText: String): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT $LIGHT_SELECT FROM $JOIN WHERE $OLDER $ORDER_BY")
-	fun observeAll(maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
+	abstract fun observeAll(maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT $LIGHT_SELECT FROM $JOIN WHERE $OLDER AND read = 0 $ORDER_BY")
-	fun observeAllUnreads(maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
+	abstract fun observeAllUnreads(maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT $LIGHT_SELECT FROM $JOIN WHERE $OLDER AND favorite = 1 $ORDER_BY")
-	fun observeAllFavorites(maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
+	abstract fun observeAllFavorites(maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT id FROM entries WHERE $OLDER $ORDER_BY")
-	fun observeAllIds(maxDate: Long): LiveData<List<String>>
+	abstract fun observeAllIds(maxDate: Long): LiveData<List<String>>
 
 	@Query("SELECT id FROM entries WHERE $OLDER AND read = 0 $ORDER_BY")
-	fun observeAllUnreadIds(maxDate: Long): LiveData<List<String>>
+	abstract fun observeAllUnreadIds(maxDate: Long): LiveData<List<String>>
 
 	@Query("SELECT id FROM entries WHERE $OLDER AND favorite = 1 $ORDER_BY")
-	fun observeAllFavoriteIds(maxDate: Long): LiveData<List<String>>
+	abstract fun observeAllFavoriteIds(maxDate: Long): LiveData<List<String>>
 
 	@Query("SELECT $LIGHT_SELECT FROM $JOIN WHERE $FEED_ID AND $OLDER $ORDER_BY")
-	fun observeByFeed(feedId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
+	abstract fun observeByFeed(feedId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT $LIGHT_SELECT FROM $JOIN WHERE $FEED_ID AND $OLDER AND read = 0 $ORDER_BY")
-	fun observeUnreadsByFeed(feedId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
+	abstract fun observeUnreadsByFeed(feedId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT $LIGHT_SELECT FROM $JOIN WHERE $FEED_ID AND $OLDER AND favorite = 1 $ORDER_BY")
-	fun observeFavoritesByFeed(feedId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
+	abstract fun observeFavoritesByFeed(feedId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT id FROM entries WHERE title $LIKE_SEARCH OR description $LIKE_SEARCH OR mobilizedContent $LIKE_SEARCH $ORDER_BY")
-	fun observeIdsBySearch(searchText: String): LiveData<List<String>>
+	abstract fun observeIdsBySearch(searchText: String): LiveData<List<String>>
 
 	@Query("SELECT id FROM entries WHERE feedId IS :feedId AND $OLDER $ORDER_BY")
-	fun observeIdsByFeed(feedId: Long, maxDate: Long): LiveData<List<String>>
+	abstract fun observeIdsByFeed(feedId: Long, maxDate: Long): LiveData<List<String>>
 
 	@Query("SELECT id FROM entries WHERE feedId IS :feedId AND $OLDER AND read = 0 $ORDER_BY")
-	fun observeUnreadIdsByFeed(feedId: Long, maxDate: Long): LiveData<List<String>>
+	abstract fun observeUnreadIdsByFeed(feedId: Long, maxDate: Long): LiveData<List<String>>
 
 	@Query("SELECT id FROM entries WHERE feedId IS :feedId AND $OLDER AND favorite = 1 $ORDER_BY")
-	fun observeFavoriteIdsByFeed(feedId: Long, maxDate: Long): LiveData<List<String>>
+	abstract fun observeFavoriteIdsByFeed(feedId: Long, maxDate: Long): LiveData<List<String>>
 
 	@Query("SELECT $LIGHT_SELECT FROM $JOIN WHERE groupId IS :groupId AND $OLDER $ORDER_BY")
-	fun observeByGroup(groupId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
+	abstract fun observeByGroup(groupId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT $LIGHT_SELECT FROM $JOIN WHERE groupId IS :groupId AND $OLDER AND read = 0 $ORDER_BY")
-	fun observeUnreadsByGroup(groupId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
+	abstract fun observeUnreadsByGroup(groupId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT $LIGHT_SELECT FROM $JOIN WHERE groupId IS :groupId AND $OLDER AND favorite = 1 $ORDER_BY")
-	fun observeFavoritesByGroup(groupId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
+	abstract fun observeFavoritesByGroup(groupId: Long, maxDate: Long): DataSource.Factory<Int, EntryWithFeed>
 
 	@Query("SELECT id FROM $JOIN WHERE groupId IS :groupId AND $OLDER $ORDER_BY")
-	fun observeIdsByGroup(groupId: Long, maxDate: Long): LiveData<List<String>>
+	abstract fun observeIdsByGroup(groupId: Long, maxDate: Long): LiveData<List<String>>
 
 	@Query("SELECT id FROM $JOIN WHERE groupId IS :groupId AND $OLDER AND read = 0 $ORDER_BY")
-	fun observeUnreadIdsByGroup(groupId: Long, maxDate: Long): LiveData<List<String>>
+	abstract fun observeUnreadIdsByGroup(groupId: Long, maxDate: Long): LiveData<List<String>>
 
 	@Query("SELECT id FROM $JOIN WHERE groupId IS :groupId AND $OLDER AND favorite = 1 $ORDER_BY")
-	fun observeFavoriteIdsByGroup(groupId: Long, maxDate: Long): LiveData<List<String>>
+	abstract fun observeFavoriteIdsByGroup(groupId: Long, maxDate: Long): LiveData<List<String>>
 
 	@Query("SELECT COUNT(*) FROM entries WHERE read = 0 AND fetchDate > :minDate")
-	fun observeNewEntriesCount(minDate: Long): LiveData<Long>
+	abstract fun observeNewEntriesCount(minDate: Long): LiveData<Long>
 
 	@Query("SELECT COUNT(*) FROM entries WHERE $FEED_ID AND read = 0 AND fetchDate > :minDate")
-	fun observeNewEntriesCountByFeed(feedId: Long, minDate: Long): LiveData<Long>
+	abstract fun observeNewEntriesCountByFeed(feedId: Long, minDate: Long): LiveData<Long>
 
 	@Query("SELECT COUNT(*) FROM $JOIN WHERE groupId IS :groupId AND read = 0 AND fetchDate > :minDate")
-	fun observeNewEntriesCountByGroup(groupId: Long, minDate: Long): LiveData<Long>
+	abstract fun observeNewEntriesCountByGroup(groupId: Long, minDate: Long): LiveData<Long>
 
 	@get:Query("SELECT id FROM entries WHERE favorite = 1")
-	val favoriteIds: List<String>
+	abstract val favoriteIds: List<String>
 
 	@get:Query("SELECT COUNT(*) FROM entries WHERE read = 0")
-	val countUnread: Long
+	abstract val countUnread: Long
 
 	@Query("SELECT * FROM entries WHERE id IS :id LIMIT 1")
-	fun findById(id: String): Entry?
+	abstract fun findById(id: String): Entry?
 
 	@Query("SELECT * FROM $JOIN WHERE id IS :id LIMIT 1")
-	fun findByIdWithFeed(id: String): EntryWithFeed?
+	abstract fun findByIdWithFeed(id: String): EntryWithFeed?
+
+	@Query("SELECT title FROM entries WHERE title IN (:titles)")
+	abstract fun findAlreadyExistingTitles(titles: List<String>): List<String>
 
 	@Query("SELECT * FROM $JOIN WHERE title IS :title LIMIT 1")
 	fun findByTitle(title: String): EntryWithFeed?
@@ -121,41 +124,41 @@ interface EntryDao {
 	fun findByLink(link: String): EntryWithFeed?
 
 	@Query("SELECT id FROM entries WHERE feedId IS (:feedId)")
-	fun idsForFeed(feedId: Long): List<String>
+	abstract fun idsForFeed(feedId: Long): List<String>
 
 	@Query("UPDATE entries SET read = 1 WHERE id IN (:ids)")
-	fun markAsRead(ids: List<String>)
+	abstract fun markAsRead(ids: List<String>)
 
 	@Query("UPDATE entries SET read = 0 WHERE id IN (:ids)")
-	fun markAsUnread(ids: List<String>)
+	abstract fun markAsUnread(ids: List<String>)
 
 	@Query("UPDATE entries SET read = 1 WHERE feedId = :feedId")
-	fun markAsRead(feedId: Long)
+	abstract fun markAsRead(feedId: Long)
 
 	@Query("UPDATE entries SET read = 1 WHERE feedId IN (SELECT feedId FROM feeds WHERE groupId = :groupId)")
-	fun markGroupAsRead(groupId: Long)
+	abstract fun markGroupAsRead(groupId: Long)
 
 	@Query("UPDATE entries SET read = 1")
-	fun markAllAsRead()
+	abstract fun markAllAsRead()
 
 	@Query("UPDATE entries SET favorite = 1 WHERE id IS :id")
-	fun markAsFavorite(id: String)
+	abstract fun markAsFavorite(id: String)
 
 	@Query("UPDATE entries SET favorite = 0 WHERE id IS :id")
-	fun markAsNotFavorite(id: String)
+	abstract fun markAsNotFavorite(id: String)
 
-	@Query("DELETE FROM entries WHERE fetchDate < :keepDateBorderTime AND favorite = 0 AND read = 1")
-	fun deleteOlderThan(keepDateBorderTime: Long)
+	@Query("DELETE FROM entries WHERE fetchDate < :keepDateBorderTime AND favorite = 0 AND read = :read")
+	abstract fun deleteOlderThan(keepDateBorderTime: Long, read: Long)
 
-	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	fun insert(vararg entries: Entry)
+	@Insert(onConflict = OnConflictStrategy.IGNORE) // Ignore because we don't want to delete previously starred entries
+	abstract fun insert(vararg entries: Entry)
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	fun insert(entry: Entry)
 
 	@Update
-	fun update(vararg entries: Entry)
+	abstract fun update(vararg entries: Entry)
 
 	@Delete
-	fun delete(vararg entries: Entry)
+	abstract fun delete(vararg entries: Entry)
 }

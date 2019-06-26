@@ -50,9 +50,6 @@
     <string name="error_feed_export">Экспорт не удался. Удостоверьтесь, что карта памяти имеет
         возможность записи.
     </string>
-    <string name="error_external_storage_not_available">Внешнее хранилище (например, карта памяти)
-        недоступно.
-    </string>
     <string name="feed_search">Поиск лент</string>
 	<string name="feed_search_hint">Введите ссылку или ключевое слово</string>
     <string name="feed_added">Лента добавлена в список</string>
@@ -94,15 +91,19 @@
     <string name="no_entries">Нет записей\nПотяните вниз чтобы обновить</string>
     <string name="undo">Отмена</string>
     <string name="marked_as_read">Помечены как прочитанные</string>
+    <string name="marked_as_unread">Marked as unread</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Автоматическое обновление</string>
     <string name="settings_refresh_enabled">Обновлять автоматически</string>
     <string name="settings_refresh_enabled_description">Включить автоматическое обновление лент
     </string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Интервал обновления</string>
     <string name="settings_category_content_presentation">Представление содержания</string>
     <string name="settings_keep_time">Время хранения новостей</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Показывать изображения</string>
     <string name="settings_display_images_description">Показывать изображения в новостях</string>
     <string name="settings_preload_image_mode">Предварительно загружать изображения</string>
@@ -111,6 +112,15 @@
     <string name="settings_refresh_wifi_only_description">Автоматическое обновление будет
         выполняться только при включенном Wi-Fi
     </string>
+    <string name="settings_category_filter">Filters</string>
+    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
+    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
+    <string name="filter">Remove items containing keywords (coma-separated list)</string>
+    <string name="settings_theme">Theme</string>
+    <string name="open_browser_direct">Open entries directly in your default browser</string>
+    <string name="open_browser_direct_title">Open in browser</string>
+    <string name="refresh_on_startup">Refreshes your feeds when launching the app</string>
+    <string name="refresh_on_startup_title">Refresh on startup</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">%d новая запись</item>
@@ -152,6 +162,11 @@
         <item>Никогда</item>
         <item>Только по Wi-Fi</item>
         <item>Всегда</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Black</item>
     </string-array>
 
 </resources>

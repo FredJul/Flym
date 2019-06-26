@@ -18,13 +18,16 @@
 package net.frju.flym.ui.feeds
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import net.fred.feedex.R
+import net.frju.flym.utils.setupTheme
 
 class FeedListEditActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
+		setupTheme()
+
 		super.onCreate(savedInstanceState)
 
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
