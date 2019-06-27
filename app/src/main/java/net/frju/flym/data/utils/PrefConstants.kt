@@ -38,7 +38,7 @@ object PrefConstants {
     const val PRELOAD_IMAGE_MODE__ALWAYS = "ALWAYS_PRELOAD"
 
     const val REMOVE_DUPLICATES = "remove_duplicates"
-
+    const val MIN_FILTER_WORD_LENGTH = "min_filter_word_length"
     const val FILTER_KEYWORDS = "filter_keywords"
 
     const val KEEP_TIME = "keep_time"

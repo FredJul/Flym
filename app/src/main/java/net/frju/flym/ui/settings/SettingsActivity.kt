@@ -25,9 +25,9 @@ import net.frju.flym.utils.setupTheme
 import net.frju.flym.data.tasks.DeleteAllFiltersTask
 import net.frju.flym.data.tasks.InsertFiltersTask
 import net.frju.flym.data.utils.PrefConstants
+import net.frju.flym.utils.getPrefInt
 import net.frju.flym.utils.getPrefString
 import net.frju.flym.utils.putPrefString
-import java.util.*
 import kotlin.collections.ArrayList
 
 class SettingsActivity : AppCompatActivity() {
@@ -68,15 +68,18 @@ class SettingsActivity : AppCompatActivity() {
 		var filterString = applicationContext.getPrefString(PrefConstants.FILTER_KEYWORDS, "")
 
 		if(filterString != null && !filterString.isNullOrEmpty() && !filterString.isBlank()) {
-			var filterStrings = filterString.split("\n")
+			var filterStrings = filterString.split("\n").sorted()
 			var finalFilters = ArrayList<String>()
+			var minimumWordLength = applicationContext.getPrefString(PrefConstants.MIN_FILTER_WORD_LENGTH, "1")
+			var minimumWordLengthInt = Integer.valueOf(minimumWordLength.toString())
 
 			if(filterStrings != null) {
 				for (currentFilterString in filterStrings) {
 					var finalFilterString = currentFilterString.trim()
 					if(finalFilterString != null
 							&& !finalFilterString.isBlank()
-							&& !finalFilterString.isEmpty()) {
+							&& !finalFilterString.isEmpty()
+							&& finalFilterString.length >= minimumWordLengthInt) {
 						finalFilters.add(finalFilterString)
 					}
 				}
@@ -84,6 +87,9 @@ class SettingsActivity : AppCompatActivity() {
 
 			var insertAllTask = InsertFiltersTask()
 			insertAllTask.execute(finalFilters)
+
+			var finalFilterPrefString = finalFilters.joinToString("\n", "","", -1, "")
+			applicationContext.putPrefString(PrefConstants.FILTER_KEYWORDS, finalFilterPrefString)
 		}
 	}
 }
