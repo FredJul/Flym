@@ -118,10 +118,10 @@ abstract class EntryDao {
 	abstract fun findAlreadyExistingTitles(titles: List<String>): List<String>
 
 	@Query("SELECT * FROM $JOIN WHERE title IS :title LIMIT 1")
-	fun findByTitle(title: String): EntryWithFeed?
+	abstract fun findByTitle(title: String): EntryWithFeed?
 
 	@Query("SELECT * FROM $JOIN WHERE link IS :link LIMIT 1")
-	fun findByLink(link: String): EntryWithFeed?
+	abstract fun findByLink(link: String): EntryWithFeed?
 
 	@Query("SELECT id FROM entries WHERE feedId IS (:feedId)")
 	abstract fun idsForFeed(feedId: Long): List<String>
@@ -154,7 +154,7 @@ abstract class EntryDao {
 	abstract fun insert(vararg entries: Entry)
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	fun insert(entry: Entry)
+	abstract fun insert(entry: Entry)
 
 	@Update
 	abstract fun update(vararg entries: Entry)

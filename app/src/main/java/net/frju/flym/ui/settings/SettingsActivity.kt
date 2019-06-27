@@ -21,10 +21,14 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import net.fred.feedex.R
-import net.frju.flym.data.utils.PrefUtils
 import net.frju.flym.utils.setupTheme
 import net.frju.flym.data.tasks.DeleteAllFiltersTask
 import net.frju.flym.data.tasks.InsertFiltersTask
+import net.frju.flym.data.utils.PrefConstants
+import net.frju.flym.utils.getPrefString
+import net.frju.flym.utils.putPrefString
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -61,7 +65,7 @@ class SettingsActivity : AppCompatActivity() {
 		var deleteAllTask = DeleteAllFiltersTask()
 		deleteAllTask.execute()
 
-		var filterString = PrefUtils.getString(PrefUtils.FILTER_KEYWORDS, "")
+		var filterString = applicationContext.getPrefString(PrefConstants.FILTER_KEYWORDS, "")
 
 		if(filterString != null && !filterString.isNullOrEmpty() && !filterString.isBlank()) {
 			var filterStrings = filterString.split("\n")

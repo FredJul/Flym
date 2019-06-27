@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "31435aa9bc89d78889a9d396fa842371",
+    "identityHash": "819854d921c6f8b057e6983229db9fdd",
     "entities": [
       {
         "tableName": "feeds",
@@ -276,11 +276,48 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "filters",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`filterId` TEXT NOT NULL, `keywordToIgnore` TEXT NOT NULL, PRIMARY KEY(`filterId`, `keywordToIgnore`))",
+        "fields": [
+          {
+            "fieldPath": "filterId",
+            "columnName": "filterId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "keywordToIgnore",
+            "columnName": "keywordToIgnore",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "filterId",
+            "keywordToIgnore"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_filters_filterId",
+            "unique": false,
+            "columnNames": [
+              "filterId"
+            ],
+            "createSql": "CREATE  INDEX `index_filters_filterId` ON `${TABLE_NAME}` (`filterId`)"
+          }
+        ],
+        "foreignKeys": []
       }
     ],
+    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"31435aa9bc89d78889a9d396fa842371\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '819854d921c6f8b057e6983229db9fdd')"
     ]
   }
 }

@@ -403,12 +403,15 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				createCall(feed.link).execute().use { response ->
 					val input = SyndFeedInput()
 					val romeFeed = input.build(XmlReader(response.body()!!.byteStream()))
-					entries.addAll(romeFeed.entries.asSequence().filter { it.publishedDate?.time ?: Long.MAX_VALUE > acceptMinDate }.map { it.toDbFormat(feed) })
+					romeFeed.entries.filter { it.publishedDate?.time ?: Long.MAX_VALUE > acceptMinDate }
+							.map { it.toDbFormat(feed) }
+							.forEach {
 						filterItem(it, entries)
 					}
 
 					feed.update(romeFeed)
 				}
+			}
 		 	catch (t: Throwable) {
 				feed.fetchError = true
 			}
@@ -490,10 +493,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			addImagesToDownload(imgUrlsToDownload)
 
 			return entries.size
-		}
+			}
 
 		private fun filterItem(it: Entry, entries: MutableList<Entry>) {
-			if (PrefUtils.getBoolean(PrefUtils.REMOVE_DUPLICATES, true)) {
+			if (context.getPrefBoolean(PrefConstants.REMOVE_DUPLICATES, true)) {
 				if (App.db.entryDao().findByTitle(it.title.toString()) != null
 						|| App.db.entryDao().findByLink(it.link.toString())!= null) {
 					return
