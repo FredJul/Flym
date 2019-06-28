@@ -20,14 +20,14 @@ package net.frju.flym.ui.views
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.PixelFormat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import net.fred.feedex.R
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.windowManager
@@ -68,7 +68,8 @@ class DragNDropRecyclerView @JvmOverloads constructor(context: Context, attrs: A
 
         when (action) {
             MotionEvent.ACTION_DOWN -> {
-                startPosition = getChildAdapterPosition(findChildViewUnder(x, y))
+                startPosition = findChildViewUnder(x, y)?.let { getChildAdapterPosition(it) }
+                        ?: childCount - 1
                 if (startPosition != NO_POSITION) {
                     val mItemPosition = startPosition - (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
                     dragPointOffset = y - getChildAt(mItemPosition).top
@@ -80,14 +81,16 @@ class DragNDropRecyclerView @JvmOverloads constructor(context: Context, attrs: A
             MotionEvent.ACTION_MOVE -> drag(0F, y)// replace 0 with x if desired
             MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
                 dragMode = false
-                val endPosition = getChildAdapterPosition(findChildViewUnder(x, y))
+                val endPosition = findChildViewUnder(x, y)?.let { getChildAdapterPosition(it) }
+                        ?: childCount - 1
                 stopDrag(startPosition - (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition())
                 if (startPosition != NO_POSITION && endPosition != NO_POSITION)
                     dragNDropListener?.onDrop(startPosition, endPosition)
             }
             else -> {
                 dragMode = false
-                val endPosition = getChildAdapterPosition(findChildViewUnder(x, y))
+                val endPosition = findChildViewUnder(x, y)?.let { getChildAdapterPosition(it) }
+                        ?: childCount - 1
                 stopDrag(startPosition - (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition())
                 if (startPosition != NO_POSITION && endPosition != NO_POSITION)
                     dragNDropListener?.onDrop(startPosition, endPosition)
@@ -137,7 +140,7 @@ class DragNDropRecyclerView @JvmOverloads constructor(context: Context, attrs: A
             val bitmap = Bitmap.createBitmap(item.drawingCache)
             item.isDrawingCacheEnabled = false
 
-            setBackgroundResource(R.color.colorPrimaryDark)
+            setBackgroundResource(R.color.colorAccent)
             setImageBitmap(bitmap)
         }
 

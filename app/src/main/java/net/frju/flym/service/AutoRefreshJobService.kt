@@ -23,48 +23,61 @@ import android.app.job.JobScheduler
 import android.app.job.JobService
 import android.content.ComponentName
 import android.content.Context
-import net.frju.flym.data.utils.PrefUtils
+import android.os.Build
+import net.frju.flym.data.utils.PrefConstants
+import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.getPrefString
 import org.jetbrains.anko.doAsync
 
 class AutoRefreshJobService : JobService() {
 
-    companion object {
-        private const val TWO_HOURS = "7200"
-        private const val JOB_ID = 0
+	companion object {
+		var ignoreNextJob = false
 
-        fun initAutoRefresh(context: Context) {
+		private const val TWO_HOURS = "7200"
+		private const val JOB_ID = 0
 
-            // DO NOT USE ANKO TO RETRIEVE THE SERVICE HERE (crash on API 21)
-            val jobSchedulerService = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+		fun initAutoRefresh(context: Context) {
 
-            val time = Math.max(300, PrefUtils.getString(PrefUtils.REFRESH_INTERVAL, TWO_HOURS).toInt())
+			// DO NOT USE ANKO TO RETRIEVE THE SERVICE HERE (crash on API 21)
+			val jobSchedulerService = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
 
-            if (PrefUtils.getBoolean(PrefUtils.REFRESH_ENABLED, true)) {
-                val builder = JobInfo.Builder(JOB_ID, ComponentName(context, AutoRefreshJobService::class.java))
-                        .setPeriodic(time * 1000L)
-                        .setPersisted(true)
-                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+            val time = Math.max(300, context.getPrefString(PrefConstants.REFRESH_INTERVAL, TWO_HOURS)!!.toInt())
 
-                jobSchedulerService.schedule(builder.build())
-            } else {
-                jobSchedulerService.cancel(JOB_ID)
-            }
-        }
-    }
+			if (context.getPrefBoolean(PrefConstants.REFRESH_ENABLED, true)) {
+				val builder = JobInfo.Builder(JOB_ID, ComponentName(context, AutoRefreshJobService::class.java))
+						.setPeriodic(time * 1000L)
+						.setPersisted(true)
+						.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
 
-    override fun onStartJob(params: JobParameters): Boolean {
-        if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
-            doAsync {
-                FetcherService.fetch(this@AutoRefreshJobService, true, FetcherService.ACTION_REFRESH_FEEDS)
-                jobFinished(params, false)
-            }
-            return true
-        }
+				if (Build.VERSION.SDK_INT >= 26) {
+					builder.setRequiresBatteryNotLow(true)
+							.setRequiresStorageNotLow(true)
+				}
 
-        return false
-    }
+				ignoreNextJob = true // We can't add a initial delay with JobScheduler, so let's do this little hack instead
+				jobSchedulerService.schedule(builder.build())
+			} else {
+				jobSchedulerService.cancel(JOB_ID)
+			}
+		}
+	}
 
-    override fun onStopJob(params: JobParameters): Boolean {
-        return false
-    }
+	override fun onStartJob(params: JobParameters): Boolean {
+		if (!ignoreNextJob && !getPrefBoolean(PrefConstants.IS_REFRESHING, false)) {
+			doAsync {
+				FetcherService.fetch(this@AutoRefreshJobService, true, FetcherService.ACTION_REFRESH_FEEDS)
+				jobFinished(params, false)
+			}
+			return true
+		}
+
+		ignoreNextJob = false
+
+		return false
+	}
+
+	override fun onStopJob(params: JobParameters): Boolean {
+		return false
+	}
 }

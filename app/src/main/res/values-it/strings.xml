@@ -24,7 +24,7 @@
 
     <!-- GENERAL -->
     <string name="app_name">Flym</string>
-    <string name="about_flym">A proposito di Flym</string>
+    <string name="about_flym">Informazioni su Flym</string>
     <string name="welcome_title">Benvenuto in Flym. Vuoi aggiungere un feed?</string>
     <string name="welcome_title_with_opml_import">Vuoi importare i feed precedenti in Flym?</string>
     <string name="cannot_find_feeds">Nessun feed è stato trovato</string>
@@ -48,7 +48,6 @@
     <string name="menu_export">Esporta file OPML</string>
     <string name="storage_request_explanation">Per poter importare/esportare i feed da/su file, è necessario consentire all\'applicazione di accedere alla memoria di archiviazione.</string>
     <string name="error_feed_export">L\'esportazione è fallita. Controllare di avere una scheda SD scrivibile e correttamente montata.</string>
-    <string name="error_external_storage_not_available">L\'archivio esterno (per esempio la scheda SD) non è disponibile.</string>
     <string name="feed_search">Ricerca feed</string>
     <string name="feed_search_hint">Inserisci il link di un feed o una parola chiave</string>
     <string name="feed_added">Feed aggiunto alla lista</string>
@@ -67,8 +66,8 @@
     <string name="google_news_entertainment">Intrattenimento</string>
     <string name="google_news_sports">Sport</string>
     <string name="google_news_health">Salute</string>
-    <string name="feed_name">Feed name</string>
-    <string name="feed_link">Feed link</string>
+    <string name="feed_name">Nome del feed</string>
+    <string name="feed_link">Link del feed</string>
 
     <!-- ENTRIES -->
     <string name="all_entries">Tutti gli articoli</string>
@@ -86,20 +85,34 @@
     <string name="no_entries">Nessun feed\nPer favore effettua lo swipe verso il basso per aggiornare</string>
     <string name="undo">Annulla</string>
     <string name="marked_as_read">Contrassegnato come letto</string>
+    <string name="marked_as_unread">Contrassegnato come non letto</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Aggiornamento automatico</string>
     <string name="settings_refresh_enabled">Attiva aggiornamento automatico</string>
     <string name="settings_refresh_enabled_description">Attiva l\'aggiornamento automatico dei feed</string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Intervallo</string>
     <string name="settings_category_content_presentation">Aspetto e contenuti</string>
     <string name="settings_keep_time">Tempo di archiviazione</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Mostra immagini</string>
     <string name="settings_display_images_description">Mostra le immagini degli articoli</string>
     <string name="settings_preload_image_mode">Scarica le immagini in anticipo</string>
     <string name="settings_font_size">Dimensione testo</string>
     <string name="settings_refresh_wifi_only">Aggiorna solo in WiFi</string>
     <string name="settings_refresh_wifi_only_description">L\'aggiornamento automatico viene eseguito solo quando si è connessi ad una rete WiFi</string>
+    <string name="settings_category_filter">Filtri</string>
+    <string name="settings_remove_duplicates_description_title">Rimuovi duplicati</string>
+    <string name="settings_remove_duplicates_description">Controlla il titolo di ogni nuovo articolo e ignoralo se ha lo stesso nome di uno gia presente</string>
+    <string name="filter">Rimuovi articoli che contengono parole chiave (usa la virgola come divisore)</string>
+    <string name="settings_theme">Tema</string>
+    <string name="open_browser_direct">Apri gli articoli direttamente nel tuo browser predefinito</string>
+    <string name="open_browser_direct_title">Apri nel browser</string>
+    <string name="refresh_on_startup">Aggiorna i feed all\'avvio dell\'applicazione</string>
+    <string name="refresh_on_startup_title">Aggiorna all\'avvio</string>
+
     <plurals name="number_of_new_entries">
         <item quantity="one">Un nuovo articolo</item>
         <item quantity="other">%d nuovi articoli</item>
@@ -138,6 +151,11 @@
         <item>Mai</item>
         <item>Solo con Wi-Fi</item>
         <item>Sempre</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Chiaro</item>
+        <item>Scuro</item>
+        <item>Nero</item>
     </string-array>
 
 </resources>

@@ -82,7 +82,7 @@
             "columnNames": [
               "groupId"
             ],
-            "createSql": "CREATE  INDEX `index_feeds_groupId` ON `${TABLE_NAME}` (`groupId`)"
+            "createSql": "CREATE INDEX `index_feeds_groupId` ON `${TABLE_NAME}` (`groupId`)"
           },
           {
             "name": "index_feeds_feedId_feedLink",

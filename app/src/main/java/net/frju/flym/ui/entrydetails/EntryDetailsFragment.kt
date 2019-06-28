@@ -17,15 +17,14 @@
 
 package net.frju.flym.ui.entrydetails
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_entry_details.*
 import me.thanel.swipeactionview.SwipeActionView
@@ -33,12 +32,16 @@ import me.thanel.swipeactionview.SwipeGestureListener
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
-import net.frju.flym.data.utils.PrefUtils
+import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
+import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.isOnline
+import org.jetbrains.anko.attr
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.support.v4.browse
+import org.jetbrains.anko.support.v4.share
 import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.uiThread
 import org.jetbrains.annotations.NotNull
@@ -53,7 +56,7 @@ class EntryDetailsFragment : Fragment() {
 
 		fun newInstance(entryId: String, allEntryIds: List<String>): EntryDetailsFragment {
 			return EntryDetailsFragment().apply {
-				arguments = bundleOf(ARG_ENTRY_ID to entryId, ARG_ALL_ENTRIES_IDS to allEntryIds)
+                arguments = bundleOf(ARG_ENTRY_ID to entryId, ARG_ALL_ENTRIES_IDS to allEntryIds)
 			}
 		}
 	}
@@ -98,9 +101,9 @@ class EntryDetailsFragment : Fragment() {
 		super.onActivityCreated(savedInstanceState)
 
 		refresh_layout.setColorScheme(R.color.colorAccent,
-				R.color.colorPrimaryDark,
+				requireContext().attr(R.attr.colorPrimaryDark).resourceId,
 				R.color.colorAccent,
-				R.color.colorPrimaryDark)
+				requireContext().attr(R.attr.colorPrimaryDark).resourceId)
 
 		refresh_layout.setOnRefreshListener {
 			switchFullTextMode()
@@ -138,7 +141,7 @@ class EntryDetailsFragment : Fragment() {
 				refresh_layout.isRefreshing = true
 
 				// If the service is not started, start it here to avoid an infinite loading
-				if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+				if (context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false) == false) {
 					context?.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_MOBILIZE_FEEDS))
 				}
 			} else {
@@ -206,17 +209,12 @@ class EntryDetailsFragment : Fragment() {
 							}
 						}
 						R.id.menu_entry_details__open_browser -> {
-							try {
-								startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entryWithFeed.entry.link)))
-							} catch (e: Exception) {
-								toast(R.string.error) // TODO better error message, can be ActivityNotFoundException if no browser or NPE if no link
+							entryWithFeed.entry.link?.let {
+								browse(it)
 							}
 						}
 						R.id.menu_entry_details__share -> {
-							startActivity(Intent.createChooser(
-									Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_SUBJECT, entryWithFeed.entry.title).putExtra(Intent.EXTRA_TEXT, entryWithFeed.entry.link)
-											.setType("text/plain"), getString(R.string.menu_share)
-							))
+							share(entryWithFeed.entry.link.orEmpty(), entryWithFeed.entry.title.orEmpty())
 						}
 						R.id.menu_entry_details__fulltext -> {
 							switchFullTextMode()
@@ -232,8 +230,6 @@ class EntryDetailsFragment : Fragment() {
 								activity?.onBackPressed()
 							}
 						}
-						else -> {
-						}
 					}
 
 					true
@@ -243,6 +239,14 @@ class EntryDetailsFragment : Fragment() {
 	}
 
 	private fun switchFullTextMode() {
+		// Enable this to test new manual mobilization
+//		doAsync {
+//			entryWithFeed?.entry?.let {
+//				it.mobilizedContent = null
+//				App.db.entryDao().insert(it)
+//			}
+//		}
+
 		entryWithFeed?.let { entryWithFeed ->
 			if (entryWithFeed.entry.mobilizedContent == null || !preferFullText) {
 				if (entryWithFeed.entry.mobilizedContent == null) {

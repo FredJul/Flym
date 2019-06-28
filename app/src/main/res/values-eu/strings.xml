@@ -50,9 +50,6 @@
     <string name="error_feed_export">Esportazioak huts egin du. Egiaztatu idatz daitekeen SD-txartel bat
         muntatuta duzula.
     </string>
-	<string name="error_external_storage_not_available">Kanpoko biltegia (adib. SD-txartela) ez dago
-        eskuragarri.
-    </string>
     <string name="feed_search">Jarioen bilaketa</string>
 	<string name="feed_search_hint">Idatz ezazu lotura edo gako hitza</string>
     <string name="feed_added">Jarioa zerrendara gehitu da</string>
@@ -94,15 +91,19 @@
     <string name="no_entries">Elementurik ez\nMesedez tiratu beherantz freskatzeko</string>
     <string name="undo">Desegin</string>
     <string name="marked_as_read">Irakurrita bezala markatuta</string>
+    <string name="marked_as_unread">Marked as unread</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Freskatze automatikoa</string>
     <string name="settings_refresh_enabled">Freskatze automatikoa gaitu</string>
     <string name="settings_refresh_enabled_description">Jarioen freskatze automatikoa gaitu
     </string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Freskatze tartea</string>
     <string name="settings_category_content_presentation">Edukien aurkezpena</string>
     <string name="settings_keep_time">Sarrerak gordeta mantenduko diren denbora</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Irudiak erakutsi</string>
     <string name="settings_display_images_description">Irudiak erakutsi sarreretan</string>
     <string name="settings_preload_image_mode">Irudiak aurretik kargatu</string>
@@ -110,6 +111,15 @@
     <string name="settings_refresh_wifi_only">Freskatu soilik Wi-Fipean</string>
     <string name="settings_refresh_wifi_only_description">Freskatze automatikoa soilik Wi-Fi konexioa eskuragarri badago egingo da
     </string>
+    <string name="settings_category_filter">Filters</string>
+    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
+    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
+    <string name="filter">Remove items containing keywords (coma-separated list)</string>
+    <string name="settings_theme">Theme</string>
+    <string name="open_browser_direct">Open entries directly in your default browser</string>
+    <string name="open_browser_direct_title">Open in browser</string>
+    <string name="refresh_on_startup">Refreshes your feeds when launching the app</string>
+    <string name="refresh_on_startup_title">Refresh on startup</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Sarrera berri bat</item>
@@ -149,6 +159,11 @@
         <item>Inoiz</item>
         <item>Wi-Fipean soilik</item>
         <item>Beti</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Black</item>
     </string-array>
 
 </resources>

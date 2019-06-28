@@ -17,24 +17,24 @@
 
 package net.frju.flym.data.entities
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.Index
-import android.arch.persistence.room.PrimaryKey
 import android.content.Context
 import android.os.Parcelable
+import android.text.Html
 import android.text.format.DateFormat
 import android.text.format.DateUtils
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.rometools.rome.feed.synd.SyndEntry
 import kotlinx.android.parcel.Parcelize
 import net.frju.flym.utils.sha1
-import java.util.Date
-import java.util.UUID
+import java.util.*
 
 
 @Parcelize
 @Entity(tableName = "entries",
-		indices = [(Index(value = ["feedId"]))],
+		indices = [(Index(value = ["feedId"])), (Index(value = ["link"], unique = true))],
 		foreignKeys = [(ForeignKey(entity = Feed::class,
 				parentColumns = ["feedId"],
 				childColumns = ["feedId"],
@@ -67,12 +67,15 @@ fun SyndEntry.toDbFormat(feed: Feed): Entry {
 	item.id = (feed.id.toString() + "_" + (link ?: uri ?: title
 	?: UUID.randomUUID().toString())).sha1()
 	item.feedId = feed.id
-	item.title = title
+    @Suppress("DEPRECATION")
+    item.title = Html.fromHtml(title).toString()
 	item.description = contents.getOrNull(0)?.value ?: description?.value
 	item.link = link
 	//TODO item.imageLink = null
 	item.author = author
-	item.publicationDate = if (publishedDate?.before(item.publicationDate) == true) publishedDate!! else item.publicationDate
+
+	val date = publishedDate ?: updatedDate
+	item.publicationDate = if (date?.before(item.publicationDate) == true) date else item.publicationDate
 
 	return item
 }

@@ -27,7 +27,6 @@
     <string name="menu_export">Export to OPML</string>
     <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_export">The export has failed. Make sure you have a writable SD-card mounted.</string>
-    <string name="error_external_storage_not_available">The external storage (e.g. SD-card) is not available.</string>
     <string name="feed_search">Feed search</string>
     <string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
@@ -65,14 +64,18 @@
     <string name="no_entries">No items\nPlease pull down to refresh</string>
     <string name="undo">Undo</string>
     <string name="marked_as_read">Marked as read</string>
+    <string name="marked_as_unread">Marked as unread</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automated refresh</string>
     <string name="settings_refresh_enabled">Enable automatic refresh</string>
     <string name="settings_refresh_enabled_description">Enable the automatic refresh of feeds</string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Refresh interval</string>
     <string name="settings_category_content_presentation">Content presentation</string>
-    <string name="settings_keep_time">Time that the entries will be kept</string>
+    <string name="settings_keep_time">Time that the read entries will be kept</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Display images</string>
     <string name="settings_display_images_description">Display images in entries</string>
     <string name="settings_preload_image_mode">Preload images</string>
@@ -83,6 +86,11 @@
     <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
     <string name="filter">Remove items containing keywords</string>
+    <string name="settings_theme">Theme</string>
+    <string name="open_browser_direct">Open entries directly in your default browser</string>
+    <string name="open_browser_direct_title">Open in browser</string>
+    <string name="refresh_on_startup">Refreshes your feeds when launching the app</string>
+    <string name="refresh_on_startup_title">Refresh on startup</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">One new entry</item>
@@ -122,5 +130,10 @@
         <item>Never</item>
         <item>Only over Wi-Fi</item>
         <item>Always</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Black</item>
     </string-array>
 </resources>

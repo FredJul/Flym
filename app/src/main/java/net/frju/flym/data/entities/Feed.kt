@@ -17,12 +17,8 @@
 
 package net.frju.flym.data.entities
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.Index
-import android.arch.persistence.room.PrimaryKey
 import android.os.Parcelable
+import androidx.room.*
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.rometools.rome.feed.synd.SyndFeed
@@ -50,6 +46,7 @@ data class Feed(
 		var isGroup: Boolean = false,
 		var groupId: Long? = null,
 		var displayPriority: Int = 0,
+		@Deprecated("Not used anymore")
 		var lastManualActionUid: String = "") : Parcelable {
 
 	companion object {

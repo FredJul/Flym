@@ -17,8 +17,7 @@
 
 package net.frju.flym.data.entities
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Index
+import androidx.room.*
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 

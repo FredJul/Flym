@@ -17,26 +17,27 @@
 
 package net.frju.flym.ui.entries
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
-import android.arch.paging.LivePagedListBuilder
-import android.arch.paging.PagedList
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_entries.*
 import kotlinx.android.synthetic.main.view_entry.view.*
 import kotlinx.android.synthetic.main.view_main_containers.*
@@ -44,16 +45,23 @@ import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.entities.Feed
-import net.frju.flym.data.utils.PrefUtils
+import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.closeKeyboard
+import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.registerOnPrefChangeListener
+import net.frju.flym.utils.unregisterOnPrefChangeListener
+import org.jetbrains.anko.appcompat.v7.titleResource
+import org.jetbrains.anko.attr
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.colorAttr
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.support.v4.dip
+import org.jetbrains.anko.support.v4.share
 import org.jetbrains.anko.uiThread
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
@@ -83,7 +91,7 @@ class EntriesFragment : Fragment() {
 		set(value) {
 			field = value
 
-			setupToolbar()
+			setupTitle()
 			bottom_navigation.post { initDataObservers() } // Needed to retrieve the correct selected tab position
 		}
 
@@ -91,14 +99,16 @@ class EntriesFragment : Fragment() {
 
 	private val adapter = EntryAdapter({ entryWithFeed ->
 		navigator.goToEntryDetails(entryWithFeed.entry.id, entryIds!!)
+	}, { entryWithFeed ->
+		share(entryWithFeed.entry.link.orEmpty(), entryWithFeed.entry.title.orEmpty())
 	}, { entryWithFeed, view ->
 		entryWithFeed.entry.favorite = !entryWithFeed.entry.favorite
 
 		view.favorite_icon?.let {
 			if (entryWithFeed.entry.favorite) {
-				it.setImageResource(R.drawable.ic_star_white_24dp)
+				it.setImageResource(R.drawable.ic_star_24dp)
 			} else {
-				it.setImageResource(R.drawable.ic_star_border_white_24dp)
+				it.setImageResource(R.drawable.ic_star_border_24dp)
 			}
 		}
 
@@ -120,9 +130,13 @@ class EntriesFragment : Fragment() {
 	private val searchHandler = Handler()
 
 	private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
-		if (PrefUtils.IS_REFRESHING == key) {
+		if (PrefConstants.IS_REFRESHING == key) {
 			refreshSwipeProgress()
 		}
+	}
+
+	init {
+		setHasOptionsMenu(true)
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -148,29 +162,31 @@ class EntriesFragment : Fragment() {
 				initDataObservers()
 				recycler_view.scrollToPosition(0)
 			}
+
+			activity?.toolbar?.menu?.findItem(R.id.menu_entries__share)?.isVisible = it.itemId == R.id.favorites
 			true
 		}
 
 		unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
 			setGravityOffset(35F, 0F, true)
 			isShowShadow = false
-			badgeBackgroundColor = ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark)
+			badgeBackgroundColor = requireContext().colorAttr(R.attr.colorPrimaryDark)
 		}
 
-		read_all_fab.onClick {
+		read_all_fab.onClick { _ ->
 			entryIds?.let { entryIds ->
 				if (entryIds.isNotEmpty()) {
 					doAsync {
 						// TODO check if limit still needed
-						entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
+						entryIds.withIndex().groupBy { it.index / 300 }.map { pair -> pair.value.map { it.value } }.forEach {
 							App.db.entryDao().markAsRead(it)
 						}
 					}
 
-					longSnackbar(coordinator, R.string.marked_as_read, R.string.undo) {
+					coordinator.longSnackbar(R.string.marked_as_read, R.string.undo) { _ ->
 						doAsync {
 							// TODO check if limit still needed
-							entryIds.withIndex().groupBy { it.index / 300 }.map { it.value.map { it.value } }.forEach {
+							entryIds.withIndex().groupBy { it.index / 300 }.map { pair -> pair.value.map { it.value } }.forEach {
 								App.db.entryDao().markAsUnread(it)
 							}
 
@@ -255,13 +271,13 @@ class EntriesFragment : Fragment() {
 
 	override fun onStart() {
 		super.onStart()
-		PrefUtils.registerOnPrefChangeListener(prefListener)
+		context?.registerOnPrefChangeListener(prefListener)
 		refreshSwipeProgress()
 	}
 
 	override fun onStop() {
 		super.onStop()
-		PrefUtils.unregisterOnPrefChangeListener(prefListener)
+		context?.unregisterOnPrefChangeListener(prefListener)
 	}
 
 	override fun onSaveInstanceState(outState: Bundle) {
@@ -281,9 +297,9 @@ class EntriesFragment : Fragment() {
 		recycler_view.adapter = adapter
 
 		refresh_layout.setColorScheme(R.color.colorAccent,
-				R.color.colorPrimaryDark,
+				requireContext().attr(R.attr.colorPrimaryDark).resourceId,
 				R.color.colorAccent,
-				R.color.colorPrimaryDark)
+				requireContext().attr(R.attr.colorPrimaryDark).resourceId)
 
 		refresh_layout.setOnRefreshListener {
 			startRefresh()
@@ -314,6 +330,16 @@ class EntriesFragment : Fragment() {
 							App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
 						}
 
+						coordinator.longSnackbar(R.string.marked_as_read, R.string.undo) { _ ->
+							doAsync {
+								if (entryWithFeed.entry.read) {
+									App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
+								} else {
+									App.db.entryDao().markAsRead(listOf(entryWithFeed.entry.id))
+								}
+							}
+						}
+
 						if (bottom_navigation.selectedItemId != R.id.unreads) {
 							uiThread {
 								adapter.notifyItemChanged(viewHolder.adapterPosition)
@@ -330,7 +356,7 @@ class EntriesFragment : Fragment() {
 		recycler_view.emptyView = empty_view
 
 		recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-			override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+			override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
 				super.onScrollStateChanged(recyclerView, newState)
 				activity?.closeKeyboard()
 			}
@@ -338,7 +364,7 @@ class EntriesFragment : Fragment() {
 	}
 
 	private fun startRefresh() {
-		if (!PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)) {
+		if (context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false) == false) {
 			if (feed?.isGroup == false && feed?.id != Feed.ALL_ENTRIES_ID) {
 				context?.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.EXTRA_FEED_ID,
 						feed?.id))
@@ -351,75 +377,86 @@ class EntriesFragment : Fragment() {
 		refresh_layout.postDelayed({ refreshSwipeProgress() }, 500)
 	}
 
-	private fun setupToolbar() {
+	private fun setupTitle() {
 		activity?.toolbar?.apply {
 			if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
-				setTitle(R.string.all_entries)
+				titleResource = R.string.all_entries
 			} else {
 				title = feed?.title
 			}
+		}
+	}
 
-			menu.clear()
-			inflateMenu(R.menu.menu_fragment_entries)
+	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+		super.onCreateOptionsMenu(menu, inflater)
 
-			val searchItem = menu.findItem(R.id.menu_entries__search)
-			val searchView = searchItem.actionView as SearchView
-			if (searchText != null) {
-				searchItem.expandActionView()
-				searchView.post {
-					searchView.setQuery(searchText, false)
-					searchView.clearFocus()
-				}
-			}
+		inflater.inflate(R.menu.menu_fragment_entries, menu)
 
-			searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-				override fun onQueryTextSubmit(query: String): Boolean {
-					return false
-				}
+		menu.findItem(R.id.menu_entries__share).isVisible = bottom_navigation.selectedItemId == R.id.favorites
 
-				override fun onQueryTextChange(newText: String): Boolean {
-					if (searchText != null) { // needed because it can actually be called after the onMenuItemActionCollapse event
-						searchText = newText
-
-						// In order to avoid plenty of request, we add a small throttle time
-						searchHandler.removeCallbacksAndMessages(null)
-						searchHandler.postDelayed({
-							initDataObservers()
-						}, 700)
-					}
-					return false
-				}
-			})
-			searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-				override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-					searchText = ""
-					initDataObservers()
-					bottom_navigation.isGone = true
-					return true
-				}
-
-				override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-					searchText = null
-					initDataObservers()
-					bottom_navigation.isVisible = true
-					return true
-				}
-			})
-
-			setOnMenuItemClickListener { item ->
-				when (item.itemId) {
-					R.id.menu_entries__about -> {
-						navigator.goToAboutMe()
-						true
-					}
-					R.id.menu_entries__settings -> {
-						navigator.goToSettings()
-						true
-					}
-					else -> false
-				}
+		val searchItem = menu.findItem(R.id.menu_entries__search)
+		val searchView = searchItem.actionView as SearchView
+		if (searchText != null) {
+			searchItem.expandActionView()
+			searchView.post {
+				searchView.setQuery(searchText, false)
+				searchView.clearFocus()
 			}
 		}
+
+		searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+			override fun onQueryTextSubmit(query: String): Boolean {
+				return false
+			}
+
+			override fun onQueryTextChange(newText: String): Boolean {
+				if (searchText != null) { // needed because it can actually be called after the onMenuItemActionCollapse event
+					searchText = newText
+
+					// In order to avoid plenty of request, we add a small throttle time
+					searchHandler.removeCallbacksAndMessages(null)
+					searchHandler.postDelayed({
+						initDataObservers()
+					}, 700)
+				}
+				return false
+			}
+		})
+		searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+			override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+				searchText = ""
+				initDataObservers()
+				bottom_navigation.isGone = true
+				return true
+			}
+
+			override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+				searchText = null
+				initDataObservers()
+				bottom_navigation.isVisible = true
+				return true
+			}
+		})
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		when (item.itemId) {
+			R.id.menu_entries__share -> {
+				// TODO: will only work for the visible 30 items, need to find something better
+				adapter.currentList?.joinToString("\n\n") { it.entry.title + ": " + it.entry.link }?.let { content ->
+					val title = getString(R.string.app_name) + " " + getString(R.string.favorites)
+					share(content.take(300000), title) // take() to avoid crashing with a too big intent
+				}
+			}
+			R.id.menu_entries__about -> {
+				navigator.goToAboutMe()
+			}
+			R.id.menu_entries__settings -> {
+				navigator.goToSettings()
+			}
+		}
+
+		return true
 	}
 
 	fun setSelectedEntryId(selectedEntryId: String) {
@@ -427,6 +464,6 @@ class EntriesFragment : Fragment() {
 	}
 
 	private fun refreshSwipeProgress() {
-		refresh_layout.isRefreshing = PrefUtils.getBoolean(PrefUtils.IS_REFRESHING, false)
+		refresh_layout.isRefreshing = context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false) ?: false
 	}
 }

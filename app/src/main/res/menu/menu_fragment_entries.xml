@@ -7,7 +7,12 @@
 		android:icon="@drawable/ic_search_white_24dp"
 		android:title="@android:string/search_go"
 		app:showAsAction="collapseActionView|always"
-		app:actionViewClass="android.support.v7.widget.SearchView"/>
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
+	<item
+		android:id="@+id/menu_entries__share"
+		android:title="@string/menu_share"
+		app:showAsAction="never" />
 
 	<item
 		android:id="@+id/menu_entries__settings"

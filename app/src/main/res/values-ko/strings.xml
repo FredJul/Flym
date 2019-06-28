@@ -48,7 +48,6 @@
     <string name="menu_export">OPML로 내보내기</string>
     <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_export">내보내기가 실패했습니다. 쓰기 가능한 SD 카드 저장소가 마운트되어 있는지 확인하십시오.</string>
-    <string name="error_external_storage_not_available">외부 저장소(SD 카드 따위)가 없습니다.</string>
     <string name="feed_search">피드 검색</string>
     <string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
@@ -86,20 +85,33 @@
     <string name="no_entries">No items\nPlease pull down to refresh</string>
     <string name="undo">Undo</string>
     <string name="marked_as_read">Marked as read</string>
+    <string name="marked_as_unread">Marked as unread</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">자동 새로 고침</string>
     <string name="settings_refresh_enabled">자동 새로 고침 사용</string>
     <string name="settings_refresh_enabled_description">피드 자동 새로 고침 기능을 사용</string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">새로 고침 간격</string>
     <string name="settings_category_content_presentation">내용 표시</string>
     <string name="settings_keep_time">항목을 저장할 시간</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">이미지 표시</string>
     <string name="settings_display_images_description">항목에서 이미지 표시</string>
     <string name="settings_preload_image_mode">이미지 미리 읽기</string>
     <string name="settings_font_size">글자 크기</string>
     <string name="settings_refresh_wifi_only">Wi-Fi에서만 새로 고침</string>
     <string name="settings_refresh_wifi_only_description">Wi-Fi를 사용할 때만 자동으로 새로 고침</string>
+    <string name="settings_category_filter">Filters</string>
+    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
+    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
+    <string name="filter">Remove items containing keywords (coma-separated list)</string>
+    <string name="settings_theme">Theme</string>
+    <string name="open_browser_direct">Open entries directly in your default browser</string>
+    <string name="open_browser_direct_title">Open in browser</string>
+    <string name="refresh_on_startup">Refreshes your feeds when launching the app</string>
+    <string name="refresh_on_startup_title">Refresh on startup</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="other">새 항목 %d개</item>
@@ -138,6 +150,11 @@
         <item>안 함</item>
         <item>Wi-Fi를 통해서만</item>
         <item>언제나</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Black</item>
     </string-array>
 
 </resources>

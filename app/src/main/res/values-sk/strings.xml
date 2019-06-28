@@ -49,7 +49,6 @@
     <string name="menu_export">Export do OPML</string>
     <string name="storage_request_explanation">To be able to import or export the feeds from or to a file, you must allow the application to access to the storage memory.</string>
     <string name="error_feed_export">Export zlyhal. Na pripojenú SD kartu sa pravdepodobne nedá zapisovať.</string>
-    <string name="error_external_storage_not_available">Externý úložný priestor (napr. SD karta) nie je dostupný.</string>
     <string name="feed_search">Prehľadať zdroj</string>
 	<string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
@@ -87,20 +86,33 @@
     <string name="no_entries">No items\nPlease pull down to refresh</string>
     <string name="undo">Undo</string>
     <string name="marked_as_read">Marked as read</string>
+    <string name="marked_as_unread">Marked as unread</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatické načítavanie</string>
     <string name="settings_refresh_enabled">Povoliť automatické načítávanie</string>
     <string name="settings_refresh_enabled_description">Povolí automatické načítavanie článkov</string>
+    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
+    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Interval načítavania</string>
     <string name="settings_category_content_presentation">Prezentácia obsahu</string>
     <string name="settings_keep_time">Čas na ktorý budú články uložené</string>
+    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Zobrazovať obrázky</string>
     <string name="settings_display_images_description">Zobrazovať obrázky v článkoch</string>
     <string name="settings_preload_image_mode">Načítať obrázky</string>
     <string name="settings_font_size">Veľkosť textu</string>
     <string name="settings_refresh_wifi_only">Obnovovať len cez Wi-Fi pripojenie</string>
     <string name="settings_refresh_wifi_only_description">Automatické obnovovanie bude spustené len pri dostupnom Wi-Fi pripojení</string>
+    <string name="settings_category_filter">Filters</string>
+    <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
+    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
+    <string name="filter">Remove items containing keywords (coma-separated list)</string>
+    <string name="settings_theme">Theme</string>
+    <string name="open_browser_direct">Open entries directly in your default browser</string>
+    <string name="open_browser_direct_title">Open in browser</string>
+    <string name="refresh_on_startup">Refreshes your feeds when launching the app</string>
+    <string name="refresh_on_startup_title">Refresh on startup</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Jeden nový článok</item>
@@ -144,6 +156,11 @@
         <item>Nikdy</item>
         <item>Len cez Wi-Fi</item>
         <item>Vždy</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Black</item>
     </string-array>
 
 </resources>
