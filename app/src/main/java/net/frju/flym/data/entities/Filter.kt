@@ -20,6 +20,7 @@ package net.frju.flym.data.entities
 import androidx.room.*
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import java.time.LocalDateTime
 
 @Parcelize
 @Entity(tableName = "filters",
@@ -27,4 +28,5 @@ import kotlinx.android.parcel.Parcelize
 		indices = [(Index(value = ["filterId"]))])
 data class Filter(
 		var filterId: String = "",
-		var keywordToIgnore: String = "") : Parcelable
+		var keywordToIgnore: String = "",
+		var dateCreated: LocalDateTime = LocalDateTime.now()) : Parcelable

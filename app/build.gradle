@@ -11,7 +11,7 @@ android {
 	compileSdkVersion 29
 	defaultConfig {
 		applicationId "net.frju.flym"
-		minSdkVersion 21
+		minSdkVersion 26
 		targetSdkVersion 29
 		versionCode 24
 		versionName "2.3.0"

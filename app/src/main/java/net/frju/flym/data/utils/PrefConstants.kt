@@ -40,6 +40,7 @@ object PrefConstants {
     const val REMOVE_DUPLICATES = "remove_duplicates"
     const val MIN_FILTER_WORD_LENGTH = "min_filter_word_length"
     const val FILTER_KEYWORDS = "filter_keywords"
+    const val FILTER_KEYWORDS_SHARED = "filter_keywords_shared"
 
     const val KEEP_TIME = "keep_time"
     const val KEEP_TIME_UNREAD = "keep_time_unread"

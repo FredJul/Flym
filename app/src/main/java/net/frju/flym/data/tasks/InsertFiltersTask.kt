@@ -20,6 +20,10 @@ package net.frju.flym.data.tasks
 import android.os.AsyncTask
 import net.frju.flym.data.entities.Filter
 import net.frju.flym.App
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.util.*
+import kotlin.collections.ArrayList
 
 class InsertFiltersTask() : AsyncTask<ArrayList<String>, Void, Void>() {
 
@@ -31,7 +35,8 @@ class InsertFiltersTask() : AsyncTask<ArrayList<String>, Void, Void>() {
                 param.forEach { value ->
                     if (value != null && !value.isEmpty() && !value.isEmpty()) {
                         var filter = Filter()
-                        filter.keywordToIgnore = value.toString()
+                        filter.keywordToIgnore = value
+                        filter.dateCreated = LocalDateTime.now()
                         filters.add(filter)
                     }
                 }

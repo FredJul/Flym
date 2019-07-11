@@ -86,6 +86,7 @@
     <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
     <string name="filter">Remove items containing keywords</string>
+    <string name="filter_shared">Shared filter keywords</string>
     <string name="settings_theme">Theme</string>
     <string name="open_browser_direct">Open entries directly in your default browser</string>
     <string name="open_browser_direct_title">Open in browser</string>
