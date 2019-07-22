@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
- Copyright (c) 2017-2018 Luca Trevisani
+ Copyright (c) 2017-2019 Luca Trevisani
  Copyright (c) 2013-2014 Danilo Treffiletti
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -43,19 +43,19 @@
 
     <!-- FEEDS -->
     <string name="feeds">Feed</string>
-    <string name="menu_add_group">Aggiungi gruppo</string>
-    <string name="menu_import">Importa file OPML</string>
-    <string name="menu_export">Esporta file OPML</string>
+    <string name="menu_add_group">Aggiungi un gruppo</string>
+    <string name="menu_import">Importa un file OPML</string>
+    <string name="menu_export">Esporta un file OPML</string>
     <string name="storage_request_explanation">Per poter importare/esportare i feed da/su file, è necessario consentire all\'applicazione di accedere alla memoria di archiviazione.</string>
-    <string name="error_feed_export">L\'esportazione è fallita. Controllare di avere una scheda SD scrivibile e correttamente montata.</string>
+    <string name="error_feed_export">L\'esportazione è fallita. Controllare di avere una scheda SD con permessi di scrittura abilitati e correttamente montata.</string>
     <string name="feed_search">Ricerca feed</string>
     <string name="feed_search_hint">Inserisci il link di un feed o una parola chiave</string>
     <string name="feed_added">Feed aggiunto alla lista</string>
     <string name="question_delete_feed">Vuoi cancellare questo feed?</string>
     <string name="question_delete_group">Vuoi cancellare questo gruppo e tutti i suoi feed?</string>
-    <string name="add_group_title">Inserire nome del gruppo</string>
+    <string name="add_group_title">Inserire un nome per il gruppo</string>
     <string name="message_exported_to">Esportato su %s.</string>
-    <string name="to_group_title">Azione spostamento feed</string>
+    <string name="to_group_title">Azione di spostamento del feed</string>
     <string name="to_group_message">Puoi sia spostare il feed dentro il gruppo sia prima del gruppo. Cosa vuoi fare?</string>
     <string name="to_group_above">Sopra il gruppo</string>
     <string name="to_group_into">Dentro il gruppo</string>
@@ -76,7 +76,7 @@
     <string name="menu_share">Condividi</string>
     <string name="menu_mark_as_unread">Segna come non letto</string>
     <string name="get_full_text">Recupera il testo completo</string>
-    <string name="original_text">Mostra testo originale</string>
+    <string name="original_text">Mostra il testo originale</string>
     <string name="open_in_browser">Vedi nel browser</string>
     <string name="cant_open_link">Nessuna applicazione trovata per questo link</string>
     <string name="unreads">Non letti</string>
@@ -89,24 +89,24 @@
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Aggiornamento automatico</string>
-    <string name="settings_refresh_enabled">Attiva aggiornamento automatico</string>
+    <string name="settings_refresh_enabled">Attiva l\'aggiornamento automatico</string>
     <string name="settings_refresh_enabled_description">Attiva l\'aggiornamento automatico dei feed</string>
-    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
-    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
-    <string name="settings_refresh_interval">Intervallo</string>
+    <string name="settings_refresh_enable_notifications">Mostra una notifica di aggiornamento</string>
+    <string name="settings_refresh_enable_notifications_description">Mosta una notifica di sistema quando un aggiornamento è completato</string>
+    <string name="settings_refresh_interval">Intervallo di aggiornamento</string>
     <string name="settings_category_content_presentation">Aspetto e contenuti</string>
     <string name="settings_keep_time">Tempo di archiviazione</string>
-    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
-    <string name="settings_display_images">Mostra immagini</string>
+    <string name="settings_keep_time_unread">Tempo di archiviazione degli articoli non letti</string>
+    <string name="settings_display_images">Mostra le immagini</string>
     <string name="settings_display_images_description">Mostra le immagini degli articoli</string>
     <string name="settings_preload_image_mode">Scarica le immagini in anticipo</string>
-    <string name="settings_font_size">Dimensione testo</string>
-    <string name="settings_refresh_wifi_only">Aggiorna solo in WiFi</string>
+    <string name="settings_font_size">Dimensione del testo</string>
+    <string name="settings_refresh_wifi_only">Aggiorna solo su rete WiFi</string>
     <string name="settings_refresh_wifi_only_description">L\'aggiornamento automatico viene eseguito solo quando si è connessi ad una rete WiFi</string>
     <string name="settings_category_filter">Filtri</string>
-    <string name="settings_remove_duplicates_description_title">Rimuovi duplicati</string>
+    <string name="settings_remove_duplicates_description_title">Rimuovi i duplicati</string>
     <string name="settings_remove_duplicates_description">Controlla il titolo di ogni nuovo articolo e ignoralo se ha lo stesso nome di uno gia presente</string>
-    <string name="filter">Rimuovi articoli che contengono parole chiave (usa la virgola come divisore)</string>
+    <string name="filter">Rimuovi gli articoli che contengono queste parole chiave (usa la virgola come divisore)</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Apri gli articoli direttamente nel tuo browser predefinito</string>
     <string name="open_browser_direct_title">Apri nel browser</string>
@@ -149,7 +149,7 @@
     </string-array>
     <string-array name="settings_preload_image_modes">
         <item>Mai</item>
-        <item>Solo con Wi-Fi</item>
+        <item>Solo su Wi-Fi</item>
         <item>Sempre</item>
     </string-array>
     <string-array name="settings_themes">
