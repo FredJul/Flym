@@ -91,20 +91,20 @@
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>
-    <string name="settings_refresh_enabled">Automatisches Aktualisieren</string>
+    <string name="settings_refresh_enabled">Automatisches Aktualisieren aktivieren</string>
     <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren aller Feeds</string>
-    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
-    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
+    <string name="settings_refresh_enable_notifications">Aktualisierungsbenachrichtigungen anzeigen</string>
+    <string name="settings_refresh_enable_notifications_description">Zeigt eine Benachrichtigung an, wenn eine Aktualisierung abgeschlossen ist</string>
     <string name="settings_refresh_interval">Aktualisierungsintervall</string>
     <string name="settings_category_content_presentation">Anzeige der Inhalte</string>
-    <string name="settings_keep_time">Zeit nach der Einträge gelöscht werden</string>
-    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
+    <string name="settings_keep_time">Zeit, in der die gelesenen Einträge erhalten bleiben</string>
+    <string name="settings_keep_time_unread">Zeit, in der die ungelesenen Einträge erhalten bleiben</string>
     <string name="settings_display_images">Bilder anzeigen</string>
     <string name="settings_display_images_description">Bilder in den Einträgen anzeigen</string>
     <string name="settings_preload_image_mode">Bilder vorab laden</string>
     <string name="settings_font_size">Textgröße</string>
     <string name="settings_refresh_wifi_only">Nur über WLAN aktualisieren</string>
-    <string name="settings_refresh_wifi_only_description">Die automatische Aktualisierung wird nur bei aktiver WLAN-Verbindung durchgeführt</string>
+    <string name="settings_refresh_wifi_only_description">Automatische Aktualisierung wird nur durchgeführt, wenn eine WLAN-Verbindung verfügbar ist</string>
     <string name="settings_category_filter">Filter</string>
     <string name="settings_remove_duplicates_description_title">Duplikate entfernen</string>
     <string name="settings_remove_duplicates_description">Untersucht Titel von neu heruntergeladenen Einträgen. Überspringt, wenn ein Eintrag mit demselben Titel bereits vorhanden ist</string>
