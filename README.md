@@ -24,4 +24,4 @@ It is [free/open-source software](https://www.gnu.org/philosophy/free-sw.html) u
 
 ## Bitcoin donation
 
-3DprwFMg5bXGz8QimyiaoEE7mmCkj2DGf5
+`3DprwFMg5bXGz8QimyiaoEE7mmCkj2DGf5`
