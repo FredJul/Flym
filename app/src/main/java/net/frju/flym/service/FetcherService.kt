@@ -43,13 +43,23 @@ import net.frju.flym.data.entities.Task
 import net.frju.flym.data.entities.toDbFormat
 import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.ui.main.MainActivity
-import net.frju.flym.utils.*
+import net.frju.flym.utils.HtmlUtils
+import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.getPrefString
+import net.frju.flym.utils.isOnline
+import net.frju.flym.utils.putPrefBoolean
+import net.frju.flym.utils.sha1
 import okhttp3.Call
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okio.Okio
-import org.jetbrains.anko.*
+import okio.buffer
+import okio.sink
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.connectivityManager
+import org.jetbrains.anko.error
+import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.toast
 import org.jsoup.Jsoup
 import java.io.File
 import java.io.FileOutputStream
@@ -286,7 +296,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 					entry.link?.let { link ->
 						try {
 							createCall(link).execute().use { response ->
-								response.body()?.byteStream()?.let { input ->
+								response.body?.byteStream()?.let { input ->
 									Readability4JExtended(link, Jsoup.parse(input, null, link)).parse().articleContent?.html()?.let {
 										val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(link))
 
@@ -402,7 +412,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			try {
 				createCall(feed.link).execute().use { response ->
 					val input = SyndFeedInput()
-					val romeFeed = input.build(XmlReader(response.body()!!.byteStream()))
+					val romeFeed = input.build(XmlReader(response.body!!.byteStream()))
 					entries.addAll(romeFeed.entries.asSequence().filter { it.publishedDate?.time ?: Long.MAX_VALUE > acceptMinDate }.map { it.toDbFormat(feed) })
 					feed.update(romeFeed)
 				}
@@ -511,10 +521,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 				try {
 					createCall(realUrl).execute().use { response ->
-						response.body()?.let { body ->
+						response.body?.let { body ->
 							val fileOutput = FileOutputStream(tempImgPath)
 
-							val sink = Okio.buffer(Okio.sink(fileOutput))
+							val sink = fileOutput.sink().buffer()
 							sink.writeAll(body.source())
 							sink.close()
 

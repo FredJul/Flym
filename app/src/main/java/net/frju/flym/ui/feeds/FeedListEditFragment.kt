@@ -19,7 +19,12 @@ package net.frju.flym.ui.feeds
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -110,11 +115,11 @@ class FeedListEditFragment : Fragment() {
         inflater.inflate(R.menu.menu_fragment_feed_list_edit, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.add_group -> {
                 val input = EditText(activity).apply {
-                    setSingleLine(true)
+                    isSingleLine = true
                 }
 
                 AlertDialog.Builder(activity)
