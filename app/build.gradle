@@ -13,8 +13,8 @@ android {
 		applicationId "net.frju.flym"
 		minSdkVersion 21
 		targetSdkVersion 29
-		versionCode 25
-		versionName "2.3.1"
+		versionCode 26
+		versionName "2.3.2"
 	}
 
 	compileOptions {
@@ -76,7 +76,7 @@ dependencies {
 
 	implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-	def lifecycle_version = "2.1.0"
+	def lifecycle_version = "2.2.0"
 	implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 
 	def room_version = "2.2.3"
