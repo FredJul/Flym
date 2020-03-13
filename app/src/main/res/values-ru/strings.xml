@@ -107,6 +107,7 @@
     <string name="settings_remove_duplicates_description_title">Удалять дубликаты</string>
     <string name="settings_remove_duplicates_description">Проверять названия заголовков скачанных записей и пропускать их, если запись с таким заголовком уже есть</string>
     <string name="filter">Удалять записи, содержащий слова (разделенный запятыми список)</string>
+    <string name="filter_title">Чёрный список</string>
     <string name="settings_theme">Темы</string>
     <string name="open_browser_direct">Записи будут открываться в браузере по умолчанию</string>
     <string name="open_browser_direct_title">Открыть в браузере</string>
