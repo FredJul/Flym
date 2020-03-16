@@ -40,6 +40,7 @@
     <string name="network_error">Нет подключения к сети</string>
     <string name="drawer_explanation">Добро пожаловать!\n\nДолгое нажатие на ленте откроет дополнительные опции ▼</string>
     <string name="drawer_fetch_error_explanation">Некоторые ленты не обновились корректно ▼</string>
+    <string name="about_screen_info">Я публикую это приложение как бесплатное программное обеспечение с открытым исходным кодом под лицензией GPLv3. Не стесняйтесь изменять его до тех пор, пока вы сохраняете его исходный код открытым.</string>
 
     <!-- FEEDS -->
     <string name="feeds">Ленты</string>

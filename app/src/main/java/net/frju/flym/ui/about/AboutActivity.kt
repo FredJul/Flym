@@ -38,7 +38,7 @@ class AboutActivity : AppCompatActivity() {
 				.setPhoto(R.mipmap.profile_picture)
 				.setCover(R.mipmap.profile_cover)
 				.setName("Frédéric Julian")
-				.setBrief("I'm publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.")
+				.setBrief(R.string.about_screen_info)
 				.setAppIcon(R.mipmap.ic_launcher_foreground)
 				.setAppName(R.string.app_name)
 				.addGitHubLink("FredJul")
