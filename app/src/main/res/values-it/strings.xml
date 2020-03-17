@@ -107,6 +107,7 @@
     <string name="settings_remove_duplicates_description_title">Rimuovi i duplicati</string>
     <string name="settings_remove_duplicates_description">Controlla il titolo di ogni nuovo articolo e ignoralo se ha lo stesso nome di uno gia presente</string>
     <string name="filter">Rimuovi gli articoli che contengono queste parole chiave (usa la virgola come divisore)</string>
+	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Apri gli articoli direttamente nel tuo browser predefinito</string>
     <string name="open_browser_direct_title">Apri nel browser</string>

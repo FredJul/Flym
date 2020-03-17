@@ -86,6 +86,7 @@
     <string name="settings_remove_duplicates_description_title">Dubbele items verwijderen</string>
     <string name="settings_remove_duplicates_description">Controleert de titel van nieuw gedownloadde items en slaat het item over als dezelfde titel al beschikbaar is</string>
     <string name="filter">Verwijder items adv zoekwoorden (komma-gescheiden lijst)</string>
+	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">Thema</string>
     <string name="open_browser_direct">Open items direct in de standaardbrowser</string>
     <string name="open_browser_direct_title">Openen in browser</string>

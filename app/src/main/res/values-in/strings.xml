@@ -86,6 +86,7 @@
     <string name="settings_remove_duplicates_description_title">Buang duplikat</string>
     <string name="settings_remove_duplicates_description">Periksa judul entri yang diunduh dan lewati ketika dua atau lebih memiliki judul yang sama</string>
     <string name="filter">Buang item dengan kata kunci (daftar dipisah koma)</string>
+	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Buka entri di peramban default anda</string>
     <string name="open_browser_direct_title">Buka di peramban</string>

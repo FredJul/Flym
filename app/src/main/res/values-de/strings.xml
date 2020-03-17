@@ -109,6 +109,7 @@
     <string name="settings_remove_duplicates_description_title">Duplikate entfernen</string>
     <string name="settings_remove_duplicates_description">Untersucht Titel von neu heruntergeladenen Einträgen. Überspringt, wenn ein Eintrag mit demselben Titel bereits vorhanden ist</string>
     <string name="filter">Einträge, welche nachfolgende Schlüsselworte beinhalten, entfernen (kommaseparierte Liste)</string>
+	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">Thema</string>
     <string name="open_browser_direct">Einträge direkt in deinem Standardbrowser öffnen</string>
     <string name="open_browser_direct_title">Im Browser öffnen</string>

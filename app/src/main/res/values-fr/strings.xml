@@ -107,6 +107,7 @@
 	<string name="settings_remove_duplicates_description_title">Supprimer les doublons</string>
 	<string name="settings_remove_duplicates_description">Supprime les articles ayant le même titre que ceux déjà chargés</string>
 	<string name="filter">Filtre les articles contenant des mots-clés (séparés par des virgules)</string>
+	<string name="filter_title">Liste noire</string>
 	<string name="settings_theme">Thème</string>
 	<string name="open_browser_direct">Ouvre les articles directement dans votre navigateur</string>
 	<string name="open_browser_direct_title">Ouverture dans navigateur</string>

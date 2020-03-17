@@ -82,7 +82,7 @@ class FeedListEditFragment : Fragment() {
                                     fromFeed.feed.groupId = toFeed.feed.groupId
                                     changeItemPriority(fromFeed.feed, toFeed.feed.displayPriority)
                                 }.show()
-                    } else if (fromFeed.feed.isGroup == false || toFeed.feed.groupId == null) { // can't move group inside another one
+                    } else if (!fromFeed.feed.isGroup || toFeed.feed.groupId == null) { // can't move group inside another one
                         fromFeed.feed.groupId = toFeed.feed.groupId
                         changeItemPriority(fromFeed.feed, toFeed.feed.displayPriority)
                     }

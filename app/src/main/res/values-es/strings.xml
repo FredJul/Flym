@@ -114,6 +114,7 @@
     <string name="settings_remove_duplicates_description_title">Borrar duplicados</string>
     <string name="settings_remove_duplicates_description">Sólo descarga los artículos cuyo título no coincide con el de otro ya presente.</string>
     <string name="filter">Elimina artículos con las palabras indicadas (separar con comas)</string>
+	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">Modo de presentación</string>
     <string name="open_browser_direct">Abre artículos directamente en tu navegador por defecto</string>
     <string name="open_browser_direct_title">Abrir artículo en navegador</string>

@@ -108,6 +108,7 @@
     <string name="settings_remove_duplicates_description_title">Odstranit duplicity</string>
     <string name="settings_remove_duplicates_description">Zkontroluje název nově stažené položky a přeskočí ji, pokud již existuje jedna se stejným názvem</string>
     <string name="filter">Odstranit položky obsahující klíčová slova(seznam oddělený čárkami)</string>
+	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">Téma</string>
     <string name="open_browser_direct">Otevře záznamy přímo ve výchozím prohlížeči</string>
     <string name="open_browser_direct_title">Otevřít v prohlížeči</string>

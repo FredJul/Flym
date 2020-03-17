@@ -86,6 +86,7 @@
     <string name="settings_remove_duplicates_description_title">Ukloni duplikate</string>
     <string name="settings_remove_duplicates_description">Proverava naslove članaka koji su preuzeti i preskače ako isti već postoje kako bi se izbegao dupli sadržaj tj. dupli članci</string>
     <string name="filter">Ukloni članke koji sadrže ključne reči (lista razdvojena zapetom")</string>
+	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">Teme</string>
     <string name="open_browser_direct">Otvaranje članaka direktno u podrazumevanom internet pregledaču</string>
     <string name="open_browser_direct_title">Otvori u pregledaču</string>
