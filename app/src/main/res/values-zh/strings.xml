@@ -40,6 +40,7 @@
     <string name="network_error">网络不可用</string>
     <string name="drawer_explanation">欢迎!\n\n长按订阅源查看选项 ▼</string>
     <string name="drawer_fetch_error_explanation">部分订阅源未正常刷新 ▼</string>
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
     <string name="feeds">订阅源</string>
@@ -107,6 +108,7 @@
     <string name="settings_remove_duplicates_description_title">去除重复项</string>
     <string name="settings_remove_duplicates_description">检查新下载文章的标题并忽略相同标题的文章</string>
     <string name="filter">移除包含这些关键词的文章 (由半角逗号分隔)</string>
+	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">主题</string>
     <string name="open_browser_direct">直接在默认浏览器中打开</string>
     <string name="open_browser_direct_title">在浏览器中打开</string>

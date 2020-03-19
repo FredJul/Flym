@@ -19,6 +19,7 @@
     <string name="network_error">Jaringan tidak tersedia</string>
     <string name="drawer_explanation">Selamat datang!\n\nSentuh lama pada feed untuk melihat opsi ▼</string>
     <string name="drawer_fetch_error_explanation">Beberapa feed anda tidak disegarkan dengan benar ▼</string>
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feed</string>
@@ -86,6 +87,7 @@
     <string name="settings_remove_duplicates_description_title">Buang duplikat</string>
     <string name="settings_remove_duplicates_description">Periksa judul entri yang diunduh dan lewati ketika dua atau lebih memiliki judul yang sama</string>
     <string name="filter">Buang item dengan kata kunci (daftar dipisah koma)</string>
+	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Buka entri di peramban default anda</string>
     <string name="open_browser_direct_title">Buka di peramban</string>
