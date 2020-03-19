@@ -41,6 +41,7 @@
     <string name="network_error">Síť není nastavena</string>
     <string name="drawer_explanation">Vítejte!\n\nDlouhým podržením zdroje zobrazite možnosti ▼</string>
     <string name="drawer_fetch_error_explanation">Některé z vašich zdrojů se neobnovily správně ▼</string>
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
     <string name="feeds">Zdroje</string>

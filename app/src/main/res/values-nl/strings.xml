@@ -19,6 +19,7 @@
     <string name="network_error">Geen netwerkverbinding</string>
     <string name="drawer_explanation">Welkom!\n\nHoudt feeds lang ingedrukt om opties te tonen ▼</string>
     <string name="drawer_fetch_error_explanation">Sommige feeds zijn niet volledig ververst ▼</string>
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>

@@ -42,6 +42,7 @@
     <string name="network_error">Kein Internet</string>
     <string name="drawer_explanation">Willkommen!\n\nLänger auf die Feeds drücken, um die Optionen zu sehen ▼</string>
     <string name="drawer_fetch_error_explanation">Einige deiner Feeds wurden nicht korrekt aktualisiert ▼</string>
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>

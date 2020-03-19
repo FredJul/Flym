@@ -40,6 +40,7 @@
     <string name="network_error">네트워크가 준비되지 않았습니다</string>
     <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
     <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
     <string name="feeds">피드</string>

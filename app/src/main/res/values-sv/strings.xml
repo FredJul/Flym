@@ -39,6 +39,7 @@
     <string name="network_error">Nätverket är inte tillgängligt</string>
     <string name="drawer_explanation">Välkommen!\n\nEtt långt tryck på en feed visar menun ▼</string>
     <string name="drawer_fetch_error_explanation">Några feeds uppdaterades inte rätt ▼</string>
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>

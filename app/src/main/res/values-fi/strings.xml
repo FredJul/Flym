@@ -39,6 +39,7 @@
     <string name="network_error">Ei verkkoyhteyttä</string>
     <string name="drawer_explanation">Tervetuloa!\n\nPitkä painallus syötteen otsikon kohdalla näyttää valikon ▼</string>
     <string name="drawer_fetch_error_explanation">Osa syötteistä ei päivittynyt oikein ▼</string>
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
     <string name="feeds">Syötteet</string>

@@ -40,6 +40,7 @@
     <string name="network_error">Nessuna connessione disponibile</string>
     <string name="drawer_explanation">Benvenuto!\n\nCon una pressione prolungata sui feed vedrai le opzioni ▼</string>
     <string name="drawer_fetch_error_explanation">Alcuni feed non sono stati aggiornati correttamente ▼</string>
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feed</string>
