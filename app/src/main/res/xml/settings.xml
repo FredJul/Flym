@@ -85,9 +85,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="true"
+            android:dependency="refresh_enabled"
             android:key="enable_refresh_notification"
             android:summary="@string/settings_refresh_enable_notifications_description"
             android:title="@string/settings_refresh_enable_notifications" />
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="refresh_on_startup"
+            android:summary="@string/refresh_on_startup"
+            android:title="@string/refresh_on_startup_title"/>
 
         <CheckBoxPreference
             android:layout_width="wrap_content"
@@ -97,13 +106,6 @@
             android:summary="@string/settings_refresh_wifi_only_description"
             android:title="@string/settings_refresh_wifi_only" />
 
-        <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true"
-            android:key="refresh_on_startup"
-            android:summary="@string/refresh_on_startup"
-            android:title="@string/refresh_on_startup_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory
