@@ -74,9 +74,10 @@
     <string name="settings_refresh_enable_notifications">Tampilkan notifikasi penyegaran</string>
     <string name="settings_refresh_enable_notifications_description">Menampilkan notifikasi sistem saat penyegaran feed selesai dilakukan</string>
     <string name="settings_refresh_interval">Interval penyegaran</string>
-    <string name="settings_category_content_presentation">Presentasi konten</string>
+    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">Lama entri yang sudah dibaca akan disimpan</string>
     <string name="settings_keep_time_unread">Lama entri yang belum dibaca akan disimpan</string>
+    <string name="settings_category_content_presentation">Presentasi konten</string>
     <string name="settings_display_images">Tampilkan gambar</string>
     <string name="settings_display_images_description">Menampilkan gambar di dalam entri feed</string>
     <string name="settings_preload_image_mode">Pramuat gambar</string>

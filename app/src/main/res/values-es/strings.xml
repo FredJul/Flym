@@ -100,9 +100,10 @@
     <string name="settings_refresh_enable_notifications">Mostrar notificación de actualización</string>
     <string name="settings_refresh_enable_notifications_description">Mostrar una notificación de sistema cuando se concluye una actualización de las fuentes</string>
     <string name="settings_refresh_interval">Intervalo entre actualizaciones</string>
-    <string name="settings_category_content_presentation">Modo de presentación</string>
+    <string name="settings_category_keep_time">Tiempo de retención de artículos</string>
     <string name="settings_keep_time">Tiempo de retención de artículos leídos</string>
     <string name="settings_keep_time_unread">Tiempo de retención de artículos no leídos</string>
+    <string name="settings_category_content_presentation">Modo de presentación</string>
     <string name="settings_display_images">Mostrar imágenes</string>
     <string name="settings_display_images_description">Mostrar imágenes en artículos</string>
     <string name="settings_preload_image_mode">Precargar imágenes</string>
@@ -166,6 +167,5 @@
         <item>Oscuro</item>
         <item>Negro</item>
     </string-array>
-    <string name="settings_category_keep_time">Tiempo de retención de artículos</string>
 
 </resources>

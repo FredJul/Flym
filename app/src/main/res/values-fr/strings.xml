@@ -95,9 +95,10 @@
 	<string name="settings_refresh_enable_notifications">Afficher les notifications de mise à jour</string>
 	<string name="settings_refresh_enable_notifications_description">Affiche une notification système à la fin d\'une mise à jour</string>
 	<string name="settings_refresh_interval">Intervalle de mise à jour</string>
-	<string name="settings_category_content_presentation">Présentation des flux</string>
+	<string name="settings_category_keep_time">Temps de conservation des articles</string>
 	<string name="settings_keep_time">Délai de conservation des flux lus</string>
 	<string name="settings_keep_time_unread">Délai de conservation des flux non-lus</string>
+	<string name="settings_category_content_presentation">Présentation des flux</string>
 	<string name="settings_display_images">Afficher les images</string>
 	<string name="settings_display_images_description">Afficher les images dans les articles</string>
 	<string name="settings_preload_image_mode">Préchargement des images</string>

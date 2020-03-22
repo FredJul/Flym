@@ -74,9 +74,10 @@
     <string name="settings_refresh_enable_notifications">Prikazivanje obaveštenja prilikom osvežavanja</string>
     <string name="settings_refresh_enable_notifications_description">Prikaži sistemsko obaveštenje nakon što se osvežavanje završi</string>
     <string name="settings_refresh_interval">Interval automatskog osvežavanja</string>
-    <string name="settings_category_content_presentation">Prikaz sadržaja</string>
+    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">Vreme čuvanja članaka</string>
     <string name="settings_keep_time_unread">Vremensko ograničenje za čuvanje nepročitanih članaka</string>
+    <string name="settings_category_content_presentation">Prikaz sadržaja</string>
     <string name="settings_display_images">Prikaži slike</string>
     <string name="settings_display_images_description">Prikaži slike unutar članaka</string>
     <string name="settings_preload_image_mode">Učitavanje slika unapred</string>

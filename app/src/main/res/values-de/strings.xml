@@ -97,9 +97,10 @@
     <string name="settings_refresh_enable_notifications">Aktualisierungsbenachrichtigungen anzeigen</string>
     <string name="settings_refresh_enable_notifications_description">Zeigt eine Benachrichtigung an, wenn eine Aktualisierung abgeschlossen ist</string>
     <string name="settings_refresh_interval">Aktualisierungsintervall</string>
-    <string name="settings_category_content_presentation">Anzeige der Inhalte</string>
+    <string name="settings_category_keep_time">Zeit, in der Einträge erhalten bleiben</string>
     <string name="settings_keep_time">Zeit, in der die gelesenen Einträge erhalten bleiben</string>
     <string name="settings_keep_time_unread">Zeit, in der die ungelesenen Einträge erhalten bleiben</string>
+    <string name="settings_category_content_presentation">Anzeige der Inhalte</string>
     <string name="settings_display_images">Bilder anzeigen</string>
     <string name="settings_display_images_description">Bilder in den Einträgen anzeigen</string>
     <string name="settings_preload_image_mode">Bilder vorab laden</string>
@@ -161,5 +162,4 @@
         <item>Dunkel</item>
         <item>Schwarz</item>
     </string-array>
-    <string name="settings_category_keep_time">Zeit, in der Einträge erhalten bleiben</string>
 </resources>

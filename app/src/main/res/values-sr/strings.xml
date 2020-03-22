@@ -74,9 +74,10 @@
     <string name="settings_refresh_enable_notifications">Приказивање обавештења приликом освежавања</string>
     <string name="settings_refresh_enable_notifications_description">Прикажи системско обавештење након што се освежавање заврши</string>
     <string name="settings_refresh_interval">Интервал аутоматског освежавања</string>
-    <string name="settings_category_content_presentation">Приказ садржаја</string>
+    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">Време чувања чланака</string>
     <string name="settings_keep_time_unread">Временско ограничење за чување непрочитаних чланака</string>
+    <string name="settings_category_content_presentation">Приказ садржаја</string>
     <string name="settings_display_images">Прикажи слике</string>
     <string name="settings_display_images_description">Прикажи слике унутар чланака</string>
     <string name="settings_preload_image_mode">Учитавање слика унапред</string>

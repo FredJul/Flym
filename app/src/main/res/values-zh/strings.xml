@@ -95,9 +95,10 @@
     <string name="settings_refresh_enable_notifications">显示刷新通知</string>
     <string name="settings_refresh_enable_notifications_description">刷新完成时显示系统通知</string>
     <string name="settings_refresh_interval">刷新间隔</string>
-    <string name="settings_category_content_presentation">内容介绍</string>
+    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">已读文章保存时间</string>
     <string name="settings_keep_time_unread">未读文章保存时间</string>
+    <string name="settings_category_content_presentation">内容介绍</string>
     <string name="settings_display_images">显示图片</string>
     <string name="settings_display_images_description">在文章中显示图片</string>
     <string name="settings_preload_image_mode">预先加载图片</string>

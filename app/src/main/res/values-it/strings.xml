@@ -95,9 +95,10 @@
     <string name="settings_refresh_enable_notifications">Mostra una notifica di aggiornamento</string>
     <string name="settings_refresh_enable_notifications_description">Mosta una notifica di sistema quando un aggiornamento è completato</string>
     <string name="settings_refresh_interval">Intervallo di aggiornamento</string>
-    <string name="settings_category_content_presentation">Aspetto e contenuti</string>
+    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">Tempo di archiviazione</string>
     <string name="settings_keep_time_unread">Tempo di archiviazione degli articoli non letti</string>
+    <string name="settings_category_content_presentation">Aspetto e contenuti</string>
     <string name="settings_display_images">Mostra le immagini</string>
     <string name="settings_display_images_description">Mostra le immagini degli articoli</string>
     <string name="settings_preload_image_mode">Scarica le immagini in anticipo</string>

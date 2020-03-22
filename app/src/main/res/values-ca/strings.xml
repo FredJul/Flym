@@ -80,9 +80,10 @@
     <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
     <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Interval entre actualitzacions</string>
-    <string name="settings_category_content_presentation">Presentació del contingut</string>
+    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">Temps de conservació d\'entrades</string>
     <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
+    <string name="settings_category_content_presentation">Presentació del contingut</string>
     <string name="settings_display_images">Mostra imatges</string>
     <string name="settings_display_images_description">Mostra imatges a les entrades</string>
     <string name="settings_preload_image_mode">Precàrrega d\'imatges</string>

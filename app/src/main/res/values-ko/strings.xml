@@ -95,9 +95,10 @@
     <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
     <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">새로 고침 간격</string>
-    <string name="settings_category_content_presentation">내용 표시</string>
+    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">항목을 저장할 시간</string>
     <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
+    <string name="settings_category_content_presentation">내용 표시</string>
     <string name="settings_display_images">이미지 표시</string>
     <string name="settings_display_images_description">항목에서 이미지 표시</string>
     <string name="settings_preload_image_mode">이미지 미리 읽기</string>

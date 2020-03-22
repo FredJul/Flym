@@ -74,9 +74,10 @@
     <string name="settings_refresh_enable_notifications">Notificatie bij verversen</string>
     <string name="settings_refresh_enable_notifications_description">Laat een notificatie zien zodra het verversen is voltooid</string>
     <string name="settings_refresh_interval">Ververstussenpoos</string>
-    <string name="settings_category_content_presentation">Inhoudsweergave</string>
+    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">Hoe lang gelezen items bewaard moeten worden</string>
     <string name="settings_keep_time_unread">Hoe lang ongelezen items bewaard moeten worden</string>
+    <string name="settings_category_content_presentation">Inhoudsweergave</string>
     <string name="settings_display_images">Afbeeldingen tonen</string>
     <string name="settings_display_images_description">Afbeeldingen tonen in feeditems</string>
     <string name="settings_preload_image_mode">Afbeeldingen vooraf downloaden</string>
