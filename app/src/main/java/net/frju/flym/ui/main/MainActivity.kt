@@ -155,9 +155,11 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 					if (hasFetchingError()) {
 						drawer_hint.textColor = Color.RED
 						drawer_hint.textResource = R.string.drawer_fetch_error_explanation
+						toolbar.setNavigationIcon(R.drawable.ic_menu_red_highlight_24dp)
 					} else {
 						drawer_hint.textColor = Color.WHITE
 						drawer_hint.textResource = R.string.drawer_explanation
+						toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
 					}
 				}
 
