@@ -166,5 +166,6 @@
         <item>Oscuro</item>
         <item>Negro</item>
     </string-array>
+    <string name="settings_category_keep_time">Tiempo de retención de artículos</string>
 
 </resources>
