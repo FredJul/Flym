@@ -19,7 +19,7 @@
     <string name="network_error">Мрежа није подешена</string>
     <string name="drawer_explanation">Добродошли!\n\nЗа преглед опција, притисните и задржите жељени довод ▼</string>
     <string name="drawer_fetch_error_explanation">Део довода није освежен ▼</string>
-    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well. Ову апликацију објављујем као бесплатан и слободан софтвер под ГНУ-овом општом јавном лиценцом (ГПЛ) верзије 3</string>
+    <string name="about_screen_info">Ову апликацију објављујем као бесплатан и слободан софтвер под ГНУ-овом општом јавном лиценцом (ГПЛ) верзије 3</string>
 
     <!-- FEEDS -->
     <string name="feeds">Доводи</string>

@@ -19,7 +19,7 @@
     <string name="network_error">Mreža nije podešena</string>
     <string name="drawer_explanation">Dobrodošli!\n\nZa pregled opcija, pritisnite i zadržite željeni dovod ▼</string>
     <string name="drawer_fetch_error_explanation">Deo dovoda nije osvežen ▼</string>
-    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well. Ovu aplikaciju objavljujem kao besplatan i slobodan softver pod GNU-ovom opštom javnom licencom (GPL) verzije 3</string>
+	<string name="about_screen_info">Ovu aplikaciju objavljujem kao besplatan i slobodan softver pod GNU-ovom opštom javnom licencom (GPL) verzije 3</string>
 
     <!-- FEEDS -->
     <string name="feeds">Dovodi</string>
