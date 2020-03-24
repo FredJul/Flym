@@ -28,6 +28,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -60,6 +61,7 @@ import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
+import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.support.v4.share
 import org.jetbrains.anko.uiThread
@@ -170,7 +172,10 @@ class EntriesFragment : Fragment() {
 		unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
 			setGravityOffset(35F, 0F, true)
 			isShowShadow = false
-			badgeBackgroundColor = requireContext().colorAttr(R.attr.colorPrimaryDark)
+			badgeBackgroundColor = when (defaultSharedPreferences.getString(PrefConstants.THEME, "DARK")) {
+				"BLACK" -> ResourcesCompat.getColor(resources, R.color.colorAccentBlack, null)
+				else -> requireContext().colorAttr(R.attr.colorPrimaryDark)
+			}
 		}
 
 		read_all_fab.onClick { _ ->
