@@ -170,7 +170,7 @@ class EntriesFragment : Fragment() {
 		unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
 			setGravityOffset(35F, 0F, true)
 			isShowShadow = false
-			badgeBackgroundColor = requireContext().colorAttr(R.attr.colorPrimaryDark)
+			badgeBackgroundColor = requireContext().colorAttr(R.attr.colorAccent)
 		}
 
 		read_all_fab.onClick { _ ->
@@ -464,6 +464,7 @@ class EntriesFragment : Fragment() {
 	}
 
 	private fun refreshSwipeProgress() {
-		refresh_layout.isRefreshing = context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false) ?: false
+		refresh_layout.isRefreshing = context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false)
+				?: false
 	}
 }
