@@ -443,7 +443,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 					entries.removeAll { entry ->
 						keywordLists.any {
 							entry.title?.contains(it, true) == true ||
-									entry.description?.contains(it, true) == true
+									entry.description?.contains(it, true) == true ||
+									entry.author?.contains(it, true) == true
 						}
 					}
 				}
