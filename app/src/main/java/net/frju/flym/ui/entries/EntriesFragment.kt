@@ -365,7 +365,7 @@ class EntriesFragment : Fragment() {
 
 	private fun startRefresh() {
 		if (context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false) == false) {
-			if (feed?.isGroup == false && feed?.id != Feed.ALL_ENTRIES_ID) {
+			if (feed?.id != Feed.ALL_ENTRIES_ID) {
 				context?.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.EXTRA_FEED_ID,
 						feed?.id))
 			} else {
