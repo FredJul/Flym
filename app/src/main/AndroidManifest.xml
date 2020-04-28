@@ -87,6 +87,13 @@
 				<data android:scheme="rss" />
 			</intent-filter>
 
+			<intent-filter>
+				<action android:name="net.frju.flym.intent.UNREADS" />
+				<action android:name="net.frju.flym.intent.ALL" />
+				<action android:name="net.frju.flym.intent.FAVORITES" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+
 			<meta-data
 				android:name="android.app.shortcuts"
 				android:resource="@xml/shortcuts"/>

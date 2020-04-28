@@ -9,9 +9,7 @@
         android:shortcutDisabledMessage="@string/unreads">
 
         <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="net.frju.flym"
-            android:targetClass="net.frju.flym.ui.main.MainActivity" />
+            android:action="net.frju.flym.intent.UNREADS"/>
 
     </shortcut>
 
@@ -24,9 +22,7 @@
         android:shortcutDisabledMessage="@string/all">
 
         <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="net.frju.flym"
-            android:targetClass="net.frju.flym.ui.main.MainActivity" />
+            android:action="net.frju.flym.intent.ALL"/>
 
     </shortcut>
 
@@ -39,9 +35,7 @@
         android:shortcutDisabledMessage="@string/favorites">
 
         <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="net.frju.flym"
-            android:targetClass="net.frju.flym.ui.main.MainActivity" />
+            android:action="net.frju.flym.intent.FAVORITES"/>
 
     </shortcut>
 </shortcuts>
