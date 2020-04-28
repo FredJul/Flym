@@ -146,8 +146,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 					val acceptMinDate = Math.max(readEntriesKeepDate, unreadEntriesKeepDate)
 
 					var newCount = 0
-					if (feedId == 0L) {
-						newCount = refreshFeeds(acceptMinDate)
+					if (feedId == 0L || App.db.feedDao().findById(feedId)!!.isGroup == true) {
+						newCount = refreshFeeds(feedId, acceptMinDate)
 					} else {
 						App.db.feedDao().findById(feedId)?.let {
 							try {
@@ -364,7 +364,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			}
 		}
 
-		private fun refreshFeeds(acceptMinDate: Long): Int {
+		private fun refreshFeeds(feedId: Long, acceptMinDate: Long): Int {
 
 			val executor = Executors.newFixedThreadPool(THREAD_NUMBER) { r ->
 				Thread(r).apply {
@@ -374,8 +374,13 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			val completionService = ExecutorCompletionService<Int>(executor)
 
 			var globalResult = 0
+			val feeds: List<Feed>
+			if (feedId == 0L) {
+				feeds = App.db.feedDao().allNonGroupFeeds
+			} else {
+				feeds = App.db.feedDao().allFeedsInGroup(feedId)
+			}
 
-			val feeds = App.db.feedDao().allNonGroupFeeds
 			for (feed in feeds) {
 				completionService.submit {
 					var result = 0
