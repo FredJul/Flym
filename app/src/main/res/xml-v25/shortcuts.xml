@@ -1,0 +1,47 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:shortcutId="unreads"
+        android:enabled="true"
+        android:icon="@mipmap/ic_unreads"
+        android:shortcutShortLabel="@string/unreads"
+        android:shortcutLongLabel="@string/unreads"
+        android:shortcutDisabledMessage="@string/unreads">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="net.frju.flym"
+            android:targetClass="net.frju.flym.ui.main.MainActivity" />
+
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="all"
+        android:enabled="true"
+        android:icon="@mipmap/ic_all"
+        android:shortcutShortLabel="@string/all"
+        android:shortcutLongLabel="@string/all"
+        android:shortcutDisabledMessage="@string/all">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="net.frju.flym"
+            android:targetClass="net.frju.flym.ui.main.MainActivity" />
+
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="favorites"
+        android:enabled="true"
+        android:icon="@mipmap/ic_favorites"
+        android:shortcutShortLabel="@string/favorites"
+        android:shortcutLongLabel="@string/favorites"
+        android:shortcutDisabledMessage="@string/favorites">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="net.frju.flym"
+            android:targetClass="net.frju.flym.ui.main.MainActivity" />
+
+    </shortcut>
+</shortcuts>
