@@ -94,6 +94,10 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		private const val RETRIEVE_FULLTEXT_OPML_ATTR = "retrieveFullText"
 	}
 
+	private val INTENT_UNREADS = "net.frju.flym.intent.UNREADS"
+	private val INTENT_ALL = "net.frju.flym.intent.ALL"
+	private val INTENT_FAVORITES = "net.frju.flym.intent.FAVORITES"
+
 	private val feedGroups = mutableListOf<FeedGroup>()
 	private val feedAdapter = FeedAdapter(feedGroups)
 
@@ -307,7 +311,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	private fun handleImplicitIntent(intent: Intent?) {
 		// Has to be called on onStart (when the app is closed) and on onNewIntent (when the app is in the background)
 
-		//Add feed urls from Open with
+		// Add feed urls from Open with
 		if (intent?.action.equals(Intent.ACTION_VIEW)) {
 			val search: String = intent?.data.toString()
 			FeedSearchDialog(this, search).show()
@@ -330,11 +334,34 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		}
 	}
 
+	private fun handleResumeOnlyIntents(intent: Intent?) {
+
+		// If it comes from the All feeds App Shortcuts, select the right view
+		if (intent?.action.equals(INTENT_ALL)) {
+			feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
+			bottom_navigation.selectedItemId = R.id.all
+		}
+
+		// If it comes from the Favorites feeds App Shortcuts, select the right view
+		if (intent?.action.equals(INTENT_FAVORITES)) {
+			feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
+			bottom_navigation.selectedItemId = R.id.favorites
+		}
+
+		// If it comes from the Unreads feeds App Shortcuts, select the right view
+		if (intent?.action.equals(INTENT_UNREADS)) {
+			feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
+			bottom_navigation.selectedItemId = R.id.unreads
+		}
+	}
+
 	override fun onResume() {
 		super.onResume()
 
 		isInForeground = true
 		notificationManager.cancel(0)
+
+		handleResumeOnlyIntents(intent)
 	}
 
 	override fun onPause() {
