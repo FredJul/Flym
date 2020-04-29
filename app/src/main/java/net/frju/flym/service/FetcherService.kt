@@ -69,6 +69,7 @@ import java.net.CookiePolicy
 import java.util.concurrent.ExecutorCompletionService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.math.max
 
 
 class FetcherService : IntentService(FetcherService::class.java.simpleName) {
@@ -123,12 +124,12 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				return
 			}
 
-			when {
-				ACTION_MOBILIZE_FEEDS == action -> {
+			when (action) {
+				ACTION_MOBILIZE_FEEDS -> {
 					mobilizeAllEntries()
 					downloadAllImages()
 				}
-				ACTION_DOWNLOAD_IMAGES == action -> downloadAllImages()
+				ACTION_DOWNLOAD_IMAGES -> downloadAllImages()
 				else -> { // == Constants.ACTION_REFRESH_FEEDS
 					context.putPrefBoolean(PrefConstants.IS_REFRESHING, true)
 
@@ -143,10 +144,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 					COOKIE_MANAGER.cookieStore.removeAll() // Cookies are important for some sites, but we clean them each times
 
 					// We need to use the more recent date in order to be sure to not see old entries again
-					val acceptMinDate = Math.max(readEntriesKeepDate, unreadEntriesKeepDate)
+					val acceptMinDate = max(readEntriesKeepDate, unreadEntriesKeepDate)
 
 					var newCount = 0
-					if (feedId == 0L || App.db.feedDao().findById(feedId)!!.isGroup == true) {
+					if (feedId == 0L || App.db.feedDao().findById(feedId)!!.isGroup) {
 						newCount = refreshFeeds(feedId, acceptMinDate)
 					} else {
 						App.db.feedDao().findById(feedId)?.let {
@@ -170,7 +171,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 		private fun showRefreshNotification(itemCount: Int = 0) {
 
 			val shouldDisplayNotification =
-				context.getPrefBoolean(PrefConstants.REFRESH_NOTIFICATION_ENABLED, true)
+					context.getPrefBoolean(PrefConstants.REFRESH_NOTIFICATION_ENABLED, true)
 
 			if (shouldDisplayNotification && itemCount > 0) {
 				if (!MainActivity.isInForeground) {
@@ -178,18 +179,18 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
 					if (unread > 0) {
 						val text = context.resources.getQuantityString(
-							R.plurals.number_of_new_entries,
-							unread.toInt(),
-							unread
+								R.plurals.number_of_new_entries,
+								unread.toInt(),
+								unread
 						)
 
 						val notificationIntent = Intent(
-							context,
-							MainActivity::class.java
+								context,
+								MainActivity::class.java
 						).putExtra(MainActivity.EXTRA_FROM_NOTIF, true)
 						val contentIntent = PendingIntent.getActivity(
-							context, 0, notificationIntent,
-							PendingIntent.FLAG_UPDATE_CURRENT
+								context, 0, notificationIntent,
+								PendingIntent.FLAG_UPDATE_CURRENT
 						)
 
 						val channelId = "notif_channel"
@@ -197,27 +198,27 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 						@TargetApi(Build.VERSION_CODES.O)
 						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 							val channel = NotificationChannel(
-								channelId,
-								context.getString(R.string.app_name),
-								NotificationManager.IMPORTANCE_DEFAULT
+									channelId,
+									context.getString(R.string.app_name),
+									NotificationManager.IMPORTANCE_DEFAULT
 							)
 							context.notificationManager.createNotificationChannel(channel)
 						}
 
 						val notifBuilder = NotificationCompat.Builder(context, channelId)
-							.setContentIntent(contentIntent)
-							.setSmallIcon(R.drawable.ic_statusbar_rss)
-							.setLargeIcon(
-								BitmapFactory.decodeResource(
-									context.resources,
-									R.mipmap.ic_launcher
+								.setContentIntent(contentIntent)
+								.setSmallIcon(R.drawable.ic_statusbar_rss)
+								.setLargeIcon(
+										BitmapFactory.decodeResource(
+												context.resources,
+												R.mipmap.ic_launcher
+										)
 								)
-							)
-							.setTicker(text)
-							.setWhen(System.currentTimeMillis())
-							.setAutoCancel(true)
-							.setContentTitle(context.getString(R.string.flym_feeds))
-							.setContentText(text)
+								.setTicker(text)
+								.setWhen(System.currentTimeMillis())
+								.setAutoCancel(true)
+								.setContentTitle(context.getString(R.string.flym_feeds))
+								.setContentText(text)
 
 						context.notificationManager.notify(0, notifBuilder.build())
 					}
@@ -233,10 +234,9 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 			if (context.getPrefBoolean(PrefConstants.DISPLAY_IMAGES, true)) {
 				if (PrefConstants.PRELOAD_IMAGE_MODE__ALWAYS == fetchPictureMode) {
 					return true
-				} else if (PrefConstants.PRELOAD_IMAGE_MODE__WIFI_ONLY == fetchPictureMode) {
-					if (App.context.connectivityManager.activeNetworkInfo?.type == ConnectivityManager.TYPE_WIFI) {
-						return true
-					}
+				} else if (PrefConstants.PRELOAD_IMAGE_MODE__WIFI_ONLY == fetchPictureMode
+						&& context.connectivityManager.activeNetworkInfo?.type == ConnectivityManager.TYPE_WIFI) {
+					return true
 				}
 			}
 
@@ -394,7 +394,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				}
 			}
 
-			for (i in 0 until feeds.size) {
+			for (i in feeds.indices) {
 				try {
 					val f = completionService.take()
 					globalResult += f.get()
@@ -550,7 +550,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				// We need to exclude favorite entries images to this cleanup
 				val favoriteIds = App.db.entryDao().favoriteIds
 
-				IMAGE_FOLDER_FILE.listFiles().forEach { file ->
+				IMAGE_FOLDER_FILE.listFiles()?.forEach { file ->
 					// If old file and not part of a favorite entry
 					if (file.lastModified() < keepDateBorderTime && !favoriteIds.any { file.name.startsWith(it + ID_SEPARATOR) }) {
 						file.delete()

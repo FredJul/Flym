@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -38,7 +39,6 @@ import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.isOnline
 import org.jetbrains.anko.attr
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.support.v4.share
@@ -131,11 +131,11 @@ class EntryDetailsFragment : Fragment() {
 	}
 
 	private fun initDataObservers() {
-		isMobilizingLiveData?.removeObservers(this)
+		isMobilizingLiveData?.removeObservers(viewLifecycleOwner)
 		refresh_layout.isRefreshing = false
 
 		isMobilizingLiveData = App.db.taskDao().observeItemMobilizationTasksCount(entryId)
-		isMobilizingLiveData?.observe(this, Observer<Int> { count ->
+		isMobilizingLiveData?.observe(viewLifecycleOwner, Observer<Int> { count ->
 			if (count ?: 0 > 0) {
 				isMobilizing = true
 				refresh_layout.isRefreshing = true

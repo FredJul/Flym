@@ -65,13 +65,27 @@ import net.frju.flym.utils.closeKeyboard
 import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.putPrefBoolean
 import net.frju.flym.utils.setupNoActionBarTheme
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.browse
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textResource
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.File
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.io.Reader
+import java.io.StringReader
+import java.io.Writer
 import java.net.URL
-import java.util.*
+import java.util.Date
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -369,7 +383,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		isInForeground = false
 	}
 
-	override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+	override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 		super.onRestoreInstanceState(savedInstanceState)
 		feedAdapter.onRestoreInstanceState(savedInstanceState)
 	}
@@ -504,6 +518,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+		super.onActivityResult(requestCode, resultCode, resultData)
+
 		if (requestCode == READ_OPML_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 			resultData?.data?.also { uri -> importOpml(uri) }
 		} else if (requestCode == WRITE_OPML_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
@@ -527,11 +543,11 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	private fun importOpml(uri: Uri) {
 		doAsync {
 			try {
-				InputStreamReader(contentResolver.openInputStream(uri)).use { reader -> parseOpml(reader) }
+				InputStreamReader(contentResolver.openInputStream(uri)!!).use { reader -> parseOpml(reader) }
 			} catch (e: Exception) {
 				try {
 					// We try to remove the opml version number, it may work better in some cases
-					val content = BufferedInputStream(contentResolver.openInputStream(uri)).bufferedReader().use { it.readText() }
+					val content = BufferedInputStream(contentResolver.openInputStream(uri)!!).bufferedReader().use { it.readText() }
 					val fixedReader = StringReader(content.replace("<opml version=['\"][0-9]\\.[0-9]['\"]>".toRegex(), "<opml>"))
 					parseOpml(fixedReader)
 				} catch (e: Exception) {
@@ -544,7 +560,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	private fun exportOpml(uri: Uri) {
 		doAsync {
 			try {
-				OutputStreamWriter(contentResolver.openOutputStream(uri), Charsets.UTF_8).use { writer -> exportOpml(writer) }
+				OutputStreamWriter(contentResolver.openOutputStream(uri)!!, Charsets.UTF_8).use { writer -> exportOpml(writer) }
 				contentResolver.query(uri, null, null, null, null)?.use { cursor ->
 					if (cursor.moveToFirst()) {
 						val fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
@@ -645,11 +661,10 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	}
 
 	private fun goBack(): Boolean {
-		if (containers_layout.state == MainNavigator.State.TWO_COLUMNS_WITH_DETAILS && !containers_layout.hasTwoColumns()) {
-			if (clearDetails()) {
-				containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
-				return true
-			}
+		if (containers_layout.state != MainNavigator.State.TWO_COLUMNS_WITH_DETAILS || containers_layout.hasTwoColumns()) return false
+		if (clearDetails()) {
+			containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
+			return true
 		}
 		return false
 	}
