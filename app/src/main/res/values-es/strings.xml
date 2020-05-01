@@ -39,6 +39,7 @@
     <string name="network_error">No se ha configurado la red</string>
     <string name="drawer_explanation">Bienvenido!\n\nManten pulsado sobre una fuente para ver sus opciones ▼</string>
     <string name="drawer_fetch_error_explanation">Algunas fuentes no se han actualizado bien ▼</string>
+    <string name="about_screen_info">Estoy publicando esta aplicación de manera libre y de código abierto bajo la licencia GPLv3. Siéntate libre a modificarla siempre y cuando se mantenga de código abierto.</string>
 
     <!-- FEEDS -->
     <string name="feeds">Fuentes</string>
@@ -88,7 +89,7 @@
     <string name="no_entries">No hay artículos\nDesliza para abajo para actualizar</string>
     <string name="undo">Deshacer</string>
     <string name="marked_as_read">Marcado como leído</string>
-    <string name="marked_as_unread">Marcado como leído</string>
+    <string name="marked_as_unread">Marcado como no leído</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Actualización automática</string>
@@ -96,12 +97,13 @@
     <string name="settings_refresh_enabled_description">Activa las actualizaciones automáticas de
         las fuentes.
     </string>
-    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
-    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
+    <string name="settings_refresh_enable_notifications">Mostrar notificación de actualización</string>
+    <string name="settings_refresh_enable_notifications_description">Mostrar una notificación de sistema cuando se concluye una actualización de las fuentes</string>
     <string name="settings_refresh_interval">Intervalo entre actualizaciones</string>
+    <string name="settings_category_keep_time">Tiempo de retención de artículos</string>
+    <string name="settings_keep_time">Tiempo de retención de artículos leídos</string>
+    <string name="settings_keep_time_unread">Tiempo de retención de artículos no leídos</string>
     <string name="settings_category_content_presentation">Modo de presentación</string>
-    <string name="settings_keep_time">Tiempo de retención de las entradas</string>
-    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_display_images">Mostrar imágenes</string>
     <string name="settings_display_images_description">Mostrar imágenes en artículos</string>
     <string name="settings_preload_image_mode">Precargar imágenes</string>
@@ -114,8 +116,9 @@
     <string name="settings_remove_duplicates_description_title">Borrar duplicados</string>
     <string name="settings_remove_duplicates_description">Sólo descarga los artículos cuyo título no coincide con el de otro ya presente.</string>
     <string name="filter">Elimina artículos con las palabras indicadas (separar con comas)</string>
-    <string name="settings_theme">Modo de presentación</string>
-    <string name="open_browser_direct">Abre artículos directamente en tu navegador por defecto</string>
+	<string name="filter_title">Lista negra</string>
+    <string name="settings_theme">Tema</string>
+    <string name="open_browser_direct">Abrir artículos directamente en tu navegador por defecto</string>
     <string name="open_browser_direct_title">Abrir artículo en navegador</string>
     <string name="refresh_on_startup">Actualizar fuentes al iniciar la aplicación</string>
     <string name="refresh_on_startup_title">Actualizar al inicio</string>

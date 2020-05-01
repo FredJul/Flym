@@ -3,6 +3,9 @@
     <color name="colorPrimary">#009789</color>
     <color name="colorAccent">#02C8B4</color>
 
+    <color name="shortcutBackground">#F5F5F5</color>
+    <color name="shortcutForeground">#00665C</color>
+
     <color name="selected_item_background">#4c009789</color>
 
     <!-- Dark Theme specific colors -->

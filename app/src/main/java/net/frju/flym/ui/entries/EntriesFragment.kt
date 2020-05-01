@@ -28,6 +28,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -54,7 +55,6 @@ import net.frju.flym.utils.registerOnPrefChangeListener
 import net.frju.flym.utils.unregisterOnPrefChangeListener
 import org.jetbrains.anko.appcompat.v7.titleResource
 import org.jetbrains.anko.attr
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.colorAttr
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.doAsync
@@ -170,7 +170,7 @@ class EntriesFragment : Fragment() {
 		unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {
 			setGravityOffset(35F, 0F, true)
 			isShowShadow = false
-			badgeBackgroundColor = requireContext().colorAttr(R.attr.colorPrimaryDark)
+			badgeBackgroundColor = requireContext().colorAttr(R.attr.colorAccent)
 		}
 
 		read_all_fab.onClick { _ ->
@@ -207,7 +207,7 @@ class EntriesFragment : Fragment() {
 	}
 
 	private fun initDataObservers() {
-		entryIdsLiveData?.removeObservers(this)
+		entryIdsLiveData?.removeObservers(viewLifecycleOwner)
 		entryIdsLiveData = when {
 			searchText != null -> App.db.entryDao().observeIdsBySearch(searchText!!)
 			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByGroup(feed!!.id, listDisplayDate)
@@ -223,11 +223,11 @@ class EntriesFragment : Fragment() {
 			else -> App.db.entryDao().observeAllIds(listDisplayDate)
 		}
 
-		entryIdsLiveData?.observe(this, Observer<List<String>> { list ->
+		entryIdsLiveData?.observe(viewLifecycleOwner, Observer { list ->
 			entryIds = list
 		})
 
-		entriesLiveData?.removeObservers(this)
+		entriesLiveData?.removeObservers(viewLifecycleOwner)
 		entriesLiveData = LivePagedListBuilder(when {
 			searchText != null -> App.db.entryDao().observeSearch(searchText!!)
 			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByGroup(feed!!.id, listDisplayDate)
@@ -243,18 +243,18 @@ class EntriesFragment : Fragment() {
 			else -> App.db.entryDao().observeAll(listDisplayDate)
 		}, 30).build()
 
-		entriesLiveData?.observe(this, Observer<PagedList<EntryWithFeed>> { pagedList ->
+		entriesLiveData?.observe(viewLifecycleOwner, Observer { pagedList ->
 			adapter.submitList(pagedList)
 		})
 
-		newCountLiveData?.removeObservers(this)
+		newCountLiveData?.removeObservers(viewLifecycleOwner)
 		newCountLiveData = when {
 			feed?.isGroup == true -> App.db.entryDao().observeNewEntriesCountByGroup(feed!!.id, listDisplayDate)
 			feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeNewEntriesCountByFeed(feed!!.id, listDisplayDate)
 			else -> App.db.entryDao().observeNewEntriesCount(listDisplayDate)
 		}
 
-		newCountLiveData?.observe(this, Observer<Long> { count ->
+		newCountLiveData?.observe(viewLifecycleOwner, Observer { count ->
 			if (count != null && count > 0L) {
 				// If we have an empty list, let's immediately display the new items
 				if (entryIds?.isEmpty() == true && bottom_navigation.selectedItemId != R.id.favorites) {
@@ -365,7 +365,7 @@ class EntriesFragment : Fragment() {
 
 	private fun startRefresh() {
 		if (context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false) == false) {
-			if (feed?.isGroup == false && feed?.id != Feed.ALL_ENTRIES_ID) {
+			if (feed?.id != Feed.ALL_ENTRIES_ID) {
 				context?.startService(Intent(context, FetcherService::class.java).setAction(FetcherService.ACTION_REFRESH_FEEDS).putExtra(FetcherService.EXTRA_FEED_ID,
 						feed?.id))
 			} else {
@@ -464,6 +464,7 @@ class EntriesFragment : Fragment() {
 	}
 
 	private fun refreshSwipeProgress() {
-		refresh_layout.isRefreshing = context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false) ?: false
+		refresh_layout.isRefreshing = context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false)
+				?: false
 	}
 }

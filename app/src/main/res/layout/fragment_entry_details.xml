@@ -42,7 +42,8 @@
             <net.frju.flym.ui.entrydetails.EntryDetailsView
                 android:id="@+id/entry_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
         </net.frju.flym.ui.views.SwipeRefreshLayout>
     </me.thanel.swipeactionview.SwipeActionView>
 </FrameLayout>

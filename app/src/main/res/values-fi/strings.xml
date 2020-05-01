@@ -39,6 +39,7 @@
     <string name="network_error">Ei verkkoyhteyttä</string>
     <string name="drawer_explanation">Tervetuloa!\n\nPitkä painallus syötteen otsikon kohdalla näyttää valikon ▼</string>
     <string name="drawer_fetch_error_explanation">Osa syötteistä ei päivittynyt oikein ▼</string>
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
     <string name="feeds">Syötteet</string>
@@ -97,9 +98,10 @@
     <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
     <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Päivitysväli</string>
-    <string name="settings_category_content_presentation">Sisällön esittäminen</string>
+    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">Artikkelien säilyttämisaika</string>
     <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
+    <string name="settings_category_content_presentation">Sisällön esittäminen</string>
     <string name="settings_display_images">Näytä kuvat</string>
     <string name="settings_display_images_description">Näytä kuvat artikkeleissa</string>
     <string name="settings_preload_image_mode">Esilataa kuvat</string>
@@ -111,6 +113,7 @@
     <string name="settings_remove_duplicates_description_title">Poista kahdesti esiintyvät</string>
     <string name="settings_remove_duplicates_description">Tarkista uuden artikkeli otsikko ja jätä se väliin, jos artikkeli on jo haettuna</string>
     <string name="filter">Poista artikkelit joissa esiintyy avainsanat (pilkulla erotettu lista)</string>
+	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">Teema</string>
     <string name="open_browser_direct">Open entries directly in your default browser</string>
     <string name="open_browser_direct_title">Open in browser</string>

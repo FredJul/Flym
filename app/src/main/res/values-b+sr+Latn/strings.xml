@@ -5,7 +5,7 @@
     <string name="app_name">Flim</string>
     <string name="about_flym">O Flimu</string>
     <string name="welcome_title">Dobrodošli u Flim. Da li želite da dodate novi dovod?</string>
-    <string name="welcome_title_with_opml_import">Da li želite da uvezete prethodne Flim dovode?</string>
+    <string name="welcome_title_with_opml_import">Da li želite da uvezete prethodno sačuvanu Flim dovoda?</string>
     <string name="cannot_find_feeds">Dovodi nisu pronađeni</string>
     <string name="menu_settings">Podešavanja</string>
     <string name="menu_edit_feed">Uređivanje dovoda</string>
@@ -19,6 +19,7 @@
     <string name="network_error">Mreža nije podešena</string>
     <string name="drawer_explanation">Dobrodošli!\n\nZa pregled opcija, pritisnite i zadržite željeni dovod ▼</string>
     <string name="drawer_fetch_error_explanation">Deo dovoda nije osvežen ▼</string>
+	<string name="about_screen_info">Ovu aplikaciju objavljujem kao besplatan i slobodan softver pod GNU-ovom opštom javnom licencom (GPL) verzije 3</string>
 
     <!-- FEEDS -->
     <string name="feeds">Dovodi</string>
@@ -26,7 +27,7 @@
     <string name="menu_import">Uvezi iz OPML</string>
     <string name="menu_export">Izvezi u OPML</string>
     <string name="storage_request_explanation">Da bi uvoz/izvoz dovoda bio moguć u/iz datoteke, neophodno je da dozvolite aplikaciji pristup internom skladištu.</string>
-    <string name="error_feed_export">Izvoz nije završen uspešno. Proverite da li uređaj ima SD karticu montiranu u sistemu.</string>
+    <string name="error_feed_export">Izvoz nije uspešno završen. Proverite da li uređaj ima SD karticu montiranu u sistemu.</string>
     <string name="feed_search">Pretraga dovoda</string>
     <string name="feed_search_hint">Unesite vezu do dovoda ili ključnu reč</string>
     <string name="feed_added">Dovod je dodat u listu</string>
@@ -41,7 +42,7 @@
     <string name="google_news_top_stories">Najbolje priče</string>
     <string name="google_news_world">Svet</string>
     <string name="google_news_business">Poslovni svet</string>
-    <string name="google_news_science_technology">Nauka &amp; Tehnologija</string>
+    <string name="google_news_science_technology">Nauka i Tehnologija</string>
     <string name="google_news_entertainment">Zabava</string>
     <string name="google_news_sports">Sport</string>
     <string name="google_news_health">Zdravlje</string>
@@ -61,7 +62,7 @@
     <string name="unreads">Nepročitano</string>
     <string name="all">Sve</string>
     <string name="favorites">Omiljeno</string>
-    <string name="no_entries">Nema članaka\nMolimo da prevučete prstom nadole za osvežavanje liste članaka</string>
+    <string name="no_entries">Nema članaka\nMolimo da prevučete prstom, po ekranu, na dole za osvežavanje liste članaka</string>
     <string name="undo">Opozovi</string>
     <string name="marked_as_read">Označeno kao pročitano</string>
     <string name="marked_as_unread">Označeno kao nepročitano</string>
@@ -73,9 +74,10 @@
     <string name="settings_refresh_enable_notifications">Prikazivanje obaveštenja prilikom osvežavanja</string>
     <string name="settings_refresh_enable_notifications_description">Prikaži sistemsko obaveštenje nakon što se osvežavanje završi</string>
     <string name="settings_refresh_interval">Interval automatskog osvežavanja</string>
-    <string name="settings_category_content_presentation">Prikaz sadržaja</string>
+    <string name="settings_category_keep_time">Vreme čuvanja unosa</string>
     <string name="settings_keep_time">Vreme čuvanja članaka</string>
     <string name="settings_keep_time_unread">Vremensko ograničenje za čuvanje nepročitanih članaka</string>
+    <string name="settings_category_content_presentation">Prikaz sadržaja</string>
     <string name="settings_display_images">Prikaži slike</string>
     <string name="settings_display_images_description">Prikaži slike unutar članaka</string>
     <string name="settings_preload_image_mode">Učitavanje slika unapred</string>
@@ -86,6 +88,7 @@
     <string name="settings_remove_duplicates_description_title">Ukloni duplikate</string>
     <string name="settings_remove_duplicates_description">Proverava naslove članaka koji su preuzeti i preskače ako isti već postoje kako bi se izbegao dupli sadržaj tj. dupli članci</string>
     <string name="filter">Ukloni članke koji sadrže ključne reči (lista razdvojena zapetom")</string>
+    <string name="filter_title">Crna lista</string>
     <string name="settings_theme">Teme</string>
     <string name="open_browser_direct">Otvaranje članaka direktno u podrazumevanom internet pregledaču</string>
     <string name="open_browser_direct_title">Otvori u pregledaču</string>

@@ -40,6 +40,7 @@
     <string name="network_error">Nessuna connessione disponibile</string>
     <string name="drawer_explanation">Benvenuto!\n\nCon una pressione prolungata sui feed vedrai le opzioni ▼</string>
     <string name="drawer_fetch_error_explanation">Alcuni feed non sono stati aggiornati correttamente ▼</string>
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feed</string>
@@ -94,9 +95,10 @@
     <string name="settings_refresh_enable_notifications">Mostra una notifica di aggiornamento</string>
     <string name="settings_refresh_enable_notifications_description">Mosta una notifica di sistema quando un aggiornamento è completato</string>
     <string name="settings_refresh_interval">Intervallo di aggiornamento</string>
-    <string name="settings_category_content_presentation">Aspetto e contenuti</string>
+    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">Tempo di archiviazione</string>
     <string name="settings_keep_time_unread">Tempo di archiviazione degli articoli non letti</string>
+    <string name="settings_category_content_presentation">Aspetto e contenuti</string>
     <string name="settings_display_images">Mostra le immagini</string>
     <string name="settings_display_images_description">Mostra le immagini degli articoli</string>
     <string name="settings_preload_image_mode">Scarica le immagini in anticipo</string>
@@ -107,6 +109,7 @@
     <string name="settings_remove_duplicates_description_title">Rimuovi i duplicati</string>
     <string name="settings_remove_duplicates_description">Controlla il titolo di ogni nuovo articolo e ignoralo se ha lo stesso nome di uno gia presente</string>
     <string name="filter">Rimuovi gli articoli che contengono queste parole chiave (usa la virgola come divisore)</string>
+	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Apri gli articoli direttamente nel tuo browser predefinito</string>
     <string name="open_browser_direct_title">Apri nel browser</string>

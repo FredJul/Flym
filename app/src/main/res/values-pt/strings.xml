@@ -39,6 +39,7 @@
     <string name="network_error">A internet não está disponível</string>
     <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
     <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
@@ -93,9 +94,10 @@
     <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
     <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Intervalo de atualização</string>
-    <string name="settings_category_content_presentation">Apresentação de conteúdo</string>
+    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">Tempo que as entradas vão permanecer</string>
     <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
+    <string name="settings_category_content_presentation">Apresentação de conteúdo</string>
     <string name="settings_display_images">Mostrar imagens</string>
     <string name="settings_display_images_description">Mostrar imagens nas entradas</string>
     <string name="settings_preload_image_mode">Pré-carregar imagens</string>
@@ -106,6 +108,7 @@
     <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
     <string name="filter">Remove items containing keywords (coma-separated list)</string>
+	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">Theme</string>
     <string name="open_browser_direct">Open entries directly in your default browser</string>
     <string name="open_browser_direct_title">Open in browser</string>

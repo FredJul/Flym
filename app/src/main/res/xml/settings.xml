@@ -6,55 +6,6 @@
     <PreferenceCategory
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="@string/settings_category_refresh">
-
-        <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true"
-            android:key="refresh_enabled"
-            android:summary="@string/settings_refresh_enabled_description"
-            android:title="@string/settings_refresh_enabled" />
-
-        <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true"
-            android:key="enable_refresh_notification"
-            android:summary="@string/settings_refresh_enable_notifications_description"
-            android:title="@string/settings_refresh_enable_notifications" />
-
-        <net.frju.flym.ui.views.AutoSummaryListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="7200"
-            android:dependency="refresh_enabled"
-            android:entries="@array/settings_intervals"
-            android:entryValues="@array/settings_interval_values"
-            android:inputType="number"
-            android:key="refresh_interval"
-            android:title="@string/settings_refresh_interval" />
-
-        <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="false"
-            android:key="refresh_wifi_only"
-            android:summary="@string/settings_refresh_wifi_only_description"
-            android:title="@string/settings_refresh_wifi_only" />
-
-        <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true"
-            android:key="refresh_on_startup"
-            android:summary="@string/refresh_on_startup"
-            android:title="@string/refresh_on_startup_title"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:title="@string/settings_category_content_presentation">
 
         <net.frju.flym.ui.views.AutoSummaryListPreference
@@ -66,24 +17,6 @@
             android:inputType="text"
             android:key="theme"
             android:title="@string/settings_theme" />
-        <net.frju.flym.ui.views.AutoSummaryListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="4"
-            android:entries="@array/settings_keep_times"
-            android:entryValues="@array/settings_keep_time_values"
-            android:inputType="number"
-            android:key="keep_time"
-            android:title="@string/settings_keep_time" />
-        <net.frju.flym.ui.views.AutoSummaryListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="0"
-            android:entries="@array/settings_keep_times"
-            android:entryValues="@array/settings_keep_time_values"
-            android:inputType="number"
-            android:key="keep_time_unread"
-            android:title="@string/settings_keep_time_unread" />
 
         <net.frju.flym.ui.views.AutoSummaryListPreference
             android:layout_width="wrap_content"
@@ -127,6 +60,83 @@
     <PreferenceCategory
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:title="@string/settings_category_refresh">
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="refresh_enabled"
+            android:summary="@string/settings_refresh_enabled_description"
+            android:title="@string/settings_refresh_enabled" />
+
+        <net.frju.flym.ui.views.AutoSummaryListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="7200"
+            android:dependency="refresh_enabled"
+            android:entries="@array/settings_intervals"
+            android:entryValues="@array/settings_interval_values"
+            android:inputType="number"
+            android:key="refresh_interval"
+            android:title="@string/settings_refresh_interval" />
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:dependency="refresh_enabled"
+            android:key="enable_refresh_notification"
+            android:summary="@string/settings_refresh_enable_notifications_description"
+            android:title="@string/settings_refresh_enable_notifications" />
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="refresh_on_startup"
+            android:summary="@string/refresh_on_startup"
+            android:title="@string/refresh_on_startup_title"/>
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="refresh_wifi_only"
+            android:summary="@string/settings_refresh_wifi_only_description"
+            android:title="@string/settings_refresh_wifi_only" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/settings_category_keep_time">
+
+        <net.frju.flym.ui.views.AutoSummaryListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="4"
+            android:entries="@array/settings_keep_times"
+            android:entryValues="@array/settings_keep_time_values"
+            android:inputType="number"
+            android:key="keep_time"
+            android:title="@string/settings_keep_time" />
+
+        <net.frju.flym.ui.views.AutoSummaryListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="0"
+            android:entries="@array/settings_keep_times"
+            android:entryValues="@array/settings_keep_time_values"
+            android:inputType="number"
+            android:key="keep_time_unread"
+            android:title="@string/settings_keep_time_unread" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:title="@string/settings_category_filter">
 
         <CheckBoxPreference
@@ -139,7 +149,8 @@
 
         <EditTextPreference
             android:key="filter_keywords"
-            android:title="@string/filter" />
+            android:summary="@string/filter"
+            android:title="@string/filter_title" />
 
     </PreferenceCategory>
 

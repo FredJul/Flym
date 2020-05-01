@@ -65,13 +65,27 @@ import net.frju.flym.utils.closeKeyboard
 import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.putPrefBoolean
 import net.frju.flym.utils.setupNoActionBarTheme
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.browse
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textResource
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.File
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.io.Reader
+import java.io.StringReader
+import java.io.Writer
 import java.net.URL
-import java.util.*
+import java.util.Date
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -93,6 +107,10 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
 		private const val RETRIEVE_FULLTEXT_OPML_ATTR = "retrieveFullText"
 	}
+
+	private val INTENT_UNREADS = "net.frju.flym.intent.UNREADS"
+	private val INTENT_ALL = "net.frju.flym.intent.ALL"
+	private val INTENT_FAVORITES = "net.frju.flym.intent.FAVORITES"
 
 	private val feedGroups = mutableListOf<FeedGroup>()
 	private val feedAdapter = FeedAdapter(feedGroups)
@@ -155,9 +173,11 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 					if (hasFetchingError()) {
 						drawer_hint.textColor = Color.RED
 						drawer_hint.textResource = R.string.drawer_fetch_error_explanation
+						toolbar.setNavigationIcon(R.drawable.ic_menu_red_highlight_24dp)
 					} else {
 						drawer_hint.textColor = Color.WHITE
 						drawer_hint.textResource = R.string.drawer_explanation
+						toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
 					}
 				}
 
@@ -305,7 +325,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	private fun handleImplicitIntent(intent: Intent?) {
 		// Has to be called on onStart (when the app is closed) and on onNewIntent (when the app is in the background)
 
-		//Add feed urls from Open with
+		// Add feed urls from Open with
 		if (intent?.action.equals(Intent.ACTION_VIEW)) {
 			val search: String = intent?.data.toString()
 			FeedSearchDialog(this, search).show()
@@ -328,11 +348,34 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		}
 	}
 
+	private fun handleResumeOnlyIntents(intent: Intent?) {
+
+		// If it comes from the All feeds App Shortcuts, select the right view
+		if (intent?.action.equals(INTENT_ALL)) {
+			feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
+			bottom_navigation.selectedItemId = R.id.all
+		}
+
+		// If it comes from the Favorites feeds App Shortcuts, select the right view
+		if (intent?.action.equals(INTENT_FAVORITES)) {
+			feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
+			bottom_navigation.selectedItemId = R.id.favorites
+		}
+
+		// If it comes from the Unreads feeds App Shortcuts, select the right view
+		if (intent?.action.equals(INTENT_UNREADS)) {
+			feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
+			bottom_navigation.selectedItemId = R.id.unreads
+		}
+	}
+
 	override fun onResume() {
 		super.onResume()
 
 		isInForeground = true
 		notificationManager.cancel(0)
+
+		handleResumeOnlyIntents(intent)
 	}
 
 	override fun onPause() {
@@ -340,7 +383,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		isInForeground = false
 	}
 
-	override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+	override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 		super.onRestoreInstanceState(savedInstanceState)
 		feedAdapter.onRestoreInstanceState(savedInstanceState)
 	}
@@ -475,6 +518,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+		super.onActivityResult(requestCode, resultCode, resultData)
+
 		if (requestCode == READ_OPML_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 			resultData?.data?.also { uri -> importOpml(uri) }
 		} else if (requestCode == WRITE_OPML_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
@@ -498,11 +543,11 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	private fun importOpml(uri: Uri) {
 		doAsync {
 			try {
-				InputStreamReader(contentResolver.openInputStream(uri)).use { reader -> parseOpml(reader) }
+				InputStreamReader(contentResolver.openInputStream(uri)!!).use { reader -> parseOpml(reader) }
 			} catch (e: Exception) {
 				try {
 					// We try to remove the opml version number, it may work better in some cases
-					val content = BufferedInputStream(contentResolver.openInputStream(uri)).bufferedReader().use { it.readText() }
+					val content = BufferedInputStream(contentResolver.openInputStream(uri)!!).bufferedReader().use { it.readText() }
 					val fixedReader = StringReader(content.replace("<opml version=['\"][0-9]\\.[0-9]['\"]>".toRegex(), "<opml>"))
 					parseOpml(fixedReader)
 				} catch (e: Exception) {
@@ -515,7 +560,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	private fun exportOpml(uri: Uri) {
 		doAsync {
 			try {
-				OutputStreamWriter(contentResolver.openOutputStream(uri), Charsets.UTF_8).use { writer -> exportOpml(writer) }
+				OutputStreamWriter(contentResolver.openOutputStream(uri)!!, Charsets.UTF_8).use { writer -> exportOpml(writer) }
 				contentResolver.query(uri, null, null, null, null)?.use { cursor ->
 					if (cursor.moveToFirst()) {
 						val fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
@@ -616,11 +661,10 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 	}
 
 	private fun goBack(): Boolean {
-		if (containers_layout.state == MainNavigator.State.TWO_COLUMNS_WITH_DETAILS && !containers_layout.hasTwoColumns()) {
-			if (clearDetails()) {
-				containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
-				return true
-			}
+		if (containers_layout.state != MainNavigator.State.TWO_COLUMNS_WITH_DETAILS || containers_layout.hasTwoColumns()) return false
+		if (clearDetails()) {
+			containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
+			return true
 		}
 		return false
 	}
