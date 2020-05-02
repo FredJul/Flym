@@ -55,6 +55,14 @@
             android:summary="@string/open_browser_direct"
             android:title="@string/open_browser_direct_title" />
 
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="hide_button_mark_all_as_read"
+            android:summary="@string/settings_hide_button_mark_all_as_read_description"
+            android:title="@string/settings_hide_button_mark_all_as_read" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

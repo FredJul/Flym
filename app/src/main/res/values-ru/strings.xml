@@ -115,6 +115,8 @@
     <string name="open_browser_direct_title">Открыть в браузере</string>
     <string name="refresh_on_startup">При запуске приложения будет выполняться обновление лент</string>
     <string name="refresh_on_startup_title">Обновлять при запуске</string>
+    <string name="settings_hide_button_mark_all_as_read">Скрыть кнопку \'Пометить все как прочитанные\'</string>
+    <string name="settings_hide_button_mark_all_as_read_description">Не показывать кнопку \'Пометить все как прочитанные\' на экране</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">%d новая запись</item>
