@@ -94,6 +94,8 @@
     <string name="open_browser_direct_title">Otvori u pregledaču</string>
     <string name="refresh_on_startup">Osvežavanje dovoda pri pokretanju aplikacije</string>
     <string name="refresh_on_startup_title">Osvežavanje prilikom pokretanja</string>
+	<string name="settings_hide_button_mark_all_as_read">Hide button \'Mark all as read\'</string>
+	<string name="settings_hide_button_mark_all_as_read_description">Don\'t show button \'Mark all as read\' on screen</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Jedan novi članak</item>

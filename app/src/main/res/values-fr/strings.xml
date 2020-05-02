@@ -115,6 +115,8 @@
 	<string name="open_browser_direct_title">Ouverture dans navigateur</string>
 	<string name="refresh_on_startup">Mise à jour des flux au lancement de l\'application</string>
 	<string name="refresh_on_startup_title">Mise à jour au lancement</string>
+	<string name="settings_hide_button_mark_all_as_read">Cacher le bouton \'Marquer tout comme lu\'</string>
+	<string name="settings_hide_button_mark_all_as_read_description">Ne pas afficher le bouton \'Marquer tout comme lu\' à l\'écran</string>
 
 	<plurals name="number_of_new_entries">
 		<item quantity="one">%d nouvel article</item>

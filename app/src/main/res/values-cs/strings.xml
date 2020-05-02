@@ -116,6 +116,8 @@
     <string name="open_browser_direct_title">Otevřít v prohlížeči</string>
     <string name="refresh_on_startup">Při spuštění aplikace aktualizuje vaše zdroje</string>
     <string name="refresh_on_startup_title">Obnovit při spuštění</string>
+    <string name="settings_hide_button_mark_all_as_read">Hide button \'Mark all as read\'</string>
+    <string name="settings_hide_button_mark_all_as_read_description">Don\'t show button \'Mark all as read\' on screen</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Jeden nový článek</item>

@@ -117,6 +117,8 @@
     <string name="open_browser_direct_title">Im Browser öffnen</string>
     <string name="refresh_on_startup">Aktualisiert alle Feeds, sobald die Anwendung gestartet wird</string>
     <string name="refresh_on_startup_title">Beim Start aktualisieren</string>
+    <string name="settings_hide_button_mark_all_as_read">Hide button \'Mark all as read\'</string>
+    <string name="settings_hide_button_mark_all_as_read_description">Don\'t show button \'Mark all as read\' on screen</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Eintrag</item>

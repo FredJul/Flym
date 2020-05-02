@@ -94,6 +94,8 @@
     <string name="open_browser_direct_title">Openen in browser</string>
     <string name="refresh_on_startup">Ververst de feeds wanneer de app gestart wordt</string>
     <string name="refresh_on_startup_title">Ververs bij opstarten</string>
+    <string name="settings_hide_button_mark_all_as_read">Hide button \'Mark all as read\'</string>
+    <string name="settings_hide_button_mark_all_as_read_description">Don\'t show button \'Mark all as read\' on screen</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Eén nieuw item</item>
