@@ -47,5 +47,6 @@ object PrefConstants {
     const val FONT_SIZE = "font_size"
 
     const val OPEN_BROWSER_DIRECTLY = "open_browser_directly"
+    const val HIDE_BUTTON_MARK_ALL_AS_READ = "hide_button_mark_all_as_read"
 
 }

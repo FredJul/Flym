@@ -273,6 +273,12 @@ class EntriesFragment : Fragment() {
 		super.onStart()
 		context?.registerOnPrefChangeListener(prefListener)
 		refreshSwipeProgress()
+
+        if (context?.getPrefBoolean(PrefConstants.HIDE_BUTTON_MARK_ALL_AS_READ, false) == true) {
+            read_all_fab.visibility = View.INVISIBLE;
+        } else {
+            read_all_fab.visibility = View.VISIBLE;
+        }
 	}
 
 	override fun onStop() {
