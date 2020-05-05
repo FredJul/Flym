@@ -63,6 +63,14 @@
             android:summary="@string/settings_hide_button_mark_all_as_read_description"
             android:title="@string/settings_hide_button_mark_all_as_read" />
 
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="sort_order"
+            android:summary="@string/settings_sort_order"
+            android:title="@string/settings_sort_order_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
