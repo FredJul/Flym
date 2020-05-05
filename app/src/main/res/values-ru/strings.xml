@@ -117,6 +117,8 @@
     <string name="refresh_on_startup_title">Обновлять при запуске</string>
     <string name="settings_hide_button_mark_all_as_read">Скрыть кнопку \'Пометить все как прочитанные\'</string>
     <string name="settings_hide_button_mark_all_as_read_description">Не показывать кнопку \'Пометить все как прочитанные\' на экране</string>
+    <string name="settings_sort_order">Сортировать новости от новых к старым</string>
+    <string name="settings_sort_order_title">Порядок сортрировки</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">%d новая запись</item>

@@ -128,6 +128,7 @@ class EntriesFragment : Fragment() {
 	private var unreadBadge: Badge? = null
 	private var searchText: String? = null
 	private val searchHandler = Handler()
+	private var isDesc: Boolean = true
 
 	private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
 		if (PrefConstants.IS_REFRESHING == key) {
@@ -207,20 +208,21 @@ class EntriesFragment : Fragment() {
 	}
 
 	private fun initDataObservers() {
+		isDesc = context?.getPrefBoolean(PrefConstants.SORT_ORDER, true)!!
 		entryIdsLiveData?.removeObservers(viewLifecycleOwner)
 		entryIdsLiveData = when {
-			searchText != null -> App.db.entryDao().observeIdsBySearch(searchText!!)
-			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByGroup(feed!!.id, listDisplayDate)
-			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByGroup(feed!!.id, listDisplayDate)
-			feed?.isGroup == true -> App.db.entryDao().observeIdsByGroup(feed!!.id, listDisplayDate)
+			searchText != null -> App.db.entryDao().observeIdsBySearch(searchText!!, isDesc)
+			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByGroup(feed!!.id, listDisplayDate, isDesc)
+			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByGroup(feed!!.id, listDisplayDate, isDesc)
+			feed?.isGroup == true -> App.db.entryDao().observeIdsByGroup(feed!!.id, listDisplayDate, isDesc)
 
-			feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByFeed(feed!!.id, listDisplayDate)
-			feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByFeed(feed!!.id, listDisplayDate)
-			feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeIdsByFeed(feed!!.id, listDisplayDate)
+			feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadIdsByFeed(feed!!.id, listDisplayDate, isDesc)
+			feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoriteIdsByFeed(feed!!.id, listDisplayDate, isDesc)
+			feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeIdsByFeed(feed!!.id, listDisplayDate, isDesc)
 
-			bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreadIds(listDisplayDate)
-			bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavoriteIds(listDisplayDate)
-			else -> App.db.entryDao().observeAllIds(listDisplayDate)
+			bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreadIds(listDisplayDate, isDesc)
+			bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavoriteIds(listDisplayDate, isDesc)
+			else -> App.db.entryDao().observeAllIds(listDisplayDate, isDesc)
 		}
 
 		entryIdsLiveData?.observe(viewLifecycleOwner, Observer { list ->
@@ -229,18 +231,18 @@ class EntriesFragment : Fragment() {
 
 		entriesLiveData?.removeObservers(viewLifecycleOwner)
 		entriesLiveData = LivePagedListBuilder(when {
-			searchText != null -> App.db.entryDao().observeSearch(searchText!!)
-			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByGroup(feed!!.id, listDisplayDate)
-			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByGroup(feed!!.id, listDisplayDate)
-			feed?.isGroup == true -> App.db.entryDao().observeByGroup(feed!!.id, listDisplayDate)
+			searchText != null -> App.db.entryDao().observeSearch(searchText!!, isDesc)
+			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByGroup(feed!!.id, listDisplayDate, isDesc)
+			feed?.isGroup == true && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByGroup(feed!!.id, listDisplayDate, isDesc)
+			feed?.isGroup == true -> App.db.entryDao().observeByGroup(feed!!.id, listDisplayDate, isDesc)
 
-			feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByFeed(feed!!.id, listDisplayDate)
-			feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByFeed(feed!!.id, listDisplayDate)
-			feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeByFeed(feed!!.id, listDisplayDate)
+			feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeUnreadsByFeed(feed!!.id, listDisplayDate, isDesc)
+			feed != null && feed?.id != Feed.ALL_ENTRIES_ID && bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeFavoritesByFeed(feed!!.id, listDisplayDate, isDesc)
+			feed != null && feed?.id != Feed.ALL_ENTRIES_ID -> App.db.entryDao().observeByFeed(feed!!.id, listDisplayDate, isDesc)
 
-			bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreads(listDisplayDate)
-			bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavorites(listDisplayDate)
-			else -> App.db.entryDao().observeAll(listDisplayDate)
+			bottom_navigation.selectedItemId == R.id.unreads -> App.db.entryDao().observeAllUnreads(listDisplayDate, isDesc)
+			bottom_navigation.selectedItemId == R.id.favorites -> App.db.entryDao().observeAllFavorites(listDisplayDate, isDesc)
+			else -> App.db.entryDao().observeAll(listDisplayDate, isDesc)
 		}, 30).build()
 
 		entriesLiveData?.observe(viewLifecycleOwner, Observer { pagedList ->
