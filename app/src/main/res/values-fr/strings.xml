@@ -117,6 +117,8 @@
 	<string name="refresh_on_startup_title">Mise à jour au lancement</string>
 	<string name="settings_hide_button_mark_all_as_read">Cacher le bouton \'Marquer tout comme lu\'</string>
 	<string name="settings_hide_button_mark_all_as_read_description">Ne pas afficher le bouton \'Marquer tout comme lu\' à l\'écran</string>
+	<string name="settings_sort_order">Trier les articles du plus recent au plus ancient</string>
+	<string name="settings_sort_order_title">Tri des articles</string>
 
 	<plurals name="number_of_new_entries">
 		<item quantity="one">%d nouvel article</item>

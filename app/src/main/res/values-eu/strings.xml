@@ -125,6 +125,8 @@
     <string name="refresh_on_startup_title">Refresh on startup</string>
     <string name="settings_hide_button_mark_all_as_read">Hide button \'Mark all as read\'</string>
     <string name="settings_hide_button_mark_all_as_read_description">Don\'t show button \'Mark all as read\' on screen</string>
+    <string name="settings_sort_order">Sort entries from newest to oldest</string>
+    <string name="settings_sort_order_title">Sort order</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Sarrera berri bat</item>
