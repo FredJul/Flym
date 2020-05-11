@@ -115,10 +115,10 @@
     <string name="open_browser_direct_title">在浏览器中打开</string>
     <string name="refresh_on_startup">启动应用时刷新你的订阅源</string>
     <string name="refresh_on_startup_title">启动时刷新</string>
-    <string name="settings_hide_button_mark_all_as_read">Hide button \'Mark all as read\'</string>
-    <string name="settings_hide_button_mark_all_as_read_description">Don\'t show button \'Mark all as read\' on screen</string>
-	<string name="settings_sort_order">Sort entries from newest to oldest</string>
-	<string name="settings_sort_order_title">Sort order</string>
+    <string name="settings_hide_button_mark_all_as_read">隐藏“标记全部为已读”按钮</string>
+    <string name="settings_hide_button_mark_all_as_read_description">不在屏幕上显示“标记全部为已读”按钮</string>
+	<string name="settings_sort_order">按最新到最旧排列文章</string>
+	<string name="settings_sort_order_title">排列顺序</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">1 篇新文章</item>
