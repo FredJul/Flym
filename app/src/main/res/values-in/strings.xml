@@ -94,10 +94,10 @@
     <string name="open_browser_direct_title">Buka di peramban</string>
     <string name="refresh_on_startup">Menyegarkan daftar feed saat memulai aplikasi</string>
     <string name="refresh_on_startup_title">Segarkan saat mulai</string>
-    <string name="settings_hide_button_mark_all_as_read">Hide button \'Mark all as read\'</string>
-    <string name="settings_hide_button_mark_all_as_read_description">Don\'t show button \'Mark all as read\' on screen</string>
-    <string name="settings_sort_order">Sort entries from newest to oldest</string>
-    <string name="settings_sort_order_title">Sort order</string>
+    <string name="settings_hide_button_mark_all_as_read">Sembunyikan tombol \'Tandai semua sudah dibaca\'</string>
+    <string name="settings_hide_button_mark_all_as_read_description">Jangan tampilkan tombol \'Tandai semua sudah dibaca\' pada daftar feed</string>
+    <string name="settings_sort_order">Urutkan entri dari terbaru ke terlama</string>
+    <string name="settings_sort_order_title">Pengurutan</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Satu entri baru</item>
