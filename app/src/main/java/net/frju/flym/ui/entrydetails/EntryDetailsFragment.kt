@@ -34,6 +34,7 @@ import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.utils.PrefConstants
+import net.frju.flym.data.utils.PrefConstants.ENABLE_SWIPE_ENTRY
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.getPrefBoolean
@@ -41,6 +42,7 @@ import net.frju.flym.utils.isOnline
 import org.jetbrains.anko.attr
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.support.v4.browse
+import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import org.jetbrains.anko.support.v4.share
 import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.uiThread
@@ -89,8 +91,14 @@ class EntryDetailsFragment : Fragment() {
 	private var isMobilizing = false
 	private var preferFullText = true
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+		return if (defaultSharedPreferences.getBoolean(ENABLE_SWIPE_ENTRY, true)) {
 			inflater.inflate(R.layout.fragment_entry_details, container, false)
+		} else {
+			inflater.inflate(R.layout.fragment_entry_details_noswipe, container, false)
+		}
+
+	}
 
 	override fun onDestroyView() {
 		super.onDestroyView()
@@ -109,21 +117,23 @@ class EntryDetailsFragment : Fragment() {
 			switchFullTextMode()
 		}
 
-		swipe_view.swipeGestureListener = object : SwipeGestureListener {
-			override fun onSwipedLeft(@NotNull swipeActionView: SwipeActionView): Boolean {
-				nextId?.let { nextId ->
-					setEntry(nextId, allEntryIds)
-					navigator?.setSelectedEntryId(nextId)
+		if (defaultSharedPreferences.getBoolean(ENABLE_SWIPE_ENTRY, true)) {
+			swipe_view.swipeGestureListener = object : SwipeGestureListener {
+				override fun onSwipedLeft(@NotNull swipeActionView: SwipeActionView): Boolean {
+					nextId?.let { nextId ->
+						setEntry(nextId, allEntryIds)
+						navigator?.setSelectedEntryId(nextId)
+					}
+					return true
 				}
-				return true
-			}
 
-			override fun onSwipedRight(@NotNull swipeActionView: SwipeActionView): Boolean {
-				previousId?.let { previousId ->
-					setEntry(previousId, allEntryIds)
-					navigator?.setSelectedEntryId(previousId)
+				override fun onSwipedRight(@NotNull swipeActionView: SwipeActionView): Boolean {
+					previousId?.let { previousId ->
+						setEntry(previousId, allEntryIds)
+						navigator?.setSelectedEntryId(previousId)
+					}
+					return true
 				}
-				return true
 			}
 		}
 

@@ -71,6 +71,14 @@
             android:summary="@string/settings_sort_order"
             android:title="@string/settings_sort_order_title" />
 
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="enable_swipe_entry"
+            android:summary="@string/settings_enable_entry_swipe_description"
+            android:title="@string/settings_enable_entry_swipe"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory
