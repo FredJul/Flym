@@ -98,6 +98,8 @@
     <string name="settings_hide_button_mark_all_as_read_description">Jangan tampilkan tombol \'Tandai semua sudah dibaca\' pada daftar feed</string>
     <string name="settings_sort_order">Urutkan entri dari terbaru ke terlama</string>
     <string name="settings_sort_order_title">Pengurutan</string>
+    <string name="settings_enable_entry_swipe">Enable swipe while viewing an entry</string>
+    <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Satu entri baru</item>

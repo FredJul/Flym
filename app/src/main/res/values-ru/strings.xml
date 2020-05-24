@@ -119,6 +119,8 @@
     <string name="settings_hide_button_mark_all_as_read_description">Не показывать кнопку \'Пометить все как прочитанные\' на экране</string>
     <string name="settings_sort_order">Сортировать новости от новых к старым</string>
     <string name="settings_sort_order_title">Порядок сортрировки</string>
+    <string name="settings_enable_entry_swipe">Enable swipe while viewing an entry</string>
+    <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">%d новая запись</item>

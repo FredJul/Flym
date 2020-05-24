@@ -119,6 +119,8 @@
     <string name="settings_hide_button_mark_all_as_read_description">不在屏幕上显示“标记全部为已读”按钮</string>
 	<string name="settings_sort_order">按最新到最旧排列文章</string>
 	<string name="settings_sort_order_title">排列顺序</string>
+    <string name="settings_enable_entry_swipe">Enable swipe while viewing an entry</string>
+    <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">1 篇新文章</item>

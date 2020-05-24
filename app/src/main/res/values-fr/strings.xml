@@ -119,6 +119,8 @@
 	<string name="settings_hide_button_mark_all_as_read_description">Ne pas afficher le bouton \'Marquer tout comme lu\' à l\'écran</string>
 	<string name="settings_sort_order">Trier les articles du plus recent au plus ancient</string>
 	<string name="settings_sort_order_title">Tri des articles</string>
+	<string name="settings_enable_entry_swipe">Activer la navigation latéral sur un article</string>
+	<string name="settings_enable_entry_swipe_description">Si activé, permet de faire un swite pour naviguer entre les différents articles.</string>
 
 	<plurals name="number_of_new_entries">
 		<item quantity="one">%d nouvel article</item>
