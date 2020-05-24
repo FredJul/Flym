@@ -50,4 +50,5 @@ object PrefConstants {
     const val HIDE_BUTTON_MARK_ALL_AS_READ = "hide_button_mark_all_as_read"
     const val SORT_ORDER = "sort_order"
 
+    const val ENABLE_SWIPE_ENTRY = "enable_swipe_entry"
 }
