@@ -47,8 +47,8 @@
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
     <string name="menu_add_group">Gruppe erstellen</string>
-    <string name="menu_import">Aus OPML importieren</string>
-    <string name="menu_export">Nach OPML exportieren</string>
+    <string name="menu_import">Import aus OPML</string>
+    <string name="menu_export">Eport nach OPML</string>
     <string name="storage_request_explanation">Um Feeds aus/in eine(r) Datei zu importieren/exportieren, muss das Programm die Berechtigung haben auf den Speicher zuzugreifen.</string>
     <string name="error_feed_export">Der Export ist fehlgeschlagen. Stelle sicher, dass eine beschreibbare SD-Karte eingelegt ist.</string>
     <string name="feed_search">Feed-Suche</string>
@@ -110,19 +110,19 @@
     <string name="settings_category_filter">Filter</string>
     <string name="settings_remove_duplicates_description_title">Duplikate entfernen</string>
     <string name="settings_remove_duplicates_description">Untersucht Titel von neu heruntergeladenen Einträgen. Überspringt, wenn ein Eintrag mit demselben Titel bereits vorhanden ist</string>
-    <string name="filter">Einträge, welche nachfolgende Schlüsselworte beinhalten, entfernen (kommaseparierte Liste)</string>
-	<string name="filter_title">Blacklist</string>
+    <string name="filter">Einträge entfernen, welche nachfolgende Schlüsselworte beinhalten (kommaseparierte Liste)</string>
+	<string name="filter_title">Sperrliste</string>
     <string name="settings_theme">Thema</string>
     <string name="open_browser_direct">Einträge direkt in deinem Standardbrowser öffnen</string>
     <string name="open_browser_direct_title">Im Browser öffnen</string>
     <string name="refresh_on_startup">Aktualisiert alle Feeds, sobald die Anwendung gestartet wird</string>
     <string name="refresh_on_startup_title">Beim Start aktualisieren</string>
-    <string name="settings_hide_button_mark_all_as_read">Hide button \'Mark all as read\'</string>
-    <string name="settings_hide_button_mark_all_as_read_description">Don\'t show button \'Mark all as read\' on screen</string>
-    <string name="settings_sort_order">Sort entries from newest to oldest</string>
-    <string name="settings_sort_order_title">Sort order</string>
-    <string name="settings_enable_entry_swipe">Enable swipe while viewing an entry</string>
-    <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
+    <string name="settings_hide_button_mark_all_as_read">Button ausblenden \'Als gelesen markieren\'</string>
+    <string name="settings_hide_button_mark_all_as_read_description">Button \'Als gelesen markieren\' auf dem Bildschirm nicht anzeigen</string>
+    <string name="settings_sort_order">Einträge vom neuesten zum ältesten sortieren</string>
+    <string name="settings_sort_order_title">Sortierreihenfolge</string>
+    <string name="settings_enable_entry_swipe">Wischen beim Anzeigen eines Eintrags aktivieren</string>
+    <string name="settings_enable_entry_swipe_description">Wenn dies aktiviert ist, kann während der Anzeige eines Eintrags zwischen den Einträgen gewechselt werden.</string>
 
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Eintrag</item>
