@@ -15,6 +15,16 @@ It is [free/open-source software](https://www.gnu.org/philosophy/free-sw.html) u
       alt="Get it on Google Play"
       height="80">](https://play.google.com/store/apps/details?id=net.frju.flym)
 
+## Contribution
+
+I continue to maintain Flym by handling pull requests and doing deliveries, but overall I am not interested anymore in developing new features or doing architecture evolution. Therefore I would like to count on the community for that and can give some people more permissions.
+
+Here is a potential list of things that could be done:
+- help developing features and bugfixes
+- help maintaining the issues list
+- help improving code quality (moving to MVVM, replacing Anko with ktx/coroutines, ...)
+- help translating, and maybe setup an online tool to help that (like Weblate?)
+
 ## Screenshots
 
 ![](https://lh3.googleusercontent.com/IABRvlpoCXSNwWd1vPuRw7kVFEHoIv_ChdZMBs8lLa0OVaTYPpJ2TO44p3w-wdrzluvd=w1440-h620-rw) _
