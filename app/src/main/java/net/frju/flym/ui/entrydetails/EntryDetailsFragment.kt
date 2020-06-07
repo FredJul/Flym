@@ -296,8 +296,9 @@ class EntryDetailsFragment : Fragment() {
 
 		doAsync {
 			App.db.entryDao().findByIdWithFeed(entryId)?.let { entry ->
+                var feed = App.db.feedDao().findById(entry.entry.feedId)
 				entryWithFeed = entry
-				preferFullText = true
+				preferFullText = feed?.retrieveFullText ?: true
 				isMobilizing = false
 
 				uiThread {
