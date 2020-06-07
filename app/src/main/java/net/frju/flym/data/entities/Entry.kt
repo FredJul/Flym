@@ -68,7 +68,11 @@ fun SyndEntry.toDbFormat(feed: Feed): Entry {
 	?: UUID.randomUUID().toString())).sha1()
 	item.feedId = feed.id
     @Suppress("DEPRECATION")
-    item.title = Html.fromHtml(title).toString()
+	if (title != null) {
+		item.title = Html.fromHtml(title).toString()
+	} else {
+		item.title = "Untitled"
+	}
 	item.description = contents.getOrNull(0)?.value ?: description?.value
 	item.link = link
 	//TODO item.imageLink = null
