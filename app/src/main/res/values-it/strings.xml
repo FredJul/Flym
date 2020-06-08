@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Translated by Luca Trevisani -->
+<!-- Previously translated by Danilo Treffiletti -->
+
 <resources>
 
     <!-- GENERAL -->
@@ -11,7 +13,7 @@
     <string name="menu_settings">Impostazioni</string>
     <string name="menu_edit_feed">Modifica il feed</string>
     <string name="menu_reorder">Riordina i feed</string>
-    <string name="menu_delete">Cancella</string>
+    <string name="menu_delete">Elimina</string>
     <string name="menu_enable_full_text_retrieval">Abilita il recupero del testo completo</string>
     <string name="menu_disable_full_text_retrieval">Disabilita il recupero del testo completo</string>
     <string name="menu_all_read">Segna tutti come letti</string>
@@ -39,7 +41,7 @@
     <string name="to_group_title">Azione di spostamento del feed</string>
     <string name="to_group_message">Puoi spostare il feed sia dentro che sopra il gruppo. Cosa vuoi fare?</string>
     <string name="to_group_above">Sopra il gruppo</string>
-    <string name="to_group_into">Dentro il groupo</string>
+    <string name="to_group_into">Dentro il gruppo</string>
     <string name="google_news_top_stories">Notizie principali</string>
     <string name="google_news_world">Dal mondo</string>
     <string name="google_news_business">Affari</string>
