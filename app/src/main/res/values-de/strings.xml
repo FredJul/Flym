@@ -1,31 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
- Copyright (c) 2010-2012 Stefan Handschuh
- Copyright (c) 2012-2014 Frederic Julian
-      modified 2014-2016 Matthias Dill
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
--->
 <resources>
-
     <!-- GENERAL -->
-    <string name="app_name">Flym</string>
     <string name="about_flym">Über Flym</string>
     <string name="welcome_title">Willkommen bei Flym. Willst du einen Feed hinzufügen?</string>
     <string name="welcome_title_with_opml_import">Möchtest du frühere Flym-Feeds importieren?</string>
@@ -43,9 +18,7 @@
     <string name="drawer_explanation">Willkommen!\n\nLänger auf die Feeds drücken, um die Optionen zu sehen ▼</string>
     <string name="drawer_fetch_error_explanation">Einige deiner Feeds wurden nicht korrekt aktualisiert ▼</string>
     <string name="about_screen_info">Ich veröffentliche diese App als freie und Open Source-Software unter der GPLv3-Lizenz. Jegliche Änderungen sind möglich, solange auch sie Open Source sind.</string>
-
     <!-- FEEDS -->
-    <string name="feeds">Feeds</string>
     <string name="menu_add_group">Gruppe erstellen</string>
     <string name="menu_import">Import aus OPML</string>
     <string name="menu_export">Eport nach OPML</string>
@@ -71,7 +44,6 @@
     <string name="google_news_health">Gesundheit</string>
     <string name="feed_name">Feed-Name</string>
     <string name="feed_link">Feed-Link</string>
-
     <!-- ENTRIES -->
     <string name="all_entries">Alle Einträge</string>
     <string name="menu_star">Favorisieren</string>
@@ -89,8 +61,6 @@
     <string name="undo">Rückgängig</string>
     <string name="marked_as_read">Als gelesen markieren</string>
     <string name="marked_as_unread">Als ungelesen markieren</string>
-    <string name="entry_default_title">Untitled</string>
-
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>
     <string name="settings_refresh_enabled">Automatisches Aktualisieren aktivieren</string>
@@ -112,7 +82,7 @@
     <string name="settings_remove_duplicates_description_title">Duplikate entfernen</string>
     <string name="settings_remove_duplicates_description">Untersucht Titel von neu heruntergeladenen Einträgen. Überspringt, wenn ein Eintrag mit demselben Titel bereits vorhanden ist</string>
     <string name="filter">Einträge entfernen, welche nachfolgende Schlüsselworte beinhalten (kommaseparierte Liste)</string>
-	<string name="filter_title">Sperrliste</string>
+    <string name="filter_title">Sperrliste</string>
     <string name="settings_theme">Thema</string>
     <string name="open_browser_direct">Einträge direkt in deinem Standardbrowser öffnen</string>
     <string name="open_browser_direct_title">Im Browser öffnen</string>
@@ -124,12 +94,10 @@
     <string name="settings_sort_order_title">Sortierreihenfolge</string>
     <string name="settings_enable_entry_swipe">Wischen beim Anzeigen eines Eintrags aktivieren</string>
     <string name="settings_enable_entry_swipe_description">Wenn dies aktiviert ist, kann während der Anzeige eines Eintrags zwischen den Einträgen gewechselt werden.</string>
-
     <plurals name="number_of_new_entries">
         <item quantity="one">Ein neuer Eintrag</item>
         <item quantity="other">%d neue Einträge</item>
     </plurals>
-
     <string-array name="settings_intervals">
         <item>5 Minuten</item>
         <item>15 Minuten</item>
@@ -150,14 +118,6 @@
         <item>2 Monate</item>
         <item>3 Monate</item>
         <item>Für immer</item>
-    </string-array>
-    <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Standard</item>
-        <item>+1</item>
-        <item>+2</item>
-        <item>+3</item>
     </string-array>
     <string-array name="settings_preload_image_modes">
         <item>Niemals</item>
