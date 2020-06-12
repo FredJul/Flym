@@ -19,6 +19,7 @@ package net.frju.flym.data.entities
 
 import android.content.Context
 import android.os.Parcelable
+import android.provider.Settings.Global.getString
 import android.text.Html
 import android.text.format.DateFormat
 import android.text.format.DateUtils
@@ -28,7 +29,9 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.rometools.rome.feed.synd.SyndEntry
 import kotlinx.android.parcel.Parcelize
+import net.fred.feedex.R
 import net.frju.flym.utils.sha1
+import java.security.AccessController.getContext
 import java.util.*
 
 
@@ -62,13 +65,17 @@ data class Entry(@PrimaryKey
 			}
 }
 
-fun SyndEntry.toDbFormat(feed: Feed): Entry {
+fun SyndEntry.toDbFormat(feed: Feed, context: Context): Entry {
 	val item = Entry()
 	item.id = (feed.id.toString() + "_" + (link ?: uri ?: title
 	?: UUID.randomUUID().toString())).sha1()
 	item.feedId = feed.id
     @Suppress("DEPRECATION")
-    item.title = Html.fromHtml(title).toString()
+	if (title != null) {
+		item.title = Html.fromHtml(title).toString()
+	} else {
+		item.title = context.getString(R.string.feed_title_missing)
+	}
 	item.description = contents.getOrNull(0)?.value ?: description?.value
 	item.link = link
 	//TODO item.imageLink = null
