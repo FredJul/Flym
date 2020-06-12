@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Translated by Luca Trevisani -->
-<!-- Previously translated by Danilo Treffiletti -->
-
 <resources>
-
     <!-- GENERAL -->
-    <string name="app_name">Flym</string>
     <string name="about_flym">Informazioni su Flym</string>
     <string name="welcome_title">Benvenuto in Flym. Vuoi aggiungere un feed?</string>
     <string name="welcome_title_with_opml_import">Vuoi importare i feed precedenti in Flym?</string>
@@ -22,8 +17,7 @@
     <string name="network_error">Nessuna connessione disponibile</string>
     <string name="drawer_explanation">Benvenuto!\n\nCon una pressione prolungata sui feed vedrai le opzioni ▼</string>
     <string name="drawer_fetch_error_explanation">Alcuni feed non sono stati aggiornati correttamente ▼</string>
-	<string name="about_screen_info">Pubblico questa applicazione come software gratuito e open source con licenza GPLv3. Sentiti libero di modificarlo fintanto che lo mantieni anche open source.</string>
-
+    <string name="about_screen_info">Pubblico questa applicazione come software gratuito e open source con licenza GPLv3. Sentiti libero di modificarlo fintanto che lo mantieni anche open source.</string>
     <!-- FEEDS -->
     <string name="feeds">Feed</string>
     <string name="menu_add_group">Aggiungi un gruppo</string>
@@ -51,7 +45,6 @@
     <string name="google_news_health">Salute</string>
     <string name="feed_name">Nome del feed</string>
     <string name="feed_link">Link del feed</string>
-
     <!-- ENTRIES -->
     <string name="all_entries">Tutti gli articoli</string>
     <string name="menu_star">Aggiungi ai preferiti</string>
@@ -69,8 +62,6 @@
     <string name="undo">Annulla</string>
     <string name="marked_as_read">Contrassegnato come letto</string>
     <string name="marked_as_unread">Contrassegnato come non letto</string>
-    <string name="entry_default_title">Untitled</string>
-
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Aggiornamento automatico</string>
     <string name="settings_refresh_enabled">Attiva l\'aggiornamento automatico</string>
@@ -104,12 +95,10 @@
     <string name="settings_sort_order_title">Ordine degli articoli</string>
     <string name="settings_enable_entry_swipe">Abilita lo swipe durante la visualizzazione di una voce</string>
     <string name="settings_enable_entry_swipe_description">Se abilitato, permette lo swipe fra gli articoli mentre se ne vede uno.</string>
-
     <plurals name="number_of_new_entries">
         <item quantity="one">Un nuovo articolo</item>
         <item quantity="other">%d nuovi articoli</item>
     </plurals>
-
     <string-array name="settings_intervals">
         <item>5 minuti</item>
         <item>15 minuti</item>
