@@ -1,29 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><!--
- Copyright (c) 2010-2012 Stefan Handschuh
- Copyright (c) 2018 Gary Wang
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
--->
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- GENERAL -->
-    <string name="app_name">Flym</string>
     <string name="about_flym">关于 Flym</string>
     <string name="welcome_title">欢迎使用 Flym 。需要添加一个订阅源吗？</string>
     <string name="welcome_title_with_opml_import">是否要导入旧版 Flym 中的订阅源？</string>
@@ -41,7 +18,6 @@
     <string name="drawer_explanation">欢迎!\n\n长按订阅源查看选项 ▼</string>
     <string name="drawer_fetch_error_explanation">部分订阅源未正常刷新 ▼</string>
     <string name="about_screen_info">我将此应用遵循 GPLv3 许可证发布为自由开源软件。你可以随意修改它，只要你也保持它开源。</string>
-
     <!-- FEEDS -->
     <string name="feeds">订阅源</string>
     <string name="menu_add_group">添加分组</string>
@@ -50,7 +26,7 @@
     <string name="storage_request_explanation">程序需要获取存储读写权限以便导入导出订阅源。</string>
     <string name="error_feed_export">导出失败，请确定你的 SD 卡可以写入。</string>
     <string name="feed_search">搜索订阅源</string>
-	<string name="feed_search_hint">输入订阅源链接或搜索关键词</string>
+    <string name="feed_search_hint">输入订阅源链接或搜索关键词</string>
     <string name="feed_added">订阅源已加入列表</string>
     <string name="question_delete_feed">你确定要删除这个订阅源吗？</string>
     <string name="question_delete_group">你确定要删除这个分组和其中所有的订阅源吗？</string>
@@ -69,7 +45,6 @@
     <string name="google_news_health">健康</string>
     <string name="feed_name">订阅源名称</string>
     <string name="feed_link">订阅源链接</string>
-
     <!-- ENTRIES -->
     <string name="all_entries">全部文章</string>
     <string name="menu_star">收藏</string>
@@ -87,8 +62,6 @@
     <string name="undo">撤销</string>
     <string name="marked_as_read">标记为已读</string>
     <string name="marked_as_unread">标记为未读</string>
-    <string name="entry_default_title">Untitled</string>
-
     <!-- SETTINGS -->
     <string name="settings_category_refresh">自动刷新</string>
     <string name="settings_refresh_enabled">开启自动刷新</string>
@@ -110,7 +83,7 @@
     <string name="settings_remove_duplicates_description_title">去除重复项</string>
     <string name="settings_remove_duplicates_description">检查新下载文章的标题并忽略相同标题的文章</string>
     <string name="filter">移除包含这些关键词的文章 (由半角逗号分隔)</string>
-	<string name="filter_title">黑名单</string>
+    <string name="filter_title">黑名单</string>
     <string name="settings_theme">主题</string>
     <string name="open_browser_direct">直接在默认浏览器中打开</string>
     <string name="open_browser_direct_title">在浏览器中打开</string>
@@ -118,16 +91,11 @@
     <string name="refresh_on_startup_title">启动时刷新</string>
     <string name="settings_hide_button_mark_all_as_read">隐藏“标记全部为已读”按钮</string>
     <string name="settings_hide_button_mark_all_as_read_description">不在屏幕上显示“标记全部为已读”按钮</string>
-	<string name="settings_sort_order">按最新到最旧排列文章</string>
-	<string name="settings_sort_order_title">排列顺序</string>
-    <string name="settings_enable_entry_swipe">Enable swipe while viewing an entry</string>
-    <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
-
+    <string name="settings_sort_order">按最新到最旧排列文章</string>
+    <string name="settings_sort_order_title">排列顺序</string>
     <plurals name="number_of_new_entries">
-        <item quantity="one">1 篇新文章</item>
         <item quantity="other">%d 篇新文章</item>
     </plurals>
-
     <string-array name="settings_intervals">
         <item>5 分钟</item>
         <item>15 分钟</item>
