@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
     <string name="about_flym">Über Flym</string>
     <string name="welcome_title">Willkommen bei Flym. Willst du einen Feed hinzufügen?</string>
     <string name="welcome_title_with_opml_import">Möchtest du frühere Flym-Feeds importieren?</string>
