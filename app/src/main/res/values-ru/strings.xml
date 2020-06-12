@@ -87,6 +87,7 @@
     <string name="undo">Отмена</string>
     <string name="marked_as_read">Помечены как прочитанные</string>
     <string name="marked_as_unread">Помечены как непрочитанные</string>
+    <string name="entry_default_title">Untitled</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Автоматическое обновление</string>

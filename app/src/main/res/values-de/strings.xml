@@ -89,6 +89,7 @@
     <string name="undo">Rückgängig</string>
     <string name="marked_as_read">Als gelesen markieren</string>
     <string name="marked_as_unread">Als ungelesen markieren</string>
+    <string name="entry_default_title">Untitled</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>

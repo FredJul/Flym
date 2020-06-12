@@ -87,6 +87,7 @@
 	<string name="undo">Annuler</string>
 	<string name="marked_as_read">Marqué comme lu</string>
 	<string name="marked_as_unread">Marqué comme non lu</string>
+	<string name="entry_default_title">Sans nom</string>
 
 	<!-- SETTINGS -->
 	<string name="settings_category_refresh">Mise à jour automatique</string>

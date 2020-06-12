@@ -87,6 +87,7 @@
     <string name="undo">撤销</string>
     <string name="marked_as_read">标记为已读</string>
     <string name="marked_as_unread">标记为未读</string>
+    <string name="entry_default_title">Untitled</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">自动刷新</string>

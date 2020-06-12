@@ -66,6 +66,7 @@
     <string name="undo">Опозови</string>
     <string name="marked_as_read">Означено као прочитано</string>
     <string name="marked_as_unread">Означено као непрочитано</string>
+    <string name="entry_default_title">Untitled</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Аутоматско освежавање</string>

@@ -418,7 +418,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 				createCall(feed.link).execute().use { response ->
 					val input = SyndFeedInput()
 					val romeFeed = input.build(XmlReader(response.body!!.byteStream()))
-					entries.addAll(romeFeed.entries.asSequence().filter { it.publishedDate?.time ?: Long.MAX_VALUE > acceptMinDate }.map { it.toDbFormat(feed, context) })
+					entries.addAll(romeFeed.entries.asSequence().filter { it.publishedDate?.time ?: Long.MAX_VALUE > acceptMinDate }.map { it.toDbFormat(context, feed) })
 					feed.update(romeFeed)
 				}
 			} catch (t: Throwable) {

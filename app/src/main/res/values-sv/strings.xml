@@ -86,6 +86,7 @@
     <string name="undo">Avmarkera</string>
     <string name="marked_as_read">Markerade som läst</string>
     <string name="marked_as_unread">Marked as unread</string>
+    <string name="entry_default_title">Untitled</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisk uppdatering</string>

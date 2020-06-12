@@ -93,6 +93,7 @@
     <string name="undo">Desegin</string>
     <string name="marked_as_read">Irakurrita bezala markatuta</string>
     <string name="marked_as_unread">Marked as unread</string>
+    <string name="entry_default_title">Untitled</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Freskatze automatikoa</string>

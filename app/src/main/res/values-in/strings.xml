@@ -66,6 +66,7 @@
     <string name="undo">Urung</string>
     <string name="marked_as_read">Ditandai sudah dibaca</string>
     <string name="marked_as_unread">Ditandai belum dibaca</string>
+    <string name="entry_default_title">Untitled</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Penyegaran otomatis</string>

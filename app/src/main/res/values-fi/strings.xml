@@ -89,6 +89,7 @@
     <string name="undo">Peru</string>
     <string name="marked_as_read">Merkitty luetuksi</string>
     <string name="marked_as_unread">Merkitty lukemattomaksi</string>
+    <string name="entry_default_title">Untitled</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automaattinen päivitys</string>

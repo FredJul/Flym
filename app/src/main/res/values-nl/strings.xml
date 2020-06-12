@@ -66,6 +66,7 @@
     <string name="undo">Ongedaan maken</string>
     <string name="marked_as_read">Gemarkeerd als gelezen</string>
     <string name="marked_as_unread">Marked as unread</string>
+    <string name="entry_default_title">Untitled</string>
 
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisch verversen</string>
