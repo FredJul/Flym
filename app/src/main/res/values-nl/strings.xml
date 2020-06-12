@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- GENERAL -->
-    <string name="app_name">Flym</string>
     <string name="about_flym">Over Flym</string>
     <string name="welcome_title">Welkom bij Flym. Wil je een feed toevoegen?</string>
     <string name="welcome_title_with_opml_import">Wil je eerdere Flym-feeds importeren?</string>
@@ -19,10 +17,7 @@
     <string name="network_error">Geen netwerkverbinding</string>
     <string name="drawer_explanation">Welkom!\n\nHoudt feeds lang ingedrukt om opties te tonen ▼</string>
     <string name="drawer_fetch_error_explanation">Sommige feeds zijn niet volledig ververst ▼</string>
-    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
-
     <!-- FEEDS -->
-    <string name="feeds">Feeds</string>
     <string name="menu_add_group">Groep toevoegen</string>
     <string name="menu_import">Importeren uit OPML</string>
     <string name="menu_export">Exporteren naar OPML</string>
@@ -43,12 +38,10 @@
     <string name="google_news_world">Wereld</string>
     <string name="google_news_business">Zakelijk</string>
     <string name="google_news_science_technology">Wetenschap &amp; Technologie</string>
-    <string name="google_news_entertainment">Entertainment</string>
     <string name="google_news_sports">Sport</string>
     <string name="google_news_health">Gezondheid</string>
     <string name="feed_name">Feednaam</string>
     <string name="feed_link">Feedlink</string>
-
     <!-- ENTRIES -->
     <string name="all_entries">Alle items</string>
     <string name="menu_star">Favoriet</string>
@@ -65,9 +58,6 @@
     <string name="no_entries">Geen items\nTrek omlaag om te verversen</string>
     <string name="undo">Ongedaan maken</string>
     <string name="marked_as_read">Gemarkeerd als gelezen</string>
-    <string name="marked_as_unread">Marked as unread</string>
-    <string name="entry_default_title">Untitled</string>
-
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisch verversen</string>
     <string name="settings_refresh_enabled">Automatisch verversen inschakelen</string>
@@ -75,7 +65,6 @@
     <string name="settings_refresh_enable_notifications">Notificatie bij verversen</string>
     <string name="settings_refresh_enable_notifications_description">Laat een notificatie zien zodra het verversen is voltooid</string>
     <string name="settings_refresh_interval">Ververstussenpoos</string>
-    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">Hoe lang gelezen items bewaard moeten worden</string>
     <string name="settings_keep_time_unread">Hoe lang ongelezen items bewaard moeten worden</string>
     <string name="settings_category_content_presentation">Inhoudsweergave</string>
@@ -85,28 +74,18 @@
     <string name="settings_font_size">Tekstgrootte</string>
     <string name="settings_refresh_wifi_only">Alleen verversen via Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">De app zal alleen automatisch verversen als er een WiFi-verbinding beschikbaar is</string>
-    <string name="settings_category_filter">Filters</string>
     <string name="settings_remove_duplicates_description_title">Dubbele items verwijderen</string>
     <string name="settings_remove_duplicates_description">Controleert de titel van nieuw gedownloadde items en slaat het item over als dezelfde titel al beschikbaar is</string>
     <string name="filter">Verwijder items adv zoekwoorden (komma-gescheiden lijst)</string>
-	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">Thema</string>
     <string name="open_browser_direct">Open items direct in de standaardbrowser</string>
     <string name="open_browser_direct_title">Openen in browser</string>
     <string name="refresh_on_startup">Ververst de feeds wanneer de app gestart wordt</string>
     <string name="refresh_on_startup_title">Ververs bij opstarten</string>
-    <string name="settings_hide_button_mark_all_as_read">Hide button \'Mark all as read\'</string>
-    <string name="settings_hide_button_mark_all_as_read_description">Don\'t show button \'Mark all as read\' on screen</string>
-    <string name="settings_sort_order">Sort entries from newest to oldest</string>
-    <string name="settings_sort_order_title">Sort order</string>
-    <string name="settings_enable_entry_swipe">Enable swipe while viewing an entry</string>
-    <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
-
     <plurals name="number_of_new_entries">
         <item quantity="one">Eén nieuw item</item>
         <item quantity="other">%d nieuwe items</item>
     </plurals>
-
     <string-array name="settings_intervals">
         <item>5 minuten</item>
         <item>15 minuten</item>
