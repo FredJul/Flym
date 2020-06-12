@@ -23,7 +23,7 @@ Here is a potential list of things that could be done:
 - help developing features and bugfixes
 - help maintaining the issues list
 - help improving code quality (moving to MVVM, replacing Anko with ktx/coroutines, ...)
-- help translating, and maybe setup an online tool to help that (Weblate setup in progress...)
+- help translating on https://frju.crowdin.com/flym
 
 ## Screenshots
 
