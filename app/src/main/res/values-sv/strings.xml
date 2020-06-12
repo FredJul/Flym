@@ -1,28 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><!--
- Copyright (c) 2010-2012 Stefan Handschuh
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
--->
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- GENERAL -->
-    <string name="app_name">Flym</string>
     <string name="about_flym">Om Flym</string>
     <string name="welcome_title">Välkommen till Flym. Skulle du vilja lägga till en feed?</string>
     <string name="welcome_title_with_opml_import">Skulle du vilja importera tidigare Flym feeds?</string>
@@ -34,23 +12,18 @@
     <string name="menu_enable_full_text_retrieval">Hämta i fulltext</string>
     <string name="menu_disable_full_text_retrieval">Hämta inte i fulltext</string>
     <string name="menu_all_read">Mark som läst</string>
-    <string name="flym_feeds">Flym feeds</string>
     <string name="error">Fel</string>
     <string name="network_error">Nätverket är inte tillgängligt</string>
     <string name="drawer_explanation">Välkommen!\n\nEtt långt tryck på en feed visar menun ▼</string>
     <string name="drawer_fetch_error_explanation">Några feeds uppdaterades inte rätt ▼</string>
-    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
-
     <!-- FEEDS -->
-    <string name="feeds">Feeds</string>
     <string name="menu_add_group">Lägg till grupp</string>
     <string name="menu_import">Importera från OPML</string>
     <string name="menu_export">Exportera till OPML</string>
     <string name="storage_request_explanation">För att kunna importera eller exportera en fil, du måste ge appen behörighet att läsa och spara på minneskort.</string>
     <string name="error_feed_export">Exporten har misslyckats. Försäkra dig om att du har ett skrivbart SD-kort monterat.</string>
     <string name="feed_search">Sök efter feed</string>
-	<string name="feed_search_hint">Inskriva feed link eller nyckelord</string>
-    <string name="feed_added">Feed added to the list</string>
+    <string name="feed_search_hint">Inskriva feed link eller nyckelord</string>
     <string name="question_delete_feed">Vill du radera denna feed?</string>
     <string name="question_delete_group">Vill du radera denna grupp och alla dess feeds?</string>
     <string name="add_group_title">Ny grupp</string>
@@ -66,9 +39,6 @@
     <string name="google_news_entertainment">Nöje</string>
     <string name="google_news_sports">Sport</string>
     <string name="google_news_health">Hälsa</string>
-    <string name="feed_name">Feed name</string>
-    <string name="feed_link">Feed link</string>
-
     <!-- ENTRIES -->
     <string name="all_entries">Alla</string>
     <string name="menu_star">Markera som favorit</string>
@@ -79,23 +49,15 @@
     <string name="original_text">Visa originaltexten</string>
     <string name="open_in_browser">Öppna i webläsare</string>
     <string name="cant_open_link">Inget lämpligt program hittades för denna länk</string>
-    <string name="unreads">Unreads</string>
-    <string name="all">All</string>
     <string name="favorites">Favoriter</string>
     <string name="no_entries">Inga inlägg\nDra ner för att uppdatera</string>
     <string name="undo">Avmarkera</string>
     <string name="marked_as_read">Markerade som läst</string>
-    <string name="marked_as_unread">Marked as unread</string>
-    <string name="entry_default_title">Untitled</string>
-
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisk uppdatering</string>
     <string name="settings_refresh_enabled">Uppdatera automatiskt</string>
     <string name="settings_refresh_enabled_description">Uppdatera alla feeds automatiskt</string>
-    <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
-    <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Uppdateringsintervall</string>
-    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">Tid som inläggen behållas</string>
     <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
     <string name="settings_category_content_presentation">Innehållspresentation</string>
@@ -109,24 +71,11 @@
     <string name="settings_remove_duplicates_description_title">Radera duplikat</string>
     <string name="settings_remove_duplicates_description">Kontrollera titeln på en ny inlägg, och förbigå om den redan finns</string>
     <string name="filter">Radera inlägg med nyckelord (lista separerade med komma)</string>
-	<string name="filter_title">Blacklist</string>
     <string name="settings_theme">Tema</string>
-    <string name="open_browser_direct">Open entries directly in your default browser</string>
-    <string name="open_browser_direct_title">Open in browser</string>
-    <string name="refresh_on_startup">Refreshes your feeds when launching the app</string>
-    <string name="refresh_on_startup_title">Refresh on startup</string>
-    <string name="settings_hide_button_mark_all_as_read">Hide button \'Mark all as read\'</string>
-    <string name="settings_hide_button_mark_all_as_read_description">Don\'t show button \'Mark all as read\' on screen</string>
-	<string name="settings_sort_order">Sort entries from newest to oldest</string>
-	<string name="settings_sort_order_title">Sort order</string>
-    <string name="settings_enable_entry_swipe">Enable swipe while viewing an entry</string>
-    <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
-
     <plurals name="number_of_new_entries">
         <item quantity="one">Ett nytt inlägg</item>
         <item quantity="other">%d nya inlägg</item>
     </plurals>
-
     <string-array name="settings_intervals">
         <item>5 minuter</item>
         <item>15 minuter</item>
@@ -166,5 +115,4 @@
         <item>Mörk</item>
         <item>Svart</item>
     </string-array>
-
 </resources>
