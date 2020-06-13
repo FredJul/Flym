@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
     <string name="about_flym">Informazioni su Flym</string>
     <string name="welcome_title">Benvenuto in Flym. Vuoi aggiungere un feed?</string>
     <string name="welcome_title_with_opml_import">Vuoi importare i feed precedenti in Flym?</string>
@@ -62,6 +63,7 @@
     <string name="undo">Annulla</string>
     <string name="marked_as_read">Contrassegnato come letto</string>
     <string name="marked_as_unread">Contrassegnato come non letto</string>
+    <string name="entry_default_title">Senza titolo</string>
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Aggiornamento automatico</string>
     <string name="settings_refresh_enabled">Attiva l\'aggiornamento automatico</string>
