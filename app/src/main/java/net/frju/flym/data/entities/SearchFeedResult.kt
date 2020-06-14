@@ -29,4 +29,7 @@ data class SearchFeedResult(
 
 	override fun getTitle() = name
 
+	override fun toString(): String{
+		return "Name: " + this.name + " Link: " + this.link
+	}
 }
