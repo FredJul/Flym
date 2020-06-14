@@ -145,7 +145,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		nav.adapter = feedAdapter
 
 		add_feed_fab.onClick {
-			FeedSearchDialog(this).show()
+//			FeedSearchDialog(this).show()
+			startActivity<FeedSearchActivity>()
 		}
 
 		App.db.feedDao().observeAllWithCount.observe(this@MainActivity, Observer { nullableFeeds ->

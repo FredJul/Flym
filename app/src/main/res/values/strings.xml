@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <plurals name="number_of_new_entries">
+        <item quantity="one">One new entry</item>
+        <item quantity="other">%d new entries</item>
+    </plurals>
+
+
     <!-- GENERAL -->
     <string name="app_name">Flym</string>
     <string name="about_flym">About Flym</string>
@@ -19,7 +25,7 @@
     <string name="network_error">The network is not set up</string>
     <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
     <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
-	<string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
+    <string name="about_screen_info">This application is free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
@@ -102,10 +108,10 @@
     <string name="settings_enable_entry_swipe">Enable swipe while viewing an entry</string>
     <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
 
-    <plurals name="number_of_new_entries">
-        <item quantity="one">One new entry</item>
-        <item quantity="other">%d new entries</item>
-    </plurals>
+    <string-array name="contributors">
+        <item>hansjesse</item>
+        <item>FredJul</item>
+    </string-array>
 
     <string-array name="settings_intervals">
         <item>5 minutes</item>

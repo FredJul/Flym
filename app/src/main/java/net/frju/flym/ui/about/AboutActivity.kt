@@ -34,21 +34,24 @@ class AboutActivity : AppCompatActivity() {
 
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-		val view = AboutBuilder.with(this)
+		val aboutBuilder = AboutBuilder.with(this)
 				.setPhoto(R.mipmap.profile_picture)
 				.setCover(R.mipmap.profile_cover)
-				.setName("Frédéric Julian")
+				.setName(R.string.app_name)
 				.setBrief(R.string.about_screen_info)
 				.setAppIcon(R.mipmap.ic_launcher_foreground)
 				.setAppName(R.string.app_name)
-				.addGitHubLink("FredJul")
 				.addFiveStarsAction()
 				.addShareAction(R.string.app_name)
 				.setWrapScrollView(true)
 				.setLinksAnimated(true)
 				.setShowAsCard(true)
-				.build()
 
+		for (contributor in resources.getStringArray(R.array.contributors)){
+			aboutBuilder.addGitHubLink(contributor)
+		}
+
+		val view = aboutBuilder.build()
 		setContentView(view)
 	}
 
