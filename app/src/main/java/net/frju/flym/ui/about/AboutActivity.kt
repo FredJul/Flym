@@ -35,7 +35,6 @@ class AboutActivity : AppCompatActivity() {
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 		val aboutBuilder = AboutBuilder.with(this)
-				.setPhoto(R.mipmap.profile_picture)
 				.setCover(R.mipmap.profile_cover)
 				.setName(R.string.app_name)
 				.setBrief(R.string.about_screen_info)
@@ -46,10 +45,6 @@ class AboutActivity : AppCompatActivity() {
 				.setWrapScrollView(true)
 				.setLinksAnimated(true)
 				.setShowAsCard(true)
-
-		for (contributor in resources.getStringArray(R.array.contributors)){
-			aboutBuilder.addGitHubLink(contributor)
-		}
 
 		val view = aboutBuilder.build()
 		setContentView(view)
