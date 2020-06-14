@@ -17,14 +17,14 @@
     <string name="error">Erreur</string>
     <string name="network_error">Pas de connexion disponible</string>
     <string name="drawer_explanation">Bienvenue !\n\nAppuyez longtemps sur les flux pour voir les options ▼</string>
-    <string name="drawer_fetch_error_explanation">Certains de vos flux ne se sont pas raffraichis correctement ▼</string>
+    <string name="drawer_fetch_error_explanation">Certains de vos flux n\'ont pas été mis à jour correctement ▼</string>
     <string name="about_screen_info">Je publie cette application comme open-source sour license GPLv3. Vous êtes libre de la modifier aussi longtemps que vous publiez vos modifications avec la même license.</string>
     <!-- FEEDS -->
     <string name="feeds">Flux</string>
     <string name="menu_add_group">Ajouter un groupe</string>
     <string name="menu_import">Importer depuis OPML</string>
     <string name="menu_export">Exporter vers OPML</string>
-    <string name="storage_request_explanation">Pour pouvoir importer ou exporter les flux dans un fichier, vous devez authoriser l\'application à accéder à la mémoire de stockage.</string>
+    <string name="storage_request_explanation">Pour pouvoir importer ou exporter les flux dans un fichier, vous devez autoriser l\'application à accéder à la mémoire de stockage.</string>
     <string name="error_feed_export">L\'export a échoué. Assurez-vous d\'avoir une carte SD montée et autorisée en écriture.</string>
     <string name="feed_search">Recherche de flux</string>
     <string name="feed_search_hint">Entrez un lien de flux ou un mot-clé</string>
@@ -59,7 +59,7 @@
     <string name="unreads">Non lus</string>
     <string name="all">Tous</string>
     <string name="favorites">Favoris</string>
-    <string name="no_entries">Aucun article\nGlissez vers le bas pour raffraichir</string>
+    <string name="no_entries">Aucun article\nGlissez vers le bas pour raffraîchir</string>
     <string name="undo">Annuler</string>
     <string name="marked_as_read">Marqué comme lu</string>
     <string name="marked_as_unread">Marqué comme non lu</string>
@@ -96,7 +96,7 @@
     <string name="settings_sort_order">Trier les articles du plus recent au plus ancient</string>
     <string name="settings_sort_order_title">Tri des articles</string>
     <string name="settings_enable_entry_swipe">Activer la navigation latéral sur un article</string>
-    <string name="settings_enable_entry_swipe_description">Si activé, permet de faire un swite pour naviguer entre les différents articles.</string>
+    <string name="settings_enable_entry_swipe_description">Si activé, permet de glisser pour naviguer entre les différents articles.</string>
     <plurals name="number_of_new_entries">
         <item quantity="one">%d nouvel article</item>
         <item quantity="other">%d nouveaux articles</item>
