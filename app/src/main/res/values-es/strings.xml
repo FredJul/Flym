@@ -1,28 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><!--
- Copyright (c) 2010-2012 Stefan Handschuh
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
--->
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- GENERAL -->
-    <string name="app_name">Flym</string>
     <string name="about_flym">Sobre Flym</string>
     <string name="welcome_title">Bienvenido a Flym ¿Quieres añadir una fuente?</string>
     <string name="welcome_title_with_opml_import">¿Quieres importar fuentes anteriores de Flym?</string>
@@ -35,12 +13,10 @@
     <string name="menu_disable_full_text_retrieval">Deshablitar recuperación de texto completo</string>
     <string name="menu_all_read">Marcar todo como leído</string>
     <string name="flym_feeds">Fuentes de Flym</string>
-    <string name="error">Error</string>
     <string name="network_error">No se ha configurado la red</string>
     <string name="drawer_explanation">Bienvenido!\n\nManten pulsado sobre una fuente para ver sus opciones ▼</string>
     <string name="drawer_fetch_error_explanation">Algunas fuentes no se han actualizado bien ▼</string>
     <string name="about_screen_info">Estoy publicando esta aplicación de manera libre y de código abierto bajo la licencia GPLv3. Siéntate libre a modificarla siempre y cuando se mantenga de código abierto.</string>
-
     <!-- FEEDS -->
     <string name="feeds">Fuentes</string>
     <string name="menu_add_group">Añadir grupo</string>
@@ -51,7 +27,7 @@
         la tarjeta SD.
     </string>
     <string name="feed_search">Buscar fuentes</string>
-	<string name="feed_search_hint">Introduce enlace a una fuente o palabra clave</string>
+    <string name="feed_search_hint">Introduce enlace a una fuente o palabra clave</string>
     <string name="feed_added">Fuente añadida a la lista</string>
     <string name="question_delete_feed">¿Seguro que quiere eliminar esta fuente?</string>
     <string name="question_delete_group">¿Seguro que quiere eliminar este grupo de fuentes?</string>
@@ -72,7 +48,6 @@
     <string name="google_news_health">Salud</string>
     <string name="feed_name">Nombre de la fuente</string>
     <string name="feed_link">Enlace de la fuente</string>
-
     <!-- ENTRIES -->
     <string name="all_entries">Todos los artículos</string>
     <string name="menu_star">Destacar</string>
@@ -81,7 +56,7 @@
     <string name="menu_mark_as_unread">Marcar como no leído</string>
     <string name="get_full_text">Descargar el texto completo</string>
     <string name="original_text">Mostrar el texto original</string>
-	<string name="open_in_browser">Ver en el navegador</string>
+    <string name="open_in_browser">Ver en el navegador</string>
     <string name="cant_open_link">No se ha encontrado una aplicación para este enlace.</string>
     <string name="unreads">Sin leer</string>
     <string name="all">Todos</string>
@@ -90,8 +65,6 @@
     <string name="undo">Deshacer</string>
     <string name="marked_as_read">Marcado como leído</string>
     <string name="marked_as_unread">Marcado como no leído</string>
-    <string name="entry_default_title">Untitled</string>
-
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Actualización automática</string>
     <string name="settings_refresh_enabled">Habilitar actualizaciones automáticas</string>
@@ -117,24 +90,16 @@
     <string name="settings_remove_duplicates_description_title">Borrar duplicados</string>
     <string name="settings_remove_duplicates_description">Sólo descarga los artículos cuyo título no coincide con el de otro ya presente.</string>
     <string name="filter">Elimina artículos con las palabras indicadas (separar con comas)</string>
-	<string name="filter_title">Lista negra</string>
+    <string name="filter_title">Lista negra</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Abrir artículos directamente en tu navegador por defecto</string>
     <string name="open_browser_direct_title">Abrir artículo en navegador</string>
     <string name="refresh_on_startup">Actualizar fuentes al iniciar la aplicación</string>
     <string name="refresh_on_startup_title">Actualizar al inicio</string>
-    <string name="settings_hide_button_mark_all_as_read">Hide button \'Mark all as read\'</string>
-    <string name="settings_hide_button_mark_all_as_read_description">Don\'t show button \'Mark all as read\' on screen</string>
-    <string name="settings_sort_order">Sort entries from newest to oldest</string>
-    <string name="settings_sort_order_title">Sort order</string>
-    <string name="settings_enable_entry_swipe">Enable swipe while viewing an entry</string>
-    <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
-
     <plurals name="number_of_new_entries">
         <item quantity="one">Un artículo nuevo</item>
         <item quantity="other">%d artículos nuevos</item>
     </plurals>
-
     <string-array name="settings_intervals">
         <item>5 minutos</item>
         <item>15 minutos</item>
@@ -174,5 +139,4 @@
         <item>Oscuro</item>
         <item>Negro</item>
     </string-array>
-
 </resources>

@@ -1,29 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><!--
- Copyright (c) 2018 Alexander Okulovich
- Copyright (c) 2010-2012 Stefan Handschuh
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
--->
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- GENERAL -->
-    <string name="app_name">Flym</string>
     <string name="about_flym">О программе</string>
     <string name="welcome_title">Добро пожаловать в Flym. Хотите добавить новую ленту?</string>
     <string name="welcome_title_with_opml_import">Импортировать предыдущие ленты Flym?</string>
@@ -41,7 +18,6 @@
     <string name="drawer_explanation">Добро пожаловать!\n\nДолгое нажатие на ленте откроет дополнительные опции ▼</string>
     <string name="drawer_fetch_error_explanation">Некоторые ленты не обновились корректно ▼</string>
     <string name="about_screen_info">Я публикую это приложение как бесплатное программное обеспечение с открытым исходным кодом под лицензией GPLv3. Не стесняйтесь изменять его до тех пор, пока вы сохраняете его исходный код открытым.</string>
-
     <!-- FEEDS -->
     <string name="feeds">Ленты</string>
     <string name="menu_add_group">Добавить группу</string>
@@ -69,7 +45,6 @@
     <string name="google_news_health">Здоровье</string>
     <string name="feed_name">Имя</string>
     <string name="feed_link">Ссылка</string>
-
     <!-- ENTRIES -->
     <string name="all_entries">Все новости</string>
     <string name="menu_star">Поместить в избранное</string>
@@ -87,8 +62,6 @@
     <string name="undo">Отмена</string>
     <string name="marked_as_read">Помечены как прочитанные</string>
     <string name="marked_as_unread">Помечены как непрочитанные</string>
-    <string name="entry_default_title">Untitled</string>
-
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Автоматическое обновление</string>
     <string name="settings_refresh_enabled">Обновлять автоматически</string>
@@ -122,14 +95,12 @@
     <string name="settings_sort_order_title">Порядок сортрировки</string>
     <string name="settings_enable_entry_swipe">Включить смахивание в режиме просмотра записи</string>
     <string name="settings_enable_entry_swipe_description">Когда включено, в режиме просмотре записи смахивание в сторону приводит к переходу к другой записи.</string>
-
     <plurals name="number_of_new_entries">
         <item quantity="one">%d новая запись</item>
         <item quantity="few">%d новых записи</item>
         <item quantity="many">%d новых записей</item>
         <item quantity="other">%d новых записей</item>
     </plurals>
-
     <string-array name="settings_intervals">
         <item>5 минут</item>
         <item>15 минут</item>
@@ -169,5 +140,4 @@
         <item>Тёмная</item>
         <item>Чёрная</item>
     </string-array>
-
 </resources>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- GENERAL -->
     <string name="app_name">Flim</string>
     <string name="about_flym">O Flimu</string>
@@ -19,8 +18,7 @@
     <string name="network_error">Mreža nije podešena</string>
     <string name="drawer_explanation">Dobrodošli!\n\nZa pregled opcija, pritisnite i zadržite željeni dovod ▼</string>
     <string name="drawer_fetch_error_explanation">Deo dovoda nije osvežen ▼</string>
-	<string name="about_screen_info">Ovu aplikaciju objavljujem kao besplatan i slobodan softver pod GNU-ovom opštom javnom licencom (GPL) verzije 3</string>
-
+    <string name="about_screen_info">Ovu aplikaciju objavljujem kao besplatan i slobodan softver pod GNU-ovom opštom javnom licencom (GPL) verzije 3</string>
     <!-- FEEDS -->
     <string name="feeds">Dovodi</string>
     <string name="menu_add_group">Dodaj grupu</string>
@@ -48,7 +46,6 @@
     <string name="google_news_health">Zdravlje</string>
     <string name="feed_name">Ime dovoda</string>
     <string name="feed_link">Hiperveza dovoda</string>
-
     <!-- ENTRIES -->
     <string name="all_entries">Svi članci</string>
     <string name="menu_star">Zvezda</string>
@@ -66,8 +63,6 @@
     <string name="undo">Opozovi</string>
     <string name="marked_as_read">Označeno kao pročitano</string>
     <string name="marked_as_unread">Označeno kao nepročitano</string>
-    <string name="entry_default_title">Untitled</string>
-
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatsko osvežavanje</string>
     <string name="settings_refresh_enabled">Omogući automatsko osvežavanje</string>
@@ -88,25 +83,18 @@
     <string name="settings_category_filter">Filteri</string>
     <string name="settings_remove_duplicates_description_title">Ukloni duplikate</string>
     <string name="settings_remove_duplicates_description">Proverava naslove članaka koji su preuzeti i preskače ako isti već postoje kako bi se izbegao dupli sadržaj tj. dupli članci</string>
-    <string name="filter">Ukloni članke koji sadrže ključne reči (lista razdvojena zapetom")</string>
+    <string name="filter">Ukloni članke koji sadrže ključne reči (lista razdvojena zapetom\")</string>
     <string name="filter_title">Crna lista</string>
     <string name="settings_theme">Teme</string>
     <string name="open_browser_direct">Otvaranje članaka direktno u podrazumevanom internet pregledaču</string>
     <string name="open_browser_direct_title">Otvori u pregledaču</string>
     <string name="refresh_on_startup">Osvežavanje dovoda pri pokretanju aplikacije</string>
     <string name="refresh_on_startup_title">Osvežavanje prilikom pokretanja</string>
-	<string name="settings_hide_button_mark_all_as_read">Hide button \'Mark all as read\'</string>
-	<string name="settings_hide_button_mark_all_as_read_description">Don\'t show button \'Mark all as read\' on screen</string>
-	<string name="settings_sort_order">Sort entries from newest to oldest</string>
-	<string name="settings_sort_order_title">Sort order</string>
-	<string name="settings_enable_entry_swipe">Enable swipe while viewing an entry</string>
-	<string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
-
     <plurals name="number_of_new_entries">
         <item quantity="one">Jedan novi članak</item>
+        <item quantity="few">Novih članaka: %d</item>
         <item quantity="other">Novih članaka: %d</item>
     </plurals>
-
     <string-array name="settings_intervals">
         <item>5 minuta</item>
         <item>15 minuta</item>
