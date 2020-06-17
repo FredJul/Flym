@@ -2,6 +2,10 @@
 <resources>
 
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">One new entry</item>
+        <item quantity="other">%d new entries</item>
+    </plurals>
     <string name="app_name">Flym</string>
     <string name="about_flym">About Flym</string>
     <string name="welcome_title">Welcome to Flym. Would you like to add a feed?</string>
@@ -19,9 +23,9 @@
     <string name="network_error">The network is not set up</string>
     <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
     <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
-	<string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
     <string name="feeds">Feeds</string>
     <string name="menu_add_group">Add group</string>
     <string name="menu_import">Import from OPML</string>
@@ -47,9 +51,9 @@
     <string name="google_news_sports">Sports</string>
     <string name="google_news_health">Health</string>
     <string name="feed_name">Feed name</string>
-    <string name="feed_link">Feed link</string>
 
     <!-- ENTRIES -->
+    <string name="feed_link">Feed link</string>
     <string name="all_entries">All entries</string>
     <string name="menu_star">Star</string>
     <string name="menu_unstar">Unstar</string>
@@ -66,9 +70,9 @@
     <string name="undo">Undo</string>
     <string name="marked_as_read">Marked as read</string>
     <string name="marked_as_unread">Marked as unread</string>
-    <string name="entry_default_title">Untitled</string>
 
     <!-- SETTINGS -->
+    <string name="entry_default_title">Untitled</string>
     <string name="settings_category_refresh">Automated refresh</string>
     <string name="settings_refresh_enabled">Enable automatic refresh</string>
     <string name="settings_refresh_enabled_description">Enable the automatic refresh of feeds</string>
@@ -100,12 +104,8 @@
     <string name="settings_sort_order">Sort entries from newest to oldest</string>
     <string name="settings_sort_order_title">Sort order</string>
     <string name="settings_enable_entry_swipe">Enable swipe while viewing an entry</string>
-    <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
 
-    <plurals name="number_of_new_entries">
-        <item quantity="one">One new entry</item>
-        <item quantity="other">%d new entries</item>
-    </plurals>
+    <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
 
     <string-array name="settings_intervals">
         <item>5 minutes</item>
