@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
     <string name="about_flym">О программе</string>
     <string name="welcome_title">Добро пожаловать в Flym. Хотите добавить новую ленту?</string>
     <string name="welcome_title_with_opml_import">Импортировать предыдущие ленты Flym?</string>
@@ -62,6 +63,7 @@
     <string name="undo">Отмена</string>
     <string name="marked_as_read">Помечены как прочитанные</string>
     <string name="marked_as_unread">Помечены как непрочитанные</string>
+    <string name="entry_default_title">Без названия</string>
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Автоматическое обновление</string>
     <string name="settings_refresh_enabled">Обновлять автоматически</string>
