@@ -16,7 +16,19 @@
     <string name="flym_feeds">Feeds do Flym</string>
     <string name="error">Erro</string>
     <string name="network_error">A internet não está disponível</string>
+    <string name="drawer_explanation">Bem-vindo(a)!\n\nPressione e segure os feeds para ver as opções</string>
+    <string name="drawer_fetch_error_explanation">Alguns de seus feeds não foram atualizados corretamente</string>
+    <string name="about_screen_info">Estou publicando este aplicativo como software gratuito e de código aberto, sob a licença GPLv3. Sinta-se à vontade para modificá-lo, desde que o mantenha também como código aberto.</string>
     <!-- FEEDS -->
+    <string name="feeds">Feeds</string>
+    <string name="menu_add_group">Adicionar grupo</string>
+    <string name="menu_import">Importar de OPML</string>
+    <string name="menu_export">Exportar para OPML</string>
     <!-- ENTRIES -->
     <!-- SETTINGS -->
+    <string-array name="settings_themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Preto</item>
+    </string-array>
 </resources>
