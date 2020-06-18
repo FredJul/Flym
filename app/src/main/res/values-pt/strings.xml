@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">Sobre o Flym</string>
+    <string name="welcome_title">Bem-vindo ao Flym. Gostaria de adicionar um feed?</string>
+    <string name="welcome_title_with_opml_import">Gostaria de importar os feeds anteriores do Flym?</string>
+    <string name="cannot_find_feeds">Nenhum feed foi encontrado</string>
+    <string name="menu_settings">Configurações</string>
+    <string name="menu_edit_feed">Editar feed</string>
+    <string name="menu_reorder">Reordenar feeds</string>
+    <string name="menu_delete">Apagar</string>
+    <string name="menu_enable_full_text_retrieval">Ativar recuperação completa de texto</string>
+    <string name="menu_disable_full_text_retrieval">Desativar recuperação completa de texto</string>
+    <string name="menu_all_read">Marcar tudo como lido</string>
+    <string name="flym_feeds">Feeds do Flym</string>
+    <string name="error">Erro</string>
+    <string name="network_error">A internet não está disponível</string>
     <!-- FEEDS -->
     <!-- ENTRIES -->
     <!-- SETTINGS -->
