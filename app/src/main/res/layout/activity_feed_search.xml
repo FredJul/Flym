@@ -9,25 +9,53 @@
 
     <TextView
         android:id="@+id/tv_search_label"
-        android:layout_width="378dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="16dp"
         android:text="Search Feeds"
-        android:textSize="18dp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/et_search_input"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:textSize="18dp"
-        android:singleLine="true"
         android:imeOptions="actionSearch"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:singleLine="true"
+        android:textSize="18sp"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintBottom_toTopOf="@id/lv_search_results"
+        app:layout_constraintEnd_toStartOf="@+id/btn_add_feed"
+        app:layout_constraintLeft_toRightOf="@id/btn_add_feed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_search_label" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_search_label"
+        app:layout_constraintWidth_default="spread" />
+
+    <Button
+        android:id="@+id/btn_add_feed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@android:string/ok"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintTop_toBottomOf="@id/tv_search_label"
+        app:layout_constraintLeft_toLeftOf="@id/et_search_input"
+        app:layout_constraintBottom_toTopOf="@id/lv_search_results"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="57dp"/>
+
+    <ListView
+        android:id="@+id/lv_search_results"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_search_input" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

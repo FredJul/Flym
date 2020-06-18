@@ -1,25 +1,38 @@
 package net.frju.flym.ui.main
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.URLUtil
-import android.widget.EditText
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
 import net.fred.feedex.R
+import net.frju.flym.App
+import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.service.FetcherService
+import okhttp3.internal.notify
+import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.layoutInflater
+import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.sdk21.listeners.textChangedListener
+import org.jetbrains.anko.toast
 import org.json.JSONException
 import org.json.JSONObject
+import java.lang.Exception
 import java.net.URLEncoder
 import java.util.*
+import kotlin.collections.ArrayList
 
 
-class FeedSearchActivity : AppCompatActivity() {
+class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
     private val TAG = "FeedSearchActivity"
 
@@ -28,31 +41,54 @@ class FeedSearchActivity : AppCompatActivity() {
     private val FEED_SEARCH_DESC = "description"
     private val FEED_SEARCH_BLACKLIST = arrayOf("http://syndication.lesechos.fr/rss/rss_finance.xml")
 
-    private val GNEWS_TOPIC_NAME = intArrayOf(R.string.google_news_top_stories, R.string.google_news_world, R.string.google_news_business, R.string.google_news_science_technology, R.string.google_news_entertainment, R.string.google_news_sports, R.string.google_news_health)
-    private val GNEWS_TOPIC_CODE = arrayOf("", "WORLD", "BUSINESS", "SCITECH", "ENTERTAINMENT", "SPORTS", "HEALTH")
+    private var mResultsListView: ListView? = null
+    private var mSearchInput: AutoCompleteTextView? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed_search)
-        this.watchSearchInput()
+
+        this.initSearchListView()
+        this.initSearchInputs()
     }
 
-    private fun watchSearchInput(){
-        val searchInput = this.findViewById<EditText>(R.id.et_search_input)
+
+    private fun initSearchListView(){
+        mResultsListView = this.findViewById(R.id.lv_search_results)
+        mResultsListView?.adapter = SearchResultsAdapter(this, ArrayList<SearchFeedResult>())
+        mResultsListView?.onItemClickListener = this
+    }
+
+    private fun initSearchInputs(){
+        mSearchInput = this.findViewById<AutoCompleteTextView>(R.id.et_search_input)
         var timer = Timer()
 
-        searchInput.textChangedListener {
+        mSearchInput?.textChangedListener {
             afterTextChanged {
-                val term = searchInput.text.toString().trim()
-                if (term.isNotEmpty()) {
-                    timer.cancel()
-                    timer = Timer()
-                    timer.schedule(object: TimerTask() {
-                        override fun run() {
-                            searchForFeed(term)
-                        }
-                    }, 2000)
+                mSearchInput?.let { searchInput ->
+                    val term = searchInput.text.toString().trim()
+                    if (term.isNotEmpty()) {
+                        timer.cancel()
+                        timer = Timer()
+                        timer.schedule(object: TimerTask() {
+                            override fun run() {
+                                searchForFeed(term)
+                            }
+                        }, 1000)
+                    }
+                }
+            }
+        }
+        this.findViewById<Button>(R.id.btn_add_feed).onClick {
+            mSearchInput?.let { searchInput ->
+                val text = searchInput.text.toString()
+                if (URLUtil.isNetworkUrl(text)) {
+                    // Todo: Add check if it's a valid URL (i.e. returns valid response code)
+                    addFeed(searchInput, text, text)
+                }else{
+                    // Todo: Swap to string resource
+                    searchInput.snackbar("Please select from the results or provide a valid URL")
                 }
             }
         }
@@ -80,21 +116,11 @@ class FeedSearchActivity : AppCompatActivity() {
                 .toString()
     }
 
+    @Suppress("DEPRECATION")
     private fun searchForFeed(term:String){
 
         val array = ArrayList<SearchFeedResult>()
-        if (URLUtil.isNetworkUrl(term)) {
-            FetcherService.createCall(term).execute().use { response ->
-                val feed = SyndFeedInput().build(XmlReader(response.body!!.byteStream()))
-                val feedTitle = feed.title?: term
-                val feedDescription = feed.description?: ""
-                val feedResult = SearchFeedResult(term, feedTitle, feedDescription)
-                Log.d(TAG, feedResult.toString())
-                array.add(feedResult)
-            }
-
-        } else {
-            @Suppress("DEPRECATION")
+        try {
             FetcherService.createCall(getFeedlySearchUrl(term)).execute().use {
                 it.body?.let { body ->
                     val json = JSONObject(body.string())
@@ -112,12 +138,67 @@ class FeedSearchActivity : AppCompatActivity() {
                                 Log.d(TAG, feedResult.toString())
                                 array.add(feedResult)
                             }
+                            this.runOnUiThread(Runnable {
+                                (mResultsListView?.adapter as SearchResultsAdapter).updateData(array)
+                            })
+
                         } catch (e: JSONException) {
                             e.printStackTrace()
                         }
                     }
                 }
             }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    private fun addFeed(view:View, title:String, link:String){
+
+        this.findViewById<AutoCompleteTextView>(R.id.et_search_input).setText("")
+        val feedToAdd = Feed(link = link, title = title)
+        doAsync { App.db.feedDao().insert(feedToAdd) }
+        view.snackbar("$title added")
+    }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        if (parent != null && view != null){
+            val item = parent.getItemAtPosition(position) as SearchFeedResult
+            addFeed(view, item.name, item.link)
+        }
+    }
+
+    // Todo: Replace layout with customized one, that will show subscribed ones checked in the list
+    class SearchResultsAdapter(context: Context, items: ArrayList<SearchFeedResult>) :
+            ArrayAdapter<SearchFeedResult>(context, android.R.layout.simple_list_item_1, items) {
+
+        private class ItemViewHolder {
+            internal var text: TextView? = null
+        }
+
+        fun updateData(items: ArrayList<SearchFeedResult>){
+            this.clear()
+            this.addAll(items)
+            this.notifyDataSetChanged()
+        }
+
+        override fun getView(i: Int, view: View?, viewGroup: ViewGroup): View {
+            val viewHolder: ItemViewHolder
+            var inflatedView: View? = view
+            if (inflatedView == null) {
+                inflatedView = context.layoutInflater.inflate(android.R.layout.simple_list_item_1, null)
+                viewHolder = ItemViewHolder()
+                viewHolder.text = inflatedView!!.findViewById<View>(android.R.id.text1 ) as TextView
+
+            } else {
+                //no need to call findViewById, can use existing ones from saved view holder
+                viewHolder = inflatedView.tag as ItemViewHolder
+            }
+            val item = getItem(i)
+            viewHolder.text!!.text = item!!.title
+
+            inflatedView.tag = viewHolder
+            return inflatedView
         }
     }
 }
