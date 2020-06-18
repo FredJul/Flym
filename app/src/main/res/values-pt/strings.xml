@@ -24,6 +24,16 @@
     <string name="menu_add_group">Adicionar grupo</string>
     <string name="menu_import">Importar de OPML</string>
     <string name="menu_export">Exportar para OPML</string>
+    <string name="storage_request_explanation">Para importar ou exportar feeds num arquivo, você deve permitir o acesso da aplicação ao armazenamento do dispositivo.</string>
+    <string name="error_feed_export">A exportação falhou. Certifique-se de que você tem um cartão SD disponível para gravação.</string>
+    <string name="feed_search">Busca de Feed</string>
+    <string name="feed_search_hint">Insira o link de um feed ou uma palavra-chave</string>
+    <string name="feed_added">Feed adicionado a lista</string>
+    <string name="question_delete_feed">Você realmente deseja apagar este feed?</string>
+    <string name="question_delete_group">Você realmente deseja apagar este grupo e todos os seus feeds?</string>
+    <string name="add_group_title">Selecione o nome do grupo</string>
+    <string name="message_exported_to">Exportado para %s.</string>
+    <string name="to_group_title">Ação de mover Feed</string>
     <!-- ENTRIES -->
     <!-- SETTINGS -->
     <string-array name="settings_themes">
