@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">Sobre o Flym</string>
+    <string name="welcome_title">Bem-vindo ao Flym. Gostaria de adicionar um feed?</string>
+    <string name="welcome_title_with_opml_import">Gostaria de importar os feeds anteriores do Flym?</string>
+    <string name="cannot_find_feeds">Nenhum feed foi encontrado</string>
+    <string name="menu_settings">Configurações</string>
+    <string name="menu_edit_feed">Editar feed</string>
+    <string name="menu_reorder">Reordenar feeds</string>
+    <string name="menu_delete">Apagar</string>
+    <string name="menu_enable_full_text_retrieval">Ativar recuperação completa de texto</string>
+    <string name="menu_disable_full_text_retrieval">Desativar recuperação completa de texto</string>
+    <string name="menu_all_read">Marcar tudo como lido</string>
+    <string name="flym_feeds">Feeds do Flym</string>
+    <string name="error">Erro</string>
+    <string name="network_error">A internet não está disponível</string>
+    <string name="drawer_explanation">Bem-vindo(a)!\n\nPressione e segure os feeds para ver as opções</string>
+    <string name="drawer_fetch_error_explanation">Alguns de seus feeds não foram atualizados corretamente</string>
+    <string name="about_screen_info">Estou publicando este aplicativo como software gratuito e de código aberto, sob a licença GPLv3. Sinta-se à vontade para modificá-lo, desde que o mantenha também como código aberto.</string>
+    <!-- FEEDS -->
+    <string name="feeds">Feeds</string>
+    <string name="menu_add_group">Adicionar grupo</string>
+    <string name="menu_import">Importar de OPML</string>
+    <string name="menu_export">Exportar para OPML</string>
+    <string name="storage_request_explanation">Para importar ou exportar feeds num arquivo, você deve permitir o acesso da aplicação ao armazenamento do dispositivo.</string>
+    <string name="error_feed_export">A exportação falhou. Certifique-se de que você tem um cartão SD disponível para gravação.</string>
+    <string name="feed_search">Busca de Feed</string>
+    <string name="feed_search_hint">Insira o link de um feed ou uma palavra-chave</string>
+    <string name="feed_added">Feed adicionado a lista</string>
+    <string name="question_delete_feed">Você realmente deseja apagar este feed?</string>
+    <string name="question_delete_group">Você realmente deseja apagar este grupo e todos os seus feeds?</string>
+    <string name="add_group_title">Selecione o nome do grupo</string>
+    <string name="message_exported_to">Exportado para %s.</string>
+    <string name="to_group_title">Ação de mover Feed</string>
+    <string name="to_group_message">Você pode colocar esse feed neste ou acima deste grupo. O que você deseja fazer?</string>
+    <string name="to_group_above">Acima do grupo</string>
+    <string name="to_group_into">Dentro do grupo</string>
+    <string name="google_news_top_stories">Melhores histórias</string>
+    <string name="google_news_world">Mundo</string>
+    <string name="google_news_business">Negócios</string>
+    <string name="google_news_science_technology">Ciência &amp; Tecnologia</string>
+    <string name="google_news_entertainment">Entretenimento</string>
+    <string name="google_news_sports">Esportes</string>
+    <string name="google_news_health">Saúde</string>
+    <string name="feed_name">Nome do Feed</string>
+    <string name="feed_link">Link do Feed</string>
+    <!-- ENTRIES -->
+    <string name="all_entries">Todas as entradas</string>
+    <string name="menu_star">Adicionar Favorito</string>
+    <string name="menu_unstar">Remover Favorito</string>
+    <string name="menu_share">Compartilhar</string>
+    <string name="menu_mark_as_unread">Marcar como não lido</string>
+    <string name="get_full_text">Obter o texto completo</string>
+    <string name="original_text">Exibir texto original</string>
+    <string name="open_in_browser">Ver no navegador</string>
+    <string name="cant_open_link">Nenhum aplicativo encontrado para este link</string>
+    <string name="unreads">Não lidos</string>
+    <string name="all">Todos</string>
+    <string name="favorites">Favoritos</string>
+    <string name="no_entries">Nenhum item\nPor favor, puxe para baixo para atualizar</string>
+    <string name="undo">Desfazer</string>
+    <string name="marked_as_read">Marcado como lido</string>
+    <string name="marked_as_unread">Marcado como não lido</string>
+    <string name="entry_default_title">Sem título</string>
+    <!-- SETTINGS -->
+    <string name="settings_category_refresh">Atualização automática</string>
+    <string name="settings_refresh_enabled">Ativar atualização automática</string>
+    <string name="settings_refresh_enabled_description">Ativar atualização automática de feeds</string>
+    <string name="settings_refresh_enable_notifications">Exibir notificações de atualização</string>
+    <string name="settings_refresh_enable_notifications_description">Mostrar uma notificação do sistema quando uma atualização for concluída</string>
+    <string name="settings_refresh_interval">Intervalo de atualização</string>
+    <string name="settings_category_keep_time">Tempo para manter as entradas</string>
+    <string name="settings_keep_time">Tempo que as entradas serão mantidas</string>
+    <string name="settings_keep_time_unread">Tempo que as entradas não lidas serão mantidas</string>
+    <string name="settings_category_content_presentation">Apresentação do conteúdo</string>
+    <string name="settings_display_images">Exibir imagens</string>
+    <string name="settings_display_images_description">Mostrar imagens nas entradas</string>
+    <string name="settings_preload_image_mode">Pré-carregar imagens</string>
+    <string name="settings_font_size">Tamanho do texto</string>
+    <string name="settings_refresh_wifi_only">Atualizar somente por Wi-Fi</string>
+    <string name="settings_refresh_wifi_only_description">Atualização automática só será feita quando uma conexão Wi-Fi estiver disponível</string>
+    <string name="settings_category_filter">Filtros</string>
+    <string name="settings_remove_duplicates_description_title">Remover duplicatas</string>
+    <string name="settings_remove_duplicates_description">Verifica o título dos itens baixados recentemente e ignora quando um com o mesmo título já está presente</string>
+    <string name="filter">Remover itens que contêm palavras-chave (lista separada por vírgulas)</string>
+    <string name="filter_title">Lista negra</string>
+    <string name="settings_theme">Tema</string>
+    <string name="open_browser_direct">Abrir entradas diretamente no seu navegador padrão</string>
+    <string name="open_browser_direct_title">Abrir no navegador</string>
+    <string name="refresh_on_startup">Atualiza seus feeds ao iniciar o aplicativo</string>
+    <string name="refresh_on_startup_title">Atualizar ao iniciar</string>
+    <string name="settings_hide_button_mark_all_as_read">Ocultar botão \'Marcar tudo como lido\'</string>
+    <string name="settings_hide_button_mark_all_as_read_description">Não mostrar o botão \'Marcar tudo como lido\' na tela</string>
+    <string name="settings_sort_order">Ordenar feeds do mais recente ao mais antigo</string>
+    <string name="settings_sort_order_title">Modo de ordenação</string>
+    <string name="settings_enable_entry_swipe">Habilitar deslizar ao visualizar uma entrada</string>
+    <string name="settings_enable_entry_swipe_description">Se ativado, permite deslizar entre os itens ao exibir uma entrada.</string>
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Uma nova entrada</item>
+        <item quantity="other">%d novas entradas</item>
+    </plurals>
+    <string-array name="settings_intervals">
+        <item>5 minutos</item>
+        <item>15 minutos</item>
+        <item>30 minutos</item>
+        <item>1 hora</item>
+        <item>2 horas</item>
+        <item>6 horas</item>
+        <item>12 horas</item>
+        <item>1 dia</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 dia</item>
+        <item>2 dias</item>
+        <item>4 dias</item>
+        <item>1 semana</item>
+        <item>2 semanas</item>
+        <item>1 mês</item>
+        <item>2 meses</item>
+        <item>3 meses</item>
+        <item>Para sempre</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Padrão</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Nunca</item>
+        <item>Somente por Wi-Fi</item>
+        <item>Sempre</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Claro</item>
+        <item>Escuro</item>
+        <item>Preto</item>
+    </string-array>
+</resources>
