@@ -46,4 +46,6 @@
     <color name="subtitle_black">#8c8c8c</color>
     <color name="subtitle_border_black">#303030</color>
 
+    <color name="color_highlight">#ff8822</color>
+
 </resources>

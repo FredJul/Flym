@@ -1,32 +1,35 @@
 package net.frju.flym.ui.main
 
+import android.R.id.text2
 import android.content.Context
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.URLUtil
 import android.widget.*
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.rometools.rome.io.SyndFeedInput
-import com.rometools.rome.io.XmlReader
+import androidx.core.content.ContextCompat
+import androidx.core.text.toSpannable
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.service.FetcherService
-import okhttp3.internal.notify
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.sdk21.listeners.textChangedListener
-import org.jetbrains.anko.toast
 import org.json.JSONException
 import org.json.JSONObject
-import java.lang.Exception
 import java.net.URLEncoder
 import java.util.*
 import kotlin.collections.ArrayList
@@ -61,7 +64,7 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
     }
 
     private fun initSearchInputs(){
-        mSearchInput = this.findViewById<AutoCompleteTextView>(R.id.et_search_input)
+        mSearchInput = this.findViewById(R.id.et_search_input)
         var timer = Timer()
 
         mSearchInput?.textChangedListener {
@@ -75,7 +78,7 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
                             override fun run() {
                                 searchForFeed(term)
                             }
-                        }, 1000)
+                        }, 400)
                     }
                 }
             }
@@ -84,7 +87,6 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
             mSearchInput?.let { searchInput ->
                 val text = searchInput.text.toString()
                 if (URLUtil.isNetworkUrl(text)) {
-                    // Todo: Add check if it's a valid URL (i.e. returns valid response code)
                     addFeed(searchInput, text, text)
                 }else{
                     // Todo: Swap to string resource
@@ -139,7 +141,7 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
                                 array.add(feedResult)
                             }
                             this.runOnUiThread(Runnable {
-                                (mResultsListView?.adapter as SearchResultsAdapter).updateData(array)
+                                (mResultsListView?.adapter as SearchResultsAdapter).updateData(term, array)
                             })
 
                         } catch (e: JSONException) {
@@ -154,11 +156,21 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
     }
 
     private fun addFeed(view:View, title:String, link:String){
-
-        this.findViewById<AutoCompleteTextView>(R.id.et_search_input).setText("")
-        val feedToAdd = Feed(link = link, title = title)
-        doAsync { App.db.feedDao().insert(feedToAdd) }
-        view.snackbar("$title added")
+        // Todo: Move strings to resources
+        doAsync {
+            if (App.db.feedDao().findByLink(link) != null) {
+                runOnUiThread {
+                    view.snackbar("$link has already been added as $title")
+                }
+            }else{
+                val feedToAdd = Feed(link = link, title = title)
+                App.db.feedDao().insert(feedToAdd)
+                runOnUiThread {
+                    mSearchInput?.setText("")
+                    view.snackbar("$title added")
+                }
+            }
+        }
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -170,33 +182,59 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
 
     // Todo: Replace layout with customized one, that will show subscribed ones checked in the list
     class SearchResultsAdapter(context: Context, items: ArrayList<SearchFeedResult>) :
-            ArrayAdapter<SearchFeedResult>(context, android.R.layout.simple_list_item_1, items) {
+            ArrayAdapter<SearchFeedResult>(context, R.layout.item_feed_search_result, items) {  // android.R.layout.simple_list_item_1
+
+        private var mSearchTerm: String? = null
 
         private class ItemViewHolder {
-            internal var text: TextView? = null
+//            internal var text: TextView? = null
+
+            internal var title: TextView? = null
+            internal var description: TextView? = null
         }
 
-        fun updateData(items: ArrayList<SearchFeedResult>){
+        fun updateData(searchTerm: String, items: ArrayList<SearchFeedResult>){
+            this.mSearchTerm = searchTerm
             this.clear()
             this.addAll(items)
             this.notifyDataSetChanged()
+        }
+
+        private fun setTitle(viewHolder: ItemViewHolder, item: SearchFeedResult?){
+            mSearchTerm?.let { term ->
+                item?.let { it ->
+                    val start = it.title.toLowerCase(Locale.ROOT).indexOf(term.toLowerCase(Locale.ROOT))
+                    if (start != -1) {
+                        val end = start + term.length
+                        val spannable = it.title.toSpannable()
+                        val color = ContextCompat.getColor(context, R.color.color_highlight)
+                        spannable.setSpan(ForegroundColorSpan(color), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        viewHolder.title?.text = spannable
+                        return
+                    }
+                }
+            }
+            viewHolder.title?.text = item?.title
         }
 
         override fun getView(i: Int, view: View?, viewGroup: ViewGroup): View {
             val viewHolder: ItemViewHolder
             var inflatedView: View? = view
             if (inflatedView == null) {
-                inflatedView = context.layoutInflater.inflate(android.R.layout.simple_list_item_1, null)
+//                inflatedView = context.layoutInflater.inflate(android.R.layout.simple_list_item_1, null)
+                inflatedView = context.layoutInflater.inflate(R.layout.item_feed_search_result, null)
                 viewHolder = ItemViewHolder()
-                viewHolder.text = inflatedView!!.findViewById<View>(android.R.id.text1 ) as TextView
+//                viewHolder.title = inflatedView!!.findViewById<View>(android.R.id.text1 ) as TextView
+                viewHolder.title = inflatedView!!.findViewById<View>(R.id.tv_title ) as TextView
+                viewHolder.description = inflatedView!!.findViewById<View>(R.id.tv_description ) as TextView
 
             } else {
                 //no need to call findViewById, can use existing ones from saved view holder
                 viewHolder = inflatedView.tag as ItemViewHolder
             }
             val item = getItem(i)
-            viewHolder.text!!.text = item!!.title
-
+            setTitle(viewHolder, item)
+            viewHolder.description?.text = item?.desc
             inflatedView.tag = viewHolder
             return inflatedView
         }
