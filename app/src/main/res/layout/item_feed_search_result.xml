@@ -1,39 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout        xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:padding="10dp">
 
     <ImageView
-        android:id="@+id/iv_feed_added"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_baseline_check_24"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:visibility="invisible"
-        />
+        android:id="@+id/iv_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="6dp"
+        android:layout_marginRight="12dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/ll_details"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/ll_details"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintLeft_toRightOf="@+id/iv_icon"
+        app:layout_constraintRight_toLeftOf="@+id/iv_feed_added"
+        app:layout_constraintWidth_default="spread"
+        tools:layout_editor_absoluteY="10dp">
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:textSize="18sp"
+            android:text="title"
             android:textColor="@color/colorPrimary"
-            android:text="title"/>
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:textSize="13sp"
-            android:text="description"/>
+            android:text="description"
+            android:textSize="13sp" />
     </LinearLayout>
-</LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_feed_added"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:layout_margin="6dp"
+        android:layout_marginLeft="12dp"
+        android:src="@drawable/ic_baseline_add_24"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/ll_details"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="10dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,15 +17,17 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.text.toSpannable
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import net.fred.feedex.R
 import net.frju.flym.App
+import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.service.FetcherService
+import net.frju.flym.ui.entries.EntryAdapter
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.layoutInflater
-import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.sdk21.listeners.onEditorAction
 import org.jetbrains.anko.sdk21.listeners.textChangedListener
@@ -43,6 +45,7 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
     private val FEED_SEARCH_TITLE = "title"
     private val FEED_SEARCH_URL = "feedId"
     private val FEED_SEARCH_DESC = "description"
+    private val FEED_SEARCH_ICON_URL = "iconUrl"
     private val FEED_SEARCH_BLACKLIST = arrayOf("http://syndication.lesechos.fr/rss/rss_finance.xml")
 
     private var mResultsListView: ListView? = null
@@ -146,10 +149,14 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
                             val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
                             if (url.isNotEmpty() && !FEED_SEARCH_BLACKLIST.contains(url)) {
                                 @Suppress("DEPRECATION")
+
+//                                Log.d(TAG, entry.toString())
+
                                 val feedTitle = Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString()
                                 val feedDescription = Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString()
+                                val feedIconUrl = Html.fromHtml(entry.get(FEED_SEARCH_ICON_URL).toString()).toString()
                                 val feedAdded = App.db.feedDao().findByLink(url) != null
-                                val feedResult = SearchFeedResult(url, feedTitle, feedDescription, feedAdded)
+                                val feedResult = SearchFeedResult(feedIconUrl, url, feedTitle, feedDescription, feedAdded)
                                 Log.d(TAG, feedResult.toString())
                                 array.add(feedResult)
                             }
@@ -192,12 +199,12 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
                                 App.db.feedDao().deleteByLink(item.link)
                                 item.isAdded = false
                             }
-                            feedAdded?.visibility = View.INVISIBLE
+                            feedAdded?.setImageResource(R.drawable.ic_baseline_add_24)
                         }.setNegativeButton(android.R.string.no, null)
                         .show()
             }else{
                 // Add
-                feedAdded?.visibility = View.VISIBLE
+                feedAdded?.setImageResource(R.drawable.ic_baseline_check_24)
                 item.isAdded = true
                 addFeed(vw, item.title, item.link)
             }
@@ -210,6 +217,7 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
         private var mSearchTerm: String? = null
 
         private class ItemViewHolder {
+            internal var icon: ImageView? = null
             internal var feedAdded: ImageView? = null
             internal var title: TextView? = null
             internal var description: TextView? = null
@@ -241,8 +249,30 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
             viewHolder.description?.text = item.desc
         }
 
+        private fun setIcon(viewHolder: ItemViewHolder, item: SearchFeedResult){
+            val letterDrawable = Feed.getLetterDrawable(Random().nextLong(), item.title)
+            viewHolder.icon?.let{ iv ->
+                if (item.iconUrl != null) {
+                    GlideApp.with(context)
+                            .load(item.iconUrl)
+                            .centerCrop()
+                            .transition(DrawableTransitionOptions.withCrossFade(EntryAdapter.CROSS_FADE_FACTORY))
+                            .placeholder(letterDrawable)
+                            .error(letterDrawable)
+                            .into(iv)
+                } else {
+                    GlideApp.with(context).clear(iv)
+                    iv.setImageDrawable(letterDrawable)
+                }
+            }
+        }
+
         private fun setFeedAdded(viewHolder: ItemViewHolder, item: SearchFeedResult){
-            viewHolder.feedAdded?.visibility = if (item.isAdded) View.VISIBLE else View.INVISIBLE
+            if (item.isAdded){
+                viewHolder.feedAdded?.setImageResource(R.drawable.ic_baseline_check_24)
+            }else{
+                viewHolder.feedAdded?.setImageResource(R.drawable.ic_baseline_add_24)
+            }
         }
 
         override fun getView(i: Int, view: View?, viewGroup: ViewGroup): View {
@@ -252,8 +282,9 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
                 inflatedView = context.layoutInflater.inflate(R.layout.item_feed_search_result, null)
                 viewHolder = ItemViewHolder()
                 inflatedView?.let { vw ->
-                    viewHolder.title = vw.findViewById<View>(R.id.tv_title ) as TextView
-                    viewHolder.description = vw.findViewById<View>(R.id.tv_description ) as TextView
+                    viewHolder.icon = vw.findViewById(R.id.iv_icon) as ImageView
+                    viewHolder.title = vw.findViewById(R.id.tv_title ) as TextView
+                    viewHolder.description = vw.findViewById(R.id.tv_description ) as TextView
                     viewHolder.feedAdded = vw.findViewById(R.id.iv_feed_added) as ImageView
                 }
             } else {
@@ -261,9 +292,10 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
             }
             val item = getItem(i)
             item?.let { it ->
-                setFeedAdded(viewHolder, it)
+                setIcon(viewHolder, it)
                 setTitle(viewHolder, it)
                 setDescription(viewHolder, it)
+                setFeedAdded(viewHolder, it)
             }
             inflatedView?.tag = viewHolder
             return inflatedView!!
