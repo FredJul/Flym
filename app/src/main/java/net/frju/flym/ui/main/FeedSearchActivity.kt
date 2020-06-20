@@ -99,6 +99,7 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
                 val text = searchInput.text.toString()
                 if (URLUtil.isNetworkUrl(text)) {
                     addFeed(searchInput, text, text)
+                    searchInput.setText("")
                 }else{
                     // Todo: Swap to string resource
                     searchInput.snackbar("Please select from the results or provide a valid URL")
@@ -169,17 +170,10 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
 
     private fun addFeed(view:View, title:String, link:String){
         doAsync {
-            if (App.db.feedDao().findByLink(link) != null) {
-                runOnUiThread {
-                    view.snackbar(getString(R.string.feed_already_added, link, title))
-                }
-            }else{
-                val feedToAdd = Feed(link = link, title = title)
-                App.db.feedDao().insert(feedToAdd)
-                runOnUiThread {
-                    mSearchInput?.setText("")
-                    view.snackbar(getString(R.string.feed_added))
-                }
+            val feedToAdd = Feed(link = link, title = title)
+            App.db.feedDao().insert(feedToAdd)
+            runOnUiThread {
+                view.snackbar(getString(R.string.feed_added))
             }
         }
     }

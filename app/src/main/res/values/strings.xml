@@ -35,7 +35,6 @@
     <string name="feed_search">Feed search</string>
     <string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
-    <string name="feed_already_added" tools:ignore="MissingTranslation">%1$s already added as %2$s</string>  <!-- Todo: Needs Translation -->
     <string name="question_delete_feed">Do you really want to delete this feed?</string>
     <string name="question_delete_group">Do you really want to delete this group and all of its feeds?</string>
     <string name="add_group_title">Select group name</string>
