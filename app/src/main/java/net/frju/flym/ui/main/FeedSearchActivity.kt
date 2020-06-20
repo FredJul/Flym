@@ -246,7 +246,7 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
         }
 
         private fun setDescription(viewHolder: ItemViewHolder, item: SearchFeedResult){
-            viewHolder.description?.text = item.desc
+            viewHolder.description?.text = item.link
         }
 
         private fun setIcon(viewHolder: ItemViewHolder, item: SearchFeedResult){
