@@ -109,7 +109,7 @@
             android:name="net.frju.flym.ui.settings.SettingsActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name="net.frju.flym.ui.main.FeedSearchActivity"
+            android:name="net.frju.flym.ui.discover.FeedSearchActivity"
             android:parentActivityName="net.frju.flym.ui.main.MainActivity"
             android:launchMode="singleTask"/>
         <meta-data

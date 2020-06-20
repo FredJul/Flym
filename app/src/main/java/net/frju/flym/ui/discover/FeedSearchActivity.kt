@@ -1,4 +1,4 @@
-package net.frju.flym.ui.main
+package net.frju.flym.ui.discover
 
 import android.app.AlertDialog
 import android.content.Context
