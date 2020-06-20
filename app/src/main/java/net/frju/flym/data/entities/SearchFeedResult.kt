@@ -25,7 +25,8 @@ import kotlinx.android.parcel.Parcelize
 data class SearchFeedResult(
 		var link: String = "",
 		var name: String = "",
-		var desc: String = "") : Parcelable, Searchable {
+		var desc: String = "",
+		var isAdded: Boolean = false) : Parcelable, Searchable {
 
 	override fun getTitle() = name
 

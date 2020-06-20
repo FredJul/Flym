@@ -29,6 +29,8 @@ interface MainNavigator {
 
 	fun goToEntryDetails(entryId: String, allEntryIds: List<String>)
 
+    fun goToFeedSearch()
+
 	fun goToAboutMe()
 
 	fun goToSettings()

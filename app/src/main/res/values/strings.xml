@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- GENERAL -->
     <plurals name="number_of_new_entries">
@@ -35,6 +35,7 @@
     <string name="feed_search">Feed search</string>
     <string name="feed_search_hint">Enter feed link or keyword</string>
     <string name="feed_added">Feed added to the list</string>
+    <string name="feed_already_added" tools:ignore="MissingTranslation">%1$s already added as %2$s</string>  <!-- Todo: Needs Translation -->
     <string name="question_delete_feed">Do you really want to delete this feed?</string>
     <string name="question_delete_group">Do you really want to delete this group and all of its feeds?</string>
     <string name="add_group_title">Select group name</string>
@@ -71,6 +72,8 @@
     <string name="marked_as_read">Marked as read</string>
     <string name="marked_as_unread">Marked as unread</string>
 
+    <!-- FEED SEARCH -->
+    
     <!-- SETTINGS -->
     <string name="entry_default_title">Untitled</string>
     <string name="settings_category_refresh">Automated refresh</string>

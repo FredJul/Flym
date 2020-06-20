@@ -10,7 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name="net.frju.flym.ui.main.FeedSearchActivity"></activity>
         <activity
             android:name="net.frju.flym.ui.main.MainActivity"
             android:configChanges="orientation|screenSize"
@@ -108,9 +107,11 @@
             android:launchMode="singleTask" />
         <activity
             android:name="net.frju.flym.ui.settings.SettingsActivity"
-            android:label="@string/menu_settings"
             android:launchMode="singleTask" />
-
+        <activity
+            android:name="net.frju.flym.ui.main.FeedSearchActivity"
+            android:parentActivityName="net.frju.flym.ui.main.MainActivity"
+            android:launchMode="singleTask"/>
         <meta-data
             android:name="com.samsung.android.icon_container.has_icon_container"
             android:value="true" />

@@ -145,8 +145,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		nav.adapter = feedAdapter
 
 		add_feed_fab.onClick {
-			startActivity<FeedSearchActivity>()
-//			FeedSearchDialog(this).show()
+			goToFeedSearch()
 		}
 
 		App.db.feedDao().observeAllWithCount.observe(this@MainActivity, Observer { nullableFeeds ->
@@ -426,6 +425,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 					.commitAllowingStateLoss()
 		}
 	}
+
+	override fun goToFeedSearch() = startActivity<FeedSearchActivity>()
 
 	override fun goToEntryDetails(entryId: String, allEntryIds: List<String>) {
 		closeKeyboard()

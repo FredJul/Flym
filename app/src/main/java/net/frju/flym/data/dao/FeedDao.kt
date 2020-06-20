@@ -47,6 +47,9 @@ abstract class FeedDao {
     @Query("SELECT * FROM feeds WHERE feedLink IS :link")
     abstract fun findByLink(link: String): Feed?
 
+    @Query("DELETE FROM feeds WHERE feedLink IS :link")
+    abstract fun deleteByLink(link: String)
+
     @Query("UPDATE feeds SET retrieveFullText = 1 WHERE feedId = :feedId")
     abstract fun enableFullTextRetrieval(feedId: Long)
 
