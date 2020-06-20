@@ -72,7 +72,7 @@
     <string name="marked_as_unread">Marked as unread</string>
 
     <!-- FEED SEARCH -->
-    
+
     <!-- SETTINGS -->
     <string name="entry_default_title">Untitled</string>
     <string name="settings_category_refresh">Automated refresh</string>
@@ -109,6 +109,7 @@
 
     <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
 
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string-array name="settings_intervals">
         <item>5 minutes</item>
         <item>15 minutes</item>
@@ -143,6 +144,7 @@
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
     <string-array name="settings_themes">
         <item>Light</item>
         <item>Dark</item>

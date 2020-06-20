@@ -54,7 +54,7 @@ import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.service.AutoRefreshJobService
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.about.AboutActivity
-import net.frju.flym.ui.discover.FeedSearchActivity
+import net.frju.flym.ui.discover.DiscoverActivity
 import net.frju.flym.ui.entries.EntriesFragment
 import net.frju.flym.ui.entrydetails.EntryDetailsActivity
 import net.frju.flym.ui.entrydetails.EntryDetailsFragment
@@ -427,7 +427,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		}
 	}
 
-	override fun goToFeedSearch() = startActivity<FeedSearchActivity>()
+	override fun goToFeedSearch() = startActivity<DiscoverActivity>()
 
 	override fun goToEntryDetails(entryId: String, allEntryIds: List<String>) {
 		closeKeyboard()

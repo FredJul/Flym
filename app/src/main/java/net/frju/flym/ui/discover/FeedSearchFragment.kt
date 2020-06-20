@@ -8,13 +8,11 @@ import android.text.Html
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.webkit.URLUtil
 import android.widget.*
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.text.toSpannable
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -25,12 +23,8 @@ import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.SearchFeedResult
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.entries.EntryAdapter
-import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.layoutInflater
-import org.jetbrains.anko.sdk21.listeners.onClick
-import org.jetbrains.anko.sdk21.listeners.onEditorAction
-import org.jetbrains.anko.sdk21.listeners.textChangedListener
 import org.json.JSONException
 import org.json.JSONObject
 import java.net.URLEncoder
@@ -38,9 +32,10 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
+private const val ARG_QUERY = "query"
 
-    private val TAG = "FeedSearchActivity"
+
+class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
 
     private val FEED_SEARCH_TITLE = "title"
     private val FEED_SEARCH_URL = "feedId"
@@ -49,66 +44,41 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
     private val FEED_SEARCH_BLACKLIST = arrayOf("http://syndication.lesechos.fr/rss/rss_finance.xml")
 
     private var mResultsListView: ListView? = null
-    private var mSearchInput: AutoCompleteTextView? = null
+    private lateinit var mManageFeeds: FeedManagementInterface
+
+    private var mQuery: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_feed_search)
-
-        this.initSearchListView()
-        this.initSearchInputs()
-    }
-
-    private fun initSearchListView(){
-        mResultsListView = this.findViewById(R.id.lv_search_results)
-        mResultsListView?.adapter = SearchResultsAdapter(this, ArrayList<SearchFeedResult>())
-        mResultsListView?.onItemClickListener = this
-    }
-
-    private fun initSearchInputs(){
-        var timer = Timer()
-        mSearchInput = this.findViewById(R.id.et_search_input)
-        mSearchInput?.let { searchInput ->
-
-            // Handle IME Options Search Action
-            searchInput.onEditorAction { _, actionId, event ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    val term = searchInput.text.toString().trim()
-                    searchForFeed(term)
-                    true
-                }
-                false
-            }
-
-            // Handle search after N ms pause after input
-            searchInput.textChangedListener {
-                afterTextChanged {
-                    val term = searchInput.text.toString().trim()
-                    if (term.isNotEmpty()) {
-                        timer.cancel()
-                        timer = Timer()
-                        timer.schedule(object: TimerTask() {
-                            override fun run() {
-                                searchForFeed(term)
-                            }
-                        }, 400)
-                    }
-                }
-            }
-
-            // Handle manually adding URL
-            this.findViewById<Button>(R.id.btn_add_feed).onClick {
-                val text = searchInput.text.toString()
-                if (URLUtil.isNetworkUrl(text)) {
-                    addFeed(searchInput, text, text)
-                    searchInput.setText("")
-                }else{
-                    // Todo: Swap to string resource
-                    searchInput.snackbar("Please select from the results or provide a valid URL")
-                }
+        arguments?.let {
+            mQuery = it.getString(ARG_QUERY)
+            mQuery?.let { query ->
+                searchForFeed(query)
             }
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_feed_search, container, false)
+        initSearchListView(view)
+        return view
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mManageFeeds = context as FeedManagementInterface
+    }
+
+    fun search(query: String){
+        mQuery = query
+        searchForFeed(query)
+    }
+
+    private fun initSearchListView(view: View){
+        mResultsListView = view.findViewById(R.id.lv_search_results)
+        mResultsListView?.adapter = SearchResultsAdapter(view.context, ArrayList<SearchFeedResult>())
+        mResultsListView?.onItemClickListener = this
     }
 
     private fun getFeedlySearchUrl(term:String) : String {
@@ -133,54 +103,42 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
                 .toString()
     }
 
-    @Suppress("DEPRECATION")
     private fun searchForFeed(term:String){
+        doAsync {
+            val array = ArrayList<SearchFeedResult>()
+            try {
+                FetcherService.createCall(getFeedlySearchUrl(term)).execute().use {
+                    it.body?.let { body ->
+                        val json = JSONObject(body.string())
+                        val entries = json.getJSONArray("results")
 
-        val array = ArrayList<SearchFeedResult>()
-        try {
-            FetcherService.createCall(getFeedlySearchUrl(term)).execute().use {
-                it.body?.let { body ->
-                    val json = JSONObject(body.string())
-                    val entries = json.getJSONArray("results")
+                        for (i in 0 until entries.length()) {
+                            try {
+                                val entry = entries.get(i) as JSONObject
+                                val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
+                                if (url.isNotEmpty() && !FEED_SEARCH_BLACKLIST.contains(url)) {
 
-                    for (i in 0 until entries.length()) {
-                        try {
-                            val entry = entries.get(i) as JSONObject
-                            val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
-                            if (url.isNotEmpty() && !FEED_SEARCH_BLACKLIST.contains(url)) {
-                                @Suppress("DEPRECATION")
+                                    @Suppress("DEPRECATION")
+                                    val feedTitle = Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString()
+                                    val feedDescription = Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString()
+                                    val feedIconUrl = Html.fromHtml(entry.get(FEED_SEARCH_ICON_URL).toString()).toString()
+                                    val feedAdded = App.db.feedDao().findByLink(url) != null
+                                    val feedResult = SearchFeedResult(feedIconUrl, url, feedTitle, feedDescription, feedAdded)
+                                    Log.d(TAG, feedResult.toString())
+                                    array.add(feedResult)
+                                }
+                                activity?.runOnUiThread(Runnable {
+                                    (mResultsListView?.adapter as SearchResultsAdapter).updateData(term, array)
+                                })
 
-//                                Log.d(TAG, entry.toString())
-
-                                val feedTitle = Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString()
-                                val feedDescription = Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString()
-                                val feedIconUrl = Html.fromHtml(entry.get(FEED_SEARCH_ICON_URL).toString()).toString()
-                                val feedAdded = App.db.feedDao().findByLink(url) != null
-                                val feedResult = SearchFeedResult(feedIconUrl, url, feedTitle, feedDescription, feedAdded)
-                                Log.d(TAG, feedResult.toString())
-                                array.add(feedResult)
+                            } catch (e: JSONException) {
+                                e.printStackTrace()
                             }
-                            this.runOnUiThread(Runnable {
-                                (mResultsListView?.adapter as SearchResultsAdapter).updateData(term, array)
-                            })
-
-                        } catch (e: JSONException) {
-                            e.printStackTrace()
                         }
                     }
                 }
-            }
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
-    }
-
-    private fun addFeed(view:View, title:String, link:String){
-        doAsync {
-            val feedToAdd = Feed(link = link, title = title)
-            App.db.feedDao().insert(feedToAdd)
-            runOnUiThread {
-                view.snackbar(getString(R.string.feed_added))
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
@@ -190,23 +148,19 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
             val feedAdded = vw.findViewById<ImageView>(R.id.iv_feed_added)
             val item = parent?.getItemAtPosition(position) as SearchFeedResult
             if (item.isAdded){
-                // Remove
-                AlertDialog.Builder(this)
+                AlertDialog.Builder(view.context)
                         .setTitle(item.title)
                         .setMessage(R.string.question_delete_feed)
                         .setPositiveButton(android.R.string.yes) { _, _ ->
-                            doAsync {
-                                App.db.feedDao().deleteByLink(item.link)
-                                item.isAdded = false
-                            }
+                            mManageFeeds.deleteFeed(vw, item)
+                            item.isAdded = false
                             feedAdded?.setImageResource(R.drawable.ic_baseline_add_24)
                         }.setNegativeButton(android.R.string.no, null)
                         .show()
             }else{
-                // Add
                 feedAdded?.setImageResource(R.drawable.ic_baseline_check_24)
                 item.isAdded = true
-                addFeed(vw, item.title, item.link)
+                mManageFeeds.addFeed(vw, item.title, item.link)
             }
         }
     }
@@ -300,5 +254,18 @@ class FeedSearchActivity : AppCompatActivity(), AdapterView.OnItemClickListener 
             inflatedView?.tag = viewHolder
             return inflatedView!!
         }
+    }
+
+    companion object {
+
+        const val TAG = "FeedSearchFragment"
+
+        @JvmStatic
+        fun newInstance(query: String) =
+                FeedSearchFragment().apply {
+                    arguments = Bundle().apply {
+                        putString(ARG_QUERY, query)
+                    }
+                }
     }
 }

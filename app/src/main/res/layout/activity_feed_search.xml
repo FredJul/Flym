@@ -27,7 +27,7 @@
         android:imeOptions="actionSearch"
         android:singleLine="true"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/lv_search_results"
+        app:layout_constraintBottom_toTopOf="@id/fcv_discover_fragments"
         app:layout_constraintEnd_toStartOf="@+id/btn_add_feed"
         app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -43,15 +43,15 @@
         android:layout_margin="12dp"
         android:layout_marginEnd="12dp"
         android:text="@android:string/ok"
-        app:layout_constraintBottom_toTopOf="@id/lv_search_results"
+        app:layout_constraintBottom_toTopOf="@id/fcv_discover_fragments"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintLeft_toLeftOf="@id/et_search_input"
         app:layout_constraintTop_toBottomOf="@id/tv_search_label"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ListView
-        android:id="@+id/lv_search_results"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_discover_fragments"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
@@ -61,5 +61,6 @@
         app:layout_constraintHeight_default="spread"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_search_input" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
