@@ -190,7 +190,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
                 if (start != -1) {
                     val end = start + term.length
                     val spannable = item.title.toSpannable()
-                    val color = ContextCompat.getColor(context, R.color.color_highlight)
+                    val color = ContextCompat.getColor(context, R.color.colorPrimary)
                     spannable.setSpan(ForegroundColorSpan(color), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     viewHolder.title?.text = spannable
                     return
