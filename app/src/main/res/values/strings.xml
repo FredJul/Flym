@@ -144,7 +144,6 @@
         <item>Only over Wi-Fi</item>
         <item>Always</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
     <string-array name="settings_themes">
         <item>Light</item>
         <item>Dark</item>
