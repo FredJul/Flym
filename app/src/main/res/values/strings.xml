@@ -72,7 +72,7 @@
     <string name="marked_as_unread">Marked as unread</string>
 
     <!-- DISCOVER -->
-    <string name="discover_search_hint" translatable="false">Search by keyword, URL, or topic.  Topics can be indicated with a #.</string>  <!-- Need translations -->
+    <string name="discover_search_hint" translatable="false">Search by keyword, URL, or topic.  Topics can be indicated with a # prefix.</string>  <!-- Need translations -->
 
     <!-- SETTINGS -->
     <string name="entry_default_title">Untitled</string>
