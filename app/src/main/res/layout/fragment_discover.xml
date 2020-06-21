@@ -10,12 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Search by String, URL, or topic by prefixing with #. Example mozilla, https://mozilla.blog.com/, #tech"/>
+        android:textSize="18sp"
+        android:text="@string/discover_search_hint"/>
 
     <GridView
         android:id="@+id/gv_topics"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="2" />
+        android:numColumns="3" />
 
 </LinearLayout>

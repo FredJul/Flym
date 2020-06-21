@@ -71,6 +71,9 @@
     <string name="marked_as_read">Marked as read</string>
     <string name="marked_as_unread">Marked as unread</string>
 
+    <!-- DISCOVER -->
+    <string name="discover_search_hint" translatable="false">Search by keyword, URL, or topic.  Topics can be indicated with a #.</string>  <!-- Need translations -->
+
     <!-- SETTINGS -->
     <string name="entry_default_title">Untitled</string>
     <string name="settings_category_refresh">Automated refresh</string>

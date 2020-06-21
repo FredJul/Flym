@@ -42,8 +42,9 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface{
             searchInput.onEditorAction { _, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     val term = searchInput.text.toString().trim()
-//                    searchForFeed(term)
-                    goSearch(term)
+                    if (term.isNotEmpty()) {
+                        goSearch(term)
+                    }
                     true
                 }
                 false
@@ -53,12 +54,11 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface{
             searchInput.textChangedListener {
                 afterTextChanged {
                     val term = searchInput.text.toString().trim()
-                    if (term.isNotEmpty()) {
+                    if (term.isNotEmpty()){
                         timer.cancel()
                         timer = Timer()
                         timer.schedule(object: TimerTask() {
                             override fun run() {
-//                                searchForFeed(term)
                                 goSearch(term)
                             }
                         }, 400)
@@ -72,9 +72,6 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface{
                 if (URLUtil.isNetworkUrl(text)) {
                     addFeed(searchInput, text, text)
                     searchInput.setText("")
-                }else{
-                    // Todo: Swap to string resource
-                    searchInput.snackbar("Please select from the results or provide a valid URL")
                 }
             }
         }
@@ -105,6 +102,10 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface{
                     .replace(R.id.fcv_discover_fragments, fragment, DiscoverFragment.TAG)
                     .commitAllowingStateLoss()
         }
+    }
+
+    override fun searchForFeed(query: String) {
+        mSearchInput?.setText(query)
     }
 
     override fun addFeed(view:View, title:String, link:String){
