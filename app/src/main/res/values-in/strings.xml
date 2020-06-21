@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
     <string name="about_flym">Tentang Flym</string>
     <string name="welcome_title">Selamat datang di Flym. Apakah anda ingin menambahkan feed?</string>
     <string name="welcome_title_with_opml_import">Apakah anda ingin mengimpor feed Flym sebelumnya?</string>
@@ -62,6 +63,7 @@
     <string name="undo">Urung</string>
     <string name="marked_as_read">Ditandai sudah dibaca</string>
     <string name="marked_as_unread">Ditandai belum dibaca</string>
+    <string name="entry_default_title">Tanpa judul</string>
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Penyegaran otomatis</string>
     <string name="settings_refresh_enabled">Aktifkan penyegaran otomatis</string>
