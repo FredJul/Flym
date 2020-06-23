@@ -38,12 +38,6 @@
     <string name="to_group_message">Je kunt deze feed toevoegen aan de groep of erboven plaatsen. Wat wil je doen?</string>
     <string name="to_group_above">Boven groep plaatsen</string>
     <string name="to_group_into">Toevoegen aan groep</string>
-    <string name="google_news_top_stories">Topverhalen</string>
-    <string name="google_news_world">Wereld</string>
-    <string name="google_news_business">Zakelijk</string>
-    <string name="google_news_science_technology">Wetenschap &amp; Technologie</string>
-    <string name="google_news_sports">Sport</string>
-    <string name="google_news_health">Gezondheid</string>
     <string name="feed_name">Feednaam</string>
     <!-- ENTRIES -->
     <string name="feed_link">Feedlink</string>
