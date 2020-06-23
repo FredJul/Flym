@@ -63,6 +63,26 @@
     <!-- DISCOVER -->
     <string name="discover_search_label">Rechercher des flux</string>
     <string name="discover_search_hint">Recherche par mot-clés, URL ou sujets. Les sujets peuvent être indiqués avec un # au début du mot.</string>
+    <string-array name="discover_topics">
+        <item>actualités</item>
+        <item>politique</item>
+        <item>monde</item>
+        <item>ingénierie</item>
+        <item>tech</item>
+        <item>startups</item>
+        <item>télécom</item>
+        <item>cybersécurité</item>
+        <item>confidentialité</item>
+        <item>science</item>
+        <item>médecine</item>
+        <item>santé</item>
+        <item>éducation</item>
+        <item>business</item>
+        <item>marketing</item>
+        <item>espace</item>
+        <item>design</item>
+        <item>bande-dessinée</item>
+    </string-array>
     <!-- SETTINGS -->
     <string name="entry_default_title">Sans nom</string>
     <string name="settings_category_refresh">Mise à jour automatique</string>
