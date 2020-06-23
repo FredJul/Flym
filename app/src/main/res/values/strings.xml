@@ -43,13 +43,6 @@
     <string name="to_group_message">You can either put this feed into or above this group. What do you want to do?</string>
     <string name="to_group_above">Above the group</string>
     <string name="to_group_into">Into the group</string>
-    <string name="google_news_top_stories">Top Stories</string>
-    <string name="google_news_world">World</string>
-    <string name="google_news_business">Business</string>
-    <string name="google_news_science_technology">Science &amp; Technology</string>
-    <string name="google_news_entertainment">Entertainment</string>
-    <string name="google_news_sports">Sports</string>
-    <string name="google_news_health">Health</string>
     <string name="feed_name">Feed name</string>
 
     <!-- ENTRIES -->
@@ -74,6 +67,31 @@
     <!-- DISCOVER -->
     <string name="discover_search_label">Search Feeds</string>
     <string name="discover_search_hint">Search by keyword, URL, or topic. Topics can be indicated with a # prefix.</string>
+    <string-array name="discover_topics">
+        <item>news</item>
+        <item>politics</item>
+        <item>world</item>
+
+        <item>engineering</item>
+        <item>tech</item>
+        <item>startups</item>
+
+        <item>telecom</item>
+        <item>cybersecurity</item>
+        <item>privacy</item>
+
+        <item>science</item>
+        <item>medicine</item>
+        <item>healthcare</item>
+
+        <item>education</item>
+        <item>business</item>
+        <item>marketing</item>
+
+        <item>space</item>
+        <item>design</item>
+        <item>comics</item>
+    </string-array>
 
     <!-- SETTINGS -->
     <string name="entry_default_title">Untitled</string>

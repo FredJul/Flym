@@ -39,30 +39,4 @@
         <item>DARK</item>
         <item>BLACK</item>
     </string-array>
-
-    <string-array name="discover_topics">
-        <item>news</item>
-        <item>politics</item>
-        <item>world</item>
-
-        <item>engineering</item>
-        <item>tech</item>
-        <item>startups</item>
-
-        <item>telecom</item>
-        <item>cybersecurity</item>
-        <item>privacy</item>
-
-        <item>science</item>
-        <item>medicine</item>
-        <item>healthcare</item>
-
-        <item>education</item>
-        <item>business</item>
-        <item>marketing</item>
-
-        <item>space</item>
-        <item>design</item>
-        <item>comics</item>
-    </string-array>
 </resources>
