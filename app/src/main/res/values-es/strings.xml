@@ -43,13 +43,6 @@
     </string>
     <string name="to_group_above">Encima del grupo</string>
     <string name="to_group_into">Al grupo</string>
-    <string name="google_news_top_stories">Mejores artículos</string>
-    <string name="google_news_world">Mundo</string>
-    <string name="google_news_business">Negocios</string>
-    <string name="google_news_science_technology">Ciencia &amp; Tecnología</string>
-    <string name="google_news_entertainment">Ocio</string>
-    <string name="google_news_sports">Deportes</string>
-    <string name="google_news_health">Salud</string>
     <string name="feed_name">Nombre de la fuente</string>
     <!-- ENTRIES -->
     <string name="feed_link">Enlace de la fuente</string>
