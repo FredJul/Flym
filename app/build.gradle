@@ -82,6 +82,7 @@ dependencies {
 	implementation fileTree(dir: 'libs', include: ['*.jar'])
 
 	implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
 	def lifecycle_version = "2.2.0"
 	implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
@@ -94,7 +95,6 @@ dependencies {
 	implementation 'com.google.android.material:material:1.1.0'
 	implementation 'androidx.cardview:cardview:1.0.0'
 	implementation 'androidx.recyclerview:recyclerview:1.1.0'
-
 	def anko_version = '0.10.8'
 	implementation "org.jetbrains.anko:anko-sdk21:$anko_version"
 	implementation "org.jetbrains.anko:anko-sdk21-listeners:$anko_version"

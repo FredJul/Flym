@@ -54,6 +54,7 @@ import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.service.AutoRefreshJobService
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.about.AboutActivity
+import net.frju.flym.ui.discover.DiscoverActivity
 import net.frju.flym.ui.entries.EntriesFragment
 import net.frju.flym.ui.entrydetails.EntryDetailsActivity
 import net.frju.flym.ui.entrydetails.EntryDetailsFragment
@@ -145,7 +146,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 		nav.adapter = feedAdapter
 
 		add_feed_fab.onClick {
-			FeedSearchDialog(this).show()
+			goToFeedSearch()
 		}
 
 		App.db.feedDao().observeAllWithCount.observe(this@MainActivity, Observer { nullableFeeds ->
@@ -425,6 +426,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 					.commitAllowingStateLoss()
 		}
 	}
+
+	override fun goToFeedSearch() = startActivity<DiscoverActivity>()
 
 	override fun goToEntryDetails(entryId: String, allEntryIds: List<String>) {
 		closeKeyboard()
