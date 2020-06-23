@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Један нови чланак</item>
+        <item quantity="few">Нових чланака: %d</item>
+        <item quantity="other">Нових чланака: %d</item>
+    </plurals>
     <string name="app_name">Флим</string>
     <string name="about_flym">О Флиму</string>
     <string name="welcome_title">Добродошли у Флим. Да ли желите да додате нови довод?</string>
@@ -45,8 +50,8 @@
     <string name="google_news_sports">Спорт</string>
     <string name="google_news_health">Здравље</string>
     <string name="feed_name">Име довода</string>
-    <string name="feed_link">Хипервеза довода</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Хипервеза довода</string>
     <string name="all_entries">Сви чланци</string>
     <string name="menu_star">Звезда</string>
     <string name="menu_unstar">Без звезде</string>
@@ -63,6 +68,7 @@
     <string name="undo">Опозови</string>
     <string name="marked_as_read">Означено као прочитано</string>
     <string name="marked_as_unread">Означено као непрочитано</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Аутоматско освежавање</string>
     <string name="settings_refresh_enabled">Омогући аутоматско освежавање</string>
@@ -90,11 +96,6 @@
     <string name="open_browser_direct_title">Отвори у прегледачу</string>
     <string name="refresh_on_startup">Освежавање довода при покретању апликације</string>
     <string name="refresh_on_startup_title">Освежавање приликом покретања</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Један нови чланак</item>
-        <item quantity="few">Нових чланака: %d</item>
-        <item quantity="other">Нових чланака: %d</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 минута</item>
         <item>15 минута</item>
