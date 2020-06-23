@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Sarrera berri bat</item>
+        <item quantity="other">%d sarrera berri</item>
+    </plurals>
     <string name="about_flym">Flymi buruz</string>
     <string name="welcome_title">Ongi etorri Flymera. Jario bat gehitu nahi al zenuke?</string>
     <string name="welcome_title_with_opml_import">Flymeko aurreko jarioak inportatu nahi al zenituzke?</string>
@@ -64,6 +68,7 @@
     <string name="no_entries">Elementurik ez\nMesedez tiratu beherantz freskatzeko</string>
     <string name="undo">Desegin</string>
     <string name="marked_as_read">Irakurrita bezala markatuta</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Freskatze automatikoa</string>
     <string name="settings_refresh_enabled">Freskatze automatikoa gaitu</string>
@@ -82,10 +87,6 @@
     </string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
     <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Sarrera berri bat</item>
-        <item quantity="other">%d sarrera berri</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 minutu</item>
         <item>15 minutu</item>
