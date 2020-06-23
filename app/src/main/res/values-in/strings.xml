@@ -40,13 +40,6 @@
     <string name="to_group_message">Anda bisa memindahkan feed ini ke dalam atau ke atas grup ini. Apa yang ingin anda lakukan?</string>
     <string name="to_group_above">Ke atas grup</string>
     <string name="to_group_into">Ke dalam grup</string>
-    <string name="google_news_top_stories">Unggulan</string>
-    <string name="google_news_world">Dunia</string>
-    <string name="google_news_business">Bisnis</string>
-    <string name="google_news_science_technology">Sains &amp; Teknologi</string>
-    <string name="google_news_entertainment">Hiburan</string>
-    <string name="google_news_sports">Olah Raga</string>
-    <string name="google_news_health">Kesehatan</string>
     <string name="feed_name">Nama feed</string>
     <!-- ENTRIES -->
     <string name="feed_link">Tautan feed</string>
