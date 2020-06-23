@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">%d новая запись</item>
+        <item quantity="few">%d новых записи</item>
+        <item quantity="many">%d новых записей</item>
+        <item quantity="other">%d новых записей</item>
+    </plurals>
     <string name="app_name">Flym</string>
     <string name="about_flym">О программе</string>
     <string name="welcome_title">Добро пожаловать в Flym. Хотите добавить новую ленту?</string>
@@ -45,8 +51,8 @@
     <string name="google_news_sports">Спорт</string>
     <string name="google_news_health">Здоровье</string>
     <string name="feed_name">Имя</string>
-    <string name="feed_link">Ссылка</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Ссылка</string>
     <string name="all_entries">Все новости</string>
     <string name="menu_star">Поместить в избранное</string>
     <string name="menu_unstar">Убрать из избранного</string>
@@ -63,8 +69,9 @@
     <string name="undo">Отмена</string>
     <string name="marked_as_read">Помечены как прочитанные</string>
     <string name="marked_as_unread">Помечены как непрочитанные</string>
-    <string name="entry_default_title">Без названия</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
+    <string name="entry_default_title">Без названия</string>
     <string name="settings_category_refresh">Автоматическое обновление</string>
     <string name="settings_refresh_enabled">Обновлять автоматически</string>
     <string name="settings_refresh_enabled_description">Включить автоматическое обновление лент</string>
@@ -97,12 +104,6 @@
     <string name="settings_sort_order_title">Порядок сортрировки</string>
     <string name="settings_enable_entry_swipe">Включить смахивание в режиме просмотра записи</string>
     <string name="settings_enable_entry_swipe_description">Когда включено, в режиме просмотре записи смахивание в сторону приводит к переходу к другой записи.</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">%d новая запись</item>
-        <item quantity="few">%d новых записи</item>
-        <item quantity="many">%d новых записей</item>
-        <item quantity="other">%d новых записей</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 минут</item>
         <item>15 минут</item>
