@@ -45,13 +45,6 @@
     </string>
     <string name="to_group_above">Taldearen gainean</string>
     <string name="to_group_into">Taldearen barruan</string>
-    <string name="google_news_top_stories">Berri nagusiak</string>
-    <string name="google_news_world">Mundua</string>
-    <string name="google_news_business">Negozioak</string>
-    <string name="google_news_science_technology">Zientzia eta teknologia</string>
-    <string name="google_news_entertainment">Denbora-pasa</string>
-    <string name="google_news_sports">Kirolak</string>
-    <string name="google_news_health">Osasuna</string>
     <!-- ENTRIES -->
     <string name="all_entries">Sarrera guztiak</string>
     <string name="menu_star">Gogokoenetara gehitu</string>
