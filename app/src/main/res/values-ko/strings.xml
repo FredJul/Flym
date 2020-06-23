@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="other">새 항목 %d개</item>
+    </plurals>
     <string name="about_flym">플라임 정보</string>
     <string name="welcome_title">플라임 사용을 환영합니다. 피드를 추가하시겠습니까?</string>
     <string name="cannot_find_feeds">No feeds has been found</string>
@@ -42,6 +45,7 @@
     <string name="original_text">원래 텍스트 가져오기</string>
     <string name="open_in_browser">브라우저에서 보기</string>
     <string name="cant_open_link">이 링크에 대한 프로그램이 없습니다</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
     <string name="settings_category_refresh">자동 새로 고침</string>
     <string name="settings_refresh_enabled">자동 새로 고침 사용</string>
@@ -58,9 +62,6 @@
     <string name="settings_refresh_wifi_only_description">Wi-Fi를 사용할 때만 자동으로 새로 고침</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
     <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="other">새 항목 %d개</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5분</item>
         <item>15분</item>
