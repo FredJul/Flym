@@ -33,13 +33,6 @@
     </string>
     <string name="to_group_above">Situa a sobre del grup</string>
     <string name="to_group_into">Afegeix al grup</string>
-    <string name="google_news_top_stories">Històries principals</string>
-    <string name="google_news_world">Món</string>
-    <string name="google_news_business">Negocis</string>
-    <string name="google_news_science_technology">Ciencia &amp; Tecnologia</string>
-    <string name="google_news_entertainment">Entreteniment</string>
-    <string name="google_news_sports">Esports</string>
-    <string name="google_news_health">Salut</string>
     <!-- ENTRIES -->
     <string name="all_entries">Totes les entrades</string>
     <string name="menu_star">Marca</string>
