@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Ett nytt inlägg</item>
+        <item quantity="other">%d nya inlägg</item>
+    </plurals>
     <string name="about_flym">Om Flym</string>
     <string name="welcome_title">Välkommen till Flym. Skulle du vilja lägga till en feed?</string>
     <string name="welcome_title_with_opml_import">Skulle du vilja importera tidigare Flym feeds?</string>
@@ -53,6 +57,7 @@
     <string name="no_entries">Inga inlägg\nDra ner för att uppdatera</string>
     <string name="undo">Avmarkera</string>
     <string name="marked_as_read">Markerade som läst</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisk uppdatering</string>
     <string name="settings_refresh_enabled">Uppdatera automatiskt</string>
@@ -72,10 +77,6 @@
     <string name="settings_remove_duplicates_description">Kontrollera titeln på en ny inlägg, och förbigå om den redan finns</string>
     <string name="filter">Radera inlägg med nyckelord (lista separerade med komma)</string>
     <string name="settings_theme">Tema</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Ett nytt inlägg</item>
-        <item quantity="other">%d nya inlägg</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 minuter</item>
         <item>15 minuter</item>
