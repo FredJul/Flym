@@ -43,13 +43,6 @@
     <string name="to_group_message">Вы можете поместить ленту внутрь этой группы, либо сверху от нее. Что вы хотите сделать?</string>
     <string name="to_group_above">Над группой</string>
     <string name="to_group_into">Внутрь группы</string>
-    <string name="google_news_top_stories">Главные новости</string>
-    <string name="google_news_world">Мир</string>
-    <string name="google_news_business">Бизнес</string>
-    <string name="google_news_science_technology">Наука и технологии</string>
-    <string name="google_news_entertainment">Развлечения</string>
-    <string name="google_news_sports">Спорт</string>
-    <string name="google_news_health">Здоровье</string>
     <string name="feed_name">Имя</string>
     <!-- ENTRIES -->
     <string name="feed_link">Ссылка</string>
