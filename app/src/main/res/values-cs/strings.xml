@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Jeden nový článek</item>
+        <item quantity="few">%d nové články</item>
+        <item quantity="many">%d nových článků</item>
+        <item quantity="other">%d nových článků</item>
+    </plurals>
     <string name="about_flym">O aplikaci Flym</string>
     <string name="welcome_title">Vítejte v aplikaci Flym. Chcete přidat nový zdroj?</string>
     <string name="welcome_title_with_opml_import">Chcete importovat předchozí zdroje Flym?</string>
@@ -43,8 +49,8 @@
     <string name="google_news_sports">Sporty</string>
     <string name="google_news_health">Zdraví</string>
     <string name="feed_name">Název zdroje</string>
-    <string name="feed_link">Odkaz zdroje</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Odkaz zdroje</string>
     <string name="all_entries">Všechny články</string>
     <string name="menu_star">Označit</string>
     <string name="menu_unstar">Odznačit</string>
@@ -61,6 +67,7 @@
     <string name="undo">Vrátit</string>
     <string name="marked_as_read">Označeno jako přečtené</string>
     <string name="marked_as_unread">Označeno jako nepřečtené</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatické načítání</string>
     <string name="settings_refresh_enabled">Povolit automatické načítání</string>
@@ -86,12 +93,6 @@
     <string name="open_browser_direct_title">Otevřít v prohlížeči</string>
     <string name="refresh_on_startup">Při spuštění aplikace aktualizuje vaše zdroje</string>
     <string name="refresh_on_startup_title">Obnovit při spuštění</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Jeden nový článek</item>
-        <item quantity="few">%d nové články</item>
-        <item quantity="many">%d nových článků</item>
-        <item quantity="other">%d nových článků</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 minut</item>
         <item>15 minut</item>
