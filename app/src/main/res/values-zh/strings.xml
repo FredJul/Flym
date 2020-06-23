@@ -39,13 +39,6 @@
     <string name="to_group_message">你可以将这个订阅源移动到这个分组里面或者上面。你想做什么？</string>
     <string name="to_group_above">移动到分组上面</string>
     <string name="to_group_into">添加到分组</string>
-    <string name="google_news_top_stories">热门报道</string>
-    <string name="google_news_world">世界</string>
-    <string name="google_news_business">财经</string>
-    <string name="google_news_science_technology">科学 &amp; 科技</string>
-    <string name="google_news_entertainment">娱乐</string>
-    <string name="google_news_sports">体育</string>
-    <string name="google_news_health">健康</string>
     <string name="feed_name">订阅源名称</string>
     <!-- ENTRIES -->
     <string name="feed_link">订阅源链接</string>
