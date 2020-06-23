@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="other">%d 篇新文章</item>
+    </plurals>
     <string name="about_flym">关于 Flym</string>
     <string name="welcome_title">欢迎使用 Flym 。需要添加一个订阅源吗？</string>
     <string name="welcome_title_with_opml_import">是否要导入旧版 Flym 中的订阅源？</string>
@@ -44,8 +47,8 @@
     <string name="google_news_sports">体育</string>
     <string name="google_news_health">健康</string>
     <string name="feed_name">订阅源名称</string>
-    <string name="feed_link">订阅源链接</string>
     <!-- ENTRIES -->
+    <string name="feed_link">订阅源链接</string>
     <string name="all_entries">全部文章</string>
     <string name="menu_star">收藏</string>
     <string name="menu_unstar">取消收藏</string>
@@ -62,6 +65,7 @@
     <string name="undo">撤销</string>
     <string name="marked_as_read">标记为已读</string>
     <string name="marked_as_unread">标记为未读</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
     <string name="settings_category_refresh">自动刷新</string>
     <string name="settings_refresh_enabled">开启自动刷新</string>
@@ -93,9 +97,6 @@
     <string name="settings_hide_button_mark_all_as_read_description">不在屏幕上显示“标记全部为已读”按钮</string>
     <string name="settings_sort_order">按最新到最旧排列文章</string>
     <string name="settings_sort_order_title">排列顺序</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="other">%d 篇新文章</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 分钟</item>
         <item>15 分钟</item>
