@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Un nuovo articolo</item>
+        <item quantity="other">%d nuovi articoli</item>
+    </plurals>
     <string name="app_name">Flym</string>
     <string name="about_flym">Informazioni su Flym</string>
     <string name="welcome_title">Benvenuto in Flym. Vuoi aggiungere un feed?</string>
@@ -45,8 +49,8 @@
     <string name="google_news_sports">Sport</string>
     <string name="google_news_health">Salute</string>
     <string name="feed_name">Nome del feed</string>
-    <string name="feed_link">Link del feed</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Link del feed</string>
     <string name="all_entries">Tutti gli articoli</string>
     <string name="menu_star">Aggiungi ai preferiti</string>
     <string name="menu_unstar">Rimuovi dai preferiti</string>
@@ -63,8 +67,9 @@
     <string name="undo">Annulla</string>
     <string name="marked_as_read">Contrassegnato come letto</string>
     <string name="marked_as_unread">Contrassegnato come non letto</string>
-    <string name="entry_default_title">Senza titolo</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
+    <string name="entry_default_title">Senza titolo</string>
     <string name="settings_category_refresh">Aggiornamento automatico</string>
     <string name="settings_refresh_enabled">Attiva l\'aggiornamento automatico</string>
     <string name="settings_refresh_enabled_description">Attiva l\'aggiornamento automatico dei feed</string>
@@ -97,10 +102,6 @@
     <string name="settings_sort_order_title">Ordine degli articoli</string>
     <string name="settings_enable_entry_swipe">Abilita lo swipe durante la visualizzazione di una voce</string>
     <string name="settings_enable_entry_swipe_description">Se abilitato, permette lo swipe fra gli articoli mentre se ne vede uno.</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Un nuovo articolo</item>
-        <item quantity="other">%d nuovi articoli</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 minuti</item>
         <item>15 minuti</item>
