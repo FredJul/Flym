@@ -246,7 +246,7 @@ public class SwipeRefreshLayout extends ViewGroup {
 						"SwipeRefreshLayout can host only one direct child");
 			}
 			mTarget = getChildAt(0);
-        }
+		}
 		if (mDistanceToTriggerSync == -1) {
 			if (getParent() != null && ((View) getParent()).getHeight() > 0) {
 				final DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -381,10 +381,10 @@ public class SwipeRefreshLayout extends ViewGroup {
 		removeCallbacks(mCancel);
 		mReturnToStartPosition.run();
 		setRefreshing(true);
-        if (mListener != null) {
-            mListener.onRefresh();
-        }
-    }
+		if (mListener != null) {
+			mListener.onRefresh();
+		}
+	}
 
 	private void updateCurrentScrollYDiff(int yDiff) {
 		if (yDiff > mDistanceToTriggerSync) {

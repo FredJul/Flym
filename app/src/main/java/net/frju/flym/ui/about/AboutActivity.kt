@@ -27,36 +27,36 @@ import net.frju.flym.utils.setupTheme
 
 class AboutActivity : AppCompatActivity() {
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		setupTheme()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setupTheme()
 
-		super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
 
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-		val view = AboutBuilder.with(this)
-				.setPhoto(R.mipmap.profile_picture)
-				.setCover(R.mipmap.profile_cover)
-				.setName("Frédéric Julian")
-				.setBrief(R.string.about_screen_info)
-				.setAppIcon(R.mipmap.ic_launcher_foreground)
-				.setAppName(R.string.app_name)
-				.addGitHubLink("FredJul")
-				.addFiveStarsAction()
-				.addShareAction(R.string.app_name)
-				.setWrapScrollView(true)
-				.setLinksAnimated(true)
-				.setShowAsCard(true)
-				.build()
+        val view = AboutBuilder.with(this)
+                .setPhoto(R.mipmap.profile_picture)
+                .setCover(R.mipmap.profile_cover)
+                .setName("Frédéric Julian")
+                .setBrief(R.string.about_screen_info)
+                .setAppIcon(R.mipmap.ic_launcher_foreground)
+                .setAppName(R.string.app_name)
+                .addGitHubLink("FredJul")
+                .addFiveStarsAction()
+                .addShareAction(R.string.app_name)
+                .setWrapScrollView(true)
+                .setLinksAnimated(true)
+                .setShowAsCard(true)
+                .build()
 
-		setContentView(view)
-	}
+        setContentView(view)
+    }
 
-	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-		when (item?.itemId) {
-			android.R.id.home -> onBackPressed()
-		}
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            android.R.id.home -> onBackPressed()
+        }
 
-		return true
-	}
+        return true
+    }
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -31,9 +30,9 @@
         android:id="@+id/ll_details"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical"
         app:layout_constraintLeft_toRightOf="@+id/cv_icon"
         app:layout_constraintRight_toLeftOf="@+id/iv_feed_added"
         app:layout_constraintWidth_default="spread"

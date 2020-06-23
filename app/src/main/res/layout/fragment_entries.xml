@@ -8,9 +8,9 @@
         android:id="@+id/coordinator"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="0dp"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,15 +31,15 @@
                 android:scrollbars="vertical" />
         </net.frju.flym.ui.views.SwipeRefreshLayout>
 
-		<TextView
-			android:id="@+id/empty_view"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:drawableTop="@drawable/ic_empty_gray_100dp"
-			android:layout_gravity="center"
-			android:gravity="center"
-			android:text="@string/no_entries"
-			android:textColor="@android:color/darker_gray" />
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_empty_gray_100dp"
+            android:gravity="center"
+            android:text="@string/no_entries"
+            android:textColor="@android:color/darker_gray" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/read_all_fab"
@@ -52,19 +52,19 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-		android:id="@+id/bottom_navigation"
-		android:layout_width="0dp"
-		android:layout_height="65dp"
-		android:layout_marginBottom="0dp"
-		android:layout_marginEnd="0dp"
-		android:layout_marginStart="0dp"
-		android:background="?attr/colorPrimary"
-		app:itemIconTint="@color/bottom_navigation_item"
-		app:itemTextColor="@color/bottom_navigation_item"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:menu="@menu/menu_bottom_navigation_items"/>
+        android:id="@+id/bottom_navigation"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
+        android:background="?attr/colorPrimary"
+        app:itemIconTint="@color/bottom_navigation_item"
+        app:itemTextColor="@color/bottom_navigation_item"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/menu_bottom_navigation_items" />
 </androidx.constraintlayout.widget.ConstraintLayout>

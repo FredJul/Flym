@@ -1,30 +1,33 @@
 package net.frju.flym.ui.discover
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.GridView
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import net.fred.feedex.R
 import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.Feed
-import net.frju.flym.data.entities.SearchFeedResult
-import net.frju.flym.ui.entries.EntryAdapter
 import org.jetbrains.anko.layoutInflater
-import java.util.*
+import java.util.Random
 
 
 class DiscoverFragment : Fragment(), AdapterView.OnItemClickListener {
 
-    private lateinit var mManageFeeds: FeedManagementInterface
+    companion object {
+        const val TAG = "DiscoverFragment"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        @JvmStatic
+        fun newInstance() = DiscoverFragment()
     }
+
+    private lateinit var manageFeeds: FeedManagementInterface
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_discover, container, false)
@@ -34,10 +37,10 @@ class DiscoverFragment : Fragment(), AdapterView.OnItemClickListener {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mManageFeeds = context as FeedManagementInterface
+        manageFeeds = context as FeedManagementInterface
     }
 
-    private fun initGridView(view: View){
+    private fun initGridView(view: View) {
         val gvTopics: GridView = view.findViewById(R.id.gv_topics)
         val topics = view.context.resources.getStringArray(R.array.discover_topics)
         gvTopics.adapter = TopicAdapter(view.context, topics)
@@ -45,10 +48,8 @@ class DiscoverFragment : Fragment(), AdapterView.OnItemClickListener {
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        view?.let {vw ->
-            val topic = parent?.getItemAtPosition(position) as String
-            mManageFeeds.searchForFeed("#$topic")
-        }
+        val topic = parent?.getItemAtPosition(position) as String
+        manageFeeds.searchForFeed("#$topic")
     }
 
     class TopicAdapter(context: Context, topics: Array<String>) :
@@ -59,13 +60,13 @@ class DiscoverFragment : Fragment(), AdapterView.OnItemClickListener {
             internal var title: TextView? = null
         }
 
-        private fun setTopicTitle(viewHolder: ItemViewHolder, topic: String){
+        private fun setTopicTitle(viewHolder: ItemViewHolder, topic: String) {
             viewHolder.title?.text = topic
         }
 
-        private fun setTopicImage(viewHolder: ItemViewHolder, topic: String){
+        private fun setTopicImage(viewHolder: ItemViewHolder, topic: String) {
             val letterDrawable = Feed.getLetterDrawable(Random().nextLong(), topic)
-            viewHolder.image?.let{ iv ->
+            viewHolder.image?.let { iv ->
                 GlideApp.with(context).clear(iv)
                 iv.setImageDrawable(letterDrawable)
             }
@@ -79,7 +80,7 @@ class DiscoverFragment : Fragment(), AdapterView.OnItemClickListener {
                 viewHolder = ItemViewHolder()
                 inflatedView?.let { vw ->
                     viewHolder.image = vw.findViewById(R.id.iv_topic_image) as ImageView
-                    viewHolder.title = vw.findViewById(R.id.tv_topic_title ) as TextView
+                    viewHolder.title = vw.findViewById(R.id.tv_topic_title) as TextView
                 }
             } else {
                 viewHolder = inflatedView.tag as ItemViewHolder
@@ -92,13 +93,5 @@ class DiscoverFragment : Fragment(), AdapterView.OnItemClickListener {
             inflatedView?.tag = viewHolder
             return inflatedView!!
         }
-    }
-
-    companion object {
-
-        const val TAG = "DiscoverFragment"
-
-        @JvmStatic
-        fun newInstance() = DiscoverFragment()
     }
 }

@@ -22,15 +22,15 @@ import android.util.AttributeSet
 
 class AutoSummaryListPreference(context: Context, attrs: AttributeSet) : android.preference.ListPreference(context, attrs) {
 
-	override fun onDialogClosed(positiveResult: Boolean) {
-		super.onDialogClosed(positiveResult)
-		if (positiveResult) {
-			summary = entry
-		}
-	}
+    override fun onDialogClosed(positiveResult: Boolean) {
+        super.onDialogClosed(positiveResult)
+        if (positiveResult) {
+            summary = entry
+        }
+    }
 
-	override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
-		super.onSetInitialValue(restoreValue, defaultValue)
-		summary = entry
-	}
+    override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
+        super.onSetInitialValue(restoreValue, defaultValue)
+        summary = entry
+    }
 }

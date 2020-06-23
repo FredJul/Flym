@@ -77,7 +77,7 @@
             android:defaultValue="true"
             android:key="enable_swipe_entry"
             android:summary="@string/settings_enable_entry_swipe_description"
-            android:title="@string/settings_enable_entry_swipe"/>
+            android:title="@string/settings_enable_entry_swipe" />
 
     </PreferenceCategory>
 
@@ -120,7 +120,7 @@
             android:defaultValue="true"
             android:key="refresh_on_startup"
             android:summary="@string/refresh_on_startup"
-            android:title="@string/refresh_on_startup_title"/>
+            android:title="@string/refresh_on_startup_title" />
 
         <CheckBoxPreference
             android:layout_width="wrap_content"

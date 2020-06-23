@@ -27,13 +27,13 @@ interface MainNavigator {
 
     fun goToEntriesList(feed: Feed?)
 
-	fun goToEntryDetails(entryId: String, allEntryIds: List<String>)
+    fun goToEntryDetails(entryId: String, allEntryIds: List<String>)
 
     fun goToFeedSearch()
 
-	fun goToAboutMe()
+    fun goToAboutMe()
 
-	fun goToSettings()
+    fun goToSettings()
 
     fun setSelectedEntryId(selectedEntryId: String)
 

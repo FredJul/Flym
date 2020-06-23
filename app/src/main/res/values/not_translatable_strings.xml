@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="settings_interval_values" translatable="false">
-		<item>300</item>
-		<item>900</item>
-		<item>1800</item>
-		<item>3600</item>
-		<item>7200</item>
-		<item>21600</item>
-		<item>43200</item>
-		<item>86400</item>
+        <item>300</item>
+        <item>900</item>
+        <item>1800</item>
+        <item>3600</item>
+        <item>7200</item>
+        <item>21600</item>
+        <item>43200</item>
+        <item>86400</item>
     </string-array>
     <string-array name="settings_keep_time_values" translatable="false">
         <item>1</item>

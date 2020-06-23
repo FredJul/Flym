@@ -19,42 +19,42 @@
         android:layout_gravity="start"
         android:background="?attr/colorBackground"
         android:clickable="true"
-        android:focusable="true"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:focusable="true">
 
         <include
-            layout="@layout/view_main_drawer_header"
             android:id="@+id/drawer_header"
-            app:layout_constraintTop_toTopOf="parent"
+            layout="@layout/view_main_drawer_header"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_feed_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_white_24dp"
             android:layout_marginTop="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/drawer_header"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_add_white_24dp"
             app:layout_constraintBottom_toBottomOf="@+id/drawer_header"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" />
+            app:layout_constraintTop_toBottomOf="@+id/drawer_header" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/nav"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:scrollbars="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/drawer_header"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="0dp"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:clipToPadding="false"
             android:paddingTop="16dp"
-            android:clipToPadding="false" />
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drawer_header" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

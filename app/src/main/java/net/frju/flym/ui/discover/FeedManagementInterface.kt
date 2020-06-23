@@ -7,7 +7,7 @@ interface FeedManagementInterface {
 
     fun searchForFeed(query: String)
 
-    fun addFeed(view: View, title:String, link:String)
+    fun addFeed(view: View, title: String, link: String)
 
     fun deleteFeed(view: View, feed: SearchFeedResult)
 

@@ -23,23 +23,23 @@ import net.frju.flym.data.utils.PrefConstants
 import org.jetbrains.anko.inputMethodManager
 
 fun Activity.closeKeyboard() {
-	currentFocus?.let {
-		inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
-	}
+    currentFocus?.let {
+        inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
+    }
 }
 
 fun Activity.setupTheme() {
-	setTheme(when (getPrefString(PrefConstants.THEME, "DARK")) {
-		"LIGHT" -> R.style.AppThemeLight
-		"BLACK" -> R.style.AppThemeBlack
-		else -> R.style.AppTheme
-	})
+    setTheme(when (getPrefString(PrefConstants.THEME, "DARK")) {
+        "LIGHT" -> R.style.AppThemeLight
+        "BLACK" -> R.style.AppThemeBlack
+        else -> R.style.AppTheme
+    })
 }
 
 fun Activity.setupNoActionBarTheme() {
-	setTheme(when (getPrefString(PrefConstants.THEME, "DARK")) {
-		"LIGHT" -> R.style.AppThemeLight_NoActionBar
-		"BLACK" -> R.style.AppThemeBlack_NoActionBar
-		else -> R.style.AppTheme_NoActionBar
-	})
+    setTheme(when (getPrefString(PrefConstants.THEME, "DARK")) {
+        "LIGHT" -> R.style.AppThemeLight_NoActionBar
+        "BLACK" -> R.style.AppThemeBlack_NoActionBar
+        else -> R.style.AppTheme_NoActionBar
+    })
 }

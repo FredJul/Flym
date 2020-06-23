@@ -1,41 +1,38 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
 
     <shortcut
-        android:shortcutId="unreads"
         android:enabled="true"
         android:icon="@mipmap/ic_unreads"
-        android:shortcutShortLabel="@string/unreads"
+        android:shortcutDisabledMessage="@string/unreads"
+        android:shortcutId="unreads"
         android:shortcutLongLabel="@string/unreads"
-        android:shortcutDisabledMessage="@string/unreads">
+        android:shortcutShortLabel="@string/unreads">
 
-        <intent
-            android:action="net.frju.flym.intent.UNREADS"/>
+        <intent android:action="net.frju.flym.intent.UNREADS" />
 
     </shortcut>
 
     <shortcut
-        android:shortcutId="all"
         android:enabled="true"
         android:icon="@mipmap/ic_all"
-        android:shortcutShortLabel="@string/all"
+        android:shortcutDisabledMessage="@string/all"
+        android:shortcutId="all"
         android:shortcutLongLabel="@string/all"
-        android:shortcutDisabledMessage="@string/all">
+        android:shortcutShortLabel="@string/all">
 
-        <intent
-            android:action="net.frju.flym.intent.ALL"/>
+        <intent android:action="net.frju.flym.intent.ALL" />
 
     </shortcut>
 
     <shortcut
-        android:shortcutId="favorites"
         android:enabled="true"
         android:icon="@mipmap/ic_favorites"
-        android:shortcutShortLabel="@string/favorites"
+        android:shortcutDisabledMessage="@string/favorites"
+        android:shortcutId="favorites"
         android:shortcutLongLabel="@string/favorites"
-        android:shortcutDisabledMessage="@string/favorites">
+        android:shortcutShortLabel="@string/favorites">
 
-        <intent
-            android:action="net.frju.flym.intent.FAVORITES"/>
+        <intent android:action="net.frju.flym.intent.FAVORITES" />
 
     </shortcut>
 </shortcuts>

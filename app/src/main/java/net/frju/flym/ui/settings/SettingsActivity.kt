@@ -25,22 +25,22 @@ import net.frju.flym.utils.setupTheme
 
 class SettingsActivity : AppCompatActivity() {
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		setupTheme()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setupTheme()
 
-		super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
 
-		setContentView(R.layout.activity_settings)
+        setContentView(R.layout.activity_settings)
 
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-	}
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
 
-	override fun onOptionsItemSelected(item: MenuItem): Boolean {
-		when (item.itemId) {
-			android.R.id.home -> {
-				finish()
-			}
-		}
-		return true
-	}
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+            }
+        }
+        return true
+    }
 }

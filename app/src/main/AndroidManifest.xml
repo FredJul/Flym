@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.fred.feedex">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name="net.frju.flym.App"
         android:allowBackup="true"
@@ -110,8 +115,9 @@
             android:launchMode="singleTask" />
         <activity
             android:name="net.frju.flym.ui.discover.DiscoverActivity"
-            android:parentActivityName="net.frju.flym.ui.main.MainActivity"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:parentActivityName="net.frju.flym.ui.main.MainActivity" />
+
         <meta-data
             android:name="com.samsung.android.icon_container.has_icon_container"
             android:value="true" />
@@ -131,10 +137,5 @@
             android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- Disable Samsung squircle launcher icon -->
         <service android:name="net.frju.flym.service.FetcherService" />
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

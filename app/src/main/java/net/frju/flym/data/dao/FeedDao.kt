@@ -18,7 +18,12 @@
 package net.frju.flym.data.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.FeedWithCount
 
@@ -28,10 +33,10 @@ private const val ENTRY_COUNT = "(SELECT COUNT(*) FROM entries WHERE feedId IS f
 abstract class FeedDao {
     @get:Query("SELECT * FROM feeds WHERE isGroup = 0")
     abstract val allNonGroupFeeds: List<Feed>
-    
+
     @Query("SELECT * FROM feeds WHERE isGroup = 0 and groupId = :groupId")
     abstract fun allFeedsInGroup(groupId: Long): List<Feed>
-    
+
     @get:Query("SELECT * FROM feeds ORDER BY groupId DESC, displayPriority ASC, feedId ASC")
     abstract val all: List<Feed>
 

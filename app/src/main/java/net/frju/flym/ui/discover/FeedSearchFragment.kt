@@ -8,13 +8,17 @@ import android.text.Html
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.ListView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.text.toSpannable
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import net.fred.feedex.R
 import net.frju.flym.App
@@ -25,35 +29,45 @@ import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.entries.EntryAdapter
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.layoutInflater
+import org.jetbrains.anko.uiThread
 import org.json.JSONException
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.*
-import kotlin.collections.ArrayList
-
-
-private const val ARG_QUERY = "query"
-
+import java.util.Locale
+import java.util.Random
 
 class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
 
-    private val FEED_SEARCH_TITLE = "title"
-    private val FEED_SEARCH_URL = "feedId"
-    private val FEED_SEARCH_DESC = "description"
-    private val FEED_SEARCH_ICON_URL = "iconUrl"
-    private val FEED_SEARCH_BLACKLIST = arrayOf("http://syndication.lesechos.fr/rss/rss_finance.xml")
+    companion object {
+        const val TAG = "FeedSearchFragment"
 
-    private var mResultsListView: ListView? = null
-    private lateinit var mManageFeeds: FeedManagementInterface
+        private const val ARG_QUERY = "query"
+        private const val FEED_SEARCH_TITLE = "title"
+        private const val FEED_SEARCH_URL = "feedId"
+        private const val FEED_SEARCH_DESC = "description"
+        private const val FEED_SEARCH_ICON_URL = "iconUrl"
+        private val FEED_SEARCH_BLACKLIST = arrayOf("http://syndication.lesechos.fr/rss/rss_finance.xml")
 
-    private var mQuery: String? = null
+        @JvmStatic
+        fun newInstance(query: String) =
+                FeedSearchFragment().apply {
+                    arguments = Bundle().apply {
+                        putString(ARG_QUERY, query)
+                    }
+                }
+    }
+
+    private var resultsListView: ListView? = null
+    private lateinit var manageFeeds: FeedManagementInterface
+
+    private var query: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            mQuery = it.getString(ARG_QUERY)
-            mQuery?.let { query ->
+            query = it.getString(ARG_QUERY)
+            query?.let { query ->
                 searchForFeed(query)
             }
         }
@@ -67,21 +81,21 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mManageFeeds = context as FeedManagementInterface
+        manageFeeds = context as FeedManagementInterface
     }
 
-    fun search(query: String){
-        mQuery = query
+    fun search(query: String) {
+        this.query = query
         searchForFeed(query)
     }
 
-    private fun initSearchListView(view: View){
-        mResultsListView = view.findViewById(R.id.lv_search_results)
-        mResultsListView?.adapter = SearchResultsAdapter(view.context, ArrayList<SearchFeedResult>())
-        mResultsListView?.onItemClickListener = this
+    private fun initSearchListView(view: View) {
+        resultsListView = view.findViewById(R.id.lv_search_results)
+        resultsListView?.adapter = SearchResultsAdapter(view.context, ArrayList<SearchFeedResult>())
+        resultsListView?.onItemClickListener = this
     }
 
-    private fun getFeedlySearchUrl(term:String) : String {
+    private fun getFeedlySearchUrl(term: String): String {
         return Uri.Builder()
                 .scheme("https")
                 .authority("cloud.feedly.com")
@@ -93,17 +107,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
                 .toString()
     }
 
-    private fun getGoogleNewsRssUrl(topic:String) : String {
-        return Uri.Builder()
-                .scheme("https")
-                .authority("news.google.com")
-                .path(if (topic.isNullOrEmpty()) "/news/rss/" else "/news/rss/headlines/section/topic/")
-                .appendQueryParameter("ned", this.resources.configuration.locale.language)
-                .build()
-                .toString()
-    }
-
-    private fun searchForFeed(term:String){
+    private fun searchForFeed(term: String) {
         doAsync {
             val array = ArrayList<SearchFeedResult>()
             try {
@@ -127,9 +131,9 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
                                     Log.d(TAG, feedResult.toString())
                                     array.add(feedResult)
                                 }
-                                activity?.runOnUiThread(Runnable {
-                                    (mResultsListView?.adapter as SearchResultsAdapter).updateData(term, array)
-                                })
+                                uiThread {
+                                    (resultsListView?.adapter as SearchResultsAdapter).updateData(term, array)
+                                }
 
                             } catch (e: JSONException) {
                                 e.printStackTrace()
@@ -144,23 +148,23 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        view?.let {vw ->
+        view?.let { vw ->
             val feedAdded = vw.findViewById<ImageView>(R.id.iv_feed_added)
             val item = parent?.getItemAtPosition(position) as SearchFeedResult
-            if (item.isAdded){
+            if (item.isAdded) {
                 AlertDialog.Builder(view.context)
                         .setTitle(item.title)
                         .setMessage(R.string.question_delete_feed)
                         .setPositiveButton(android.R.string.yes) { _, _ ->
-                            mManageFeeds.deleteFeed(vw, item)
+                            manageFeeds.deleteFeed(vw, item)
                             item.isAdded = false
                             feedAdded?.setImageResource(R.drawable.ic_baseline_add_24)
                         }.setNegativeButton(android.R.string.no, null)
                         .show()
-            }else{
+            } else {
                 feedAdded?.setImageResource(R.drawable.ic_baseline_check_24)
                 item.isAdded = true
-                mManageFeeds.addFeed(vw, item.title, item.link)
+                manageFeeds.addFeed(vw, item.title, item.link)
             }
         }
     }
@@ -168,7 +172,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
     class SearchResultsAdapter(context: Context, items: ArrayList<SearchFeedResult>) :
             ArrayAdapter<SearchFeedResult>(context, R.layout.item_feed_search_result, items) {
 
-        private var mSearchTerm: String? = null
+        private var searchTerm: String? = null
 
         private class ItemViewHolder {
             internal var icon: ImageView? = null
@@ -177,15 +181,15 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
             internal var description: TextView? = null
         }
 
-        fun updateData(searchTerm: String, items: ArrayList<SearchFeedResult>){
-            this.mSearchTerm = searchTerm
+        fun updateData(searchTerm: String, items: ArrayList<SearchFeedResult>) {
+            this.searchTerm = searchTerm
             this.clear()
             this.addAll(items)
             this.notifyDataSetChanged()
         }
 
-        private fun setTitle(viewHolder: ItemViewHolder, item: SearchFeedResult){
-            mSearchTerm?.let { term ->
+        private fun setTitle(viewHolder: ItemViewHolder, item: SearchFeedResult) {
+            searchTerm?.let { term ->
                 val start = item.title.toLowerCase(Locale.ROOT).indexOf(term.toLowerCase(Locale.ROOT))
                 if (start != -1) {
                     val end = start + term.length
@@ -199,14 +203,14 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
             viewHolder.title?.text = item?.title
         }
 
-        private fun setDescription(viewHolder: ItemViewHolder, item: SearchFeedResult){
+        private fun setDescription(viewHolder: ItemViewHolder, item: SearchFeedResult) {
             viewHolder.description?.text = item.link
         }
 
-        private fun setIcon(viewHolder: ItemViewHolder, item: SearchFeedResult){
+        private fun setIcon(viewHolder: ItemViewHolder, item: SearchFeedResult) {
             val letterDrawable = Feed.getLetterDrawable(Random().nextLong(), item.title)
-            viewHolder.icon?.let{ iv ->
-                if (item.iconUrl != null) {
+            viewHolder.icon?.let { iv ->
+                if (item.iconUrl.isNotEmpty()) {
                     GlideApp.with(context)
                             .load(item.iconUrl)
                             .centerCrop()
@@ -221,10 +225,10 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
             }
         }
 
-        private fun setFeedAdded(viewHolder: ItemViewHolder, item: SearchFeedResult){
-            if (item.isAdded){
+        private fun setFeedAdded(viewHolder: ItemViewHolder, item: SearchFeedResult) {
+            if (item.isAdded) {
                 viewHolder.feedAdded?.setImageResource(R.drawable.ic_baseline_check_24)
-            }else{
+            } else {
                 viewHolder.feedAdded?.setImageResource(R.drawable.ic_baseline_add_24)
             }
         }
@@ -237,8 +241,8 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
                 viewHolder = ItemViewHolder()
                 inflatedView?.let { vw ->
                     viewHolder.icon = vw.findViewById(R.id.iv_icon) as ImageView
-                    viewHolder.title = vw.findViewById(R.id.tv_title ) as TextView
-                    viewHolder.description = vw.findViewById(R.id.tv_description ) as TextView
+                    viewHolder.title = vw.findViewById(R.id.tv_title) as TextView
+                    viewHolder.description = vw.findViewById(R.id.tv_description) as TextView
                     viewHolder.feedAdded = vw.findViewById(R.id.iv_feed_added) as ImageView
                 }
             } else {
@@ -254,18 +258,5 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
             inflatedView?.tag = viewHolder
             return inflatedView!!
         }
-    }
-
-    companion object {
-
-        const val TAG = "FeedSearchFragment"
-
-        @JvmStatic
-        fun newInstance(query: String) =
-                FeedSearchFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_QUERY, query)
-                    }
-                }
     }
 }

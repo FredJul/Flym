@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- GENERAL -->
     <plurals name="number_of_new_entries">
@@ -23,9 +23,9 @@
     <string name="network_error">The network is not set up</string>
     <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
     <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
+    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
 
     <!-- FEEDS -->
-    <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
     <string name="feeds">Feeds</string>
     <string name="menu_add_group">Add group</string>
     <string name="menu_import">Import from OPML</string>
@@ -72,7 +72,8 @@
     <string name="marked_as_unread">Marked as unread</string>
 
     <!-- DISCOVER -->
-    <string name="discover_search_hint" translatable="false">Search by keyword, URL, or topic.  Topics can be indicated with a # prefix.</string>  <!-- Need translations -->
+    <string name="discover_search_label">Search Feeds</string>
+    <string name="discover_search_hint">Search by keyword, URL, or topic. Topics can be indicated with a # prefix.</string>
 
     <!-- SETTINGS -->
     <string name="entry_default_title">Untitled</string>

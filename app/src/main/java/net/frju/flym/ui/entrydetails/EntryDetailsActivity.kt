@@ -24,28 +24,28 @@ import net.frju.flym.utils.setupNoActionBarTheme
 
 class EntryDetailsActivity : AppCompatActivity() {
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		setupNoActionBarTheme()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setupNoActionBarTheme()
 
-		super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
 
-		if (savedInstanceState == null) {
-			val fragment = EntryDetailsFragment().apply {
-				arguments = intent.extras
-			}
+        if (savedInstanceState == null) {
+            val fragment = EntryDetailsFragment().apply {
+                arguments = intent.extras
+            }
 
-			supportFragmentManager
-					.beginTransaction()
-					.replace(android.R.id.content, fragment)
-					.commitAllowingStateLoss()
-		}
-	}
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(android.R.id.content, fragment)
+                    .commitAllowingStateLoss()
+        }
+    }
 
-	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-		when (item?.itemId) {
-			android.R.id.home -> onBackPressed()
-		}
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            android.R.id.home -> onBackPressed()
+        }
 
-		return false
-	}
+        return false
+    }
 }
