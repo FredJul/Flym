@@ -41,13 +41,6 @@
     <string name="to_group_message">Puoi spostare il feed sia dentro che sopra il gruppo. Cosa vuoi fare?</string>
     <string name="to_group_above">Sopra il gruppo</string>
     <string name="to_group_into">Dentro il gruppo</string>
-    <string name="google_news_top_stories">Notizie principali</string>
-    <string name="google_news_world">Dal mondo</string>
-    <string name="google_news_business">Affari</string>
-    <string name="google_news_science_technology">Scienza e tecnologia</string>
-    <string name="google_news_entertainment">Intrattenimento</string>
-    <string name="google_news_sports">Sport</string>
-    <string name="google_news_health">Salute</string>
     <string name="feed_name">Nome del feed</string>
     <!-- ENTRIES -->
     <string name="feed_link">Link del feed</string>
