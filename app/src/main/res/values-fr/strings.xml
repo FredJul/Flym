@@ -41,13 +41,6 @@
     <string name="to_group_message">Vous pouvez placer ce flux dans ou au-dessus de ce groupe. Que voulez-vous faire\u00A0?</string>
     <string name="to_group_above">Au-dessus du groupe</string>
     <string name="to_group_into">Dans le groupe</string>
-    <string name="google_news_top_stories">À la une</string>
-    <string name="google_news_world">International</string>
-    <string name="google_news_business">Économie</string>
-    <string name="google_news_science_technology">Science &amp; High-Tech</string>
-    <string name="google_news_entertainment">Culture</string>
-    <string name="google_news_sports">Sport</string>
-    <string name="google_news_health">Santé</string>
     <string name="feed_name">Nom du flux</string>
     <!-- ENTRIES -->
     <string name="feed_link">Lien du flux</string>
@@ -68,6 +61,8 @@
     <string name="marked_as_read">Marqué comme lu</string>
     <string name="marked_as_unread">Marqué comme non lu</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">Rechercher des flux</string>
+    <string name="discover_search_hint">Recherche par mot-clés, URL ou sujets. Les sujets peuvent être indiqués avec un # au début du mot.</string>
     <!-- SETTINGS -->
     <string name="entry_default_title">Sans nom</string>
     <string name="settings_category_refresh">Mise à jour automatique</string>
