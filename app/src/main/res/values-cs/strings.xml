@@ -41,13 +41,6 @@
     <string name="to_group_message">Můžete tento zdroj posunout do a nebo nad tuto skupinu. Co chcete udělat?</string>
     <string name="to_group_above">Nad skupinu</string>
     <string name="to_group_into">Do skupiny</string>
-    <string name="google_news_top_stories">Hlavní témata</string>
-    <string name="google_news_world">Svět</string>
-    <string name="google_news_business">Podnikání</string>
-    <string name="google_news_science_technology">Věda &amp; Technologie</string>
-    <string name="google_news_entertainment">Zábava</string>
-    <string name="google_news_sports">Sporty</string>
-    <string name="google_news_health">Zdraví</string>
     <string name="feed_name">Název zdroje</string>
     <!-- ENTRIES -->
     <string name="feed_link">Odkaz zdroje</string>
