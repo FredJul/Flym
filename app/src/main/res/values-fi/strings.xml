@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Yksi uusi artikkeli</item>
+        <item quantity="other">%d uutta artikkelia</item>
+    </plurals>
     <string name="about_flym">Tietoja Flymista</string>
     <string name="welcome_title">Tervetuloa Flym:iin. Haluaisitko lisätä syötteen?</string>
     <string name="welcome_title_with_opml_import">Haluatko tuoda aiemmat Flym-syötteet?</string>
@@ -46,8 +50,8 @@
     <string name="google_news_sports">Urheilu</string>
     <string name="google_news_health">Terveys</string>
     <string name="feed_name">Syötteen nimi</string>
-    <string name="feed_link">Syötteen osoite</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Syötteen osoite</string>
     <string name="all_entries">Kaikki </string>
     <string name="menu_star">Merkitse tähdellä</string>
     <string name="menu_unstar">Poista tähti</string>
@@ -64,6 +68,7 @@
     <string name="undo">Peru</string>
     <string name="marked_as_read">Merkitty luetuksi</string>
     <string name="marked_as_unread">Merkitty lukemattomaksi</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automaattinen päivitys</string>
     <string name="settings_refresh_enabled">Päivitä automaattisesti</string>
@@ -85,10 +90,6 @@
     <string name="settings_remove_duplicates_description">Tarkista uuden artikkeli otsikko ja jätä se väliin, jos artikkeli on jo haettuna</string>
     <string name="filter">Poista artikkelit joissa esiintyy avainsanat (pilkulla erotettu lista)</string>
     <string name="settings_theme">Teema</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Yksi uusi artikkeli</item>
-        <item quantity="other">%d uutta artikkelia</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 minuuttia</item>
         <item>15 minuuttia</item>
