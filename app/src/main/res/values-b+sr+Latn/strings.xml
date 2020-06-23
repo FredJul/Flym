@@ -42,13 +42,6 @@
     <string name="to_group_message">Dovod možete da pomerite u grupu ili iznad nje. Šta želite da radite?</string>
     <string name="to_group_above">O grupi</string>
     <string name="to_group_into">U grupu</string>
-    <string name="google_news_top_stories">Najbolje priče</string>
-    <string name="google_news_world">Svet</string>
-    <string name="google_news_business">Poslovni svet</string>
-    <string name="google_news_science_technology">Nauka i Tehnologija</string>
-    <string name="google_news_entertainment">Zabava</string>
-    <string name="google_news_sports">Sport</string>
-    <string name="google_news_health">Zdravlje</string>
     <string name="feed_name">Ime dovoda</string>
     <!-- ENTRIES -->
     <string name="feed_link">Hiperveza dovoda</string>
