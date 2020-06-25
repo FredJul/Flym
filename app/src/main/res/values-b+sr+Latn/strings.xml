@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Jedan novi članak</item>
+        <item quantity="few">Novih članaka: %d</item>
+        <item quantity="other">Novih članaka: %d</item>
+    </plurals>
     <string name="app_name">Flim</string>
     <string name="about_flym">O Flimu</string>
     <string name="welcome_title">Dobrodošli u Flim. Da li želite da dodate novi dovod?</string>
@@ -37,16 +42,9 @@
     <string name="to_group_message">Dovod možete da pomerite u grupu ili iznad nje. Šta želite da radite?</string>
     <string name="to_group_above">O grupi</string>
     <string name="to_group_into">U grupu</string>
-    <string name="google_news_top_stories">Najbolje priče</string>
-    <string name="google_news_world">Svet</string>
-    <string name="google_news_business">Poslovni svet</string>
-    <string name="google_news_science_technology">Nauka i Tehnologija</string>
-    <string name="google_news_entertainment">Zabava</string>
-    <string name="google_news_sports">Sport</string>
-    <string name="google_news_health">Zdravlje</string>
     <string name="feed_name">Ime dovoda</string>
-    <string name="feed_link">Hiperveza dovoda</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Hiperveza dovoda</string>
     <string name="all_entries">Svi članci</string>
     <string name="menu_star">Zvezda</string>
     <string name="menu_unstar">Bez zvezde</string>
@@ -63,6 +61,7 @@
     <string name="undo">Opozovi</string>
     <string name="marked_as_read">Označeno kao pročitano</string>
     <string name="marked_as_unread">Označeno kao nepročitano</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatsko osvežavanje</string>
     <string name="settings_refresh_enabled">Omogući automatsko osvežavanje</string>
@@ -90,11 +89,6 @@
     <string name="open_browser_direct_title">Otvori u pregledaču</string>
     <string name="refresh_on_startup">Osvežavanje dovoda pri pokretanju aplikacije</string>
     <string name="refresh_on_startup_title">Osvežavanje prilikom pokretanja</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Jedan novi članak</item>
-        <item quantity="few">Novih članaka: %d</item>
-        <item quantity="other">Novih članaka: %d</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 minuta</item>
         <item>15 minuta</item>

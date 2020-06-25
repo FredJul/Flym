@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">%d nouvel article</item>
+        <item quantity="other">%d nouveaux articles</item>
+    </plurals>
     <string name="app_name">Flym</string>
     <string name="about_flym">À propos de Flym</string>
     <string name="welcome_title">Bienvenue sur Flym. Voulez-vous ajouter un flux ?</string>
@@ -18,7 +22,7 @@
     <string name="network_error">Pas de connexion disponible</string>
     <string name="drawer_explanation">Bienvenue !\n\nAppuyez longtemps sur les flux pour voir les options ▼</string>
     <string name="drawer_fetch_error_explanation">Certains de vos flux n\'ont pas été mis à jour correctement ▼</string>
-    <string name="about_screen_info">Je publie cette application comme open-source sour license GPLv3. Vous êtes libre de la modifier aussi longtemps que vous publiez vos modifications avec la même license.</string>
+    <string name="about_screen_info">Cette application est gratuite et open-source sous license GPLv3. Vous êtes libre de la modifier tant que vous publiez vos modifications sous la même license.</string>
     <!-- FEEDS -->
     <string name="feeds">Flux</string>
     <string name="menu_add_group">Ajouter un groupe</string>
@@ -37,16 +41,9 @@
     <string name="to_group_message">Vous pouvez placer ce flux dans ou au-dessus de ce groupe. Que voulez-vous faire\u00A0?</string>
     <string name="to_group_above">Au-dessus du groupe</string>
     <string name="to_group_into">Dans le groupe</string>
-    <string name="google_news_top_stories">À la une</string>
-    <string name="google_news_world">International</string>
-    <string name="google_news_business">Économie</string>
-    <string name="google_news_science_technology">Science &amp; High-Tech</string>
-    <string name="google_news_entertainment">Culture</string>
-    <string name="google_news_sports">Sport</string>
-    <string name="google_news_health">Santé</string>
     <string name="feed_name">Nom du flux</string>
-    <string name="feed_link">Lien du flux</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Lien du flux</string>
     <string name="all_entries">Tous les articles</string>
     <string name="menu_star">Mettre en favoris</string>
     <string name="menu_unstar">Enlever des favoris</string>
@@ -63,8 +60,31 @@
     <string name="undo">Annuler</string>
     <string name="marked_as_read">Marqué comme lu</string>
     <string name="marked_as_unread">Marqué comme non lu</string>
-    <string name="entry_default_title">Sans nom</string>
+    <!-- DISCOVER -->
+    <string name="discover_search_label">Rechercher des flux</string>
+    <string name="discover_search_hint">Recherche par mot-clés, URL ou sujets. Les sujets peuvent être indiqués avec un # au début du mot.</string>
+    <string-array name="discover_topics">
+        <item>actualités</item>
+        <item>politique</item>
+        <item>monde</item>
+        <item>ingénierie</item>
+        <item>tech</item>
+        <item>startups</item>
+        <item>télécom</item>
+        <item>cybersécurité</item>
+        <item>confidentialité</item>
+        <item>science</item>
+        <item>médecine</item>
+        <item>santé</item>
+        <item>éducation</item>
+        <item>business</item>
+        <item>marketing</item>
+        <item>espace</item>
+        <item>design</item>
+        <item>bande-dessinée</item>
+    </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">Sans nom</string>
     <string name="settings_category_refresh">Mise à jour automatique</string>
     <string name="settings_refresh_enabled">Activer la mise à jour auto</string>
     <string name="settings_refresh_enabled_description">Active la mise à jour automatique des flux</string>
@@ -97,10 +117,6 @@
     <string name="settings_sort_order_title">Tri des articles</string>
     <string name="settings_enable_entry_swipe">Activer la navigation latéral sur un article</string>
     <string name="settings_enable_entry_swipe_description">Si activé, permet de glisser horizontalement pour naviguer entre les différents articles.</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">%d nouvel article</item>
-        <item quantity="other">%d nouveaux articles</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 minutes</item>
         <item>15 minutes</item>

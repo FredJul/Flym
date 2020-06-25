@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Uma nova entrada</item>
+        <item quantity="other">%d novas entradas</item>
+    </plurals>
     <string name="app_name">Flym</string>
     <string name="about_flym">Sobre o Flym</string>
     <string name="welcome_title">Bem-vindo ao Flym. Gostaria de adicionar um feed?</string>
@@ -37,16 +41,9 @@
     <string name="to_group_message">Você pode colocar esse feed neste ou acima deste grupo. O que você deseja fazer?</string>
     <string name="to_group_above">Acima do grupo</string>
     <string name="to_group_into">Dentro do grupo</string>
-    <string name="google_news_top_stories">Melhores histórias</string>
-    <string name="google_news_world">Mundo</string>
-    <string name="google_news_business">Negócios</string>
-    <string name="google_news_science_technology">Ciência &amp; Tecnologia</string>
-    <string name="google_news_entertainment">Entretenimento</string>
-    <string name="google_news_sports">Esportes</string>
-    <string name="google_news_health">Saúde</string>
     <string name="feed_name">Nome do Feed</string>
-    <string name="feed_link">Link do Feed</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Link do Feed</string>
     <string name="all_entries">Todas as entradas</string>
     <string name="menu_star">Adicionar Favorito</string>
     <string name="menu_unstar">Remover Favorito</string>
@@ -63,8 +60,9 @@
     <string name="undo">Desfazer</string>
     <string name="marked_as_read">Marcado como lido</string>
     <string name="marked_as_unread">Marcado como não lido</string>
-    <string name="entry_default_title">Sem título</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
+    <string name="entry_default_title">Sem título</string>
     <string name="settings_category_refresh">Atualização automática</string>
     <string name="settings_refresh_enabled">Ativar atualização automática</string>
     <string name="settings_refresh_enabled_description">Ativar atualização automática de feeds</string>
@@ -97,10 +95,6 @@
     <string name="settings_sort_order_title">Modo de ordenação</string>
     <string name="settings_enable_entry_swipe">Habilitar deslizar ao visualizar uma entrada</string>
     <string name="settings_enable_entry_swipe_description">Se ativado, permite deslizar entre os itens ao exibir uma entrada.</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Uma nova entrada</item>
-        <item quantity="other">%d novas entradas</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 minutos</item>
         <item>15 minutos</item>

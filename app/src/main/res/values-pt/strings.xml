@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Uma nova entrada</item>
+        <item quantity="other">%d novas entradas</item>
+    </plurals>
     <string name="about_flym">Sobre Flym</string>
     <string name="welcome_title">Bem-vindo ao Flym. Você gostaria de adicionar um feed?</string>
     <string name="cannot_find_feeds">No feeds has been found</string>
@@ -24,13 +28,6 @@
     <string name="to_group_message">Você pode colocar este feed neste grupo ou acima. O que você deseja fazer?</string>
     <string name="to_group_above">Acima do gupo</string>
     <string name="to_group_into">Dentro do grupo</string>
-    <string name="google_news_top_stories">Melhores histórias</string>
-    <string name="google_news_world">Mundo</string>
-    <string name="google_news_business">Negócios</string>
-    <string name="google_news_science_technology">Ciência &amp; Tecnologia</string>
-    <string name="google_news_entertainment">Entretenimento</string>
-    <string name="google_news_sports">Esportes</string>
-    <string name="google_news_health">Saúde</string>
     <!-- ENTRIES -->
     <string name="all_entries">Todas as entradas</string>
     <string name="menu_star">Adicionar Estrela</string>
@@ -43,6 +40,7 @@
     <string name="cant_open_link">Nenhum aplicativo encontrado para este link</string>
     <string name="undo">Desfazer</string>
     <string name="marked_as_read">Marcado como lido</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Atualização automática</string>
     <string name="settings_refresh_enabled">Habilitar atualização automática</string>
@@ -59,10 +57,6 @@
     <string name="settings_refresh_wifi_only_description">Atualização automática só será feita quando uma conexão Wi-Fi estiver disponível</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
     <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Uma nova entrada</item>
-        <item quantity="other">%d novas entradas</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 minutos</item>
         <item>15 minutos</item>

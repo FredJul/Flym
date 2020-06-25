@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Jeden nový článok</item>
+        <item quantity="few">%d nové články</item>
+        <item quantity="many">%d nových článkov</item>
+        <item quantity="other">%d nových článkov</item>
+    </plurals>
     <string name="about_flym">O aplikácii Flym</string>
     <string name="welcome_title">Vitajte v aplikácii Flym. Chcete pridať nový zdroj?</string>
     <string name="cannot_find_feeds">No feeds has been found</string>
@@ -27,13 +33,6 @@
     <string name="to_group_message">Môžete tento zdroj posunúť do a alebo nad túto skupinu. Čo chcete spraviť?</string>
     <string name="to_group_above">Nad skupinu</string>
     <string name="to_group_into">Do skupiny</string>
-    <string name="google_news_top_stories">Hlavné témy</string>
-    <string name="google_news_world">Svet</string>
-    <string name="google_news_business">Podnikanie</string>
-    <string name="google_news_science_technology">Veda &amp; Technológie</string>
-    <string name="google_news_entertainment">Zábava</string>
-    <string name="google_news_sports">Športy</string>
-    <string name="google_news_health">Zdravie</string>
     <!-- ENTRIES -->
     <string name="menu_star">Označiť</string>
     <string name="menu_unstar">Odznačiť</string>
@@ -43,6 +42,7 @@
     <string name="original_text">Zobraziť originálny text</string>
     <string name="open_in_browser">Zobraziť v prehliadači</string>
     <string name="cant_open_link">Pre tento odkaz nebola nájdená žiadna aplikácia</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatické načítavanie</string>
     <string name="settings_refresh_enabled">Povoliť automatické načítávanie</string>
@@ -59,12 +59,6 @@
     <string name="settings_refresh_wifi_only_description">Automatické obnovovanie bude spustené len pri dostupnom Wi-Fi pripojení</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
     <string name="filter">Remove items containing keywords (coma-separated list)</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Jeden nový článok</item>
-        <item quantity="few">%d nové články</item>
-        <item quantity="many">%d nových článkov</item>
-        <item quantity="other">%d nových článkov</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 minút</item>
         <item>15 minút</item>

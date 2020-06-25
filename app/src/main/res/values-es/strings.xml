@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Un artículo nuevo</item>
+        <item quantity="other">%d artículos nuevos</item>
+    </plurals>
     <string name="about_flym">Sobre Flym</string>
     <string name="welcome_title">Bienvenido a Flym ¿Quieres añadir una fuente?</string>
     <string name="welcome_title_with_opml_import">¿Quieres importar fuentes anteriores de Flym?</string>
@@ -39,16 +43,9 @@
     </string>
     <string name="to_group_above">Encima del grupo</string>
     <string name="to_group_into">Al grupo</string>
-    <string name="google_news_top_stories">Mejores artículos</string>
-    <string name="google_news_world">Mundo</string>
-    <string name="google_news_business">Negocios</string>
-    <string name="google_news_science_technology">Ciencia &amp; Tecnología</string>
-    <string name="google_news_entertainment">Ocio</string>
-    <string name="google_news_sports">Deportes</string>
-    <string name="google_news_health">Salud</string>
     <string name="feed_name">Nombre de la fuente</string>
-    <string name="feed_link">Enlace de la fuente</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Enlace de la fuente</string>
     <string name="all_entries">Todos los artículos</string>
     <string name="menu_star">Destacar</string>
     <string name="menu_unstar">No destacar</string>
@@ -65,6 +62,7 @@
     <string name="undo">Deshacer</string>
     <string name="marked_as_read">Marcado como leído</string>
     <string name="marked_as_unread">Marcado como no leído</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Actualización automática</string>
     <string name="settings_refresh_enabled">Habilitar actualizaciones automáticas</string>
@@ -96,10 +94,6 @@
     <string name="open_browser_direct_title">Abrir artículo en navegador</string>
     <string name="refresh_on_startup">Actualizar fuentes al iniciar la aplicación</string>
     <string name="refresh_on_startup_title">Actualizar al inicio</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Un artículo nuevo</item>
-        <item quantity="other">%d artículos nuevos</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 minutos</item>
         <item>15 minutos</item>

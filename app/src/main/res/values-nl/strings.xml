@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Eén nieuw item</item>
+        <item quantity="other">%d nieuwe items</item>
+    </plurals>
     <string name="about_flym">Over Flym</string>
     <string name="welcome_title">Welkom bij Flym. Wil je een feed toevoegen?</string>
     <string name="welcome_title_with_opml_import">Wil je eerdere Flym-feeds importeren?</string>
@@ -34,15 +38,9 @@
     <string name="to_group_message">Je kunt deze feed toevoegen aan de groep of erboven plaatsen. Wat wil je doen?</string>
     <string name="to_group_above">Boven groep plaatsen</string>
     <string name="to_group_into">Toevoegen aan groep</string>
-    <string name="google_news_top_stories">Topverhalen</string>
-    <string name="google_news_world">Wereld</string>
-    <string name="google_news_business">Zakelijk</string>
-    <string name="google_news_science_technology">Wetenschap &amp; Technologie</string>
-    <string name="google_news_sports">Sport</string>
-    <string name="google_news_health">Gezondheid</string>
     <string name="feed_name">Feednaam</string>
-    <string name="feed_link">Feedlink</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Feedlink</string>
     <string name="all_entries">Alle items</string>
     <string name="menu_star">Favoriet</string>
     <string name="menu_unstar">Geen favoriet</string>
@@ -58,6 +56,7 @@
     <string name="no_entries">Geen items\nTrek omlaag om te verversen</string>
     <string name="undo">Ongedaan maken</string>
     <string name="marked_as_read">Gemarkeerd als gelezen</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisch verversen</string>
     <string name="settings_refresh_enabled">Automatisch verversen inschakelen</string>
@@ -82,10 +81,6 @@
     <string name="open_browser_direct_title">Openen in browser</string>
     <string name="refresh_on_startup">Ververst de feeds wanneer de app gestart wordt</string>
     <string name="refresh_on_startup_title">Ververs bij opstarten</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="one">Eén nieuw item</item>
-        <item quantity="other">%d nieuwe items</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 minuten</item>
         <item>15 minuten</item>

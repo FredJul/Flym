@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="other">%d entri baru</item>
+    </plurals>
     <string name="app_name">Flym</string>
     <string name="about_flym">Tentang Flym</string>
     <string name="welcome_title">Selamat datang di Flym. Apakah anda ingin menambahkan feed?</string>
@@ -37,16 +40,9 @@
     <string name="to_group_message">Anda bisa memindahkan feed ini ke dalam atau ke atas grup ini. Apa yang ingin anda lakukan?</string>
     <string name="to_group_above">Ke atas grup</string>
     <string name="to_group_into">Ke dalam grup</string>
-    <string name="google_news_top_stories">Unggulan</string>
-    <string name="google_news_world">Dunia</string>
-    <string name="google_news_business">Bisnis</string>
-    <string name="google_news_science_technology">Sains &amp; Teknologi</string>
-    <string name="google_news_entertainment">Hiburan</string>
-    <string name="google_news_sports">Olah Raga</string>
-    <string name="google_news_health">Kesehatan</string>
     <string name="feed_name">Nama feed</string>
-    <string name="feed_link">Tautan feed</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Tautan feed</string>
     <string name="all_entries">Semua entri</string>
     <string name="menu_star">Favorit</string>
     <string name="menu_unstar">Batal favorit</string>
@@ -63,8 +59,9 @@
     <string name="undo">Urung</string>
     <string name="marked_as_read">Ditandai sudah dibaca</string>
     <string name="marked_as_unread">Ditandai belum dibaca</string>
-    <string name="entry_default_title">Tanpa judul</string>
+    <!-- DISCOVER -->
     <!-- SETTINGS -->
+    <string name="entry_default_title">Tanpa judul</string>
     <string name="settings_category_refresh">Penyegaran otomatis</string>
     <string name="settings_refresh_enabled">Aktifkan penyegaran otomatis</string>
     <string name="settings_refresh_enabled_description">Mengaktifkan penyegaran otomatis daftar feed</string>
@@ -97,9 +94,6 @@
     <string name="settings_sort_order_title">Pengurutan</string>
     <string name="settings_enable_entry_swipe">Aktifkan geser saat membaca entri</string>
     <string name="settings_enable_entry_swipe_description">Jika diaktifkan, geser ke kiri atau kanan untuk membuka entri yang lama atau baru saat sedang membaca entri.</string>
-    <plurals name="number_of_new_entries">
-        <item quantity="other">%d entri baru</item>
-    </plurals>
     <string-array name="settings_intervals">
         <item>5 menit</item>
         <item>15 menit</item>
