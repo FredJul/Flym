@@ -4,6 +4,7 @@
     <plurals name="number_of_new_entries">
         <item quantity="other">%d 篇新文章</item>
     </plurals>
+    <string name="app_name">Flym</string>
     <string name="about_flym">关于 Flym</string>
     <string name="welcome_title">欢迎使用 Flym 。需要添加一个订阅源吗？</string>
     <string name="welcome_title_with_opml_import">是否要导入旧版 Flym 中的订阅源？</string>
@@ -59,7 +60,10 @@
     <string name="marked_as_read">标记为已读</string>
     <string name="marked_as_unread">标记为未读</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">搜索订阅源</string>
+    <string name="discover_search_hint">使用关键词或话题进行搜索，或键入订阅源的 URL。话题可通过 # 前缀标明。</string>
     <!-- SETTINGS -->
+    <string name="entry_default_title">未命名</string>
     <string name="settings_category_refresh">自动刷新</string>
     <string name="settings_refresh_enabled">开启自动刷新</string>
     <string name="settings_refresh_enabled_description">开启自动刷新</string>
@@ -91,6 +95,7 @@
     <string name="settings_sort_order">按最新到最旧排列文章</string>
     <string name="settings_sort_order_title">排列顺序</string>
     <string name="settings_enable_entry_swipe">阅读条目时启用侧滑切换</string>
+    <string name="settings_enable_entry_swipe_description">如果启用，则在阅读条目界面中，将可以通过侧滑的方式切换到上一个或下一个条目。</string>
     <string-array name="settings_intervals">
         <item>5 分钟</item>
         <item>15 分钟</item>
