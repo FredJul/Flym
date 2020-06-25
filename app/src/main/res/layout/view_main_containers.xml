@@ -10,16 +10,16 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
-            android:fitsSystemWindows="true"
-            android:stateListAnimator="@animator/appbar_always_elevated"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:stateListAnimator="@animator/appbar_always_elevated">
 
             <androidx.appcompat.widget.Toolbar
-				android:id="@+id/toolbar"
-				android:layout_width="match_parent"
-				android:layout_height="?android:attr/actionBarSize"
-                android:theme="@style/AppTheme.ActionBar.Details"/>
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:theme="@style/AppTheme.ActionBar.Details" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout

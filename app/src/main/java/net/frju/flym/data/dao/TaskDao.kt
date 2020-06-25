@@ -18,43 +18,49 @@
 package net.frju.flym.data.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
 import net.frju.flym.data.entities.Task
 
 
 @Dao
 abstract class TaskDao {
-	@get:Query("SELECT * FROM tasks")
-	abstract val all: List<Task>
+    @get:Query("SELECT * FROM tasks")
+    abstract val all: List<Task>
 
-	@get:Query("SELECT * FROM tasks")
-	abstract val observeAll: LiveData<List<Task>>
+    @get:Query("SELECT * FROM tasks")
+    abstract val observeAll: LiveData<List<Task>>
 
-	@get:Query("SELECT * FROM tasks WHERE imageLinkToDl = ''")
-	abstract val mobilizeTasks: List<Task>
+    @get:Query("SELECT * FROM tasks WHERE imageLinkToDl = ''")
+    abstract val mobilizeTasks: List<Task>
 
-	@Query("SELECT COUNT(*) FROM tasks WHERE imageLinkToDl = '' AND entryId = :itemId")
-	abstract fun observeItemMobilizationTasksCount(itemId: String): LiveData<Int>
+    @Query("SELECT COUNT(*) FROM tasks WHERE imageLinkToDl = '' AND entryId = :itemId")
+    abstract fun observeItemMobilizationTasksCount(itemId: String): LiveData<Int>
 
-	@get:Query("SELECT * FROM tasks WHERE imageLinkToDl != ''")
-	abstract val downloadTasks: List<Task>
+    @get:Query("SELECT * FROM tasks WHERE imageLinkToDl != ''")
+    abstract val downloadTasks: List<Task>
 
-	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	protected abstract fun insertInternal(task: Task)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    protected abstract fun insertInternal(task: Task)
 
-	@Transaction
-	open fun insert(vararg tasks: Task) {
-		for (task in tasks) {
-			try {
-				insertInternal(task) // Needed to avoid failing on all insert if a single one is failing
-			} catch (t: Throwable) {
-			}
-		}
-	}
+    @Transaction
+    open fun insert(vararg tasks: Task) {
+        for (task in tasks) {
+            try {
+                insertInternal(task) // Needed to avoid failing on all insert if a single one is failing
+            } catch (t: Throwable) {
+            }
+        }
+    }
 
-	@Update
-	abstract fun update(vararg tasks: Task)
+    @Update
+    abstract fun update(vararg tasks: Task)
 
-	@Delete
-	abstract fun delete(vararg tasks: Task)
+    @Delete
+    abstract fun delete(vararg tasks: Task)
 }

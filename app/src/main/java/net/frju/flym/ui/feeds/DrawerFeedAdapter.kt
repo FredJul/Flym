@@ -28,35 +28,35 @@ private const val STATE_SELECTED_ID = "STATE_SELECTED_ID"
 
 open class FeedAdapter(groups: List<FeedGroup>) : BaseFeedAdapter(groups) {
 
-	var selectedItemId = Feed.ALL_ENTRIES_ID
-		set(newValue) {
-			notifyParentDataSetChanged(true)
-			field = newValue
-		}
+    var selectedItemId = Feed.ALL_ENTRIES_ID
+        set(newValue) {
+            notifyParentDataSetChanged(true)
+            field = newValue
+        }
 
-	override fun bindItem(itemView: View, feedWithCount: FeedWithCount) {
-		itemView.isSelected = selectedItemId == feedWithCount.feed.id
+    override fun bindItem(itemView: View, feedWithCount: FeedWithCount) {
+        itemView.isSelected = selectedItemId == feedWithCount.feed.id
 
-		itemView.onClick {
-			selectedItemId = feedWithCount.feed.id
-			feedClickListener?.invoke(itemView, feedWithCount)
-		}
-	}
+        itemView.onClick {
+            selectedItemId = feedWithCount.feed.id
+            feedClickListener?.invoke(itemView, feedWithCount)
+        }
+    }
 
-	override fun bindItem(itemView: View, group: FeedGroup) {
-		itemView.isSelected = selectedItemId == group.feedWithCount.feed.id
+    override fun bindItem(itemView: View, group: FeedGroup) {
+        itemView.isSelected = selectedItemId == group.feedWithCount.feed.id
 
-		itemView.onClick {
-			selectedItemId = group.feedWithCount.feed.id
-			feedClickListener?.invoke(itemView, group.feedWithCount)
-		}
-	}
+        itemView.onClick {
+            selectedItemId = group.feedWithCount.feed.id
+            feedClickListener?.invoke(itemView, group.feedWithCount)
+        }
+    }
 
-	override fun onSaveInstanceState(savedInstanceState: Bundle) {
-		savedInstanceState.putLong(STATE_SELECTED_ID, selectedItemId)
-	}
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.putLong(STATE_SELECTED_ID, selectedItemId)
+    }
 
-	override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-		selectedItemId = savedInstanceState?.getLong(STATE_SELECTED_ID) ?: Feed.ALL_ENTRIES_ID
-	}
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        selectedItemId = savedInstanceState?.getLong(STATE_SELECTED_ID) ?: Feed.ALL_ENTRIES_ID
+    }
 }

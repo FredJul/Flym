@@ -33,7 +33,11 @@ import androidx.core.content.FileProvider.getUriForFile
 import net.fred.feedex.R
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.utils.PrefConstants
-import net.frju.flym.utils.*
+import net.frju.flym.utils.FILE_SCHEME
+import net.frju.flym.utils.HtmlUtils
+import net.frju.flym.utils.UTF8
+import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.getPrefString
 import org.jetbrains.anko.colorAttr
 import java.io.File
 import java.io.IOException

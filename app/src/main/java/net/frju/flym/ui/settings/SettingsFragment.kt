@@ -29,23 +29,23 @@ import org.jetbrains.anko.startActivity
 
 class SettingsFragment : PreferenceFragment() {
 
-	private val onRefreshChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-		AutoRefreshJobService.initAutoRefresh(activity)
-		true
-	}
+    private val onRefreshChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+        AutoRefreshJobService.initAutoRefresh(activity)
+        true
+    }
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-		addPreferencesFromResource(R.xml.settings)
+        addPreferencesFromResource(R.xml.settings)
 
-		findPreference(PrefConstants.REFRESH_ENABLED)?.onPreferenceChangeListener = onRefreshChangeListener
-		findPreference(PrefConstants.REFRESH_INTERVAL)?.onPreferenceChangeListener = onRefreshChangeListener
+        findPreference(PrefConstants.REFRESH_ENABLED)?.onPreferenceChangeListener = onRefreshChangeListener
+        findPreference(PrefConstants.REFRESH_INTERVAL)?.onPreferenceChangeListener = onRefreshChangeListener
 
-		findPreference(PrefConstants.THEME)?.setOnPreferenceChangeListener { preference, any ->
-			activity.finishAffinity()
-			startActivity<MainActivity>()
-			true
-		}
-	}
+        findPreference(PrefConstants.THEME)?.setOnPreferenceChangeListener { preference, any ->
+            activity.finishAffinity()
+            startActivity<MainActivity>()
+            true
+        }
+    }
 }

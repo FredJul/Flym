@@ -36,52 +36,52 @@ import java.util.UUID
 
 @Parcelize
 @Entity(tableName = "entries",
-		indices = [(Index(value = ["feedId"])), (Index(value = ["link"], unique = true))],
-		foreignKeys = [(ForeignKey(entity = Feed::class,
-				parentColumns = ["feedId"],
-				childColumns = ["feedId"],
-				onDelete = ForeignKey.CASCADE))])
+        indices = [(Index(value = ["feedId"])), (Index(value = ["link"], unique = true))],
+        foreignKeys = [(ForeignKey(entity = Feed::class,
+                parentColumns = ["feedId"],
+                childColumns = ["feedId"],
+                onDelete = ForeignKey.CASCADE))])
 data class Entry(@PrimaryKey
-				 var id: String = "",
-				 var feedId: Long = 0L,
-				 var link: String? = null,
-				 var fetchDate: Date = Date(),
-				 var publicationDate: Date = fetchDate, // important to know if the publication date has been set
-				 var title: String? = null,
-				 var description: String? = null,
-				 var mobilizedContent: String? = null,
-				 var imageLink: String? = null,
-				 var author: String? = null,
-				 var read: Boolean = false,
-				 var favorite: Boolean = false) : Parcelable {
+                 var id: String = "",
+                 var feedId: Long = 0L,
+                 var link: String? = null,
+                 var fetchDate: Date = Date(),
+                 var publicationDate: Date = fetchDate, // important to know if the publication date has been set
+                 var title: String? = null,
+                 var description: String? = null,
+                 var mobilizedContent: String? = null,
+                 var imageLink: String? = null,
+                 var author: String? = null,
+                 var read: Boolean = false,
+                 var favorite: Boolean = false) : Parcelable {
 
-	fun getReadablePublicationDate(context: Context): String =
-			if (DateUtils.isToday(publicationDate.time)) {
-				DateFormat.getTimeFormat(context).format(publicationDate)
-			} else {
-				DateFormat.getMediumDateFormat(context).format(publicationDate) + ' ' +
-						DateFormat.getTimeFormat(context).format(publicationDate)
-			}
+    fun getReadablePublicationDate(context: Context): String =
+            if (DateUtils.isToday(publicationDate.time)) {
+                DateFormat.getTimeFormat(context).format(publicationDate)
+            } else {
+                DateFormat.getMediumDateFormat(context).format(publicationDate) + ' ' +
+                        DateFormat.getTimeFormat(context).format(publicationDate)
+            }
 }
 
 fun SyndEntry.toDbFormat(context: Context, feed: Feed): Entry {
-	val item = Entry()
-	item.id = (feed.id.toString() + "_" + (link ?: uri ?: title
-	?: UUID.randomUUID().toString())).sha1()
-	item.feedId = feed.id
-	@Suppress("DEPRECATION")
-	if (title != null) {
-		item.title = Html.fromHtml(title).toString()
-	} else {
-		item.title = context.getString(R.string.entry_default_title)
-	}
-	item.description = contents.getOrNull(0)?.value ?: description?.value
-	item.link = link
-	//TODO item.imageLink = null
-	item.author = author
+    val item = Entry()
+    item.id = (feed.id.toString() + "_" + (link ?: uri ?: title
+    ?: UUID.randomUUID().toString())).sha1()
+    item.feedId = feed.id
+    @Suppress("DEPRECATION")
+    if (title != null) {
+        item.title = Html.fromHtml(title).toString()
+    } else {
+        item.title = context.getString(R.string.entry_default_title)
+    }
+    item.description = contents.getOrNull(0)?.value ?: description?.value
+    item.link = link
+    //TODO item.imageLink = null
+    item.author = author
 
-	val date = publishedDate ?: updatedDate
-	item.publicationDate = if (date?.before(item.publicationDate) == true) date else item.publicationDate
+    val date = publishedDate ?: updatedDate
+    item.publicationDate = if (date?.before(item.publicationDate) == true) date else item.publicationDate
 
-	return item
+    return item
 }

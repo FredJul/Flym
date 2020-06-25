@@ -85,8 +85,7 @@
         <item name="colorBackground">@color/colorBackgroundBlack</item>
     </style>
 
-    <style name="AppThemeBlack.ActionBar.Details" parent="AppThemeBlack.ActionBar">
-    </style>
+    <style name="AppThemeBlack.ActionBar.Details" parent="AppThemeBlack.ActionBar"></style>
 
     <style name="AppThemeBlack.NoActionBar">
         <item name="windowActionBar">false</item>
