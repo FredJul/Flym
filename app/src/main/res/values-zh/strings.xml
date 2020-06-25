@@ -90,6 +90,7 @@
     <string name="settings_hide_button_mark_all_as_read_description">不在屏幕上显示“标记全部为已读”按钮</string>
     <string name="settings_sort_order">按最新到最旧排列文章</string>
     <string name="settings_sort_order_title">排列顺序</string>
+    <string name="settings_enable_entry_swipe">阅读条目时启用侧滑切换</string>
     <string-array name="settings_intervals">
         <item>5 分钟</item>
         <item>15 分钟</item>
