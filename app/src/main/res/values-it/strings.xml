@@ -61,7 +61,7 @@
     <string name="marked_as_read">Contrassegnato come letto</string>
     <string name="marked_as_unread">Contrassegnato come non letto</string>
     <!-- DISCOVER -->
-    <string name="discover_search_label">Cerca Feed</string>
+    <string name="discover_search_label">Cerca feed</string>
     <string name="discover_search_hint">Cerca per parola chiave, URL o argomento. Gli argomenti possono essere indicati con # come prefisso.</string>
     <string-array name="discover_topics">
         <item>notizie</item>
@@ -81,7 +81,7 @@
         <item>marketing</item>
         <item>spazio</item>
         <item>design</item>
-        <item>comics</item>
+        <item>fumetti</item>
     </string-array>
     <!-- SETTINGS -->
     <string name="entry_default_title">Senza titolo</string>
