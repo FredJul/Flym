@@ -292,7 +292,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     AlertDialog.Builder(this)
                             .setTitle(R.string.welcome_title)
                             .setPositiveButton(android.R.string.yes) { _, _ ->
-                                FeedSearchDialog(this).show()
+                                goToFeedSearch()
                             }
                             .setNegativeButton(android.R.string.no, null)
                             .show()
@@ -329,14 +329,14 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         // Add feed urls from Open with
         if (intent?.action.equals(Intent.ACTION_VIEW)) {
             val search: String = intent?.data.toString()
-            FeedSearchDialog(this, search).show()
+            DiscoverActivity.newInstance(this, search)
             setIntent(null)
         }
         // Add feed urls from Share menu
         if (intent?.action.equals(Intent.ACTION_SEND)) {
             if (intent?.hasExtra(Intent.EXTRA_TEXT) == true) {
                 val search = intent.getStringExtra(Intent.EXTRA_TEXT)
-                FeedSearchDialog(this, search).show()
+                DiscoverActivity.newInstance(this, search)
             }
             setIntent(null)
         }
@@ -427,7 +427,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
-    override fun goToFeedSearch() = startActivity<DiscoverActivity>()
+    override fun goToFeedSearch() = DiscoverActivity.newInstance(this)
 
     override fun goToEntryDetails(entryId: String, allEntryIds: List<String>) {
         closeKeyboard()
