@@ -1,5 +1,6 @@
 package net.frju.flym.ui.discover
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -17,12 +18,23 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.sdk21.listeners.onEditorAction
 import org.jetbrains.anko.sdk21.listeners.textChangedListener
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.uiThread
 import java.util.Timer
 import java.util.TimerTask
 
 
 class DiscoverActivity : AppCompatActivity(), FeedManagementInterface {
+
+    companion object {
+
+        @JvmStatic
+        fun newInstance(context: Context) = context.startActivity<DiscoverActivity>()
+
+        @JvmStatic
+        fun newInstance(context: Context, query: String) =
+                context.startActivity<DiscoverActivity>(FeedSearchFragment.ARG_QUERY to query)
+    }
 
     private var searchInput: AutoCompleteTextView? = null
 
@@ -31,6 +43,8 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface {
         setContentView(R.layout.activity_feed_search)
         this.initSearchInputs()
         this.goDiscover()
+
+        intent.getStringExtra(FeedSearchFragment.ARG_QUERY)?.let { searchForFeed(it) }
     }
 
     private fun initSearchInputs() {

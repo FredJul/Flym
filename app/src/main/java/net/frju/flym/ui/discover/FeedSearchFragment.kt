@@ -40,8 +40,8 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
 
     companion object {
         const val TAG = "FeedSearchFragment"
+        const val ARG_QUERY = "query"
 
-        private const val ARG_QUERY = "query"
         private const val FEED_SEARCH_TITLE = "title"
         private const val FEED_SEARCH_URL = "feedId"
         private const val FEED_SEARCH_DESC = "description"
