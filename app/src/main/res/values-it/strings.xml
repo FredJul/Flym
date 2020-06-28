@@ -61,6 +61,28 @@
     <string name="marked_as_read">Contrassegnato come letto</string>
     <string name="marked_as_unread">Contrassegnato come non letto</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">Cerca feed</string>
+    <string name="discover_search_hint">Cerca per parola chiave, URL o argomento. Gli argomenti possono essere indicati con # come prefisso.</string>
+    <string-array name="discover_topics">
+        <item>notizie</item>
+        <item>politica</item>
+        <item>mondo</item>
+        <item>ingegneria</item>
+        <item>tecnologia</item>
+        <item>startup</item>
+        <item>telecomunicazioni</item>
+        <item>sicurezza informatica</item>
+        <item>privacy</item>
+        <item>scienza</item>
+        <item>medicina</item>
+        <item>sanità</item>
+        <item>istruzione</item>
+        <item>affari</item>
+        <item>marketing</item>
+        <item>spazio</item>
+        <item>design</item>
+        <item>fumetti</item>
+    </string-array>
     <!-- SETTINGS -->
     <string name="entry_default_title">Senza titolo</string>
     <string name="settings_category_refresh">Aggiornamento automatico</string>
