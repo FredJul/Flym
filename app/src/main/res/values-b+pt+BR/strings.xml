@@ -62,6 +62,27 @@
     <string name="marked_as_unread">Marcado como não lido</string>
     <!-- DISCOVER -->
     <string name="discover_search_label">Buscar Feeds</string>
+    <string name="discover_search_hint">Buscar por palavra-chave, URL ou tópico. Tópicos podem ser indicados com um prefixo #.</string>
+    <string-array name="discover_topics">
+        <item>notícias</item>
+        <item>política</item>
+        <item>mundo</item>
+        <item>engenharia</item>
+        <item>tecnologia</item>
+        <item>startups</item>
+        <item>telecom</item>
+        <item>cibersegurança</item>
+        <item>privacidade</item>
+        <item>ciência</item>
+        <item>medicina</item>
+        <item>saúde</item>
+        <item>educação</item>
+        <item>negócios</item>
+        <item>marketing</item>
+        <item>espaço</item>
+        <item>design</item>
+        <item>quadrinhos</item>
+    </string-array>
     <!-- SETTINGS -->
     <string name="entry_default_title">Sem título</string>
     <string name="settings_category_refresh">Atualização automática</string>
