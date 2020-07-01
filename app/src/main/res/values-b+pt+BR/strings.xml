@@ -61,6 +61,7 @@
     <string name="marked_as_read">Marcado como lido</string>
     <string name="marked_as_unread">Marcado como não lido</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">Buscar Feeds</string>
     <!-- SETTINGS -->
     <string name="entry_default_title">Sem título</string>
     <string name="settings_category_refresh">Atualização automática</string>
