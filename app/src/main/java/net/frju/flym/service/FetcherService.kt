@@ -30,6 +30,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.text.Html
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
@@ -407,7 +408,58 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             return globalResult
         }
 
+        private fun commonFeedUrlEnding(link:String): Boolean {
+            val commonUrlEndings = arrayOf("rss", "atom", "feed", "xml")
+            for (ending in commonUrlEndings){
+                if (link.endsWith(ending)){
+                    return true
+                }
+            }
+            return false
+        }
+
+        /**
+         * Fetches the feed entries
+         */
+        private fun fetchFeedEntries(feed:Feed, link:String): HashSet<Entry> {
+            val entries = HashSet<Entry>()
+            try {
+                createCall(link).execute().use { response ->
+                    val input = SyndFeedInput()
+                    val romeFeed = input.build(XmlReader(response.body!!.byteStream()))
+                    entries.addAll(romeFeed.entries.asSequence().map { it.toDbFormat(context, feed) })
+                    feed.update(romeFeed)
+                }
+            } catch (t: Throwable){
+                feed.fetchError = true
+                if (!commonFeedUrlEnding(link)){
+
+                }
+            }
+            return entries
+        }
+
+        private fun filterEntries(){
+            
+        }
+
         private fun refreshFeed(feed: Feed, acceptMinDate: Long): Int {
+            val imgUrlsToDownload = mutableMapOf<String, List<String>>()
+            val downloadPictures = shouldDownloadPictures()
+
+            val entries = HashSet<Entry>()
+            try {
+                fetchFeedEntries(feed, feed.link)
+            } catch (t: Throwable) {
+                feed.fetchError = true
+                // Todo: Retry w/ /rss and /feed
+            }
+
+
+            return entries.size
+        }
+
+        private fun refreshFeedOld(feed: Feed, acceptMinDate: Long): Int {
             val entries = mutableListOf<Entry>()
             val entriesToInsert = mutableListOf<Entry>()
             val imgUrlsToDownload = mutableMapOf<String, List<String>>()

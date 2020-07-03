@@ -30,8 +30,7 @@ import com.rometools.rome.feed.synd.SyndEntry
 import kotlinx.android.parcel.Parcelize
 import net.fred.feedex.R
 import net.frju.flym.utils.sha1
-import java.util.Date
-import java.util.UUID
+import java.util.*
 
 
 @Parcelize
@@ -62,6 +61,20 @@ data class Entry(@PrimaryKey
                 DateFormat.getMediumDateFormat(context).format(publicationDate) + ' ' +
                         DateFormat.getTimeFormat(context).format(publicationDate)
             }
+
+    override fun equals(other: Any?): Boolean {
+        other?.let { o ->
+            if (this == o) {
+                return true
+            }else if(this.javaClass != o.javaClass){
+                return false
+            }else{
+                val otherEntry = o as Entry
+                return this.id == otherEntry.id || this.link == otherEntry.link
+            }
+        }
+        return super.equals(other)
+    }
 }
 
 fun SyndEntry.toDbFormat(context: Context, feed: Feed): Entry {
