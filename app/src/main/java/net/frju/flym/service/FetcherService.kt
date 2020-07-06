@@ -30,7 +30,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.text.Html
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.rometools.rome.feed.synd.SyndEntry
 import com.rometools.rome.io.SyndFeedInput
@@ -457,10 +456,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             }
 
             val entries = HashSet<Entry>(App.db.entryDao().entriesByFeed(feed.id))
-            val entriesToInsert = mutableListOf<Entry>()
-            val imgUrlsToDownload = mutableMapOf<String, List<String>>()
-            val downloadPictures = shouldDownloadPictures()
-
             val previousFeedState = feed.copy()
             try {
                 createCall(feed.link).execute().use { response ->
@@ -483,6 +478,9 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             }
             App.db.feedDao().updateFetchDate(fetchDate, feed.id)
 
+            val entriesToInsert = mutableListOf<Entry>()
+            val imgUrlsToDownload = mutableMapOf<String, List<String>>()
+            val downloadPictures = shouldDownloadPictures()
 
             val existingIds = App.db.entryDao().idsForFeed(feed.id)
             val feedBaseUrl = getBaseUrl(feed.link)
