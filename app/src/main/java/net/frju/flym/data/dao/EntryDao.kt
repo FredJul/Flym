@@ -19,12 +19,7 @@ package net.frju.flym.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import net.frju.flym.data.entities.Entry
 import net.frju.flym.data.entities.EntryWithFeed
 
@@ -113,14 +108,18 @@ abstract class EntryDao {
     @get:Query("SELECT COUNT(*) FROM entries WHERE read = 0")
     abstract val countUnread: Long
 
+    @Query("SELECT * FROM entries WHERE feedId IS (:feedId)")
+    abstract fun entriesByFeed(feedId: Long): List<Entry>
+
     @Query("SELECT * FROM entries WHERE id IS :id LIMIT 1")
     abstract fun findById(id: String): Entry?
 
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM $JOIN WHERE id IS :id LIMIT 1")
     abstract fun findByIdWithFeed(id: String): EntryWithFeed?
 
-    @Query("SELECT title FROM entries WHERE title IN (:titles)")
-    abstract fun findAlreadyExistingTitles(titles: List<String>): List<String>
+    @Query("SELECT title FROM entries WHERE title IS NOT NULL and feedId IS (:feedId)")
+    abstract fun findTitlesForFeed(feedId: Long): List<String>
 
     @Query("SELECT id FROM entries WHERE feedId IS (:feedId)")
     abstract fun idsForFeed(feedId: Long): List<String>

@@ -27,6 +27,7 @@ import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.rometools.rome.feed.synd.SyndFeed
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 @Parcelize
 @Entity(tableName = "feeds",
@@ -50,6 +51,8 @@ data class Feed(
         var isGroup: Boolean = false,
         var groupId: Long? = null,
         var displayPriority: Int = 0,
+        @ColumnInfo(name = "feedFetchDate")
+        var fetchDate: Date = Date(),
         @Deprecated("Not used anymore")
         var lastManualActionUid: String = "") : Parcelable {
 

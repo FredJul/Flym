@@ -71,10 +71,19 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        private val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.run {
+                    execSQL("ALTER TABLE feeds ADD COLUMN feedFetchDate DATE")
+                }
+            }
+        }
+
         fun createDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, DATABASE_NAME)
                     .addMigrations(MIGRATION_1_2)
                     .addMigrations(MIGRATION_2_3)
+                    .addMigrations(MIGRATION_3_4)
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)

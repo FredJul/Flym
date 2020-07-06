@@ -26,6 +26,7 @@ import androidx.room.Query
 import androidx.room.Update
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.FeedWithCount
+import java.util.*
 
 private const val ENTRY_COUNT = "(SELECT COUNT(*) FROM entries WHERE feedId IS f.feedId AND read = 0)"
 
@@ -52,8 +53,14 @@ abstract class FeedDao {
     @Query("SELECT * FROM feeds WHERE feedLink IS :link")
     abstract fun findByLink(link: String): Feed?
 
+    @Query("SELECT feedFetchDate FROM feeds WHERE feedId IS :id LIMIT 1")
+    abstract fun findLastFetchDate(id: Long): Date?
+
     @Query("DELETE FROM feeds WHERE feedLink IS :link")
     abstract fun deleteByLink(link: String)
+
+    @Query("UPDATE feeds SET feedFetchDate = :fetchDate WHERE feedId IS :feedId")
+    abstract fun updateFetchDate(fetchDate: Date, feedId: Long)
 
     @Query("UPDATE feeds SET retrieveFullText = 1 WHERE feedId = :feedId")
     abstract fun enableFullTextRetrieval(feedId: Long)

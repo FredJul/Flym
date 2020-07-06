@@ -32,6 +32,7 @@ import android.os.Handler
 import android.text.Html
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.rometools.rome.feed.synd.SyndEntry
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
 import net.dankito.readability4j.extended.Readability4JExtended
@@ -67,9 +68,12 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.net.CookieManager
 import java.net.CookiePolicy
+import java.util.*
 import java.util.concurrent.ExecutorCompletionService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 import kotlin.math.max
 
 
@@ -145,7 +149,12 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                     COOKIE_MANAGER.cookieStore.removeAll() // Cookies are important for some sites, but we clean them each times
 
                     // We need to use the more recent date in order to be sure to not see old entries again
-                    val acceptMinDate = max(readEntriesKeepDate, unreadEntriesKeepDate)
+                    var acceptMinDate = max(readEntriesKeepDate, unreadEntriesKeepDate)
+
+                    // Keep the original logic to avoid entries reappearing on startup after
+                    // migration, but add the lastFetchDate to stop the reappearing entries
+                    val lastFetchDate = App.db.feedDao().findLastFetchDate(feedId)
+                    lastFetchDate?.let { acceptMinDate = max(acceptMinDate, lastFetchDate.time) }
 
                     var newCount = 0
                     if (feedId == 0L || App.db.feedDao().findById(feedId)!!.isGroup) {
@@ -408,59 +417,42 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             return globalResult
         }
 
-        private fun commonFeedUrlEnding(link:String): Boolean {
-            val commonUrlEndings = arrayOf("rss", "atom", "feed", "xml")
-            for (ending in commonUrlEndings){
-                if (link.endsWith(ending)){
-                    return true
-                }
-            }
-            return false
+        private fun isTimeRelevant(entry: SyndEntry, acceptMinDate: Long) : Boolean {
+            return entry.publishedDate?.time ?: Long.MAX_VALUE > acceptMinDate
         }
 
-        /**
-         * Fetches the feed entries
-         */
-        private fun fetchFeedEntries(feed:Feed, link:String): HashSet<Entry> {
-            val entries = HashSet<Entry>()
-            try {
-                createCall(link).execute().use { response ->
-                    val input = SyndFeedInput()
-                    val romeFeed = input.build(XmlReader(response.body!!.byteStream()))
-                    entries.addAll(romeFeed.entries.asSequence().map { it.toDbFormat(context, feed) })
-                    feed.update(romeFeed)
-                }
-            } catch (t: Throwable){
-                feed.fetchError = true
-                if (!commonFeedUrlEnding(link)){
-
-                }
-            }
-            return entries
+        private fun isDuplicate(entry: SyndEntry, saveDuplicates: Boolean, existingTitles: List<String>) : Boolean{
+            return !saveDuplicates && entry.title in existingTitles
         }
 
-        private fun filterEntries(){
-            
+        private fun containsBlacklistedTerm(entry: SyndEntry, blacklist: List<String>) : Boolean {
+            var contains = false
+            for (term in blacklist){
+                if (entry.title?.contains(term) == true ||
+                        entry.description?.value?.contains(term) == true ||
+                        entry.author?.contains(term) == true) {
+                    contains = true
+                    break
+                }
+            }
+            return contains
         }
 
         private fun refreshFeed(feed: Feed, acceptMinDate: Long): Int {
-            val imgUrlsToDownload = mutableMapOf<String, List<String>>()
-            val downloadPictures = shouldDownloadPictures()
 
-            val entries = HashSet<Entry>()
-            try {
-                fetchFeedEntries(feed, feed.link)
-            } catch (t: Throwable) {
-                feed.fetchError = true
-                // Todo: Retry w/ /rss and /feed
+            val fetchDate = Date()
+
+            // Fetch existing Title, Preferences, and keyword blacklist once outside the loops
+            val saveDuplicates = context.getPrefBoolean(PrefConstants.REMOVE_DUPLICATES, true)
+            val existingTitles = App.db.entryDao().findTitlesForFeed(feed.id)
+            val blacklistKeywords = context.getPrefString(PrefConstants.FILTER_KEYWORDS, "")!!
+            val blacklist: List<String> = if (blacklistKeywords.isNotBlank()) {
+                blacklistKeywords.split(',').map { it.trim() }
+            }else{
+                ArrayList()
             }
 
-
-            return entries.size
-        }
-
-        private fun refreshFeedOld(feed: Feed, acceptMinDate: Long): Int {
-            val entries = mutableListOf<Entry>()
+            val entries = HashSet<Entry>(App.db.entryDao().entriesByFeed(feed.id))
             val entriesToInsert = mutableListOf<Entry>()
             val imgUrlsToDownload = mutableMapOf<String, List<String>>()
             val downloadPictures = shouldDownloadPictures()
@@ -470,7 +462,12 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 createCall(feed.link).execute().use { response ->
                     val input = SyndFeedInput()
                     val romeFeed = input.build(XmlReader(response.body!!.byteStream()))
-                    entries.addAll(romeFeed.entries.asSequence().filter { it.publishedDate?.time ?: Long.MAX_VALUE > acceptMinDate }.map { it.toDbFormat(context, feed) })
+                    entries.addAll(romeFeed.entries.asSequence()
+                            .filter {
+                                isTimeRelevant(it, acceptMinDate) &&
+                                !containsBlacklistedTerm(it, blacklist) &&
+                                !isDuplicate(it, saveDuplicates, existingTitles)
+                            }.map { it.toDbFormat(context, feed) })
                     feed.update(romeFeed)
                 }
             } catch (t: Throwable) {
@@ -480,32 +477,10 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             if (feed != previousFeedState) {
                 App.db.feedDao().update(feed)
             }
+            App.db.feedDao().updateFetchDate(fetchDate, feed.id)
 
             // First we remove the entries that we already have in db (no update to save data)
             val existingIds = App.db.entryDao().idsForFeed(feed.id)
-            entries.removeAll { it.id in existingIds }
-
-            // Second, we filter items with same title than one we already have
-            if (context.getPrefBoolean(PrefConstants.REMOVE_DUPLICATES, true)) {
-                val existingTitles = App.db.entryDao().findAlreadyExistingTitles(entries.mapNotNull { it.title })
-                entries.removeAll { it.title in existingTitles }
-            }
-
-            // Third, we filter items containing forbidden keywords
-            val filterKeywordString = context.getPrefString(PrefConstants.FILTER_KEYWORDS, "")!!
-            if (filterKeywordString.isNotBlank()) {
-                val keywordLists = filterKeywordString.split(',').map { it.trim() }
-
-                if (keywordLists.isNotEmpty()) {
-                    entries.removeAll { entry ->
-                        keywordLists.any {
-                            entry.title?.contains(it, true) == true ||
-                                    entry.description?.contains(it, true) == true ||
-                                    entry.author?.contains(it, true) == true
-                        }
-                    }
-                }
-            }
 
             val feedBaseUrl = getBaseUrl(feed.link)
             var foundExisting = false
@@ -547,7 +522,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
             // Insert everything
             App.db.entryDao().insert(*(entriesToInsert.toTypedArray()))
-
             if (feed.retrieveFullText) {
                 addEntriesToMobilize(entries.map { it.id })
             }
