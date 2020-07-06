@@ -421,8 +421,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             return entry.publishedDate?.time ?: Long.MAX_VALUE > acceptMinDate
         }
 
-        private fun isDuplicate(entry: SyndEntry, saveDuplicates: Boolean, existingTitles: List<String>) : Boolean{
-            return !saveDuplicates && entry.title in existingTitles
+        private fun isDuplicate(entry: SyndEntry, removeDuplicates: Boolean, existingTitles: List<String>) : Boolean{
+            return removeDuplicates && entry.title in existingTitles
         }
 
         private fun containsBlacklistedTerm(entry: SyndEntry, blacklist: List<String>) : Boolean {
@@ -442,12 +442,16 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
             val fetchDate = Date()
 
-            // Fetch existing Title, Preferences, and keyword blacklist once outside the loops
-            val saveDuplicates = context.getPrefBoolean(PrefConstants.REMOVE_DUPLICATES, true)
-            val existingTitles = App.db.entryDao().findTitlesForFeed(feed.id)
-            val blacklistKeywords = context.getPrefString(PrefConstants.FILTER_KEYWORDS, "")!!
-            val blacklist: List<String> = if (blacklistKeywords.isNotBlank()) {
-                blacklistKeywords.split(',').map { it.trim() }
+            val removeDuplicates = context.getPrefBoolean(PrefConstants.REMOVE_DUPLICATES, true)
+            val existingTitles = if (removeDuplicates){
+                App.db.entryDao().findTitlesForFeed(feed.id)
+            }else{
+                ArrayList()
+            }
+
+            val filterKeywords = context.getPrefString(PrefConstants.FILTER_KEYWORDS, "")!!
+            val blacklist: List<String> = if (filterKeywords.isNotBlank()) {
+                filterKeywords.split(',').map { it.trim() }
             }else{
                 ArrayList()
             }
@@ -465,8 +469,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                     entries.addAll(romeFeed.entries.asSequence()
                             .filter {
                                 isTimeRelevant(it, acceptMinDate) &&
-                                !containsBlacklistedTerm(it, blacklist) &&
-                                !isDuplicate(it, saveDuplicates, existingTitles)
+                                !isDuplicate(it, removeDuplicates, existingTitles) &&
+                                !containsBlacklistedTerm(it, blacklist)
                             }.map { it.toDbFormat(context, feed) })
                     feed.update(romeFeed)
                 }
@@ -479,43 +483,33 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             }
             App.db.feedDao().updateFetchDate(fetchDate, feed.id)
 
-            // First we remove the entries that we already have in db (no update to save data)
-            val existingIds = App.db.entryDao().idsForFeed(feed.id)
 
+            val existingIds = App.db.entryDao().idsForFeed(feed.id)
             val feedBaseUrl = getBaseUrl(feed.link)
-            var foundExisting = false
 
             // Now we improve the html and find images
             for (entry in entries) {
-                if (existingIds.contains(entry.id)) {
-                    foundExisting = true
-                }
+                if (!existingIds.contains(entry.id)) {
+                    entriesToInsert.add(entry)
 
-                if (entry.publicationDate != entry.fetchDate || !foundExisting) { // we try to not put back old entries, even when there is no date
-                    if (!existingIds.contains(entry.id)) {
-                        entriesToInsert.add(entry)
+                    entry.title = entry.title?.replace("\n", " ")?.trim()
+                    entry.description?.let { desc ->
+                        // Improve the description
+                        val improvedContent = HtmlUtils.improveHtmlContent(desc, feedBaseUrl)
 
-                        entry.title = entry.title?.replace("\n", " ")?.trim()
-                        entry.description?.let { desc ->
-                            // Improve the description
-                            val improvedContent = HtmlUtils.improveHtmlContent(desc, feedBaseUrl)
-
-                            if (downloadPictures) {
-                                val imagesList = HtmlUtils.getImageURLs(improvedContent)
-                                if (imagesList.isNotEmpty()) {
-                                    if (entry.imageLink == null) {
-                                        entry.imageLink = HtmlUtils.getMainImageURL(imagesList)
-                                    }
-                                    imgUrlsToDownload[entry.id] = imagesList
+                        if (downloadPictures) {
+                            val imagesList = HtmlUtils.getImageURLs(improvedContent)
+                            if (imagesList.isNotEmpty()) {
+                                if (entry.imageLink == null) {
+                                    entry.imageLink = HtmlUtils.getMainImageURL(imagesList)
                                 }
-                            } else if (entry.imageLink == null) {
-                                entry.imageLink = HtmlUtils.getMainImageURL(improvedContent)
+                                imgUrlsToDownload[entry.id] = imagesList
                             }
-
-                            entry.description = improvedContent
+                        } else if (entry.imageLink == null) {
+                            entry.imageLink = HtmlUtils.getMainImageURL(improvedContent)
                         }
-                    } else {
-                        foundExisting = true
+
+                        entry.description = improvedContent
                     }
                 }
             }
