@@ -67,7 +67,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.net.CookieManager
 import java.net.CookiePolicy
-import java.util.*
+import java.util.Date
 import java.util.concurrent.ExecutorCompletionService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit

@@ -17,6 +17,7 @@
 
 package net.frju.flym.data.dao
 
+import java.util.Date
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
@@ -26,7 +27,6 @@ import androidx.room.Query
 import androidx.room.Update
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.FeedWithCount
-import java.util.*
 
 private const val ENTRY_COUNT = "(SELECT COUNT(*) FROM entries WHERE feedId IS f.feedId AND read = 0)"
 
