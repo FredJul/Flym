@@ -18,6 +18,7 @@
 package net.frju.flym.data.entities
 
 import java.util.Date
+import java.util.UUID
 import android.content.Context
 import android.os.Parcelable
 import android.text.Html
