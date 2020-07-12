@@ -17,8 +17,6 @@
 
 package net.frju.flym.data.entities
 
-import java.util.Date
-import java.util.UUID
 import android.content.Context
 import android.os.Parcelable
 import android.text.Html
@@ -32,6 +30,8 @@ import com.rometools.rome.feed.synd.SyndEntry
 import kotlinx.android.parcel.Parcelize
 import net.fred.feedex.R
 import net.frju.flym.utils.sha1
+import java.util.Date
+import java.util.UUID
 
 
 @Parcelize
