@@ -24,9 +24,10 @@
     <string name="drawer_fetch_error_explanation">Einige deiner Feeds wurden nicht korrekt aktualisiert ▼</string>
     <string name="about_screen_info">Ich veröffentliche diese App als freie und Open Source-Software unter der GPLv3-Lizenz. Jegliche Änderungen sind möglich, solange auch sie Open Source sind.</string>
     <!-- FEEDS -->
+    <string name="feeds">Feeds</string>
     <string name="menu_add_group">Gruppe erstellen</string>
     <string name="menu_import">Import aus OPML</string>
-    <string name="menu_export">Eport nach OPML</string>
+    <string name="menu_export">Export nach OPML</string>
     <string name="storage_request_explanation">Um Feeds aus/in eine(r) Datei zu importieren/exportieren, muss das Programm die Berechtigung haben auf den Speicher zuzugreifen.</string>
     <string name="error_feed_export">Der Export ist fehlgeschlagen. Stelle sicher, dass eine beschreibbare SD-Karte eingelegt ist.</string>
     <string name="feed_search">Feed-Suche</string>
@@ -60,6 +61,28 @@
     <string name="marked_as_read">Als gelesen markieren</string>
     <string name="marked_as_unread">Als ungelesen markieren</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">Feeds suchen</string>
+    <string name="discover_search_hint">Suche nach Stichwort, URL oder Themen. Themen können mit #-Präfix angezeigt werden.</string>
+    <string-array name="discover_topics">
+        <item>Nachrichten</item>
+        <item>Politik</item>
+        <item>world</item>
+        <item>engineering</item>
+        <item>tech</item>
+        <item>startups</item>
+        <item>telecom</item>
+        <item>Cybersecurity</item>
+        <item>Datenschutz</item>
+        <item>Wissenschaft</item>
+        <item>Medizin</item>
+        <item>healthcare</item>
+        <item>Bildung</item>
+        <item>business</item>
+        <item>Marketing</item>
+        <item>space</item>
+        <item>Design</item>
+        <item>Comics</item>
+    </string-array>
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>
     <string name="settings_refresh_enabled">Automatisches Aktualisieren aktivieren</string>
@@ -113,6 +136,14 @@
         <item>2 Monate</item>
         <item>3 Monate</item>
         <item>Für immer</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Standard</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
     </string-array>
     <string-array name="settings_preload_image_modes">
         <item>Niemals</item>
