@@ -66,24 +66,25 @@
     <string-array name="discover_topics">
         <item>Nachrichten</item>
         <item>Politik</item>
-        <item>world</item>
-        <item>engineering</item>
-        <item>tech</item>
-        <item>startups</item>
-        <item>telecom</item>
+        <item>Welt</item>
+        <item>Maschinenbau</item>
+        <item>Technik</item>
+        <item>Startups</item>
+        <item>Telekommunikation</item>
         <item>Cybersecurity</item>
         <item>Datenschutz</item>
         <item>Wissenschaft</item>
         <item>Medizin</item>
-        <item>healthcare</item>
+        <item>Gesundheitswesen</item>
         <item>Bildung</item>
-        <item>business</item>
+        <item>Wirtschaft</item>
         <item>Marketing</item>
-        <item>space</item>
+        <item>Weltraum</item>
         <item>Design</item>
         <item>Comics</item>
     </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">Unbenannt</string>
     <string name="settings_category_refresh">Automatisches Aktualisieren</string>
     <string name="settings_refresh_enabled">Automatisches Aktualisieren aktivieren</string>
     <string name="settings_refresh_enabled_description">Aktiviert das automatische Aktualisieren aller Feeds</string>
