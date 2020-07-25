@@ -160,7 +160,7 @@ class EntryDetailsFragment : Fragment() {
                         App.db.entryDao().findByIdWithFeed(entryId)?.let { newEntry ->
                             uiThread {
                                 entryWithFeed = newEntry
-                                entry_view.setEntry(entryWithFeed, preferFullText)
+                                entry_view.setEntry(entryWithFeed, true)
 
                                 setupToolbar()
                             }
