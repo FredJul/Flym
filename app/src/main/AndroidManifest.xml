@@ -115,6 +115,7 @@
             android:launchMode="singleTask" />
         <activity
             android:name="net.frju.flym.ui.discover.DiscoverActivity"
+            android:label="@string/discover_search_label"
             android:launchMode="singleTask"
             android:parentActivityName="net.frju.flym.ui.main.MainActivity" />
 

@@ -5,17 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.GridView
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import net.fred.feedex.R
 import net.frju.flym.GlideApp
 import net.frju.flym.data.entities.Feed
 import org.jetbrains.anko.layoutInflater
-import java.util.Random
 
 
 class DiscoverFragment : Fragment(), AdapterView.OnItemClickListener {
@@ -65,7 +60,7 @@ class DiscoverFragment : Fragment(), AdapterView.OnItemClickListener {
         }
 
         private fun setTopicImage(viewHolder: ItemViewHolder, topic: String) {
-            val letterDrawable = Feed.getLetterDrawable(Random().nextLong(), topic)
+            val letterDrawable = Feed.getLetterDrawable(topic.hashCode().toLong(), topic)
             viewHolder.image?.let { iv ->
                 GlideApp.with(context).clear(iv)
                 iv.setImageDrawable(letterDrawable)

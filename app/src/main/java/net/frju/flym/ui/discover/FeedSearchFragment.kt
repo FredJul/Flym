@@ -11,11 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.text.toSpannable
 import androidx.fragment.app.Fragment
@@ -33,8 +29,8 @@ import org.jetbrains.anko.uiThread
 import org.json.JSONException
 import org.json.JSONObject
 import java.net.URLEncoder
-import java.util.Locale
-import java.util.Random
+import java.util.*
+import kotlin.collections.ArrayList
 
 class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
 
@@ -91,7 +87,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
 
     private fun initSearchListView(view: View) {
         resultsListView = view.findViewById(R.id.lv_search_results)
-        resultsListView?.adapter = SearchResultsAdapter(view.context, ArrayList<SearchFeedResult>())
+        resultsListView?.adapter = SearchResultsAdapter(view.context, ArrayList())
         resultsListView?.onItemClickListener = this
     }
 
@@ -153,7 +149,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
             val item = parent?.getItemAtPosition(position) as SearchFeedResult
             if (item.isAdded) {
                 AlertDialog.Builder(view.context)
-                        .setTitle(item.title)
+                        .setTitle(item.name)
                         .setMessage(R.string.question_delete_feed)
                         .setPositiveButton(android.R.string.yes) { _, _ ->
                             manageFeeds.deleteFeed(vw, item)
@@ -164,7 +160,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
             } else {
                 feedAdded?.setImageResource(R.drawable.ic_baseline_check_24)
                 item.isAdded = true
-                manageFeeds.addFeed(vw, item.title, item.link)
+                manageFeeds.addFeed(vw, item.name, item.link)
             }
         }
     }
@@ -190,17 +186,17 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
 
         private fun setTitle(viewHolder: ItemViewHolder, item: SearchFeedResult) {
             searchTerm?.let { term ->
-                val start = item.title.toLowerCase(Locale.ROOT).indexOf(term.toLowerCase(Locale.ROOT))
+                val start = item.name.toLowerCase(Locale.ROOT).indexOf(term.toLowerCase(Locale.ROOT))
                 if (start != -1) {
                     val end = start + term.length
-                    val spannable = item.title.toSpannable()
+                    val spannable = item.name.toSpannable()
                     val color = ContextCompat.getColor(context, R.color.colorAccent)
                     spannable.setSpan(ForegroundColorSpan(color), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     viewHolder.title?.text = spannable
                     return
                 }
             }
-            viewHolder.title?.text = item?.title
+            viewHolder.title?.text = item.name
         }
 
         private fun setDescription(viewHolder: ItemViewHolder, item: SearchFeedResult) {
@@ -208,7 +204,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
         }
 
         private fun setIcon(viewHolder: ItemViewHolder, item: SearchFeedResult) {
-            val letterDrawable = Feed.getLetterDrawable(Random().nextLong(), item.title)
+            val letterDrawable = Feed.getLetterDrawable(item.link.hashCode().toLong(), item.name)
             viewHolder.icon?.let { iv ->
                 if (item.iconUrl.isNotEmpty()) {
                     GlideApp.with(context)
@@ -248,8 +244,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
             } else {
                 viewHolder = inflatedView.tag as ItemViewHolder
             }
-            val item = getItem(i)
-            item?.let { it ->
+            getItem(i)?.let {
                 setIcon(viewHolder, it)
                 setTitle(viewHolder, it)
                 setDescription(viewHolder, it)
