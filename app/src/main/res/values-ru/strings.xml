@@ -63,6 +63,8 @@
     <string name="marked_as_read">Помечены как прочитанные</string>
     <string name="marked_as_unread">Помечены как непрочитанные</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">Поиск лент</string>
+    <string name="discover_search_hint">Поиск по ключевому слову, URL или теме. Темы можно указать с префиксом #.</string>
     <!-- SETTINGS -->
     <string name="entry_default_title">Без названия</string>
     <string name="settings_category_refresh">Автоматическое обновление</string>

@@ -62,7 +62,30 @@
     <string name="marked_as_read">Označeno kao pročitano</string>
     <string name="marked_as_unread">Označeno kao nepročitano</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">Pretraga dovoda</string>
+    <string name="discover_search_hint">Pretraga po ključnim rečima, URL ili temi. Tema može biti označena # prefiksom.</string>
+    <string-array name="discover_topics">
+        <item>vesti</item>
+        <item>politika</item>
+        <item>svet</item>
+        <item>inženjerija</item>
+        <item>tehnologija</item>
+        <item>start-ap</item>
+        <item>telekomunikacije</item>
+        <item>sajber bezbednost</item>
+        <item>privatnost</item>
+        <item>nauka</item>
+        <item>medicina</item>
+        <item>zdravstvena nega</item>
+        <item>obrazovanje</item>
+        <item>posao</item>
+        <item>marketing</item>
+        <item>svemir</item>
+        <item>dizajn</item>
+        <item>stripovi</item>
+    </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">Bez naslova</string>
     <string name="settings_category_refresh">Automatsko osvežavanje</string>
     <string name="settings_refresh_enabled">Omogući automatsko osvežavanje</string>
     <string name="settings_refresh_enabled_description">Omogući automatsko osvežavanje dovoda</string>
@@ -89,6 +112,12 @@
     <string name="open_browser_direct_title">Otvori u pregledaču</string>
     <string name="refresh_on_startup">Osvežavanje dovoda pri pokretanju aplikacije</string>
     <string name="refresh_on_startup_title">Osvežavanje prilikom pokretanja</string>
+    <string name="settings_hide_button_mark_all_as_read">Sakrij \"Označi sve kao pročitano\"</string>
+    <string name="settings_hide_button_mark_all_as_read_description">Ne prikazuj opciju za \"Označi sve kao pročitano\"</string>
+    <string name="settings_sort_order">Razvrstaj članke od najnovijeg do najstarijeg</string>
+    <string name="settings_sort_order_title">Redosled razvrstavanja</string>
+    <string name="settings_enable_entry_swipe">Omogući prevlačenje prstom prilikom pregleda članka</string>
+    <string name="settings_enable_entry_swipe_description">Ukoliko je omogućeno, dozvoljava prevlačenje prstom zarad promene članka prilikom zasebnog pregleda.</string>
     <string-array name="settings_intervals">
         <item>5 minuta</item>
         <item>15 minuta</item>
