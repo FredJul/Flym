@@ -5,11 +5,14 @@
         <item quantity="one">Una entrada nova</item>
         <item quantity="other">%d noves entrades</item>
     </plurals>
+    <string name="app_name">Flym</string>
     <string name="about_flym">Quant a Flym</string>
     <string name="welcome_title">Benvingut a Flym. Voleu afegir un feed?</string>
+    <string name="welcome_title_with_opml_import">Voleu importar fonts anteriors de Flym?</string>
     <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">Paràmetres</string>
     <string name="menu_edit_feed">Edita el canal</string>
+    <string name="menu_reorder">Reordena els feeds</string>
     <string name="menu_all_read">Marca\'ls tots com a llegits</string>
     <string name="flym_feeds">Canals de Flym</string>
     <string name="network_error">No hi ha connectivitat</string>
