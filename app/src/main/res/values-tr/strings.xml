@@ -3,6 +3,32 @@
     <!-- GENERAL -->
     <!-- FEEDS -->
     <!-- ENTRIES -->
+    <string name="favorites">Favoriler</string>
+    <string name="undo">Geri al</string>
+    <string name="marked_as_read">Okunmuş</string>
+    <string name="marked_as_unread">Okunmamış</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">Yayın Ara</string>
+    <string name="discover_search_hint">Anahtar kelime, URL veya başlık ara. Başlıkları # ön eki ile belirtebilirsiniz.</string>
+    <string-array name="discover_topics">
+        <item>haber</item>
+        <item>politika</item>
+        <item>dünya</item>
+        <item>mühendislik</item>
+        <item>teknoloji</item>
+        <item>startuplar</item>
+        <item>telecom</item>
+        <item>cybersecurity</item>
+        <item>privacy</item>
+        <item>science</item>
+        <item>medicine</item>
+        <item>healthcare</item>
+        <item>education</item>
+        <item>business</item>
+        <item>marketing</item>
+        <item>space</item>
+        <item>design</item>
+        <item>comics</item>
+    </string-array>
     <!-- SETTINGS -->
 </resources>
