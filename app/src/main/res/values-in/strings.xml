@@ -60,6 +60,26 @@
     <string name="marked_as_read">Ditandai sudah dibaca</string>
     <string name="marked_as_unread">Ditandai belum dibaca</string>
     <!-- DISCOVER -->
+    <string-array name="discover_topics">
+        <item>berita</item>
+        <item>politik</item>
+        <item>dunia</item>
+        <item>engineering</item>
+        <item>teknologi</item>
+        <item>startups</item>
+        <item>telecom</item>
+        <item>cybersecurity</item>
+        <item>privasi</item>
+        <item>sains</item>
+        <item>medicine</item>
+        <item>kesehatan</item>
+        <item>edukasi</item>
+        <item>bisnis</item>
+        <item>pemasaran</item>
+        <item>space</item>
+        <item>desain</item>
+        <item>komik</item>
+    </string-array>
     <!-- SETTINGS -->
     <string name="entry_default_title">Tanpa judul</string>
     <string name="settings_category_refresh">Penyegaran otomatis</string>
