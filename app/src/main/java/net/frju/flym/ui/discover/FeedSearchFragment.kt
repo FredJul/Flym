@@ -28,7 +28,6 @@ import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.uiThread
 import org.json.JSONException
 import org.json.JSONObject
-import java.net.URLEncoder
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -98,7 +97,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
                 .path("/v3/search/feeds")
                 .appendQueryParameter("count", "20")
                 .appendQueryParameter("locale", resources.configuration.locale.language)
-                .appendQueryParameter("query", URLEncoder.encode(term, "UTF-8"))
+                .appendQueryParameter("query", term)
                 .build()
                 .toString()
     }
