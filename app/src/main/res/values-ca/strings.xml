@@ -5,14 +5,24 @@
         <item quantity="one">Una entrada nova</item>
         <item quantity="other">%d noves entrades</item>
     </plurals>
+    <string name="app_name">Flym</string>
     <string name="about_flym">Quant a Flym</string>
     <string name="welcome_title">Benvingut a Flym. Voleu afegir un feed?</string>
+    <string name="welcome_title_with_opml_import">Voleu importar fonts anteriors de Flym?</string>
     <string name="cannot_find_feeds">No feeds has been found</string>
     <string name="menu_settings">Paràmetres</string>
     <string name="menu_edit_feed">Edita el canal</string>
+    <string name="menu_reorder">Reordena els feeds</string>
+    <string name="menu_delete">Suprimeix</string>
+    <string name="menu_enable_full_text_retrieval">Activa la recuperació de text complet</string>
+    <string name="menu_disable_full_text_retrieval">Desactiva la recuperació de text complet</string>
     <string name="menu_all_read">Marca\'ls tots com a llegits</string>
     <string name="flym_feeds">Canals de Flym</string>
+    <string name="error">Error</string>
     <string name="network_error">No hi ha connectivitat</string>
+    <string name="drawer_explanation">Benvingut! \n\nPremeu permanentment les fonts per veure les opcions ▼</string>
+    <string name="drawer_fetch_error_explanation">Alguns dels vostres feeds no s’han actualitzat correctament ▼</string>
+    <string name="about_screen_info">Publico aquesta aplicació com a programari gratuït i de codi obert amb llicència GPLv3. No dubteu a modificar-la sempre que la mantingueu de codi obert.</string>
     <!-- FEEDS -->
     <string name="feeds">Canals</string>
     <string name="menu_add_group">Afegir un grup</string>
@@ -23,6 +33,8 @@
         externa.
     </string>
     <string name="feed_search">Cerca canals</string>
+    <string name="feed_search_hint">Introduïu l’enllaç o la paraula clau del feed</string>
+    <string name="feed_added">Feed afegit a la llista</string>
     <string name="question_delete_feed">Voleu eliminar aquest canal?</string>
     <string name="question_delete_group">Voleu eliminar aquest grup i els seus canals?</string>
     <string name="add_group_title">Sel·lecció del nom del grup</string>
@@ -33,7 +45,9 @@
     </string>
     <string name="to_group_above">Situa a sobre del grup</string>
     <string name="to_group_into">Afegeix al grup</string>
+    <string name="feed_name">Nom del feed</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Enllaç del feed</string>
     <string name="all_entries">Totes les entrades</string>
     <string name="menu_star">Marca</string>
     <string name="menu_unstar">Treu la marca</string>
@@ -42,28 +56,71 @@
     <string name="get_full_text">Descarrega el text complet</string>
     <string name="original_text">Mostra el text original</string>
     <string name="open_in_browser">Mostra al navegador</string>
-    <string name="cant_open_link">No s\'ha trobat una aplicació\'per aquest enllaç.</string>
+    <string name="cant_open_link">No s\'ha trobat una aplicació per aquest enllaç</string>
+    <string name="unreads">No llegits</string>
+    <string name="all">Tots</string>
+    <string name="favorites">Favorits</string>
+    <string name="no_entries">No hi ha cap element \nTireu cap avall per actualitzar</string>
+    <string name="undo">Desfer</string>
+    <string name="marked_as_read">Marca com a llegit</string>
+    <string name="marked_as_unread">Marca com a no llegit</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">Cerca feeds</string>
+    <string name="discover_search_hint">Cerca per paraula clau, URL o tema. Els temes es poden indicar amb un prefix #.</string>
+    <string-array name="discover_topics">
+        <item>notícies</item>
+        <item>política</item>
+        <item>món</item>
+        <item>enginyeria</item>
+        <item>tecnologia</item>
+        <item>startups</item>
+        <item>telecomunicacions</item>
+        <item>seguretat cibernètica</item>
+        <item>privadesa</item>
+        <item>ciència</item>
+        <item>medicina</item>
+        <item>atenció sanitària</item>
+        <item>educació</item>
+        <item>negocis</item>
+        <item>màrqueting</item>
+        <item>espai</item>
+        <item>disseny</item>
+        <item>còmics</item>
+    </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">Sense títol</string>
     <string name="settings_category_refresh">Actualització automàtica</string>
     <string name="settings_refresh_enabled">Activa les actualitzacions automàtiques</string>
-    <string name="settings_refresh_enabled_description">Descarrega el contingut dels canals
-        automàticament.
-    </string>
+    <string name="settings_refresh_enabled_description">Descarrega el contingut dels canals automàticament</string>
+    <string name="settings_refresh_enable_notifications">Mostra les notificacions de refresc</string>
+    <string name="settings_refresh_enable_notifications_description">Mostra una notificació del sistema quan s\'ha finalitzat un refresc</string>
     <string name="settings_refresh_interval">Interval entre actualitzacions</string>
+    <string name="settings_category_keep_time">Temps per mantenir les entrades</string>
     <string name="settings_keep_time">Temps de conservació d\'entrades</string>
-    <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
+    <string name="settings_keep_time_unread">Temps que es mantindran les entrades sense llegir</string>
     <string name="settings_category_content_presentation">Presentació del contingut</string>
     <string name="settings_display_images">Mostra imatges</string>
     <string name="settings_display_images_description">Mostra imatges a les entrades</string>
     <string name="settings_preload_image_mode">Precàrrega d\'imatges</string>
     <string name="settings_font_size">Mida del text</string>
     <string name="settings_refresh_wifi_only">Actualitza els canals només en Wi-Fi</string>
-    <string name="settings_refresh_wifi_only_description">Només es descarregaran nous continguts
-        dins d\'una connexió Wi-Fi.
-    </string>
-    <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
+    <string name="settings_refresh_wifi_only_description">Només es descarregaran nous continguts dins d\'una connexió Wi-Fi</string>
+    <string name="settings_category_filter">Filtres</string>
+    <string name="settings_remove_duplicates_description_title">Elimineu els duplicats</string>
+    <string name="settings_remove_duplicates_description">Comprova el títol dels elements que s\'han descarregat recentment i se els amaga quan ja existeix un amb el mateix títol</string>
+    <string name="filter">Elimineu els elements que contenen paraules clau (llista separada per comes)</string>
+    <string name="filter_title">Llista negra</string>
+    <string name="settings_theme">Tema</string>
+    <string name="open_browser_direct">Obriu les entrades directament al navegador predeterminat</string>
+    <string name="open_browser_direct_title">Oberta al navegador</string>
+    <string name="refresh_on_startup">Actualitza els feeds en iniciar l’aplicació</string>
+    <string name="refresh_on_startup_title">Actualitza l’inici</string>
+    <string name="settings_hide_button_mark_all_as_read">Oculta el botó \"Marca com a llegit\"</string>
+    <string name="settings_hide_button_mark_all_as_read_description">No mostrar el botó \"Marca com a llegit\" a la pantalla</string>
+    <string name="settings_sort_order">Ordena les entrades de les més noves a les més antigues</string>
+    <string name="settings_sort_order_title">Ordre de classificació</string>
+    <string name="settings_enable_entry_swipe">Habilita lliscar mentre visualitzes una entrada</string>
+    <string name="settings_enable_entry_swipe_description">Si està activat, permet desplaçar-se entre entrades mentre es visualitza una entrada.</string>
     <string-array name="settings_intervals">
         <item>5 minuts</item>
         <item>15 minuts</item>
@@ -97,5 +154,10 @@
         <item>Mai</item>
         <item>Només amb Wi-Fi</item>
         <item>Sempre</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Clar</item>
+        <item>Fosc</item>
+        <item>Negre</item>
     </string-array>
 </resources>
