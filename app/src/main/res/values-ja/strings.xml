@@ -28,7 +28,7 @@
     <string name="menu_import">OPML からインポート</string>
     <string name="menu_export">OPML へエクスポート</string>
     <string name="storage_request_explanation">フィードをファイルにインポートまたはエクスポートするには、アプリケーションによるデバイスのストレージへのアクセスを許可する必要があります。</string>
-    <string name="error_feed_export">エクスポートに失敗しました。書き込み可能なSDカードがマウントされていることを確認してください。</string>
+    <string name="error_feed_export">エクスポートに失敗しました。書き込み可能な SD カードがマウントされていることを確認してください。</string>
     <string name="feed_search">フィード検索</string>
     <string name="feed_search_hint">フィードのリンクまたはキーワードを入力</string>
     <string name="feed_added">フィードをリストに追加しました</string>
