@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">Flym について</string>
+    <string name="welcome_title">Flym へようこそ。フィードを追加しますか？</string>
     <!-- FEEDS -->
     <!-- ENTRIES -->
+    <string name="favorites">お気に入り</string>
     <!-- DISCOVER -->
     <!-- SETTINGS -->
+    <string name="settings_theme">テーマ</string>
+    <string name="open_browser_direct">デフォルトのブラウザで直接エントリーを開く</string>
+    <string name="open_browser_direct_title">ブラウザで開く</string>
 </resources>
