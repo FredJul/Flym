@@ -4,12 +4,105 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">Flym について</string>
     <string name="welcome_title">Flym へようこそ。フィードを追加しますか？</string>
+    <string name="menu_settings">設定</string>
+    <string name="menu_edit_feed">フィードを編集</string>
+    <string name="menu_delete">削除</string>
     <!-- FEEDS -->
     <!-- ENTRIES -->
+    <string name="all_entries">すべてのエントリー</string>
+    <string name="menu_star">スターを付ける</string>
+    <string name="menu_unstar">スターを取り消す</string>
+    <string name="menu_share">共有</string>
+    <string name="unreads">未読</string>
+    <string name="all">すべて</string>
     <string name="favorites">お気に入り</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">フィードを検索</string>
+    <string name="discover_search_hint">キーワード、URL、またはトピックで検索します。トピックは # 接頭辞で指定できます。</string>
+    <string-array name="discover_topics">
+        <item>ニュース</item>
+        <item>政治</item>
+        <item>世界</item>
+        <item>工学</item>
+        <item>技術</item>
+        <item>スタートアップ</item>
+        <item>通信</item>
+        <item>サイバーセキュリティ</item>
+        <item>プライバシー</item>
+        <item>科学</item>
+        <item>医薬</item>
+        <item>健康</item>
+        <item>教育</item>
+        <item>ビジネス</item>
+        <item>マーケティング</item>
+        <item>宇宙</item>
+        <item>デザイン</item>
+        <item>漫画</item>
+    </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">無題</string>
+    <string name="settings_category_refresh">自動更新</string>
+    <string name="settings_refresh_enabled">自動更新を有効にする</string>
+    <string name="settings_refresh_enabled_description">フィードの自動更新を有効にします</string>
+    <string name="settings_refresh_enable_notifications">更新通知を表示</string>
+    <string name="settings_refresh_enable_notifications_description">更新が完了したときにシステム通知を表示します。</string>
+    <string name="settings_refresh_interval">更新間隔</string>
+    <string name="settings_category_keep_time">エントリーを保持する時間</string>
+    <string name="settings_keep_time">既読のエントリーが保持される時間</string>
+    <string name="settings_keep_time_unread">未読のエントリーが保持される時間</string>
+    <string name="settings_display_images">画像を表示</string>
+    <string name="settings_display_images_description">エントリ内の画像を表示します</string>
+    <string name="settings_font_size">テキストサイズ</string>
+    <string name="settings_refresh_wifi_only">Wi-Fi 接続時のみ更新</string>
+    <string name="settings_refresh_wifi_only_description">自動更新は Wi-Fi 接続が利用可能な場合にのみ行われます</string>
+    <string name="settings_category_filter">フィルタ</string>
+    <string name="settings_remove_duplicates_description_title">重複を削除</string>
+    <string name="filter">キーワードを含む項目を削除（カンマ区切りリスト）</string>
+    <string name="filter_title">ブラックリスト</string>
     <string name="settings_theme">テーマ</string>
     <string name="open_browser_direct">デフォルトのブラウザで直接エントリーを開く</string>
     <string name="open_browser_direct_title">ブラウザで開く</string>
+    <string name="refresh_on_startup">アプリを起動するときにフィードを更新します</string>
+    <string name="refresh_on_startup_title">起動時に更新</string>
+    <string name="settings_hide_button_mark_all_as_read">「すべて既読にする」ボタンを非表示</string>
+    <string name="settings_hide_button_mark_all_as_read_description">「すべて既読にする」ボタンを画面に表示しません</string>
+    <string-array name="settings_intervals">
+        <item>5 分</item>
+        <item>15 分</item>
+        <item>30 分</item>
+        <item>1 時間</item>
+        <item>2 時間</item>
+        <item>6 時間</item>
+        <item>12 時間</item>
+        <item>1 日</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 日</item>
+        <item>2 日</item>
+        <item>4 日</item>
+        <item>1 週間</item>
+        <item>2 週間</item>
+        <item>1 ヶ月</item>
+        <item>2 ヶ月</item>
+        <item>3 ヶ月</item>
+        <item>Forever</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Standard</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Never</item>
+        <item>Wi-Fi 経由のみ</item>
+        <item>Always</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>ライト</item>
+        <item>ダーク</item>
+        <item>ブラック</item>
+    </string-array>
 </resources>
