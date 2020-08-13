@@ -13,6 +13,7 @@
     <string name="menu_star">スターを付ける</string>
     <string name="menu_unstar">スターを取り消す</string>
     <string name="menu_share">共有</string>
+    <string name="open_in_browser">ブラウザーで見る</string>
     <string name="unreads">未読</string>
     <string name="all">すべて</string>
     <string name="favorites">お気に入り</string>
@@ -50,14 +51,17 @@
     <string name="settings_category_keep_time">エントリーを保持する時間</string>
     <string name="settings_keep_time">既読のエントリーが保持される時間</string>
     <string name="settings_keep_time_unread">未読のエントリーが保持される時間</string>
+    <string name="settings_category_content_presentation">コンテンツの表示</string>
     <string name="settings_display_images">画像を表示</string>
     <string name="settings_display_images_description">エントリ内の画像を表示します</string>
+    <string name="settings_preload_image_mode">画像を先読みする</string>
     <string name="settings_font_size">テキストサイズ</string>
     <string name="settings_refresh_wifi_only">Wi-Fi 接続時のみ更新</string>
     <string name="settings_refresh_wifi_only_description">自動更新は Wi-Fi 接続が利用可能な場合にのみ行われます</string>
     <string name="settings_category_filter">フィルタ</string>
     <string name="settings_remove_duplicates_description_title">重複を削除</string>
-    <string name="filter">キーワードを含む項目を削除（カンマ区切りリスト）</string>
+    <string name="settings_remove_duplicates_description">新しくダウンロードしたアイテムのタイトルを確認し、同じタイトルを持つアイテムがすでに存在するときはスキップします</string>
+    <string name="filter">キーワードを含むアイテムを削除（カンマ区切りリスト）</string>
     <string name="filter_title">ブラックリスト</string>
     <string name="settings_theme">テーマ</string>
     <string name="open_browser_direct">デフォルトのブラウザで直接エントリーを開く</string>
@@ -66,6 +70,7 @@
     <string name="refresh_on_startup_title">起動時に更新</string>
     <string name="settings_hide_button_mark_all_as_read">「すべて既読にする」ボタンを非表示</string>
     <string name="settings_hide_button_mark_all_as_read_description">「すべて既読にする」ボタンを画面に表示しません</string>
+    <string name="settings_sort_order_title">並べ替え順序</string>
     <string-array name="settings_intervals">
         <item>5 分</item>
         <item>15 分</item>
