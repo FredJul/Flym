@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <string name="app_name">অগ্নি</string>
+    <string name="about_flym">অগ্নি সম্পর্কে</string>
+    <string name="welcome_title">অগ্নিতে স্বাগতম। তুমি কি একটি ফিড যোগকর্তে চাও?</string>
+    <string name="welcome_title_with_opml_import">তুমি কি আগের অগ্নি ফিড আনতে চাও?</string>
+    <string name="cannot_find_feeds">কোনো ফিড পাওয়া যায়নি</string>
+    <string name="menu_settings">সেটিংস</string>
+    <string name="menu_edit_feed">ফিড সম্পাদনা করো</string>
+    <string name="menu_reorder">ফিড সাজাও</string>
+    <string name="menu_delete">মুছো</string>
+    <string name="menu_enable_full_text_retrieval">সম্পূর্ণ লেখা আনা চালু করো</string>
+    <string name="menu_disable_full_text_retrieval">সম্পূর্ণ লেখা আনা বন্ধ করো</string>
+    <string name="menu_all_read">সব পড়া চিহ্নিত করো</string>
+    <string name="flym_feeds">অগ্নি ফিড</string>
     <!-- FEEDS -->
     <!-- ENTRIES -->
     <!-- DISCOVER -->
