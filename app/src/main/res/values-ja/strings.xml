@@ -21,7 +21,7 @@
     <string name="network_error">ネットワークが設定されていません</string>
     <string name="drawer_explanation">ようこそ！\n\nフィードを長押しするとオプションが表示されます ▼</string>
     <string name="drawer_fetch_error_explanation">一部のフィードが正しく更新されませんでした ▼</string>
-    <string name="about_screen_info">私はこのアプリケーションを自由でオープンソースのソフトウェアとして GPLv3 ライセンスの下で公開しています。オープンソースを維持する限り、自由に改変することができます。</string>
+    <string name="about_screen_info">私はこのアプリケーションを自由かつオープンソースのソフトウェアとして、GPLv3 ライセンスの下で公開しています。オープンソースを維持する限り、自由に改変することができます。</string>
     <!-- FEEDS -->
     <string name="feeds">フィード</string>
     <string name="menu_add_group">グループを追加</string>
@@ -29,7 +29,7 @@
     <string name="menu_export">OPML へエクスポート</string>
     <string name="storage_request_explanation">フィードをファイルにインポートまたはエクスポートするには、アプリケーションによるデバイスのストレージへのアクセスを許可する必要があります。</string>
     <string name="error_feed_export">エクスポートに失敗しました。書き込み可能な SD カードがマウントされていることを確認してください。</string>
-    <string name="feed_search">フィード検索</string>
+    <string name="feed_search">フィードの検索</string>
     <string name="feed_search_hint">フィードのリンクまたはキーワードを入力</string>
     <string name="feed_added">フィードをリストに追加しました</string>
     <string name="question_delete_feed">本当にこのフィードを削除しますか？</string>
@@ -50,7 +50,7 @@
     <string name="menu_mark_as_unread">未読にする</string>
     <string name="get_full_text">全文を取得</string>
     <string name="original_text">元のテキストを表示</string>
-    <string name="open_in_browser">ブラウザーで見る</string>
+    <string name="open_in_browser">ブラウザで見る</string>
     <string name="cant_open_link">このリンクに対するアプリケーションが見つかりません</string>
     <string name="unreads">未読</string>
     <string name="all">すべて</string>
@@ -88,14 +88,14 @@
     <string name="settings_refresh_enabled">自動更新を有効にする</string>
     <string name="settings_refresh_enabled_description">フィードの自動更新を有効にします</string>
     <string name="settings_refresh_enable_notifications">更新通知を表示</string>
-    <string name="settings_refresh_enable_notifications_description">更新が完了したときにシステム通知を表示します。</string>
+    <string name="settings_refresh_enable_notifications_description">更新が完了したときにシステム通知を表示します</string>
     <string name="settings_refresh_interval">更新間隔</string>
     <string name="settings_category_keep_time">エントリーを保持する時間</string>
     <string name="settings_keep_time">既読のエントリーが保持される時間</string>
     <string name="settings_keep_time_unread">未読のエントリーが保持される時間</string>
     <string name="settings_category_content_presentation">コンテンツの表示</string>
     <string name="settings_display_images">画像を表示</string>
-    <string name="settings_display_images_description">エントリ内の画像を表示します</string>
+    <string name="settings_display_images_description">エントリー内の画像を表示します</string>
     <string name="settings_preload_image_mode">画像を先読みする</string>
     <string name="settings_font_size">テキストサイズ</string>
     <string name="settings_refresh_wifi_only">Wi-Fi 接続時のみ更新</string>
@@ -112,7 +112,7 @@
     <string name="refresh_on_startup_title">起動時に更新</string>
     <string name="settings_hide_button_mark_all_as_read">「すべて既読にする」ボタンを非表示</string>
     <string name="settings_hide_button_mark_all_as_read_description">「すべて既読にする」ボタンを画面に表示しません</string>
-    <string name="settings_sort_order">エントリーを新しい順に並べます。</string>
+    <string name="settings_sort_order">エントリーを新しい順に並べます</string>
     <string name="settings_sort_order_title">並べ替え順序</string>
     <string name="settings_enable_entry_swipe">エントリーの表示中にスワイプを有効にする</string>
     <string name="settings_enable_entry_swipe_description">有効にすると、エントリーを表示中にエントリー間でスワイプができます。</string>
