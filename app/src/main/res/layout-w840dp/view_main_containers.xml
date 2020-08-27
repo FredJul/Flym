@@ -5,33 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/frame_master"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            android:stateListAnimator="@animator/appbar_always_elevated"
-            android:theme="@style/AppTheme.ActionBar">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/frame_master"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:cardCornerRadius="0dp" />
-
-    </LinearLayout>
+        app:cardCornerRadius="0dp" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/frame_details"
@@ -41,4 +19,5 @@
         android:layout_marginEnd="@dimen/container_horizontal_padding_end"
         app:cardBackgroundColor="@color/colorBackground"
         app:cardElevation="3dp" />
+
 </FrameLayout>
