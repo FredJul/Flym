@@ -1,49 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<me.thanel.swipeactionview.SwipeActionView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_navigate_before_white_24dp" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:theme="@style/AppTheme.ActionBar.Details" />
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="end|center_vertical"
+        android:src="@drawable/ic_navigate_next_white_24dp" />
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <me.thanel.swipeactionview.SwipeActionView
-        android:id="@+id/swipe_view"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_navigate_before_white_24dp" />
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="end|center_vertical"
-            android:src="@drawable/ic_navigate_next_white_24dp" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:theme="@style/AppTheme.ActionBar.Details" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <net.frju.flym.ui.views.SwipeRefreshLayout
             android:id="@+id/refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?android:attr/actionBarSize">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <net.frju.flym.ui.entrydetails.EntryDetailsView
-                android:id="@+id/entry_view"
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical" />
+                android:scrollbars="vertical">
+
+                <net.frju.flym.ui.entrydetails.EntryDetailsView
+                    android:id="@+id/entry_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </androidx.core.widget.NestedScrollView>
+
         </net.frju.flym.ui.views.SwipeRefreshLayout>
-    </me.thanel.swipeactionview.SwipeActionView>
-</FrameLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</me.thanel.swipeactionview.SwipeActionView>
