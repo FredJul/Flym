@@ -332,13 +332,16 @@ class EntriesFragment : Fragment() {
                 adapter.currentList?.get(viewHolder.adapterPosition)?.let { entryWithFeed ->
                     entryWithFeed.entry.read = !entryWithFeed.entry.read
                     doAsync {
+                        val snackbarMessage: Int
                         if (entryWithFeed.entry.read) {
                             App.db.entryDao().markAsRead(listOf(entryWithFeed.entry.id))
+                            snackbarMessage = R.string.marked_as_read
                         } else {
                             App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
+                            snackbarMessage = R.string.marked_as_unread
                         }
 
-                        coordinator.longSnackbar(R.string.marked_as_read, R.string.undo) { _ ->
+                        coordinator.longSnackbar(snackbarMessage, R.string.undo) { _ ->
                             doAsync {
                                 if (entryWithFeed.entry.read) {
                                     App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
