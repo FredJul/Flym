@@ -17,6 +17,7 @@
 
 package net.frju.flym.utils
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
@@ -71,4 +72,17 @@ fun Context.unregisterOnPrefChangeListener(listener: SharedPreferences.OnSharedP
         defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
     } catch (ignored: Exception) { // Seems to be possible to have a NPE here... Why??
     }
+}
+
+fun Context.showAlertDialog(
+        title: Int,
+        function: () -> (Unit)
+) {
+    AlertDialog.Builder(this)
+            .setTitle(title)
+            .setPositiveButton(android.R.string.yes) { _, _ ->
+                function()
+            }
+            .setNegativeButton(android.R.string.no, null)
+            .show()
 }
