@@ -320,6 +320,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
+        setIntent(intent)
+
         handleImplicitIntent(intent)
     }
 
@@ -352,19 +354,19 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     private fun handleResumeOnlyIntents(intent: Intent?) {
 
         // If it comes from the All feeds App Shortcuts, select the right view
-        if (intent?.action.equals(INTENT_ALL)) {
+        if (intent?.action.equals(INTENT_ALL) && bottom_navigation.selectedItemId != R.id.all) {
             feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
             bottom_navigation.selectedItemId = R.id.all
         }
 
         // If it comes from the Favorites feeds App Shortcuts, select the right view
-        if (intent?.action.equals(INTENT_FAVORITES)) {
+        if (intent?.action.equals(INTENT_FAVORITES) && bottom_navigation.selectedItemId != R.id.favorites) {
             feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
             bottom_navigation.selectedItemId = R.id.favorites
         }
 
         // If it comes from the Unreads feeds App Shortcuts, select the right view
-        if (intent?.action.equals(INTENT_UNREADS)) {
+        if (intent?.action.equals(INTENT_UNREADS) && bottom_navigation.selectedItemId != R.id.unreads) {
             feedAdapter.selectedItemId = Feed.ALL_ENTRIES_ID
             bottom_navigation.selectedItemId = R.id.unreads
         }
