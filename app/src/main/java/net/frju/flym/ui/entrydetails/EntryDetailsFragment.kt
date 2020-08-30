@@ -118,9 +118,9 @@ class EntryDetailsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         refresh_layout.setColorScheme(R.color.colorAccent,
-                requireContext().attr(R.attr.colorPrimaryDark).resourceId,
-                R.color.colorAccent,
-                requireContext().attr(R.attr.colorPrimaryDark).resourceId)
+            requireContext().attr(R.attr.colorPrimaryDark).resourceId,
+            R.color.colorAccent,
+            requireContext().attr(R.attr.colorPrimaryDark).resourceId)
 
         refresh_layout.setOnRefreshListener {
             switchFullTextMode()
@@ -149,10 +149,10 @@ class EntryDetailsFragment : Fragment() {
         if (defaultSharedPreferences.getBoolean(HIDE_NAVIGATION_ON_SCROLL, false)) {
             toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
                 scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
-                        AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+                    AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
             }
-            swipe_view.systemUiVisibility =
-                    SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            swipe_view?.systemUiVisibility =
+                SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             toolbar.setOnApplyWindowInsetsListener { v, insets ->
                 toolbar.updatePadding(top = insets.systemWindowInsetTop)
                 toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
@@ -231,8 +231,8 @@ class EntryDetailsFragment : Fragment() {
 
                 if (entryWithFeed.entry.favorite) {
                     menu.findItem(R.id.menu_entry_details__favorite)
-                            .setTitle(R.string.menu_unstar)
-                            .setIcon(R.drawable.ic_star_white_24dp)
+                        .setTitle(R.string.menu_unstar)
+                        .setIcon(R.drawable.ic_star_white_24dp)
                 }
 
 

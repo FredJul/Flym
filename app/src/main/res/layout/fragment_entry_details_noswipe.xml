@@ -22,10 +22,15 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?android:attr/actionBarSize">
 
-        <net.frju.flym.ui.entrydetails.EntryDetailsView
-            android:id="@+id/entry_view"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical">
+
+            <net.frju.flym.ui.entrydetails.EntryDetailsView
+                android:id="@+id/entry_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </androidx.core.widget.NestedScrollView>
     </net.frju.flym.ui.views.SwipeRefreshLayout>
 </FrameLayout>
