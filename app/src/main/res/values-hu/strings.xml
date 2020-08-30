@@ -1,8 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="one">Egy új bejegyzés</item>
+        <item quantity="other">%d új bejegyzés</item>
+    </plurals>
+    <string name="app_name">Flym</string>
+    <string name="about_flym">A Flym-ről</string>
+    <string name="welcome_title">Üdvözöljük a Flym-ben. Szeretne hozzáadni hírcsatornákat?</string>
+    <string name="welcome_title_with_opml_import">Szeretne importálni korábbi Flym hírcsatornákat?</string>
+    <string name="cannot_find_feeds">Nem található hírcsatorna</string>
+    <string name="menu_settings">Beállítások</string>
+    <string name="menu_edit_feed">Hírcsatorna szerkesztése</string>
+    <string name="menu_reorder">Hírcsatornák újrarendezése</string>
+    <string name="menu_delete">Törlés</string>
+    <string name="menu_enable_full_text_retrieval">A teljes szöveg lekeresésének engedélyezése</string>
+    <string name="menu_disable_full_text_retrieval">A teljes szöveg lekeresésének letiltása</string>
+    <string name="menu_all_read">Összes megjelölése olvasottként</string>
+    <string name="flym_feeds">Flym hírcsatornák</string>
+    <string name="error">Hiba</string>
+    <string name="network_error">A hálózat nincs beállítva</string>
+    <string name="drawer_explanation">Üdvözöljük\n\nHosszan nyomja meg a hírcsatornákat az opciók megtekintéséhez</string>
+    <string name="drawer_fetch_error_explanation">Néhány hírcsatornáját nem sikerült megfelelően frissíteni</string>
+    <string name="about_screen_info">Ezt az alkalmazást ingyenes és nyílt forráskódú szoftverként teszem elérhetővé a GPLv3 licenc alatt. Nyugodtan módosíthatja, feltéve, hogy nyílt forráskódú marad.</string>
     <!-- FEEDS -->
+    <string name="feeds">Hírcsatornák</string>
+    <string name="menu_add_group">Csoport hozzáadása</string>
+    <string name="menu_import">Importálás OPML fájlból</string>
+    <string name="menu_export">Exportálás OPML fájlba</string>
+    <string name="storage_request_explanation">Ahhoz,hogy importálhasson vagy exportálhasson hírcsatornákat, engedély kell adnia az alkalmazásnak az eszköze tárhelyéhez.</string>
+    <string name="error_feed_export">Az exportálás meghiúsult. Győződjön meg arról,hogy az SD-kártya írható-e.</string>
+    <string name="feed_search">Hírcsatorna keresés</string>
+    <string name="feed_search_hint">Írjon be egy hírcsatorna linket vagy kulcsszót</string>
+    <string name="feed_added">Hírcsatorna hozzáadva a listához</string>
+    <string name="question_delete_feed">Biztosan törölni szeretné ezt a hírcsatornát?</string>
+    <string name="question_delete_group">Biztosan törölni szeretné ezt a csoportot és az összes hozzá tartozó hírcsatornát?</string>
+    <string name="add_group_title">Csoportnév kiválasztása</string>
+    <string name="message_exported_to">Exportálva ide: %s</string>
+    <string name="to_group_title">Hírcsatorna mozgatása</string>
+    <string name="to_group_message">A hírcsatornát beteheti csoportba vagy felé helyezheti. Mit szeretne csinálni?</string>
+    <string name="to_group_above">Csoport fölé</string>
+    <string name="to_group_into">Csoportba</string>
+    <string name="feed_name">Hírcsatorna név</string>
     <!-- ENTRIES -->
+    <string name="feed_link">Hírcsatorna link</string>
+    <string name="all_entries">Összes bejegyzés</string>
+    <string name="menu_star">Csillagoz</string>
+    <string name="menu_unstar">Csillagozás feloldása</string>
+    <string name="menu_share">Megosztás</string>
+    <string name="menu_mark_as_unread">Megjelölés olvasatlanként</string>
+    <string name="get_full_text">Teljes szöveg betöltése</string>
+    <string name="original_text">Eredeti szöveg megjelenítése</string>
+    <string name="open_in_browser">Megjelenítés böngészővel</string>
+    <string name="cant_open_link">Ehhez a linkhez nem tartozik alkalmazás</string>
+    <string name="unreads">Olvasatlanok</string>
+    <string name="all">Összes</string>
+    <string name="favorites">Kedvencek</string>
+    <string name="no_entries">Nincsenek elemek\nFrissítéshez kérjük, húzza le</string>
+    <string name="undo">Visszavonás</string>
+    <string name="marked_as_read">Megjelölés olvasottként</string>
+    <string name="marked_as_unread">Megjelölve olvasatlanként</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">Hírcsatornák keresése</string>
+    <string name="discover_search_hint">Keressen kulcsszó, URL vagy téma alapján. A témákat # előtaggal lehet megjelölni.</string>
+    <string-array name="discover_topics">
+        <item>hírek</item>
+        <item>politika</item>
+        <item>világ</item>
+        <item>mérnöki</item>
+        <item>technológia</item>
+        <item>startupok</item>
+        <item>távközlés</item>
+        <item>kiberbiztonság</item>
+        <item>biztonság</item>
+        <item>tudomány</item>
+        <item>orvostudomány</item>
+        <item>egészségügy</item>
+        <item>oktatás</item>
+        <item>üzlet</item>
+        <item>marketing</item>
+        <item>űr</item>
+        <item>design</item>
+        <item>képregények</item>
+    </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">Névtelen</string>
+    <string name="settings_category_refresh">Automatikus frissítés</string>
+    <string name="settings_refresh_enabled">Automatikus frissítés bekapcsolása</string>
+    <string name="settings_refresh_enabled_description">Engedélyezze a hírcsatornák automatikus frissítését</string>
+    <string name="settings_refresh_enable_notifications">Frissítési értesítések megjelenítése</string>
+    <string name="settings_refresh_enable_notifications_description">Rendszer-értesítés megjelenítése a frissítés befejezése után</string>
+    <string name="settings_refresh_interval">Frissítési intervallum</string>
+    <string name="settings_category_keep_time">Bejegyzések megőrzésének ideje</string>
+    <string name="settings_keep_time">Az időtartam amíg az olvasott bejegyzések letöltve maradnak</string>
+    <string name="settings_keep_time_unread">Az időtartam amíg az olvasatlan bejegyzések letöltve maradnak</string>
+    <string name="settings_category_content_presentation">Tartalom megjelenítése</string>
+    <string name="settings_display_images">Képek megjelenítése</string>
+    <string name="settings_display_images_description">Képek megjelenítése bejegyzéseknél</string>
+    <string name="settings_preload_image_mode">Képek betöltése előre</string>
+    <string name="settings_font_size">Szöveg mérete</string>
+    <string name="settings_refresh_wifi_only">Frissítés csak Wi-Fi-n keresztül</string>
+    <string name="settings_refresh_wifi_only_description">Az automatikus frissítések csak Wi-Fi kapcsolattal lesznek végrehajtva</string>
+    <string name="settings_category_filter">Szűrők</string>
+    <string name="settings_remove_duplicates_description_title">Ismétlődések eltávolítása</string>
+    <string name="settings_remove_duplicates_description">Ellenőrzi az újonnan letöltött elemek címét, és átugorja, ha már létezik ugyanaz a cím</string>
+    <string name="filter">Kulcsszavakat tartalmazó elemek eltávolítása (vesszővel elválasztott lista)</string>
+    <string name="filter_title">Tiltólista</string>
+    <string name="settings_theme">Téma</string>
+    <string name="open_browser_direct">Bejegyzések megnyitása az alapértelmezett böngészővel</string>
+    <string name="open_browser_direct_title">Megnyitás böngészővel</string>
+    <string name="refresh_on_startup">Frissíti a hírcsatornáit az alkalmazás indításakor</string>
+    <string name="refresh_on_startup_title">Frissítés indításkor</string>
+    <string name="settings_hide_button_mark_all_as_read">\'Megjelölés olvasottként\' gomb elrejtése</string>
+    <string name="settings_hide_button_mark_all_as_read_description">Ne jelenítse meg a \'Megjelölés olvasottként\' gombot a kijelzőn</string>
+    <string name="settings_sort_order">A bejegyzések rendezése a legújabbtól és a legrégebbiig</string>
+    <string name="settings_sort_order_title">Sorrend</string>
+    <string name="settings_enable_entry_swipe">Csúsztatás engedélyezése bejegyzés olvasása közben</string>
+    <string name="settings_enable_entry_swipe_description">Ha engedélyezve van, lehetővé teszi a bejegyzés közötti csúszást bejegyzések megtekintése közben.</string>
+    <string-array name="settings_intervals">
+        <item>5 perc</item>
+        <item>15 perc</item>
+        <item>30 perc</item>
+        <item>1 óra</item>
+        <item>2 óra</item>
+        <item>6 óra</item>
+        <item>12 óra</item>
+        <item>1 nap</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 nap</item>
+        <item>2 nap</item>
+        <item>4 nap</item>
+        <item>1 hét</item>
+        <item>2 hét</item>
+        <item>1 hónap</item>
+        <item>2 hónap</item>
+        <item>3 hónap</item>
+        <item>Örökre</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Alapértelmezett</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>Soha</item>
+        <item>Csak Wi-Fi-n</item>
+        <item>Mindig</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>Világos</item>
+        <item>Sötét</item>
+        <item>Fekete</item>
+    </string-array>
 </resources>

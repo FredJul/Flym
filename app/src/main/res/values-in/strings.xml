@@ -7,14 +7,14 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">Tentang Flym</string>
     <string name="welcome_title">Selamat datang di Flym. Apakah anda ingin menambahkan feed?</string>
-    <string name="welcome_title_with_opml_import">Apakah anda ingin mengimpor feed Flym sebelumnya?</string>
+    <string name="welcome_title_with_opml_import">Apakah anda ingin mengimpor feed Flym yang sebelumnya?</string>
     <string name="cannot_find_feeds">Tidak ada feed yang ditemukan</string>
     <string name="menu_settings">Pengaturan</string>
     <string name="menu_edit_feed">Sunting feed</string>
     <string name="menu_reorder">Urutkan feed</string>
     <string name="menu_delete">Hapus</string>
-    <string name="menu_enable_full_text_retrieval">Aktifkan pengambilan teks lengkap</string>
-    <string name="menu_disable_full_text_retrieval">Nonaktifkan pengambilan teks lengkap</string>
+    <string name="menu_enable_full_text_retrieval">Aktifkan teks lengkap</string>
+    <string name="menu_disable_full_text_retrieval">Nonaktifkan teks lengkap</string>
     <string name="menu_all_read">Tandai semua dibaca</string>
     <string name="flym_feeds">Feed Flym</string>
     <string name="error">Galat</string>
@@ -27,11 +27,11 @@
     <string name="menu_add_group">Tambah grup</string>
     <string name="menu_import">Impor dari OPML</string>
     <string name="menu_export">Ekspor ke OPML</string>
-    <string name="storage_request_explanation">Untuk dapat mengimpor atau mengekspor feed dari atau ke berkas, anda harus mengizinkan aplikasi mengakses penyimpanan lokal.</string>
+    <string name="storage_request_explanation">Untuk mengimpor atau mengekspor feed, anda harus mengizinkan aplikasi mengakses penyimpanan lokal.</string>
     <string name="error_feed_export">Ekspor gagal. Pastikan kartu SD terpasang.</string>
     <string name="feed_search">Cari feed</string>
     <string name="feed_search_hint">Masukkan tautan feed atau kata kunci</string>
-    <string name="feed_added">Feed ditambahkan ke daftar</string>
+    <string name="feed_added">Feed berhasil ditambahkan</string>
     <string name="question_delete_feed">Apakah anda yakin ingin menghapus feed ini?</string>
     <string name="question_delete_group">Apakah anda yakin ingin menghapus grup ini dan semua feed di dalamnya?</string>
     <string name="add_group_title">Pilih nama grup</string>
@@ -55,45 +55,67 @@
     <string name="unreads">Belum dibaca</string>
     <string name="all">Semua</string>
     <string name="favorites">Favorit</string>
-    <string name="no_entries">Tidak ada item\nSilakan tarik ke bawah untuk menyegarkan</string>
+    <string name="no_entries">Tidak ada item feed\nSilakan tarik ke bawah untuk menyegarkan</string>
     <string name="undo">Urung</string>
     <string name="marked_as_read">Ditandai sudah dibaca</string>
     <string name="marked_as_unread">Ditandai belum dibaca</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">Cari Feed</string>
+    <string name="discover_search_hint">Cari kata kunci, URL, atau topik. Topik bisa ditandai dengan awalan #.</string>
+    <string-array name="discover_topics">
+        <item>berita</item>
+        <item>politik</item>
+        <item>dunia</item>
+        <item>engineering</item>
+        <item>teknologi</item>
+        <item>startup</item>
+        <item>telekomunikasi</item>
+        <item>keamanan siber</item>
+        <item>privasi</item>
+        <item>sains</item>
+        <item>pengobatan</item>
+        <item>kesehatan</item>
+        <item>edukasi</item>
+        <item>bisnis</item>
+        <item>pemasaran</item>
+        <item>angkasa</item>
+        <item>desain</item>
+        <item>komik</item>
+    </string-array>
     <!-- SETTINGS -->
     <string name="entry_default_title">Tanpa judul</string>
     <string name="settings_category_refresh">Penyegaran otomatis</string>
     <string name="settings_refresh_enabled">Aktifkan penyegaran otomatis</string>
     <string name="settings_refresh_enabled_description">Mengaktifkan penyegaran otomatis daftar feed</string>
     <string name="settings_refresh_enable_notifications">Tampilkan notifikasi penyegaran</string>
-    <string name="settings_refresh_enable_notifications_description">Menampilkan notifikasi sistem saat penyegaran feed selesai dilakukan</string>
+    <string name="settings_refresh_enable_notifications_description">Menampilkan notifikasi sistem saat penyegaran selesai dilakukan</string>
     <string name="settings_refresh_interval">Interval penyegaran</string>
     <string name="settings_category_keep_time">Waktu entri akan disimpan</string>
     <string name="settings_keep_time">Waktu entri yang sudah dibaca akan disimpan</string>
     <string name="settings_keep_time_unread">Waktu entri yang belum dibaca akan disimpan</string>
     <string name="settings_category_content_presentation">Presentasi konten</string>
     <string name="settings_display_images">Tampilkan gambar</string>
-    <string name="settings_display_images_description">Menampilkan gambar di dalam entri feed</string>
+    <string name="settings_display_images_description">Menampilkan gambar di dalam entri</string>
     <string name="settings_preload_image_mode">Pramuat gambar</string>
     <string name="settings_font_size">Ukuran teks</string>
-    <string name="settings_refresh_wifi_only">Segarkan saat tersambung ke Wi-Fi</string>
+    <string name="settings_refresh_wifi_only">Hanya segarkan melalui Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Penyegaran otomatis hanya akan dilakukan saat perangkat tersambung ke jaringan Wi-Fi</string>
     <string name="settings_category_filter">Filter</string>
     <string name="settings_remove_duplicates_description_title">Hapus duplikat</string>
-    <string name="settings_remove_duplicates_description">Memeriksa judul entri yang diunduh dan lewati ketika dua atau lebih memiliki judul yang sama</string>
-    <string name="filter">Hapus entri dengan kata kunci (daftar dipisah koma)</string>
+    <string name="settings_remove_duplicates_description">Memeriksa judul entri yang diunduh dan lewati ketika entri dengan judul yang sama sudah tersedia</string>
+    <string name="filter">Hapus entri yang mengandung kata kunci (daftar dipisah koma)</string>
     <string name="filter_title">Daftar hitam</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Buka entri di peramban default anda</string>
     <string name="open_browser_direct_title">Buka di peramban</string>
     <string name="refresh_on_startup">Menyegarkan daftar feed saat memulai aplikasi</string>
-    <string name="refresh_on_startup_title">Segarkan saat mulai</string>
+    <string name="refresh_on_startup_title">Segarkan saat memulai</string>
     <string name="settings_hide_button_mark_all_as_read">Sembunyikan tombol \'Tandai semua sudah dibaca\'</string>
     <string name="settings_hide_button_mark_all_as_read_description">Jangan tampilkan tombol \'Tandai semua sudah dibaca\' pada daftar feed</string>
     <string name="settings_sort_order">Urutkan entri dari terbaru ke terlama</string>
     <string name="settings_sort_order_title">Pengurutan</string>
     <string name="settings_enable_entry_swipe">Aktifkan geser saat membaca entri</string>
-    <string name="settings_enable_entry_swipe_description">Jika diaktifkan, geser ke kiri atau kanan untuk membuka entri yang lama atau baru saat sedang membaca entri.</string>
+    <string name="settings_enable_entry_swipe_description">Jika diaktifkan, geser ke kiri atau kanan untuk membuka entri lama atau baru saat sedang membaca entri.</string>
     <string-array name="settings_intervals">
         <item>5 menit</item>
         <item>15 menit</item>
@@ -125,7 +147,7 @@
     </string-array>
     <string-array name="settings_preload_image_modes">
         <item>Tidak pernah</item>
-        <item>Hanya pada Wi-Fi</item>
+        <item>Hanya melalui Wi-Fi</item>
         <item>Selalu</item>
     </string-array>
     <string-array name="settings_themes">
