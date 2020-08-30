@@ -61,10 +61,7 @@ import net.frju.flym.ui.feeds.FeedAdapter
 import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
-import net.frju.flym.utils.closeKeyboard
-import net.frju.flym.utils.getPrefBoolean
-import net.frju.flym.utils.putPrefBoolean
-import net.frju.flym.utils.setupNoActionBarTheme
+import net.frju.flym.utils.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.browse
 import org.jetbrains.anko.doAsync
@@ -276,21 +273,9 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                 openDrawer()
 
                 if (isOldFlymAppInstalled()) {
-                    AlertDialog.Builder(this)
-                            .setTitle(R.string.welcome_title_with_opml_import)
-                            .setPositiveButton(android.R.string.yes) { _, _ ->
-                                autoImportOpml()
-                            }
-                            .setNegativeButton(android.R.string.no, null)
-                            .show()
+                    showAlertDialog(R.string.welcome_title_with_opml_import) { autoImportOpml() }
                 } else {
-                    AlertDialog.Builder(this)
-                            .setTitle(R.string.welcome_title)
-                            .setPositiveButton(android.R.string.yes) { _, _ ->
-                                goToFeedSearch()
-                            }
-                            .setNegativeButton(android.R.string.no, null)
-                            .show()
+                    showAlertDialog(R.string.welcome_title) { goToFeedSearch() }
                 }
             } else {
                 closeDrawer()
