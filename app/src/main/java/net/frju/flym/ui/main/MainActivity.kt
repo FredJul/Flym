@@ -44,7 +44,6 @@ import com.rometools.rome.io.WireFeedOutput
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_edit_feed.view.*
 import kotlinx.android.synthetic.main.fragment_entries.*
-import kotlinx.android.synthetic.main.view_main_containers.*
 import kotlinx.android.synthetic.main.view_main_drawer_header.*
 import net.fred.feedex.R
 import net.frju.flym.App
@@ -270,10 +269,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             }
         })
 
-        setSupportActionBar(toolbar)
-        toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
-        toolbar.setNavigationOnClickListener { toggleDrawer() }
-
         if (savedInstanceState == null) {
             // First open => we open the drawer for you
             if (getPrefBoolean(PrefConstants.FIRST_OPEN, true)) {
@@ -313,7 +308,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         AutoRefreshJobService.initAutoRefresh(this)
 
         handleImplicitIntent(intent)
-
     }
 
 
@@ -657,7 +651,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
-    private fun toggleDrawer() {
+    fun toggleDrawer() {
         if (drawer?.isDrawerOpen(GravityCompat.START) == true) {
             drawer?.closeDrawer(GravityCompat.START)
         } else {
