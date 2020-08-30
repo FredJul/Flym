@@ -20,10 +20,13 @@ package net.frju.flym.ui.entries
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.graphics.Color
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.os.Handler
 import android.util.TypedValue
 import android.view.*
+import android.view.View.*
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Guideline
@@ -44,11 +47,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
-import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_entries.*
-import kotlinx.android.synthetic.main.fragment_entries.refresh_layout
-import kotlinx.android.synthetic.main.fragment_entries.toolbar
 import kotlinx.android.synthetic.main.view_entry.view.*
 import net.fred.feedex.R
 import net.frju.flym.App
@@ -64,7 +66,6 @@ import net.frju.flym.utils.registerOnPrefChangeListener
 import net.frju.flym.utils.unregisterOnPrefChangeListener
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource
-import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.support.v4.share
@@ -134,6 +135,7 @@ class EntriesFragment : Fragment() {
     private var searchText: String? = null
     private val searchHandler = Handler()
     private var isDesc: Boolean = true
+    private var fabScrollListener: RecyclerView.OnScrollListener? = null
 
     private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (PrefConstants.IS_REFRESHING == key) {
@@ -193,20 +195,31 @@ class EntriesFragment : Fragment() {
                         }
                     }
 
-                    inner_coordinator.longSnackbar(R.string.marked_as_read, R.string.undo) { _ ->
-                        doAsync {
-                            // TODO check if limit still needed
-                            entryIds.withIndex().groupBy { it.index / 300 }.map { pair -> pair.value.map { it.value } }.forEach {
-                                App.db.entryDao().markAsUnread(it)
-                            }
+                    Snackbar
+                            .make(coordinator, R.string.marked_as_read, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.undo) { _ ->
+                                doAsync {
+                                    // TODO check if limit still needed
+                                    entryIds.withIndex().groupBy { it.index / 300 }.map { pair -> pair.value.map { it.value } }.forEach {
+                                        App.db.entryDao().markAsUnread(it)
+                                    }
 
-                            uiThread {
-                                // we need to wait for the list to be empty before displaying the new items (to avoid scrolling issues)
-                                listDisplayDate = Date().time
-                                initDataObservers()
+                                    uiThread {
+                                        // we need to wait for the list to be empty before displaying the new items (to avoid scrolling issues)
+                                        listDisplayDate = Date().time
+                                        initDataObservers()
+                                    }
+                                }
                             }
-                        }
-                    }
+                            .apply {
+                                view.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                                    anchorId = R.id.bottom_navigation
+                                    anchorGravity = Gravity.TOP
+                                    gravity = Gravity.TOP
+                                    insetEdge = Gravity.BOTTOM
+                                }
+                                show()
+                            }
                 }
 
                 if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
@@ -285,35 +298,68 @@ class EntriesFragment : Fragment() {
         context?.registerOnPrefChangeListener(prefListener)
         refreshSwipeProgress()
 
-        if (context?.getPrefBoolean(PrefConstants.HIDE_BUTTON_MARK_ALL_AS_READ, false) == true) {
-            read_all_fab.visibility = View.INVISIBLE;
-        } else {
-            read_all_fab.visibility = View.VISIBLE;
+        val hideFAB = context?.getPrefBoolean(PrefConstants.HIDE_BUTTON_MARK_ALL_AS_READ, false) == true
+        if (hideFAB && read_all_fab.isShown) {
+            read_all_fab.hide()
+        } else if (bottom_navigation.isShown && !read_all_fab.isShown) {
+            read_all_fab.show()
         }
 
         if (context?.getPrefBoolean(PrefConstants.HIDE_NAVIGATION_ON_SCROLL, false) == true) {
-            recycler_view.updatePadding(bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_vertical_padding) + getNavigationBarHeight())
             bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
-                behavior = HideBottomViewOnScrollBehavior<BottomAppBar>()
-                height = resources.getDimensionPixelSize(R.dimen.bottom_nav_height) + getNavigationBarHeight()
+                if (behavior !is HideBottomViewOnScrollBehavior) {
+                    behavior = HideBottomViewOnScrollBehavior<BottomNavigationView>()
+                }
             }
-            bottom_navigation.updatePadding(bottom = getNavigationBarHeight())
+            fabScrollListener?.let {
+                recycler_view.removeOnScrollListener(it)
+                fabScrollListener = null
+            }
+            if (!hideFAB) {
+                fabScrollListener = object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        if (dy > 0 && read_all_fab.isShown) {
+                            read_all_fab.hide()
+                        } else if (dy < 0 && !read_all_fab.isShown) {
+                            read_all_fab.show()
+                        }
+                    }
+                }
+                recycler_view.addOnScrollListener(fabScrollListener!!)
+            }
             toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
                 scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
                         AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
             }
-            coordinator.systemUiVisibility =
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            if (VERSION.SDK_INT >= VERSION_CODES.R) {
+                activity?.window?.setDecorFitsSystemWindows(false)
+            } else {
+                @Suppress("DEPRECATION")
+                coordinator.systemUiVisibility =
+                        SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            }
             toolbar.setOnApplyWindowInsetsListener { v, insets ->
-                toolbar.updatePadding(top = insets.systemWindowInsetTop)
+                val (statusBarHeight, navigationBarHeight) = if (VERSION.SDK_INT >= VERSION_CODES.R) {
+                    val systemBarsInsets = insets.getInsets(WindowInsets.Type.systemBars())
+                    Pair(systemBarsInsets.top, systemBarsInsets.bottom)
+                } else {
+                    @Suppress("DEPRECATION")
+                    Pair(insets.systemWindowInsetTop, insets.systemWindowInsetBottom)
+                }
+                recycler_view.updatePadding(bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_vertical_padding) + navigationBarHeight)
+                bottom_navigation.updatePadding(bottom = navigationBarHeight)
+                bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                    height = resources.getDimensionPixelSize(R.dimen.bottom_nav_height) + navigationBarHeight
+                }
+                toolbar.updatePadding(top = statusBarHeight)
                 toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
                     val tv = TypedValue()
                     if (activity?.theme?.resolveAttribute(R.attr.actionBarSize, tv, true) == true) {
-                        height = resources.getDimensionPixelSize(tv.resourceId) + insets.systemWindowInsetTop
+                        height = resources.getDimensionPixelSize(tv.resourceId) + statusBarHeight
                     }
                 }
                 activity?.drawer_header?.findViewById<Guideline>(R.id.guideline)?.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    guideBegin = insets.systemWindowInsetTop
+                    guideBegin = statusBarHeight
                 }
                 insets
             }
@@ -323,12 +369,16 @@ class EntriesFragment : Fragment() {
             recycler_view.updatePadding(bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_bottom_padding_with_nav))
             bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
                 if (behavior is HideBottomViewOnScrollBehavior) {
-                    (behavior as HideBottomViewOnScrollBehavior<View>).slideUp(bottom_navigation)
+                    (behavior as HideBottomViewOnScrollBehavior).slideUp(bottom_navigation)
                 }
                 behavior = null
                 height = resources.getDimensionPixelSize(R.dimen.bottom_nav_height)
             }
             bottom_navigation.updatePadding(bottom = 0)
+            fabScrollListener?.let {
+                recycler_view.removeOnScrollListener(it)
+                fabScrollListener = null
+            }
             appbar.setExpanded(true, true)
             toolbar.updatePadding(top = 0)
             toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
@@ -338,7 +388,12 @@ class EntriesFragment : Fragment() {
                     height = resources.getDimensionPixelSize(tv.resourceId)
                 }
             }
-            coordinator.systemUiVisibility = 0
+            if (VERSION.SDK_INT >= VERSION_CODES.R) {
+                activity?.window?.setDecorFitsSystemWindows(true)
+            } else {
+                @Suppress("DEPRECATION")
+                coordinator.systemUiVisibility = 0
+            }
             activity?.drawer_header?.findViewById<Guideline>(R.id.guideline)?.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 guideBegin = 0
             }
@@ -347,6 +402,7 @@ class EntriesFragment : Fragment() {
             if (activity?.theme?.resolveAttribute(R.attr.colorPrimaryDark, tv, true) == true) {
                 activity?.window?.statusBarColor = tv.data
             }
+            activity?.window?.navigationBarColor = Color.BLACK
         }
     }
 
@@ -362,15 +418,6 @@ class EntriesFragment : Fragment() {
         outState.putString(STATE_SEARCH_TEXT, searchText)
 
         super.onSaveInstanceState(outState)
-    }
-
-    private fun getNavigationBarHeight(): Int {
-        val resourceId: Int = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        return if (resourceId > 0) {
-            resources.getDimensionPixelSize(resourceId)
-        } else {
-            0
-        }
     }
 
     private fun setupRecyclerView() {
@@ -417,15 +464,26 @@ class EntriesFragment : Fragment() {
                             snackbarMessage = R.string.marked_as_unread
                         }
 
-                        inner_coordinator.longSnackbar(snackbarMessage, R.string.undo) { _ ->
-                            doAsync {
-                                if (entryWithFeed.entry.read) {
-                                    App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
-                                } else {
-                                    App.db.entryDao().markAsRead(listOf(entryWithFeed.entry.id))
+                        Snackbar
+                                .make(coordinator, snackbarMessage, Snackbar.LENGTH_LONG)
+                                .setAction(R.string.undo) { _ ->
+                                    doAsync {
+                                        if (entryWithFeed.entry.read) {
+                                            App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))
+                                        } else {
+                                            App.db.entryDao().markAsRead(listOf(entryWithFeed.entry.id))
+                                        }
+                                    }
                                 }
-                            }
-                        }
+                                .apply {
+                                    view.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                                        anchorId = R.id.bottom_navigation
+                                        anchorGravity = Gravity.TOP
+                                        gravity = Gravity.TOP
+                                        insetEdge = Gravity.BOTTOM
+                                    }
+                                    show()
+                                }
 
                         if (bottom_navigation.selectedItemId != R.id.unreads) {
                             uiThread {

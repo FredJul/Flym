@@ -19,12 +19,14 @@ package net.frju.flym.ui.entrydetails
 
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
+import android.view.WindowInsets
 import android.widget.FrameLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -36,6 +38,8 @@ import androidx.lifecycle.Observer
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_entry_details.*
+import kotlinx.android.synthetic.main.fragment_entry_details.refresh_layout
+import kotlinx.android.synthetic.main.fragment_entry_details.toolbar
 import me.thanel.swipeactionview.SwipeActionView
 import me.thanel.swipeactionview.SwipeGestureListener
 import net.fred.feedex.R
@@ -151,35 +155,38 @@ class EntryDetailsFragment : Fragment() {
                 scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
                     AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
             }
-            swipe_view?.systemUiVisibility =
-                SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                activity?.window?.setDecorFitsSystemWindows(false)
+            } else {
+                @Suppress("DEPRECATION")
+                coordinator.systemUiVisibility =
+                        SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            }
             toolbar.setOnApplyWindowInsetsListener { v, insets ->
-                toolbar.updatePadding(top = insets.systemWindowInsetTop)
+                val (statusBarHeight, navigationBarHeight) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val systemBarsInsets = insets.getInsets(WindowInsets.Type.systemBars())
+                    Pair(systemBarsInsets.top, systemBarsInsets.bottom)
+                } else {
+                    @Suppress("DEPRECATION")
+                    Pair(insets.systemWindowInsetTop, insets.systemWindowInsetBottom)
+                }
+                toolbar.updatePadding(top = statusBarHeight)
                 toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
                     val tv = TypedValue()
                     if (activity?.theme?.resolveAttribute(R.attr.actionBarSize, tv, true) == true) {
-                        height = resources.getDimensionPixelSize(tv.resourceId) + insets.systemWindowInsetTop
+                        height = resources.getDimensionPixelSize(tv.resourceId) + statusBarHeight
                     }
                 }
+                entry_view.updateLayoutParams<FrameLayout.LayoutParams> {
+                    bottomMargin = navigationBarHeight
+                }
                 insets
-            }
-            entry_view.updateLayoutParams<FrameLayout.LayoutParams> {
-                bottomMargin = getNavigationBarHeight()
             }
             activity?.window?.statusBarColor = ResourcesCompat.getColor(resources, R.color.status_bar_background, null)
             activity?.window?.navigationBarColor = Color.TRANSPARENT
         }
 
         setEntry(arguments?.getString(ARG_ENTRY_ID)!!, arguments?.getStringArrayList(ARG_ALL_ENTRIES_IDS)!!)
-    }
-
-    private fun getNavigationBarHeight(): Int {
-        val resourceId: Int = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        return if (resourceId > 0) {
-            resources.getDimensionPixelSize(resourceId)
-        } else {
-            0
-        }
     }
 
     private fun initDataObservers() {

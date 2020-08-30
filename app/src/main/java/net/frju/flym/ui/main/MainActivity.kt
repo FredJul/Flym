@@ -317,7 +317,9 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         if (intent?.action.equals(Intent.ACTION_SEND)) {
             if (intent?.hasExtra(Intent.EXTRA_TEXT) == true) {
                 val search = intent.getStringExtra(Intent.EXTRA_TEXT)
-                DiscoverActivity.newInstance(this, search)
+                if (search != null) {
+                    DiscoverActivity.newInstance(this, search)
+                }
             }
             setIntent(null)
         }

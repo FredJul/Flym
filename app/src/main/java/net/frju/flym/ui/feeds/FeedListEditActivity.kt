@@ -35,8 +35,8 @@ class FeedListEditActivity : AppCompatActivity() {
         setContentView(R.layout.activity_feed_list_edit)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             android.R.id.home -> onBackPressed()
         }
 
