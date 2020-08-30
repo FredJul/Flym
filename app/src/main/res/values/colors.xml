@@ -8,6 +8,8 @@
 
     <color name="selected_item_background">#4c009789</color>
 
+    <color name="status_bar_background">#52000000</color>
+
     <!-- Dark Theme specific colors -->
     <color name="colorPrimaryDark">#00665C</color>
     <color name="colorBackground">#202020</color>

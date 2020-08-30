@@ -48,6 +48,7 @@ object PrefConstants {
 
     const val OPEN_BROWSER_DIRECTLY = "open_browser_directly"
     const val HIDE_BUTTON_MARK_ALL_AS_READ = "hide_button_mark_all_as_read"
+    const val HIDE_NAVIGATION_ON_SCROLL = "hide_navigation_on_scroll"
     const val SORT_ORDER = "sort_order"
 
     const val ENABLE_SWIPE_ENTRY = "enable_swipe_entry"

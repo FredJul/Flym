@@ -18,14 +18,22 @@
 package net.frju.flym.ui.entrydetails
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.*
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_entry_details.*
 import me.thanel.swipeactionview.SwipeActionView
@@ -35,6 +43,7 @@ import net.frju.flym.App
 import net.frju.flym.data.entities.EntryWithFeed
 import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.data.utils.PrefConstants.ENABLE_SWIPE_ENTRY
+import net.frju.flym.data.utils.PrefConstants.HIDE_NAVIGATION_ON_SCROLL
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.getPrefBoolean
@@ -137,7 +146,40 @@ class EntryDetailsFragment : Fragment() {
             }
         }
 
+        if (defaultSharedPreferences.getBoolean(HIDE_NAVIGATION_ON_SCROLL, false)) {
+            toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
+                scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
+                        AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+            }
+            swipe_view.systemUiVisibility =
+                    SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            toolbar.setOnApplyWindowInsetsListener { v, insets ->
+                toolbar.updatePadding(top = insets.systemWindowInsetTop)
+                toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
+                    val tv = TypedValue()
+                    if (activity?.theme?.resolveAttribute(R.attr.actionBarSize, tv, true) == true) {
+                        height = resources.getDimensionPixelSize(tv.resourceId) + insets.systemWindowInsetTop
+                    }
+                }
+                insets
+            }
+            entry_view.updateLayoutParams<FrameLayout.LayoutParams> {
+                bottomMargin = getNavigationBarHeight()
+            }
+            activity?.window?.statusBarColor = ResourcesCompat.getColor(resources, R.color.status_bar_background, null)
+            activity?.window?.navigationBarColor = Color.TRANSPARENT
+        }
+
         setEntry(arguments?.getString(ARG_ENTRY_ID)!!, arguments?.getStringArrayList(ARG_ALL_ENTRIES_IDS)!!)
+    }
+
+    private fun getNavigationBarHeight(): Int {
+        val resourceId: Int = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+        return if (resourceId > 0) {
+            resources.getDimensionPixelSize(resourceId)
+        } else {
+            0
+        }
     }
 
     private fun initDataObservers() {
