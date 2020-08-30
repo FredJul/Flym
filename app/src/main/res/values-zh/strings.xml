@@ -62,6 +62,26 @@
     <!-- DISCOVER -->
     <string name="discover_search_label">搜索订阅源</string>
     <string name="discover_search_hint">使用关键词或话题进行搜索，或键入订阅源的 URL。话题可通过 # 前缀标明。</string>
+    <string-array name="discover_topics">
+        <item>新闻</item>
+        <item>政治</item>
+        <item>寰宇</item>
+        <item>工程</item>
+        <item>科技</item>
+        <item>创业公司</item>
+        <item>电信</item>
+        <item>网络安全</item>
+        <item>隐私</item>
+        <item>科学</item>
+        <item>医药</item>
+        <item>卫生保健</item>
+        <item>教育</item>
+        <item>商业</item>
+        <item>营销</item>
+        <item>太空</item>
+        <item>设计</item>
+        <item>漫画</item>
+    </string-array>
     <!-- SETTINGS -->
     <string name="entry_default_title">未命名</string>
     <string name="settings_category_refresh">自动刷新</string>

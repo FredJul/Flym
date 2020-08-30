@@ -21,16 +21,13 @@ import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -39,6 +36,8 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
+import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.android.synthetic.main.fragment_entries.*
 import kotlinx.android.synthetic.main.view_entry.view.*
 import kotlinx.android.synthetic.main.view_main_containers.*
@@ -53,19 +52,15 @@ import net.frju.flym.utils.closeKeyboard
 import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.registerOnPrefChangeListener
 import net.frju.flym.utils.unregisterOnPrefChangeListener
+import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource
-import org.jetbrains.anko.attr
-import org.jetbrains.anko.colorAttr
 import org.jetbrains.anko.design.longSnackbar
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.notificationManager
 import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.support.v4.share
-import org.jetbrains.anko.uiThread
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
-import java.util.Date
+import java.util.*
 
 
 class EntriesFragment : Fragment() {
@@ -184,7 +179,7 @@ class EntriesFragment : Fragment() {
                         }
                     }
 
-                    coordinator.longSnackbar(R.string.marked_as_read, R.string.undo) { _ ->
+                    inner_coordinator.longSnackbar(R.string.marked_as_read, R.string.undo) { _ ->
                         doAsync {
                             // TODO check if limit still needed
                             entryIds.withIndex().groupBy { it.index / 300 }.map { pair -> pair.value.map { it.value } }.forEach {
@@ -281,6 +276,20 @@ class EntriesFragment : Fragment() {
         } else {
             read_all_fab.visibility = View.VISIBLE;
         }
+
+        val params: CoordinatorLayout.LayoutParams = bottom_navigation.layoutParams as CoordinatorLayout.LayoutParams
+        if (context?.getPrefBoolean(PrefConstants.HIDE_NAVIGATION_ON_SCROLL, false) == true) {
+            recycler_view.updatePadding(bottom = (8 * resources.displayMetrics.density).toInt())
+            params.behavior = HideBottomViewOnScrollBehavior<BottomAppBar>()
+        } else {
+            recycler_view.updatePadding(bottom = (73 * resources.displayMetrics.density).toInt())
+            if (params.behavior is HideBottomViewOnScrollBehavior) {
+                (params.behavior as HideBottomViewOnScrollBehavior<View>).slideUp(bottom_navigation)
+            }
+            params.behavior = null
+        }
+        recycler_view.requestLayout()
+        bottom_navigation.requestLayout()
     }
 
     override fun onStop() {
@@ -341,7 +350,7 @@ class EntriesFragment : Fragment() {
                             snackbarMessage = R.string.marked_as_unread
                         }
 
-                        coordinator.longSnackbar(snackbarMessage, R.string.undo) { _ ->
+                        inner_coordinator.longSnackbar(snackbarMessage, R.string.undo) { _ ->
                             doAsync {
                                 if (entryWithFeed.entry.read) {
                                     App.db.entryDao().markAsUnread(listOf(entryWithFeed.entry.id))

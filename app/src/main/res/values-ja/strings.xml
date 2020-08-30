@@ -1,8 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <plurals name="number_of_new_entries">
+        <item quantity="other">%d 件の新しいエントリー</item>
+    </plurals>
+    <string name="app_name">Flym</string>
+    <string name="about_flym">Flym について</string>
+    <string name="welcome_title">Flym へようこそ。フィードを追加しますか？</string>
+    <string name="welcome_title_with_opml_import">以前使っていた Flym フィードをインポートしますか？</string>
+    <string name="cannot_find_feeds">フィードが見つかりませんでした</string>
+    <string name="menu_settings">設定</string>
+    <string name="menu_edit_feed">フィードを編集</string>
+    <string name="menu_reorder">フィードを並べ替える</string>
+    <string name="menu_delete">削除</string>
+    <string name="menu_enable_full_text_retrieval">全文の取得を有効にする</string>
+    <string name="menu_disable_full_text_retrieval">全文の取得を無効にする</string>
+    <string name="menu_all_read">すべて既読にする</string>
+    <string name="flym_feeds">Flym フィード</string>
+    <string name="error">エラー</string>
+    <string name="network_error">ネットワークが設定されていません</string>
+    <string name="drawer_explanation">ようこそ！\n\nフィードを長押しするとオプションが表示されます ▼</string>
+    <string name="drawer_fetch_error_explanation">一部のフィードが正しく更新されませんでした ▼</string>
+    <string name="about_screen_info">私はこのアプリケーションを自由かつオープンソースのソフトウェアとして、GPLv3 ライセンスの下で公開しています。オープンソースを維持する限り、自由に改変することができます。</string>
     <!-- FEEDS -->
+    <string name="feeds">フィード</string>
+    <string name="menu_add_group">グループを追加</string>
+    <string name="menu_import">OPML からインポート</string>
+    <string name="menu_export">OPML へエクスポート</string>
+    <string name="storage_request_explanation">フィードをファイルにインポートまたはエクスポートするには、アプリケーションによるデバイスのストレージへのアクセスを許可する必要があります。</string>
+    <string name="error_feed_export">エクスポートに失敗しました。書き込み可能な SD カードがマウントされていることを確認してください。</string>
+    <string name="feed_search">フィードの検索</string>
+    <string name="feed_search_hint">フィードのリンクまたはキーワードを入力</string>
+    <string name="feed_added">フィードをリストに追加しました</string>
+    <string name="question_delete_feed">本当にこのフィードを削除しますか？</string>
+    <string name="question_delete_group">本当にこのグループとその中のすべてのフィードを削除しますか？</string>
+    <string name="add_group_title">グループ名を選択</string>
+    <string name="message_exported_to">%s にエクスポートしました。</string>
+    <string name="to_group_title">フィードの移動アクション</string>
+    <string name="to_group_message">このフィードはこのグループの中または上に配置できます。どうしますか？</string>
+    <string name="to_group_above">グループの上に配置</string>
+    <string name="to_group_into">グループに入れる</string>
+    <string name="feed_name">フィード名</string>
     <!-- ENTRIES -->
+    <string name="feed_link">フィードのリンク</string>
+    <string name="all_entries">すべてのエントリー</string>
+    <string name="menu_star">スターを付ける</string>
+    <string name="menu_unstar">スターを取り消す</string>
+    <string name="menu_share">共有</string>
+    <string name="menu_mark_as_unread">未読にする</string>
+    <string name="get_full_text">全文を取得</string>
+    <string name="original_text">元のテキストを表示</string>
+    <string name="open_in_browser">ブラウザで見る</string>
+    <string name="cant_open_link">このリンクに対するアプリケーションが見つかりません</string>
+    <string name="unreads">未読</string>
+    <string name="all">すべて</string>
+    <string name="favorites">お気に入り</string>
+    <string name="no_entries">アイテムがありません\n引っ張って更新してください</string>
+    <string name="undo">元に戻す</string>
+    <string name="marked_as_read">既読にしました</string>
+    <string name="marked_as_unread">未読にしました</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">フィードを検索</string>
+    <string name="discover_search_hint">キーワード、URL、またはトピックで検索します。トピックは # 接頭辞で指定できます。</string>
+    <string-array name="discover_topics">
+        <item>ニュース</item>
+        <item>政治</item>
+        <item>世界</item>
+        <item>工学</item>
+        <item>技術</item>
+        <item>スタートアップ</item>
+        <item>通信</item>
+        <item>サイバーセキュリティ</item>
+        <item>プライバシー</item>
+        <item>科学</item>
+        <item>医薬</item>
+        <item>健康</item>
+        <item>教育</item>
+        <item>ビジネス</item>
+        <item>マーケティング</item>
+        <item>宇宙</item>
+        <item>デザイン</item>
+        <item>漫画</item>
+    </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">無題</string>
+    <string name="settings_category_refresh">自動更新</string>
+    <string name="settings_refresh_enabled">自動更新を有効にする</string>
+    <string name="settings_refresh_enabled_description">フィードの自動更新を有効にします</string>
+    <string name="settings_refresh_enable_notifications">更新通知を表示</string>
+    <string name="settings_refresh_enable_notifications_description">更新が完了したときにシステム通知を表示します</string>
+    <string name="settings_refresh_interval">更新間隔</string>
+    <string name="settings_category_keep_time">エントリーを保持する時間</string>
+    <string name="settings_keep_time">既読のエントリーが保持される時間</string>
+    <string name="settings_keep_time_unread">未読のエントリーが保持される時間</string>
+    <string name="settings_category_content_presentation">コンテンツの表示</string>
+    <string name="settings_display_images">画像を表示</string>
+    <string name="settings_display_images_description">エントリー内の画像を表示します</string>
+    <string name="settings_preload_image_mode">画像を先読みする</string>
+    <string name="settings_font_size">テキストサイズ</string>
+    <string name="settings_refresh_wifi_only">Wi-Fi 接続時のみ更新</string>
+    <string name="settings_refresh_wifi_only_description">自動更新は Wi-Fi 接続が利用可能な場合にのみ行われます</string>
+    <string name="settings_category_filter">フィルタ</string>
+    <string name="settings_remove_duplicates_description_title">重複を削除</string>
+    <string name="settings_remove_duplicates_description">新しくダウンロードしたアイテムのタイトルを確認し、同じタイトルを持つアイテムがすでに存在するときはスキップします</string>
+    <string name="filter">キーワードを含むアイテムを削除（カンマ区切りリスト）</string>
+    <string name="filter_title">ブラックリスト</string>
+    <string name="settings_theme">テーマ</string>
+    <string name="open_browser_direct">デフォルトのブラウザで直接エントリーを開く</string>
+    <string name="open_browser_direct_title">ブラウザで開く</string>
+    <string name="refresh_on_startup">アプリを起動するときにフィードを更新します</string>
+    <string name="refresh_on_startup_title">起動時に更新</string>
+    <string name="settings_hide_button_mark_all_as_read">「すべて既読にする」ボタンを非表示</string>
+    <string name="settings_hide_button_mark_all_as_read_description">「すべて既読にする」ボタンを画面に表示しません</string>
+    <string name="settings_sort_order">エントリーを新しい順に並べます</string>
+    <string name="settings_sort_order_title">並べ替え順序</string>
+    <string name="settings_enable_entry_swipe">エントリーの表示中にスワイプを有効にする</string>
+    <string name="settings_enable_entry_swipe_description">有効にすると、エントリーを表示中にエントリー間でスワイプができます。</string>
+    <string-array name="settings_intervals">
+        <item>5 分</item>
+        <item>15 分</item>
+        <item>30 分</item>
+        <item>1 時間</item>
+        <item>2 時間</item>
+        <item>6 時間</item>
+        <item>12 時間</item>
+        <item>1 日</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>1 日</item>
+        <item>2 日</item>
+        <item>4 日</item>
+        <item>1 週間</item>
+        <item>2 週間</item>
+        <item>1 ヶ月</item>
+        <item>2 ヶ月</item>
+        <item>3 ヶ月</item>
+        <item>常に保持する</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>標準</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>常に先読みしない</item>
+        <item>Wi-Fi 経由のみ</item>
+        <item>常に先読みする</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>ライト</item>
+        <item>ダーク</item>
+        <item>ブラック</item>
+    </string-array>
 </resources>
