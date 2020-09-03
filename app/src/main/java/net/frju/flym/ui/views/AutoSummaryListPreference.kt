@@ -19,18 +19,14 @@ package net.frju.flym.ui.views
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.preference.ListPreference
+import androidx.preference.Preference.SummaryProvider
 
-class AutoSummaryListPreference(context: Context, attrs: AttributeSet) : android.preference.ListPreference(context, attrs) {
+class AutoSummaryListPreference(context: Context, attrs: AttributeSet) : ListPreference(context, attrs) {
 
-    override fun onDialogClosed(positiveResult: Boolean) {
-        super.onDialogClosed(positiveResult)
-        if (positiveResult) {
-            summary = entry
+    init {
+        summaryProvider = SummaryProvider<AutoSummaryListPreference> { preference ->
+            preference.entry
         }
-    }
-
-    override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
-        super.onSetInitialValue(restoreValue, defaultValue)
-        summary = entry
     }
 }
