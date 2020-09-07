@@ -51,8 +51,8 @@ class DiscoverFragment : Fragment(), AdapterView.OnItemClickListener {
             ArrayAdapter<String>(context, R.layout.item_discover_topic, topics) {
 
         private class ItemViewHolder {
-            internal var image: ImageView? = null
-            internal var title: TextView? = null
+            var image: ImageView? = null
+            var title: TextView? = null
         }
 
         private fun setTopicTitle(viewHolder: ItemViewHolder, topic: String) {
