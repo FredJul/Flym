@@ -83,6 +83,8 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
         isHorizontalScrollBarEnabled = false
         settings.useWideViewPort = false
         settings.cacheMode = WebSettings.LOAD_NO_CACHE
+        settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+        settings.allowFileAccess = true
 
         @SuppressLint("SetJavaScriptEnabled")
         settings.javaScriptEnabled = true
