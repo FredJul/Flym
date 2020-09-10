@@ -136,6 +136,8 @@ class EntryDetailsFragment : Fragment() {
                     nextId?.let { nextId ->
                         setEntry(nextId, allEntryIds)
                         navigator?.setSelectedEntryId(nextId)
+                        app_bar_layout.setExpanded(true, true)
+                        nested_scroll_view.scrollTo(0, 0)
                     }
                     return true
                 }
@@ -144,6 +146,8 @@ class EntryDetailsFragment : Fragment() {
                     previousId?.let { previousId ->
                         setEntry(previousId, allEntryIds)
                         navigator?.setSelectedEntryId(previousId)
+                        app_bar_layout.setExpanded(true, true)
+                        nested_scroll_view.scrollTo(0, 0)
                     }
                     return true
                 }
