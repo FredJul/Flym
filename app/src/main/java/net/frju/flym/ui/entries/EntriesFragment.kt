@@ -299,11 +299,6 @@ class EntriesFragment : Fragment() {
         refreshSwipeProgress()
 
         val hideFAB = context?.getPrefBoolean(PrefConstants.HIDE_BUTTON_MARK_ALL_AS_READ, false) == true
-        if (hideFAB && read_all_fab.isShown) {
-            read_all_fab.hide()
-        } else if (bottom_navigation.isShown && !read_all_fab.isShown) {
-            read_all_fab.show()
-        }
 
         if (context?.getPrefBoolean(PrefConstants.HIDE_NAVIGATION_ON_SCROLL, false) == true) {
             bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
@@ -311,11 +306,17 @@ class EntriesFragment : Fragment() {
                     behavior = HideBottomViewOnScrollBehavior<BottomNavigationView>()
                 }
             }
+            showNavigationIfRecyclerViewCannotScroll()
             fabScrollListener?.let {
                 recycler_view.removeOnScrollListener(it)
                 fabScrollListener = null
             }
-            if (!hideFAB) {
+            if (hideFAB) {
+                read_all_fab.hide()
+            } else {
+                if (isBottomNavigationViewShown()) {
+                    read_all_fab.show()
+                }
                 fabScrollListener = object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         if (dy > 0 && read_all_fab.isShown) {
@@ -378,6 +379,11 @@ class EntriesFragment : Fragment() {
             fabScrollListener?.let {
                 recycler_view.removeOnScrollListener(it)
                 fabScrollListener = null
+            }
+            if (hideFAB) {
+                read_all_fab.hide()
+            } else {
+                read_all_fab.show()
             }
             appbar.setExpanded(true, true)
             toolbar.updatePadding(top = 0)
@@ -485,6 +491,10 @@ class EntriesFragment : Fragment() {
                                     show()
                                 }
 
+                        uiThread {
+                            showNavigationIfRecyclerViewCannotScroll()
+                        }
+
                         if (bottom_navigation.selectedItemId != R.id.unreads) {
                             uiThread {
                                 adapter.notifyItemChanged(viewHolder.adapterPosition)
@@ -530,6 +540,29 @@ class EntriesFragment : Fragment() {
                 title = feed?.title
             }
         }
+    }
+
+    private fun showNavigationIfRecyclerViewCannotScroll() {
+        val hideFAB = context?.getPrefBoolean(PrefConstants.HIDE_BUTTON_MARK_ALL_AS_READ, false) == true
+        val canScrollRecyclerView = recycler_view.canScrollVertically(1) ||
+                recycler_view.canScrollVertically(-1)
+        bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+            if (!canScrollRecyclerView) {
+                (behavior as HideBottomViewOnScrollBehavior).slideUp(bottom_navigation)
+            }
+        }
+        if (!canScrollRecyclerView) {
+            appbar.setExpanded(true, true)
+            if (!hideFAB) {
+                read_all_fab.show()
+            }
+        }
+    }
+
+    private fun isBottomNavigationViewShown(): Boolean {
+        val location = IntArray(2)
+        bottom_navigation.getLocationOnScreen(location)
+        return location[1] < resources.displayMetrics.heightPixels
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
