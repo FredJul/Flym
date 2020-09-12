@@ -113,6 +113,8 @@
     <string name="refresh_on_startup_title">Beim Start aktualisieren</string>
     <string name="settings_hide_button_mark_all_as_read">Button ausblenden \'Als gelesen markieren\'</string>
     <string name="settings_hide_button_mark_all_as_read_description">Button \'Als gelesen markieren\' auf dem Bildschirm nicht anzeigen</string>
+    <string name="settings_hide_navigation_on_scroll">Navigation beim Scrollen ausblenden</string>
+    <string name="settings_hide_navigation_on_scroll_description">Wenn dies aktiviert ist, wird die obere/untere Navigation beim Herunterscrollen ausgeblendet und beim Hochscrollen wieder eingeblendet</string>
     <string name="settings_sort_order">Einträge vom neuesten zum ältesten sortieren</string>
     <string name="settings_sort_order_title">Sortierreihenfolge</string>
     <string name="settings_enable_entry_swipe">Wischen beim Anzeigen eines Eintrags aktivieren</string>
