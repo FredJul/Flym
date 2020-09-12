@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,10 +12,21 @@
         android:text="@string/discover_search_hint"
         android:textSize="18sp" />
 
-    <GridView
-        android:id="@+id/gv_topics"
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="@integer/discover_grid_columns" />
+        app:layoutDescription="@xml/fragment_discover_scene">
+
+        <GridView
+            android:id="@+id/gv_topics"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:numColumns="@integer/discover_grid_columns"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 
 </LinearLayout>
