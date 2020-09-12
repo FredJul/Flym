@@ -31,6 +31,9 @@ import android.os.Build
 import android.os.Handler
 import android.text.Html
 import androidx.core.app.NotificationCompat
+import com.chuckerteam.chucker.api.ChuckerCollector
+import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.chuckerteam.chucker.api.RetentionManager
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
 import net.dankito.readability4j.extended.Readability4JExtended
@@ -81,11 +84,12 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             setCookiePolicy(CookiePolicy.ACCEPT_ALL)
         }
 
-        private val HTTP_CLIENT: OkHttpClient = OkHttpClient.Builder()
+        private val NETWORK_COLLECTOR = ChuckerCollector(context, true, RetentionManager.Period.ONE_DAY)
+
+        private val HTTP_CLIENT_BUILDER: OkHttpClient.Builder = OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .cookieJar(JavaNetCookieJar(COOKIE_MANAGER))
-                .build()
 
         const val FROM_AUTO_REFRESH = "FROM_AUTO_REFRESH"
 
@@ -101,11 +105,17 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         private const val TEMP_PREFIX = "TEMP__"
         private const val ID_SEPARATOR = "__"
 
-        fun createCall(url: String): Call = HTTP_CLIENT.newCall(Request.Builder()
-                .url(url)
-                .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
-                .addHeader("accept", "*/*")
-                .build())
+        fun createCall(url: String): Call {
+            if (App.context.getPrefBoolean(PrefConstants.REFRESH_ENABLE_DEBUG_TRAFFIC, false)) {
+                HTTP_CLIENT_BUILDER.addInterceptor(ChuckerInterceptor(App.context, NETWORK_COLLECTOR))
+            }
+            val httpClient = HTTP_CLIENT_BUILDER.build()
+            return httpClient.newCall(Request.Builder()
+                                        .url(url)
+                                        .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
+                                        .addHeader("accept", "*/*")
+                                        .build())
+        }
 
         fun fetch(context: Context, isFromAutoRefresh: Boolean, action: String, feedId: Long = 0L) {
             if (context.getPrefBoolean(PrefConstants.IS_REFRESHING, false)) {
@@ -155,6 +165,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                                 newCount = refreshFeed(it, acceptMinDate)
                             } catch (e: Exception) {
                                 error("Can't fetch feed ${it.link}", e)
+                                NETWORK_COLLECTOR.onError("Feed ${it.title}", e)
                             }
                         }
                     }
@@ -326,6 +337,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                             }
                         } catch (t: Throwable) {
                             error("Can't mobilize feedWithCount ${entry.link}", t)
+                            NETWORK_COLLECTOR.onError("Feed ${entry.title}", t)
                         }
                     }
                 }
@@ -388,6 +400,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                         result = refreshFeed(feed, acceptMinDate)
                     } catch (e: Exception) {
                         error("Can't fetch feedWithCount ${feed.link}", e)
+                        NETWORK_COLLECTOR.onError("Feed ${feed.link}", e)
                     }
 
                     result
@@ -423,6 +436,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 }
             } catch (t: Throwable) {
                 feed.fetchError = true
+                NETWORK_COLLECTOR.onError("Feed ${feed.title}", t)
             }
 
             if (feed != previousFeedState) {
@@ -538,6 +552,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                         }
                     }
                 } catch (e: Exception) {
+                    NETWORK_COLLECTOR.onError("Image $realUrl", e)
                     File(tempImgPath).delete()
                     throw e
                 }

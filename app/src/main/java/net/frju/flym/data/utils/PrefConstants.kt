@@ -29,6 +29,7 @@ object PrefConstants {
     const val REFRESH_INTERVAL = "refresh_interval"
     const val REFRESH_ON_STARTUP = "refresh_on_startup"
     const val REFRESH_WIFI_ONLY = "refresh_wifi_only"
+    const val REFRESH_ENABLE_DEBUG_TRAFFIC = "refresh_enable_debug_traffic"
 
     const val THEME = "theme"
     const val DISPLAY_IMAGES = "display_images"

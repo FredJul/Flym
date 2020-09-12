@@ -111,6 +111,8 @@
     <string name="settings_font_size">Text size</string>
     <string name="settings_refresh_wifi_only">Refresh only over Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Automatic refresh will only be done if a Wi-Fi connection is available</string>
+    <string name="settings_refresh_enable_debug_traffic">Enable debug network traffic</string>
+    <string name="settings_refresh_enable_debug_traffic_description">If enabled, will log all network traffic during refresh. May require app restart.</string>
     <string name="settings_category_filter">Filters</string>
     <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly-downloaded items and skips when one with the same title is already present</string>
