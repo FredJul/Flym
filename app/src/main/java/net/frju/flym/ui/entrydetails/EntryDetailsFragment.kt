@@ -52,13 +52,11 @@ import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.isOnline
-import org.jetbrains.anko.attr
-import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import org.jetbrains.anko.support.v4.share
 import org.jetbrains.anko.support.v4.toast
-import org.jetbrains.anko.uiThread
 import org.jetbrains.annotations.NotNull
 
 
@@ -128,6 +126,11 @@ class EntryDetailsFragment : Fragment() {
 
         refresh_layout.setOnRefreshListener {
             switchFullTextMode()
+        }
+
+        if (defaultSharedPreferences.getString(PrefConstants.THEME, null) == "LIGHT") {
+            navigate_before?.imageResource = R.drawable.ic_navigate_before_black_24dp
+            navigate_next?.imageResource = R.drawable.ic_navigate_next_black_24dp
         }
 
         if (defaultSharedPreferences.getBoolean(ENABLE_SWIPE_ENTRY, true)) {
