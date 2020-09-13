@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="discover_grid_columns">3</integer>
+    <integer name="anim_duration_long">500</integer>
 </resources>
