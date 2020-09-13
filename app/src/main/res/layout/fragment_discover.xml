@@ -15,6 +15,7 @@
         android:id="@+id/gv_topics"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="@integer/discover_grid_columns" />
+        android:numColumns="@integer/discover_grid_columns"
+        android:layoutAnimation="@anim/grid_layout_animation_from_bottom" />
 
 </LinearLayout>
