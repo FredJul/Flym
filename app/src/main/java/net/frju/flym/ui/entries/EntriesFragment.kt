@@ -103,29 +103,34 @@ class EntriesFragment : Fragment() {
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
-    private val adapter = EntryAdapter({ entryWithFeed ->
-        navigator.goToEntryDetails(entryWithFeed.entry.id, entryIds!!)
-    }, { entryWithFeed ->
-        share(entryWithFeed.entry.link.orEmpty(), entryWithFeed.entry.title.orEmpty())
-    }, { entryWithFeed, view ->
-        entryWithFeed.entry.favorite = !entryWithFeed.entry.favorite
+    private val adapter = EntryAdapter(
+            displayThumbnails = context?.getPrefBoolean(PrefConstants.DISPLAY_THUMBNAILS, true) == true,
+            globalClickListener = { entryWithFeed ->
+                navigator.goToEntryDetails(entryWithFeed.entry.id, entryIds!!)
+            },
+            globalLongClickListener = { entryWithFeed ->
+                share(entryWithFeed.entry.link.orEmpty(), entryWithFeed.entry.title.orEmpty())
+            },
+            favoriteClickListener = { entryWithFeed, view ->
+                entryWithFeed.entry.favorite = !entryWithFeed.entry.favorite
 
-        view.favorite_icon?.let {
-            if (entryWithFeed.entry.favorite) {
-                it.setImageResource(R.drawable.ic_star_24dp)
-            } else {
-                it.setImageResource(R.drawable.ic_star_border_24dp)
-            }
-        }
+                view.favorite_icon?.let {
+                    if (entryWithFeed.entry.favorite) {
+                        it.setImageResource(R.drawable.ic_star_24dp)
+                    } else {
+                        it.setImageResource(R.drawable.ic_star_border_24dp)
+                    }
+                }
 
-        doAsync {
-            if (entryWithFeed.entry.favorite) {
-                App.db.entryDao().markAsFavorite(entryWithFeed.entry.id)
-            } else {
-                App.db.entryDao().markAsNotFavorite(entryWithFeed.entry.id)
+                doAsync {
+                    if (entryWithFeed.entry.favorite) {
+                        App.db.entryDao().markAsFavorite(entryWithFeed.entry.id)
+                    } else {
+                        App.db.entryDao().markAsNotFavorite(entryWithFeed.entry.id)
+                    }
+                }
             }
-        }
-    })
+    )
     private var listDisplayDate = Date().time
     private var entriesLiveData: LiveData<PagedList<EntryWithFeed>>? = null
     private var entryIdsLiveData: LiveData<List<String>>? = null
@@ -297,6 +302,12 @@ class EntriesFragment : Fragment() {
         super.onStart()
         context?.registerOnPrefChangeListener(prefListener)
         refreshSwipeProgress()
+
+        val displayThumbnails = context?.getPrefBoolean(PrefConstants.DISPLAY_THUMBNAILS, true) == true
+        if (displayThumbnails != adapter.displayThumbnails) {
+            adapter.displayThumbnails = displayThumbnails
+            adapter.notifyDataSetChanged()
+        }
 
         val hideFAB = context?.getPrefBoolean(PrefConstants.HIDE_BUTTON_MARK_ALL_AS_READ, false) == true
 

@@ -31,6 +31,7 @@ object PrefConstants {
     const val REFRESH_WIFI_ONLY = "refresh_wifi_only"
 
     const val THEME = "theme"
+    const val DISPLAY_THUMBNAILS = "display_thumbnails"
     const val DISPLAY_IMAGES = "display_images"
 
     const val PRELOAD_IMAGE_MODE = "preload_image_mode"

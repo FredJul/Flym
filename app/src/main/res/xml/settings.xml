@@ -32,6 +32,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="true"
+            android:key="display_thumbnails"
+            android:summary="@string/settings_display_thumbnails_description"
+            android:title="@string/settings_display_thumbnails" />
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
             android:key="display_images"
             android:summary="@string/settings_display_images_description"
             android:title="@string/settings_display_images" />
