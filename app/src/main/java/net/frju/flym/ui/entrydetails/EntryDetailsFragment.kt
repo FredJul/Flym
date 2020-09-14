@@ -188,7 +188,7 @@ class EntryDetailsFragment : Fragment() {
         refresh_layout.isRefreshing = false
 
         isMobilizingLiveData = App.db.taskDao().observeItemMobilizationTasksCount(entryId)
-        isMobilizingLiveData?.observe(viewLifecycleOwner, Observer<Int> { count ->
+        isMobilizingLiveData?.observe(viewLifecycleOwner, { count ->
             if (count ?: 0 > 0) {
                 isMobilizing = true
                 refresh_layout.isRefreshing = true

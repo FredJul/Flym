@@ -170,10 +170,10 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
         private var searchTerm: String? = null
 
         private class ItemViewHolder {
-            internal var icon: ImageView? = null
-            internal var feedAdded: ImageView? = null
-            internal var title: TextView? = null
-            internal var description: TextView? = null
+            var icon: ImageView? = null
+            var feedAdded: ImageView? = null
+            var title: TextView? = null
+            var description: TextView? = null
         }
 
         fun updateData(searchTerm: String, items: ArrayList<SearchFeedResult>) {

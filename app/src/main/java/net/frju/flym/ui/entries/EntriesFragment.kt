@@ -70,7 +70,7 @@ import q.rorbin.badgeview.QBadgeView
 import java.util.*
 
 
-class EntriesFragment : Fragment() {
+class EntriesFragment : Fragment(R.layout.fragment_entries) {
 
     companion object {
 
@@ -138,7 +138,7 @@ class EntriesFragment : Fragment() {
     private var isDesc: Boolean = true
     private var fabScrollListener: RecyclerView.OnScrollListener? = null
 
-    private val prefListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
+    private val prefListener = OnSharedPreferenceChangeListener { _, key ->
         if (PrefConstants.IS_REFRESHING == key) {
             refreshSwipeProgress()
         }
@@ -147,9 +147,6 @@ class EntriesFragment : Fragment() {
     init {
         setHasOptionsMenu(true)
     }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_entries, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
