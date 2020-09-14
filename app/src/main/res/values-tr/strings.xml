@@ -95,6 +95,8 @@
     <string name="settings_keep_time">Okunmuş öğeleri tutma süresi</string>
     <string name="settings_keep_time_unread">Okunmamış öğeleri tutma süresi</string>
     <string name="settings_category_content_presentation">İçerik gösterimi</string>
+    <string name="settings_display_thumbnails">Küçük resimleri göster</string>
+    <string name="settings_display_thumbnails_description">İçerikte küçük resimleri göster</string>
     <string name="settings_display_images">Resimleri göster</string>
     <string name="settings_display_images_description">Öğelerde resimleri göster</string>
     <string name="settings_preload_image_mode">Resimleri önyükleme</string>
