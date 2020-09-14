@@ -19,19 +19,15 @@ package net.frju.flym.ui.entrydetails
 
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.*
 import android.view.ViewGroup
-import android.view.WindowInsets
 import android.widget.FrameLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
+import androidx.core.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -162,30 +158,21 @@ class EntryDetailsFragment : Fragment() {
                 scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
                     AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                activity?.window?.setDecorFitsSystemWindows(false)
-            } else {
-                @Suppress("DEPRECATION")
-                coordinator.systemUiVisibility =
-                        SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            activity?.window?.let {
+                WindowCompat.setDecorFitsSystemWindows(it, false)
             }
-            toolbar.setOnApplyWindowInsetsListener { v, insets ->
-                val (statusBarHeight, navigationBarHeight) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    val systemBarsInsets = insets.getInsets(WindowInsets.Type.systemBars())
-                    Pair(systemBarsInsets.top, systemBarsInsets.bottom)
-                } else {
-                    @Suppress("DEPRECATION")
-                    Pair(insets.systemWindowInsetTop, insets.systemWindowInsetBottom)
+            ViewCompat.setOnApplyWindowInsetsListener(toolbar) { _, insets ->
+                val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                app_bar_layout.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                    leftMargin = systemInsets.left
+                    rightMargin = systemInsets.right
                 }
-                toolbar.updatePadding(top = statusBarHeight)
                 toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
-                    val tv = TypedValue()
-                    if (activity?.theme?.resolveAttribute(R.attr.actionBarSize, tv, true) == true) {
-                        height = resources.getDimensionPixelSize(tv.resourceId) + statusBarHeight
-                    }
+                    topMargin = systemInsets.top
                 }
+                nested_scroll_view.updatePadding(left = systemInsets.left, right = systemInsets.right)
                 entry_view.updateLayoutParams<FrameLayout.LayoutParams> {
-                    bottomMargin = navigationBarHeight
+                    bottomMargin = systemInsets.bottom
                 }
                 insets
             }

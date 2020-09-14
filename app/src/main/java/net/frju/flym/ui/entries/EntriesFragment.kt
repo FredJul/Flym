@@ -26,17 +26,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.TypedValue
 import android.view.*
-import android.view.View.*
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Guideline
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
+import androidx.core.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -332,48 +328,46 @@ class EntriesFragment : Fragment() {
                 scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
                         AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
             }
-            if (VERSION.SDK_INT >= VERSION_CODES.R) {
-                activity?.window?.setDecorFitsSystemWindows(false)
-            } else {
-                @Suppress("DEPRECATION")
-                coordinator.systemUiVisibility =
-                        SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            activity?.window?.let {
+                WindowCompat.setDecorFitsSystemWindows(it, false)
             }
-            toolbar.setOnApplyWindowInsetsListener { v, insets ->
-                val (statusBarHeight, navigationBarHeight) = if (VERSION.SDK_INT >= VERSION_CODES.R) {
-                    val systemBarsInsets = insets.getInsets(WindowInsets.Type.systemBars())
-                    Pair(systemBarsInsets.top, systemBarsInsets.bottom)
-                } else {
-                    @Suppress("DEPRECATION")
-                    Pair(insets.systemWindowInsetTop, insets.systemWindowInsetBottom)
+            ViewCompat.setOnApplyWindowInsetsListener(toolbar) { _, insets ->
+                val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                appbar.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                    leftMargin = systemInsets.left
+                    rightMargin = systemInsets.right
                 }
-                recycler_view.updatePadding(bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_vertical_padding) + navigationBarHeight)
-                bottom_navigation.updatePadding(bottom = navigationBarHeight)
+                recycler_view.updatePadding(left = systemInsets.left, right = systemInsets.right, bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_vertical_padding) + systemInsets.bottom)
+                bottom_navigation.updatePadding(bottom = systemInsets.bottom)
                 bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
-                    height = resources.getDimensionPixelSize(R.dimen.bottom_nav_height) + navigationBarHeight
+                    height = resources.getDimensionPixelSize(R.dimen.bottom_nav_height) + systemInsets.bottom
+                    leftMargin = systemInsets.left
+                    rightMargin = systemInsets.right
                 }
-                toolbar.updatePadding(top = statusBarHeight)
                 toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
-                    val tv = TypedValue()
-                    if (activity?.theme?.resolveAttribute(R.attr.actionBarSize, tv, true) == true) {
-                        height = resources.getDimensionPixelSize(tv.resourceId) + statusBarHeight
-                    }
+                    topMargin = systemInsets.top
                 }
                 activity?.drawer_header?.findViewById<Guideline>(R.id.guideline)?.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    guideBegin = statusBarHeight
+                    guideBegin = systemInsets.top
                 }
                 insets
             }
             activity?.window?.statusBarColor = ResourcesCompat.getColor(resources, R.color.status_bar_background, null)
             activity?.window?.navigationBarColor = Color.TRANSPARENT
         } else {
-            recycler_view.updatePadding(bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_bottom_padding_with_nav))
+            appbar.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                leftMargin = 0
+                rightMargin = 0
+            }
+            recycler_view.updatePadding(left = 0, right = 0, bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_bottom_padding_with_nav))
             bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
                 if (behavior is HideBottomViewOnScrollBehavior) {
                     (behavior as HideBottomViewOnScrollBehavior).slideUp(bottom_navigation)
                 }
                 behavior = null
                 height = resources.getDimensionPixelSize(R.dimen.bottom_nav_height)
+                leftMargin = 0
+                rightMargin = 0
             }
             bottom_navigation.updatePadding(bottom = 0)
             fabScrollListener?.let {
@@ -386,13 +380,8 @@ class EntriesFragment : Fragment() {
                 read_all_fab.show()
             }
             appbar.setExpanded(true, true)
-            toolbar.updatePadding(top = 0)
             toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
-                scrollFlags = 0
-                val tv = TypedValue()
-                if (activity?.theme?.resolveAttribute(R.attr.actionBarSize, tv, true) == true) {
-                    height = resources.getDimensionPixelSize(tv.resourceId)
-                }
+                topMargin = 0
             }
             if (VERSION.SDK_INT >= VERSION_CODES.R) {
                 activity?.window?.setDecorFitsSystemWindows(true)
