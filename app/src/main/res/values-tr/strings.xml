@@ -115,6 +115,8 @@
     <string name="refresh_on_startup_title">Başlangıçta tazele</string>
     <string name="settings_hide_button_mark_all_as_read">\'Tümünü okundu olarak işaretle\' butonunu gizle</string>
     <string name="settings_hide_button_mark_all_as_read_description">\'Tümünü okundu olarak işaretle\' butonunu ekranda gösterme</string>
+    <string name="settings_hide_navigation_on_scroll">Sürükleme sırasında gezinmeyi gizle</string>
+    <string name="settings_hide_navigation_on_scroll_description">Etkinleştirilirse, üst / alt gezinme aşağı kaydırırken gizlenir ve yukarı kaydırırken yeniden görünür</string>
     <string name="settings_sort_order">Öğeleri yeniden eskiye doğru sırala</string>
     <string name="settings_sort_order_title">Sıralama yönü</string>
     <string name="settings_enable_entry_swipe">Bir öğeyi gösterirken kaydırma hareketini etkinleştir</string>
