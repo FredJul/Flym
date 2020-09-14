@@ -38,7 +38,7 @@ import org.jetbrains.anko.sdk21.listeners.onClick
 import org.jetbrains.anko.sdk21.listeners.onLongClick
 
 
-class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, private val globalLongClickListener: (EntryWithFeed) -> Unit, private val favoriteClickListener: (EntryWithFeed, ImageView) -> Unit) : PagedListAdapter<EntryWithFeed, EntryAdapter.ViewHolder>(DIFF_CALLBACK) {
+class EntryAdapter(var displayThumbnails: Boolean, private val globalClickListener: (EntryWithFeed) -> Unit, private val globalLongClickListener: (EntryWithFeed) -> Unit, private val favoriteClickListener: (EntryWithFeed, ImageView) -> Unit) : PagedListAdapter<EntryWithFeed, EntryAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
 
@@ -56,7 +56,8 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
         val CROSS_FADE_FACTORY: DrawableCrossFadeFactory = DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         @SuppressLint("SetTextI18n")
         fun bind(entryWithFeed: EntryWithFeed, globalClickListener: (EntryWithFeed) -> Unit, globalLongClickListener: (EntryWithFeed) -> Unit, favoriteClickListener: (EntryWithFeed, ImageView) -> Unit) = with(itemView) {
             val mainImgUrl = if (TextUtils.isEmpty(entryWithFeed.entry.imageLink)) null else FetcherService.getDownloadedOrDistantImageUrl(entryWithFeed.entry.id, entryWithFeed.entry.imageLink!!)
@@ -68,6 +69,8 @@ class EntryAdapter(private val globalClickListener: (EntryWithFeed) -> Unit, pri
                 GlideApp.with(context).clear(main_icon)
                 main_icon.setImageDrawable(letterDrawable)
             }
+
+            main_icon.visibility = if (displayThumbnails) View.VISIBLE else View.GONE
 
             title.isEnabled = !entryWithFeed.entry.read
             title.text = entryWithFeed.entry.title

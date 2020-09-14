@@ -105,6 +105,8 @@
     <string name="settings_keep_time">Time that read entries will be kept</string>
     <string name="settings_keep_time_unread">Time that unread entries will be kept</string>
     <string name="settings_category_content_presentation">Content presentation</string>
+    <string name="settings_display_thumbnails">Display thumbnails</string>
+    <string name="settings_display_thumbnails_description">Display thumbnails in feed</string>
     <string name="settings_display_images">Display images</string>
     <string name="settings_display_images_description">Display images in entries</string>
     <string name="settings_preload_image_mode">Preload images</string>
