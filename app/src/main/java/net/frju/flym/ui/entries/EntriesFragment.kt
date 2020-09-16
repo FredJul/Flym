@@ -392,13 +392,11 @@ class EntriesFragment : Fragment() {
             }
             appbar.setExpanded(true, true)
             toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
+                scrollFlags = 0
                 topMargin = 0
             }
-            if (VERSION.SDK_INT >= VERSION_CODES.R) {
-                activity?.window?.setDecorFitsSystemWindows(true)
-            } else {
-                @Suppress("DEPRECATION")
-                coordinator.systemUiVisibility = 0
+            activity?.window?.let {
+                WindowCompat.setDecorFitsSystemWindows(it, true)
             }
             activity?.drawer_header?.findViewById<Guideline>(R.id.guideline)?.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 guideBegin = 0
