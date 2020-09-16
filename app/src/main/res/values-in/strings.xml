@@ -66,7 +66,7 @@
         <item>berita</item>
         <item>politik</item>
         <item>dunia</item>
-        <item>engineering</item>
+        <item>pembangunan</item>
         <item>teknologi</item>
         <item>startup</item>
         <item>telekomunikasi</item>
@@ -112,6 +112,8 @@
     <string name="refresh_on_startup_title">Segarkan saat memulai</string>
     <string name="settings_hide_button_mark_all_as_read">Sembunyikan tombol \'Tandai semua sudah dibaca\'</string>
     <string name="settings_hide_button_mark_all_as_read_description">Jangan tampilkan tombol \'Tandai semua sudah dibaca\' pada daftar feed</string>
+    <string name="settings_hide_navigation_on_scroll">Sembunyikan navigasi ketika menggulir</string>
+    <string name="settings_hide_navigation_on_scroll_description">Jika diaktifkan, bilah navigasi atas/bawah akan disembunyikan saat menggulir ke bawah dan muncul saat menggulir ke atas</string>
     <string name="settings_sort_order">Urutkan entri dari terbaru ke terlama</string>
     <string name="settings_sort_order_title">Pengurutan</string>
     <string name="settings_enable_entry_swipe">Aktifkan geser saat membaca entri</string>

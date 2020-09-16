@@ -108,33 +108,35 @@
     <string name="settings_theme">テーマ</string>
     <string name="open_browser_direct">デフォルトのブラウザで直接エントリーを開く</string>
     <string name="open_browser_direct_title">ブラウザで開く</string>
-    <string name="refresh_on_startup">アプリを起動するときにフィードを更新します</string>
+    <string name="refresh_on_startup">アプリの起動時にフィードを更新します</string>
     <string name="refresh_on_startup_title">起動時に更新</string>
     <string name="settings_hide_button_mark_all_as_read">「すべて既読にする」ボタンを非表示</string>
     <string name="settings_hide_button_mark_all_as_read_description">「すべて既読にする」ボタンを画面に表示しません</string>
+    <string name="settings_hide_navigation_on_scroll">スクロール時にナビゲーションを非表示にする</string>
+    <string name="settings_hide_navigation_on_scroll_description">有効にすると、上部 / 下部のナビゲーションが、下にスクロールするとき非表示になり、上にスクロールするとき再表示されます</string>
     <string name="settings_sort_order">エントリーを新しい順に並べます</string>
     <string name="settings_sort_order_title">並べ替え順序</string>
     <string name="settings_enable_entry_swipe">エントリーの表示中にスワイプを有効にする</string>
     <string name="settings_enable_entry_swipe_description">有効にすると、エントリーを表示中にエントリー間でスワイプができます。</string>
     <string-array name="settings_intervals">
-        <item>5 分</item>
-        <item>15 分</item>
-        <item>30 分</item>
-        <item>1 時間</item>
-        <item>2 時間</item>
-        <item>6 時間</item>
-        <item>12 時間</item>
-        <item>1 日</item>
+        <item>5分</item>
+        <item>15分</item>
+        <item>30分</item>
+        <item>1時間</item>
+        <item>2時間</item>
+        <item>6時間</item>
+        <item>12時間</item>
+        <item>1日</item>
     </string-array>
     <string-array name="settings_keep_times">
-        <item>1 日</item>
-        <item>2 日</item>
-        <item>4 日</item>
-        <item>1 週間</item>
-        <item>2 週間</item>
-        <item>1 ヶ月</item>
-        <item>2 ヶ月</item>
-        <item>3 ヶ月</item>
+        <item>1日</item>
+        <item>2日</item>
+        <item>4日</item>
+        <item>1週間</item>
+        <item>2週間</item>
+        <item>1ヶ月</item>
+        <item>2ヶ月</item>
+        <item>3ヶ月</item>
         <item>常に保持する</item>
     </string-array>
     <string-array name="settings_font_sizes">

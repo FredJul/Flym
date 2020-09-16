@@ -113,6 +113,8 @@
     <string name="refresh_on_startup_title">Mise à jour au lancement</string>
     <string name="settings_hide_button_mark_all_as_read">Cacher le bouton \'Marquer tout comme lu\'</string>
     <string name="settings_hide_button_mark_all_as_read_description">Ne pas afficher le bouton \'Marquer tout comme lu\' à l\'écran</string>
+    <string name="settings_hide_navigation_on_scroll">Cacher la navigation lors du défilement</string>
+    <string name="settings_hide_navigation_on_scroll_description">Si activé, les barres de navigation haut/bas seront masquer lors du défilement vers le bas et réapparaîtra lors du défilement vers le haut</string>
     <string name="settings_sort_order">Trier les articles du plus recent au plus ancient</string>
     <string name="settings_sort_order_title">Tri des articles</string>
     <string name="settings_enable_entry_swipe">Activer la navigation latéral sur un article</string>
