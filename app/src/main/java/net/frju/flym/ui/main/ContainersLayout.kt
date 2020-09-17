@@ -35,7 +35,6 @@ import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import kotlinx.android.synthetic.main.view_main_containers.view.*
-import kotlinx.android.synthetic.main.fragment_entries.view.*
 import net.fred.feedex.R
 import net.frju.flym.utils.onLaidOut
 
@@ -71,8 +70,6 @@ class ContainersLayout @JvmOverloads constructor(context: Context, attrs: Attrib
     private fun singleColumnMaster() {
         if (hasTwoColumns()) {
             frame_details.visibility = View.GONE
-            toolbar.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-            toolbar.layoutParams = toolbar.layoutParams
             frame_master.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
             frame_master.layoutParams = frame_master.layoutParams
         } else {
@@ -103,11 +100,6 @@ class ContainersLayout @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     private fun setupSecondColumn() {
-        toolbar.run {
-            layoutParams.width = context.resources.getDimensionPixelSize(R.dimen.container_max_width)
-            layoutParams = layoutParams
-        }
-
         frame_master.run {
             isVisible = true
             layoutParams.width = context.resources.getDimensionPixelSize(R.dimen.container_max_width)
