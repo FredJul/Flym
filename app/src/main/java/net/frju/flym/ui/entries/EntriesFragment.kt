@@ -398,7 +398,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
             activity?.drawer_header?.findViewById<Guideline>(R.id.guideline)?.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 guideBegin = 0
             }
-            toolbar.setOnApplyWindowInsetsListener(null)
+            ViewCompat.setOnApplyWindowInsetsListener(toolbar, null)
             val tv = TypedValue()
             if (activity?.theme?.resolveAttribute(R.attr.colorPrimaryDark, tv, true) == true) {
                 activity?.window?.statusBarColor = tv.data
