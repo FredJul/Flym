@@ -30,8 +30,7 @@ import android.os.Environment
 import android.provider.OpenableColumns
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.view.GravityCompat
-import androidx.core.view.isGone
+import androidx.core.view.*
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -295,6 +294,20 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         handleImplicitIntent(intent)
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        if (getPrefBoolean(PrefConstants.HIDE_NAVIGATION_ON_SCROLL, false)) {
+            ViewCompat.setOnApplyWindowInsetsListener(nav) { _, insets ->
+                val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                nav.updatePadding(bottom = systemInsets.bottom)
+                insets
+            }
+        } else {
+            ViewCompat.setOnApplyWindowInsetsListener(nav, null)
+            nav.updatePadding(bottom = 0)
+        }
+    }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
