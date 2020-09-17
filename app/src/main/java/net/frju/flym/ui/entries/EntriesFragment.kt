@@ -24,9 +24,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.TypedValue
 import android.view.*
+import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.Guideline
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -43,8 +42,10 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_entries.*
+import kotlinx.android.synthetic.main.fragment_entries.coordinator
+import kotlinx.android.synthetic.main.fragment_entries.refresh_layout
+import kotlinx.android.synthetic.main.fragment_entries.toolbar
 import kotlinx.android.synthetic.main.view_entry.view.*
 import net.fred.feedex.R
 import net.frju.flym.App
@@ -54,10 +55,7 @@ import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainActivity
 import net.frju.flym.ui.main.MainNavigator
-import net.frju.flym.utils.closeKeyboard
-import net.frju.flym.utils.getPrefBoolean
-import net.frju.flym.utils.registerOnPrefChangeListener
-import net.frju.flym.utils.unregisterOnPrefChangeListener
+import net.frju.flym.utils.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.titleResource
 import org.jetbrains.anko.sdk21.listeners.onClick
@@ -339,41 +337,35 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
             }
             ViewCompat.setOnApplyWindowInsetsListener(toolbar) { _, insets ->
                 val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                appbar.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                coordinator.updateLayoutParams<FrameLayout.LayoutParams> {
                     leftMargin = systemInsets.left
                     rightMargin = systemInsets.right
                 }
-                recycler_view.updatePadding(left = systemInsets.left, right = systemInsets.right, bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_vertical_padding) + systemInsets.bottom)
+                recycler_view.updatePadding(bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_vertical_padding) + systemInsets.bottom)
                 bottom_navigation.updatePadding(bottom = systemInsets.bottom)
                 bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
                     height = resources.getDimensionPixelSize(R.dimen.bottom_nav_height) + systemInsets.bottom
-                    leftMargin = systemInsets.left
-                    rightMargin = systemInsets.right
                 }
                 toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
                     topMargin = systemInsets.top
                 }
-                activity?.drawer_header?.findViewById<Guideline>(R.id.guideline)?.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    guideBegin = systemInsets.top
-                }
                 insets
             }
-            activity?.window?.statusBarColor = ResourcesCompat.getColor(resources, R.color.status_bar_background, null)
-            activity?.window?.navigationBarColor = Color.TRANSPARENT
+            val statusBarBackground = ResourcesCompat.getColor(resources, R.color.status_bar_background, null)
+            activity?.window?.statusBarColor = statusBarBackground
+            activity?.window?.navigationBarColor = if (context?.isGestureNavigationEnabled() == true) Color.TRANSPARENT else statusBarBackground
         } else {
-            appbar.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+            coordinator.updateLayoutParams<FrameLayout.LayoutParams> {
                 leftMargin = 0
                 rightMargin = 0
             }
-            recycler_view.updatePadding(left = 0, right = 0, bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_bottom_padding_with_nav))
+            recycler_view.updatePadding(bottom = resources.getDimensionPixelSize(R.dimen.recycler_view_bottom_padding_with_nav))
             bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
                 if (behavior is HideBottomViewOnScrollBehavior) {
                     (behavior as HideBottomViewOnScrollBehavior).slideUp(bottom_navigation)
                 }
                 behavior = null
                 height = resources.getDimensionPixelSize(R.dimen.bottom_nav_height)
-                leftMargin = 0
-                rightMargin = 0
             }
             bottom_navigation.updatePadding(bottom = 0)
             fabScrollListener?.let {
@@ -393,15 +385,12 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
             activity?.window?.let {
                 WindowCompat.setDecorFitsSystemWindows(it, true)
             }
-            activity?.drawer_header?.findViewById<Guideline>(R.id.guideline)?.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                guideBegin = 0
-            }
             ViewCompat.setOnApplyWindowInsetsListener(toolbar, null)
             val tv = TypedValue()
             if (activity?.theme?.resolveAttribute(R.attr.colorPrimaryDark, tv, true) == true) {
                 activity?.window?.statusBarColor = tv.data
+                activity?.window?.navigationBarColor = tv.data
             }
-            activity?.window?.navigationBarColor = Color.BLACK
         }
     }
 

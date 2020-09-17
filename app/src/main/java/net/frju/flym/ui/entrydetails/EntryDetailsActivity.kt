@@ -18,9 +18,12 @@
 package net.frju.flym.ui.entrydetails
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import net.fred.feedex.R
 import net.frju.flym.utils.setupNoActionBarTheme
+import org.jetbrains.anko.backgroundColor
 
 class EntryDetailsActivity : AppCompatActivity() {
 
@@ -28,6 +31,11 @@ class EntryDetailsActivity : AppCompatActivity() {
         setupNoActionBarTheme()
 
         super.onCreate(savedInstanceState)
+
+        val tv = TypedValue()
+        if (theme.resolveAttribute(R.attr.colorPrimary, tv, true)) {
+            window.decorView.backgroundColor = tv.data
+        }
 
         if (savedInstanceState == null) {
             val fragment = EntryDetailsFragment().apply {

@@ -24,13 +24,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_entry_details.*
@@ -47,6 +45,7 @@ import net.frju.flym.data.utils.PrefConstants.HIDE_NAVIGATION_ON_SCROLL
 import net.frju.flym.service.FetcherService
 import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.getPrefBoolean
+import net.frju.flym.utils.isGestureNavigationEnabled
 import net.frju.flym.utils.isOnline
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.browse
@@ -163,21 +162,28 @@ class EntryDetailsFragment : Fragment() {
             }
             ViewCompat.setOnApplyWindowInsetsListener(toolbar) { _, insets ->
                 val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                app_bar_layout.updateLayoutParams<CoordinatorLayout.LayoutParams> {
-                    leftMargin = systemInsets.left
-                    rightMargin = systemInsets.right
+                if (swipe_view != null) {
+                    swipe_view.updateLayoutParams<FrameLayout.LayoutParams> {
+                        leftMargin = systemInsets.left
+                        rightMargin = systemInsets.right
+                    }
+                } else {
+                    coordinator.updateLayoutParams<FrameLayout.LayoutParams> {
+                        leftMargin = systemInsets.left
+                        rightMargin = systemInsets.right
+                    }
                 }
                 toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
                     topMargin = systemInsets.top
                 }
-                nested_scroll_view.updatePadding(left = systemInsets.left, right = systemInsets.right)
                 entry_view.updateLayoutParams<FrameLayout.LayoutParams> {
                     bottomMargin = systemInsets.bottom
                 }
                 insets
             }
-            activity?.window?.statusBarColor = ResourcesCompat.getColor(resources, R.color.status_bar_background, null)
-            activity?.window?.navigationBarColor = Color.TRANSPARENT
+            val statusBarBackground = ResourcesCompat.getColor(resources, R.color.status_bar_background, null)
+            activity?.window?.statusBarColor = statusBarBackground
+            activity?.window?.navigationBarColor = if (context?.isGestureNavigationEnabled() == true) Color.TRANSPARENT else statusBarBackground
         }
 
         setEntry(arguments?.getString(ARG_ENTRY_ID)!!, arguments?.getStringArrayList(ARG_ALL_ENTRIES_IDS)!!)
