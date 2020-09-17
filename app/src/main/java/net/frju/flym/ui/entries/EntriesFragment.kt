@@ -20,8 +20,6 @@ package net.frju.flym.ui.entries
 import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.graphics.Color
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.os.Handler
 import android.util.TypedValue
@@ -543,7 +541,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
                 recycler_view.canScrollVertically(-1)
         bottom_navigation.updateLayoutParams<CoordinatorLayout.LayoutParams> {
             if (!canScrollRecyclerView) {
-                (behavior as HideBottomViewOnScrollBehavior).slideUp(bottom_navigation)
+                (behavior as? HideBottomViewOnScrollBehavior)?.slideUp(bottom_navigation)
             }
         }
         if (!canScrollRecyclerView) {
