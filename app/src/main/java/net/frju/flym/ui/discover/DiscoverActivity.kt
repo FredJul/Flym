@@ -42,9 +42,18 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed_search)
         this.initSearchInputs()
-        this.goDiscover()
 
-        intent.getStringExtra(FeedSearchFragment.ARG_QUERY)?.let { searchForFeed(it) }
+        val query = savedInstanceState?.getString(FeedSearchFragment.ARG_QUERY) ?: intent.getStringExtra(FeedSearchFragment.ARG_QUERY)
+        if (!query.isNullOrEmpty()) {
+            this.searchForFeed(query)
+        } else {
+            this.goDiscover()
+        }
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        savedInstanceState.putString(FeedSearchFragment.ARG_QUERY, searchInput?.text?.toString())
     }
 
     private fun initSearchInputs() {
