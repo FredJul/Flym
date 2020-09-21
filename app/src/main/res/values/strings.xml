@@ -172,4 +172,7 @@
         <item>Dark</item>
         <item>Black</item>
     </string-array>
+    <string name="settings_category_timeout">Timeouts</string>
+    <string name="settings_read_timeout">Read Timeout</string>
+    <string name="settings_read_timeout_description">Number of seconds to wait for additional data to come int before giving up</string>
 </resources>

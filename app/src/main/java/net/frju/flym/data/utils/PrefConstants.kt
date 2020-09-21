@@ -53,4 +53,6 @@ object PrefConstants {
     const val SORT_ORDER = "sort_order"
 
     const val ENABLE_SWIPE_ENTRY = "enable_swipe_entry"
+
+    const val READ_TIMEOUT = "read_timeout"
 }

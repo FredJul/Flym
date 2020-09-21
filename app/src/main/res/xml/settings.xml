@@ -193,5 +193,16 @@
             android:title="@string/filter_title" />
 
     </PreferenceCategory>
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/settings_category_timeout">
+
+        <EditTextPreference
+            android:defaultValue="10"
+            android:key="read_timeout"
+            android:summary="@string/settings_read_timeout_description"
+            android:title="@string/settings_read_timeout" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

@@ -18,10 +18,14 @@
 package net.frju.flym.ui.settings
 
 import android.os.Bundle
+import android.text.InputType
+import android.widget.EditText
 import androidx.preference.CheckBoxPreference
+import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import net.fred.feedex.R
+import net.frju.flym.data.utils.PrefConstants.READ_TIMEOUT
 import net.frju.flym.data.utils.PrefConstants.REFRESH_ENABLED
 import net.frju.flym.data.utils.PrefConstants.REFRESH_INTERVAL
 import net.frju.flym.data.utils.PrefConstants.THEME
@@ -50,5 +54,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     startActivity<MainActivity>()
                     true
                 }
+        
+        findPreference<EditTextPreference>(READ_TIMEOUT)?.setOnBindEditTextListener { editText: EditText ->
+            editText.setRawInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        }
     }
 }

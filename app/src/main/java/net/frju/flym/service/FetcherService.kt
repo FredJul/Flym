@@ -83,7 +83,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
 
         private val HTTP_CLIENT: OkHttpClient = OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(10, TimeUnit.SECONDS)
                 .cookieJar(JavaNetCookieJar(COOKIE_MANAGER))
                 .build()
 
@@ -101,11 +100,15 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         private const val TEMP_PREFIX = "TEMP__"
         private const val ID_SEPARATOR = "__"
 
-        fun createCall(url: String): Call = HTTP_CLIENT.newCall(Request.Builder()
-                .url(url)
-                .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
-                .addHeader("accept", "*/*")
-                .build())
+        fun createCall(url: String): Call = HTTP_CLIENT.newBuilder()
+                .readTimeout(App.context.getPrefString(PrefConstants.READ_TIMEOUT, "10")?.toLongOrNull() ?: 10, TimeUnit.SECONDS)
+                .build()
+                .newCall(Request.Builder()
+                        .url(url)
+                        .header("User-agent", "Mozilla/5.0 (compatible) AppleWebKit Chrome Safari") // some feeds need this to work properly
+                        .addHeader("accept", "*/*")
+                        .build()
+                )
 
         fun fetch(context: Context, isFromAutoRefresh: Boolean, action: String, feedId: Long = 0L) {
             if (context.getPrefBoolean(PrefConstants.IS_REFRESHING, false)) {
