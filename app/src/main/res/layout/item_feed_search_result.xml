@@ -43,15 +43,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?attr/colorReadState" />
 
         <TextView
             android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
-            android:textSize="12sp" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?attr/colorReadState" />
+
     </LinearLayout>
 
     <ImageView
@@ -61,6 +63,7 @@
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_baseline_add_24"
         android:visibility="visible"
+        app:tint="?attr/colorReadState"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/ll_details"

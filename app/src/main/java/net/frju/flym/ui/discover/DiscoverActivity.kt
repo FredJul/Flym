@@ -13,6 +13,7 @@ import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.SearchFeedResult
+import net.frju.flym.utils.setupTheme
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk21.listeners.onClick
@@ -39,6 +40,7 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface {
     private var searchInput: AutoCompleteTextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setupTheme()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed_search)
         this.initSearchInputs()
