@@ -20,6 +20,7 @@ package net.frju.flym.utils
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.provider.Settings
 import androidx.core.content.edit
 import org.jetbrains.anko.connectivityManager
 import org.jetbrains.anko.defaultSharedPreferences
@@ -85,4 +86,8 @@ fun Context.showAlertDialog(
             }
             .setNegativeButton(android.R.string.no, null)
             .show()
+}
+
+fun Context.isGestureNavigationEnabled(): Boolean {
+    return Settings.Secure.getInt(this.contentResolver, "navigation_mode", 0) == 2
 }

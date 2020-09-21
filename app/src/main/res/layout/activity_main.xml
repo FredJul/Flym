@@ -5,14 +5,17 @@
     android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    android:background="?attr/colorPrimary">
 
     <net.frju.flym.ui.main.ContainersLayout
         android:id="@+id/containers_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="?attr/colorBackground" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/drawer_content"
         android:layout_width="@dimen/nav_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -23,6 +26,8 @@
         <include
             android:id="@+id/drawer_header"
             layout="@layout/view_main_drawer_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

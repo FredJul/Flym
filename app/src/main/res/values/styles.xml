@@ -7,7 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorBackground">@color/colorBackground</item>
-        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:windowBackground">?attr/colorBackground</item>
         <item name="colorReadState">@color/read_state</item>
         <item name="colorColoredReadState">@color/colored_read_state</item>
         <item name="colorQuoteBackground">@color/quote_background_dark</item>
@@ -15,6 +15,7 @@
         <item name="colorArticleText">@color/article_text_dark</item>
         <item name="colorSubtitle">@color/subtitle_dark</item>
         <item name="colorSubtitleBorder">@color/subtitle_border_dark</item>
+        <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
     </style>
 
     <style name="AppTheme.ActionBar" parent="Theme.AppCompat">
@@ -37,7 +38,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryLight</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorBackground">@color/colorBackgroundLight</item>
-        <item name="android:windowBackground">@color/colorBackgroundLight</item>
+        <item name="android:windowBackground">?attr/colorBackground</item>
         <item name="colorReadState">@color/read_state_light</item>
         <item name="colorColoredReadState">@color/colored_read_state_light</item>
         <item name="colorQuoteBackground">@color/quote_background_light</item>
@@ -45,6 +46,7 @@
         <item name="colorArticleText">@color/article_text_light</item>
         <item name="colorSubtitle">@color/subtitle_light</item>
         <item name="colorSubtitleBorder">@color/subtitle_border_light</item>
+        <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
     </style>
 
     <style name="AppThemeLight.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -67,7 +69,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDarkBlack</item>
         <item name="colorAccent">@color/colorAccentBlack</item>
         <item name="colorBackground">@color/colorBackgroundBlack</item>
-        <item name="android:windowBackground">@color/colorBackgroundBlack</item>
+        <item name="android:windowBackground">?attr/colorBackground</item>
         <item name="colorReadState">@color/read_state_black</item>
         <item name="colorColoredReadState">@color/colored_read_state_black</item>
         <item name="colorQuoteBackground">@color/quote_background_black</item>
@@ -75,7 +77,7 @@
         <item name="colorArticleText">@color/article_text_black</item>
         <item name="colorSubtitle">@color/subtitle_black</item>
         <item name="colorSubtitleBorder">@color/subtitle_border_black</item>
-
+        <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
     </style>
 
     <style name="AppThemeBlack.ActionBar" parent="Theme.AppCompat">
