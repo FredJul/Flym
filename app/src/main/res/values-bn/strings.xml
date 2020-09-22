@@ -30,36 +30,41 @@
     <string name="feed_search">ফিড খুজোঁ</string>
     <string name="feed_search_hint">ফিড লিঙ্ক বা মূলশব্দ দাও</string>
     <string name="feed_added">ফিড তালিকায় যোগ করা হয়েছে</string>
+    <string name="feed_name">ফিডের নাম</string>
     <!-- ENTRIES -->
+    <string name="feed_link">ফিড লিঙ্ক</string>
     <string name="menu_star">পছন্দ</string>
     <string name="menu_unstar">পছন্দ না</string>
     <string name="menu_share">শেয়ার</string>
     <string name="unreads">অপঠিত</string>
     <string name="all">সব</string>
+    <string name="favorites">পছন্দসমূহ</string>
     <string name="undo">ফিরত যাও</string>
     <!-- DISCOVER -->
     <string-array name="discover_topics">
         <item>খবর</item>
-        <item>politics</item>
+        <item>রাজনীতি</item>
         <item>পৃথিবী</item>
         <item>engineering</item>
         <item>প্রযুক্তি</item>
         <item>startups</item>
-        <item>telecom</item>
+        <item>টেলিকম</item>
         <item>cybersecurity</item>
-        <item>privacy</item>
-        <item>science</item>
-        <item>medicine</item>
+        <item>গোপনীয়তা</item>
+        <item>বিজ্ঞান</item>
+        <item>চিকিৎসাশাস্ত্র</item>
         <item>healthcare</item>
-        <item>education</item>
-        <item>business</item>
+        <item>শিক্ষা</item>
+        <item>ব্যবসা</item>
         <item>marketing</item>
         <item>মহাকাশ</item>
         <item>design</item>
         <item>কমিক</item>
     </string-array>
     <!-- SETTINGS -->
+    <string name="settings_font_size">লেখার আকার</string>
     <string name="settings_category_filter">ফিল্টার</string>
+    <string name="filter_title">ব্ল্যাকলিস্ট</string>
     <string name="settings_theme">থিম</string>
     <string-array name="settings_intervals">
         <item>৫ মিনিট</item>
@@ -78,14 +83,14 @@
         <item>১ সপ্তাহ</item>
         <item>২ সপ্তাহ</item>
         <item>১ মাস</item>
-        <item>2 months</item>
-        <item>3 months</item>
-        <item>Forever</item>
+        <item>২ মাস</item>
+        <item>৩ মাস</item>
+        <item>সর্বদা</item>
     </string-array>
     <string-array name="settings_font_sizes">
         <item>-২</item>
         <item>-১</item>
-        <item>Standard</item>
+        <item>আদর্শ</item>
         <item>+১</item>
         <item>+২</item>
         <item>+৩</item>
