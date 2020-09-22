@@ -1,7 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext{
+        kotlin_version = '1.4.10'
+        lifecycle_version = "2.2.0"
+        room_version = "2.2.5"
+        anko_version = '0.10.8'
+        okhttp_version = '4.8.1'
+        glide_version = '4.11.0'
+    }
 
     repositories {
         google()
