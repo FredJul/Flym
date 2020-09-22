@@ -22,7 +22,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
@@ -78,7 +77,6 @@
         app:layout_constraintTop_toTopOf="@+id/feed_name_layout"
         tools:text="24/12/2006 12:45" />
 
-
     <ImageView
         android:id="@+id/favorite_icon"
         android:layout_width="wrap_content"
@@ -86,6 +84,7 @@
         android:padding="12dp"
         android:src="@drawable/ic_star_24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorReadState" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
