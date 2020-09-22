@@ -101,7 +101,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
     implementation "org.jetbrains.anko:anko-design:$anko_version"
 
-    def okhttp_version = '4.8.1'
+    def okhttp_version = '4.9.0'
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.squareup.okhttp3:okhttp-urlconnection:$okhttp_version"
 
@@ -109,7 +109,7 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
 
-    implementation 'androidx.core:core-ktx:1.5.0-alpha02'
+    implementation 'androidx.core:core-ktx:1.5.0-alpha03'
     implementation 'androidx.paging:paging-runtime:2.1.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.preference:preference:1.1.1'

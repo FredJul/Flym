@@ -39,6 +39,8 @@ import net.frju.flym.utils.UTF8
 import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.getPrefString
 import org.jetbrains.anko.colorAttr
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.io.File
 import java.io.IOException
 
@@ -128,39 +130,43 @@ class EntryDetailsView @JvmOverloads constructor(context: Context, attrs: Attrib
         if (entryWithFeed == null) {
             loadDataWithBaseURL("", "", TEXT_HTML, UTF8, null)
         } else {
-            var contentText = if (preferFullText) entryWithFeed.entry.mobilizedContent
-                    ?: entryWithFeed.entry.description.orEmpty() else entryWithFeed.entry.description.orEmpty()
+            doAsync {
+                var contentText = if (preferFullText) entryWithFeed.entry.mobilizedContent
+                        ?: entryWithFeed.entry.description.orEmpty() else entryWithFeed.entry.description.orEmpty()
+                val displayImages = context.getPrefBoolean(PrefConstants.DISPLAY_IMAGES, true)
+                contentText = if (displayImages) HtmlUtils.replaceImageURLs(contentText, entryWithFeed.entry.id) else contentText.replace(HTML_IMG_REGEX.toRegex(), "")
 
-            if (context.getPrefBoolean(PrefConstants.DISPLAY_IMAGES, true)) {
-                contentText = HtmlUtils.replaceImageURLs(contentText, entryWithFeed.entry.id)
-                if (settings.blockNetworkImage) {
-                    // setBlockNetworkImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
-                    loadData("", TEXT_HTML, UTF8)
-                    settings.blockNetworkImage = false
+                uiThread {
+                    if (displayImages) {
+                        if (settings.blockNetworkImage) {
+                            // setBlockNetworkImage(false) calls postSync, which takes time, so we clean up the html first and change the value afterwards
+                            loadData("", TEXT_HTML, UTF8)
+                            settings.blockNetworkImage = false
+                        }
+                    } else {
+                        settings.blockNetworkImage = true
+                    }
+
+                    val subtitle = StringBuilder(entryWithFeed.entry.getReadablePublicationDate(context))
+                    if (entryWithFeed.entry.author?.isNotEmpty() == true) {
+                        subtitle.append(" &mdash; ").append(entryWithFeed.entry.author)
+                    }
+
+                    val html = StringBuilder(CSS)
+                            .append(BODY_START)
+                            .append(TITLE_START).append(entryWithFeed.entry.link).append(TITLE_MIDDLE).append(entryWithFeed.entry.title).append(TITLE_END)
+                            .append(SUBTITLE_START).append(subtitle).append(SUBTITLE_END)
+                            .append(contentText)
+                            .append(BODY_END)
+                            .toString()
+
+                    // do not put 'null' to the base url...
+                    loadDataWithBaseURL("", html, TEXT_HTML, UTF8, null)
+
+                    // display top of article
+                    ObjectAnimator.ofInt(this@EntryDetailsView, "scrollY", scrollY, 0).setDuration(500).start()
                 }
-            } else {
-                contentText = contentText.replace(HTML_IMG_REGEX.toRegex(), "")
-                settings.blockNetworkImage = true
             }
-
-            val subtitle = StringBuilder(entryWithFeed.entry.getReadablePublicationDate(context))
-            if (entryWithFeed.entry.author?.isNotEmpty() == true) {
-                subtitle.append(" &mdash; ").append(entryWithFeed.entry.author)
-            }
-
-            val html = StringBuilder(CSS)
-                    .append(BODY_START)
-                    .append(TITLE_START).append(entryWithFeed.entry.link).append(TITLE_MIDDLE).append(entryWithFeed.entry.title).append(TITLE_END)
-                    .append(SUBTITLE_START).append(subtitle).append(SUBTITLE_END)
-                    .append(contentText)
-                    .append(BODY_END)
-                    .toString()
-
-            // do not put 'null' to the base url...
-            loadDataWithBaseURL("", html, TEXT_HTML, UTF8, null)
-
-            // display top of article
-            ObjectAnimator.ofInt(this@EntryDetailsView, "scrollY", scrollY, 0).setDuration(500).start()
         }
     }
 
