@@ -20,9 +20,16 @@ package net.frju.flym
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.os.Build
+import android.os.StrictMode
+import android.os.StrictMode.VmPolicy
+import android.os.strictmode.UntaggedSocketViolation
+import android.util.Log
+import net.fred.feedex.BuildConfig
 import net.frju.flym.data.AppDatabase
 import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.utils.putPrefBoolean
+import java.util.concurrent.Executors
 
 
 class App : Application() {
@@ -45,5 +52,26 @@ class App : Application() {
         db = AppDatabase.createDatabase(context)
 
         context.putPrefBoolean(PrefConstants.IS_REFRESHING, false) // init
+
+        // Enable strict mode to find performance issues in debug build
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .penaltyFlashScreen()
+                    .build())
+            val vmPolicy = VmPolicy.Builder().detectAll()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                vmPolicy.penaltyListener(Executors.newSingleThreadExecutor(), {
+                    // Hide UntaggedSocketViolations since they are useless and unfixable in okhttp and glide
+                    if (it !is UntaggedSocketViolation) {
+                        Log.d("StrictMode", "StrictMode policy violation: " + it.stackTrace)
+                    }
+                })
+            } else {
+                vmPolicy.penaltyLog()
+            }
+            StrictMode.setVmPolicy(vmPolicy.build())
+        }
     }
 }
