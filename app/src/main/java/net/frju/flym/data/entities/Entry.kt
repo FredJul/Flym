@@ -19,9 +19,9 @@ package net.frju.flym.data.entities
 
 import android.content.Context
 import android.os.Parcelable
-import android.text.Html
 import android.text.format.DateFormat
 import android.text.format.DateUtils
+import androidx.core.text.HtmlCompat
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -69,9 +69,8 @@ fun SyndEntry.toDbFormat(context: Context, feed: Feed): Entry {
     item.id = (feed.id.toString() + "_" + (link ?: uri ?: title
     ?: UUID.randomUUID().toString())).sha1()
     item.feedId = feed.id
-    @Suppress("DEPRECATION")
     if (title != null) {
-        item.title = Html.fromHtml(title).toString()
+        item.title = HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
     } else {
         item.title = context.getString(R.string.entry_default_title)
     }

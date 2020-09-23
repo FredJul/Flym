@@ -22,7 +22,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class SearchFeedResult(
-        var iconUrl: String = "",
+        var iconUrl: String? = "",
         var link: String = "",
         var name: String = "",
         var desc: String = "",

@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.text.Html
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import android.util.Log
@@ -13,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.core.text.toSpannable
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -116,11 +116,9 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
                                 val entry = entries.get(i) as JSONObject
                                 val url = entry.get(FEED_SEARCH_URL).toString().replace("feed/", "")
                                 if (url.isNotEmpty() && !FEED_SEARCH_BLACKLIST.contains(url)) {
-
-                                    @Suppress("DEPRECATION")
-                                    val feedTitle = Html.fromHtml(entry.get(FEED_SEARCH_TITLE).toString()).toString()
-                                    val feedDescription = Html.fromHtml(entry.get(FEED_SEARCH_DESC).toString()).toString()
-                                    val feedIconUrl = Html.fromHtml(entry.get(FEED_SEARCH_ICON_URL).toString()).toString()
+                                    val feedTitle = HtmlCompat.fromHtml(entry.get(FEED_SEARCH_TITLE).toString(), HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+                                    val feedDescription = HtmlCompat.fromHtml(entry.get(FEED_SEARCH_DESC).toString(), HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+                                    val feedIconUrl = if (entry.has(FEED_SEARCH_ICON_URL)) HtmlCompat.fromHtml(entry.get(FEED_SEARCH_ICON_URL).toString(), HtmlCompat.FROM_HTML_MODE_LEGACY).toString() else null
                                     val feedAdded = App.db.feedDao().findByLink(url) != null
                                     val feedResult = SearchFeedResult(feedIconUrl, url, feedTitle, feedDescription, feedAdded)
                                     Log.d(TAG, feedResult.toString())
@@ -205,7 +203,7 @@ class FeedSearchFragment : Fragment(), AdapterView.OnItemClickListener {
         private fun setIcon(viewHolder: ItemViewHolder, item: SearchFeedResult) {
             val letterDrawable = Feed.getLetterDrawable(item.link.hashCode().toLong(), item.name)
             viewHolder.icon?.let { iv ->
-                if (item.iconUrl.isNotEmpty()) {
+                if (!item.iconUrl.isNullOrEmpty()) {
                     GlideApp.with(context)
                             .load(item.iconUrl)
                             .centerCrop()
