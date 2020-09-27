@@ -22,7 +22,6 @@ import net.fred.feedex.R
 import net.frju.flym.data.utils.PrefConstants
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.inputMethodManager
-import org.jetbrains.anko.uiThread
 
 fun Activity.closeKeyboard() {
     currentFocus?.let {
