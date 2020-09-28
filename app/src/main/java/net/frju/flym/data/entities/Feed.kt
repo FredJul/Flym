@@ -61,12 +61,24 @@ data class Feed(
             val feedName = feedTitle.orEmpty()
 
             val color = ColorGenerator.MATERIAL.getColor(feedId) // The color is specific to the feedId (which shouldn't change)
-            val lettersForName = if (feedName.length < 2) feedName.toUpperCase() else feedName.substring(0, 2).trim().toUpperCase()
+            val lettersForName = getLettersForName(feedName)
             return if (rounded) {
                 TextDrawable.builder().buildRound(lettersForName, color)
             } else {
                 TextDrawable.builder().buildRect(lettersForName, color)
             }
+        }
+
+        private fun getLettersForName(feedName: String): String {
+            val split = feedName.split(" ", "-", limit=2)
+
+            val letters = when {
+                feedName.length <= 2 -> feedName
+                split.size >= 2 -> String(charArrayOf(split[0][0], split[1][0]))
+                else -> feedName.substring(0, 2)
+            }
+
+            return letters.trim().toUpperCase()
         }
     }
 
