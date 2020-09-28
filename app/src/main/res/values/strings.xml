@@ -101,23 +101,22 @@
     <string name="settings_refresh_enable_notifications">Display refresh notifications</string>
     <string name="settings_refresh_enable_notifications_description">Show a system notification when a refresh is completed</string>
     <string name="settings_refresh_interval">Refresh interval</string>
-    <string name="settings_category_keep_time">Time to keep entries</string>
     <string name="settings_keep_time">Time that read entries will be kept</string>
     <string name="settings_keep_time_unread">Time that unread entries will be kept</string>
-    <string name="settings_category_content_presentation">Content presentation</string>
+    <string name="settings_category_general">General</string>
     <string name="settings_display_thumbnails">Display thumbnails</string>
-    <string name="settings_display_thumbnails_description">Display thumbnails in feed</string>
+    <string name="settings_display_thumbnails_description">Display thumbnails in the article list</string>
     <string name="settings_display_images">Display images</string>
     <string name="settings_display_images_description">Display images in entries</string>
     <string name="settings_preload_image_mode">Preload images</string>
     <string name="settings_font_size">Text size</string>
     <string name="settings_refresh_wifi_only">Refresh only over Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Automatic refresh will only be done if a Wi-Fi connection is available</string>
-    <string name="settings_category_filter">Filters</string>
     <string name="settings_remove_duplicates_description_title">Remove duplicates</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly-downloaded items and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (comma-separated list)</string>
-    <string name="filter_title">Blacklist</string>
+    <string name="filter">Remove items containing keywords</string>
+    <string name="filter_title">Blocklist</string>
+    <string name="filter_dialog_message">Separate keywords with commas</string>
     <string name="settings_theme">Theme</string>
     <string name="open_browser_direct">Open entries directly in your default browser</string>
     <string name="open_browser_direct_title">Open in browser</string>
@@ -130,8 +129,9 @@
     <string name="settings_sort_order">Sort entries from newest to oldest</string>
     <string name="settings_sort_order_title">Sort order</string>
     <string name="settings_enable_entry_swipe">Enable swipe while viewing an entry</string>
-
-    <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry.</string>
+    <string name="settings_category_article_list">Article list</string>
+    <string name="settings_category_article_appearance">Article appearance</string>
+    <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry</string>
 
     <string-array name="settings_intervals">
         <item>5 minutes</item>

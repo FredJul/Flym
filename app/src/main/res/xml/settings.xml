@@ -6,7 +6,7 @@
     <PreferenceCategory
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="@string/settings_category_content_presentation">
+        android:title="@string/settings_category_general">
 
         <net.frju.flym.ui.views.AutoSummaryListPreference
             android:layout_width="wrap_content"
@@ -18,6 +18,22 @@
             android:key="theme"
             android:title="@string/settings_theme" />
 
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="hide_navigation_on_scroll"
+            android:summary="@string/settings_hide_navigation_on_scroll_description"
+            android:title="@string/settings_hide_navigation_on_scroll" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/settings_category_article_appearance">
+
+
         <net.frju.flym.ui.views.AutoSummaryListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,14 +43,6 @@
             android:inputType="number"
             android:key="font_size"
             android:title="@string/settings_font_size" />
-
-        <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true"
-            android:key="display_thumbnails"
-            android:summary="@string/settings_display_thumbnails_description"
-            android:title="@string/settings_display_thumbnails" />
 
         <CheckBoxPreference
             android:layout_width="wrap_content"
@@ -66,18 +74,34 @@
         <CheckBoxPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="false"
-            android:key="hide_button_mark_all_as_read"
-            android:summary="@string/settings_hide_button_mark_all_as_read_description"
-            android:title="@string/settings_hide_button_mark_all_as_read" />
+            android:defaultValue="true"
+            android:key="enable_swipe_entry"
+            android:summary="@string/settings_enable_entry_swipe_description"
+            android:title="@string/settings_enable_entry_swipe" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/settings_category_article_list">
+
+
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="display_thumbnails"
+            android:summary="@string/settings_display_thumbnails_description"
+            android:title="@string/settings_display_thumbnails" />
 
         <CheckBoxPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="false"
-            android:key="hide_navigation_on_scroll"
-            android:summary="@string/settings_hide_navigation_on_scroll_description"
-            android:title="@string/settings_hide_navigation_on_scroll" />
+            android:key="hide_button_mark_all_as_read"
+            android:summary="@string/settings_hide_button_mark_all_as_read_description"
+            android:title="@string/settings_hide_button_mark_all_as_read" />
 
         <CheckBoxPreference
             android:layout_width="wrap_content"
@@ -87,13 +111,40 @@
             android:summary="@string/settings_sort_order"
             android:title="@string/settings_sort_order_title" />
 
+        <net.frju.flym.ui.views.AutoSummaryListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="4"
+            android:entries="@array/settings_keep_times"
+            android:entryValues="@array/settings_keep_time_values"
+            android:inputType="number"
+            android:key="keep_time"
+            android:title="@string/settings_keep_time" />
+
+        <net.frju.flym.ui.views.AutoSummaryListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="0"
+            android:entries="@array/settings_keep_times"
+            android:entryValues="@array/settings_keep_time_values"
+            android:inputType="number"
+            android:key="keep_time_unread"
+            android:title="@string/settings_keep_time_unread" />
+
         <CheckBoxPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="true"
-            android:key="enable_swipe_entry"
-            android:summary="@string/settings_enable_entry_swipe_description"
-            android:title="@string/settings_enable_entry_swipe" />
+            android:key="remove_duplicates"
+            android:summary="@string/settings_remove_duplicates_description"
+            android:title="@string/settings_remove_duplicates_description_title" />
+
+        <EditTextPreference
+            android:key="filter_keywords"
+            android:summary="@string/filter"
+            android:title="@string/filter_title"
+            android:dialogMessage="@string/filter_dialog_message"/>
+
 
     </PreferenceCategory>
 
@@ -145,52 +196,6 @@
             android:key="refresh_wifi_only"
             android:summary="@string/settings_refresh_wifi_only_description"
             android:title="@string/settings_refresh_wifi_only" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="@string/settings_category_keep_time">
-
-        <net.frju.flym.ui.views.AutoSummaryListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="4"
-            android:entries="@array/settings_keep_times"
-            android:entryValues="@array/settings_keep_time_values"
-            android:inputType="number"
-            android:key="keep_time"
-            android:title="@string/settings_keep_time" />
-
-        <net.frju.flym.ui.views.AutoSummaryListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="0"
-            android:entries="@array/settings_keep_times"
-            android:entryValues="@array/settings_keep_time_values"
-            android:inputType="number"
-            android:key="keep_time_unread"
-            android:title="@string/settings_keep_time_unread" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="@string/settings_category_filter">
-
-        <CheckBoxPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true"
-            android:key="remove_duplicates"
-            android:summary="@string/settings_remove_duplicates_description"
-            android:title="@string/settings_remove_duplicates_description_title" />
-
-        <EditTextPreference
-            android:key="filter_keywords"
-            android:summary="@string/filter"
-            android:title="@string/filter_title" />
 
     </PreferenceCategory>
 
