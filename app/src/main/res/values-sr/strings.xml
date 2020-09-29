@@ -96,6 +96,8 @@
     <string name="settings_keep_time">Време чувања чланака</string>
     <string name="settings_keep_time_unread">Временско ограничење за чување непрочитаних чланака</string>
     <string name="settings_category_content_presentation">Приказ садржаја</string>
+    <string name="settings_display_thumbnails">Прикажи сличице</string>
+    <string name="settings_display_thumbnails_description">Прикажи сличице у доводу</string>
     <string name="settings_display_images">Прикажи слике</string>
     <string name="settings_display_images_description">Прикажи слике унутар чланака</string>
     <string name="settings_preload_image_mode">Учитавање слика унапред</string>
@@ -114,6 +116,8 @@
     <string name="refresh_on_startup_title">Освежавање приликом покретања</string>
     <string name="settings_hide_button_mark_all_as_read">Sakrij \"Označi sve kao pročitano\"</string>
     <string name="settings_hide_button_mark_all_as_read_description">Ne prikazuj opciju za \"Označi sve kao pročitano\"</string>
+    <string name="settings_hide_navigation_on_scroll">Сакриј навигацију приликом померања садржаја на екрану</string>
+    <string name="settings_hide_navigation_on_scroll_description">Уколико је омогућено, навигација на врху/дну ће бити скривена када се садржај буде помицао на доле а приказиваће се приликом помицања на горе</string>
     <string name="settings_sort_order">Razvrstaj članke od najnovijeg do najstarijeg</string>
     <string name="settings_sort_order_title">Redosled razvrstavanja</string>
     <string name="settings_enable_entry_swipe">Omogući prevlačenje prstom prilikom pregleda članka</string>
