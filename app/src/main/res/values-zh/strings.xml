@@ -94,6 +94,8 @@
     <string name="settings_keep_time">已读文章保存时间</string>
     <string name="settings_keep_time_unread">未读文章保存时间</string>
     <string name="settings_category_content_presentation">内容介绍</string>
+    <string name="settings_display_thumbnails">显示缩略图</string>
+    <string name="settings_display_thumbnails_description">在订阅源文章列表中显示缩略图</string>
     <string name="settings_display_images">显示图片</string>
     <string name="settings_display_images_description">在文章中显示图片</string>
     <string name="settings_preload_image_mode">预先加载图片</string>
@@ -112,6 +114,8 @@
     <string name="refresh_on_startup_title">启动时刷新</string>
     <string name="settings_hide_button_mark_all_as_read">隐藏“标记全部为已读”按钮</string>
     <string name="settings_hide_button_mark_all_as_read_description">不在屏幕上显示“标记全部为已读”按钮</string>
+    <string name="settings_hide_navigation_on_scroll">滚动时隐藏导航栏</string>
+    <string name="settings_hide_navigation_on_scroll_description">如果启用，顶部/底部导航栏将在向下滚动时隐藏，并在向上滚动时重新显示</string>
     <string name="settings_sort_order">按最新到最旧排列文章</string>
     <string name="settings_sort_order_title">排列顺序</string>
     <string name="settings_enable_entry_swipe">阅读条目时启用侧滑切换</string>
