@@ -42,6 +42,7 @@ class FeedListEditFragment : Fragment() {
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = EditFeedAdapter(feedGroups)
 
+    @ExperimentalStdlibApi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_feed_list_edit, container, false)
 
@@ -115,6 +116,7 @@ class FeedListEditFragment : Fragment() {
         inflater.inflate(R.menu.menu_fragment_feed_list_edit, menu)
     }
 
+    @ExperimentalStdlibApi
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.add_group -> {
@@ -146,6 +148,7 @@ class FeedListEditFragment : Fragment() {
         return false
     }
 
+    @ExperimentalStdlibApi
     private fun changeItemPriority(fromFeed: Feed, newDisplayPriority: Int) {
         fromFeed.displayPriority = newDisplayPriority
 

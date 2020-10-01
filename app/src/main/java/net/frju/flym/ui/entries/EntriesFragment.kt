@@ -85,6 +85,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         }
     }
 
+    @ExperimentalStdlibApi
     var feed: Feed? = null
         set(value) {
             field = value
@@ -95,6 +96,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
 
     private val navigator: MainNavigator by lazy { activity as MainNavigator }
 
+    @ExperimentalStdlibApi
     private val adapter = EntryAdapter(
             displayThumbnails = context?.getPrefBoolean(PrefConstants.DISPLAY_THUMBNAILS, true) == true,
             globalClickListener = { entryWithFeed ->
@@ -144,6 +146,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         setHasOptionsMenu(true)
     }
 
+    @ExperimentalStdlibApi
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -225,6 +228,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         }
     }
 
+    @ExperimentalStdlibApi
     private fun initDataObservers() {
         isDesc = context?.getPrefBoolean(PrefConstants.SORT_ORDER, true)!!
         entryIdsLiveData?.removeObservers(viewLifecycleOwner)
@@ -289,6 +293,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         })
     }
 
+    @ExperimentalStdlibApi
     override fun onStart() {
         super.onStart()
         context?.registerOnPrefChangeListener(prefListener)
@@ -401,6 +406,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         context?.unregisterOnPrefChangeListener(prefListener)
     }
 
+    @ExperimentalStdlibApi
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelable(STATE_FEED, feed)
         outState.putString(STATE_SELECTED_ENTRY_ID, adapter.selectedEntryId)
@@ -410,6 +416,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         super.onSaveInstanceState(outState)
     }
 
+    @ExperimentalStdlibApi
     private fun setupRecyclerView() {
         recycler_view.setHasFixedSize(true)
 
@@ -502,6 +509,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         })
     }
 
+    @ExperimentalStdlibApi
     private fun startRefresh() {
         if (context?.getPrefBoolean(PrefConstants.IS_REFRESHING, false) == false) {
             if (feed?.id != Feed.ALL_ENTRIES_ID) {
@@ -516,6 +524,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         refresh_layout.postDelayed({ refreshSwipeProgress() }, 500)
     }
 
+    @ExperimentalStdlibApi
     private fun setupTitle() {
         activity?.toolbar?.apply {
             if (feed == null || feed?.id == Feed.ALL_ENTRIES_ID) {
@@ -549,6 +558,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         return location[1] < resources.displayMetrics.heightPixels
     }
 
+    @ExperimentalStdlibApi
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
@@ -601,6 +611,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         })
     }
 
+    @ExperimentalStdlibApi
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_entries__share -> {
@@ -621,6 +632,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
         return true
     }
 
+    @ExperimentalStdlibApi
     fun setSelectedEntryId(selectedEntryId: String) {
         adapter.selectedEntryId = selectedEntryId
     }

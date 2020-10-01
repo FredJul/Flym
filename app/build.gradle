@@ -8,11 +8,11 @@ androidExtensions {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 29
     defaultConfig {
         applicationId "net.frju.flym"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 29 // Allows for legacy storage on Android 11
         versionCode 37
         versionName "2.5.3"
     }
@@ -122,4 +122,7 @@ dependencies {
     implementation 'net.dankito.readability4j:readability4j:1.0.5'
     implementation 'pub.devrel:easypermissions:3.0.0'
     implementation 'com.rometools:rome-opml:1.15.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC'
+    implementation 'org.decsync:libdecsync:1.7.1'
+    implementation 'com.nononsenseapps:filepicker:4.1.0'
 }

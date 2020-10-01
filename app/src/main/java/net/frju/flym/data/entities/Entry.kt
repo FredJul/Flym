@@ -21,6 +21,7 @@ import android.content.Context
 import android.os.Parcelable
 import android.text.format.DateFormat
 import android.text.format.DateUtils
+import android.util.Log
 import androidx.core.text.HtmlCompat
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -28,15 +29,17 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.rometools.rome.feed.synd.SyndEntry
 import kotlinx.android.parcel.Parcelize
+import kotlinx.serialization.json.JsonPrimitive
 import net.fred.feedex.R
 import net.frju.flym.utils.sha1
-import java.util.Date
-import java.util.UUID
+import org.decsync.library.Decsync
+import java.util.*
 
+private const val TAG = "Entry"
 
 @Parcelize
 @Entity(tableName = "entries",
-        indices = [(Index(value = ["feedId"])), (Index(value = ["link"], unique = true))],
+        indices = [(Index(value = ["feedId"])), (Index(value = ["link"], unique = true)), (Index(value = ["uri"], unique = true))],
         foreignKeys = [(ForeignKey(entity = Feed::class,
                 parentColumns = ["feedId"],
                 childColumns = ["feedId"],
@@ -45,6 +48,7 @@ data class Entry(@PrimaryKey
                  var id: String = "",
                  var feedId: Long = 0L,
                  var link: String? = null,
+                 var uri: String? = null,
                  var fetchDate: Date = Date(),
                  var publicationDate: Date = fetchDate, // important to know if the publication date has been set
                  var title: String? = null,
@@ -62,6 +66,40 @@ data class Entry(@PrimaryKey
                 DateFormat.getMediumDateFormat(context).format(publicationDate) + ' ' +
                         DateFormat.getTimeFormat(context).format(publicationDate)
             }
+
+    @ExperimentalStdlibApi
+    fun getDecsyncEntry(type: String, value: Boolean): Decsync.EntryWithPath? {
+        if (publicationDate == fetchDate) {
+            Log.w(TAG, "Unknown publication date for entry $this")
+            return null
+        }
+        val path = getDecsyncPath(type)
+        val key = uri ?: run {
+            Log.w(TAG, "Unknown uri for entry $this")
+            return null
+        }
+        return Decsync.EntryWithPath(path, JsonPrimitive(key), JsonPrimitive(value))
+    }
+
+    @ExperimentalStdlibApi
+    fun getDecsyncStoredEntry(type: String): Decsync.StoredEntry? {
+        val path = getDecsyncPath(type)
+        val key = uri ?: run {
+            Log.w(TAG, "Unknown uri for entry $this")
+            return null
+        }
+        return Decsync.StoredEntry(path, JsonPrimitive(key))
+    }
+
+    private fun getDecsyncPath(type: String): List<String> {
+        val time = publicationDate.time
+        val date = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        date.timeInMillis = time
+        val year = "%04d".format(date.get(Calendar.YEAR))
+        val month = "%02d".format(date.get(Calendar.MONTH) + 1)
+        val day = "%02d".format(date.get(Calendar.DAY_OF_MONTH))
+        return listOf("articles", type, year, month, day)
+    }
 }
 
 fun SyndEntry.toDbFormat(context: Context, feed: Feed): Entry {
@@ -76,6 +114,7 @@ fun SyndEntry.toDbFormat(context: Context, feed: Feed): Entry {
     }
     item.description = contents.getOrNull(0)?.value ?: description?.value
     item.link = link
+    item.uri = uri
     //TODO item.imageLink = null
     item.author = author
 

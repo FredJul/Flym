@@ -111,6 +111,7 @@ class EntryDetailsFragment : Fragment() {
         entry_view.destroy()
     }
 
+    @ExperimentalStdlibApi
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -189,6 +190,7 @@ class EntryDetailsFragment : Fragment() {
         setEntry(arguments?.getString(ARG_ENTRY_ID)!!, arguments?.getStringArrayList(ARG_ALL_ENTRIES_IDS)!!)
     }
 
+    @ExperimentalStdlibApi
     private fun initDataObservers() {
         isMobilizingLiveData?.removeObservers(viewLifecycleOwner)
         refresh_layout.isRefreshing = false
@@ -223,6 +225,7 @@ class EntryDetailsFragment : Fragment() {
         })
     }
 
+    @ExperimentalStdlibApi
     private fun setupToolbar() {
         toolbar.apply {
             entryWithFeed?.let { entryWithFeed ->
@@ -297,6 +300,7 @@ class EntryDetailsFragment : Fragment() {
         }
     }
 
+    @ExperimentalStdlibApi
     private fun switchFullTextMode() {
         // Enable this to test new manual mobilization
 //		doAsync {
@@ -337,6 +341,7 @@ class EntryDetailsFragment : Fragment() {
         }
     }
 
+    @ExperimentalStdlibApi
     fun setEntry(entryId: String, allEntryIds: List<String>) {
         this.entryId = entryId
         this.allEntryIds = allEntryIds

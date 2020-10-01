@@ -139,6 +139,18 @@
     <string name="settings_category_article_appearance">Article appearance</string>
     <string name="settings_enable_entry_swipe_description">If enabled, allows swiping between entries while viewing an entry</string>
 
+    <string name="settings_category_decsync">DecSync</string>
+    <string name="settings_decsync_about">About DecSync</string>
+    <string name="settings_decsync_enabled">Enable DecSync</string>
+    <string name="settings_decsync_enabled_description">Sync with other RSS readers</string>
+    <string name="settings_decsync_dir_not_configured">No DecSync directory configured</string>
+
+    <!-- DecSync -->
+    <string name="saf_update">Due to an Android update you need to reselect the DecSync directory</string>
+    <string name="disable_decsync">Disable DecSync</string>
+    <string name="decsync_disabled">DecSync support disabled</string>
+    <string name="channel_error_name">Errors</string>
+
     <string-array name="settings_intervals">
         <item>5 minutes</item>
         <item>15 minutes</item>

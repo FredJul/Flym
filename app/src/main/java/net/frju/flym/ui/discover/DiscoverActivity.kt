@@ -39,6 +39,7 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface {
 
     private var searchInput: AutoCompleteTextView? = null
 
+    @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         setupTheme()
         super.onCreate(savedInstanceState)
@@ -58,6 +59,7 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface {
         savedInstanceState.putString(FeedSearchFragment.ARG_QUERY, searchInput?.text?.toString())
     }
 
+    @ExperimentalStdlibApi
     private fun initSearchInputs() {
         var timer = Timer()
         searchInput = this.findViewById(R.id.et_search_input)
@@ -133,6 +135,7 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface {
         searchInput?.setText(query)
     }
 
+    @ExperimentalStdlibApi
     override fun addFeed(view: View, title: String, link: String) {
         doAsync {
             val feedToAdd = Feed(link = link, title = title)
@@ -143,6 +146,7 @@ class DiscoverActivity : AppCompatActivity(), FeedManagementInterface {
         }
     }
 
+    @ExperimentalStdlibApi
     override fun deleteFeed(view: View, feed: SearchFeedResult) {
         doAsync {
             App.db.feedDao().deleteByLink(feed.link)

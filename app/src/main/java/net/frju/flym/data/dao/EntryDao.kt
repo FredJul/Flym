@@ -25,8 +25,14 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import net.frju.flym.App
 import net.frju.flym.data.entities.Entry
 import net.frju.flym.data.entities.EntryWithFeed
+import net.frju.flym.data.utils.PrefConstants.DECSYNC_ENABLED
+import net.frju.flym.utils.DecsyncUtils
+import net.frju.flym.utils.Extra
+import net.frju.flym.utils.getPrefBoolean
+import org.decsync.library.Decsync
 
 private const val LIGHT_SELECT = "id, entries.feedId, feedLink, feedTitle, fetchDate, publicationDate, title, link, description, imageLink, read, favorite"
 private const val ORDER_BY = "ORDER BY CASE WHEN :isDesc = 1 THEN publicationDate END DESC, CASE WHEN :isDesc = 0 THEN publicationDate END ASC, id"
@@ -107,6 +113,12 @@ abstract class EntryDao {
     @Query("SELECT COUNT(*) FROM $JOIN WHERE groupId IS :groupId AND read = 0 AND fetchDate > :minDate")
     abstract fun observeNewEntriesCountByGroup(groupId: Long, minDate: Long): LiveData<Long>
 
+    @get:Query("SELECT id FROM entries WHERE read = 1")
+    abstract val readIds: List<String>
+
+    @get:Query("SELECT id FROM entries WHERE read = 0")
+    abstract val unreadIds: List<String>
+
     @get:Query("SELECT id FROM entries WHERE favorite = 1")
     abstract val favoriteIds: List<String>
 
@@ -119,38 +131,145 @@ abstract class EntryDao {
     @Query("SELECT * FROM $JOIN WHERE id IS :id LIMIT 1")
     abstract fun findByIdWithFeed(id: String): EntryWithFeed?
 
+    @Query("SELECT id FROM entries WHERE link IS :link LIMIT 1")
+    abstract fun idForLink(link: String): String?
+
+    @Query("SELECT id FROM entries WHERE uri IS :uri LIMIT 1")
+    abstract fun idForUri(uri: String): String?
+
     @Query("SELECT title FROM entries WHERE title IN (:titles)")
     abstract fun findAlreadyExistingTitles(titles: List<String>): List<String>
 
     @Query("SELECT id FROM entries WHERE feedId IS (:feedId)")
     abstract fun idsForFeed(feedId: Long): List<String>
 
+    @Query("SELECT id FROM entries WHERE feedId IS (:feedId) AND read = 0")
+    abstract fun unreadIdsForFeed(feedId: Long): List<String>
+
+    @Query("SELECT id FROM $JOIN WHERE groupId IS (:groupId) AND read = 0")
+    abstract fun unreadIdsForGroup(groupId: Long): List<String>
+
     @Query("UPDATE entries SET read = 1 WHERE id IN (:ids)")
-    abstract fun markAsRead(ids: List<String>)
+    protected abstract fun markAsReadDao(ids: List<String>)
+
+    @ExperimentalStdlibApi
+    fun markAsRead(ids: List<String>, updateDecsync: Boolean = true) {
+        if (updateDecsync && App.context.getPrefBoolean(DECSYNC_ENABLED, false)) {
+            val entries = ids.mapNotNull { id ->
+                getReadMarkEntry(id, "read", true)
+            }
+            DecsyncUtils.getDecsync(App.context)?.setEntries(entries)
+        }
+        markAsReadDao(ids)
+    }
 
     @Query("UPDATE entries SET read = 0 WHERE id IN (:ids)")
-    abstract fun markAsUnread(ids: List<String>)
+    protected abstract fun markAsUnreadDao(ids: List<String>)
+
+    @ExperimentalStdlibApi
+    fun markAsUnread(ids: List<String>, updateDecsync: Boolean = true) {
+        if (updateDecsync && App.context.getPrefBoolean(DECSYNC_ENABLED, false)) {
+            val entries = ids.mapNotNull { id ->
+                getReadMarkEntry(id, "read", false)
+            }
+            DecsyncUtils.getDecsync(App.context)?.setEntries(entries)
+        }
+        markAsUnreadDao(ids)
+    }
 
     @Query("UPDATE entries SET read = 1 WHERE feedId = :feedId")
-    abstract fun markAsRead(feedId: Long)
+    protected abstract fun markAsReadDao(feedId: Long)
+
+    @ExperimentalStdlibApi
+    fun markAsRead(feedId: Long, updateDecsync: Boolean = true) {
+        if (updateDecsync && App.context.getPrefBoolean(DECSYNC_ENABLED, false)) {
+            val entries = unreadIdsForFeed(feedId).mapNotNull { id ->
+                getReadMarkEntry(id, "read", true)
+            }
+            DecsyncUtils.getDecsync(App.context)?.setEntries(entries)
+        }
+        markAsReadDao(feedId)
+    }
 
     @Query("UPDATE entries SET read = 1 WHERE feedId IN (SELECT feedId FROM feeds WHERE groupId = :groupId)")
-    abstract fun markGroupAsRead(groupId: Long)
+    protected abstract fun markGroupAsReadDao(groupId: Long)
+
+    @ExperimentalStdlibApi
+    fun markGroupAsRead(groupId: Long, updateDecsync: Boolean = true) {
+        if (updateDecsync && App.context.getPrefBoolean(DECSYNC_ENABLED, false)) {
+            val entries = unreadIdsForGroup(groupId).mapNotNull { id ->
+                getReadMarkEntry(id, "read", true)
+            }
+            DecsyncUtils.getDecsync(App.context)?.setEntries(entries)
+        }
+        markGroupAsReadDao(groupId)
+    }
 
     @Query("UPDATE entries SET read = 1")
-    abstract fun markAllAsRead()
+    protected abstract fun markAllAsReadDao()
+
+    @ExperimentalStdlibApi
+    fun markAllAsRead(updateDecsync: Boolean = true) {
+        if (updateDecsync && App.context.getPrefBoolean(DECSYNC_ENABLED, false)) {
+            val entries = unreadIds.mapNotNull { id ->
+                getReadMarkEntry(id, "read", true)
+            }
+            DecsyncUtils.getDecsync(App.context)?.setEntries(entries)
+        }
+        markAllAsReadDao()
+    }
 
     @Query("UPDATE entries SET favorite = 1 WHERE id IS :id")
-    abstract fun markAsFavorite(id: String)
+    protected abstract fun markAsFavoriteDao(id: String)
+
+    @ExperimentalStdlibApi
+    fun markAsFavorite(id: String, updateDecsync: Boolean = true) {
+        if (updateDecsync && App.context.getPrefBoolean(DECSYNC_ENABLED, false)) {
+            writeReadMarkEntry(id, "marked", true)
+        }
+        markAsFavoriteDao(id)
+    }
 
     @Query("UPDATE entries SET favorite = 0 WHERE id IS :id")
-    abstract fun markAsNotFavorite(id: String)
+    protected abstract fun markAsNotFavoriteDao(id: String)
+
+    @ExperimentalStdlibApi
+    fun markAsNotFavorite(id: String, updateDecsync: Boolean = true) {
+        if (updateDecsync && App.context.getPrefBoolean(DECSYNC_ENABLED, false)) {
+            writeReadMarkEntry(id, "marked", false)
+        }
+        markAsNotFavoriteDao(id)
+    }
+
+    @ExperimentalStdlibApi
+    fun getReadMarkEntry(id: String, type: String, value: Boolean): Decsync.EntryWithPath? {
+        val entry = findById(id) ?: return null
+        return entry.getDecsyncEntry(type, value)
+    }
+
+    @ExperimentalStdlibApi
+    private fun writeReadMarkEntry(id: String, type: String, value: Boolean) {
+        val entry = getReadMarkEntry(id, type, value) ?: return
+        DecsyncUtils.getDecsync(App.context)?.setEntries(listOf(entry))
+    }
 
     @Query("DELETE FROM entries WHERE fetchDate < :keepDateBorderTime AND favorite = 0 AND read = :read")
     abstract fun deleteOlderThan(keepDateBorderTime: Long, read: Long)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) // Ignore because we don't want to delete previously starred entries
-    abstract fun insert(vararg entries: Entry)
+    protected abstract fun insertDao(vararg entries: Entry)
+
+    @ExperimentalStdlibApi
+    fun insert(entries: List<Entry>) {
+        insertDao(*entries.toTypedArray())
+        val storedEntries = mutableListOf<Decsync.StoredEntry>()
+        for (entry in entries) {
+            storedEntries.add(entry.getDecsyncStoredEntry("read") ?: continue)
+            storedEntries.add(entry.getDecsyncStoredEntry("marked") ?: continue)
+        }
+        val extra = Extra()
+        DecsyncUtils.getDecsync(App.context)?.executeStoredEntries(storedEntries, extra)
+    }
 
     @Update
     abstract fun update(vararg entries: Entry)

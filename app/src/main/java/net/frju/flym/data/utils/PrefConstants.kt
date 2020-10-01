@@ -53,4 +53,9 @@ object PrefConstants {
     const val SORT_ORDER = "sort_order"
 
     const val ENABLE_SWIPE_ENTRY = "enable_swipe_entry"
+
+    const val DECSYNC_ENABLED = "decsync.enabled";
+    const val DECSYNC_USE_SAF = "decsync.use_saf";
+    const val UPDATE_FORCES_SAF = "update_forces_saf"
+    const val DECSYNC_FILE = "decsync.directory";
 }

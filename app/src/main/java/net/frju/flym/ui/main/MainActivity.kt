@@ -25,6 +25,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.OpenableColumns
@@ -62,28 +63,15 @@ import net.frju.flym.ui.feeds.FeedAdapter
 import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
+import net.frju.flym.ui.settings.SettingsFragment
 import net.frju.flym.utils.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.browse
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textResource
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.BufferedInputStream
-import java.io.File
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.io.Reader
-import java.io.StringReader
-import java.io.Writer
+import java.io.*
 import java.net.URL
-import java.util.Date
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -113,6 +101,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = FeedAdapter(feedGroups)
 
+    @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         setupNoActionBarTheme()
 
@@ -285,10 +274,34 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             goToEntriesList(null)
         }
 
+        if (Build.VERSION.SDK_INT >= 29 && !Environment.isExternalStorageLegacy()) {
+            if (getPrefBoolean(PrefConstants.DECSYNC_ENABLED, false) &&
+                    !getPrefBoolean(PrefConstants.DECSYNC_USE_SAF, false)) {
+                putPrefBoolean(PrefConstants.DECSYNC_ENABLED, false)
+                putPrefBoolean(PrefConstants.UPDATE_FORCES_SAF, true)
+            }
+            putPrefBoolean(PrefConstants.DECSYNC_USE_SAF, true)
+        }
+        if (getPrefBoolean(PrefConstants.UPDATE_FORCES_SAF, false)) {
+            AlertDialog.Builder(this)
+                    .setTitle(R.string.saf_update)
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        putPrefBoolean(PrefConstants.UPDATE_FORCES_SAF, false)
+                        startActivity<SettingsActivity>(SettingsFragment.EXTRA_SELECT_SAF_DIR to true)
+                    }
+                    .setNegativeButton(R.string.disable_decsync) { _, _ ->
+                        putPrefBoolean(PrefConstants.UPDATE_FORCES_SAF, false)
+                    }
+                    .show()
+        }
+
         if (getPrefBoolean(PrefConstants.REFRESH_ON_STARTUP, defValue = true)) {
             startService(Intent(this, FetcherService::class.java)
                     .setAction(FetcherService.ACTION_REFRESH_FEEDS)
                     .putExtra(FetcherService.FROM_AUTO_REFRESH, true))
+        } else if (getPrefBoolean(PrefConstants.DECSYNC_ENABLED, false)) {
+            val extra = Extra()
+            DecsyncUtils.getDecsync(this)?.executeAllNewEntries(extra, true)
         }
 
         AutoRefreshJobService.initAutoRefresh(this)
@@ -327,6 +340,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
+    @ExperimentalStdlibApi
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
@@ -335,6 +349,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         handleImplicitIntent(intent)
     }
 
+    @ExperimentalStdlibApi
     private fun handleImplicitIntent(intent: Intent?) {
         // Has to be called on onStart (when the app is closed) and on onNewIntent (when the app is in the background)
 
@@ -423,6 +438,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
+    @ExperimentalStdlibApi
     override fun goToEntriesList(feed: Feed?) {
         clearDetails()
         containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
@@ -443,6 +459,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
     override fun goToFeedSearch() = DiscoverActivity.newInstance(this)
 
+    @ExperimentalStdlibApi
     override fun goToEntryDetails(entryId: String, allEntryIds: List<String>) {
         closeKeyboard()
 
@@ -466,6 +483,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
+    @ExperimentalStdlibApi
     override fun setSelectedEntryId(selectedEntryId: String) {
         val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
         listFragment.setSelectedEntryId(selectedEntryId)
@@ -479,6 +497,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         startActivity<SettingsActivity>()
     }
 
+    @ExperimentalStdlibApi
     private fun openInBrowser(entryId: String) {
         doAsync {
             App.db.entryDao().findByIdWithFeed(entryId)?.entry?.link?.let { url ->
@@ -534,6 +553,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         startActivityForResult(intent, WRITE_OPML_REQUEST_CODE)
     }
 
+    @ExperimentalStdlibApi
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
 
@@ -544,6 +564,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
+    @ExperimentalStdlibApi
     @AfterPermissionGranted(AUTO_IMPORT_OPML_REQUEST_CODE)
     private fun autoImportOpml() {
         if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
@@ -557,6 +578,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
+    @ExperimentalStdlibApi
     private fun importOpml(uri: Uri) {
         doAsync {
             try {
@@ -590,6 +612,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
+    @ExperimentalStdlibApi
     private fun parseOpml(opmlReader: Reader) {
         var genId = 1L
         val feedList = mutableListOf<Feed>()
@@ -627,7 +650,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
 
         if (feedList.isNotEmpty()) {
-            App.db.feedDao().insert(*feedList.toTypedArray())
+            App.db.feedDao().insert(feedList)
         }
     }
 

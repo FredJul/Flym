@@ -64,6 +64,7 @@ class AutoRefreshJobService : JobService() {
         }
     }
 
+    @ExperimentalStdlibApi
     override fun onStartJob(params: JobParameters): Boolean {
         if (!ignoreNextJob && !getPrefBoolean(PrefConstants.IS_REFRESHING, false)) {
             doAsync {
