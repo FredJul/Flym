@@ -91,21 +91,16 @@
     <string name="settings_refresh_enable_notifications">Mostra una notifica di aggiornamento</string>
     <string name="settings_refresh_enable_notifications_description">Mosta una notifica di sistema quando un aggiornamento è completato</string>
     <string name="settings_refresh_interval">Intervallo di aggiornamento</string>
-    <string name="settings_category_keep_time">Tempo di archiviazione</string>
     <string name="settings_keep_time">Tempo di archiviazione degli articoli letti</string>
     <string name="settings_keep_time_unread">Tempo di archiviazione degli articoli non letti</string>
-    <string name="settings_category_content_presentation">Aspetto dei contenuti</string>
     <string name="settings_display_images">Mostra le immagini</string>
     <string name="settings_display_images_description">Mostra le immagini negli articoli</string>
     <string name="settings_preload_image_mode">Scarica le immagini in anticipo</string>
     <string name="settings_font_size">Dimensione del testo</string>
     <string name="settings_refresh_wifi_only">Aggiorna solo su rete Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">L\'aggiornamento automatico viene eseguito solo se si è connessi ad una rete Wi-Fi</string>
-    <string name="settings_category_filter">Filtri</string>
     <string name="settings_remove_duplicates_description_title">Rimuovi i duplicati</string>
     <string name="settings_remove_duplicates_description">Ignora i nuovi articoli se hanno lo stesso titolo di quelli già presenti</string>
-    <string name="filter">Rimuovi gli articoli che contengono queste parole chiave (usa la virgola come divisore)</string>
-    <string name="filter_title">Lista nera</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Apri gli articoli direttamente nel browser predefinito</string>
     <string name="open_browser_direct_title">Apri nel browser</string>
@@ -116,7 +111,6 @@
     <string name="settings_sort_order">Ordina gli articoli dal più nuovo al più vecchio</string>
     <string name="settings_sort_order_title">Ordine degli articoli</string>
     <string name="settings_enable_entry_swipe">Abilita lo swipe durante la visualizzazione di una voce</string>
-    <string name="settings_enable_entry_swipe_description">Se abilitato, permette lo swipe fra gli articoli mentre se ne vede uno.</string>
     <string-array name="settings_intervals">
         <item>5 minuti</item>
         <item>15 minuti</item>
