@@ -70,17 +70,14 @@
     <string name="settings_refresh_interval">Interval načítání</string>
     <string name="settings_keep_time">Čas po který budou články uloženy</string>
     <string name="settings_keep_time_unread">Čas, po který budou nepřečtené záznamy uchovány</string>
-    <string name="settings_category_content_presentation">Prezentace obsahu</string>
     <string name="settings_display_images">Zobrazovat obrázky</string>
     <string name="settings_display_images_description">Zobrazovat obrázky ve článcích</string>
     <string name="settings_preload_image_mode">Načítat obrázky</string>
     <string name="settings_font_size">Velikost textu</string>
     <string name="settings_refresh_wifi_only">Obnovovat pouze přes Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Automatické obnovení bude spuštěno pouze při dostupném Wi-Fi připojení</string>
-    <string name="settings_category_filter">Filtry</string>
     <string name="settings_remove_duplicates_description_title">Odstranit duplicity</string>
     <string name="settings_remove_duplicates_description">Zkontroluje název nově stažené položky a přeskočí ji, pokud již existuje jedna se stejným názvem</string>
-    <string name="filter">Odstranit položky obsahující klíčová slova(seznam oddělený čárkami)</string>
     <string name="settings_theme">Téma</string>
     <string name="open_browser_direct">Otevře záznamy přímo ve výchozím prohlížeči</string>
     <string name="open_browser_direct_title">Otevřít v prohlížeči</string>
