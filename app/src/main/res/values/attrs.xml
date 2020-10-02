@@ -8,4 +8,6 @@
     <attr name="colorArticleText" format="reference" />
     <attr name="colorSubtitle" format="reference" />
     <attr name="colorSubtitleBorder" format="reference" />
+    <attr name="colorUnreadBadgeBackground" format="reference" />
+    <attr name="colorUnreadBadgeText" format="reference" />
 </resources>

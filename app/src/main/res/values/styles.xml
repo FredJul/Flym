@@ -16,6 +16,8 @@
         <item name="colorSubtitle">@color/subtitle_dark</item>
         <item name="colorSubtitleBorder">@color/subtitle_border_dark</item>
         <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
+        <item name="colorUnreadBadgeBackground">@color/colorPrimaryDark</item>
+        <item name="colorUnreadBadgeText">@color/color_unread_black</item>
     </style>
 
     <style name="AppTheme.ActionBar" parent="Theme.AppCompat">
@@ -47,6 +49,8 @@
         <item name="colorSubtitle">@color/subtitle_light</item>
         <item name="colorSubtitleBorder">@color/subtitle_border_light</item>
         <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
+        <item name="colorUnreadBadgeBackground">@color/colorPrimaryDark</item>
+        <item name="colorUnreadBadgeText">@color/color_unread</item>
     </style>
 
     <style name="AppThemeLight.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -78,6 +82,8 @@
         <item name="colorSubtitle">@color/subtitle_black</item>
         <item name="colorSubtitleBorder">@color/subtitle_border_black</item>
         <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
+        <item name="colorUnreadBadgeBackground">@color/colorAccentBlack</item>
+        <item name="colorUnreadBadgeText">@color/colorBackgroundBlack</item>
     </style>
 
     <style name="AppThemeBlack.ActionBar" parent="Theme.AppCompat">
