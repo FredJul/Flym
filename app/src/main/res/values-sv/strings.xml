@@ -58,17 +58,14 @@
     <string name="settings_refresh_interval">Uppdateringsintervall</string>
     <string name="settings_keep_time">Tid som inläggen behållas</string>
     <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
-    <string name="settings_category_content_presentation">Innehållspresentation</string>
     <string name="settings_display_images">Visa bilder</string>
     <string name="settings_display_images_description">Visa bilder i inlägg</string>
     <string name="settings_preload_image_mode">Förladda bilder</string>
     <string name="settings_font_size">Typsnittsstorlek</string>
     <string name="settings_refresh_wifi_only">Uppdatera endast via Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Uppdatera automatisk endast när ett Wi-Fi-nätverk är tillgänglig</string>
-    <string name="settings_category_filter">Filter</string>
     <string name="settings_remove_duplicates_description_title">Radera duplikat</string>
     <string name="settings_remove_duplicates_description">Kontrollera titeln på en ny inlägg, och förbigå om den redan finns</string>
-    <string name="filter">Radera inlägg med nyckelord (lista separerade med komma)</string>
     <string name="settings_theme">Tema</string>
     <string-array name="settings_intervals">
         <item>5 minuter</item>
