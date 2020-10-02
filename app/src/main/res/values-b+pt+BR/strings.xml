@@ -91,21 +91,16 @@
     <string name="settings_refresh_enable_notifications">Exibir notificações de atualização</string>
     <string name="settings_refresh_enable_notifications_description">Mostrar uma notificação do sistema quando uma atualização for concluída</string>
     <string name="settings_refresh_interval">Intervalo de atualização</string>
-    <string name="settings_category_keep_time">Tempo para manter as entradas</string>
     <string name="settings_keep_time">Tempo que as entradas serão mantidas</string>
     <string name="settings_keep_time_unread">Tempo que as entradas não lidas serão mantidas</string>
-    <string name="settings_category_content_presentation">Apresentação do conteúdo</string>
     <string name="settings_display_images">Exibir imagens</string>
     <string name="settings_display_images_description">Mostrar imagens nas entradas</string>
     <string name="settings_preload_image_mode">Pré-carregar imagens</string>
     <string name="settings_font_size">Tamanho do texto</string>
     <string name="settings_refresh_wifi_only">Atualizar somente por Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Atualização automática só será feita quando uma conexão Wi-Fi estiver disponível</string>
-    <string name="settings_category_filter">Filtros</string>
     <string name="settings_remove_duplicates_description_title">Remover duplicatas</string>
     <string name="settings_remove_duplicates_description">Verifica o título dos itens baixados recentemente e ignora quando um com o mesmo título já está presente</string>
-    <string name="filter">Remover itens que contêm palavras-chave (lista separada por vírgulas)</string>
-    <string name="filter_title">Lista negra</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Abrir entradas diretamente no seu navegador padrão</string>
     <string name="open_browser_direct_title">Abrir no navegador</string>
@@ -116,7 +111,6 @@
     <string name="settings_sort_order">Ordenar feeds do mais recente ao mais antigo</string>
     <string name="settings_sort_order_title">Modo de ordenação</string>
     <string name="settings_enable_entry_swipe">Habilitar deslizar ao visualizar uma entrada</string>
-    <string name="settings_enable_entry_swipe_description">Se ativado, permite deslizar entre os itens ao exibir uma entrada.</string>
     <string-array name="settings_intervals">
         <item>5 minutos</item>
         <item>15 minutos</item>
