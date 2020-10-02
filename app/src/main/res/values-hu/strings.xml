@@ -91,21 +91,16 @@
     <string name="settings_refresh_enable_notifications">Frissítési értesítések megjelenítése</string>
     <string name="settings_refresh_enable_notifications_description">Rendszer-értesítés megjelenítése a frissítés befejezése után</string>
     <string name="settings_refresh_interval">Frissítési intervallum</string>
-    <string name="settings_category_keep_time">Bejegyzések megőrzésének ideje</string>
     <string name="settings_keep_time">Az időtartam amíg az olvasott bejegyzések letöltve maradnak</string>
     <string name="settings_keep_time_unread">Az időtartam amíg az olvasatlan bejegyzések letöltve maradnak</string>
-    <string name="settings_category_content_presentation">Tartalom megjelenítése</string>
     <string name="settings_display_images">Képek megjelenítése</string>
     <string name="settings_display_images_description">Képek megjelenítése bejegyzéseknél</string>
     <string name="settings_preload_image_mode">Képek betöltése előre</string>
     <string name="settings_font_size">Szöveg mérete</string>
     <string name="settings_refresh_wifi_only">Frissítés csak Wi-Fi-n keresztül</string>
     <string name="settings_refresh_wifi_only_description">Az automatikus frissítések csak Wi-Fi kapcsolattal lesznek végrehajtva</string>
-    <string name="settings_category_filter">Szűrők</string>
     <string name="settings_remove_duplicates_description_title">Ismétlődések eltávolítása</string>
     <string name="settings_remove_duplicates_description">Ellenőrzi az újonnan letöltött elemek címét, és átugorja, ha már létezik ugyanaz a cím</string>
-    <string name="filter">Kulcsszavakat tartalmazó elemek eltávolítása (vesszővel elválasztott lista)</string>
-    <string name="filter_title">Tiltólista</string>
     <string name="settings_theme">Téma</string>
     <string name="open_browser_direct">Bejegyzések megnyitása az alapértelmezett böngészővel</string>
     <string name="open_browser_direct_title">Megnyitás böngészővel</string>
@@ -116,7 +111,6 @@
     <string name="settings_sort_order">A bejegyzések rendezése a legújabbtól és a legrégebbiig</string>
     <string name="settings_sort_order_title">Sorrend</string>
     <string name="settings_enable_entry_swipe">Csúsztatás engedélyezése bejegyzés olvasása közben</string>
-    <string name="settings_enable_entry_swipe_description">Ha engedélyezve van, lehetővé teszi a bejegyzés közötti csúszást bejegyzések megtekintése közben.</string>
     <string-array name="settings_intervals">
         <item>5 perc</item>
         <item>15 perc</item>
