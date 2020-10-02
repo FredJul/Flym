@@ -70,7 +70,6 @@
     <string name="settings_refresh_interval">Päivitysväli</string>
     <string name="settings_keep_time">Artikkelien säilyttämisaika</string>
     <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
-    <string name="settings_category_content_presentation">Sisällön esittäminen</string>
     <string name="settings_display_images">Näytä kuvat</string>
     <string name="settings_display_images_description">Näytä kuvat artikkeleissa</string>
     <string name="settings_preload_image_mode">Esilataa kuvat</string>
@@ -78,10 +77,8 @@
     <string name="settings_refresh_wifi_only">Vain Wi-Fi -yhteyden kautta</string>
     <string name="settings_refresh_wifi_only_description">Päivitä syötteet automaattisesti ainoastaan kun Wi-Fi -yhteys on käytettävissä
     </string>
-    <string name="settings_category_filter">Suodattimet</string>
     <string name="settings_remove_duplicates_description_title">Poista kahdesti esiintyvät</string>
     <string name="settings_remove_duplicates_description">Tarkista uuden artikkeli otsikko ja jätä se väliin, jos artikkeli on jo haettuna</string>
-    <string name="filter">Poista artikkelit joissa esiintyy avainsanat (pilkulla erotettu lista)</string>
     <string name="settings_theme">Teema</string>
     <string-array name="settings_intervals">
         <item>5 minuuttia</item>
