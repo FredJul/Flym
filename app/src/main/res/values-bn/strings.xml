@@ -63,8 +63,6 @@
     </string-array>
     <!-- SETTINGS -->
     <string name="settings_font_size">লেখার আকার</string>
-    <string name="settings_category_filter">ফিল্টার</string>
-    <string name="filter_title">ব্ল্যাকলিস্ট</string>
     <string name="settings_theme">থিম</string>
     <string-array name="settings_intervals">
         <item>৫ মিনিট</item>
