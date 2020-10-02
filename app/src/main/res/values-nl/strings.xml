@@ -66,7 +66,6 @@
     <string name="settings_refresh_interval">Ververstussenpoos</string>
     <string name="settings_keep_time">Hoe lang gelezen items bewaard moeten worden</string>
     <string name="settings_keep_time_unread">Hoe lang ongelezen items bewaard moeten worden</string>
-    <string name="settings_category_content_presentation">Inhoudsweergave</string>
     <string name="settings_display_images">Afbeeldingen tonen</string>
     <string name="settings_display_images_description">Afbeeldingen tonen in feeditems</string>
     <string name="settings_preload_image_mode">Afbeeldingen vooraf downloaden</string>
@@ -75,7 +74,6 @@
     <string name="settings_refresh_wifi_only_description">De app zal alleen automatisch verversen als er een WiFi-verbinding beschikbaar is</string>
     <string name="settings_remove_duplicates_description_title">Dubbele items verwijderen</string>
     <string name="settings_remove_duplicates_description">Controleert de titel van nieuw gedownloadde items en slaat het item over als dezelfde titel al beschikbaar is</string>
-    <string name="filter">Verwijder items adv zoekwoorden (komma-gescheiden lijst)</string>
     <string name="settings_theme">Thema</string>
     <string name="open_browser_direct">Open items direct in de standaardbrowser</string>
     <string name="open_browser_direct_title">Openen in browser</string>
