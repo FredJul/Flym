@@ -50,7 +50,6 @@
     <string name="settings_refresh_interval">Interval načítavania</string>
     <string name="settings_keep_time">Čas na ktorý budú články uložené</string>
     <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
-    <string name="settings_category_content_presentation">Prezentácia obsahu</string>
     <string name="settings_display_images">Zobrazovať obrázky</string>
     <string name="settings_display_images_description">Zobrazovať obrázky v článkoch</string>
     <string name="settings_preload_image_mode">Načítať obrázky</string>
@@ -58,7 +57,6 @@
     <string name="settings_refresh_wifi_only">Obnovovať len cez Wi-Fi pripojenie</string>
     <string name="settings_refresh_wifi_only_description">Automatické obnovovanie bude spustené len pri dostupnom Wi-Fi pripojení</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
     <string-array name="settings_intervals">
         <item>5 minút</item>
         <item>15 minút</item>
