@@ -73,21 +73,16 @@
     <string name="settings_refresh_enable_notifications">Включить уведомление об обновлении</string>
     <string name="settings_refresh_enable_notifications_description">Показывать системное уведомление после завершения обновления</string>
     <string name="settings_refresh_interval">Интервал обновления</string>
-    <string name="settings_category_keep_time">Время хранения новостей</string>
     <string name="settings_keep_time">Какое время хранить новости</string>
     <string name="settings_keep_time_unread">Какое время хранить непрочтитанные новости</string>
-    <string name="settings_category_content_presentation">Представление содержания</string>
     <string name="settings_display_images">Показывать изображения</string>
     <string name="settings_display_images_description">Показывать изображения в новостях</string>
     <string name="settings_preload_image_mode">Предварительно загружать изображения</string>
     <string name="settings_font_size">Размер текста</string>
     <string name="settings_refresh_wifi_only">Обновлять только по Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Автоматическое обновление будет выполняться только при включенном Wi-Fi</string>
-    <string name="settings_category_filter">Фильтры</string>
     <string name="settings_remove_duplicates_description_title">Удалять дубликаты</string>
     <string name="settings_remove_duplicates_description">Проверять названия заголовков скачанных записей и пропускать их, если запись с таким заголовком уже есть</string>
-    <string name="filter">Удалять записи, содержащий слова (разделенный запятыми список)</string>
-    <string name="filter_title">Чёрный список</string>
     <string name="settings_theme">Темы</string>
     <string name="open_browser_direct">Записи будут открываться в браузере по умолчанию</string>
     <string name="open_browser_direct_title">Открыть в браузере</string>
@@ -98,7 +93,6 @@
     <string name="settings_sort_order">Сортировать новости от новых к старым</string>
     <string name="settings_sort_order_title">Порядок сортрировки</string>
     <string name="settings_enable_entry_swipe">Включить смахивание в режиме просмотра записи</string>
-    <string name="settings_enable_entry_swipe_description">Когда включено, в режиме просмотре записи смахивание в сторону приводит к переходу к другой записи.</string>
     <string-array name="settings_intervals">
         <item>5 минут</item>
         <item>15 минут</item>
