@@ -28,6 +28,9 @@ import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.rometools.rome.feed.synd.SyndFeed
 import kotlinx.android.parcel.Parcelize
 
+
+val DELIMITERS = arrayOf(" ", "-", "&", ":", "|")
+
 @Parcelize
 @Entity(tableName = "feeds",
         indices = [(Index(value = ["groupId"])), (Index(value = ["feedId", "feedLink"], unique = true))],
@@ -61,12 +64,23 @@ data class Feed(
             val feedName = feedTitle.orEmpty()
 
             val color = ColorGenerator.MATERIAL.getColor(feedId) // The color is specific to the feedId (which shouldn't change)
-            val lettersForName = if (feedName.length < 2) feedName.toUpperCase() else feedName.substring(0, 2).trim().toUpperCase()
+            val lettersForName = getLettersForName(feedName)
             return if (rounded) {
                 TextDrawable.builder().buildRound(lettersForName, color)
             } else {
                 TextDrawable.builder().buildRect(lettersForName, color)
             }
+        }
+
+        private fun getLettersForName(feedName: String): String {
+            val split = feedName.split(*DELIMITERS).filter { it != "" }     // filtering empty strings that occur when multiple delimiters are matched, e. g. colon-whitespace: ": "
+
+            val letters = when {
+                split.size >= 2 -> String(charArrayOf(split[0][0], split[1][0]))    // first letter of first and second word
+                else -> split[0][0].toString()
+            }
+
+            return letters.toUpperCase()
         }
     }
 
