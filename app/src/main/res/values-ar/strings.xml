@@ -3,6 +3,38 @@
     <!-- GENERAL -->
     <!-- FEEDS -->
     <!-- ENTRIES -->
+    <string name="favorites">المفضلات</string>
+    <string name="undo">تراجع</string>
+    <string name="marked_as_read">تحديد كمقروء</string>
+    <string name="marked_as_unread">تحديد كغير مقروء</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">البحث في النشرات الإخبارية</string>
+    <string name="discover_search_hint">البحث عن طريق الكلمة المفتاحية، أو رابط، أو الموضوع. يمكن الإشارة إلى المواضيع مع بادئة #.</string>
+    <string-array name="discover_topics">
+        <item>الأخبار</item>
+        <item>السياسة</item>
+        <item>العالم</item>
+        <item>الهندسة</item>
+        <item>التقنية</item>
+        <item>عمليات</item>
+        <item>اتصالات</item>
+        <item>الأمن المعلوماتي</item>
+        <item>الخصوصية</item>
+        <item>العلوم</item>
+        <item>الأدوية</item>
+        <item>الرعاية الصحية</item>
+        <item>التعليم</item>
+        <item>الأعمال</item>
+        <item>التسويق</item>
+        <item>مساحة</item>
+        <item>التصميم</item>
+        <item>هزليات</item>
+    </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">بلا عنوان</string>
+    <string name="settings_category_refresh">تحديث تلقائي</string>
+    <string name="settings_refresh_enabled">تفعيل التحديث التلقائي</string>
+    <string name="settings_refresh_enabled_description">تمكين التحديث التلقائي للنشرات</string>
+    <string name="settings_refresh_enable_notifications">عرض إشعارات التحديث</string>
+    <string name="settings_refresh_enable_notifications_description">إظهار إشعار عند الانتهاء من التحديث</string>
 </resources>
