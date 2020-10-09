@@ -92,7 +92,9 @@
     <string name="settings_refresh_interval">Interval penyegaran</string>
     <string name="settings_keep_time">Waktu entri yang sudah dibaca akan disimpan</string>
     <string name="settings_keep_time_unread">Waktu entri yang belum dibaca akan disimpan</string>
+    <string name="settings_category_general">Umum</string>
     <string name="settings_display_thumbnails">Tampilkan thumbnail</string>
+    <string name="settings_display_thumbnails_description">Tampilkan thumbnail di dalam daftar artikel</string>
     <string name="settings_display_images">Tampilkan gambar</string>
     <string name="settings_display_images_description">Menampilkan gambar di dalam entri</string>
     <string name="settings_preload_image_mode">Pramuat gambar</string>
@@ -101,6 +103,9 @@
     <string name="settings_refresh_wifi_only_description">Penyegaran otomatis hanya akan dilakukan saat perangkat tersambung ke jaringan Wi-Fi</string>
     <string name="settings_remove_duplicates_description_title">Hapus duplikat</string>
     <string name="settings_remove_duplicates_description">Memeriksa judul entri yang diunduh dan lewati ketika entri dengan judul yang sama sudah tersedia</string>
+    <string name="filter">Hapus item yang mengandung kata kunci</string>
+    <string name="filter_title">Daftar blokir</string>
+    <string name="filter_dialog_message">Pisahkan kata kunci dengan koma</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Buka entri di peramban default anda</string>
     <string name="open_browser_direct_title">Buka di peramban</string>
@@ -113,6 +118,9 @@
     <string name="settings_sort_order">Urutkan entri dari terbaru ke terlama</string>
     <string name="settings_sort_order_title">Pengurutan</string>
     <string name="settings_enable_entry_swipe">Aktifkan geser saat membaca entri</string>
+    <string name="settings_category_article_list">Daftar artikel</string>
+    <string name="settings_category_article_appearance">Tampilan artikel</string>
+    <string name="settings_enable_entry_swipe_description">Jika diaktifkan, geser untuk beralih artikel lama dan baru saat sedang membaca entri</string>
     <string-array name="settings_intervals">
         <item>5 menit</item>
         <item>15 menit</item>
