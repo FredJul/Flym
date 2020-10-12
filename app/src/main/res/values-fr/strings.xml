@@ -93,6 +93,9 @@
     <string name="settings_refresh_interval">Intervalle de mise à jour</string>
     <string name="settings_keep_time">Délai de conservation des flux lus</string>
     <string name="settings_keep_time_unread">Délai de conservation des flux non-lus</string>
+    <string name="settings_category_general">Général</string>
+    <string name="settings_display_thumbnails">Afficher les vignettes</string>
+    <string name="settings_display_thumbnails_description">Afficher les vignettes dans la liste des articles</string>
     <string name="settings_display_images">Afficher les images</string>
     <string name="settings_display_images_description">Afficher les images dans les articles</string>
     <string name="settings_preload_image_mode">Préchargement des images</string>
@@ -101,6 +104,9 @@
     <string name="settings_refresh_wifi_only_description">La mise à jour auto ne se fera que si le Wifi est activé</string>
     <string name="settings_remove_duplicates_description_title">Supprimer les doublons</string>
     <string name="settings_remove_duplicates_description">Supprime les articles ayant le même titre que ceux déjà chargés</string>
+    <string name="filter">Supprimer les articles contenant des mots-clés</string>
+    <string name="filter_title">Liste de blocage</string>
+    <string name="filter_dialog_message">Séparez les mots-clés par des virgules</string>
     <string name="settings_theme">Thème</string>
     <string name="open_browser_direct">Ouvre les articles directement dans votre navigateur</string>
     <string name="open_browser_direct_title">Ouverture dans navigateur</string>
@@ -113,6 +119,9 @@
     <string name="settings_sort_order">Trier les articles du plus recent au plus ancient</string>
     <string name="settings_sort_order_title">Tri des articles</string>
     <string name="settings_enable_entry_swipe">Activer la navigation latéral sur un article</string>
+    <string name="settings_category_article_list">Liste d\'articles</string>
+    <string name="settings_category_article_appearance">Apparence des articles</string>
+    <string name="settings_enable_entry_swipe_description">Si activé, permet de glisser horizontalement pour naviguer entre les différents articles</string>
     <string-array name="settings_intervals">
         <item>5 minutes</item>
         <item>15 minutes</item>
