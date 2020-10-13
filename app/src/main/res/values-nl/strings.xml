@@ -70,20 +70,21 @@
         <item>machinebouw</item>
         <item>technologie</item>
         <item>startups</item>
-        <item>telecom</item>
-        <item>cybersecurity</item>
+        <item>telecommunicatie</item>
+        <item>cyberveiligheid</item>
         <item>privacy</item>
-        <item>science</item>
-        <item>medicine</item>
-        <item>healthcare</item>
-        <item>education</item>
-        <item>business</item>
+        <item>wetenschap</item>
+        <item>geneeskunde</item>
+        <item>gezondheidszorg</item>
+        <item>onderwijs</item>
+        <item>zakelijk</item>
         <item>marketing</item>
-        <item>space</item>
+        <item>ruimte</item>
         <item>design</item>
-        <item>comics</item>
+        <item>strips</item>
     </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">Naamloos</string>
     <string name="settings_category_refresh">Automatisch verversen</string>
     <string name="settings_refresh_enabled">Automatisch verversen inschakelen</string>
     <string name="settings_refresh_enabled_description">Feeds automatisch verversen</string>
@@ -92,6 +93,9 @@
     <string name="settings_refresh_interval">Ververstussenpoos</string>
     <string name="settings_keep_time">Hoe lang gelezen items bewaard moeten worden</string>
     <string name="settings_keep_time_unread">Hoe lang ongelezen items bewaard moeten worden</string>
+    <string name="settings_category_general">Algemeen</string>
+    <string name="settings_display_thumbnails">Miniaturen weergeven</string>
+    <string name="settings_display_thumbnails_description">Miniaturen weergeven in de artikellijst</string>
     <string name="settings_display_images">Afbeeldingen tonen</string>
     <string name="settings_display_images_description">Afbeeldingen tonen in feeditems</string>
     <string name="settings_preload_image_mode">Afbeeldingen vooraf downloaden</string>
@@ -99,12 +103,25 @@
     <string name="settings_refresh_wifi_only">Alleen verversen via Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">De app zal alleen automatisch verversen als er een WiFi-verbinding beschikbaar is</string>
     <string name="settings_remove_duplicates_description_title">Dubbele items verwijderen</string>
-    <string name="settings_remove_duplicates_description">Controleert de titel van nieuw gedownloadde items en slaat het item over als dezelfde titel al beschikbaar is</string>
+    <string name="settings_remove_duplicates_description">Controleert de titel van nieuw gedownloade items en slaat het item over als dezelfde titel al beschikbaar is</string>
+    <string name="filter">Items met trefwoorden verwijderen</string>
+    <string name="filter_title">Blokkeerlijst</string>
+    <string name="filter_dialog_message">Scheid trefwoorden met komma\'s</string>
     <string name="settings_theme">Thema</string>
     <string name="open_browser_direct">Open items direct in de standaardbrowser</string>
     <string name="open_browser_direct_title">Openen in browser</string>
     <string name="refresh_on_startup">Ververst de feeds wanneer de app gestart wordt</string>
     <string name="refresh_on_startup_title">Ververs bij opstarten</string>
+    <string name="settings_hide_button_mark_all_as_read">Verberg knop \'Alles als gelezen markeren\'</string>
+    <string name="settings_hide_button_mark_all_as_read_description">Knop \'Alles als gelezen markeren\' niet weergeven op scherm</string>
+    <string name="settings_hide_navigation_on_scroll">Verberg navigatie tijdens het scrollen</string>
+    <string name="settings_hide_navigation_on_scroll_description">Indien ingeschakeld zullen de bovenste/onderste navigatiebalken verborgen worden bij het naar beneden scrollen en opnieuw verschijnen bij het naar boven scrollen</string>
+    <string name="settings_sort_order">Sorteer items van nieuwste naar oudste</string>
+    <string name="settings_sort_order_title">Sorteervolgorde</string>
+    <string name="settings_enable_entry_swipe">Schakel vegen in tijdens het bekijken van een item</string>
+    <string name="settings_category_article_list">Artikellijst</string>
+    <string name="settings_category_article_appearance">Artikelweergave</string>
+    <string name="settings_enable_entry_swipe_description">Indien ingeschakeld kunt u vegen tussen items tijdens het bekijken van een item</string>
     <string-array name="settings_intervals">
         <item>5 minuten</item>
         <item>15 minuten</item>
