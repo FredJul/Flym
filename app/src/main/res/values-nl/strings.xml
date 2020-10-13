@@ -5,6 +5,7 @@
         <item quantity="one">Eén nieuw item</item>
         <item quantity="other">%d nieuwe items</item>
     </plurals>
+    <string name="app_name">Flym</string>
     <string name="about_flym">Over Flym</string>
     <string name="welcome_title">Welkom bij Flym. Wil je een feed toevoegen?</string>
     <string name="welcome_title_with_opml_import">Wil je eerdere Flym-feeds importeren?</string>
@@ -21,7 +22,9 @@
     <string name="network_error">Geen netwerkverbinding</string>
     <string name="drawer_explanation">Welkom!\n\nHoudt feeds lang ingedrukt om opties te tonen ▼</string>
     <string name="drawer_fetch_error_explanation">Sommige feeds zijn niet volledig ververst ▼</string>
+    <string name="about_screen_info">Ik publiceer deze applicatie als gratis en open-source software onder de GPLv3-licentie. Voel je vrij om ze aan te passen zolang je het ook open source houdt.</string>
     <!-- FEEDS -->
+    <string name="feeds">Feeds</string>
     <string name="menu_add_group">Groep toevoegen</string>
     <string name="menu_import">Importeren uit OPML</string>
     <string name="menu_export">Exporteren naar OPML</string>
@@ -56,7 +59,30 @@
     <string name="no_entries">Geen items\nTrek omlaag om te verversen</string>
     <string name="undo">Ongedaan maken</string>
     <string name="marked_as_read">Gemarkeerd als gelezen</string>
+    <string name="marked_as_unread">Gemarkeerd als ongelezen</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">Feeds zoeken</string>
+    <string name="discover_search_hint">Zoeken op trefwoord, URL of onderwerp. Onderwerpen kunnen worden aangegeven met een # voorvoegsel.</string>
+    <string-array name="discover_topics">
+        <item>nieuws</item>
+        <item>politiek</item>
+        <item>wereld</item>
+        <item>machinebouw</item>
+        <item>technologie</item>
+        <item>startups</item>
+        <item>telecom</item>
+        <item>cybersecurity</item>
+        <item>privacy</item>
+        <item>science</item>
+        <item>medicine</item>
+        <item>healthcare</item>
+        <item>education</item>
+        <item>business</item>
+        <item>marketing</item>
+        <item>space</item>
+        <item>design</item>
+        <item>comics</item>
+    </string-array>
     <!-- SETTINGS -->
     <string name="settings_category_refresh">Automatisch verversen</string>
     <string name="settings_refresh_enabled">Automatisch verversen inschakelen</string>
