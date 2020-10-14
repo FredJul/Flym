@@ -171,6 +171,7 @@ class EntriesFragment : Fragment(R.layout.fragment_entries) {
 
         (activity as MainActivity).setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.ic_menu_24dp)
+        toolbar.setNavigationContentDescription(R.string.navigation_button_content_description)
         toolbar.setNavigationOnClickListener { (activity as MainActivity).toggleDrawer() }
 
         unreadBadge = QBadgeView(context).bindTarget((bottom_navigation.getChildAt(0) as ViewGroup).getChildAt(0)).apply {

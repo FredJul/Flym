@@ -15,7 +15,8 @@
         android:scaleType="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/feed_edit_feed_icon_content_description" />
 
     <TextView
         android:id="@+id/title"
@@ -40,6 +41,7 @@
         android:src="@drawable/ic_drag_handle_white_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/feed_edit_drag_handle_content_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

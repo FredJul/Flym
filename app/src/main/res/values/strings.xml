@@ -24,6 +24,7 @@
     <string name="drawer_explanation">Welcome!\n\nLong press on the feeds to see options ▼</string>
     <string name="drawer_fetch_error_explanation">Some of your feeds did not refresh correctly ▼</string>
     <string name="about_screen_info">I\'m publishing this application as free and open-source software under GPLv3 licence. Feel free to modify it as long as you keep it open-source as well.</string>
+    <string name="navigation_button_content_description">Toggle feed menu</string>
 
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
@@ -44,6 +45,8 @@
     <string name="to_group_above">Above the group</string>
     <string name="to_group_into">Into the group</string>
     <string name="feed_name">Feed name</string>
+    <string name="feed_edit_drag_handle_content_description">Drag handle</string>
+    <string name="feed_edit_feed_icon_content_description">Feed icon</string>
 
     <!-- ENTRIES -->
     <string name="feed_link">Feed link</string>
@@ -63,6 +66,9 @@
     <string name="undo">Undo</string>
     <string name="marked_as_read">Marked as read</string>
     <string name="marked_as_unread">Marked as unread</string>
+    <string name="expand_arrow_content_description">Expand feed group</string>
+    <string name="collapse_arrow_content_description">Collapse feed group</string>
+    <string name="mark_all_as_read_fab_content_description">Mark all as read</string>
 
     <!-- DISCOVER -->
     <string name="discover_search_label">Search Feeds</string>
