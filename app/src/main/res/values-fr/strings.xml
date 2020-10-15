@@ -23,6 +23,7 @@
     <string name="drawer_explanation">Bienvenue !\n\nAppuyez longtemps sur les flux pour voir les options ▼</string>
     <string name="drawer_fetch_error_explanation">Certains de vos flux n\'ont pas été mis à jour correctement ▼</string>
     <string name="about_screen_info">Cette application est gratuite et open-source sous license GPLv3. Vous êtes libre de la modifier tant que vous publiez vos modifications sous la même license.</string>
+    <string name="navigation_button_content_description">Activer/désactiver le menu du flux</string>
     <!-- FEEDS -->
     <string name="feeds">Flux</string>
     <string name="menu_add_group">Ajouter un groupe</string>
@@ -42,6 +43,8 @@
     <string name="to_group_above">Au-dessus du groupe</string>
     <string name="to_group_into">Dans le groupe</string>
     <string name="feed_name">Nom du flux</string>
+    <string name="feed_edit_drag_handle_content_description">Poignée de déplacement</string>
+    <string name="feed_edit_feed_icon_content_description">Icône du flux</string>
     <!-- ENTRIES -->
     <string name="feed_link">Lien du flux</string>
     <string name="all_entries">Tous les articles</string>
@@ -60,6 +63,9 @@
     <string name="undo">Annuler</string>
     <string name="marked_as_read">Marqué comme lu</string>
     <string name="marked_as_unread">Marqué comme non lu</string>
+    <string name="expand_arrow_content_description">Développer le groupe de flux</string>
+    <string name="collapse_arrow_content_description">Réduire le groupe de flux</string>
+    <string name="mark_all_as_read_fab_content_description">Marquer tout comme lu</string>
     <!-- DISCOVER -->
     <string name="discover_search_label">Rechercher des flux</string>
     <string name="discover_search_hint">Recherche par mot-clés, URL ou sujets. Les sujets peuvent être indiqués avec un # au début du mot.</string>
