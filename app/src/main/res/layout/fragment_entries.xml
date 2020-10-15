@@ -55,7 +55,8 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_read_all_white_24dp"
-        app:layout_dodgeInsetEdges="bottom" />
+        app:layout_dodgeInsetEdges="bottom"
+        android:contentDescription="@string/mark_all_as_read_fab_content_description" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

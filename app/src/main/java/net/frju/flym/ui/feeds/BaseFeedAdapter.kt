@@ -110,12 +110,14 @@ abstract class BaseFeedAdapter(groups: List<FeedGroup>) : ExpandableRecyclerAdap
                                 "LIGHT" -> R.drawable.ic_keyboard_arrow_up_black_24dp
                                 else -> R.drawable.ic_keyboard_arrow_up_white_24dp
                             })
+                    itemView.icon.contentDescription = R.string.collapse_arrow_content_description.toString()
                 } else {
                     itemView.icon.setImageResource(
                             when (itemView.context.getPrefString(PrefConstants.THEME, "DARK")) {
                                 "LIGHT" -> R.drawable.ic_keyboard_arrow_down_black_24dp
                                 else -> R.drawable.ic_keyboard_arrow_down_white_24dp
                             })
+                    itemView.icon.contentDescription = R.string.expand_arrow_content_description.toString()
                 }
 
                 itemView.icon.isClickable = true
