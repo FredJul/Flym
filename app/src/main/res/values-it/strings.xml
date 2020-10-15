@@ -56,12 +56,12 @@
     <string name="unreads">Non letti</string>
     <string name="all">Tutti</string>
     <string name="favorites">Preferiti</string>
-    <string name="no_entries">Nessun articolo\nPer favore effettua lo swipe verso il basso per aggiornare</string>
+    <string name="no_entries">Nessun articolo\nPer favore scorri verso il basso per aggiornare</string>
     <string name="undo">Annulla</string>
     <string name="marked_as_read">Contrassegnato come letto</string>
     <string name="marked_as_unread">Contrassegnato come non letto</string>
     <!-- DISCOVER -->
-    <string name="discover_search_label">Cerca feed</string>
+    <string name="discover_search_label">Cerca i feed</string>
     <string name="discover_search_hint">Cerca per parola chiave, URL o argomento. Gli argomenti possono essere indicati con # come prefisso.</string>
     <string-array name="discover_topics">
         <item>notizie</item>
@@ -91,21 +91,22 @@
     <string name="settings_refresh_enable_notifications">Mostra una notifica di aggiornamento</string>
     <string name="settings_refresh_enable_notifications_description">Mosta una notifica di sistema quando un aggiornamento è completato</string>
     <string name="settings_refresh_interval">Intervallo di aggiornamento</string>
-    <string name="settings_category_keep_time">Tempo di archiviazione</string>
     <string name="settings_keep_time">Tempo di archiviazione degli articoli letti</string>
     <string name="settings_keep_time_unread">Tempo di archiviazione degli articoli non letti</string>
-    <string name="settings_category_content_presentation">Aspetto dei contenuti</string>
+    <string name="settings_category_general">Generale</string>
+    <string name="settings_display_thumbnails">Mostra le miniature</string>
+    <string name="settings_display_thumbnails_description">Mostra le miniature nell\'elenco degli articoli</string>
     <string name="settings_display_images">Mostra le immagini</string>
     <string name="settings_display_images_description">Mostra le immagini negli articoli</string>
     <string name="settings_preload_image_mode">Scarica le immagini in anticipo</string>
     <string name="settings_font_size">Dimensione del testo</string>
     <string name="settings_refresh_wifi_only">Aggiorna solo su rete Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">L\'aggiornamento automatico viene eseguito solo se si è connessi ad una rete Wi-Fi</string>
-    <string name="settings_category_filter">Filtri</string>
     <string name="settings_remove_duplicates_description_title">Rimuovi i duplicati</string>
     <string name="settings_remove_duplicates_description">Ignora i nuovi articoli se hanno lo stesso titolo di quelli già presenti</string>
-    <string name="filter">Rimuovi gli articoli che contengono queste parole chiave (usa la virgola come divisore)</string>
-    <string name="filter_title">Lista nera</string>
+    <string name="filter">Rimuovi gli articoli contenenti parole chiave</string>
+    <string name="filter_title">Lista blocco</string>
+    <string name="filter_dialog_message">Separa le parole chiave con la virgola</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Apri gli articoli direttamente nel browser predefinito</string>
     <string name="open_browser_direct_title">Apri nel browser</string>
@@ -113,10 +114,14 @@
     <string name="refresh_on_startup_title">Aggiorna all\'avvio</string>
     <string name="settings_hide_button_mark_all_as_read">Nascondi \'Segna tutti come letti\'</string>
     <string name="settings_hide_button_mark_all_as_read_description">Nascondi il pulsante \'Segna tutti come letti\' sullo schermo</string>
+    <string name="settings_hide_navigation_on_scroll">Nascondi la barra di navigazione durante lo scorrimento</string>
+    <string name="settings_hide_navigation_on_scroll_description">Se abilitata, scorrendo verso l\'alto la barra di navigazione verrà nascosta mentre scorrendo verso il basso riapparirà</string>
     <string name="settings_sort_order">Ordina gli articoli dal più nuovo al più vecchio</string>
     <string name="settings_sort_order_title">Ordine degli articoli</string>
-    <string name="settings_enable_entry_swipe">Abilita lo swipe durante la visualizzazione di una voce</string>
-    <string name="settings_enable_entry_swipe_description">Se abilitato, permette lo swipe fra gli articoli mentre se ne vede uno.</string>
+    <string name="settings_enable_entry_swipe">Abilita lo scorrimento durante la visualizzazione di un articolo</string>
+    <string name="settings_category_article_list">Lista articoli</string>
+    <string name="settings_category_article_appearance">Aspetto articoli</string>
+    <string name="settings_enable_entry_swipe_description">Se abilitato, permette lo swipe fra gli articoli mentre se ne vede uno</string>
     <string-array name="settings_intervals">
         <item>5 minuti</item>
         <item>15 minuti</item>

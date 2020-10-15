@@ -95,21 +95,16 @@
     <string name="settings_refresh_enable_notifications">Mostra les notificacions de refresc</string>
     <string name="settings_refresh_enable_notifications_description">Mostra una notificació del sistema quan s\'ha finalitzat un refresc</string>
     <string name="settings_refresh_interval">Interval entre actualitzacions</string>
-    <string name="settings_category_keep_time">Temps per mantenir les entrades</string>
     <string name="settings_keep_time">Temps de conservació d\'entrades</string>
     <string name="settings_keep_time_unread">Temps que es mantindran les entrades sense llegir</string>
-    <string name="settings_category_content_presentation">Presentació del contingut</string>
     <string name="settings_display_images">Mostra imatges</string>
     <string name="settings_display_images_description">Mostra imatges a les entrades</string>
     <string name="settings_preload_image_mode">Precàrrega d\'imatges</string>
     <string name="settings_font_size">Mida del text</string>
     <string name="settings_refresh_wifi_only">Actualitza els canals només en Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Només es descarregaran nous continguts dins d\'una connexió Wi-Fi</string>
-    <string name="settings_category_filter">Filtres</string>
     <string name="settings_remove_duplicates_description_title">Elimineu els duplicats</string>
     <string name="settings_remove_duplicates_description">Comprova el títol dels elements que s\'han descarregat recentment i se els amaga quan ja existeix un amb el mateix títol</string>
-    <string name="filter">Elimineu els elements que contenen paraules clau (llista separada per comes)</string>
-    <string name="filter_title">Llista negra</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Obriu les entrades directament al navegador predeterminat</string>
     <string name="open_browser_direct_title">Oberta al navegador</string>
@@ -120,7 +115,6 @@
     <string name="settings_sort_order">Ordena les entrades de les més noves a les més antigues</string>
     <string name="settings_sort_order_title">Ordre de classificació</string>
     <string name="settings_enable_entry_swipe">Habilita lliscar mentre visualitzes una entrada</string>
-    <string name="settings_enable_entry_swipe_description">Si està activat, permet desplaçar-se entre entrades mentre es visualitza una entrada.</string>
     <string-array name="settings_intervals">
         <item>5 minuts</item>
         <item>15 minuts</item>

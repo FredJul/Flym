@@ -21,11 +21,49 @@
     <string name="error">ত্রুটি</string>
     <string name="network_error">নেটওয়ার্ক তৈরি নয়</string>
     <string name="drawer_explanation">স্বাগতম!\n\nঅপশন দেখার জন্য ফিড কিছুক্ষণ ধরে রাখো ▼</string>
+    <string name="drawer_fetch_error_explanation">তোমার কিছু ফিড ঠিকভাবে আসেনি ▼</string>
     <!-- FEEDS -->
     <string name="feeds">ফিডসমূহ</string>
+    <string name="menu_add_group">গ্রুপ যোগ করো</string>
+    <string name="menu_import">ওপিএমএল থেকে আনো</string>
+    <string name="menu_export">ওপিএমএলে বের সংরক্ষণ করো</string>
+    <string name="feed_search">ফিড খুজোঁ</string>
+    <string name="feed_search_hint">ফিড লিঙ্ক বা মূলশব্দ দাও</string>
+    <string name="feed_added">ফিড তালিকায় যোগ করা হয়েছে</string>
+    <string name="feed_name">ফিডের নাম</string>
     <!-- ENTRIES -->
+    <string name="feed_link">ফিড লিঙ্ক</string>
+    <string name="menu_star">পছন্দ</string>
+    <string name="menu_unstar">পছন্দ না</string>
+    <string name="menu_share">শেয়ার</string>
+    <string name="unreads">অপঠিত</string>
+    <string name="all">সব</string>
+    <string name="favorites">পছন্দসমূহ</string>
+    <string name="undo">ফিরত যাও</string>
     <!-- DISCOVER -->
+    <string-array name="discover_topics">
+        <item>খবর</item>
+        <item>রাজনীতি</item>
+        <item>পৃথিবী</item>
+        <item>engineering</item>
+        <item>প্রযুক্তি</item>
+        <item>startups</item>
+        <item>টেলিকম</item>
+        <item>cybersecurity</item>
+        <item>গোপনীয়তা</item>
+        <item>বিজ্ঞান</item>
+        <item>চিকিৎসাশাস্ত্র</item>
+        <item>healthcare</item>
+        <item>শিক্ষা</item>
+        <item>ব্যবসা</item>
+        <item>marketing</item>
+        <item>মহাকাশ</item>
+        <item>design</item>
+        <item>কমিক</item>
+    </string-array>
     <!-- SETTINGS -->
+    <string name="settings_font_size">লেখার আকার</string>
+    <string name="settings_theme">থিম</string>
     <string-array name="settings_intervals">
         <item>৫ মিনিট</item>
         <item>১৫ মিনিট</item>
@@ -40,19 +78,29 @@
         <item>১ দিন</item>
         <item>২ দিন</item>
         <item>৪ দিন</item>
-        <item>1 week</item>
-        <item>2 weeks</item>
-        <item>1 month</item>
-        <item>2 months</item>
-        <item>3 months</item>
-        <item>Forever</item>
+        <item>১ সপ্তাহ</item>
+        <item>২ সপ্তাহ</item>
+        <item>১ মাস</item>
+        <item>২ মাস</item>
+        <item>৩ মাস</item>
+        <item>সর্বদা</item>
     </string-array>
     <string-array name="settings_font_sizes">
-        <item>-2</item>
-        <item>-1</item>
-        <item>Standard</item>
-        <item>+1</item>
-        <item>+2</item>
+        <item>-২</item>
+        <item>-১</item>
+        <item>আদর্শ</item>
+        <item>+১</item>
+        <item>+২</item>
         <item>+৩</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>কখনো না</item>
+        <item>Only over Wi-Fi</item>
+        <item>সবসময়</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>আলো</item>
+        <item>অন্ধকার</item>
+        <item>কালো</item>
     </string-array>
 </resources>

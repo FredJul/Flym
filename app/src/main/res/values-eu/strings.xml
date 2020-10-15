@@ -70,7 +70,6 @@
     <string name="settings_refresh_interval">Freskatze tartea</string>
     <string name="settings_keep_time">Sarrerak gordeta mantenduko diren denbora</string>
     <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
-    <string name="settings_category_content_presentation">Edukien aurkezpena</string>
     <string name="settings_display_images">Irudiak erakutsi</string>
     <string name="settings_display_images_description">Irudiak erakutsi sarreretan</string>
     <string name="settings_preload_image_mode">Irudiak aurretik kargatu</string>
@@ -79,7 +78,6 @@
     <string name="settings_refresh_wifi_only_description">Freskatze automatikoa soilik Wi-Fi konexioa eskuragarri badago egingo da
     </string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
     <string-array name="settings_intervals">
         <item>5 minutu</item>
         <item>15 minutu</item>

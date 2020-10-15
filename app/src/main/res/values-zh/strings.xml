@@ -90,21 +90,17 @@
     <string name="settings_refresh_enable_notifications">显示刷新通知</string>
     <string name="settings_refresh_enable_notifications_description">刷新完成时显示系统通知</string>
     <string name="settings_refresh_interval">刷新间隔</string>
-    <string name="settings_category_keep_time">文章保存时间</string>
     <string name="settings_keep_time">已读文章保存时间</string>
     <string name="settings_keep_time_unread">未读文章保存时间</string>
-    <string name="settings_category_content_presentation">内容介绍</string>
+    <string name="settings_display_thumbnails">显示缩略图</string>
     <string name="settings_display_images">显示图片</string>
     <string name="settings_display_images_description">在文章中显示图片</string>
     <string name="settings_preload_image_mode">预先加载图片</string>
     <string name="settings_font_size">文字大小</string>
     <string name="settings_refresh_wifi_only">仅在 Wi-Fi 环境自动刷新</string>
     <string name="settings_refresh_wifi_only_description">自动刷新仅在 Wi-Fi 环境启用</string>
-    <string name="settings_category_filter">过滤器</string>
     <string name="settings_remove_duplicates_description_title">去除重复项</string>
     <string name="settings_remove_duplicates_description">检查新下载文章的标题并忽略相同标题的文章</string>
-    <string name="filter">移除包含这些关键词的文章 (由半角逗号分隔)</string>
-    <string name="filter_title">黑名单</string>
     <string name="settings_theme">主题</string>
     <string name="open_browser_direct">直接在默认浏览器中打开</string>
     <string name="open_browser_direct_title">在浏览器中打开</string>
@@ -112,10 +108,11 @@
     <string name="refresh_on_startup_title">启动时刷新</string>
     <string name="settings_hide_button_mark_all_as_read">隐藏“标记全部为已读”按钮</string>
     <string name="settings_hide_button_mark_all_as_read_description">不在屏幕上显示“标记全部为已读”按钮</string>
+    <string name="settings_hide_navigation_on_scroll">滚动时隐藏导航栏</string>
+    <string name="settings_hide_navigation_on_scroll_description">如果启用，顶部/底部导航栏将在向下滚动时隐藏，并在向上滚动时重新显示</string>
     <string name="settings_sort_order">按最新到最旧排列文章</string>
     <string name="settings_sort_order_title">排列顺序</string>
     <string name="settings_enable_entry_swipe">阅读条目时启用侧滑切换</string>
-    <string name="settings_enable_entry_swipe_description">如果启用，则在阅读条目界面中，将可以通过侧滑的方式切换到上一个或下一个条目。</string>
     <string-array name="settings_intervals">
         <item>5 分钟</item>
         <item>15 分钟</item>

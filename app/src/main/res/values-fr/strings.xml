@@ -23,6 +23,7 @@
     <string name="drawer_explanation">Bienvenue !\n\nAppuyez longtemps sur les flux pour voir les options ▼</string>
     <string name="drawer_fetch_error_explanation">Certains de vos flux n\'ont pas été mis à jour correctement ▼</string>
     <string name="about_screen_info">Cette application est gratuite et open-source sous license GPLv3. Vous êtes libre de la modifier tant que vous publiez vos modifications sous la même license.</string>
+    <string name="navigation_button_content_description">Activer/désactiver le menu du flux</string>
     <!-- FEEDS -->
     <string name="feeds">Flux</string>
     <string name="menu_add_group">Ajouter un groupe</string>
@@ -42,6 +43,8 @@
     <string name="to_group_above">Au-dessus du groupe</string>
     <string name="to_group_into">Dans le groupe</string>
     <string name="feed_name">Nom du flux</string>
+    <string name="feed_edit_drag_handle_content_description">Poignée de déplacement</string>
+    <string name="feed_edit_feed_icon_content_description">Icône du flux</string>
     <!-- ENTRIES -->
     <string name="feed_link">Lien du flux</string>
     <string name="all_entries">Tous les articles</string>
@@ -60,6 +63,9 @@
     <string name="undo">Annuler</string>
     <string name="marked_as_read">Marqué comme lu</string>
     <string name="marked_as_unread">Marqué comme non lu</string>
+    <string name="expand_arrow_content_description">Développer le groupe de flux</string>
+    <string name="collapse_arrow_content_description">Réduire le groupe de flux</string>
+    <string name="mark_all_as_read_fab_content_description">Marquer tout comme lu</string>
     <!-- DISCOVER -->
     <string name="discover_search_label">Rechercher des flux</string>
     <string name="discover_search_hint">Recherche par mot-clés, URL ou sujets. Les sujets peuvent être indiqués avec un # au début du mot.</string>
@@ -91,21 +97,22 @@
     <string name="settings_refresh_enable_notifications">Afficher les notifications de mise à jour</string>
     <string name="settings_refresh_enable_notifications_description">Affiche une notification système à la fin d\'une mise à jour</string>
     <string name="settings_refresh_interval">Intervalle de mise à jour</string>
-    <string name="settings_category_keep_time">Temps de conservation des articles</string>
     <string name="settings_keep_time">Délai de conservation des flux lus</string>
     <string name="settings_keep_time_unread">Délai de conservation des flux non-lus</string>
-    <string name="settings_category_content_presentation">Présentation des flux</string>
+    <string name="settings_category_general">Général</string>
+    <string name="settings_display_thumbnails">Afficher les vignettes</string>
+    <string name="settings_display_thumbnails_description">Afficher les vignettes dans la liste des articles</string>
     <string name="settings_display_images">Afficher les images</string>
     <string name="settings_display_images_description">Afficher les images dans les articles</string>
     <string name="settings_preload_image_mode">Préchargement des images</string>
     <string name="settings_font_size">Taille du texte</string>
     <string name="settings_refresh_wifi_only">Mise à jour en WiFi uniquement</string>
     <string name="settings_refresh_wifi_only_description">La mise à jour auto ne se fera que si le Wifi est activé</string>
-    <string name="settings_category_filter">Filtres</string>
     <string name="settings_remove_duplicates_description_title">Supprimer les doublons</string>
     <string name="settings_remove_duplicates_description">Supprime les articles ayant le même titre que ceux déjà chargés</string>
-    <string name="filter">Filtre les articles contenant des mots-clés (séparés par des virgules)</string>
-    <string name="filter_title">Liste noire</string>
+    <string name="filter">Supprimer les articles contenant des mots-clés</string>
+    <string name="filter_title">Liste de blocage</string>
+    <string name="filter_dialog_message">Séparez les mots-clés par des virgules</string>
     <string name="settings_theme">Thème</string>
     <string name="open_browser_direct">Ouvre les articles directement dans votre navigateur</string>
     <string name="open_browser_direct_title">Ouverture dans navigateur</string>
@@ -118,7 +125,9 @@
     <string name="settings_sort_order">Trier les articles du plus recent au plus ancient</string>
     <string name="settings_sort_order_title">Tri des articles</string>
     <string name="settings_enable_entry_swipe">Activer la navigation latéral sur un article</string>
-    <string name="settings_enable_entry_swipe_description">Si activé, permet de glisser horizontalement pour naviguer entre les différents articles.</string>
+    <string name="settings_category_article_list">Liste d\'articles</string>
+    <string name="settings_category_article_appearance">Apparence des articles</string>
+    <string name="settings_enable_entry_swipe_description">Si activé, permet de glisser horizontalement pour naviguer entre les différents articles</string>
     <string-array name="settings_intervals">
         <item>5 minutes</item>
         <item>15 minutes</item>

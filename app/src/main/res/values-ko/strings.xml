@@ -46,7 +46,6 @@
     <string name="settings_refresh_interval">새로 고침 간격</string>
     <string name="settings_keep_time">항목을 저장할 시간</string>
     <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
-    <string name="settings_category_content_presentation">내용 표시</string>
     <string name="settings_display_images">이미지 표시</string>
     <string name="settings_display_images_description">항목에서 이미지 표시</string>
     <string name="settings_preload_image_mode">이미지 미리 읽기</string>
@@ -54,7 +53,6 @@
     <string name="settings_refresh_wifi_only">Wi-Fi에서만 새로 고침</string>
     <string name="settings_refresh_wifi_only_description">Wi-Fi를 사용할 때만 자동으로 새로 고침</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
     <string-array name="settings_intervals">
         <item>5분</item>
         <item>15분</item>

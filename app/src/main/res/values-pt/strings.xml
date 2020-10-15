@@ -48,7 +48,6 @@
     <string name="settings_refresh_interval">Intervalo de atualização</string>
     <string name="settings_keep_time">Tempo que as entradas vão permanecer</string>
     <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
-    <string name="settings_category_content_presentation">Apresentação de conteúdo</string>
     <string name="settings_display_images">Mostrar imagens</string>
     <string name="settings_display_images_description">Mostrar imagens nas entradas</string>
     <string name="settings_preload_image_mode">Pré-carregar imagens</string>
@@ -56,7 +55,6 @@
     <string name="settings_refresh_wifi_only">Atualizar apenas com Wi-Fi</string>
     <string name="settings_refresh_wifi_only_description">Atualização automática só será feita quando uma conexão Wi-Fi estiver disponível</string>
     <string name="settings_remove_duplicates_description">Checks the title of newly downloaded item and skips when one with the same title is already present</string>
-    <string name="filter">Remove items containing keywords (coma-separated list)</string>
     <string-array name="settings_intervals">
         <item>5 minutos</item>
         <item>15 minutos</item>

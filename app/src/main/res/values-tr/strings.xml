@@ -91,23 +91,17 @@
     <string name="settings_refresh_enable_notifications">Yenileme bildirimlerini göster</string>
     <string name="settings_refresh_enable_notifications_description">Yenileme tamamlandığında sistem bildirimi olarak göster</string>
     <string name="settings_refresh_interval">Yenileme sıklığı</string>
-    <string name="settings_category_keep_time">Öğeleri tutma süresi</string>
     <string name="settings_keep_time">Okunmuş öğeleri tutma süresi</string>
     <string name="settings_keep_time_unread">Okunmamış öğeleri tutma süresi</string>
-    <string name="settings_category_content_presentation">İçerik gösterimi</string>
     <string name="settings_display_thumbnails">Küçük resimleri göster</string>
-    <string name="settings_display_thumbnails_description">İçerikte küçük resimleri göster</string>
     <string name="settings_display_images">Resimleri göster</string>
     <string name="settings_display_images_description">Öğelerde resimleri göster</string>
     <string name="settings_preload_image_mode">Resimleri önyükleme</string>
     <string name="settings_font_size">Metin boyutu</string>
     <string name="settings_refresh_wifi_only">Yalnızca Wi-Fi üzerinden yenile</string>
     <string name="settings_refresh_wifi_only_description">Otomatik yenileme yalnızca Wi-Fi bağlantısı üzerinden gerçekleşir</string>
-    <string name="settings_category_filter">Filtreler</string>
     <string name="settings_remove_duplicates_description_title">Benzerleri kaldır</string>
     <string name="settings_remove_duplicates_description">Yeni indirilen öğe başlıklarını kontrol eder ve aynı başlığa sahip öğe mevcutsa atlar</string>
-    <string name="filter">Anahtar sözcükleri içeren öğeleri sil (virgülle ayrılmış liste)</string>
-    <string name="filter_title">Karaliste</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Öğeleri doğrudan varsayılan tarayıcıda aç</string>
     <string name="open_browser_direct_title">Tarayıcıda aç</string>
@@ -120,7 +114,6 @@
     <string name="settings_sort_order">Öğeleri yeniden eskiye doğru sırala</string>
     <string name="settings_sort_order_title">Sıralama yönü</string>
     <string name="settings_enable_entry_swipe">Bir öğeyi gösterirken kaydırma hareketini etkinleştir</string>
-    <string name="settings_enable_entry_swipe_description">Etkinleştirildiğinde öğe gösterilirken öğeler arasında geçiş yapmayı sağlar.</string>
     <string-array name="settings_intervals">
         <item>5 dakika</item>
         <item>15 dakika</item>

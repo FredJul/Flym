@@ -1,8 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">حول Flym</string>
+    <string name="welcome_title">مرحبا بكم في Flym. هل ترغب في إضافة نشرة إخبارية؟</string>
+    <string name="welcome_title_with_opml_import">هل ترغب في استيراد خلاصات Flym السابقة؟</string>
+    <string name="cannot_find_feeds">لم يتم العثور على أي خلاصات</string>
+    <string name="menu_settings">الإعدادات</string>
+    <string name="menu_edit_feed">تعديل الخلاصة</string>
+    <string name="menu_reorder">إعادة ترتيب الخلاصات</string>
+    <string name="menu_delete">حذف</string>
+    <string name="menu_enable_full_text_retrieval">تمكين استرجاع النص الكامل</string>
+    <string name="menu_disable_full_text_retrieval">تعطيل استرجاع النص الكامل</string>
+    <string name="menu_all_read">تحديد كمقروء</string>
+    <string name="flym_feeds">خلاصات Flym</string>
+    <string name="error">خطأ</string>
+    <string name="network_error">لم يتم إعداد الشبكة</string>
+    <string name="drawer_explanation">مرحباً!\n\nاضغط مطولاً على الخلاصات لمشاهدة الخيارات &lt;unk&gt;</string>
+    <string name="drawer_fetch_error_explanation">بعض الخلاصات الخاصة بك لم يتم تحديثها بشكل صحيح</string>
+    <string name="about_screen_info">أنا أقوم بنشر هذا التطبيق كبرنامج مجاني ومفتوح المصدر بموجب ترخيص GPLv3. لا تتردد في تعديله طالما احتفظت به مفتوح المصدر.</string>
     <!-- FEEDS -->
+    <string name="feeds">الخلاصات</string>
+    <string name="menu_add_group">إضافة مجموعة</string>
+    <string name="menu_import">استيراد من OPML</string>
+    <string name="menu_export">تصدير إلى OPML</string>
+    <string name="storage_request_explanation">لاستيراد أو تصدير الخلاصات في ملف، يجب عليك السماح للتطبيق بالوصول إلى تخزين الجهاز.</string>
+    <string name="error_feed_export">فشل التصدير. تأكد من أن لديك بطاقة SD قابلة للكتابة.</string>
+    <string name="feed_search">البحث عن خلاصة</string>
+    <string name="feed_search_hint">أدخل رابط الخلاصة أو كلمة مفتاحية</string>
+    <string name="feed_added">تم إضافة خلاصة إلى القائمة</string>
+    <string name="question_delete_feed">هل تريد حقاً حذف هذه الخلاصة؟</string>
+    <string name="question_delete_group">هل تريد حقاً حذف هذه المجموعة وجميع خلاصاتها؟</string>
+    <string name="add_group_title">اختر اسم المجموعة</string>
+    <string name="message_exported_to">تصدير إلى %s.</string>
+    <string name="to_group_title">عمل نقل الخلاصة</string>
+    <string name="to_group_message">يمكنك إما وضع هذه الخلاصة في هذه المجموعة أو فوقها. ماذا تريد أن تفعل؟</string>
+    <string name="to_group_above">فوق المجموعة</string>
+    <string name="to_group_into">داخل المجموعة</string>
+    <string name="feed_name">اسم الخلاصة</string>
     <!-- ENTRIES -->
+    <string name="feed_link">رابط الخلاصة</string>
+    <string name="all_entries">جميع المدخلات</string>
+    <string name="menu_star">نجمة</string>
+    <string name="menu_unstar">إلغاء النجمة</string>
+    <string name="menu_share">مشاركة</string>
+    <string name="menu_mark_as_unread">تحديد كغير مقروء</string>
+    <string name="get_full_text">استرداد النص الكامل</string>
+    <string name="original_text">إظهار النص الأصلي</string>
+    <string name="open_in_browser">فتح في المتصفح</string>
+    <string name="cant_open_link">لم يتم العثور على تطبيق لهذا الرابط</string>
+    <string name="unreads">غير مقروء</string>
+    <string name="all">الكل</string>
+    <string name="favorites">المفضلات</string>
+    <string name="no_entries">لا توجد عناصر\nيرجى السحب لأسفل للتحديث</string>
+    <string name="undo">تراجع</string>
+    <string name="marked_as_read">تحديد كمقروء</string>
+    <string name="marked_as_unread">تحديد كغير مقروء</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">البحث في النشرات الإخبارية</string>
+    <string name="discover_search_hint">البحث عن طريق الكلمة المفتاحية، أو رابط، أو الموضوع. يمكن الإشارة إلى المواضيع مع بادئة #.</string>
+    <string-array name="discover_topics">
+        <item>الأخبار</item>
+        <item>السياسة</item>
+        <item>العالم</item>
+        <item>الهندسة</item>
+        <item>التقنية</item>
+        <item>عمليات</item>
+        <item>اتصالات</item>
+        <item>الأمن المعلوماتي</item>
+        <item>الخصوصية</item>
+        <item>العلوم</item>
+        <item>الأدوية</item>
+        <item>الرعاية الصحية</item>
+        <item>التعليم</item>
+        <item>الأعمال</item>
+        <item>التسويق</item>
+        <item>مساحة</item>
+        <item>التصميم</item>
+        <item>هزليات</item>
+    </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">بلا عنوان</string>
+    <string name="settings_category_refresh">تحديث تلقائي</string>
+    <string name="settings_refresh_enabled">تفعيل التحديث التلقائي</string>
+    <string name="settings_refresh_enabled_description">تمكين التحديث التلقائي للنشرات</string>
+    <string name="settings_refresh_enable_notifications">عرض إشعارات التحديث</string>
+    <string name="settings_refresh_enable_notifications_description">إظهار إشعار عند الانتهاء من التحديث</string>
+    <string name="settings_refresh_interval">الفاصل الزمني للتحديث</string>
+    <string name="settings_keep_time">سيتم الاحتفاظ بالوقت الذي يتم فيه قراءة المدخلات</string>
+    <string name="settings_keep_time_unread">سيتم الاحتفاظ بالوقت الذي لم يتم فيه قراءة المدخلات</string>
+    <string name="settings_category_general">عام</string>
+    <string name="settings_display_thumbnails">عرض الصور المصغرة</string>
+    <string name="settings_display_thumbnails_description">عرض الصور المصغرة في قائمة المقالات</string>
+    <string name="settings_display_images">عرض الصور</string>
+    <string name="settings_display_images_description">عرض الصور في المدخلات</string>
+    <string name="settings_preload_image_mode">تحميل قبلي للصور</string>
+    <string name="settings_font_size">حجم النص</string>
+    <string name="settings_refresh_wifi_only">تحديث فقط عبر Wi-Fi</string>
+    <string name="settings_refresh_wifi_only_description">التحديث التلقائي لن يتم إلا إذا كان اتصال Wi-Fi متاحاً</string>
+    <string name="settings_remove_duplicates_description_title">إزالة التكرارات</string>
+    <string name="settings_remove_duplicates_description">التحقق من عنوان العناصر التي تم تنزيلها حديثا والتخطي عندما يكون عنوان واحد بنفس العنوان موجود بالفعل</string>
+    <string name="filter">إزالة العناصر التي تحتوي على كلمات مفتاحية</string>
+    <string name="filter_title">قائمة الحظر</string>
+    <string name="filter_dialog_message">فصل الكلمات المفتاحية بفواصل</string>
+    <string name="settings_theme">القالب</string>
+    <string name="open_browser_direct">فتح المدخلات مباشرة في المتصفح الافتراضي الخاص بك</string>
+    <string name="open_browser_direct_title">فتح في المتصفح</string>
+    <string name="refresh_on_startup">قم بتحديث خلاصاتك الإخبارية عند بدء تشغيل التطبيق</string>
+    <string name="refresh_on_startup_title">التحديث عند بدء التشغيل</string>
+    <string name="settings_hide_button_mark_all_as_read">إخفاء زر \"تحديد الكل كمقروء\"</string>
+    <string name="settings_hide_button_mark_all_as_read_description">عدم إظهار زر \"تحديد الكل كمقروءة\" على الشاشة</string>
+    <string name="settings_hide_navigation_on_scroll">إخفاء التنقل عند التمرير</string>
+    <string name="settings_hide_navigation_on_scroll_description">في حالة التمكين، سيتم إخفاء التنقل العلوي / السفلي عند التمرير للأسفل والعودة إلى الظهور عند التمرير لأعلى</string>
+    <string name="settings_sort_order">ترتيب المدخلات من الأحدث إلى الأقدم</string>
+    <string name="settings_sort_order_title">الترتيب</string>
+    <string name="settings_enable_entry_swipe">تمكين التمرير أثناء عرض الإدخال</string>
+    <string name="settings_category_article_list">قائمة المقالات</string>
+    <string name="settings_category_article_appearance">مظهر المقالة</string>
+    <string name="settings_enable_entry_swipe_description">في حالة التمكين، يسمح بالسحب بين الإدخالات أثناء عرض الإدخال</string>
+    <string-array name="settings_intervals">
+        <item>5 دقائق</item>
+        <item>15 دقيقة</item>
+        <item>30 دقيقة</item>
+        <item>1 ساعات</item>
+        <item>ساعتين</item>
+        <item>6 ساعات</item>
+        <item>12 ساعات</item>
+        <item>يوم واحد</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>يوم واحد</item>
+        <item>يومين</item>
+        <item>4 أيام</item>
+        <item>أسبوع واحد</item>
+        <item>أسبوعان</item>
+        <item>شهر</item>
+        <item>شهرين</item>
+        <item>3 أشهر</item>
+        <item>إلى الأبد</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>2-</item>
+        <item>1-</item>
+        <item>عادي</item>
+        <item>1+</item>
+        <item>2+</item>
+        <item>3+</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>أبداً</item>
+        <item>فقط عبر Wi-Fi</item>
+        <item>دائما</item>
+    </string-array>
+    <string-array name="settings_themes">
+        <item>فاتح</item>
+        <item>داكن</item>
+        <item>أسود</item>
+    </string-array>
 </resources>

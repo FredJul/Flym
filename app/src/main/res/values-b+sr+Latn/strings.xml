@@ -92,21 +92,17 @@
     <string name="settings_refresh_enable_notifications">Prikazivanje obaveštenja prilikom osvežavanja</string>
     <string name="settings_refresh_enable_notifications_description">Prikaži sistemsko obaveštenje nakon što se osvežavanje završi</string>
     <string name="settings_refresh_interval">Interval automatskog osvežavanja</string>
-    <string name="settings_category_keep_time">Vreme čuvanja unosa</string>
     <string name="settings_keep_time">Vreme čuvanja članaka</string>
     <string name="settings_keep_time_unread">Vremensko ograničenje za čuvanje nepročitanih članaka</string>
-    <string name="settings_category_content_presentation">Prikaz sadržaja</string>
+    <string name="settings_display_thumbnails">Prikaži sličice</string>
     <string name="settings_display_images">Prikaži slike</string>
     <string name="settings_display_images_description">Prikaži slike unutar članaka</string>
     <string name="settings_preload_image_mode">Učitavanje slika unapred</string>
     <string name="settings_font_size">Veličina teksta</string>
     <string name="settings_refresh_wifi_only">Osveži samo preko bežične mreže (Wi-Fi)</string>
     <string name="settings_refresh_wifi_only_description">Automatsko osvežavanje dovoda će biti izvršeno samo ako je dostupna bežična konekcija (Wi-Fi)</string>
-    <string name="settings_category_filter">Filteri</string>
     <string name="settings_remove_duplicates_description_title">Ukloni duplikate</string>
     <string name="settings_remove_duplicates_description">Proverava naslove članaka koji su preuzeti i preskače ako isti već postoje kako bi se izbegao dupli sadržaj tj. dupli članci</string>
-    <string name="filter">Ukloni članke koji sadrže ključne reči (lista razdvojena zapetom\")</string>
-    <string name="filter_title">Crna lista</string>
     <string name="settings_theme">Teme</string>
     <string name="open_browser_direct">Otvaranje članaka direktno u podrazumevanom internet pregledaču</string>
     <string name="open_browser_direct_title">Otvori u pregledaču</string>
@@ -114,10 +110,11 @@
     <string name="refresh_on_startup_title">Osvežavanje prilikom pokretanja</string>
     <string name="settings_hide_button_mark_all_as_read">Sakrij \"Označi sve kao pročitano\"</string>
     <string name="settings_hide_button_mark_all_as_read_description">Ne prikazuj opciju za \"Označi sve kao pročitano\"</string>
+    <string name="settings_hide_navigation_on_scroll">Sakrij navigaciju prilikom pomeranja sadržaja na ekranu</string>
+    <string name="settings_hide_navigation_on_scroll_description">Ukoliko je omogućeno, navigacija na vrhu/dnu će biti skrivena kada se sadržaj bude pomicao na dole a prikazivaće se prilikom pomicanja na gore</string>
     <string name="settings_sort_order">Razvrstaj članke od najnovijeg do najstarijeg</string>
     <string name="settings_sort_order_title">Redosled razvrstavanja</string>
     <string name="settings_enable_entry_swipe">Omogući prevlačenje prstom prilikom pregleda članka</string>
-    <string name="settings_enable_entry_swipe_description">Ukoliko je omogućeno, dozvoljava prevlačenje prstom zarad promene članka prilikom zasebnog pregleda.</string>
     <string-array name="settings_intervals">
         <item>5 minuta</item>
         <item>15 minuta</item>

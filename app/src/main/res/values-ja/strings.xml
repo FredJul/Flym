@@ -90,21 +90,16 @@
     <string name="settings_refresh_enable_notifications">更新通知を表示</string>
     <string name="settings_refresh_enable_notifications_description">更新が完了したときにシステム通知を表示します</string>
     <string name="settings_refresh_interval">更新間隔</string>
-    <string name="settings_category_keep_time">エントリーを保持する時間</string>
     <string name="settings_keep_time">既読のエントリーが保持される時間</string>
     <string name="settings_keep_time_unread">未読のエントリーが保持される時間</string>
-    <string name="settings_category_content_presentation">コンテンツの表示</string>
     <string name="settings_display_images">画像を表示</string>
     <string name="settings_display_images_description">エントリー内の画像を表示します</string>
     <string name="settings_preload_image_mode">画像を先読みする</string>
     <string name="settings_font_size">テキストサイズ</string>
     <string name="settings_refresh_wifi_only">Wi-Fi 接続時のみ更新</string>
     <string name="settings_refresh_wifi_only_description">自動更新は Wi-Fi 接続が利用可能な場合にのみ行われます</string>
-    <string name="settings_category_filter">フィルタ</string>
     <string name="settings_remove_duplicates_description_title">重複を削除</string>
     <string name="settings_remove_duplicates_description">新しくダウンロードしたアイテムのタイトルを確認し、同じタイトルを持つアイテムがすでに存在するときはスキップします</string>
-    <string name="filter">キーワードを含むアイテムを削除（カンマ区切りリスト）</string>
-    <string name="filter_title">ブラックリスト</string>
     <string name="settings_theme">テーマ</string>
     <string name="open_browser_direct">デフォルトのブラウザで直接エントリーを開く</string>
     <string name="open_browser_direct_title">ブラウザで開く</string>
@@ -117,7 +112,6 @@
     <string name="settings_sort_order">エントリーを新しい順に並べます</string>
     <string name="settings_sort_order_title">並べ替え順序</string>
     <string name="settings_enable_entry_swipe">エントリーの表示中にスワイプを有効にする</string>
-    <string name="settings_enable_entry_swipe_description">有効にすると、エントリーを表示中にエントリー間でスワイプができます。</string>
     <string-array name="settings_intervals">
         <item>5分</item>
         <item>15分</item>
