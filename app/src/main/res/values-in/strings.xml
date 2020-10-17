@@ -22,6 +22,7 @@
     <string name="drawer_explanation">Selamat datang!\n\nSentuh lama pada feed untuk menampilkan menu ▼</string>
     <string name="drawer_fetch_error_explanation">Beberapa feed tidak disegarkan dengan benar ▼</string>
     <string name="about_screen_info">Saya mempublikasikan aplikasi ini secara gratis, bebas dan bersumber terbuka dengan lisensi GPLv3. Jangan sungkan untuk memodifikasinya selama anda juga membuatnya bersumber terbuka.</string>
+    <string name="navigation_button_content_description">Buka/tutup menu feed</string>
     <!-- FEEDS -->
     <string name="feeds">Feed</string>
     <string name="menu_add_group">Tambah grup</string>
@@ -41,6 +42,8 @@
     <string name="to_group_above">Ke atas grup</string>
     <string name="to_group_into">Ke dalam grup</string>
     <string name="feed_name">Nama feed</string>
+    <string name="feed_edit_drag_handle_content_description">Handel seret</string>
+    <string name="feed_edit_feed_icon_content_description">Ikon feed</string>
     <!-- ENTRIES -->
     <string name="feed_link">Tautan feed</string>
     <string name="all_entries">Semua entri</string>
@@ -59,6 +62,9 @@
     <string name="undo">Urung</string>
     <string name="marked_as_read">Ditandai sudah dibaca</string>
     <string name="marked_as_unread">Ditandai belum dibaca</string>
+    <string name="expand_arrow_content_description">Buka grup feed</string>
+    <string name="collapse_arrow_content_description">Tutup grup feed</string>
+    <string name="mark_all_as_read_fab_content_description">Tandai semua dibaca</string>
     <!-- DISCOVER -->
     <string name="discover_search_label">Cari Feed</string>
     <string name="discover_search_hint">Cari kata kunci, URL, atau topik. Topik bisa ditandai dengan awalan #.</string>
