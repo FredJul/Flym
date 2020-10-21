@@ -23,6 +23,7 @@
     <string name="drawer_explanation">Benvenuto!\n\nCon una pressione prolungata sui feed vedrai le opzioni ▼</string>
     <string name="drawer_fetch_error_explanation">Alcuni feed non sono stati aggiornati correttamente ▼</string>
     <string name="about_screen_info">Pubblico questa applicazione come software gratuito e open source con licenza GPLv3. Sentiti libero di modificarlo fintanto che lo mantieni anche open source.</string>
+    <string name="navigation_button_content_description">Attiva il menù dei feed</string>
     <!-- FEEDS -->
     <string name="feeds">Feed</string>
     <string name="menu_add_group">Aggiungi un gruppo</string>
@@ -42,6 +43,7 @@
     <string name="to_group_above">Sopra il gruppo</string>
     <string name="to_group_into">Dentro il gruppo</string>
     <string name="feed_name">Nome del feed</string>
+    <string name="feed_edit_drag_handle_content_description" comment="feed_edit_drag_handle_content_description&#10;&#10;When a visually impaired user tap on the drag handle for the feed drag&amp;drop feature, the phone will say out loud that it is a &quot;Drag handle&quot;.">Selettore di trascinamento</string>
     <string name="feed_edit_feed_icon_content_description">Icona del feed</string>
     <!-- ENTRIES -->
     <string name="feed_link">Link del feed</string>
