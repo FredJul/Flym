@@ -42,6 +42,7 @@
     <string name="to_group_above">Sopra il gruppo</string>
     <string name="to_group_into">Dentro il gruppo</string>
     <string name="feed_name">Nome del feed</string>
+    <string name="feed_edit_feed_icon_content_description">Icona del feed</string>
     <!-- ENTRIES -->
     <string name="feed_link">Link del feed</string>
     <string name="all_entries">Tutti gli articoli</string>
@@ -60,6 +61,9 @@
     <string name="undo">Annulla</string>
     <string name="marked_as_read">Contrassegnato come letto</string>
     <string name="marked_as_unread">Contrassegnato come non letto</string>
+    <string name="expand_arrow_content_description">Espandi il gruppo di feed</string>
+    <string name="collapse_arrow_content_description">Comprimi il gruppo di feed</string>
+    <string name="mark_all_as_read_fab_content_description">Segna tutti come letti</string>
     <!-- DISCOVER -->
     <string name="discover_search_label">Cerca i feed</string>
     <string name="discover_search_hint">Cerca per parola chiave, URL o argomento. Gli argomenti possono essere indicati con # come prefisso.</string>
