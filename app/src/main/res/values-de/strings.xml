@@ -23,6 +23,7 @@
     <string name="drawer_explanation">Willkommen!\n\nLänger auf die Feeds drücken, um die Optionen zu sehen ▼</string>
     <string name="drawer_fetch_error_explanation">Einige deiner Feeds wurden nicht korrekt aktualisiert ▼</string>
     <string name="about_screen_info">Ich veröffentliche diese App als freie und Open Source-Software unter der GPLv3-Lizenz. Jegliche Änderungen sind möglich, solange auch sie Open Source sind.</string>
+    <string name="navigation_button_content_description">Feed-Menü umschalten</string>
     <!-- FEEDS -->
     <string name="feeds">Feeds</string>
     <string name="menu_add_group">Gruppe erstellen</string>
@@ -42,6 +43,8 @@
     <string name="to_group_above">Über die Gruppe</string>
     <string name="to_group_into">In die Gruppe</string>
     <string name="feed_name">Feed-Name</string>
+    <string name="feed_edit_drag_handle_content_description">Handhabung der Verschiebung</string>
+    <string name="feed_edit_feed_icon_content_description">Feed-Symbol</string>
     <!-- ENTRIES -->
     <string name="feed_link">Feed-Link</string>
     <string name="all_entries">Alle Einträge</string>
@@ -60,6 +63,9 @@
     <string name="undo">Rückgängig</string>
     <string name="marked_as_read">Als gelesen markieren</string>
     <string name="marked_as_unread">Als ungelesen markieren</string>
+    <string name="expand_arrow_content_description">Feed-Gruppe ausklappen</string>
+    <string name="collapse_arrow_content_description">Feed-Gruppe einklappen</string>
+    <string name="mark_all_as_read_fab_content_description">Alle als gelesen markieren</string>
     <!-- DISCOVER -->
     <string name="discover_search_label">Feeds suchen</string>
     <string name="discover_search_hint">Suche nach Stichwort, URL oder Themen. Themen können mit #-Präfix angezeigt werden.</string>
@@ -93,6 +99,9 @@
     <string name="settings_refresh_interval">Aktualisierungsintervall</string>
     <string name="settings_keep_time">Zeit, in der die gelesenen Einträge erhalten bleiben</string>
     <string name="settings_keep_time_unread">Zeit, in der die ungelesenen Einträge erhalten bleiben</string>
+    <string name="settings_category_general">Allgemein</string>
+    <string name="settings_display_thumbnails">Vorschaubilder anzeigen</string>
+    <string name="settings_display_thumbnails_description">Vorschaubilder in der Artikelliste anzeigen</string>
     <string name="settings_display_images">Bilder anzeigen</string>
     <string name="settings_display_images_description">Bilder in den Einträgen anzeigen</string>
     <string name="settings_preload_image_mode">Bilder vorab laden</string>
@@ -101,6 +110,9 @@
     <string name="settings_refresh_wifi_only_description">Automatische Aktualisierung wird nur durchgeführt, wenn eine WLAN-Verbindung verfügbar ist</string>
     <string name="settings_remove_duplicates_description_title">Duplikate entfernen</string>
     <string name="settings_remove_duplicates_description">Untersucht Titel von neu heruntergeladenen Einträgen. Überspringt, wenn ein Eintrag mit demselben Titel bereits vorhanden ist</string>
+    <string name="filter">Einträge entfernen, die Suchbegriffe enthalten</string>
+    <string name="filter_title">Sperrliste</string>
+    <string name="filter_dialog_message">Suchbegriffe mit Kommas trennen</string>
     <string name="settings_theme">Thema</string>
     <string name="open_browser_direct">Einträge direkt in deinem Standardbrowser öffnen</string>
     <string name="open_browser_direct_title">Im Browser öffnen</string>
@@ -113,6 +125,9 @@
     <string name="settings_sort_order">Einträge vom neuesten zum ältesten sortieren</string>
     <string name="settings_sort_order_title">Sortierreihenfolge</string>
     <string name="settings_enable_entry_swipe">Wischen beim Anzeigen eines Eintrags aktivieren</string>
+    <string name="settings_category_article_list">Artikelliste</string>
+    <string name="settings_category_article_appearance">Erscheinungsbild der Artikel</string>
+    <string name="settings_enable_entry_swipe_description">Wenn dies aktiviert ist, kann während der Anzeige eines Eintrags zwischen den Einträgen gewechselt werden</string>
     <string-array name="settings_intervals">
         <item>5 Minuten</item>
         <item>15 Minuten</item>
