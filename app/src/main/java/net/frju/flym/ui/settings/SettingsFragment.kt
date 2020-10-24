@@ -28,6 +28,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.nononsenseapps.filepicker.FilePickerActivity
 import com.nononsenseapps.filepicker.Utils
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import net.fred.feedex.R
 import net.frju.flym.data.utils.PrefConstants.DECSYNC_ENABLED
 import net.frju.flym.data.utils.PrefConstants.DECSYNC_FILE
@@ -55,7 +56,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         true
     }
 
-    @ExperimentalStdlibApi
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
 
@@ -116,6 +116,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     @ExperimentalStdlibApi
+    @ObsoleteCoroutinesApi
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requireContext().getPrefBoolean(DECSYNC_USE_SAF, false)) {
@@ -141,7 +142,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    @ExperimentalStdlibApi
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             PERMISSIONS_REQUEST_DECSYNC -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

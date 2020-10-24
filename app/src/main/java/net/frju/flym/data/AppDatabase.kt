@@ -76,6 +76,7 @@ abstract class AppDatabase : RoomDatabase() {
                 database.run {
                     execSQL("ALTER TABLE entries ADD COLUMN uri TEXT")
                     execSQL("CREATE UNIQUE INDEX index_entries_uri ON entries (uri)")
+                    execSQL("UPDATE feeds SET feedLink = 'catID' || substr('00000' || abs(random() % 100000), -5) WHERE isGroup = 1 AND feedLink = ''")
                 }
             }
         }
@@ -109,6 +110,16 @@ abstract class AppDatabase : RoomDatabase() {
                                     BEGIN
                                         UPDATE feeds SET displayPriority = (SELECT COUNT() FROM feeds f JOIN feeds fl ON fl.displayPriority <= f.displayPriority AND fl.groupId IS f.groupId WHERE f.feedId = feeds.feedId GROUP BY f.feedId) WHERE feedId != NEW.feedId;
                                         UPDATE feeds SET displayPriority = (SELECT COUNT() + 1 FROM feeds f WHERE f.displayPriority < NEW.displayPriority AND f.groupId IS NEW.groupId ) WHERE feedId = NEW.feedId;
+                                    END;
+                                    """)
+
+                                // give new groups a random catID by default
+                                db.execSQL("""
+                                    CREATE TRIGGER group_insert_catid
+                                        AFTER INSERT
+                                        ON feeds
+                                    BEGIN
+                                       UPDATE feeds SET feedLink = 'catID' || substr('00000' || abs(random() % 100000), -5) WHERE feedId = NEW.feedId AND isGroup = 1 AND feedLink = '';
                                     END;
                                     """)
                             }

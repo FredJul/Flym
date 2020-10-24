@@ -33,7 +33,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.text.HtmlCompat
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
-import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import net.dankito.readability4j.extended.Readability4JExtended
 import net.fred.feedex.R
 import net.frju.flym.App
@@ -51,7 +51,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.buffer
 import okio.sink
-import org.decsync.library.Decsync
 import org.jetbrains.anko.*
 import org.jsoup.Jsoup
 import java.io.File
@@ -59,7 +58,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.net.CookieManager
 import java.net.CookiePolicy
-import java.util.*
 import java.util.concurrent.ExecutorCompletionService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -82,7 +80,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 .build()
 
         const val FROM_AUTO_REFRESH = "FROM_AUTO_REFRESH"
-        const val FROM_INIT_SYNC = "FROM_INIT_SYNC"
 
         const val ACTION_REFRESH_FEEDS = "net.frju.flym.REFRESH"
         const val ACTION_MOBILIZE_FEEDS = "net.frju.flym.MOBILIZE_FEEDS"
@@ -103,7 +100,8 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 .build())
 
         @ExperimentalStdlibApi
-        fun fetch(context: Context, isFromAutoRefresh: Boolean, action: String, feedId: Long = 0L, isFromInitSync: Boolean = false) {
+        @ObsoleteCoroutinesApi
+        fun fetch(context: Context, isFromAutoRefresh: Boolean, action: String, feedId: Long = 0L) {
             if (context.getPrefBoolean(PrefConstants.IS_REFRESHING, false)) {
                 return
             }
@@ -139,54 +137,12 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                     deleteOldEntries(unreadEntriesKeepDate, 0)
                     COOKIE_MANAGER.cookieStore.removeAll() // Cookies are important for some sites, but we clean them each times
 
+                    if (context.getPrefBoolean(PrefConstants.DECSYNC_ENABLED, false)) {
+                        DecsyncUtils.withDecsync(context) { executeAllNewEntries(Extra()) }
+                    }
+
                     // We need to use the more recent date in order to be sure to not see old entries again
                     val acceptMinDate = max(readEntriesKeepDate, unreadEntriesKeepDate)
-
-                    if (context.getPrefBoolean(PrefConstants.DECSYNC_ENABLED, false)) {
-                        val extra = Extra()
-                        if (isFromInitSync) {
-                            // Give old groups a category ID
-                            val updatedGroups = App.db.feedDao().all.mapNotNull { feed ->
-                                if (feed.isGroup && feed.link.isEmpty()) {
-                                    feed.link = "catID%05".format(Random().nextInt(100000))
-                                    feed
-                                } else {
-                                    null
-                                }
-                            }
-                            App.db.feedDao().update(updatedGroups, false)
-
-                            // Initialize DecSync and subscribe to its feeds
-                            DecsyncUtils.getDecsync(context)?.initStoredEntries()
-                            DecsyncUtils.getDecsync(context)?.executeStoredEntriesForPathExact(listOf("feeds", "subscriptions"), extra)
-
-                            // Write subscriptions, categories and read and marked articles to DecSync
-                            // It doesn't matter some are already there, as libdecsync will ignore these
-                            val entries = mutableListOf<Decsync.EntryWithPath>()
-                            for (feed in App.db.feedDao().all) {
-                                if (feed.isGroup) {
-                                    entries.add(Decsync.EntryWithPath(listOf("categories", "names"), JsonPrimitive(feed.link), JsonPrimitive(feed.title)))
-                                } else {
-                                    entries.add(Decsync.EntryWithPath(listOf("feeds", "subscriptions"), JsonPrimitive(feed.link), JsonPrimitive(true)))
-                                    if (feed.title != null) {
-                                        entries.add(Decsync.EntryWithPath(listOf("feeds", "names"), JsonPrimitive(feed.link), JsonPrimitive(feed.title)))
-                                    }
-                                    feed.groupId?.let { App.db.feedDao().findById(it) }?.let { group ->
-                                        entries.add(Decsync.EntryWithPath(listOf("feeds", "categories"), JsonPrimitive(feed.link), JsonPrimitive(group.link)))
-                                    }
-                                }
-                            }
-                            for (id in App.db.entryDao().readIds) {
-                                entries.add(App.db.entryDao().getReadMarkEntry(id, "read", true) ?: continue)
-                            }
-                            for (id in App.db.entryDao().favoriteIds) {
-                                entries.add(App.db.entryDao().getReadMarkEntry(id, "marked", true) ?: continue)
-                            }
-                            DecsyncUtils.getDecsync(context)?.setEntries(entries)
-                        } else {
-                            DecsyncUtils.getDecsync(context)?.executeAllNewEntries(extra)
-                        }
-                    }
 
                     var newCount = 0
                     if (feedId == 0L || App.db.feedDao().findById(feedId)!!.isGroup) {
@@ -406,7 +362,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             }
         }
 
-        @ExperimentalStdlibApi
         private fun refreshFeeds(feedId: Long, acceptMinDate: Long): Int {
 
             val executor = Executors.newFixedThreadPool(THREAD_NUMBER) { r ->
@@ -450,7 +405,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             return globalResult
         }
 
-        @ExperimentalStdlibApi
         private fun refreshFeed(feedId: Long, feedLink: String, acceptMinDate: Long): Int {
             val entries = mutableListOf<Entry>()
             val entriesToInsert = mutableListOf<Entry>()
@@ -540,7 +494,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             }
 
             // Insert everything
-            App.db.entryDao().insert(entriesToInsert)
+            App.db.entryDao().insert(*entriesToInsert.toTypedArray())
 
             if (App.db.feedDao().findById(feedId)?.retrieveFullText == true) {
                 addEntriesToMobilize(entries.map { it.id })
@@ -618,6 +572,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
     private val handler = Handler()
 
     @ExperimentalStdlibApi
+    @ObsoleteCoroutinesApi
     public override fun onHandleIntent(intent: Intent?) {
         if (intent == null) { // No intent, we quit
             return
@@ -635,7 +590,6 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         }
 
         val feedId = intent.getLongExtra(EXTRA_FEED_ID, 0L)
-        val isFromInitSync = intent.getBooleanExtra(FROM_INIT_SYNC, false)
-        fetch(this, isFromAutoRefresh, intent.action!!, feedId, isFromInitSync)
+        fetch(this, isFromAutoRefresh, intent.action!!, feedId)
     }
 }

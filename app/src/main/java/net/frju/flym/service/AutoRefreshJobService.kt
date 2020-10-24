@@ -24,6 +24,7 @@ import android.app.job.JobService
 import android.content.ComponentName
 import android.content.Context
 import android.os.Build
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import net.frju.flym.data.utils.PrefConstants
 import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.getPrefString
@@ -65,6 +66,7 @@ class AutoRefreshJobService : JobService() {
     }
 
     @ExperimentalStdlibApi
+    @ObsoleteCoroutinesApi
     override fun onStartJob(params: JobParameters): Boolean {
         if (!ignoreNextJob && !getPrefBoolean(PrefConstants.IS_REFRESHING, false)) {
             doAsync {

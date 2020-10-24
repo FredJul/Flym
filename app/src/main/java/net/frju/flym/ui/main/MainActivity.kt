@@ -47,6 +47,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_edit_feed.view.*
 import kotlinx.android.synthetic.main.fragment_entries.*
 import kotlinx.android.synthetic.main.view_main_drawer_header.*
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
@@ -102,6 +103,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     private val feedAdapter = FeedAdapter(feedGroups)
 
     @ExperimentalStdlibApi
+    @ObsoleteCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         setupNoActionBarTheme()
 
@@ -300,8 +302,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     .setAction(FetcherService.ACTION_REFRESH_FEEDS)
                     .putExtra(FetcherService.FROM_AUTO_REFRESH, true))
         } else if (getPrefBoolean(PrefConstants.DECSYNC_ENABLED, false)) {
-            val extra = Extra()
-            DecsyncUtils.getDecsync(this)?.executeAllNewEntries(extra, true)
+            DecsyncUtils.withDecsync(this) { executeAllNewEntries(Extra(), true) }
         }
 
         AutoRefreshJobService.initAutoRefresh(this)
@@ -340,7 +341,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
-    @ExperimentalStdlibApi
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
@@ -349,7 +349,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         handleImplicitIntent(intent)
     }
 
-    @ExperimentalStdlibApi
     private fun handleImplicitIntent(intent: Intent?) {
         // Has to be called on onStart (when the app is closed) and on onNewIntent (when the app is in the background)
 
@@ -438,7 +437,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
-    @ExperimentalStdlibApi
     override fun goToEntriesList(feed: Feed?) {
         clearDetails()
         containers_layout.state = MainNavigator.State.TWO_COLUMNS_EMPTY
@@ -459,7 +457,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
     override fun goToFeedSearch() = DiscoverActivity.newInstance(this)
 
-    @ExperimentalStdlibApi
     override fun goToEntryDetails(entryId: String, allEntryIds: List<String>) {
         closeKeyboard()
 
@@ -483,7 +480,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
-    @ExperimentalStdlibApi
     override fun setSelectedEntryId(selectedEntryId: String) {
         val listFragment = supportFragmentManager.findFragmentById(R.id.frame_master) as EntriesFragment
         listFragment.setSelectedEntryId(selectedEntryId)
@@ -497,7 +493,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         startActivity<SettingsActivity>()
     }
 
-    @ExperimentalStdlibApi
     private fun openInBrowser(entryId: String) {
         doAsync {
             App.db.entryDao().findByIdWithFeed(entryId)?.entry?.link?.let { url ->
@@ -553,7 +548,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         startActivityForResult(intent, WRITE_OPML_REQUEST_CODE)
     }
 
-    @ExperimentalStdlibApi
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
 
@@ -564,7 +558,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
-    @ExperimentalStdlibApi
     @AfterPermissionGranted(AUTO_IMPORT_OPML_REQUEST_CODE)
     private fun autoImportOpml() {
         if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
@@ -578,7 +571,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
-    @ExperimentalStdlibApi
     private fun importOpml(uri: Uri) {
         doAsync {
             try {
@@ -612,7 +604,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
-    @ExperimentalStdlibApi
     private fun parseOpml(opmlReader: Reader) {
         var genId = 1L
         val feedList = mutableListOf<Feed>()
@@ -650,7 +641,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
 
         if (feedList.isNotEmpty()) {
-            App.db.feedDao().insert(feedList)
+            App.db.feedDao().insert(*feedList.toTypedArray())
         }
     }
 
