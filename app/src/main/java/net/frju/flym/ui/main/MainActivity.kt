@@ -25,6 +25,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.OpenableColumns
@@ -46,6 +47,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_edit_feed.view.*
 import kotlinx.android.synthetic.main.fragment_entries.*
 import kotlinx.android.synthetic.main.view_main_drawer_header.*
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import net.fred.feedex.R
 import net.frju.flym.App
 import net.frju.flym.data.entities.Feed
@@ -62,28 +64,15 @@ import net.frju.flym.ui.feeds.FeedAdapter
 import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
+import net.frju.flym.ui.settings.SettingsFragment
 import net.frju.flym.utils.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.browse
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textResource
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.BufferedInputStream
-import java.io.File
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.io.Reader
-import java.io.StringReader
-import java.io.Writer
+import java.io.*
 import java.net.URL
-import java.util.Date
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -113,6 +102,8 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = FeedAdapter(feedGroups)
 
+    @ExperimentalStdlibApi
+    @ObsoleteCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         setupNoActionBarTheme()
 
@@ -285,10 +276,33 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             goToEntriesList(null)
         }
 
+        if (Build.VERSION.SDK_INT >= 29 && !Environment.isExternalStorageLegacy()) {
+            if (getPrefBoolean(PrefConstants.DECSYNC_ENABLED, false) &&
+                    !getPrefBoolean(PrefConstants.DECSYNC_USE_SAF, false)) {
+                putPrefBoolean(PrefConstants.DECSYNC_ENABLED, false)
+                putPrefBoolean(PrefConstants.UPDATE_FORCES_SAF, true)
+            }
+            putPrefBoolean(PrefConstants.DECSYNC_USE_SAF, true)
+        }
+        if (getPrefBoolean(PrefConstants.UPDATE_FORCES_SAF, false)) {
+            AlertDialog.Builder(this)
+                    .setTitle(R.string.saf_update)
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        putPrefBoolean(PrefConstants.UPDATE_FORCES_SAF, false)
+                        startActivity<SettingsActivity>(SettingsFragment.EXTRA_SELECT_SAF_DIR to true)
+                    }
+                    .setNegativeButton(R.string.disable_decsync) { _, _ ->
+                        putPrefBoolean(PrefConstants.UPDATE_FORCES_SAF, false)
+                    }
+                    .show()
+        }
+
         if (getPrefBoolean(PrefConstants.REFRESH_ON_STARTUP, defValue = true)) {
             startService(Intent(this, FetcherService::class.java)
                     .setAction(FetcherService.ACTION_REFRESH_FEEDS)
                     .putExtra(FetcherService.FROM_AUTO_REFRESH, true))
+        } else if (getPrefBoolean(PrefConstants.DECSYNC_ENABLED, false)) {
+            DecsyncUtils.withDecsync(this) { executeAllNewEntries(Extra(), true) }
         }
 
         AutoRefreshJobService.initAutoRefresh(this)

@@ -17,6 +17,7 @@
 
 package net.frju.flym.data.dao
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
@@ -24,13 +25,29 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import net.frju.flym.data.entities.DecsyncCategory
+import net.frju.flym.data.entities.DecsyncFeed
 import net.frju.flym.data.entities.Feed
 import net.frju.flym.data.entities.FeedWithCount
+import java.util.*
 
+private const val DECSYNC_FEED_SELECT = "feedLink, feedTitle, groupId"
+private const val DECSYNC_FEED_WHERE = "isGroup = 0 AND feedLink != ''"
+private const val DECSYNC_CATEGORY_SELECT = "feedLink, feedTitle"
+private const val DECSYNC_CATEGORY_WHERE = "isGroup = 1 AND feedLink != '' AND feedTitle NOT NULL"
 private const val ENTRY_COUNT = "(SELECT COUNT(*) FROM entries WHERE feedId IS f.feedId AND read = 0)"
 
 @Dao
 abstract class FeedDao {
+
+    @ExperimentalStdlibApi
+    @get:Query("SELECT $DECSYNC_FEED_SELECT FROM feeds WHERE $DECSYNC_FEED_WHERE")
+    abstract val observeAllDecsyncFeeds: LiveData<List<DecsyncFeed>>
+
+    @ExperimentalStdlibApi
+    @get:Query("SELECT $DECSYNC_CATEGORY_SELECT FROM feeds WHERE $DECSYNC_CATEGORY_WHERE")
+    abstract val observeAllDecsyncCategories: LiveData<List<DecsyncCategory>>
+
     @get:Query("SELECT * FROM feeds WHERE isGroup = 0")
     abstract val allNonGroupFeeds: List<Feed>
 
@@ -61,8 +78,11 @@ abstract class FeedDao {
     @Query("UPDATE feeds SET retrieveFullText = 0 WHERE feedId = :feedId")
     abstract fun disableFullTextRetrieval(feedId: Long)
 
+    @Query("UPDATE feeds SET fetchError = 1 WHERE feedId = :feedId")
+    abstract fun setFetchError(feedId: Long)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(vararg feeds: Feed)
+    abstract fun insert(vararg feeds: Feed): List<Long>
 
     @Update
     abstract fun update(vararg feeds: Feed)

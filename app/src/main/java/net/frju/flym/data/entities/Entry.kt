@@ -21,6 +21,7 @@ import android.content.Context
 import android.os.Parcelable
 import android.text.format.DateFormat
 import android.text.format.DateUtils
+import android.util.Log
 import androidx.core.text.HtmlCompat
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -28,15 +29,15 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.rometools.rome.feed.synd.SyndEntry
 import kotlinx.android.parcel.Parcelize
+import kotlinx.serialization.json.JsonPrimitive
 import net.fred.feedex.R
 import net.frju.flym.utils.sha1
-import java.util.Date
-import java.util.UUID
-
+import org.decsync.library.Decsync
+import java.util.*
 
 @Parcelize
 @Entity(tableName = "entries",
-        indices = [(Index(value = ["feedId"])), (Index(value = ["link"], unique = true))],
+        indices = [(Index(value = ["feedId"])), (Index(value = ["link"], unique = true)), (Index(value = ["uri"], unique = true))],
         foreignKeys = [(ForeignKey(entity = Feed::class,
                 parentColumns = ["feedId"],
                 childColumns = ["feedId"],
@@ -45,6 +46,7 @@ data class Entry(@PrimaryKey
                  var id: String = "",
                  var feedId: Long = 0L,
                  var link: String? = null,
+                 var uri: String? = null,
                  var fetchDate: Date = Date(),
                  var publicationDate: Date = fetchDate, // important to know if the publication date has been set
                  var title: String? = null,
@@ -64,11 +66,11 @@ data class Entry(@PrimaryKey
             }
 }
 
-fun SyndEntry.toDbFormat(context: Context, feed: Feed): Entry {
+fun SyndEntry.toDbFormat(context: Context, feedId: Long): Entry {
     val item = Entry()
-    item.id = (feed.id.toString() + "_" + (link ?: uri ?: title
+    item.id = (feedId.toString() + "_" + (link ?: uri ?: title
     ?: UUID.randomUUID().toString())).sha1()
-    item.feedId = feed.id
+    item.feedId = feedId
     if (title != null) {
         item.title = HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
     } else {
@@ -76,6 +78,7 @@ fun SyndEntry.toDbFormat(context: Context, feed: Feed): Entry {
     }
     item.description = contents.getOrNull(0)?.value ?: description?.value
     item.link = link
+    item.uri = uri
     //TODO item.imageLink = null
     item.author = author
 

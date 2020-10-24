@@ -25,10 +25,19 @@ import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import android.os.strictmode.UntaggedSocketViolation
 import android.util.Log
+import androidx.lifecycle.Observer
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import net.fred.feedex.BuildConfig
 import net.frju.flym.data.AppDatabase
+import net.frju.flym.data.entities.DecsyncArticle
+import net.frju.flym.data.entities.DecsyncCategory
+import net.frju.flym.data.entities.DecsyncFeed
 import net.frju.flym.data.utils.PrefConstants
-import net.frju.flym.utils.putPrefBoolean
+import net.frju.flym.utils.*
+import org.decsync.library.Decsync
+import org.decsync.library.DecsyncItem
+import org.decsync.library.DecsyncObserver
+import org.decsync.library.items.Rss
 import java.util.concurrent.Executors
 
 
@@ -43,8 +52,56 @@ class App : Application() {
         @JvmStatic
         lateinit var db: AppDatabase
             private set
+
+        @ExperimentalStdlibApi
+        @ObsoleteCoroutinesApi
+        private abstract class MyDecsyncObserver<T> : DecsyncObserver(), Observer<List<T>> {
+            abstract fun toDecsyncItem(item: T): DecsyncItem
+
+            override fun isDecsyncEnabled(): Boolean {
+                return context.getPrefBoolean(PrefConstants.DECSYNC_ENABLED, false)
+            }
+
+            override fun setEntries(entries: List<Decsync.EntryWithPath>) {
+                DecsyncUtils.withDecsync(context) { setEntries(entries) }
+            }
+
+            override fun executeStoredEntries(storedEntries: List<Decsync.StoredEntry>) {
+                DecsyncUtils.withDecsync(context) { executeStoredEntries(storedEntries, Extra()) }
+            }
+
+            override fun onChanged(newList: List<T>) {
+                updateList(newList.map { toDecsyncItem(it) })
+            }
+        }
+
+        @ExperimentalStdlibApi
+        @ObsoleteCoroutinesApi
+        private val articleObserver = object: MyDecsyncObserver<DecsyncArticle>() {
+            override fun toDecsyncItem(item: DecsyncArticle): Rss.Article = item.getRssArticle()
+        }
+        @ExperimentalStdlibApi
+        @ObsoleteCoroutinesApi
+        private val feedObserver = object: MyDecsyncObserver<DecsyncFeed>() {
+            override fun toDecsyncItem(item: DecsyncFeed): Rss.Feed = item.getRssFeed()
+        }
+        @ExperimentalStdlibApi
+        @ObsoleteCoroutinesApi
+        private val categoryObserver = object: MyDecsyncObserver<DecsyncCategory>() {
+            override fun toDecsyncItem(item: DecsyncCategory): Rss.Category = item.getRssCategory()
+        }
+
+        @ExperimentalStdlibApi
+        @ObsoleteCoroutinesApi
+        fun initSync() {
+            articleObserver.initSync()
+            feedObserver.initSync()
+            categoryObserver.initSync()
+        }
     }
 
+    @ExperimentalStdlibApi
+    @ObsoleteCoroutinesApi
     override fun onCreate() {
         super.onCreate()
 
@@ -73,5 +130,10 @@ class App : Application() {
             }
             StrictMode.setVmPolicy(vmPolicy.build())
         }
+
+        // Add DecSync observers
+        db.entryDao().observeAllDecsyncArticles.observeForever(articleObserver)
+        db.feedDao().observeAllDecsyncFeeds.observeForever(feedObserver)
+        db.feedDao().observeAllDecsyncCategories.observeForever(categoryObserver)
     }
 }

@@ -25,9 +25,12 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import net.frju.flym.data.entities.DecsyncArticle
 import net.frju.flym.data.entities.Entry
 import net.frju.flym.data.entities.EntryWithFeed
 
+private const val DECSYNC_ARTICLE_SELECT = "uri, read, favorite, publicationDate"
+private const val DECSYNC_ARTICLE_WHERE = "uri NOT NULL AND publicationDate != fetchDate"
 private const val LIGHT_SELECT = "id, entries.feedId, feedLink, feedTitle, fetchDate, publicationDate, title, link, description, imageLink, read, favorite"
 private const val ORDER_BY = "ORDER BY CASE WHEN :isDesc = 1 THEN publicationDate END DESC, CASE WHEN :isDesc = 0 THEN publicationDate END ASC, id"
 private const val JOIN = "entries INNER JOIN feeds ON entries.feedId = feeds.feedId"
@@ -37,6 +40,10 @@ private const val LIKE_SEARCH = "LIKE '%' || :searchText || '%'"
 
 @Dao
 abstract class EntryDao {
+
+    @ExperimentalStdlibApi
+    @get:Query("SELECT $DECSYNC_ARTICLE_SELECT FROM entries WHERE $DECSYNC_ARTICLE_WHERE")
+    abstract val observeAllDecsyncArticles: LiveData<List<DecsyncArticle>>
 
     @Query("SELECT $LIGHT_SELECT FROM $JOIN WHERE title $LIKE_SEARCH OR description $LIKE_SEARCH OR mobilizedContent $LIKE_SEARCH $ORDER_BY")
     abstract fun observeSearch(searchText: String, isDesc: Boolean): DataSource.Factory<Int, EntryWithFeed>
@@ -107,6 +114,12 @@ abstract class EntryDao {
     @Query("SELECT COUNT(*) FROM $JOIN WHERE groupId IS :groupId AND read = 0 AND fetchDate > :minDate")
     abstract fun observeNewEntriesCountByGroup(groupId: Long, minDate: Long): LiveData<Long>
 
+    @get:Query("SELECT id FROM entries WHERE read = 1")
+    abstract val readIds: List<String>
+
+    @get:Query("SELECT id FROM entries WHERE read = 0")
+    abstract val unreadIds: List<String>
+
     @get:Query("SELECT id FROM entries WHERE favorite = 1")
     abstract val favoriteIds: List<String>
 
@@ -119,11 +132,23 @@ abstract class EntryDao {
     @Query("SELECT * FROM $JOIN WHERE id IS :id LIMIT 1")
     abstract fun findByIdWithFeed(id: String): EntryWithFeed?
 
+    @Query("SELECT id FROM entries WHERE link IS :link LIMIT 1")
+    abstract fun idForLink(link: String): String?
+
+    @Query("SELECT id FROM entries WHERE uri IS :uri LIMIT 1")
+    abstract fun idForUri(uri: String): String?
+
     @Query("SELECT title FROM entries WHERE title IN (:titles)")
     abstract fun findAlreadyExistingTitles(titles: List<String>): List<String>
 
     @Query("SELECT id FROM entries WHERE feedId IS (:feedId)")
     abstract fun idsForFeed(feedId: Long): List<String>
+
+    @Query("SELECT id FROM entries WHERE feedId IS (:feedId) AND read = 0")
+    abstract fun unreadIdsForFeed(feedId: Long): List<String>
+
+    @Query("SELECT id FROM $JOIN WHERE groupId IS (:groupId) AND read = 0")
+    abstract fun unreadIdsForGroup(groupId: Long): List<String>
 
     @Query("UPDATE entries SET read = 1 WHERE id IN (:ids)")
     abstract fun markAsRead(ids: List<String>)
