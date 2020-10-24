@@ -192,11 +192,11 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                     if (feedId == 0L || App.db.feedDao().findById(feedId)!!.isGroup) {
                         newCount = refreshFeeds(feedId, acceptMinDate)
                     } else {
-                        App.db.feedDao().findById(feedId)?.let {
+                        App.db.feedDao().findById(feedId)?.link?.let { link ->
                             try {
-                                newCount = refreshFeed(it, acceptMinDate)
+                                newCount = refreshFeed(feedId, link, acceptMinDate)
                             } catch (e: Exception) {
-                                error("Can't fetch feed ${it.link}", e)
+                                error("Can't fetch feed $link", e)
                             }
                         }
                     }
@@ -334,14 +334,14 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             for (task in tasks) {
                 var success = false
 
-                App.db.entryDao().findById(task.entryId)?.let { entry ->
-                    entry.link?.let { link ->
-                        try {
-                            createCall(link).execute().use { response ->
-                                response.body?.byteStream()?.let { input ->
-                                    Readability4JExtended(link, Jsoup.parse(input, null, link)).parse().articleContent?.html()?.let {
-                                        val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(link))
+                App.db.entryDao().findById(task.entryId)?.link?.let { link ->
+                    try {
+                        createCall(link).execute().use { response ->
+                            response.body?.byteStream()?.let { input ->
+                                Readability4JExtended(link, Jsoup.parse(input, null, link)).parse().articleContent?.html()?.let {
+                                    val mobilizedHtml = HtmlUtils.improveHtmlContent(it, getBaseUrl(link))
 
+                                    App.db.entryDao().findById(task.entryId)?.let { entry ->
                                         val entryDescription = entry.description
                                         if (entryDescription == null || HtmlCompat.fromHtml(mobilizedHtml, HtmlCompat.FROM_HTML_MODE_LEGACY).length > HtmlCompat.fromHtml(entryDescription, HtmlCompat.FROM_HTML_MODE_LEGACY).length) { // If the retrieved text is smaller than the original one, then we certainly failed...
                                             if (downloadPictures) {
@@ -366,9 +366,9 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                                     }
                                 }
                             }
-                        } catch (t: Throwable) {
-                            error("Can't mobilize feedWithCount ${entry.link}", t)
                         }
+                    } catch (t: Throwable) {
+                        error("Can't mobilize feedWithCount $link", t)
                     }
                 }
 
@@ -428,7 +428,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 completionService.submit {
                     var result = 0
                     try {
-                        result = refreshFeed(feed, acceptMinDate)
+                        result = refreshFeed(feed.id, feed.link, acceptMinDate)
                     } catch (e: Exception) {
                         error("Can't fetch feedWithCount ${feed.link}", e)
                     }
@@ -451,30 +451,32 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
         }
 
         @ExperimentalStdlibApi
-        private fun refreshFeed(feed: Feed, acceptMinDate: Long): Int {
+        private fun refreshFeed(feedId: Long, feedLink: String, acceptMinDate: Long): Int {
             val entries = mutableListOf<Entry>()
             val entriesToInsert = mutableListOf<Entry>()
             val imgUrlsToDownload = mutableMapOf<String, List<String>>()
             val downloadPictures = shouldDownloadPictures()
 
-            val previousFeedState = feed.copy()
             try {
-                createCall(feed.link).execute().use { response ->
+                createCall(feedLink).execute().use { response ->
                     val input = SyndFeedInput()
                     val romeFeed = input.build(XmlReader(response.body!!.byteStream()))
-                    entries.addAll(romeFeed.entries.asSequence().filter { it.publishedDate?.time ?: Long.MAX_VALUE > acceptMinDate }.map { it.toDbFormat(context, feed) })
-                    feed.update(romeFeed)
+                    entries.addAll(romeFeed.entries.asSequence().filter { it.publishedDate?.time ?: Long.MAX_VALUE > acceptMinDate }.map { it.toDbFormat(context, feedId) })
+                    App.db.feedDao().findById(feedId)?.let { feed ->
+                        val previousFeedState = feed.copy()
+                        feed.update(romeFeed)
+                        if (feed != previousFeedState) {
+                            App.db.feedDao().update(feed)
+                        }
+                    }
                 }
             } catch (t: Throwable) {
-                feed.fetchError = true
+                App.db.feedDao().setFetchError(feedId)
             }
 
-            if (feed != previousFeedState) {
-                App.db.feedDao().update(feed)
-            }
 
             // First we remove the entries that we already have in db (no update to save data)
-            val existingIds = App.db.entryDao().idsForFeed(feed.id)
+            val existingIds = App.db.entryDao().idsForFeed(feedId)
             entries.removeAll { it.id in existingIds }
 
             // Second, we filter items with same title than one we already have
@@ -499,7 +501,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                 }
             }
 
-            val feedBaseUrl = getBaseUrl(feed.link)
+            val feedBaseUrl = getBaseUrl(feedLink)
             var foundExisting = false
 
             // Now we improve the html and find images
@@ -540,7 +542,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
             // Insert everything
             App.db.entryDao().insert(entriesToInsert)
 
-            if (feed.retrieveFullText) {
+            if (App.db.feedDao().findById(feedId)?.retrieveFullText == true) {
                 addEntriesToMobilize(entries.map { it.id })
             }
 

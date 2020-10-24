@@ -68,6 +68,9 @@ abstract class FeedDao {
     @Query("UPDATE feeds SET retrieveFullText = 0 WHERE feedId = :feedId")
     abstract fun disableFullTextRetrieval(feedId: Long)
 
+    @Query("UPDATE feeds SET fetchError = 1 WHERE feedId = :feedId")
+    abstract fun setFetchError(feedId: Long)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     protected abstract fun insertDao(vararg feeds: Feed): List<Long>
 

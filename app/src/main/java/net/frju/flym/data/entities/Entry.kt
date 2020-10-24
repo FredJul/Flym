@@ -102,11 +102,11 @@ data class Entry(@PrimaryKey
     }
 }
 
-fun SyndEntry.toDbFormat(context: Context, feed: Feed): Entry {
+fun SyndEntry.toDbFormat(context: Context, feedId: Long): Entry {
     val item = Entry()
-    item.id = (feed.id.toString() + "_" + (link ?: uri ?: title
+    item.id = (feedId.toString() + "_" + (link ?: uri ?: title
     ?: UUID.randomUUID().toString())).sha1()
-    item.feedId = feed.id
+    item.feedId = feedId
     if (title != null) {
         item.title = HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
     } else {
