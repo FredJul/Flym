@@ -8,11 +8,11 @@ androidExtensions {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "net.frju.flym"
         minSdkVersion 21
-        targetSdkVersion 29 // Allows for legacy storage on Android 11
+        targetSdkVersion 30
         versionCode 37
         versionName "2.5.3"
     }
