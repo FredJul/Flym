@@ -127,7 +127,7 @@
     <string name="settings_enable_entry_swipe">Abilita lo scorrimento durante la visualizzazione di un articolo</string>
     <string name="settings_category_article_list">Lista articoli</string>
     <string name="settings_category_article_appearance">Aspetto articoli</string>
-    <string name="settings_enable_entry_swipe_description">Se abilitato, permette lo swipe fra gli articoli mentre se ne vede uno</string>
+    <string name="settings_enable_entry_swipe_description">Se abilitato, permette lo scorrimento fra gli articoli mentre se ne vede uno</string>
     <string-array name="settings_intervals">
         <item>5 minuti</item>
         <item>15 minuti</item>
