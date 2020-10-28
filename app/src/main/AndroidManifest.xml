@@ -121,6 +121,8 @@
 
         <meta-data
             android:name="com.samsung.android.icon_container.has_icon_container"
+            android:value="true" /> <!-- Disable Samsung squircle launcher icon -->
+        <meta-data android:name="android.webkit.WebView.MetricsOptOut"
             android:value="true" />
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -135,7 +137,7 @@
         <service
             android:name="net.frju.flym.service.AutoRefreshJobService"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- Disable Samsung squircle launcher icon -->
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service android:name="net.frju.flym.service.FetcherService" />
     </application>
 
