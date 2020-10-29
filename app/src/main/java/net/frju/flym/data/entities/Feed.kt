@@ -72,11 +72,12 @@ data class Feed(
             }
         }
 
-        private fun getLettersForName(feedName: String): String {
+        internal fun getLettersForName(feedName: String): String {
             val split = feedName.split(*DELIMITERS).filter { it != "" }     // filtering empty strings that occur when multiple delimiters are matched, e. g. colon-whitespace: ": "
 
             val letters = when {
                 split.size >= 2 -> String(charArrayOf(split[0][0], split[1][0]))    // first letter of first and second word
+                split.isEmpty() -> ""
                 else -> split[0][0].toString()
             }
 
