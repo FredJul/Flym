@@ -4,7 +4,6 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">حول Flym</string>
     <string name="welcome_title">مرحبا بكم في Flym. هل ترغب في إضافة نشرة إخبارية؟</string>
-    <string name="welcome_title_with_opml_import">هل ترغب في استيراد خلاصات Flym السابقة؟</string>
     <string name="cannot_find_feeds">لم يتم العثور على أي خلاصات</string>
     <string name="menu_settings">الإعدادات</string>
     <string name="menu_edit_feed">تعديل الخلاصة</string>

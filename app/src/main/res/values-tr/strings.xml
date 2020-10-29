@@ -8,7 +8,6 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">Flym Hakkında</string>
     <string name="welcome_title">Flym\'e hoşgeldiniz. Yayın eklemek ister misiniz?</string>
-    <string name="welcome_title_with_opml_import">Bir önceki Flym yayınlarını eklemek ister misiniz?</string>
     <string name="cannot_find_feeds">Yayın bulunamadı</string>
     <string name="menu_settings">Ayarlar</string>
     <string name="menu_edit_feed">Yayını düzenle</string>

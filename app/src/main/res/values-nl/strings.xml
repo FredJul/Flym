@@ -8,7 +8,6 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">Over Flym</string>
     <string name="welcome_title">Welkom bij Flym. Wil je een feed toevoegen?</string>
-    <string name="welcome_title_with_opml_import">Wil je eerdere Flym-feeds importeren?</string>
     <string name="cannot_find_feeds">Geen feeds gevonden</string>
     <string name="menu_settings">Instellingen</string>
     <string name="menu_edit_feed">Feed bewerken</string>

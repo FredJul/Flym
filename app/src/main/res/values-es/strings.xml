@@ -7,7 +7,6 @@
     </plurals>
     <string name="about_flym">Sobre Flym</string>
     <string name="welcome_title">Bienvenido a Flym ¿Quieres añadir una fuente?</string>
-    <string name="welcome_title_with_opml_import">¿Quieres importar fuentes anteriores de Flym?</string>
     <string name="cannot_find_feeds">No encontré fuentes</string>
     <string name="menu_settings">Configuración</string>
     <string name="menu_edit_feed">Modificar fuente</string>

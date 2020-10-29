@@ -138,7 +138,7 @@ class FetcherService : IntentService(FetcherService::class.java.simpleName) {
                     val acceptMinDate = max(readEntriesKeepDate, unreadEntriesKeepDate)
 
                     var newCount = 0
-                    if (feedId == 0L || App.db.feedDao().findById(feedId)!!.isGroup) {
+                    if (feedId == 0L || App.db.feedDao().findById(feedId)?.isGroup == true) {
                         newCount = refreshFeeds(feedId, acceptMinDate)
                     } else {
                         App.db.feedDao().findById(feedId)?.let {

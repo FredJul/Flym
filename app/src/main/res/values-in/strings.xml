@@ -7,7 +7,6 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">Tentang Flym</string>
     <string name="welcome_title">Selamat datang di Flym. Apakah anda ingin menambahkan feed?</string>
-    <string name="welcome_title_with_opml_import">Apakah anda ingin mengimpor feed Flym yang sebelumnya?</string>
     <string name="cannot_find_feeds">Tidak ada feed yang ditemukan</string>
     <string name="menu_settings">Pengaturan</string>
     <string name="menu_edit_feed">Sunting feed</string>

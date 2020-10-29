@@ -10,7 +10,6 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">О программе</string>
     <string name="welcome_title">Добро пожаловать в Flym. Хотите добавить новую ленту?</string>
-    <string name="welcome_title_with_opml_import">Импортировать предыдущие ленты Flym?</string>
     <string name="cannot_find_feeds">Ленты не найдены</string>
     <string name="menu_settings">Настройки</string>
     <string name="menu_edit_feed">Редактировать ленту</string>

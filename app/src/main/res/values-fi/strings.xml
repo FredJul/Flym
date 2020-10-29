@@ -7,7 +7,6 @@
     </plurals>
     <string name="about_flym">Tietoja Flymista</string>
     <string name="welcome_title">Tervetuloa Flym:iin. Haluaisitko lisätä syötteen?</string>
-    <string name="welcome_title_with_opml_import">Haluatko tuoda aiemmat Flym-syötteet?</string>
     <string name="cannot_find_feeds">Syötteitä ei löydy</string>
     <string name="menu_settings">Asetukset</string>
     <string name="menu_edit_feed">Muokkaa syötettä</string>

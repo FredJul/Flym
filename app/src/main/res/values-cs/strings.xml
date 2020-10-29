@@ -9,7 +9,6 @@
     </plurals>
     <string name="about_flym">O aplikaci Flym</string>
     <string name="welcome_title">Vítejte v aplikaci Flym. Chcete přidat nový zdroj?</string>
-    <string name="welcome_title_with_opml_import">Chcete importovat předchozí zdroje Flym?</string>
     <string name="cannot_find_feeds">Nebyly nalezeny žádné zdroje</string>
     <string name="menu_settings">Nastavení</string>
     <string name="menu_edit_feed">Upravit zdroj</string>

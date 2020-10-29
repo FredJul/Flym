@@ -7,7 +7,6 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">关于 Flym</string>
     <string name="welcome_title">欢迎使用 Flym 。需要添加一个订阅源吗？</string>
-    <string name="welcome_title_with_opml_import">是否要导入旧版 Flym 中的订阅源？</string>
     <string name="cannot_find_feeds">未发现订阅源</string>
     <string name="menu_settings">设置</string>
     <string name="menu_edit_feed">编辑订阅源</string>

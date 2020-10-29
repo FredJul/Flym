@@ -17,16 +17,13 @@
 
 package net.frju.flym.ui.main
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.OpenableColumns
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
@@ -34,7 +31,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.*
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rometools.opml.feed.opml.Attribute
 import com.rometools.opml.feed.opml.Opml
@@ -63,27 +59,12 @@ import net.frju.flym.ui.feeds.FeedGroup
 import net.frju.flym.ui.feeds.FeedListEditActivity
 import net.frju.flym.ui.settings.SettingsActivity
 import net.frju.flym.utils.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.browse
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.notificationManager
+import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk21.listeners.onClick
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textResource
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
-import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.BufferedInputStream
-import java.io.File
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.io.Reader
-import java.io.StringReader
-import java.io.Writer
+import java.io.*
 import java.net.URL
-import java.util.Date
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
@@ -98,17 +79,14 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
 
         private const val OLD_GNEWS_TO_IGNORE = "http://news.google.com/news?"
 
-        private const val AUTO_IMPORT_OPML_REQUEST_CODE = 1
         private const val WRITE_OPML_REQUEST_CODE = 2
         private const val READ_OPML_REQUEST_CODE = 3
-        private val NEEDED_PERMS = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        private val BACKUP_OPML = File(Environment.getExternalStorageDirectory(), "/Flym_auto_backup.opml")
         private const val RETRIEVE_FULLTEXT_OPML_ATTR = "retrieveFullText"
-    }
 
-    private val INTENT_UNREADS = "net.frju.flym.intent.UNREADS"
-    private val INTENT_ALL = "net.frju.flym.intent.ALL"
-    private val INTENT_FAVORITES = "net.frju.flym.intent.FAVORITES"
+        private const val INTENT_UNREADS = "net.frju.flym.intent.UNREADS"
+        private const val INTENT_ALL = "net.frju.flym.intent.ALL"
+        private const val INTENT_FAVORITES = "net.frju.flym.intent.FAVORITES"
+    }
 
     private val feedGroups = mutableListOf<FeedGroup>()
     private val feedAdapter = FeedAdapter(feedGroups)
@@ -117,7 +95,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         setupNoActionBarTheme()
 
         super.onCreate(savedInstanceState)
-
 
         setContentView(R.layout.activity_main)
 
@@ -146,7 +123,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             goToFeedSearch()
         }
 
-        App.db.feedDao().observeAllWithCount.observe(this@MainActivity, Observer { nullableFeeds ->
+        App.db.feedDao().observeAllWithCount.observe(this@MainActivity, { nullableFeeds ->
             nullableFeeds?.let { feeds ->
                 val newFeedGroups = mutableListOf<FeedGroup>()
 
@@ -179,7 +156,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                     }
                 }
 
-                feedAdapter.onFeedClick { view, feedWithCount ->
+                feedAdapter.onFeedClick { _, feedWithCount ->
                     goToEntriesList(feedWithCount.feed)
                     closeDrawer()
                 }
@@ -209,7 +186,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                                     AlertDialog.Builder(this@MainActivity)
                                             .setTitle(R.string.menu_edit_feed)
                                             .setView(input)
-                                            .setPositiveButton(android.R.string.ok) { dialog, which ->
+                                            .setPositiveButton(android.R.string.ok) { _, _ ->
                                                 val newName = input.feed_name.text.toString()
                                                 val newLink = input.feed_link.text.toString()
                                                 if (newName.isNotBlank() && (newLink.isNotBlank() || feedWithCount.feed.isGroup)) {
@@ -233,9 +210,9 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                                     AlertDialog.Builder(this@MainActivity)
                                             .setTitle(feedWithCount.feed.title)
                                             .setMessage(if (feedWithCount.feed.isGroup) R.string.question_delete_group else R.string.question_delete_feed)
-                                            .setPositiveButton(android.R.string.yes) { _, _ ->
+                                            .setPositiveButton(android.R.string.ok) { _, _ ->
                                                 doAsync { App.db.feedDao().delete(feedWithCount.feed) }
-                                            }.setNegativeButton(android.R.string.no, null)
+                                            }.setNegativeButton(android.R.string.cancel, null)
                                             .show()
                                 }
                                 R.id.enable_full_text_retrieval -> doAsync { App.db.feedDao().enableFullTextRetrieval(feedWithCount.feed.id) }
@@ -273,11 +250,7 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
                 putPrefBoolean(PrefConstants.FIRST_OPEN, false)
                 openDrawer()
 
-                if (isOldFlymAppInstalled()) {
-                    showAlertDialog(R.string.welcome_title_with_opml_import) { autoImportOpml() }
-                } else {
-                    showAlertDialog(R.string.welcome_title) { goToFeedSearch() }
-                }
+                showAlertDialog(R.string.welcome_title) { goToFeedSearch() }
             } else {
                 closeDrawer()
             }
@@ -286,9 +259,13 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
 
         if (getPrefBoolean(PrefConstants.REFRESH_ON_STARTUP, defValue = true)) {
-            startService(Intent(this, FetcherService::class.java)
-                    .setAction(FetcherService.ACTION_REFRESH_FEEDS)
-                    .putExtra(FetcherService.FROM_AUTO_REFRESH, true))
+            try { // Some people seems to sometimes have a IllegalStateException on this
+                startService(Intent(this, FetcherService::class.java)
+                        .setAction(FetcherService.ACTION_REFRESH_FEEDS)
+                        .putExtra(FetcherService.FROM_AUTO_REFRESH, true))
+            } catch (t: Throwable) {
+                // Nothing to do, the refresh can still be triggered manually
+            }
         }
 
         AutoRefreshJobService.initAutoRefresh(this)
@@ -488,9 +465,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
         }
     }
 
-    private fun isOldFlymAppInstalled() =
-            packageManager.getInstalledApplications(PackageManager.GET_META_DATA).any { it.packageName == "net.fred.feedex" }
-
     private fun hasFeedGroupsChanged(feedGroups: List<FeedGroup>, newFeedGroups: List<FeedGroup>): Boolean {
         if (feedGroups != newFeedGroups) {
             return true
@@ -541,19 +515,6 @@ class MainActivity : AppCompatActivity(), MainNavigator, AnkoLogger {
             resultData?.data?.also { uri -> importOpml(uri) }
         } else if (requestCode == WRITE_OPML_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             resultData?.data?.also { uri -> exportOpml(uri) }
-        }
-    }
-
-    @AfterPermissionGranted(AUTO_IMPORT_OPML_REQUEST_CODE)
-    private fun autoImportOpml() {
-        if (!EasyPermissions.hasPermissions(this, *NEEDED_PERMS)) {
-            EasyPermissions.requestPermissions(this, getString(R.string.welcome_title_with_opml_import), AUTO_IMPORT_OPML_REQUEST_CODE, *NEEDED_PERMS)
-        } else {
-            if (BACKUP_OPML.exists()) {
-                importOpml(Uri.fromFile(BACKUP_OPML))
-            } else {
-                toast(R.string.cannot_find_feeds)
-            }
         }
     }
 

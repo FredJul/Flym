@@ -7,7 +7,6 @@
     </plurals>
     <string name="about_flym">Om Flym</string>
     <string name="welcome_title">Välkommen till Flym. Skulle du vilja lägga till en feed?</string>
-    <string name="welcome_title_with_opml_import">Skulle du vilja importera tidigare Flym feeds?</string>
     <string name="cannot_find_feeds">Inga feeds hittades</string>
     <string name="menu_settings">Inställningar</string>
     <string name="menu_edit_feed">Redigera feed</string>

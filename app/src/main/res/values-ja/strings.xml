@@ -7,7 +7,6 @@
     <string name="app_name">Flym</string>
     <string name="about_flym">Flym について</string>
     <string name="welcome_title">Flym へようこそ。フィードを追加しますか？</string>
-    <string name="welcome_title_with_opml_import">以前使っていた Flym フィードをインポートしますか？</string>
     <string name="cannot_find_feeds">フィードが見つかりませんでした</string>
     <string name="menu_settings">設定</string>
     <string name="menu_edit_feed">フィードを編集</string>

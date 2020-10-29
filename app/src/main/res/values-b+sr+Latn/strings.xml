@@ -9,7 +9,6 @@
     <string name="app_name">Flim</string>
     <string name="about_flym">O Flimu</string>
     <string name="welcome_title">Dobrodošli u Flim. Da li želite da dodate novi dovod?</string>
-    <string name="welcome_title_with_opml_import">Da li želite da uvezete prethodno sačuvanu Flim dovoda?</string>
     <string name="cannot_find_feeds">Dovodi nisu pronađeni</string>
     <string name="menu_settings">Podešavanja</string>
     <string name="menu_edit_feed">Uređivanje dovoda</string>

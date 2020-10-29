@@ -8,7 +8,6 @@
     <string name="app_name">অগ্নি</string>
     <string name="about_flym">অগ্নি সম্পর্কে</string>
     <string name="welcome_title">অগ্নিতে স্বাগতম। তুমি কি একটি ফিড যোগকর্তে চাও?</string>
-    <string name="welcome_title_with_opml_import">তুমি কি আগের অগ্নি ফিড আনতে চাও?</string>
     <string name="cannot_find_feeds">কোনো ফিড পাওয়া যায়নি</string>
     <string name="menu_settings">সেটিংস</string>
     <string name="menu_edit_feed">ফিড সম্পাদনা করো</string>

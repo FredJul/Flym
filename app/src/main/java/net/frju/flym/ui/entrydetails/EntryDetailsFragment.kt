@@ -26,14 +26,15 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.*
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_entry_details.*
-import kotlinx.android.synthetic.main.fragment_entry_details.refresh_layout
-import kotlinx.android.synthetic.main.fragment_entry_details.toolbar
 import me.thanel.swipeactionview.SwipeActionView
 import me.thanel.swipeactionview.SwipeGestureListener
 import net.fred.feedex.R
@@ -47,11 +48,14 @@ import net.frju.flym.ui.main.MainNavigator
 import net.frju.flym.utils.getPrefBoolean
 import net.frju.flym.utils.isGestureNavigationEnabled
 import net.frju.flym.utils.isOnline
-import org.jetbrains.anko.*
+import org.jetbrains.anko.attr
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.support.v4.browse
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import org.jetbrains.anko.support.v4.share
 import org.jetbrains.anko.support.v4.toast
+import org.jetbrains.anko.uiThread
 import org.jetbrains.annotations.NotNull
 
 
@@ -345,7 +349,7 @@ class EntryDetailsFragment : Fragment() {
 
         doAsync {
             App.db.entryDao().findByIdWithFeed(entryId)?.let { entry ->
-                var feed = App.db.feedDao().findById(entry.entry.feedId)
+                val feed = App.db.feedDao().findById(entry.entry.feedId)
                 entryWithFeed = entry
                 preferFullText = feed?.retrieveFullText ?: true
                 isMobilizing = false

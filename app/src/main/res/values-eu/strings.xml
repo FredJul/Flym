@@ -7,7 +7,6 @@
     </plurals>
     <string name="about_flym">Flymi buruz</string>
     <string name="welcome_title">Ongi etorri Flymera. Jario bat gehitu nahi al zenuke?</string>
-    <string name="welcome_title_with_opml_import">Flymeko aurreko jarioak inportatu nahi al zenituzke?</string>
     <string name="cannot_find_feeds">Ez da jariorik aurkitu</string>
     <string name="menu_settings">Ezarpenak</string>
     <string name="menu_edit_feed">Jarioa editatu</string>
