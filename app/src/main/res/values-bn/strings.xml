@@ -29,6 +29,11 @@
     <string name="feed_search">ফিড খুজোঁ</string>
     <string name="feed_search_hint">ফিড লিঙ্ক বা মূলশব্দ দাও</string>
     <string name="feed_added">ফিড তালিকায় যোগ করা হয়েছে</string>
+    <string name="add_group_title">গ্রুপের নাম দাও</string>
+    <string name="message_exported_to">%s এ বের করা হয়েছে।</string>
+    <string name="to_group_title">ফিড সরানোর কাজ</string>
+    <string name="to_group_above">গ্রুপের ওপরে</string>
+    <string name="to_group_into">গ্রুপের ভিতরে</string>
     <string name="feed_name">ফিডের নাম</string>
     <!-- ENTRIES -->
     <string name="feed_link">ফিড লিঙ্ক</string>
@@ -62,7 +67,9 @@
     </string-array>
     <!-- SETTINGS -->
     <string name="settings_font_size">লেখার আকার</string>
+    <string name="filter_title">অবরোধ তালিকা</string>
     <string name="settings_theme">থিম</string>
+    <string name="settings_category_article_appearance">আর্টিকেলের দৃশ্যমানতার ধরণ</string>
     <string-array name="settings_intervals">
         <item>৫ মিনিট</item>
         <item>১৫ মিনিট</item>
@@ -94,7 +101,7 @@
     </string-array>
     <string-array name="settings_preload_image_modes">
         <item>কখনো না</item>
-        <item>Only over Wi-Fi</item>
+        <item>শুধু ওয়াই-ফাই দিয়ে</item>
         <item>সবসময়</item>
     </string-array>
     <string-array name="settings_themes">
