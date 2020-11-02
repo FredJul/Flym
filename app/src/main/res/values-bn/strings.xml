@@ -35,16 +35,31 @@
     <string name="to_group_above">গ্রুপের ওপরে</string>
     <string name="to_group_into">গ্রুপের ভিতরে</string>
     <string name="feed_name">ফিডের নাম</string>
+    <string name="feed_edit_drag_handle_content_description">হ্যান্ডল টানো</string>
+    <string name="feed_edit_feed_icon_content_description">ফিড আইকন</string>
     <!-- ENTRIES -->
     <string name="feed_link">ফিড লিঙ্ক</string>
+    <string name="all_entries">সব ভুক্তি</string>
     <string name="menu_star">পছন্দ</string>
     <string name="menu_unstar">পছন্দ না</string>
     <string name="menu_share">শেয়ার</string>
+    <string name="menu_mark_as_unread">অপঠিত চিহ্নিত করো</string>
+    <string name="get_full_text">সম্পূর্ণ লেখা আনো</string>
+    <string name="original_text">মূল লেখা দেখাও</string>
+    <string name="open_in_browser">ব্রাউজারে দেখো</string>
+    <string name="cant_open_link">এই লিঙ্কের জন্য কোনো অ্যাপ পাওয়া যায়নি</string>
     <string name="unreads">অপঠিত</string>
     <string name="all">সব</string>
     <string name="favorites">পছন্দসমূহ</string>
+    <string name="no_entries">কিছু নেই\nআবার আনতে উপর থেকে টানো</string>
     <string name="undo">ফিরত যাও</string>
+    <string name="marked_as_read">পঠিত চিহ্নিত</string>
+    <string name="marked_as_unread">অপঠিত চিহ্নিত</string>
+    <string name="expand_arrow_content_description">ফিড গ্রুপ প্রসারিত করো</string>
+    <string name="collapse_arrow_content_description">ফিড গ্রুপ সংকোচিত করো</string>
+    <string name="mark_all_as_read_fab_content_description">সব পঠিত চিহ্নিত করো</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">ফিড খুজো</string>
     <string-array name="discover_topics">
         <item>খবর</item>
         <item>রাজনীতি</item>
