@@ -84,7 +84,7 @@ class EntryAdapter(var displayThumbnails: Boolean, private val globalClickListen
                     date.isEnabled = !entryWithFeed.entry.read
                     date.text = entryWithFeed.entry.getReadablePublicationDate(context)
 
-                    favorite_icon.isEnabled = !entryWithFeed.entry.read
+                    favorite_icon.isEnabled = !entryWithFeed.entry.read || (entryWithFeed.entry.read && entryWithFeed.entry.favorite)
                     if (entryWithFeed.entry.favorite) {
                         favorite_icon.setImageResource(R.drawable.ic_star_24dp)
                     } else {
