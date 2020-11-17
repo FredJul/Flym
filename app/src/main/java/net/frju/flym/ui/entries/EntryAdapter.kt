@@ -18,6 +18,7 @@
 package net.frju.flym.ui.entries
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -84,7 +85,13 @@ class EntryAdapter(var displayThumbnails: Boolean, private val globalClickListen
                     date.isEnabled = !entryWithFeed.entry.read
                     date.text = entryWithFeed.entry.getReadablePublicationDate(context)
 
-                    favorite_icon.isEnabled = !entryWithFeed.entry.read || (entryWithFeed.entry.read && entryWithFeed.entry.favorite)
+                    if (entryWithFeed.entry.read) {
+                        favorite_icon.setColorFilter(Color.GRAY)
+                    }
+                    else {
+                        favorite_icon.setColorFilter(Color.WHITE)
+                    }
+
                     if (entryWithFeed.entry.favorite) {
                         favorite_icon.setImageResource(R.drawable.ic_star_24dp)
                     } else {
