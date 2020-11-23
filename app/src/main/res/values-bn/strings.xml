@@ -21,17 +21,24 @@
     <string name="network_error">নেটওয়ার্ক তৈরি নয়</string>
     <string name="drawer_explanation">স্বাগতম!\n\nঅপশন দেখার জন্য ফিড কিছুক্ষণ ধরে রাখো ▼</string>
     <string name="drawer_fetch_error_explanation">তোমার কিছু ফিড ঠিকভাবে আসেনি ▼</string>
+    <string name="about_screen_info">আমি এই অ্যাপ্লিকেশনটি জিপিএল-সং-৩ লাইসেন্সের আওতায় বিনামূল্যে এবং ওপেন সোর্স সফ্টওয়্যার হিসাবে প্রকাশ করছি। যতক্ষণ তুমি এটাকে ওপেন সোর্স রাখো ততক্ষণ এটিকে পরিবর্তন করতে পারো।</string>
+    <string name="navigation_button_content_description">মূল ফিড টগল</string>
     <!-- FEEDS -->
     <string name="feeds">ফিডসমূহ</string>
     <string name="menu_add_group">গ্রুপ যোগ করো</string>
     <string name="menu_import">ওপিএমএল থেকে আনো</string>
     <string name="menu_export">ওপিএমএলে বের সংরক্ষণ করো</string>
+    <string name="storage_request_explanation">কোনো ফাইলে ফিড আনতে বা বের করতে তোমাকে অ্যাপ্লিকেশনটিকে ডিভাইস স্টোরেজের অনুমতি দিতে হবে।</string>
+    <string name="error_feed_export">বের করা ব্যর্থ হয়েছে। তোমার লিখনযোগ্য এসডি-কার্ড মাউন্ট করা আছে তা নিশ্চিত করো।</string>
     <string name="feed_search">ফিড খুজোঁ</string>
     <string name="feed_search_hint">ফিড লিঙ্ক বা মূলশব্দ দাও</string>
     <string name="feed_added">ফিড তালিকায় যোগ করা হয়েছে</string>
+    <string name="question_delete_feed">তুমি সত্যিই এই ফিড মুছতে চাও?</string>
+    <string name="question_delete_group">তুমি সত্যিই এই গ্রুপ আর এর সব ফিড মুছতে চাও?</string>
     <string name="add_group_title">গ্রুপের নাম দাও</string>
     <string name="message_exported_to">%s এ বের করা হয়েছে।</string>
     <string name="to_group_title">ফিড সরানোর কাজ</string>
+    <string name="to_group_message">তুমি এই ফিডটি এই গ্রুপে বা তার উপরে রাখতে পারো। তুমি কি কোনটা করতে চাও?</string>
     <string name="to_group_above">গ্রুপের ওপরে</string>
     <string name="to_group_into">গ্রুপের ভিতরে</string>
     <string name="feed_name">ফিডের নাম</string>
@@ -60,6 +67,7 @@
     <string name="mark_all_as_read_fab_content_description">সব পঠিত চিহ্নিত করো</string>
     <!-- DISCOVER -->
     <string name="discover_search_label">ফিড খুজো</string>
+    <string name="discover_search_hint">কিওয়ার্ড, ইউআরএল বা বিষয় দ্বারা অনুসন্ধান করো। বিষয়গুলি একটি \'#\' উপসর্গ দিয়ে নির্দেশ করা যেতে পারে।</string>
     <string-array name="discover_topics">
         <item>খবর</item>
         <item>রাজনীতি</item>
@@ -68,7 +76,7 @@
         <item>প্রযুক্তি</item>
         <item>স্টার্টআপ</item>
         <item>টেলিকম</item>
-        <item>cybersecurity</item>
+        <item>সাইবার নিরাপত্তা</item>
         <item>গোপনীয়তা</item>
         <item>বিজ্ঞান</item>
         <item>চিকিৎসাশাস্ত্র</item>
@@ -77,16 +85,23 @@
         <item>ব্যবসা</item>
         <item>বাজারজাতকরণ</item>
         <item>মহাকাশ</item>
-        <item>design</item>
+        <item>নকশা</item>
         <item>কমিক</item>
     </string-array>
     <!-- SETTINGS -->
     <string name="entry_default_title">শিরোনামহীন</string>
+    <string name="settings_category_refresh">স্বয়ং রিফ্রেশ</string>
+    <string name="settings_refresh_interval">রিফ্রেশ মধ্যবর্তী সময়</string>
     <string name="settings_category_general">সাধারণ</string>
+    <string name="settings_display_images">ছবি দেখাও</string>
+    <string name="settings_preload_image_mode">ছবি পূর্বেই লোড করো</string>
     <string name="settings_font_size">লেখার আকার</string>
+    <string name="settings_remove_duplicates_description_title">দ্বিত্ব সরাও</string>
     <string name="filter_title">অবরোধ তালিকা</string>
     <string name="settings_theme">থিম</string>
+    <string name="open_browser_direct_title">ব্রাউজারে খুলো</string>
     <string name="settings_sort_order_title">সাজানোর পদ্ধতি</string>
+    <string name="settings_category_article_list">নিবন্ধের তালিকা</string>
     <string name="settings_category_article_appearance">আর্টিকেলের দৃশ্যমানতার ধরণ</string>
     <string-array name="settings_intervals">
         <item>৫ মিনিট</item>
