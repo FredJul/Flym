@@ -64,26 +64,29 @@
         <item>খবর</item>
         <item>রাজনীতি</item>
         <item>পৃথিবী</item>
-        <item>engineering</item>
+        <item>প্রকৌশলশাস্ত্র</item>
         <item>প্রযুক্তি</item>
-        <item>startups</item>
+        <item>স্টার্টআপ</item>
         <item>টেলিকম</item>
         <item>cybersecurity</item>
         <item>গোপনীয়তা</item>
         <item>বিজ্ঞান</item>
         <item>চিকিৎসাশাস্ত্র</item>
-        <item>healthcare</item>
+        <item>স্বাস্থ্যসেবা</item>
         <item>শিক্ষা</item>
         <item>ব্যবসা</item>
-        <item>marketing</item>
+        <item>বাজারজাতকরণ</item>
         <item>মহাকাশ</item>
         <item>design</item>
         <item>কমিক</item>
     </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">শিরোনামহীন</string>
+    <string name="settings_category_general">সাধারণ</string>
     <string name="settings_font_size">লেখার আকার</string>
     <string name="filter_title">অবরোধ তালিকা</string>
     <string name="settings_theme">থিম</string>
+    <string name="settings_sort_order_title">সাজানোর পদ্ধতি</string>
     <string name="settings_category_article_appearance">আর্টিকেলের দৃশ্যমানতার ধরণ</string>
     <string-array name="settings_intervals">
         <item>৫ মিনিট</item>
