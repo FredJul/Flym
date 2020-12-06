@@ -42,7 +42,7 @@
     <string name="to_group_above">Sopra il gruppo</string>
     <string name="to_group_into">Dentro il gruppo</string>
     <string name="feed_name">Nome del feed</string>
-    <string name="feed_edit_drag_handle_content_description" comment="feed_edit_drag_handle_content_description&#10;&#10;When a visually impaired user tap on the drag handle for the feed drag&amp;drop feature, the phone will say out loud that it is a &quot;Drag handle&quot;.">Elemento di trascinamento</string>
+    <string name="feed_edit_drag_handle_content_description">Elemento di trascinamento</string>
     <string name="feed_edit_feed_icon_content_description">Icona del feed</string>
     <!-- ENTRIES -->
     <string name="feed_link">Link del feed</string>
