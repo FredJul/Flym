@@ -76,7 +76,19 @@ fun SyndEntry.toDbFormat(context: Context, feed: Feed): Entry {
     }
     item.description = contents.getOrNull(0)?.value ?: description?.value
     item.link = link
+
+    enclosures?.forEach { if (it.type.contains("image")) { item.imageLink = it.url } }
+    if (item.imageLink == null) {
+        foreignMarkup?.forEach {
+            if (it.namespace?.prefix == "media" && it.name == "content") {
+                it.attributes.forEach { mc ->
+                    if (mc.name == "url") item.imageLink = mc.value
+                }
+            }
+        }
+    }
     //TODO item.imageLink = null
+
     item.author = author
 
     val date = publishedDate ?: updatedDate
