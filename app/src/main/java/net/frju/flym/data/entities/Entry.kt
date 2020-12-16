@@ -30,8 +30,7 @@ import com.rometools.rome.feed.synd.SyndEntry
 import kotlinx.android.parcel.Parcelize
 import net.fred.feedex.R
 import net.frju.flym.utils.sha1
-import java.util.Date
-import java.util.UUID
+import java.util.*
 
 
 @Parcelize
@@ -87,7 +86,6 @@ fun SyndEntry.toDbFormat(context: Context, feed: Feed): Entry {
             }
         }
     }
-    //TODO item.imageLink = null
 
     item.author = author
 
