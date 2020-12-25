@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- GENERAL -->
     <plurals name="number_of_new_entries">
         <item quantity="other">%d 篇新文章</item>
@@ -12,8 +13,8 @@
     <string name="menu_edit_feed">编辑订阅源</string>
     <string name="menu_reorder">排序订阅源</string>
     <string name="menu_delete">删除</string>
-    <string name="menu_enable_full_text_retrieval">开启全文接收</string>
-    <string name="menu_disable_full_text_retrieval">关闭全文接收</string>
+    <string name="menu_enable_full_text_retrieval">开启全文获取</string>
+    <string name="menu_disable_full_text_retrieval">关闭全文获取</string>
     <string name="menu_all_read">标记全部为已读</string>
     <string name="flym_feeds">Flym 订阅源</string>
     <string name="error">错误</string>
@@ -21,6 +22,8 @@
     <string name="drawer_explanation">欢迎!\n\n长按订阅源查看选项 ▼</string>
     <string name="drawer_fetch_error_explanation">部分订阅源未正常刷新 ▼</string>
     <string name="about_screen_info">我将此应用遵循 GPLv3 许可证发布为自由开源软件。你可以随意修改它，只要你也保持它开源。</string>
+    <string name="navigation_button_content_description">切换订阅源菜单</string>
+
     <!-- FEEDS -->
     <string name="feeds">订阅源</string>
     <string name="menu_add_group">添加分组</string>
@@ -40,6 +43,9 @@
     <string name="to_group_above">移动到分组上面</string>
     <string name="to_group_into">添加到分组</string>
     <string name="feed_name">订阅源名称</string>
+    <string name="feed_edit_drag_handle_content_description">拖拽点</string>
+    <string name="feed_edit_feed_icon_content_description">订阅源图标</string>
+
     <!-- ENTRIES -->
     <string name="feed_link">订阅源链接</string>
     <string name="all_entries">全部文章</string>
@@ -58,6 +64,10 @@
     <string name="undo">撤销</string>
     <string name="marked_as_read">标记为已读</string>
     <string name="marked_as_unread">标记为未读</string>
+    <string name="expand_arrow_content_description">展开订阅源组</string>
+    <string name="collapse_arrow_content_description">折叠订阅源组</string>
+    <string name="mark_all_as_read_fab_content_description">标记全部为已读</string>
+
     <!-- DISCOVER -->
     <string name="discover_search_label">搜索订阅源</string>
     <string name="discover_search_hint">使用关键词或话题进行搜索，或键入订阅源的 URL。话题可通过 # 前缀标明。</string>
@@ -65,22 +75,28 @@
         <item>新闻</item>
         <item>政治</item>
         <item>寰宇</item>
+
         <item>工程</item>
         <item>科技</item>
         <item>创业公司</item>
+
         <item>电信</item>
         <item>网络安全</item>
         <item>隐私</item>
+
         <item>科学</item>
         <item>医药</item>
         <item>卫生保健</item>
+
         <item>教育</item>
         <item>商业</item>
         <item>营销</item>
+
         <item>太空</item>
         <item>设计</item>
         <item>漫画</item>
     </string-array>
+
     <!-- SETTINGS -->
     <string name="entry_default_title">未命名</string>
     <string name="settings_category_refresh">自动刷新</string>
@@ -91,7 +107,9 @@
     <string name="settings_refresh_interval">刷新间隔</string>
     <string name="settings_keep_time">已读文章保存时间</string>
     <string name="settings_keep_time_unread">未读文章保存时间</string>
+    <string name="settings_category_general">通用</string>
     <string name="settings_display_thumbnails">显示缩略图</string>
+    <string name="settings_display_thumbnails_description">在文章列表中显示缩略图</string>
     <string name="settings_display_images">显示图片</string>
     <string name="settings_display_images_description">在文章中显示图片</string>
     <string name="settings_preload_image_mode">预先加载图片</string>
@@ -100,6 +118,9 @@
     <string name="settings_refresh_wifi_only_description">自动刷新仅在 Wi-Fi 环境启用</string>
     <string name="settings_remove_duplicates_description_title">去除重复项</string>
     <string name="settings_remove_duplicates_description">检查新下载文章的标题并忽略相同标题的文章</string>
+    <string name="filter">移除包含关键词的文章</string>
+    <string name="filter_title">屏蔽列表</string>
+    <string name="filter_dialog_message">使用逗号分隔关键词</string>
     <string name="settings_theme">主题</string>
     <string name="open_browser_direct">直接在默认浏览器中打开</string>
     <string name="open_browser_direct_title">在浏览器中打开</string>
@@ -112,6 +133,10 @@
     <string name="settings_sort_order">按最新到最旧排列文章</string>
     <string name="settings_sort_order_title">排列顺序</string>
     <string name="settings_enable_entry_swipe">阅读条目时启用侧滑切换</string>
+    <string name="settings_category_article_list">文章列表</string>
+    <string name="settings_category_article_appearance">文章偏好</string>
+    <string name="settings_enable_entry_swipe_description">启用后，允许在浏览文章时在文章间侧滑</string>
+
     <string-array name="settings_intervals">
         <item>5 分钟</item>
         <item>15 分钟</item>
