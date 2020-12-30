@@ -22,7 +22,8 @@
     <string name="network_error">Mreža nije podešena</string>
     <string name="drawer_explanation">Dobrodošli!\n\nZa pregled opcija, pritisnite i zadržite željeni dovod ▼</string>
     <string name="drawer_fetch_error_explanation">Deo dovoda nije osvežen ▼</string>
-    <string name="about_screen_info">Ovu aplikaciju objavljujem kao besplatan i slobodan softver pod GNU-ovom opštom javnom licencom (GPL) verzije 3</string>
+    <string name="about_screen_info">Ovu aplikaciju objavljujem kao besplatan i slobodan softver pod GNU-ovom opštom javnom licencom verzije 3.</string>
+    <string name="navigation_button_content_description">Promeni vidljivost menija</string>
     <!-- FEEDS -->
     <string name="feeds">Dovodi</string>
     <string name="menu_add_group">Dodaj grupu</string>
@@ -42,6 +43,8 @@
     <string name="to_group_above">O grupi</string>
     <string name="to_group_into">U grupu</string>
     <string name="feed_name">Ime dovoda</string>
+    <string name="feed_edit_drag_handle_content_description">Ručica mreže za povlačenje</string>
+    <string name="feed_edit_feed_icon_content_description">Ikonica dovoda</string>
     <!-- ENTRIES -->
     <string name="feed_link">Hiperveza dovoda</string>
     <string name="all_entries">Svi članci</string>
@@ -60,6 +63,9 @@
     <string name="undo">Opozovi</string>
     <string name="marked_as_read">Označeno kao pročitano</string>
     <string name="marked_as_unread">Označeno kao nepročitano</string>
+    <string name="expand_arrow_content_description">Proširi grupu dovoda</string>
+    <string name="collapse_arrow_content_description">Umanji grupu dovoda</string>
+    <string name="mark_all_as_read_fab_content_description">Označi sve kao pročitano</string>
     <!-- DISCOVER -->
     <string name="discover_search_label">Pretraga dovoda</string>
     <string name="discover_search_hint">Pretraga po ključnim rečima, URL ili temi. Tema može biti označena # prefiksom.</string>
@@ -93,15 +99,20 @@
     <string name="settings_refresh_interval">Interval automatskog osvežavanja</string>
     <string name="settings_keep_time">Vreme čuvanja članaka</string>
     <string name="settings_keep_time_unread">Vremensko ograničenje za čuvanje nepročitanih članaka</string>
+    <string name="settings_category_general">Generalno</string>
     <string name="settings_display_thumbnails">Prikaži sličice</string>
+    <string name="settings_display_thumbnails_description">Prikazivanje umanjenih sličica u listi članaka</string>
     <string name="settings_display_images">Prikaži slike</string>
-    <string name="settings_display_images_description">Prikaži slike unutar članaka</string>
+    <string name="settings_display_images_description">Prikaži slike u člancima</string>
     <string name="settings_preload_image_mode">Učitavanje slika unapred</string>
     <string name="settings_font_size">Veličina teksta</string>
-    <string name="settings_refresh_wifi_only">Osveži samo preko bežične mreže (Wi-Fi)</string>
-    <string name="settings_refresh_wifi_only_description">Automatsko osvežavanje dovoda će biti izvršeno samo ako je dostupna bežična konekcija (Wi-Fi)</string>
+    <string name="settings_refresh_wifi_only">Osveži samo preko bežične, Wi-Fi, mreže</string>
+    <string name="settings_refresh_wifi_only_description">Automatsko osvežavanje dovoda će biti izvršeno samo ako je dostupna bežična, Wi-Fi, konekcija</string>
     <string name="settings_remove_duplicates_description_title">Ukloni duplikate</string>
     <string name="settings_remove_duplicates_description">Proverava naslove članaka koji su preuzeti i preskače ako isti već postoje kako bi se izbegao dupli sadržaj tj. dupli članci</string>
+    <string name="filter">Ukloni unose koji sadrže ključne reči</string>
+    <string name="filter_title">Blok lista</string>
+    <string name="filter_dialog_message">Razdvajanje ključnih reči zapetom</string>
     <string name="settings_theme">Teme</string>
     <string name="open_browser_direct">Otvaranje članaka direktno u podrazumevanom internet pregledaču</string>
     <string name="open_browser_direct_title">Otvori u pregledaču</string>
@@ -114,11 +125,14 @@
     <string name="settings_sort_order">Razvrstaj članke od najnovijeg do najstarijeg</string>
     <string name="settings_sort_order_title">Redosled razvrstavanja</string>
     <string name="settings_enable_entry_swipe">Omogući prevlačenje prstom prilikom pregleda članka</string>
+    <string name="settings_category_article_list">Lista članaka</string>
+    <string name="settings_category_article_appearance">Izgled članka</string>
+    <string name="settings_enable_entry_swipe_description">Ukoliko je omogućeno, dozvoljava prevlačenje prstom zarad promene članka prilikom zasebnog pregleda</string>
     <string-array name="settings_intervals">
         <item>5 minuta</item>
         <item>15 minuta</item>
         <item>30 minuta</item>
-        <item>1 čas</item>
+        <item>1 časa</item>
         <item>2 časa</item>
         <item>6 časova</item>
         <item>12 časova</item>
@@ -145,7 +159,7 @@
     </string-array>
     <string-array name="settings_preload_image_modes">
         <item>Nikada</item>
-        <item>Samo preko bežične mreže (Wi-Fi)</item>
+        <item>Samo preko bežične, Wi-Fi, mreže</item>
         <item>Uvek</item>
     </string-array>
     <string-array name="settings_themes">
