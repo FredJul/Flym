@@ -36,7 +36,7 @@
     <string name="question_delete_feed">Да ли заиста желите да избришете овај довод?</string>
     <string name="question_delete_group">Да ли заиста желите да избришете ову групу и да све доводе унутар исте?</string>
     <string name="add_group_title">Изаберите име групе</string>
-    <string name="message_exported_to">Извезено у %s.</string>
+    <string name="message_exported_to">Извежено у %s.</string>
     <string name="to_group_title">Акција померања довода</string>
     <string name="to_group_message">Довод можете да померите у групу или изнад ње. Шта желите да радите?</string>
     <string name="to_group_above">О групи</string>
@@ -84,7 +84,7 @@
         <item>стрипови</item>
     </string-array>
     <!-- SETTINGS -->
-    <string name="entry_default_title">Без насолва</string>
+    <string name="entry_default_title">Без наслова</string>
     <string name="settings_category_refresh">Аутоматско освежавање</string>
     <string name="settings_refresh_enabled">Омогући аутоматско освежавање</string>
     <string name="settings_refresh_enabled_description">Омогући аутоматско освежавање довода</string>
@@ -93,9 +93,9 @@
     <string name="settings_refresh_interval">Интервал аутоматског освежавања</string>
     <string name="settings_keep_time">Време чувања чланака</string>
     <string name="settings_keep_time_unread">Временско ограничење за чување непрочитаних чланака</string>
-    <string name="settings_display_thumbnails">Прикажи сличице</string>
+    <string name="settings_display_thumbnails">Прикажи умањене сличице</string>
     <string name="settings_display_images">Прикажи слике</string>
-    <string name="settings_display_images_description">Прикажи слике унутар чланака</string>
+    <string name="settings_display_images_description">Прикажи слике у чланцима</string>
     <string name="settings_preload_image_mode">Учитавање слика унапред</string>
     <string name="settings_font_size">Величина текста</string>
     <string name="settings_refresh_wifi_only">Освежи само преко бежичне мреже (Wi-Fi)</string>
@@ -107,13 +107,13 @@
     <string name="open_browser_direct_title">Отвори у прегледачу</string>
     <string name="refresh_on_startup">Освежавање довода при покретању апликације</string>
     <string name="refresh_on_startup_title">Освежавање приликом покретања</string>
-    <string name="settings_hide_button_mark_all_as_read">Sakrij \"Označi sve kao pročitano\"</string>
-    <string name="settings_hide_button_mark_all_as_read_description">Ne prikazuj opciju za \"Označi sve kao pročitano\"</string>
+    <string name="settings_hide_button_mark_all_as_read">Сакриј \"Означи све као прочитано\"</string>
+    <string name="settings_hide_button_mark_all_as_read_description">Не приказуј опцију за \"Означи све као прочитано\"</string>
     <string name="settings_hide_navigation_on_scroll">Сакриј навигацију приликом померања садржаја на екрану</string>
     <string name="settings_hide_navigation_on_scroll_description">Уколико је омогућено, навигација на врху/дну ће бити скривена када се садржај буде помицао на доле а приказиваће се приликом помицања на горе</string>
-    <string name="settings_sort_order">Razvrstaj članke od najnovijeg do najstarijeg</string>
-    <string name="settings_sort_order_title">Redosled razvrstavanja</string>
-    <string name="settings_enable_entry_swipe">Omogući prevlačenje prstom prilikom pregleda članka</string>
+    <string name="settings_sort_order">Разврстај чланке од најновијег до најстаријег</string>
+    <string name="settings_sort_order_title">Редослед разврставања</string>
+    <string name="settings_enable_entry_swipe">Омогући превлачење прстом приликом прегледа чланка</string>
     <string-array name="settings_intervals">
         <item>5 минута</item>
         <item>15 минута</item>
