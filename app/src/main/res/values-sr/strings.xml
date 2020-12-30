@@ -22,7 +22,8 @@
     <string name="network_error">Мрежа није подешена</string>
     <string name="drawer_explanation">Добродошли!\n\nЗа преглед опција, притисните и задржите жељени довод ▼</string>
     <string name="drawer_fetch_error_explanation">Део довода није освежен ▼</string>
-    <string name="about_screen_info">Ову апликацију објављујем као бесплатан и слободан софтвер под ГНУ-овом општом јавном лиценцом (ГПЛ) верзије 3</string>
+    <string name="about_screen_info">Ову апликацију објављујем као бесплатан и слободан софтвер под ГНУ-овом општом јавном лиценцом верзије 3.</string>
+    <string name="navigation_button_content_description">Промени видљивост менија</string>
     <!-- FEEDS -->
     <string name="feeds">Доводи</string>
     <string name="menu_add_group">Додај групу</string>
@@ -42,6 +43,8 @@
     <string name="to_group_above">О групи</string>
     <string name="to_group_into">У групу</string>
     <string name="feed_name">Име довода</string>
+    <string name="feed_edit_drag_handle_content_description">Ручица мреже за повлачење</string>
+    <string name="feed_edit_feed_icon_content_description">Иконица довода</string>
     <!-- ENTRIES -->
     <string name="feed_link">Хипервеза довода</string>
     <string name="all_entries">Сви чланци</string>
@@ -60,6 +63,9 @@
     <string name="undo">Опозови</string>
     <string name="marked_as_read">Означено као прочитано</string>
     <string name="marked_as_unread">Означено као непрочитано</string>
+    <string name="expand_arrow_content_description">Прошири групу довода</string>
+    <string name="collapse_arrow_content_description">Умањи групу довода</string>
+    <string name="mark_all_as_read_fab_content_description">Означи све као прочитано</string>
     <!-- DISCOVER -->
     <string name="discover_search_label">Претрага довода</string>
     <string name="discover_search_hint">Претрага по кључним речима, УРЛ или теми. Тема може бити означена # префиксом.</string>
@@ -93,15 +99,20 @@
     <string name="settings_refresh_interval">Интервал аутоматског освежавања</string>
     <string name="settings_keep_time">Време чувања чланака</string>
     <string name="settings_keep_time_unread">Временско ограничење за чување непрочитаних чланака</string>
+    <string name="settings_category_general">Генерално</string>
     <string name="settings_display_thumbnails">Прикажи умањене сличице</string>
+    <string name="settings_display_thumbnails_description">Приказивање умањених сличица у листи чланака</string>
     <string name="settings_display_images">Прикажи слике</string>
     <string name="settings_display_images_description">Прикажи слике у чланцима</string>
     <string name="settings_preload_image_mode">Учитавање слика унапред</string>
     <string name="settings_font_size">Величина текста</string>
-    <string name="settings_refresh_wifi_only">Освежи само преко бежичне мреже (Wi-Fi)</string>
-    <string name="settings_refresh_wifi_only_description">Аутоматско освежавање довода ће бити извршено само ако је доступна бежична конекција (Wi-Fi)</string>
+    <string name="settings_refresh_wifi_only">Освежи само преко бежичне, Wi-Fi, мреже</string>
+    <string name="settings_refresh_wifi_only_description">Аутоматско освежавање довода ће бити извршено само ако је доступна бежична, Wi-Fi, конекција</string>
     <string name="settings_remove_duplicates_description_title">Уклони дупликате</string>
     <string name="settings_remove_duplicates_description">Проверава наслове чланака који су преузети и прескаче ако исти већ постоје како би се избегао дупли садржај тј. дупли чланци</string>
+    <string name="filter">Уклони уносе који садрже кључне речи</string>
+    <string name="filter_title">Блок листа</string>
+    <string name="filter_dialog_message">Раздвајање кључних речи запетом</string>
     <string name="settings_theme">Теме</string>
     <string name="open_browser_direct">Отварање чланака директно у подразумеваном интернет прегледачу</string>
     <string name="open_browser_direct_title">Отвори у прегледачу</string>
@@ -114,6 +125,9 @@
     <string name="settings_sort_order">Разврстај чланке од најновијег до најстаријег</string>
     <string name="settings_sort_order_title">Редослед разврставања</string>
     <string name="settings_enable_entry_swipe">Омогући превлачење прстом приликом прегледа чланка</string>
+    <string name="settings_category_article_list">Листа чланака</string>
+    <string name="settings_category_article_appearance">Изглед чланка</string>
+    <string name="settings_enable_entry_swipe_description">Уколико је омогућено, дозвољава превлачење прстом зарад промене чланка приликом засебног прегледа</string>
     <string-array name="settings_intervals">
         <item>5 минута</item>
         <item>15 минута</item>
@@ -145,7 +159,7 @@
     </string-array>
     <string-array name="settings_preload_image_modes">
         <item>Никада</item>
-        <item>Само преко бежичне мреже (Wi-Fi)</item>
+        <item>Само преко бежичне, Wi-Fi, мреже</item>
         <item>Увек</item>
     </string-array>
     <string-array name="settings_themes">
