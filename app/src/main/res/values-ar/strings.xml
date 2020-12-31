@@ -55,6 +55,7 @@
     <string name="undo">تراجع</string>
     <string name="marked_as_read">تحديد كمقروء</string>
     <string name="marked_as_unread">تحديد كغير مقروء</string>
+    <string name="mark_all_as_read_fab_content_description">تحديد الكل كمقروء</string>
     <!-- DISCOVER -->
     <string name="discover_search_label">البحث في النشرات الإخبارية</string>
     <string name="discover_search_hint">البحث عن طريق الكلمة المفتاحية، أو رابط، أو الموضوع. يمكن الإشارة إلى المواضيع مع بادئة #.</string>
