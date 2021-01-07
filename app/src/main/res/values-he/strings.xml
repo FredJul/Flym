@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <string name="menu_delete">מחיקה</string>
+    <string name="error">שגיאה</string>
     <!-- FEEDS -->
+    <string name="menu_add_group">הוספת קבוצה</string>
     <!-- ENTRIES -->
     <!-- DISCOVER -->
     <!-- SETTINGS -->
