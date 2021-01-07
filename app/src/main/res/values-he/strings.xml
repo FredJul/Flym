@@ -1,11 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- GENERAL -->
+    <string name="app_name">Flym</string>
+    <string name="about_flym">על Flym</string>
+    <string name="welcome_title">ברוך בואך אל Flym. האם ברצונך להוסיף הזנה?</string>
+    <string name="cannot_find_feeds">לא נמצאו הזנות</string>
+    <string name="menu_settings">הגדרות</string>
+    <string name="menu_edit_feed">עריכת הזנה</string>
     <string name="menu_delete">מחיקה</string>
     <string name="error">שגיאה</string>
     <!-- FEEDS -->
+    <string name="feeds">הזנות</string>
     <string name="menu_add_group">הוספת קבוצה</string>
+    <string name="menu_import">ייבוא מתוך OPML</string>
+    <string name="menu_export">ייצוא אל OPML</string>
+    <string name="feed_search">חיפוש הזנות</string>
+    <string name="question_delete_feed">האם אכן ברצונך למחוק את ההזנה הזאת?</string>
+    <string name="question_delete_group">האם אכן ברצונך למחוק את הקבוצה הזאת ואת כל ההזנות שבה?</string>
     <!-- ENTRIES -->
+    <string name="menu_star">סימון בכוכב</string>
+    <string name="menu_unstar">ביטול הכוכב</string>
+    <string name="menu_share">שיתוף</string>
+    <string name="open_in_browser">צפייה בדפדפן</string>
+    <string name="all">הכול</string>
+    <string name="undo">ביטול פעולה</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">חיפוש הזנות</string>
+    <string-array name="discover_topics">
+        <item>חדשות</item>
+        <item>פוליטיקה</item>
+        <item>עולם</item>
+        <item>הנדסה</item>
+        <item>טכנולוגיה</item>
+        <item>startups</item>
+        <item>telecom</item>
+        <item>cybersecurity</item>
+        <item>פרטיות</item>
+        <item>מדע</item>
+        <item>רפואה</item>
+        <item>בריאות</item>
+        <item>חינוך</item>
+        <item>עסקים</item>
+        <item>שיווק</item>
+        <item>חלל</item>
+        <item>עיצוב</item>
+        <item>קומיקס</item>
+    </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">ללא שם</string>
+    <string name="settings_font_size">גודל טקסט</string>
+    <string name="filter_title">רשימת חסימה</string>
+    <string name="settings_theme">ערכת נושא</string>
+    <string name="open_browser_direct_title">פתיחה בדפדפן</string>
+    <string name="settings_category_article_list">רשימת מאמרים</string>
+    <string-array name="settings_intervals">
+        <item>5 דקות</item>
+        <item>15 דקות</item>
+        <item>30 דקות</item>
+        <item>שעה</item>
+        <item>שעתיים</item>
+        <item>6 שעות</item>
+        <item>12 שעות</item>
+        <item>יום</item>
+    </string-array>
+    <string-array name="settings_keep_times">
+        <item>יום</item>
+        <item>יומיים</item>
+        <item>4 ימים</item>
+        <item>שבוע</item>
+        <item>שבועיים</item>
+        <item>חודש</item>
+        <item>חודשיים</item>
+        <item>3 חודשים</item>
+        <item>לנצח</item>
+    </string-array>
+    <string-array name="settings_font_sizes">
+        <item>-2</item>
+        <item>-1</item>
+        <item>Standard</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+    <string-array name="settings_preload_image_modes">
+        <item>אף פעם</item>
+        <item>Only over Wi-Fi</item>
+        <item>תמיד</item>
+    </string-array>
 </resources>
