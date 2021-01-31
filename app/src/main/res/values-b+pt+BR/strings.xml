@@ -97,7 +97,7 @@
     <string name="settings_keep_time">Tempo que as entradas serão mantidas</string>
     <string name="settings_keep_time_unread">Tempo que as entradas não lidas serão mantidas</string>
     <string name="settings_category_general">Geral</string>
-    <string name="settings_display_thumbnails">Mostrar minuaturas</string>
+    <string name="settings_display_thumbnails">Mostrar miniaturas</string>
     <string name="settings_display_thumbnails_description">Mostrar miniaturas nas listas</string>
     <string name="settings_display_images">Exibir imagens</string>
     <string name="settings_display_images_description">Mostrar imagens nas entradas</string>
@@ -107,6 +107,8 @@
     <string name="settings_refresh_wifi_only_description">Atualização automática só será feita quando uma conexão Wi-Fi estiver disponível</string>
     <string name="settings_remove_duplicates_description_title">Remover duplicatas</string>
     <string name="settings_remove_duplicates_description">Verifica o título dos itens baixados recentemente e ignora quando um com o mesmo título já está presente</string>
+    <string name="filter">Remover itens que contêm palavras-chave</string>
+    <string name="filter_dialog_message">Separar palavras-chave com vírgula</string>
     <string name="settings_theme">Tema</string>
     <string name="open_browser_direct">Abrir entradas diretamente no seu navegador padrão</string>
     <string name="open_browser_direct_title">Abrir no navegador</string>
@@ -114,9 +116,12 @@
     <string name="refresh_on_startup_title">Atualizar ao iniciar</string>
     <string name="settings_hide_button_mark_all_as_read">Ocultar botão \'Marcar tudo como lido\'</string>
     <string name="settings_hide_button_mark_all_as_read_description">Não mostrar o botão \'Marcar tudo como lido\' na tela</string>
+    <string name="settings_hide_navigation_on_scroll">Ocultar navegação ao rolar</string>
+    <string name="settings_hide_navigation_on_scroll_description">Se ativado, a barra de navegação ficará oculta ao rolar para baixo e reaperecerá ao rolar para cima</string>
     <string name="settings_sort_order">Ordenar feeds do mais recente ao mais antigo</string>
     <string name="settings_sort_order_title">Modo de ordenação</string>
     <string name="settings_enable_entry_swipe">Habilitar deslizar ao visualizar uma entrada</string>
+    <string name="settings_category_article_appearance">Aparência do artigo</string>
     <string-array name="settings_intervals">
         <item>5 minutos</item>
         <item>15 minutos</item>
