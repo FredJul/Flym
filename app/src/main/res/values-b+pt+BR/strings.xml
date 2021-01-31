@@ -41,6 +41,7 @@
     <string name="to_group_above">Acima do grupo</string>
     <string name="to_group_into">Dentro do grupo</string>
     <string name="feed_name">Nome do Feed</string>
+    <string name="feed_edit_feed_icon_content_description">Ícone do feed</string>
     <!-- ENTRIES -->
     <string name="feed_link">Link do Feed</string>
     <string name="all_entries">Todas as entradas</string>
@@ -59,6 +60,9 @@
     <string name="undo">Desfazer</string>
     <string name="marked_as_read">Marcado como lido</string>
     <string name="marked_as_unread">Marcado como não lido</string>
+    <string name="expand_arrow_content_description">Expandir grupo</string>
+    <string name="collapse_arrow_content_description">Minimizar grupo</string>
+    <string name="mark_all_as_read_fab_content_description">Marcar tudo como lido</string>
     <!-- DISCOVER -->
     <string name="discover_search_label">Buscar Feeds</string>
     <string name="discover_search_hint">Buscar por palavra-chave, URL ou tópico. Tópicos podem ser indicados com um prefixo #.</string>
@@ -92,6 +96,9 @@
     <string name="settings_refresh_interval">Intervalo de atualização</string>
     <string name="settings_keep_time">Tempo que as entradas serão mantidas</string>
     <string name="settings_keep_time_unread">Tempo que as entradas não lidas serão mantidas</string>
+    <string name="settings_category_general">Geral</string>
+    <string name="settings_display_thumbnails">Mostrar minuaturas</string>
+    <string name="settings_display_thumbnails_description">Mostrar miniaturas nas listas</string>
     <string name="settings_display_images">Exibir imagens</string>
     <string name="settings_display_images_description">Mostrar imagens nas entradas</string>
     <string name="settings_preload_image_mode">Pré-carregar imagens</string>
