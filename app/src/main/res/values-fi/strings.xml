@@ -5,6 +5,7 @@
         <item quantity="one">Yksi uusi artikkeli</item>
         <item quantity="other">%d uutta artikkelia</item>
     </plurals>
+    <string name="app_name">Flym</string>
     <string name="about_flym">Tietoja Flymista</string>
     <string name="welcome_title">Tervetuloa Flym:iin. Haluaisitko lisätä syötteen?</string>
     <string name="cannot_find_feeds">Syötteitä ei löydy</string>
@@ -20,6 +21,7 @@
     <string name="network_error">Ei verkkoyhteyttä</string>
     <string name="drawer_explanation">Tervetuloa!\n\nPitkä painallus syötteen otsikon kohdalla näyttää valikon ▼</string>
     <string name="drawer_fetch_error_explanation">Osa syötteistä ei päivittynyt oikein ▼</string>
+    <string name="about_screen_info">Julkaisen tämän sovelluksen ilmaisena ja avoimen lähdekoodin ohjelmistona GPLv3-lisenssillä. Voit vapaasti muokata sitä niin kauan kuin pidät sen avoimena lähdekoodina.</string>
     <!-- FEEDS -->
     <string name="feeds">Syötteet</string>
     <string name="menu_add_group">Lisää ryhmä</string>
@@ -42,6 +44,7 @@
     <string name="to_group_above">Ylemmälle tasolle</string>
     <string name="to_group_into">Ryhmään</string>
     <string name="feed_name">Syötteen nimi</string>
+    <string name="feed_edit_feed_icon_content_description">Syötteen kuvake</string>
     <!-- ENTRIES -->
     <string name="feed_link">Syötteen osoite</string>
     <string name="all_entries">Kaikki </string>
@@ -60,12 +63,39 @@
     <string name="undo">Peru</string>
     <string name="marked_as_read">Merkitty luetuksi</string>
     <string name="marked_as_unread">Merkitty lukemattomaksi</string>
+    <string name="expand_arrow_content_description">Laajenna syöteryhmä</string>
+    <string name="collapse_arrow_content_description">Pienennä syöteryhmä</string>
+    <string name="mark_all_as_read_fab_content_description">Merkitse kaikki luetuiksi</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">Hae syötteitä</string>
+    <string name="discover_search_hint">Etsi avainsanalla, URL-osoitteella tai aiheella. Aihe voidaan antaa #-etuliitteellä.</string>
+    <string-array name="discover_topics">
+        <item>uutiset</item>
+        <item>politiikka</item>
+        <item>maailma</item>
+        <item>insinöörityö</item>
+        <item>teknologia</item>
+        <item>startupit</item>
+        <item>telekommunikaatio</item>
+        <item>kyberturvallisuus</item>
+        <item>yksityisyys</item>
+        <item>tiede</item>
+        <item>lääketiede</item>
+        <item>terveydenhuolto</item>
+        <item>koulutus</item>
+        <item>liiketoiminta</item>
+        <item>markkinointi</item>
+        <item>avaruus</item>
+        <item>design</item>
+        <item>sarjakuvat</item>
+    </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">Nimetön</string>
     <string name="settings_category_refresh">Automaattinen päivitys</string>
     <string name="settings_refresh_enabled">Päivitä automaattisesti</string>
     <string name="settings_refresh_enabled_description">Päivitä kaikki syötteet automaattisesti
     </string>
+    <string name="settings_refresh_enable_notifications">Näytä päivitysilmoitukset</string>
     <string name="settings_refresh_interval">Päivitysväli</string>
     <string name="settings_keep_time">Artikkelien säilyttämisaika</string>
     <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
