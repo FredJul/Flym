@@ -3,8 +3,9 @@
 
 # BEWARE:
 **Google [added some restrictions](https://support.google.com/googleplay/android-developer/answer/10177647?visit_id=637410766788299017-71528281&rd=2#news) to news app and I don't see how Flym (and other RSS aggregators) could comply to that. For instance, Flym cannot provide a "valid and verifiable contact information" for the feed, nor it can assure that "each of the sources must meet News policy requirements".
-That means that Google may refuse future Flym updates or even totally ban the app.
-In that conditions, I cannot assure that your contributions will be delivered.**
+
+
+As of today, Flym updates on PlayStore are blocked due to that and I will archive this project. I'm sorry for all the people who contributed.**
 
 
 Flym News Reader
