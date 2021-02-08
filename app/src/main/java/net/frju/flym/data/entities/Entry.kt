@@ -29,9 +29,10 @@ import androidx.room.PrimaryKey
 import com.rometools.rome.feed.synd.SyndEntry
 import kotlinx.android.parcel.Parcelize
 import net.fred.feedex.R
+import net.frju.flym.utils.HtmlUtils
 import net.frju.flym.utils.sha1
-import java.util.Date
-import java.util.UUID
+import org.jdom2.Element
+import java.util.*
 
 
 @Parcelize
@@ -75,8 +76,39 @@ fun SyndEntry.toDbFormat(context: Context, feed: Feed): Entry {
         item.title = context.getString(R.string.entry_default_title)
     }
     item.description = contents.getOrNull(0)?.value ?: description?.value
+
+    if (item.description == null) {
+        foreignMarkup?.forEach {
+            if (it.namespace?.prefix == "media" && it.name == "group") {
+                it.children.forEach { mc ->
+                    if (mc.name == "description") item.description = mc.value
+                    if (mc.name == "thumbnail") {
+                        mc.attributes.forEach { tb ->
+                            if (tb.name == "url") item.imageLink = tb.value
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     item.link = link
-    //TODO item.imageLink = null
+
+    enclosures?.forEach {
+        if ((it.type != null && it.type.contains("image")) || HtmlUtils.isImageInUrl(it.url)) {
+            item.imageLink = it.url
+        }
+    }
+    if (item.imageLink == null) {
+        foreignMarkup?.forEach {
+            if (it.namespace?.prefix == "media" && (it.name == "thumbnail" || it.name == "content")) {
+                it.attributes.forEach { mc ->
+                    if (mc.name == "url" && HtmlUtils.isImageInUrl(mc.value)) item.imageLink = mc.value
+                }
+            }
+        }
+    }
+
     item.author = author
 
     val date = publishedDate ?: updatedDate

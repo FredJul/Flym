@@ -53,6 +53,7 @@ object HtmlUtils {
     private val END_BR_PATTERN = Pattern.compile("(\\s*<br\\s*[/]*>\\s*)*$", Pattern.CASE_INSENSITIVE)
     private val MULTIPLE_BR_PATTERN = Pattern.compile("(\\s*<br\\s*[/]*>\\s*){3,}", Pattern.CASE_INSENSITIVE)
     private val EMPTY_LINK_PATTERN = Pattern.compile("<a\\s+[^>]*></a>", Pattern.CASE_INSENSITIVE)
+    private val URL_WITH_IMAGE_PATTERN = Pattern.compile("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\\.(?:jpg|gif|png))(?:\\?([^#]*))?(?:#(.*))?", Pattern.CASE_INSENSITIVE)
 
     fun improveHtmlContent(content: String, baseUri: String): String {
         @Suppress("NAME_SHADOWING")
@@ -159,5 +160,9 @@ object HtmlUtils {
         }
 
         return false
+    }
+
+    fun isImageInUrl(url:String) : Boolean {
+        return URL_WITH_IMAGE_PATTERN.matcher(url).matches()
     }
 }
