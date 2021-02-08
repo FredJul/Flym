@@ -5,7 +5,7 @@
 Google [added some restrictions](https://support.google.com/googleplay/android-developer/answer/10177647?visit_id=637410766788299017-71528281&rd=2#news) to news app and I don't see how Flym (and other RSS aggregators) could comply to that. For instance, Flym cannot provide a "valid and verifiable contact information" for the feed, nor it can assure that "each of the sources must meet News policy requirements".
 
 
-**As of today, Flym updates on PlayStore are blocked due to that and I will archive this project. I'm sorry for all the people who contributed.**
+**AS OF TODAY, FLYM UPDATES ON PLAY STORE ARE BLOCKED BY GOOGLE. So I have archived this project in order to clearly show that I won't maintain it anymore. I'm deeply sorry for all the people who contributed.**
 
 
 Flym News Reader
@@ -22,21 +22,8 @@ It is [free/open-source software](https://www.gnu.org/philosophy/free-sw.html) u
       alt="Get it on Google Play"
       height="80">](https://play.google.com/store/apps/details?id=net.frju.flym)
 
-## Contribution
-
-Flym is now mainly developed by its community. If you would like to contribute, here is a list of potential things that you could do:
-- help developing features and bugfixes
-- help maintaining the issues list
-- help improving code quality (moving to MVVM, replacing Anko with ktx/coroutines, ...)
-- help translating on https://frju.crowdin.com/flym
-
 ## Screenshots
 
 ![](https://lh3.googleusercontent.com/IABRvlpoCXSNwWd1vPuRw7kVFEHoIv_ChdZMBs8lLa0OVaTYPpJ2TO44p3w-wdrzluvd=w1440-h620-rw) _
 ![](https://lh3.googleusercontent.com/Ie5lLGF242xxPPuSpDznKvK4OTfYI21xPnipG8p8Gtg7qUS1UPVNP3c0iwL0DLMOOw=w1440-h620-rw) _
 ![](https://lh3.googleusercontent.com/LqORvNPrsJC0VB30oD6mtnIfQTVcxyTkKVVLQnElQ6i9__Kq7bwZGj74FmB3wZ4jWw=w1440-h620-rw)
-
-## Donation
-Via [PayPal](https://www.paypal.me/fredericjulian)
-
-Via Bitcoin: `3DprwFMg5bXGz8QimyiaoEE7mmCkj2DGf5`
