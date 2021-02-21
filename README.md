@@ -5,7 +5,10 @@
 Google [added some restrictions](https://support.google.com/googleplay/android-developer/answer/10177647?visit_id=637410766788299017-71528281&rd=2#news) to news app and I don't see how Flym (and other RSS aggregators) could comply to that. For instance, Flym cannot provide a "valid and verifiable contact information" for the feed, nor it can assure that "each of the sources must meet News policy requirements".
 
 
-**AS OF TODAY, FLYM UPDATES ON PLAY STORE ARE BLOCKED BY GOOGLE. So I have archived this project in order to clearly show that I won't maintain it anymore. I'm deeply sorry for all the people who contributed.**
+**AS OF TODAY, FLYM UPDATES ON PLAY STORE ARE BLOCKED BY GOOGLE. So I have archived this project in order to clearly show that I won't maintain it anymore.**
+I'm not aware of any official way of publishing an RSS client on PlayStore and do not have motivation to argue with Google. I also do not have time and motivation to maintain Flym only for F-Droid repository, so I simply encourage people to fork if they want to continue the work.
+
+I'm deeply sorry for all the people who like or contributed to Flym and I kindly ask you to not send me angry emails. I created and maintained Flym for free during several years, and since it is open-source you can try to give it a second life if you want to.
 
 
 Flym News Reader
