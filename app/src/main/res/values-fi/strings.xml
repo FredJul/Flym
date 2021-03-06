@@ -5,6 +5,7 @@
         <item quantity="one">Yksi uusi artikkeli</item>
         <item quantity="other">%d uutta artikkelia</item>
     </plurals>
+    <string name="app_name">Flym</string>
     <string name="about_flym">Tietoja Flymista</string>
     <string name="welcome_title">Tervetuloa Flym:iin. Haluaisitko lisätä syötteen?</string>
     <string name="cannot_find_feeds">Syötteitä ei löydy</string>
@@ -20,6 +21,8 @@
     <string name="network_error">Ei verkkoyhteyttä</string>
     <string name="drawer_explanation">Tervetuloa!\n\nPitkä painallus syötteen otsikon kohdalla näyttää valikon ▼</string>
     <string name="drawer_fetch_error_explanation">Osa syötteistä ei päivittynyt oikein ▼</string>
+    <string name="about_screen_info">Julkaisen tämän sovelluksen ilmaisena ja avoimen lähdekoodin ohjelmistona GPLv3-lisenssillä. Voit vapaasti muokata sitä niin kauan kuin pidät sen avoimena lähdekoodina.</string>
+    <string name="navigation_button_content_description">Kytke syötevalikko</string>
     <!-- FEEDS -->
     <string name="feeds">Syötteet</string>
     <string name="menu_add_group">Lisää ryhmä</string>
@@ -42,6 +45,8 @@
     <string name="to_group_above">Ylemmälle tasolle</string>
     <string name="to_group_into">Ryhmään</string>
     <string name="feed_name">Syötteen nimi</string>
+    <string name="feed_edit_drag_handle_content_description">Raahauskahva</string>
+    <string name="feed_edit_feed_icon_content_description">Syötteen kuvake</string>
     <!-- ENTRIES -->
     <string name="feed_link">Syötteen osoite</string>
     <string name="all_entries">Kaikki </string>
@@ -60,15 +65,46 @@
     <string name="undo">Peru</string>
     <string name="marked_as_read">Merkitty luetuksi</string>
     <string name="marked_as_unread">Merkitty lukemattomaksi</string>
+    <string name="expand_arrow_content_description">Laajenna syöteryhmä</string>
+    <string name="collapse_arrow_content_description">Pienennä syöteryhmä</string>
+    <string name="mark_all_as_read_fab_content_description">Merkitse kaikki luetuiksi</string>
     <!-- DISCOVER -->
+    <string name="discover_search_label">Hae syötteitä</string>
+    <string name="discover_search_hint">Etsi avainsanalla, URL-osoitteella tai aiheella. Aihe voidaan antaa #-etuliitteellä.</string>
+    <string-array name="discover_topics">
+        <item>uutiset</item>
+        <item>politiikka</item>
+        <item>maailma</item>
+        <item>insinöörityö</item>
+        <item>teknologia</item>
+        <item>startupit</item>
+        <item>telekommunikaatio</item>
+        <item>kyberturvallisuus</item>
+        <item>yksityisyys</item>
+        <item>tiede</item>
+        <item>lääketiede</item>
+        <item>terveydenhuolto</item>
+        <item>koulutus</item>
+        <item>liiketoiminta</item>
+        <item>markkinointi</item>
+        <item>avaruus</item>
+        <item>design</item>
+        <item>sarjakuvat</item>
+    </string-array>
     <!-- SETTINGS -->
+    <string name="entry_default_title">Nimetön</string>
     <string name="settings_category_refresh">Automaattinen päivitys</string>
     <string name="settings_refresh_enabled">Päivitä automaattisesti</string>
     <string name="settings_refresh_enabled_description">Päivitä kaikki syötteet automaattisesti
     </string>
+    <string name="settings_refresh_enable_notifications">Näytä päivitysilmoitukset</string>
+    <string name="settings_refresh_enable_notifications_description">Näytä järjestelmäilmoitus, kun päivitys on suoritettu</string>
     <string name="settings_refresh_interval">Päivitysväli</string>
     <string name="settings_keep_time">Artikkelien säilyttämisaika</string>
     <string name="settings_keep_time_unread">Time that the unread entries will be kept</string>
+    <string name="settings_category_general">Yleiset</string>
+    <string name="settings_display_thumbnails">Näytä pienoiskuvat</string>
+    <string name="settings_display_thumbnails_description">Näytä pienoiskuvat artikkelilistassa</string>
     <string name="settings_display_images">Näytä kuvat</string>
     <string name="settings_display_images_description">Näytä kuvat artikkeleissa</string>
     <string name="settings_preload_image_mode">Esilataa kuvat</string>
@@ -78,7 +114,24 @@
     </string>
     <string name="settings_remove_duplicates_description_title">Poista kahdesti esiintyvät</string>
     <string name="settings_remove_duplicates_description">Tarkista uuden artikkeli otsikko ja jätä se väliin, jos artikkeli on jo haettuna</string>
+    <string name="filter">Poista avainsanoja sisältävät kohteet</string>
+    <string name="filter_title">Estolista</string>
+    <string name="filter_dialog_message">Erota avainsanat pilkuilla</string>
     <string name="settings_theme">Teema</string>
+    <string name="open_browser_direct">Avaa artikkelit suoraan oletusselaimessasi</string>
+    <string name="open_browser_direct_title">Avaa selaimessa</string>
+    <string name="refresh_on_startup">Päivitä syötteesi sovelluksen käynnistyessä</string>
+    <string name="refresh_on_startup_title">Päivitä käynnistyessä</string>
+    <string name="settings_hide_button_mark_all_as_read">Piilota painike \'Merkitse kaikki luetuiksi\'</string>
+    <string name="settings_hide_button_mark_all_as_read_description">Älä näytä \'Merkitse kaikki luetuiksi\'-painiketta</string>
+    <string name="settings_hide_navigation_on_scroll">Piilota navigointipalkit vieritettäessä</string>
+    <string name="settings_hide_navigation_on_scroll_description">Jos otettu käyttöön, ylä- ja alareunan navigointipalkit piilotetaan vieritettäessä alas ja näytetään uudelleen vieritettäessä ylös</string>
+    <string name="settings_sort_order">Järjestä artikkelit uusimmista vanhimpiin</string>
+    <string name="settings_sort_order_title">Järjestys</string>
+    <string name="settings_enable_entry_swipe">Salli pyyhkäisy artikkelia katsottaessa</string>
+    <string name="settings_category_article_list">Artikkelilista</string>
+    <string name="settings_category_article_appearance">Artikkelin ulkoasu</string>
+    <string name="settings_enable_entry_swipe_description">Jos otettu käyttöön, sallii artikkeleiden välillä liikkumisen pyyhkäisemällä</string>
     <string-array name="settings_intervals">
         <item>5 minuuttia</item>
         <item>15 minuuttia</item>

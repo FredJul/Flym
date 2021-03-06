@@ -68,24 +68,24 @@
     <string name="discover_search_label">フィードを検索</string>
     <string name="discover_search_hint">キーワード、URL、またはトピックで検索します。トピックは # 接頭辞で指定できます。</string>
     <string-array name="discover_topics">
-        <item>ニュース</item>
-        <item>政治</item>
-        <item>世界</item>
-        <item>工学</item>
-        <item>技術</item>
-        <item>スタートアップ</item>
-        <item>通信</item>
-        <item>サイバーセキュリティ</item>
-        <item>プライバシー</item>
-        <item>科学</item>
-        <item>医薬</item>
-        <item>健康</item>
-        <item>教育</item>
-        <item>ビジネス</item>
-        <item>マーケティング</item>
-        <item>宇宙</item>
-        <item>デザイン</item>
-        <item>漫画</item>
+        <item>news</item>
+        <item>politics</item>
+        <item>world</item>
+        <item>engineering</item>
+        <item>tech</item>
+        <item>startups</item>
+        <item>telecom</item>
+        <item>cybersecurity</item>
+        <item>privacy</item>
+        <item>science</item>
+        <item>medicine</item>
+        <item>healthcare</item>
+        <item>education</item>
+        <item>business</item>
+        <item>marketing</item>
+        <item>space</item>
+        <item>design</item>
+        <item>comics</item>
     </string-array>
     <!-- SETTINGS -->
     <string name="entry_default_title">無題</string>
@@ -116,13 +116,13 @@
     <string name="open_browser_direct_title">ブラウザで開く</string>
     <string name="refresh_on_startup">アプリの起動時にフィードを更新します</string>
     <string name="refresh_on_startup_title">起動時に更新</string>
-    <string name="settings_hide_button_mark_all_as_read">「すべて既読にする」ボタンを非表示</string>
-    <string name="settings_hide_button_mark_all_as_read_description">「すべて既読にする」ボタンを画面に表示しません</string>
-    <string name="settings_hide_navigation_on_scroll">スクロール時にナビゲーションを非表示にする</string>
+    <string name="settings_hide_button_mark_all_as_read">[すべて既読にする] を非表示</string>
+    <string name="settings_hide_button_mark_all_as_read_description">[すべて既読にする] ボタンを画面に表示しません</string>
+    <string name="settings_hide_navigation_on_scroll">ナビゲーション表示の切り替え</string>
     <string name="settings_hide_navigation_on_scroll_description">有効にすると、上部 / 下部のナビゲーションが、下にスクロールするとき非表示になり、上にスクロールするとき再表示されます</string>
     <string name="settings_sort_order">エントリーを新しい順に並べます</string>
     <string name="settings_sort_order_title">並べ替え順序</string>
-    <string name="settings_enable_entry_swipe">エントリーの表示中にスワイプを有効にする</string>
+    <string name="settings_enable_entry_swipe">スワイプでエントリー間を移動</string>
     <string name="settings_category_article_list">記事リスト</string>
     <string name="settings_category_article_appearance">記事の表示</string>
     <string name="settings_enable_entry_swipe_description">有効にすると、エントリーの表示中にエントリー間をスワイプすることができます</string>

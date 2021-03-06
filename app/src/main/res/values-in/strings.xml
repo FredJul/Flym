@@ -6,7 +6,7 @@
     </plurals>
     <string name="app_name">Flym</string>
     <string name="about_flym">Tentang Flym</string>
-    <string name="welcome_title">Selamat datang di Flym. Apakah anda ingin menambahkan feed?</string>
+    <string name="welcome_title">Selamat datang di Flym. Apakah Anda ingin menambahkan feed?</string>
     <string name="cannot_find_feeds">Tidak ada feed yang ditemukan</string>
     <string name="menu_settings">Pengaturan</string>
     <string name="menu_edit_feed">Sunting feed</string>
@@ -20,24 +20,24 @@
     <string name="network_error">Jaringan tidak tersedia</string>
     <string name="drawer_explanation">Selamat datang!\n\nSentuh lama pada feed untuk menampilkan menu ▼</string>
     <string name="drawer_fetch_error_explanation">Beberapa feed tidak disegarkan dengan benar ▼</string>
-    <string name="about_screen_info">Saya mempublikasikan aplikasi ini secara gratis, bebas dan bersumber terbuka dengan lisensi GPLv3. Jangan sungkan untuk memodifikasinya selama anda juga membuatnya bersumber terbuka.</string>
+    <string name="about_screen_info">Saya mempublikasikan aplikasi ini secara gratis, bebas dan bersumber terbuka dengan lisensi GPLv3. Jangan sungkan untuk memodifikasinya selama Anda juga membuatnya bersumber terbuka.</string>
     <string name="navigation_button_content_description">Buka/tutup menu feed</string>
     <!-- FEEDS -->
     <string name="feeds">Feed</string>
     <string name="menu_add_group">Tambah grup</string>
     <string name="menu_import">Impor dari OPML</string>
     <string name="menu_export">Ekspor ke OPML</string>
-    <string name="storage_request_explanation">Untuk mengimpor atau mengekspor feed, anda harus mengizinkan aplikasi mengakses penyimpanan lokal.</string>
+    <string name="storage_request_explanation">Untuk mengimpor atau mengekspor feed, Anda harus mengizinkan aplikasi mengakses penyimpanan lokal.</string>
     <string name="error_feed_export">Ekspor gagal. Pastikan kartu SD terpasang.</string>
     <string name="feed_search">Cari feed</string>
     <string name="feed_search_hint">Masukkan tautan feed atau kata kunci</string>
     <string name="feed_added">Feed berhasil ditambahkan</string>
-    <string name="question_delete_feed">Apakah anda yakin ingin menghapus feed ini?</string>
-    <string name="question_delete_group">Apakah anda yakin ingin menghapus grup ini dan semua feed di dalamnya?</string>
+    <string name="question_delete_feed">Apakah Anda yakin ingin menghapus feed ini?</string>
+    <string name="question_delete_group">Apakah Anda yakin ingin menghapus grup ini dan semua feed di dalamnya?</string>
     <string name="add_group_title">Pilih nama grup</string>
     <string name="message_exported_to">Diekspor ke %s.</string>
     <string name="to_group_title">Tindakan pindah feed</string>
-    <string name="to_group_message">Anda bisa memindahkan feed ini ke dalam atau ke atas grup ini. Apa yang ingin anda lakukan?</string>
+    <string name="to_group_message">Anda bisa memindahkan feed ini ke dalam atau ke atas grup ini. Apa yang ingin Anda lakukan?</string>
     <string name="to_group_above">Ke atas grup</string>
     <string name="to_group_into">Ke dalam grup</string>
     <string name="feed_name">Nama feed</string>
@@ -112,7 +112,7 @@
     <string name="filter_title">Daftar blokir</string>
     <string name="filter_dialog_message">Pisahkan kata kunci dengan koma</string>
     <string name="settings_theme">Tema</string>
-    <string name="open_browser_direct">Buka entri di peramban default anda</string>
+    <string name="open_browser_direct">Buka entri di peramban default Anda</string>
     <string name="open_browser_direct_title">Buka di peramban</string>
     <string name="refresh_on_startup">Menyegarkan daftar feed saat memulai aplikasi</string>
     <string name="refresh_on_startup_title">Segarkan saat memulai</string>

@@ -37,6 +37,8 @@
     <string name="to_group_above">فوق المجموعة</string>
     <string name="to_group_into">داخل المجموعة</string>
     <string name="feed_name">اسم الخلاصة</string>
+    <string name="feed_edit_drag_handle_content_description">مقبض السحب</string>
+    <string name="feed_edit_feed_icon_content_description">أيقونة الخلاصة</string>
     <!-- ENTRIES -->
     <string name="feed_link">رابط الخلاصة</string>
     <string name="all_entries">جميع المدخلات</string>
@@ -55,6 +57,9 @@
     <string name="undo">تراجع</string>
     <string name="marked_as_read">تحديد كمقروء</string>
     <string name="marked_as_unread">تحديد كغير مقروء</string>
+    <string name="expand_arrow_content_description">توسيع مجموعة الخلاصات</string>
+    <string name="collapse_arrow_content_description">طي مجموعة الخلاصات</string>
+    <string name="mark_all_as_read_fab_content_description">تحديد الكل كمقروء</string>
     <!-- DISCOVER -->
     <string name="discover_search_label">البحث في النشرات الإخبارية</string>
     <string name="discover_search_hint">البحث عن طريق الكلمة المفتاحية، أو رابط، أو الموضوع. يمكن الإشارة إلى المواضيع مع بادئة #.</string>

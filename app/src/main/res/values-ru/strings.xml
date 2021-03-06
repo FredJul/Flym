@@ -24,7 +24,6 @@
     <string name="drawer_explanation">Добро пожаловать!\n\nДолгое нажатие на ленте откроет дополнительные опции ▼</string>
     <string name="drawer_fetch_error_explanation">Некоторые ленты не обновились корректно ▼</string>
     <string name="about_screen_info">Я публикую это приложение как бесплатное программное обеспечение с открытым исходным кодом под лицензией GPLv3. Не стесняйтесь изменять его до тех пор, пока вы сохраняете его исходный код открытым.</string>
-    <string name="navigation_button_content_description">Переключатель меню лент</string>
     <!-- FEEDS -->
     <string name="feeds">Ленты</string>
     <string name="menu_add_group">Добавить группу</string>
@@ -44,8 +43,6 @@
     <string name="to_group_above">Над группой</string>
     <string name="to_group_into">Внутрь группы</string>
     <string name="feed_name">Имя</string>
-    <string name="feed_edit_drag_handle_content_description">Ручка перетаскивания</string>
-    <string name="feed_edit_feed_icon_content_description">Значок ленты</string>
     <!-- ENTRIES -->
     <string name="feed_link">Ссылка</string>
     <string name="all_entries">Все новости</string>
@@ -64,9 +61,6 @@
     <string name="undo">Отмена</string>
     <string name="marked_as_read">Помечены как прочитанные</string>
     <string name="marked_as_unread">Помечены как непрочитанные</string>
-    <string name="expand_arrow_content_description">Раскрыть группу новостей</string>
-    <string name="collapse_arrow_content_description">Свернуть группу новостей</string>
-    <string name="mark_all_as_read_fab_content_description">Отметить все как прочитанные</string>
     <!-- DISCOVER -->
     <string name="discover_search_label">Поиск лент</string>
     <string name="discover_search_hint">Поиск по ключевому слову, URL или теме. Темы можно указать с префиксом #.</string>
@@ -80,9 +74,6 @@
     <string name="settings_refresh_interval">Интервал обновления</string>
     <string name="settings_keep_time">Какое время хранить новости</string>
     <string name="settings_keep_time_unread">Какое время хранить непрочтитанные новости</string>
-    <string name="settings_category_general">Общее</string>
-    <string name="settings_display_thumbnails">Отображать миниатюры</string>
-    <string name="settings_display_thumbnails_description">Отображать миниатюры в списке новостей</string>
     <string name="settings_display_images">Показывать изображения</string>
     <string name="settings_display_images_description">Показывать изображения в новостях</string>
     <string name="settings_preload_image_mode">Предварительно загружать изображения</string>
@@ -91,9 +82,6 @@
     <string name="settings_refresh_wifi_only_description">Автоматическое обновление будет выполняться только при включенном Wi-Fi</string>
     <string name="settings_remove_duplicates_description_title">Удалять дубликаты</string>
     <string name="settings_remove_duplicates_description">Проверять названия заголовков скачанных записей и пропускать их, если запись с таким заголовком уже есть</string>
-    <string name="filter">Удалять записи, содержащие ключевые слова</string>
-    <string name="filter_title">Чёрный список</string>
-    <string name="filter_dialog_message">Ключевые слова, разделенные запятыми</string>
     <string name="settings_theme">Темы</string>
     <string name="open_browser_direct">Записи будут открываться в браузере по умолчанию</string>
     <string name="open_browser_direct_title">Открыть в браузере</string>
@@ -101,15 +89,9 @@
     <string name="refresh_on_startup_title">Обновлять при запуске</string>
     <string name="settings_hide_button_mark_all_as_read">Скрыть кнопку \'Пометить все как прочитанные\'</string>
     <string name="settings_hide_button_mark_all_as_read_description">Не показывать кнопку \'Пометить все как прочитанные\' на экране</string>
-    <string name="settings_hide_navigation_on_scroll">Скрывать навигационные панели во время прокрутки</string>
-    <string name="settings_hide_navigation_on_scroll_description">Если активно, верхняя и нижнияя навигационые панели скрываются во время прокрутки вниз и появляются во время прокрутки вверх</string>
     <string name="settings_sort_order">Сортировать новости от новых к старым</string>
     <string name="settings_sort_order_title">Порядок сортрировки</string>
     <string name="settings_enable_entry_swipe">Включить смахивание в режиме просмотра записи</string>
-    <string name="settings_category_article_list">Список новостей</string>
-    <string name="settings_category_article_appearance">Внешний вид новостей</string>
-    <string name="settings_enable_entry_swipe_description">Если активно, включает переход между записями в режиме просмотра при помощи смахивания</string>
-
     <string-array name="settings_intervals">
         <item>5 минут</item>
         <item>15 минут</item>
